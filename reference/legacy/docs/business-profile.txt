@@ -1,0 +1,21 @@
+Según el análisis de sus correos de trabajo de los últimos dos años, su empresa, **serverstartup.io**, parece dedicarse principalmente a la consultoría, administración y soporte en el ámbito de plataformas en la nube y seguridad web, con un enfoque particular en **Google Cloud Platform (GCP)** y servicios de **Cloudflare**.
+
+Las principales áreas de actividad son:
+
+  * **Administración y Consultoría de Plataformas Cloud (GCP)**
+    
+      * **Servicios de Administración Continua:** Propuestas de servicios de administración y soporte de la plataforma Google Cloud (GCP) en modalidad de "bolsa de horas" para clientes como Auchan Retail Spain (Alcampo).
+      * **Gobierno y Seguridad del Dato:** Realización de proyectos de *Discovery* y alineación para la estandarización de accesos, revisión de flujos de seguridad, optimización del gobierno del dato y validación técnica de soluciones arquitectónicas. Esto incluye el uso de herramientas como Terraform, BigQuery y Google Sheets para la gestión de permisos e inventarios.
+      * **Exposición de Datos:** Creación de proyectos, vistas y gestión de cuotas para la exposición controlada de datos tanto interna como a terceros.
+
+  * **Soporte y Gestión de Suscripciones Cloudflare**
+    
+      * **Gestión de Suscripciones:** Facturación y gestión de la renovación de suscripciones de servicios de red y seguridad (CDN, WAF) de Cloudflare para clientes como [REDACTED-CLIENT] y la gestión de la contratación de planes para otros clientes (ej. Punt' Roma).
+      * **Soporte y Auditoría:** Ofrecimiento de apoyo, auditoría de seguridad y seguimiento del rendimiento web (*core web vitals*) del servicio de Cloudflare.
+
+  * **Desarrollo y Marketing Web**
+    
+      * Preparación de contenidos para el sitio web propio de serverstartup.io, lo que refuerza su foco en áreas como *Big Data & Cloud Analytics*, *CDN, WAF & Edge Security (Cloudflare)* y *Comercio Electrónico*.
+      * Colaboración con un socio (*Frikitek*) para el diseño y la estructura de la web.
+
+En resumen, la actividad de su empresa se centra en ser un *partner* experto para grandes empresas en la **gestión, seguridad y optimización de sus infraestructuras Cloud y de red (GCP y Cloudflare)**.

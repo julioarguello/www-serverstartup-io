@@ -433,6 +433,81 @@ Before submitting any text, verify:
 - [ ] EN version is a natural re-expression, NOT a literal translation (§3.4)
 - [ ] Bilingual terminology is consistent with glossary (§3.4.2)
 - [ ] Does NOT sound like ThoughtWorks ES (corporate fog test)
+- [ ] ≤2 AI-tells per page — §8.3 audit run and scored
+- [ ] Burstiness: sentence and paragraph lengths visibly vary (§8.2)
+- [ ] At least one falsifiable fact per section; one domain-true retail detail per page
+- [ ] Zero em-dashes in ES; max ONE colon construction ("X: Y") per page
+- [ ] First two words of every heading and paragraph carry information (F-pattern)
+- [ ] Passes the meeting test with the §7 reader
+
+## 7. The One Reader (Target Persona)
+
+Write every page for ONE person (Harry Dry's rule: copy for everyone is copy for no one).
+
+**The architect who built what Ahorra Más runs today.** An experienced software architect (15–25 years of production scars) at a mid-size Spanish retailer. The reference estate, verified 2026-08: ~275 stores across Madrid and Castilla-La Mancha, 12,000 employees, a Salesforce Commerce Cloud storefront behind Cloudflare (`demandware` assets, `dwanonymous` cookie, `server: cloudflare`), Citrus retail media, an ERP, store POS, a promotions engine, and a data platform nobody fully trusts. Our reader stood that up personally, town by town.
+
+**Their week**: a promotion that reached the web but not the POS; stock that never quite matches between store, warehouse and online; a capacity question about the next campaign peak; a vendor meeting where someone said "assessment phase"; a junior rotated onto their account without asking.
+
+**Their real alternatives** (April Dunford): not our competitors — *"lo hacemos en casa"* or *"no hacemos nada"*. Every page must quietly answer **why not in-house**: senior depth on demand, without headcount, from people who have run the same estate and answer personally.
+
+**Trust triggers**: named tools with versions, un-round numbers, admitted limits, front-loaded prose (they read the first two words of each line — Nielsen's F-pattern), anything they could verify.
+**Close-tab triggers**: "soluciones integrales", trademarked methodology names, benefit-speak explaining their own job to them, anything a colleague would never say out loud.
+
+**Things this reader actually says** (write TO these, sparingly):
+- "El dato de stock no cuadra y nadie sabe dónde se pierde."
+- "Otro partner que me manda un junior a aprender con mi presupuesto."
+- "El WAF lo configuró alguien que ya no está en la empresa."
+- "Me sobran licencias y me faltan manos."
+
+**Litmus upgrade**: §1's café test becomes the **meeting test** — would you say the sentence, verbatim, to this architect in a working meeting without blushing? If it sounds like a press note, say what you would say in the meeting and write that.
+
+## 8. Anti-AI Fingerprints (Hard Rules)
+
+AI-written copy is detected by pattern **density**, not by any single tell (Wikipedia, "Signs of AI writing"). One tell is a style choice; five are a signature. Budget: **≤2 tells per page**.
+
+### 8.1 Banned constructions (extends §3)
+
+| Pattern | Example to kill | Fix |
+|:--------|:----------------|:----|
+| Empty contrast "no es X, es Y" / "not just X, but Y" | "No es un firewall, es tranquilidad" | State the claim once, in the affirmative. Only sanctioned exceptions: equation-headlines and "No escalamos. Profundizamos." |
+| Decorative triads | "rápido, fiable y escalable" | Use the real number of items (1, 2, 4…). Sole sanctioned triad: "Un equipo. Cuatro verticales. Cero handoffs." |
+| Em-dash flourish (—) | "y responde — siempre" | Zero em-dashes in ES. In EN prefer a period; the em-dash is the single most memed AI tell |
+| Colon-headline "X: Y" | "Una regla: quien diseña, escribe" | Max ONE per page. Otherwise split into two sentences |
+| Universal openers | "En un mundo cada vez más digital…" | Open with a system, a number or a failure |
+| Summary closers | "En definitiva…", "En resumen…" | End on the last real point or the CTA |
+| Meta-hedges | "Cabe destacar que…", "Es importante tener en cuenta…" | Delete the frame, keep the content |
+| Copula dodging | "se erige como", "actúa como", "cuenta con" | "es", "tiene" |
+| AI vocabulary (extends §3.1 blacklist) | crucial, clave, esencial, sin fisuras, sinérgico, vibrante, dinámico, potenciar, maximizar, "en constante evolución", "paisaje digital" | Concrete verb, or delete |
+| Weasel sourcing | "Los estudios demuestran…" | Name the study/client/year, or cut |
+| Rounded flex numbers | "más de 100 proyectos" | Un-round numbers read as records: "13 proyectos y 22 pedidos en 2025" |
+| Uniform rhythm (metronome) | Every sentence 12–18 words, every paragraph two lines | See §8.2.1 burstiness |
+
+### 8.2 Human texture (required, not optional)
+
+1. **Burstiness**: per section, at least one sentence under 6 words AND one over 20; paragraph lengths must visibly differ. Sentence-length variance is the most measurable human/AI separator.
+2. **One falsifiable fact per section**: a tool, a date, a version, an un-round number — something a reader could check and prove wrong. A paragraph with nothing checkable is decoration.
+3. **One domain-true detail per page**: something only someone who has operated retail systems would write ("la promoción que llega tarde al TPV", "el stock que no cuadra entre tienda y web").
+4. **Idiom in small doses**: Spanish from Spain ("da la cara", "las justas") — one per page, two max. LLM Spanish defaults to neutral pan-Hispanic register; local idiom is expensive to fake.
+5. **Asymmetry**: spend the words on the one thing we believe; drop the rest without apology. AI covers everything evenly; experts don't.
+6. **Negative honesty**: somewhere on the site, one thing we don't do or a reason NOT to hire us. Skeptical readers trust disqualification more than any claim.
+7. **Fragments allowed.** And sentences starting with Y or Pero. Professional spelling always — boutique, not sloppy.
+
+### 8.3 The 10-point "¿huele a IA?" audit
+
+Run on every page before shipping; count the hits.
+
+1. Empty contrast without new information?
+2. Decorative triad (three items chosen for cadence)?
+3. Universal opener (would it fit a dentist's website)?
+4. Summary closer, or a final paragraph that repeats the page?
+5. Banned vocabulary (>1 per paragraph)?
+6. Em-dash flourish, or "Título: explicación" in every bullet?
+7. Metronome (read aloud: equal-length sentences and paragraphs)?
+8. Zero falsifiable claims?
+9. Could a competitor paste the paragraph unchanged onto their site?
+10. Would you say it to the §7 architect's face in a meeting?
+
+**Scoring**: 0–2 hits → publishable. 3–5 → rewrite the flagged sentences. 6+ → discard the draft and restart from a concrete fact.
 
 > **Sources** (verified 2026-05-02):
 > - `reference/legacy/agent/boutique-copywriter.md` — Original copywriter skill with full blacklist
@@ -451,3 +526,33 @@ Before submitting any text, verify:
 > - `manusco/resonance` — "Seven Sweeps" and "¿Y qué?" recursive drill-down pattern (sweeps 1-4 adopted)
 > - `DatTran26/KienTruThiHanh` — Voice Dimensional Profile framework (7 dimensions adapted to boutique technical tone)
 > - GitHub Docs style guide — Bilingual technical writing best practices reference
+
+> **Sources for §7–§8** (verified 2026-08-04):
+> - Wikipedia "Signs of AI writing" (WikiProject AI Cleanup) — definitive AI-tell catalog; density-not-single-tell principle
+> - Genbeta + DeGPT + Bilateria — Spanish ChatGPT-ese word/phrase/typography lists
+> - Burstiness research (QuillBot/UNIC summaries) — sentence-length variance as human/AI separator
+> - Harry Dry, marketingexamples.com landing-page guide — visualize/falsify/one-reader/in-person tests
+> - April Dunford — positioning against real alternatives ("in-house or nothing", not competitors)
+> - Nielsen Norman Group — F-pattern reading, front-loading
+> - William Zinsser, On Writing Well — clutter test; richin13 gist — vary structure, avoid AI-giveaway phrases
+> - ahorramas.com stack fingerprint (curl, 2026-08-04): Salesforce Commerce Cloud (`demandware`, `dwanonymous`, `x-dw-request-base-id`) behind Cloudflare, Citrus retail media; company facts via ecommerce-news.es and Alimarket
+> - Reader-persona details cross-checked against `docs/company/09-target-reader.md` in www-serverstartup-io
+
+---
+
+## Fact Sources (Knowledge Base) — added 2026-08-02
+
+Every company fact used in copy MUST come from the canonical knowledge base
+**`docs/company/` in the `www-serverstartup-io` repo** (identity, team, clients,
+services, tech specialties, voice, web benchmark, sources registry). Do not
+re-derive facts from memory or old decks. Hard constraints that override anything
+else in this skill:
+
+- **Client naming whitelist**: public copy may only name Alcampo, Auchan,
+  Forum Sport, Punt Roma, Job&Talent (*former* client), plus Inetum and Grupo
+  Seidor as collaborations. Every other client: anonymous references only.
+  Full policy: `docs/company/03-clients-track-record.md`.
+- **Founded 2019** (Registro Mercantil Bizkaia 24/01/2019) — never "2017".
+  CIF **B95944807**.
+- Distilled rule: `.agent/rules/www-serverstartup-io.md` §13.
+- A frozen copy of this skill lives at `docs/company/annex/doc-copywriter-SKILL.md`.

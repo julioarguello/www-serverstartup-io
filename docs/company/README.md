@@ -19,6 +19,7 @@
 | [06-voice-positioning.md](06-voice-positioning.md)                 | Posicionamiento boutique, perfil de voz, frases canónicas                     |
 | [07-web-benchmark.md](07-web-benchmark.md)                         | Benchmark de webs boutique minimalistas (investigación 2026-08-02)            |
 | [08-sources.md](08-sources.md)                                     | Registro completo de fuentes y cómo ampliar cada dato                         |
+| [09-target-reader.md](09-target-reader.md)                         | El lector objetivo: arquitecto retail tipo Ahorra Más (estate verificado)     |
 | [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)     | Copia recuperada del skill `doc-copywriter` (borrado del submódulo `.agent`)  |
 
 ## Convenciones

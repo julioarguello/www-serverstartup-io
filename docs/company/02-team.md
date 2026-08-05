@@ -1,80 +1,53 @@
-# Equipo y red
+# Team and network
 
-## Socios (capital social)
+> Curated public version. Contact details, contractual relationships, share
+> structure and past-collaborator history live in `private/02-team.md` (gitignored).
 
-| Socio                              | Participación | Rol                                        |
-| ---------------------------------- | ------------- | ------------------------------------------ |
-| Julio Alberto Argüello Fernández   | 50 %          | Presidente / Director Técnico / delivery   |
-| Begoña Isla Garitacelaya           | 50 %          | Socia (secretaria de la Junta)             |
+## Delivery team (August 2026)
 
-Fuente: Acta de Junta General Universal 01/06/2020 (Dropbox
-`Documents/Profesional/Documentación/ServerStartup/Misc/20200720 - ACTA JUNTA SERVER.pdf`).
+The delivery team is **three senior engineers** — the same three, no bench. Client
+billing profiles are "SWA" (Software Architect) and "SA" (Solution Architect); the
+2025 balance at the main client was "440 SWA days (2 people) + 180 SA days"
+(2025 corporate deck).
 
-## Equipo técnico (agosto 2026)
+### Julio Argüello — founder, Technical Director
+- GitHub: [julioarguello](https://github.com/julioarguello)
+- Commit-evidenced domains: systems integration (Apache Camel platform), Ocado OSP
+  middleware, dbt/BigQuery, Cloudflare Workers, architecture documentation.
+  Detail in [05-tech-specialties.md](05-tech-specialties.md).
+- Background: freelance since 2017 through IT services firms; hybris/SAP Commerce
+  trenches long before that (~15 years of experience).
 
-El equipo de delivery son **tres ingenieros senior**. Los perfiles de facturación a
-cliente son "SWA" (Software Architect) y "SA" (Solution Architect); el balance 2025
-en Alcampo fue "440 jornadas SWA (2 personas), 180 jornadas SA" (deck corporativo 2025).
+### Ignacio "Nacho" Ibaseta
+- GitHub: [iibaseta](https://github.com/iibaseta)
+- Commit-evidenced domains: **Terraform / GCP infrastructure-as-code and the data
+  platform** — dominant author on the client's e-commerce API IaC and sales data
+  Terraform estates.
 
-### Julio Argüello — fundador, Director Técnico
-- GitHub: [julioarguello](https://github.com/julioarguello) · julio.arguello@serverstartup.io · +34 665 85 95 10 (firma de email).
-- Dominio por evidencia de commits: integración (plataforma JAWA/Camel), middleware
-  Ocado OSP, dbt, Smart V2, Cloudflare Workers, documentación técnica de arquitectura.
-  Detalle en [05-tech-specialties.md](05-tech-specialties.md).
-- Trayectoria previa: freelance desde 2017 (Seidor, SM, IECISA); trinchera
-  hybris/SAP Commerce desde mucho antes (~15 años de experiencia).
+### Daniel Sío
+- GitHub: [dsiorajo](https://github.com/dsiorajo)
+- Commit-evidenced domains: **Ocado e-commerce operations and Smart platform
+  evolutions** — CI/monitoring automation, dbt contributions.
 
-### Ignacio "Nacho" Ibaseta Canga
-- GitHub: [iibaseta](https://github.com/iibaseta) · iicanga@gmail.com / iicangat@gmail.com · i.ibaseta@partner.alcampo.es.
-- Dominio por commits: **Terraform/GCP IaC y plataforma de datos** —
-  `es-ares-ecom-terraform-osp-api` (autor dominante), `es-ares-data-terraform-sales`,
-  `es-ares-ecom-gcf-data-pipeline`. También proyecto "Consolidación y Resiliencia
-  Datos de Ventas" (hilo Gmail jul 2026).
-- Relación: colaborador autónomo que factura mensualmente a Server Startup
-  (hilos Gmail "Facturas Junio", "Ibaseta junio-julio").
+## Hiring philosophy
 
-### Daniel Sío Rajo
-- GitHub: [dsiorajo](https://github.com/dsiorajo) · danielsiorajo@gmail.com · d.sio@partner.alcampo.es.
-- Dominio por commits: **operativa e-commerce Ocado y evolutivos Smart** —
-  `es-ares-ecom-postman-frescos-corte`, contribuciones en `es-ares-data-dbt-retail`.
-  Por pedidos/propuestas: Evolutivos CFC (fases 5-6), Interfaces Aida (224 h),
-  Evo Smart V2 [DIG].
-- Relación: colaborador autónomo con facturación mensual (hilo "Facturas 06/26").
+The 2025 deck records the intent for a possible **4th senior profile** (Software
+Architect): "We only bring in senior, trusted profiles." No junior hires, by design.
 
-## Colaboradores puntuales y pasados
+## Stable external network (public-safe)
 
-- **Luis Villa** (luis.vi.fer@gmail.com; GitHub "Luis Villa"/"thirdBlackCrow") —
-  desarrolló el **Brand Portal** de Alcampo (frontend React + BFF Java:
-  [es-ares-data-react-brand-portal-frontend](https://github.com/auchan-retail-spain/es-ares-data-react-brand-portal-frontend),
-  [es-ares-data-java-brand-portal-bff](https://github.com/auchan-retail-spain/es-ares-data-java-brand-portal-bff)).
-  Rechazó el contrato de continuidad el 2026-07-29 (hilo "Rechazo contrato");
-  la entrega/continuidad se gestionó en el hilo "Continuidad Brand Portal".
-- **Rosselyne López** — empleada en nómina hasta su finiquito (2023-02-23,
-  Dropbox `Contratos/2023/20230223 - Finiquito Rosselyne`; carpeta `Nóminas/Rosselyne López`).
-- El deck 2025 recoge la intención de un posible **4º perfil senior (Software
-  Architect)**: "Sólo incorporamos perfiles senior y de confianza".
+| Entity        | Role                                                                 |
+| ------------- | --------------------------------------------------------------------- |
+| Grupo Seidor  | Long-standing commercial partner (Cloudflare proposals are presented "as a collaborating company of Grupo Seidor") |
+| Inetum        | Framework agreement + supplier homologations                           |
+| Cloudflare    | Official partnership since 2019, agreement renewed 2026-04-30          |
 
-## Red externa estable
+## ⚠️ Discrepancy with the current website
 
-| Entidad                  | Papel                                                                  |
-| ------------------------ | ---------------------------------------------------------------------- |
-| Grupo Seidor             | Partner comercial histórico (las propuestas Cloudflare se presentan "como empresa colaboradora del Grupo Seidor"); imputaciones desde 2017; contrato 2024-01-02 |
-| INETUM                   | Acuerdo marco (2023-02-18) + homologaciones/renovaciones 2022–2024      |
-| V-Valley                 | Distribuidor para operaciones Cloudflare (Job&Talent 2022, WoW 2022)    |
-| Asesoría Proyecta        | Fiscal/contable (pveiga@, isaez@asesoriaproyecta.com)                   |
-| Anfix                    | Plataforma contable (buzón `B95944807@recibidas.anfix.com`)             |
-| Barrilero (y Asociados)  | Certificados/gestiones legales (hilo "Información Fiscal Q2")           |
-| Bankinter / Santander    | Banca (cuentas 2024); agente grandes patrimonios en Bankinter           |
-| innotec.security         | Co-destinatarios de los reportes WAF de Eroski (SOC del cliente)        |
-
-## ⚠️ Discrepancia con la web actual
-
-La colección `members` del CMS ([seed/seed.json](../../seed/seed.json)) lista:
-`julio-arguello` (Fundador & Lead Architect), `ariadna` (Backend Engineer),
-`raul` (Data Engineer), `daniel` (Cloud & DevOps Engineer). **No coincide con el
-equipo real** (Julio, Nacho Ibaseta, Daniel Sío): "ariadna" y "raul" no aparecen en
-ninguna fuente primaria (ni Gmail, ni Dropbox, ni GitHub), y el rol de Daniel en la
-web ("Cloud & DevOps") tampoco refleja su trabajo real (integración/e-commerce/datos).
-A resolver antes o durante la reescritura de "Quiénes somos" (issue
-[#143](https://github.com/julioarguello/www-serverstartup-io/issues/143)): o son
-seudónimos deliberados o es contenido placeholder heredado.
+The CMS `members` collection ([seed/seed.json](../../seed/seed.json)) lists
+`julio-arguello`, `ariadna`, `raul` and `daniel`. **It does not match the real
+team** (Julio, Nacho Ibaseta, Daniel Sío): "ariadna" and "raul" appear in no
+primary source, and Daniel's listed role ("Cloud & DevOps") does not reflect his
+real work. Resolve before or during the "About us" rewrite
+([#143](https://github.com/julioarguello/www-serverstartup-io/issues/143)):
+either deliberate pseudonyms or inherited placeholder content.

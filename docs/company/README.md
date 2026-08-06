@@ -1,43 +1,55 @@
-# Base de conocimiento corporativo — Server Startup S.L.
+# Corporate knowledge base — Server Startup S.L.
 
-> Base de datos documental sobre la empresa: identidad, equipo, clientes, servicios,
-> especialidades técnicas y voz de marca. Construida el **2026-08-02** a partir de
-> fuentes primarias (Registro Mercantil, Dropbox, Gmail, Google Drive, GitHub) para
-> alimentar la reescritura de copies de serverstartup.io (issues
+> Documentary database about the company: identity, team, clients, services,
+> technical specialties and brand voice. Built **2026-08-02** from primary sources
+> (Registro Mercantil, Dropbox, Gmail, Google Drive, GitHub) to feed the
+> serverstartup.io copy rewrite (issues
 > [#141](https://github.com/julioarguello/www-serverstartup-io/issues/141)–#153)
-> y cualquier trabajo futuro que necesite contexto de empresa.
+> and any future work needing company context. English since 2026-08-05
+> (all working artifacts in English; only website content is ES+EN).
 
-## Índice
+## Public / private split
 
-| Documento                                                          | Contenido                                                                    |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| [01-identity.md](01-identity.md)                                   | Identidad legal, cronología fundacional, marca, nombre, logo, paleta          |
-| [02-team.md](02-team.md)                                           | Socios, equipo técnico, colaboradores, red externa                            |
-| [03-clients-track-record.md](03-clients-track-record.md)           | Mapa de clientes y proyectos con evidencia, 2017 → 2026                       |
-| [04-services-business-model.md](04-services-business-model.md)     | Líneas de negocio, modelos de precio, partnerships                            |
-| [05-tech-specialties.md](05-tech-specialties.md)                   | Especialidades técnicas demostradas por commits en GitHub                     |
-| [06-voice-positioning.md](06-voice-positioning.md)                 | Posicionamiento boutique, perfil de voz, frases canónicas                     |
-| [07-web-benchmark.md](07-web-benchmark.md)                         | Benchmark de webs boutique minimalistas (investigación 2026-08-02)            |
-| [08-sources.md](08-sources.md)                                     | Registro completo de fuentes y cómo ampliar cada dato                         |
-| [09-target-reader.md](09-target-reader.md)                         | El lector objetivo: arquitecto retail tipo Ahorra Más (estate verificado)     |
-| [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)     | Copia recuperada del skill `doc-copywriter` (borrado del submódulo `.agent`)  |
+Tracked files here are **curated for eventual public visibility** (master plan
+[#165](https://github.com/julioarguello/www-serverstartup-io/issues/165), phase
+0-pre). Everything sensitive — full client map including partner-channel
+engagements, personal contact data, pricing mechanics, the source registry —
+lives in **`private/`**, which is **gitignored** and never committed. The agent
+can read it locally; reviewers and the public repo cannot. Backup:
+`scripts/kb-backup.sh` mirrors `private/` to Julio's Dropbox.
 
-## Convenciones
+## Index
 
-- **Cada hecho lleva fuente.** Los datos sin fuente explícita heredan la del bloque.
-  El detalle de recuperación está en [08-sources.md](08-sources.md).
-- **Grados de certeza:** sin marca = verificado en documento primario;
-  `[INFERIDO]` = deducido de evidencia indirecta (se explica de cuál);
-  `[PENDIENTE]` = hueco conocido que merece verificación.
-- **Fechas absolutas** siempre (`2026-08-02`, no "hoy").
-- **Datos excluidos deliberadamente** aunque el repo sea privado: DNI, IBAN,
-  importes fiscales, salarios y cualquier dato personal sin relevancia de negocio.
+| Document                                                          | Content                                                                      |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| [01-identity.md](01-identity.md)                                   | Legal identity, founding chronology, brand, name, logo, palette              |
+| [02-team.md](02-team.md)                                           | Delivery team, hiring philosophy, public-safe network                        |
+| [03-clients-track-record.md](03-clients-track-record.md)           | 🚦 Citability policy + publicly citable track record                          |
+| [04-services-business-model.md](04-services-business-model.md)     | Business lines, model constants, AI stance                                   |
+| [05-tech-specialties.md](05-tech-specialties.md)                   | Technical specialties proven by GitHub commits                               |
+| [06-voice-positioning.md](06-voice-positioning.md)                 | Boutique positioning, voice profile, canonical lines                         |
+| [07-web-benchmark.md](07-web-benchmark.md)                         | Benchmark of minimal boutique websites (research 2026-08-02)                 |
+| [08-sources.md](08-sources.md)                                     | Pointer to the private source registry                                       |
+| [09-target-reader.md](09-target-reader.md)                         | The target reader: Ahorra Más-type retail architect (verified estate)        |
+| [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)     | Frozen copy of the `doc-copywriter` skill                                    |
+| `private/` (gitignored)                                            | Full originals: complete client map, contacts, pricing, source registry      |
 
-## Cómo mantenerla
+## Conventions
 
-1. Al aprender un hecho nuevo de empresa, añadirlo al documento temático que toque
-   **con su fuente** y fecha.
-2. Si un hecho cambia (cliente nuevo, alta/baja de equipo), no borrar el anterior:
-   marcarlo como histórico. La cronología es parte del valor.
-3. Los enlaces a Drive usan el `fileId` (estables); los de Dropbox son rutas locales
-   de la máquina de Julio; los de GitHub son URL canónicas.
+- **Every fact carries a source.** Facts without an explicit source inherit the
+  block's. Recovery detail lives in the private source registry.
+- **Certainty grades:** unmarked = verified in a primary document;
+  `[INFERRED]` = deduced from indirect evidence (explained); `[PENDING]` = known
+  gap worth verifying.
+- **Absolute dates** always (`2026-08-02`, never "today").
+- **Deliberately excluded** even from private files: national ID numbers, IBANs,
+  tax amounts, salaries, and any personal data without business relevance.
+
+## Maintenance
+
+1. When a new company fact is learned, add it to the matching document **with its
+   source** and date — sensitive detail goes to `private/`, public-safe summary here.
+2. When a fact changes (new client, team change), don't delete the old one: mark
+   it as historical. The chronology is part of the value.
+3. GitHub links are canonical URLs; everything else (Dropbox paths, Drive fileIds)
+   belongs in `private/08-sources.md`.

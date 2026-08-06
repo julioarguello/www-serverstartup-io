@@ -1,80 +1,82 @@
-# Posicionamiento y voz de marca
+# Positioning and brand voice
 
-## La tesis: partner boutique, no "una consultora más"
+## The thesis: boutique partner, not "just another consultancy"
 
-Definición interna ([boutique-consulting.txt](../../reference/legacy/docs/boutique-consulting.txt)):
-hiper-especialización, talento senior (cero juniors), agilidad y pragmatismo,
-"relación de socios (partners) más que de simples proveedores". Cierre literal:
+Internal definition ([boutique-consulting.txt](../../reference/legacy/docs/boutique-consulting.txt)):
+hyper-specialization, senior talent (zero juniors), agility and pragmatism, "a
+relationship of partners rather than mere providers". Literal closing line:
 
-> "Una boutique de integración es un 'cirujano especializado' que resuelve problemas
-> de conectividad complejos donde las grandes firmas suelen ser demasiado lentas o
-> genéricas."
+> "An integration boutique is a 'specialized surgeon' solving complex connectivity
+> problems where the big firms tend to be too slow or too generic."
 
-Los hechos que la sostienen (todos con evidencia en esta base):
-3 ingenieros, los mismos, sin banquillo · fundada 2019, equipo con ~15 años de
-oficio · cliente principal desde hace >5 años · senior-only por decisión ·
-"No podemos ir a todas" · el que diseña es el que entrega y el que responde.
+The facts that sustain it (all evidenced in this knowledge base):
+3 engineers, the same ones, no bench · founded 2019, team with ~15 years of craft ·
+main client for 5+ years · senior-only by design · "We can't take every project" ·
+whoever designs it delivers it and answers for it.
 
-## El artefacto normativo: skill `doc-copywriter`
+## The normative artifact: the `doc-copywriter` skill
 
-Copia íntegra recuperada en [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)
-(fue borrado del submódulo `.agent` en el commit `430a923`; recuperable también con
-`git -C .agent show 430a923^:skills/doc-copywriter/SKILL.md`). Esqueleto:
+Full copy in [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)
+(deleted from the `.agent` submodule in commit `430a923`; also recoverable with
+`git -C .agent show 430a923^:skills/doc-copywriter/SKILL.md`). Skeleton:
 
-- **Test central**: "¿Se lo dirías así a un compañero técnico tomando un café?"
-- **9 principios**: decir menos, describir lo que hacemos (no vender la necesidad),
-  precisión, hablar de igual a igual (tú, nunca usted), mostrar sin proclamar,
-  cálido sin ñoño, lenguaje de propiedad ("tu sistema es nuestro sistema"), que los
-  hechos presuman, "¿y qué?" recursivo.
-- **Patrones**: pain-opener, equation-headline (`WAF ≠ seguridad`), Named
-  Senior-Led ("Tres ingenieros. Los mismos tres."), transparencia Basecamp
-  ("Sin inversores. Sin deuda. Sin prisa."), títulos declarativos 37signals.
-- **Línea transversal obligatoria** (hero, about, cierre de cada servicio):
+- **Core test**: "Would you say it like this to a technical colleague over coffee?"
+- **9 principles**: say less; describe what we do (never sell the necessity);
+  precision; speak as equals (tú, never usted); show, don't claim; warm, not
+  cheerful; ownership language ("your system is our system"); let facts brag;
+  recursive "so what?".
+- **Patterns**: pain-opener, equation-headline (`WAF ≠ security`), Named
+  Senior-Led ("Three engineers. The same three."), Basecamp transparency
+  ("No investors. No debt. No hurry."), 37signals declarative titles.
+- **Mandatory cross-vertical line** (hero, about, every service footer):
   **ES: "Un equipo. Cuatro verticales. Cero handoffs." / EN: "One team. Four
   verticals. Zero handoffs."**
-- **Lista negra**: impulsar/transformar/revolucionar, excelencia, pasión,
-  world-class, exclamaciones, Spanglish, "moderno/ágil/robusto/innovador"…
-- **Bilingüe**: EN = re-expresión, no traducción. "Hablemos" → "Let's talk".
-- **CTAs ≤ 4 palabras**: "Hablemos", "Cuéntanos tu proyecto", "Audita tu edge".
+- **Blacklist**: impulsar/transformar/revolucionar, excellence, passion,
+  world-class, exclamation marks, Spanglish, "modern/agile/robust/innovative"…
+- **Bilingual**: EN = re-expression, not translation. "Hablemos" → "Let's talk".
+- **CTAs ≤ 4 words**: "Hablemos", "Cuéntanos tu proyecto", "Audita tu edge".
+- **§7 The One Reader** (Ahorra Más-type retail architect) and **§8 Anti-AI
+  fingerprints** (10-point smell audit) added 2026-08-04.
 
-Predecesores (contexto genealógico, todos en `reference/legacy/agent/`):
+Predecessors (genealogy, all in `reference/legacy/agent/`):
 [boutique-copywriter.md](../../reference/legacy/agent/boutique-copywriter.md)
-(persona: "Ingeniero Principal explicando su stack en KubeCon"; regla final: "¿Lo
-dirías en una conferencia ante 200 colegas sin sentir vergüenza ajena?"),
+(persona: "Principal Engineer explaining their stack at KubeCon"; final rule:
+"Would you say it in front of 200 colleagues without cringing?"),
 [boutique-rewrite-workflow.md](../../reference/legacy/agent/boutique-rewrite-workflow.md),
-[style-feedback.md](../../reference/legacy/agent/style-feedback.md) (p. ej.: "'No
-vendemos humo' es defensivo → usar 'Rigor técnico y honestidad profesional'"),
+[style-feedback.md](../../reference/legacy/agent/style-feedback.md) (e.g. "'We
+don't sell smoke' is defensive → use 'technical rigor and professional honesty'"),
 [richin13-writing-style.md](../../reference/legacy/agent/richin13-writing-style.md).
 
-## Referencias de tono (ADN)
+## Tone references (DNA)
 
-Positivas: MarsBased (ownership), 37signals (títulos declarativos), iA (densidad),
-thoughtbot (partner senior), Basecamp (franqueza), Pico, **Rittman Analytics (oro
-para el vertical de datos)**. Anti-referencias: **ThoughtWorks ES** ("niebla
-corporativa") y Brooklyn Data ("cuando una boutique crece, su copy muere primero").
-Análisis actualizado a 2026-08-02 en [07-web-benchmark.md](07-web-benchmark.md).
+Positive: MarsBased (ownership), 37signals (declarative titles), iA (density),
+thoughtbot (senior partner), Basecamp (candor), Pico, **Rittman Analytics (gold
+for the data vertical)**. Anti-references: **ThoughtWorks ES** ("corporate fog")
+and Brooklyn Data ("when a boutique grows, its copy dies first").
+Analysis as of 2026-08-02 in [07-web-benchmark.md](07-web-benchmark.md).
 
-## Frases canónicas verificadas contra hechos
+## Canonical lines verified against facts
 
-| Frase (ES) | Hecho que la respalda |
-| ---------- | --------------------- |
-| "Tres ingenieros. Los mismos tres. De principio a fin." | Equipo real: Julio, Nacho, Daniel ([02-team.md](02-team.md)) |
-| "Un equipo. Cuatro verticales. Cero handoffs." | Las 4 verticales las entregan las mismas 3 personas |
-| "No escalamos. Profundizamos." | "No podemos ir a todas" + senior-only (deck 2025) |
-| "Sin inversores. Sin deuda. Sin prisa." | Sociedad 50/50 de los fundadores, sin capital externo ([01-identity.md](01-identity.md)) `[INFERIDO: no hay rastro de inversión externa en ninguna fuente]` |
-| "Si se rompe, no abrimos un ticket: lo arreglamos." | Operativa real de alertas/soporte (Gmail diario) |
-| "Nosotros firmamos el código." | Manifiesto IA + práctica con agentes supervisados |
-| "Parametrizamos SAP" / "No vendemos licencias SAP." | 15 años hybris; consultoría Bihr/Logista/Shufersal |
+| Line (ES) | Backing fact |
+| --------- | ------------ |
+| "Tres ingenieros. Los mismos tres. De principio a fin." | Real team: Julio, Nacho, Daniel ([02-team.md](02-team.md)) |
+| "Un equipo. Cuatro verticales. Cero handoffs." | All four verticals delivered by the same 3 people |
+| "No escalamos. Profundizamos." | "We can't take every project" + senior-only (2025 deck) |
+| "Sin inversores. Sin deuda. Sin prisa." | Founder-owned company, no external capital `[INFERRED: no trace of outside investment in any source]` |
+| "Si se rompe, no abrimos un ticket: lo arreglamos." | Real alerting/support operations (daily) |
+| "Nosotros firmamos el código." | AI manifesto + supervised-agent practice |
+| "Parametrizamos SAP" / "No vendemos licencias SAP." | 15 years of hybris; SAP consultancy for multiple retailers via partners |
 
-## Cautelas aprendidas (no repetir)
+## Learned cautions (do not repeat)
 
-- **Citabilidad de clientes**: en la web SOLO pueden nombrarse Alcampo, Auchan,
-  Forum Sport, Punt Roma y Job&Talent (ex-cliente), más las colaboraciones con
-  Inetum y Seidor. El resto del track record, solo anonimizado. Regla completa en
-  [03-clients-track-record.md](03-clients-track-record.md) §Política de citabilidad.
-- El copy actual de la homepage aún es pre-perfil (contiene "robusto", "impulsa") —
-  issue [#142](https://github.com/julioarguello/www-serverstartup-io/issues/142).
-- No usar "2017" como año de fundación (ver [01-identity.md](01-identity.md)).
-- El testimonio del deck es potente pero habría que pedir permiso antes de usarlo
-  con atribución en la web `[PENDIENTE]`.
-- Los `members` del CMS no coinciden con el equipo real (ver [02-team.md](02-team.md)).
+- **Client citability**: the website may only name Alcampo, Auchan, Forum Sport,
+  Punt Roma and Job&Talent (former client), plus the Inetum and Seidor
+  collaborations. Everything else, anonymized only. Full rule in
+  [03-clients-track-record.md](03-clients-track-record.md) §Citability policy.
+- Homepage pre-profile copy ("robusto", "impulsa") fixed in
+  [#142](https://github.com/julioarguello/www-serverstartup-io/issues/142) /
+  PR [#167](https://github.com/julioarguello/www-serverstartup-io/pull/167).
+- Never use "2017" as the founding year (see [01-identity.md](01-identity.md)).
+- The deck testimonial is strong but attribution would require permission before
+  using it on the website `[PENDING]`.
+- The CMS `members` don't match the real team (see [02-team.md](02-team.md)).

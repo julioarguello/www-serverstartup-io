@@ -1,71 +1,67 @@
-# El lector objetivo (persona)
+# The target reader (persona)
 
-> Definido por Julio (2026-08-03): *"Mi target es un arquitecto del software
-> experimentado, que ha instaurado todo lo que tiene Ahorra Más ahora."*
-> Investigación de campo: 2026-08-04. Normativo para todo el copy: skill
-> `doc-copywriter` §7 (la copia congelada vive en
-> [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)).
+> Defined by Julio (2026-08-03): *"My target is an experienced software architect —
+> the kind of person who built everything Ahorra Más has now."*
+> Field research: 2026-08-04. Normative for all copy: `doc-copywriter` skill §7
+> (frozen copy in [annex/doc-copywriter-SKILL.md](annex/doc-copywriter-SKILL.md)).
 
-## El arquetipo
+## The archetype
 
-Arquitecto/a de software con 15–25 años de producción a las espaldas, en un
-retailer español de tamaño medio. Montó personalmente el estate que hoy opera
-una cadena como Ahorra Más, pueblo a pueblo. No es un CIO de despacho: revisa
-PRs, entra a la consola de Cloudflare, recuerda por qué cada regla del WAF está
-ahí (o le duele no recordarlo).
+A software architect with 15–25 years of production scars, at a mid-size Spanish
+retailer. They personally stood up the estate a chain like Ahorra Más operates
+today, town by town. Not a desk-bound CIO: they review PRs, log into the
+Cloudflare console, and remember why every WAF rule is there (or it pains them
+not to).
 
-## El estate de referencia: Ahorra Más (verificado)
+## The reference estate: Ahorra Más (verified)
 
-| Dato | Valor | Fuente |
+| Fact | Value | Source |
 | ---- | ----- | ------ |
-| Empresa | Cadena de proximidad, +40 años, ~275 tiendas en Madrid y Castilla-La Mancha, ~12.000 empleados | [ecommerce-news.es](https://ecommerce-news.es/ahorramas-amplia-su-ecommerce-a-cuatro-localidades-madrilenas/), [Alimarket](https://www.alimarket.es/alimentacion/noticia/322654/ahorramas-acelera-la-digitalizacion-de-sus-supermercados) |
-| Storefront | **Salesforce Commerce Cloud (Demandware)**: 318 referencias `demandware` en el HTML, cookie `dwanonymous_*`, cabecera `x-dw-request-base-id` | Fingerprint propio con `curl` (2026-08-04) |
-| Edge | **Cloudflare** (`server: cloudflare`, `cf-cache-status`) | Ídem |
-| Retail media | Citrus Ads (`citrusConversionValue`) | Ídem |
-| E-commerce | Despliegue gradual por localidades: Alcalá, Getafe, Las Rozas, Alcobendas, S.S. de los Reyes, Torrejón | ecommerce-news.es |
-| Resto del estate (inferido del sector) | ERP, TPVs de tienda, motor de promociones, logística/almacén, plataforma de datos en construcción | Prensa sectorial |
+| Company | Proximity chain, 40+ years, ~275 stores in Madrid and Castilla-La Mancha, ~12,000 employees | [ecommerce-news.es](https://ecommerce-news.es/ahorramas-amplia-su-ecommerce-a-cuatro-localidades-madrilenas/), [Alimarket](https://www.alimarket.es/alimentacion/noticia/322654/ahorramas-acelera-la-digitalizacion-de-sus-supermercados) |
+| Storefront | **Salesforce Commerce Cloud (Demandware)**: 318 `demandware` references in the HTML, `dwanonymous_*` cookie, `x-dw-request-base-id` header | Own `curl` fingerprint (2026-08-04) |
+| Edge | **Cloudflare** (`server: cloudflare`, `cf-cache-status`) | Same |
+| Retail media | Citrus Ads (`citrusConversionValue`) | Same |
+| E-commerce | Gradual town-by-town rollout: Alcalá, Getafe, Las Rozas, Alcobendas, S.S. de los Reyes, Torrejón | ecommerce-news.es |
+| Rest of the estate (sector-inferred) | ERP, store POS, promotions engine, logistics/warehouse, data platform under construction | Sector press |
 
-Lectura clave: **el estate del lector es literalmente el terreno de Server
-Startup** (plataforma de e-commerce + Cloudflare delante + integraciones tienda/
-almacén + dato). No hay que explicarle su trabajo; hay que demostrarle en dos
-frases que lo hemos vivido.
+Key reading: **the reader's estate is literally Server Startup's home turf**
+(e-commerce platform + Cloudflare in front + store/warehouse integrations + data).
+No need to explain their job to them; show in two sentences that we've lived it.
 
-## Su semana (los dolores)
+## Their week (the pains)
 
-La promoción que llegó a la web pero no al TPV. El stock que nunca cuadra del
-todo entre tienda, almacén y online. La pregunta de capacidad antes del pico de
-campaña. La reunión donde un proveedor dijo "fase de assessment". El junior que
-le rotaron a la cuenta sin preguntar.
+The promotion that reached the web but not the POS. Stock that never quite matches
+between store, warehouse and online. The capacity question before the campaign
+peak. The meeting where a vendor said "assessment phase". The junior rotated onto
+their account without asking.
 
-## Sus alternativas reales (Dunford)
+## Their real alternatives (Dunford)
 
-No son nuestros competidores: son **"lo hacemos en casa"** o **"no hacemos
-nada"**. Cada página debe responder en voz baja al *por qué no in-house*:
-profundidad senior bajo demanda, sin plantilla, de gente que ha operado el mismo
-estate y da la cara personalmente.
+Not our competitors: **"we do it in-house"** or **"we do nothing"**. Every page
+must quietly answer *why not in-house*: senior depth on demand, without headcount,
+from people who have operated the same estate and answer personally.
 
-## Disparadores
+## Triggers
 
-**De confianza**: herramientas con nombre y versión, números no redondos,
-límites admitidos, prosa que carga la información en las dos primeras palabras
-(patrón F de Nielsen), afirmaciones comprobables.
+**Trust**: named tools with versions, un-round numbers, admitted limits, prose
+that front-loads information in the first two words (Nielsen's F-pattern),
+verifiable claims.
 
-**De cierre de pestaña**: "soluciones integrales", metodologías con ™,
-*benefit-speak* que le explica su propio trabajo, cualquier frase que un colega
-no diría en voz alta.
+**Close-tab**: "soluciones integrales", trademarked methodologies, benefit-speak
+explaining their own job to them, any sentence a colleague would never say aloud.
 
-## Frases que este lector dice en un café
+## Things this reader says over coffee
 
 - "El dato de stock no cuadra y nadie sabe dónde se pierde."
 - "Otro partner que me manda un junior a aprender con mi presupuesto."
 - "El WAF lo configuró alguien que ya no está en la empresa."
 - "Me sobran licencias y me faltan manos."
 
-## Implicaciones de redacción (resumen operativo)
+## Writing implications (operational summary)
 
-1. Test de la reunión: cada frase, dicha tal cual a esta persona, sin sonrojo.
-2. Un dato falsificable por sección; un detalle de retail vivido por página.
-3. Responder "por qué no lo hago con mi equipo", nunca "por qué no Accenture".
-4. Cero em-dashes ES, máximo un "X: Y" por página, ritmo variado (ver skill §8).
-5. La anonimización de clientes ([03-clients-track-record.md](03-clients-track-record.md))
-   juega a favor: "una cadena de ~275 tiendas" le suena a su propia casa.
+1. Meeting test: every sentence, said verbatim to this person, without blushing.
+2. One falsifiable fact per section; one lived retail detail per page.
+3. Answer "why wouldn't I do this with my own team", never "why not Accenture".
+4. Zero em-dashes in ES, max one "X: Y" per page, varied rhythm (skill §8).
+5. Client anonymization ([03-clients-track-record.md](03-clients-track-record.md))
+   works in our favor: "a ~275-store chain" sounds like their own house.

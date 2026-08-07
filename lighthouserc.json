@@ -7,12 +7,13 @@
 				"http://localhost:8787/cdn-waf-seguridad-edge-cloudflare",
 				"http://localhost:8787/contacto"
 			],
-			"numberOfRuns": 1,
+			"numberOfRuns": 3,
 			"settings": {
 				"chromeFlags": "--headless --no-sandbox --disable-gpu"
 			}
 		},
 		"assert": {
+			"aggregationMethod": "median-run",
 			"assertions": {
 				"categories:performance": ["error", { "minScore": 0.95 }],
 				"categories:accessibility": ["error", { "minScore": 1 }],

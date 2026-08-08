@@ -40,7 +40,7 @@ const t = Astro.locals.t;
 					<path class="brand-cube-edge" d="M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114"></path>
 				</svg>
 			</button>
-			<a href="/" class="brand-prompt" aria-label={t("go_home")}>
+			<a href="/" class="brand-prompt">
 				<span class="brand-word">~Server Startup</span><span class="brand-path">{promptPath}</span><span class="brand-cursor" aria-hidden="true"></span>
 			</a>
 		</div>
@@ -124,7 +124,13 @@ const t = Astro.locals.t;
 
 	.brand-path {
 		font-weight: 500;
-		color: var(--accent, var(--color-primary));
+		/* Ink text over an accent-tinted "terminal selection" — the color
+		   signal stays while text contrast stays AA (colored glyphs on white
+		   failed color-contrast: #F38020 is 2.4:1). */
+		color: var(--color-primary);
+		background: color-mix(in srgb, var(--accent, transparent) 22%, transparent);
+		border-radius: 3px;
+		padding-inline: 2px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;

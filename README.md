@@ -16,9 +16,11 @@ keeps us honest.
   the edge, under 50 ms from the reader.
 - **EmDash CMS on D1 + R2** — content management running inside the same
   Worker.
-- **Seeds as the single source of truth** — every text on the site lives in
-  [`seed/`](seed/), versioned. A clean rebuild reproduces the whole site,
-  word for word.
+- **Seeds carry the complete launch corpus** — every text of this first
+  version lives in [`seed/`](seed/), versioned; a clean rebuild reproduces
+  the site word for word. Once the site is live, content moves under the
+  CMS's care — that is what a CMS is for — and the seeds remain the
+  bootstrap and the local fixture.
 - **Agent-drafted, human-signed** — first drafts are written by an agent
   carrying a copywriting skill (house voice, a blacklist, an AI-tell detector
   with a score). A human reviews, corrects and signs every text. The review

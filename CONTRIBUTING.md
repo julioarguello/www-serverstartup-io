@@ -66,10 +66,17 @@ Two local gotchas worth knowing before they cost you an hour:
 The architecture is UI-first, content-driven: templates carry layout and CSS,
 the CMS carries every word.
 
-- **Seeds are the source of truth.** Any content change lands in `seed/`
-  (`seed.json` or `seed/content/`), so a clean rebuild reproduces the whole
-  site. Editing only the admin UI leaves the change unversioned — it will not
-  survive a rebuild.
+- **Content ownership has two phases.** Pre-release (now): seeds are the
+  source of truth — any content change lands in `seed/` (`seed.json` or
+  `seed/content/`), so a clean rebuild reproduces the whole site, and an
+  edit made only in the admin UI will not survive one. Once live: the
+  production database owns the content and the admin UI
+  (`/_emdash/admin`) is the editing surface — that is what the CMS is
+  for. The seeds then remain the bootstrap corpus and the fixture for
+  local dev and preview; re-seeding production becomes a destructive,
+  opt-in operation (see the production deploy workflow). Templates,
+  schema and code keep flowing through PRs in both phases — only content
+  ownership changes.
 - **No text in templates.** UI strings come from CMS widgets (`t()` /
   `labels.get()`), contact data from site settings (`getSiteSettings()`),
   body copy from PortableText. If you are typing a Spanish or English word
@@ -145,6 +152,9 @@ PR → quality gates green → squash merge to main
 
 Merging deploys nothing to production. The manual dispatch is the approval
 gate, and the same 20-route verification battery runs after both deploys.
+One nuance worth knowing: preview always rebuilds its content from seeds (a
+stable fixture for verifying code and template changes); production content,
+once the site is live, is CMS-managed and never overwritten by a deploy.
 Details, including why preview and production cannot share a build artifact:
 [`docs/architecture.md`](docs/architecture.md) §10.2.
 

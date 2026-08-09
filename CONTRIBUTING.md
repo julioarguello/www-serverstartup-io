@@ -131,9 +131,19 @@ reproducible with the scripts in [`scripts/`](scripts/):
 | Seeded boot | `scripts/ci-local-stack.sh 8787` | homepage 200 from seeds alone |
 | HTML | `html-validate` over the 15 rendered routes | 0 problems |
 | Headers | `scripts/ci-check-headers.sh http://localhost:8787` | full suite present |
+| MCP smoke | `scripts/ci-check-mcp.sh http://localhost:8787` | JSON-RPC contract + 5 tools |
 | Lighthouse | `lighthouserc.json` assertions | perf ≥ 95; a11y, BP, SEO = 100 |
 | Secrets | gitleaks (CI) | no leaks, full history |
 | Post-deploy | `scripts/verify-deploy.sh <base-url>` | 20 routes + headers + W3C Nu, all green |
+
+**How we test.** Verification is functional and black-box — there is no
+unit-test framework (yet). Each gate drives a real build or a running
+instance and asserts an observable contract; every stack-based check takes a
+base URL, so the same script runs in CI (after the seeded boot) and,
+unchanged, against a deployed preview. A new runtime surface — an endpoint, a
+header suite, a route contract — earns a script in [`scripts/`](scripts/) in
+that shape and a row above. The `/mcp` server, for instance, ships with
+`scripts/ci-check-mcp.sh` asserting its JSON-RPC contract.
 
 Two habits that keep these gates meaningful:
 

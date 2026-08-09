@@ -124,8 +124,10 @@ const siteOrigin = Astro.site?.origin || "https://www.serverstartup.io";
 const canonicalUrl = canonical || `${siteOrigin}${currentPath}`;
 const altUrl = `${siteOrigin}${altPath}`;
 const defaultUrl = locale === "es" ? canonicalUrl : altUrl;
-const ogImage = image || `${siteOrigin}/assets/logo-vertical.png`;
 const resolvedOgTitle = ogTitleOverride || pageTitle;
+// Dynamic OG card per title (#224). Rendered on-edge via Browser Rendering;
+// falls back to the static logo off-edge. Explicit pages still win via `image`.
+const ogImage = image || `${siteOrigin}/og/image?title=${encodeURIComponent(resolvedOgTitle)}`;
 const resolvedOgType = ogType || "website";
 ---
 

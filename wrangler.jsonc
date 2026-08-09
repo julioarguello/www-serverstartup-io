@@ -63,6 +63,10 @@
 					"binding": "LOADER",
 				},
 			],
+			// Browser Rendering for dynamic OG images (#224). Declared per-env
+			// (not in the default) so local `wrangler dev` boots without it and
+			// the /og.png endpoint falls back to the static logo off-edge.
+			"browser": { "binding": "BROWSER" },
 		},
 		"production": {
 			"name": "www-serverstartup-io",
@@ -90,6 +94,7 @@
 					"binding": "LOADER",
 				},
 			],
+			"browser": { "binding": "BROWSER" },
 		},
 	},
 }

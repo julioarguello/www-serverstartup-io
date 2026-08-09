@@ -17,7 +17,7 @@ export default defineConfig({
 			prefixDefaultLocale: false,
 		},
 	},
-	adapter: cloudflare(),
+	adapter: cloudflare({ imageService: "cloudflare" }),
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,

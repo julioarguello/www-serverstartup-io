@@ -77,7 +77,8 @@
 	font-family: var(--font-family);
 	font-size: 16px;
 	font-weight: 300;
-	color: rgba(30, 30, 30, 0.6);
+	/* 0.7, not lighter: 16px text on white needs >=4.5:1 (0.6 = 4.04:1, failed the gate) */
+	color: rgba(30, 30, 30, 0.7);
 }
 
 .s-contact__arrow {

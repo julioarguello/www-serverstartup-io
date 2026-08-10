@@ -10,10 +10,11 @@
  * somos pastes D·I·J on the three visible faces; deconstruyendo opens the
  * plates and lifts the die).
  *
- * Faces are ink slabs extending half a line beyond the face, corners
- * chamfered (lines are gaps, not strokes — no joins to overshoot); tiny
- * axis-aligned studs close every vertex. Everything belongs to the die,
- * so every pose and the spin itself need no static overlays.
+ * Faces are ink slabs extending half a line beyond the face (lines are
+ * gaps, not strokes — no joins to overshoot); each corner is a pointed
+ * chamfer (vertex at 2px) so every projected silhouette vertex closes in
+ * a clean point on GPU compositors. Everything belongs to the die, so
+ * every pose and the spin itself need no static overlays.
  *
  * Purely decorative (aria-hidden): the list is the menu. Links opt in via
  * data-die-spec="<faceKey>" / data-die-site="<siteKey>" anywhere in the

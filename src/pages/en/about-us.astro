@@ -56,6 +56,12 @@ const historyConclusion =
 		: null;
 const historyMain = historyConclusion ? historyBlocks.slice(0, -1) : historyBlocks;
 
+// Accessible name for the photo link, sourced from the CMS caption itself
+// (an anchor whose only child is an alt="" image has no name — WCAG H30).
+const sponsorCaption = (sponsorBlocks.at(-1)?.children ?? [])
+	.map((s: any) => s.text ?? "")
+	.join("");
+
 // The boot line (code-marked first block) renders inside a terminal window
 // that echoes the integration instrument; the rest of the hero is plain intro.
 const bootBlocks = heroBlocks[0]?.children?.[0]?.marks?.includes("code") ? [heroBlocks[0]] : [];
@@ -168,7 +174,7 @@ const introBlocks = bootBlocks.length ? heroBlocks.slice(1) : heroBlocks;
 				<PortableText value={sponsorBlocks.slice(0, -1)} components={ptComponents} />
 				<div class="s-sponsor__media">
 					<figure class="s-sponsor__figure">
-						<a href="https://www.instagram.com/p/DSflABTjB0P/" target="_blank" rel="noopener noreferrer">
+						<a href="https://www.instagram.com/p/DSflABTjB0P/" target="_blank" rel="noopener noreferrer" aria-label={sponsorCaption}>
 							<img src="/assets/urdaneta-infantil.webp" alt="" width="1200" height="900" loading="lazy" />
 						</a>
 						<figcaption>

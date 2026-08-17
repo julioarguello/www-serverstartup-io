@@ -1,6 +1,7 @@
 ---
 id: "01M07525BSMR548PD8FB9BSRW4"
 cta_label: "Tell us your case"
+excerpt: "AI is a means, not an end. The machine writes the repetitive code; our time goes to judgment and accountability. The agent proposes, the engineer signs."
 # evidence traceability in issue 270 and docs/company/04-services-business-model.md
 ---
 

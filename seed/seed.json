@@ -3112,7 +3112,7 @@
 				"status": "published",
 				"data": {
 					"title": "Comercio electrónico",
-					"excerpt": "Tu catálogo tiene 50.000 SKUs y tu partner no sabe cómo se indexan. Parametrizamos SAP Commerce Cloud con la profundidad que solo da trabajar en el mismo proyecto durante años.",
+					"excerpt": "Extender la plataforma es lo fácil. Hacerlo con cada mejora desacoplada del núcleo, para que sobreviva a la siguiente subida de versión, es lo que casi nadie hace. Quince años dentro de SAP Commerce Cloud.",
 					"cta_label": "Audita tu e-commerce",
 					"content": [
 						{
@@ -5089,7 +5089,7 @@
 				"status": "published",
 				"data": {
 					"title": "Integración de sistemas",
-					"excerpt": "No somos arquitectos de PowerPoint. Más de 150 flujos, 19 sistemas interconectados. Enterprise Integration Patterns reales sobre Karaf y Quarkus.",
+					"excerpt": "No somos arquitectos de PowerPoint. Cada integración se corta a la medida del problema — un guante, no un martillo — con observabilidad absoluta: si un flujo falla, la traza dice dónde, cuándo y por qué.",
 					"cta_label": "Hablemos de integración",
 					"content": [
 						{
@@ -6063,7 +6063,7 @@
 				"status": "published",
 				"data": {
 					"title": "Desarrollo greenfield",
-					"excerpt": "El código no es el producto: el producto es el sistema que sigue en producción años después de la demo. Java 21, Spring Boot, Quarkus.",
+					"excerpt": "El código no es el producto: el producto es el sistema que sigue en producción años después de la demo. Especificación, contract first, gobernanza y seguridad — ninguna es opcional.",
 					"cta_label": "Hablemos de tu proyecto",
 					"content": [
 						{
@@ -6782,7 +6782,7 @@
 				"translationOf": "svc-ecommerce",
 				"data": {
 					"title": "E-commerce",
-					"excerpt": "Your catalog has 50,000 SKUs and your partner doesn't know how they're indexed. We parameterize SAP Commerce Cloud with the depth that only comes from years on the same project.",
+					"excerpt": "Extending the platform is the easy part. Doing it with every improvement decoupled from the core, so it survives the next version upgrade, is what almost nobody does. Fifteen years inside SAP Commerce Cloud.",
 					"cta_label": "Audit your e-commerce",
 					"content": [
 						{
@@ -8740,7 +8740,7 @@
 				"translationOf": "svc-integracion",
 				"data": {
 					"title": "Systems Integration",
-					"excerpt": "We're not PowerPoint architects. Over 150 integration flows, 19 interconnected systems. Real Enterprise Integration Patterns on Karaf and Quarkus.",
+					"excerpt": "We're not PowerPoint architects. Every integration is cut to fit the problem — a glove, not a hammer — with absolute observability: when a flow fails, the trace says where, when and why.",
 					"cta_label": "Let's talk integration",
 					"content": [
 						{
@@ -9715,7 +9715,7 @@
 				"translationOf": "svc-greenfield",
 				"data": {
 					"title": "Greenfield development",
-					"excerpt": "The code isn't the product: the product is the system still in production years after the demo. Java 21, Spring Boot, Quarkus.",
+					"excerpt": "The code isn't the product: the product is the system still in production years after the demo. Specification, contract first, governance and security — none of them optional.",
 					"cta_label": "Let's talk about your project",
 					"content": [
 						{
@@ -10432,7 +10432,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Inteligencia artificial",
-					"excerpt": "Agentes que trabajan dentro de tus sistemas, con el ERP, el dato y el perímetro que ya conocemos. Nada de demos de laboratorio.",
+					"excerpt": "La IA es un medio, no un fin. El código repetitivo lo hace la máquina; nuestro tiempo va al criterio y la responsabilidad. El agente propone, el ingeniero firma.",
 					"cta_label": "Cuéntanos tu caso",
 					"content": [
 						{
@@ -11060,7 +11060,7 @@
 				"translationOf": "svc-ia",
 				"data": {
 					"title": "Artificial Intelligence",
-					"excerpt": "Agents that work inside your systems, wired to the ERP, the data and the edge we already run. No lab demos.",
+					"excerpt": "AI is a means, not an end. The machine writes the repetitive code; our time goes to judgment and accountability. The agent proposes, the engineer signs.",
 					"cta_label": "Tell us your case",
 					"content": [
 						{

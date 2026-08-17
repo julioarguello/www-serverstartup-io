@@ -1,7 +1,7 @@
 ---
 id: "01KZB2G0MY3WA1HR2CK79SBNKZ"
 cta_label: "Hablemos de tu proyecto"
-excerpt: "El código no es el producto: el producto es el sistema que sigue en producción años después de la demo. Java 21, Spring Boot, Quarkus."
+excerpt: "El código no es el producto: el producto es el sistema que sigue en producción años después de la demo. Especificación, contract first, gobernanza y seguridad — ninguna es opcional."
 ---
 
 Hay necesidades que ningún producto comercial cubre. Un motor de precios que solo existe en tu negocio, una web que no cabe en ninguna plantilla (esta misma, sin ir más lejos). Para eso siempre ha existido el desarrollo *greenfield*.

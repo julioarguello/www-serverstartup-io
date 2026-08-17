@@ -14,10 +14,18 @@ const LINK = /\[([^\]\n]+)\]\(([^)\s]+)\)/g;
 
 /** Plain-text version for face-cards, <meta> descriptions and JSON-LD. */
 export function excerptPlain(s: string): string {
-	return s.replace(LINK, "$1").replace(/\*([^*\n]+)\*/g, "$1");
+	return s
+		.replace(LINK, "$1")
+		.replace(/`([^`\n]+)`/g, "$1")
+		.replace(/\*([^*\n]+)\*/g, "$1");
 }
 
-/** HTML version for the hero: escaped, then [t](url) → <a>, *…* → <em>. */
+/**
+ * HTML version for the hero: escaped, then [t](url) → <a> (house dashed
+ * style via CSS), `t` → <code> (stack terms, §14 convention), *t* → <em>
+ * (marked anglicisms). A link may wrap a code term: [`SAP Commerce
+ * Cloud`](url) — the backtick pass runs after the link pass on purpose.
+ */
 export function excerptHtml(s: string): string {
 	return s
 		.replace(/[&<>]/g, (c) => ESC[c])
@@ -26,5 +34,6 @@ export function excerptHtml(s: string): string {
 			const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
 			return `<a href="${href}"${attrs}>${text}</a>`;
 		})
+		.replace(/`([^`\n]+)`/g, "<code>$1</code>")
 		.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
 }

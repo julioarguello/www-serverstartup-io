@@ -3112,7 +3112,7 @@
 				"status": "published",
 				"data": {
 					"title": "Comercio electrónico",
-					"excerpt": "Quince años dentro de [SAP Commerce Cloud](https://www.sap.com/spain/products/crm/commerce-cloud.html). Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del núcleo, para que sobreviva a la siguiente subida de versión, es lo que casi nadie hace.",
+					"excerpt": "Quince años dentro de [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del *core*, ajustada al estándar, para que sobreviva versión tras versión, es lo que casi nadie hace. Y el rendimiento, nuestra especialidad.",
 					"cta_label": "Audita tu e-commerce",
 					"content": [
 						{
@@ -3228,7 +3228,7 @@
 								{
 									"_type": "span",
 									"_key": "kf",
-									"text": ". No vendemos licencias.",
+									"text": ". No vendemos licencias. El rendimiento es nuestra especialidad: catálogo, buscador y paso por caja se dimensionan para el pico real, no para la media.",
 									"marks": []
 								}
 							]
@@ -3678,7 +3678,7 @@
 				"status": "published",
 				"data": {
 					"title": "CDN, WAF y seguridad edge",
-					"excerpt": "*Partners* oficiales de [Cloudflare](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de CDN, WAF y seguridad perimetral, sobre todo en comercio electrónico.",
+					"excerpt": "*Partners* oficiales de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en comercio electrónico.",
 					"cta_label": "Audita tu edge",
 					"content": [
 						{
@@ -5089,7 +5089,7 @@
 				"status": "published",
 				"data": {
 					"title": "Integración de sistemas",
-					"excerpt": "No somos arquitectos de PowerPoint. Cada integración se corta a la medida del problema — un guante, no un martillo — con homogeneidad, metodología y testabilidad. Y observabilidad absoluta: si un flujo falla, la traza dice dónde, cuándo y por qué.",
+					"excerpt": "No somos arquitectos de PowerPoint: lo que planificamos, lo ejecutamos. Sin exageraciones — lo objetivamente necesario y viable. Un guante, no un martillo, con homogeneidad, metodología, testabilidad y observabilidad absoluta.",
 					"cta_label": "Hablemos de integración",
 					"content": [
 						{
@@ -6063,7 +6063,7 @@
 				"status": "published",
 				"data": {
 					"title": "Desarrollo greenfield",
-					"excerpt": "El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. SDLC completo, de la especificación a la observabilidad. Trabajamos contract first, con foco en estabilidad, seguridad y gobernanza.",
+					"excerpt": "El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. `SDLC` completo, de la especificación a la observabilidad. Trabajamos *contract first*, con foco en estabilidad, seguridad y gobernanza.",
 					"cta_label": "Hablemos de tu proyecto",
 					"content": [
 						{
@@ -6782,7 +6782,7 @@
 				"translationOf": "svc-ecommerce",
 				"data": {
 					"title": "E-commerce",
-					"excerpt": "Fifteen years inside [SAP Commerce Cloud](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, so it survives the next version upgrade, is what almost nobody does.",
+					"excerpt": "Fifteen years inside [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.",
 					"cta_label": "Audit your e-commerce",
 					"content": [
 						{
@@ -6898,7 +6898,7 @@
 								{
 									"_type": "span",
 									"_key": "kf",
-									"text": ". We don't sell licenses.",
+									"text": ". We don't sell licenses. Performance is our specialty: catalog, search and checkout are sized for the real peak, not the average.",
 									"marks": []
 								}
 							]
@@ -7335,7 +7335,7 @@
 				"translationOf": "svc-cdn",
 				"data": {
 					"title": "CDN, WAF & Edge Security",
-					"excerpt": "Official [Cloudflare](https://www.cloudflare.com/) partners since 2019. We audit, migrate and run CDN, WAF and edge security, mostly for e-commerce.",
+					"excerpt": "Official [`Cloudflare`](https://www.cloudflare.com/) partners since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for e-commerce.",
 					"cta_label": "Audit your edge",
 					"content": [
 						{
@@ -8740,7 +8740,7 @@
 				"translationOf": "svc-integracion",
 				"data": {
 					"title": "Systems Integration",
-					"excerpt": "We're not PowerPoint architects. Every integration is cut to fit the problem — a glove, not a hammer — with homogeneity, methodology and testability. And absolute observability: when a flow fails, the trace says where, when and why.",
+					"excerpt": "We're not PowerPoint architects: what we plan is what we ship. No overpromising — the objectively necessary and viable. A glove, not a hammer, with homogeneity, methodology, testability and absolute observability.",
 					"cta_label": "Let's talk integration",
 					"content": [
 						{
@@ -9715,7 +9715,7 @@
 				"translationOf": "svc-greenfield",
 				"data": {
 					"title": "Greenfield development",
-					"excerpt": "The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full SDLC, from specification to observability. We work contract first, focused on stability, security and governance.",
+					"excerpt": "The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full `SDLC`, from specification to observability. We work contract first, focused on stability, security and governance.",
 					"cta_label": "Let's talk about your project",
 					"content": [
 						{
@@ -10432,7 +10432,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Inteligencia artificial",
-					"excerpt": "La IA es un medio, no un fin. El código repetitivo lo hace la máquina; nuestro tiempo va al criterio y la responsabilidad. El agente propone, el ingeniero dispone.",
+					"excerpt": "La IA es un medio, no un fin. La máquina hace el código repetitivo; nosotros ponemos la arquitectura y el criterio, del desarrollo a la operación — enfoque integral, perfil *DevOps*. El agente propone, el ingeniero dispone.",
 					"cta_label": "Cuéntanos tu caso",
 					"content": [
 						{
@@ -11060,7 +11060,7 @@
 				"translationOf": "svc-ia",
 				"data": {
 					"title": "Artificial Intelligence",
-					"excerpt": "AI is a means, not an end. The machine writes the repetitive code; our time goes to judgment and accountability. The agent proposes; the engineer disposes.",
+					"excerpt": "AI is a means, not an end. The machine writes the repetitive code; we bring the architecture and the judgment, from development to operations — one integral approach, a DevOps profile. The agent proposes; the engineer disposes.",
 					"cta_label": "Tell us your case",
 					"content": [
 						{

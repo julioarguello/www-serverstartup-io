@@ -1,7 +1,7 @@
 ---
 id: "01M02XSPBAZDE0QWGW5ASJHMVH"
 cta_label: "Let's talk data"
-excerpt: "Anyone can wire up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story. Our tests number in the thousands."
+excerpt: "A data pipeline comes together quickly. A platform that survives years of business, schema changes and campaign peaks is another story. Our tests number in the thousands."
 ---
 
 Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.

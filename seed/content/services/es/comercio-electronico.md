@@ -1,7 +1,7 @@
 ---
 id: "01KZB2G0MW9QKQRHBMYVTRFEEF"
 cta_label: "Audita tu e-commerce"
-excerpt: "Extender la plataforma es lo fácil. Hacerlo con cada mejora desacoplada del núcleo, para que sobreviva a la siguiente subida de versión, es lo que casi nadie hace. Quince años dentro de SAP Commerce Cloud."
+excerpt: "Quince años dentro de [SAP Commerce Cloud](https://www.sap.com/spain/products/crm/commerce-cloud.html). Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del núcleo, para que sobreviva a la siguiente subida de versión, es lo que casi nadie hace."
 ---
 
 Extender una plataforma de comercio parece rápido… un desarrollo a medida aquí, un parche allá, y en unos años la subida de versión que el fabricante anuncia como rutina cuesta un trimestre. Lo hemos visto. Y sabemos evitarlo.

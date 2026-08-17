@@ -1,7 +1,7 @@
 ---
 id: "01KZB2G0MYR4QS70ETN5SN5W10"
 cta_label: "Audit your e-commerce"
-excerpt: "Extending the platform is the easy part. Doing it with every improvement decoupled from the core, so it survives the next version upgrade, is what almost nobody does. Fifteen years inside SAP Commerce Cloud."
+excerpt: "Fifteen years inside [SAP Commerce Cloud](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, so it survives the next version upgrade, is what almost nobody does."
 ---
 
 Extending a commerce platform looks quick… a custom development here, a patch there, and a few years in, the version upgrade the vendor calls routine costs you a quarter. We've seen it. We know how to avoid it.

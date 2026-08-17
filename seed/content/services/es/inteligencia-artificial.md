@@ -1,7 +1,7 @@
 ---
 id: "01M07525BS5E1JAN6X9HBDPNVB"
 cta_label: "Cuéntanos tu caso"
-excerpt: "La IA es un medio, no un fin. El código repetitivo lo hace la máquina; nuestro tiempo va al criterio y la responsabilidad. El agente propone, el ingeniero firma."
+excerpt: "La IA es un medio, no un fin. El código repetitivo lo hace la máquina; nuestro tiempo va al criterio y la responsabilidad. El agente propone, el ingeniero dispone."
 # evidence traceability in issue 270 and docs/company/04-services-business-model.md
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "01M02XSPB4687H2JC48XSJKP5H"
 cta_label: "Hablemos de tus datos"
-excerpt: "Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema y picos de campaña es otra historia. Nuestros tests se cuentan por miles."
+excerpt: "Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema, picos de campaña y fuentes de datos variables es otra historia. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture) y tests que se cuentan por miles."
 ---
 
 Cualquiera monta un *pipeline* en una tarde. Una plataforma que aguante años de negocio, cambios de esquema y picos de campaña es otra historia.

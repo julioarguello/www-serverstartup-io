@@ -301,7 +301,7 @@
 				{
 					"type": "custom",
 					"label": "Ingeniería Greenfield",
-					"url": "/ingenieria-greenfield-y-sistemas-criticos"
+					"url": "/desarrollo-greenfield"
 				},
 				{
 					"type": "custom",
@@ -4350,7 +4350,7 @@
 				"status": "published",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "Construimos plataformas, en *cloud* y *on-premise*, que gobiernan el dato desde la ingesta hasta el análisis.",
+					"excerpt": "Un flujo de datos se monta en una tarde. Una plataforma que aguante años de negocio, cambios de esquema y picos de campaña es otra historia. Nuestros tests se cuentan por miles.",
 					"cta_label": "Hablemos de tus datos",
 					"content": [
 						{
@@ -4375,7 +4375,7 @@
 								{
 									"_key": "k3",
 									"_type": "link",
-									"href": "/ingenieria-greenfield-y-sistemas-criticos"
+									"href": "/desarrollo-greenfield"
 								}
 							],
 							"children": [
@@ -6059,11 +6059,11 @@
 			},
 			{
 				"id": "svc-greenfield",
-				"slug": "ingenieria-greenfield-y-sistemas-criticos",
+				"slug": "desarrollo-greenfield",
 				"status": "published",
 				"data": {
 					"title": "Desarrollo greenfield",
-					"excerpt": "No somos una factoría de software. Construimos los componentes críticos que el software comercial no cubre. Java 21+, Spring Boot, Quarkus.",
+					"excerpt": "El código no es el producto: el producto es el sistema que sigue en producción años después de la demo. Java 21, Spring Boot, Quarkus.",
 					"cta_label": "Hablemos de tu proyecto",
 					"content": [
 						{
@@ -8000,7 +8000,7 @@
 				"translationOf": "svc-bigdata",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "We build platforms, in the *cloud* and *on-premise*, that govern data from ingestion to analysis.",
+					"excerpt": "Anyone can wire up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story. Our tests number in the thousands.",
 					"cta_label": "Let's talk data",
 					"content": [
 						{
@@ -8025,7 +8025,7 @@
 								{
 									"_key": "k3",
 									"_type": "link",
-									"href": "/en/greenfield-engineering-critical-systems"
+									"href": "/en/greenfield-development"
 								}
 							],
 							"children": [
@@ -9709,13 +9709,13 @@
 			},
 			{
 				"id": "svc-greenfield-en",
-				"slug": "greenfield-engineering-critical-systems",
+				"slug": "greenfield-development",
 				"status": "published",
 				"locale": "en",
 				"translationOf": "svc-greenfield",
 				"data": {
 					"title": "Greenfield development",
-					"excerpt": "We're not a software factory. We build the critical components that commercial software can't cover. Java 21+, Spring Boot, Quarkus.",
+					"excerpt": "The code isn't the product: the product is the system still in production years after the demo. Java 21, Spring Boot, Quarkus.",
 					"cta_label": "Let's talk about your project",
 					"content": [
 						{

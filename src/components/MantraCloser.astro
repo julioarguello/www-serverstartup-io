@@ -2,21 +2,26 @@
 /**
  * MantraCloser — the house signature, one implementation (#295).
  *
- * The line used to be written 14 times across the content and each page
- * gave it its own shape (standout blockquote, quiet blockquote, plain
- * paragraph, inline bold mid-sentence). Now the three beats live once per
- * locale in the CMS (ui_labels → mantra) and this component gives them
- * their form, so a new page cannot drift. Same move as the heading mark
- * in #298: what is design leaves the copy.
+ * The line used to be written 14 times across the content, each page
+ * giving it its own shape. Now the three beats live once per locale in the
+ * CMS (ui_labels → mantra) and this component gives them their form, so a
+ * new page cannot drift. Same move as the heading mark in #298.
  *
- * The form is an equation set in Computer Modern — Knuth's TeX face,
- * self-hosted and subset to these glyphs (13 KB for three cuts). The "6"
- * is not written: it is SHOWN as the six vertical colors, the canonical
- * ones from the menu die, the section emblems and the home rows. Screen
- * readers get the numeral instead (`u-sr`).
+ * The form is an equation set in Computer Modern (Knuth's TeX face,
+ * self-hosted, subset to these glyphs — 13 KB for three cuts), and every
+ * figure carries its own glyph BENEATH it, all three numerals staying on
+ * one baseline (founder design, 2026-08-18):
  *
- * The rule is ink everywhere (the logo's palette): the only color in the
- * piece is the six faces, and there it means something.
+ *     1 equipo   =   6 verticales   =   0 traspasos
+ *     ▣              ▪▪▪▪▪▪
+ *   the logo      the six faces        nothing — and that IS the claim
+ *
+ * The glyphs are absolutely positioned so they never disturb the line;
+ * the box reserves the room for them. Screen readers read the numerals
+ * and skip the glyphs.
+ *
+ * Chrome: the house box (left rule + 4% ink tint), the same pattern and
+ * margins as `.s-partner` — nothing invented here.
  */
 import { getUiLabels } from "../utils/ui-labels";
 
@@ -38,31 +43,47 @@ const href = en ? "/en/about-us" : "/quienes-somos";
 
 // canonical vertical colors, cube order (ec · int · bd · cdn · gf · ia)
 const FACE_COLORS = ["#008FD3", "#1D4E89", "#EA4335", "#F38020", "#3E7D50", "#6B4FBB"];
-// the noun without its quantifier: the figure carries the number
+// the figure carries the number, so the noun drops its quantifier
 const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, ""));
 ---
 
 <aside class="mantra">
 	<p class="mantra__eq">
-		<span class="mantra__n">1</span>{" "}
-		{selfPage ? nouns[0] : <a href={href}>{nouns[0]}</a>} <b>=</b>
-		<span class="mantra__six">
-			<span class="mantra__cells" aria-hidden="true">
-				{FACE_COLORS.map((c) => <i style={`background:${c}`}></i>)}
+		<span class="mantra__fig">
+			<span class="mantra__n">1</span>
+			<span class="mantra__glyph" aria-hidden="true">
+				<svg class="mantra__cube" width="17" height="19" viewBox="0 0 200 228">
+					<polygon points="100,14 186,64 100,114 14,64" fill="#CED4DA"></polygon>
+					<polygon points="14,64 100,114 100,214 14,164" fill="#CED4DA"></polygon>
+					<polygon points="100,114 186,64 186,164 100,214" fill="#E3E7EB"></polygon>
+					<path d="M100,14 186,64 186,164 100,214 14,164 14,64 Z"></path>
+					<path d="M14,64 100,114 186,64 M100,114 100,214"></path>
+				</svg>
 			</span>
-			<span class="u-sr">6</span>
+		</span>{" "}
+		{selfPage ? nouns[0] : <a href={href}>{nouns[0]}</a>} <b>=</b>
+		<span class="mantra__fig">
+			<span class="mantra__n">6</span>
+			<span class="mantra__glyph" aria-hidden="true">
+				<span class="mantra__cells">
+					{FACE_COLORS.map((c) => <i style={`background:${c}`}></i>)}
+				</span>
+			</span>
 		</span>{" "}
 		{nouns[1]} <b>=</b>
-		<span class="mantra__n">0</span> {nouns[2]}
+		<span class="mantra__fig"><span class="mantra__n">0</span></span> {nouns[2]}
 	</p>
 </aside>
 
 <style is:global>
+	/* the house box: left rule + 4% ink tint, same pattern and rhythm as
+	   .s-partner (service.css) — the signature sits inside it instead of
+	   floating naked against the next band (founder review) */
 	.mantra {
-		max-width: 700px;
-		margin: 40px 0 0;
+		margin: 44px 0 8px;
+		padding: 26px 30px 34px;
 		border-left: 3px solid var(--color-primary, #1e1e1e);
-		padding-left: 18px;
+		background: color-mix(in srgb, var(--color-primary, #1e1e1e) 4%, transparent);
 	}
 
 	.mantra__eq {
@@ -75,16 +96,51 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		color: var(--color-primary, #1e1e1e);
 	}
 
+	/* a figure and its glyph: inline-block keeps the numeral ON the shared
+	   baseline while the glyph hangs beneath, out of the flow */
+	.mantra__fig {
+		position: relative;
+		display: inline-block;
+	}
+
 	.mantra__n {
 		font-style: normal;
 		font-weight: 700;
 		font-size: 31px;
 	}
 
+	.mantra__glyph {
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		margin-top: 4px;
+		line-height: 0;
+		display: flex;
+		justify-content: center;
+	}
+
+	.mantra__cells {
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		gap: 2px;
+		width: 46px;
+	}
+	.mantra__cells i {
+		aspect-ratio: 1;
+	}
+
+	.mantra__cube path {
+		fill: none;
+		stroke: var(--color-primary, #1e1e1e);
+		stroke-width: 14;
+		stroke-linejoin: round;
+	}
+
 	.mantra__eq b {
 		font-style: normal;
 		font-weight: 400;
-		padding: 0 6px;
+		padding: 0 8px;
 		color: color-mix(in srgb, var(--color-primary, #1e1e1e) 45%, transparent);
 	}
 
@@ -102,39 +158,11 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		text-decoration-color: currentColor;
 	}
 
-	/* the six faces stand in for the numeral: one row, sat on the baseline
-	   like a glyph (the 3x2 block hung below the line — founder review) */
-	.mantra__six {
-		display: inline-block;
-	}
-	.mantra__cells {
-		display: inline-grid;
-		grid-template-columns: repeat(6, 1fr);
-		gap: 2px;
-		width: 48px;
-		vertical-align: baseline;
-		position: relative;
-		top: 1px;
-	}
-	.mantra__cells i {
-		aspect-ratio: 1;
-	}
-
-	.u-sr {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0 0 0 0);
-		white-space: nowrap;
-		border: 0;
-	}
-
 	@media (max-width: 700px) {
-		.mantra__eq { font-size: 21px; line-height: 33px; }
-		.mantra__n { font-size: 24px; }
-		.mantra__cells { width: 38px; }
+		.mantra { padding: 20px 22px 30px; margin: 34px 0 8px; }
+		.mantra__eq { font-size: 20px; line-height: 34px; }
+		.mantra__n { font-size: 23px; }
+		.mantra__cells { width: 36px; }
+		.mantra__cube { width: 14px; height: 16px; }
 	}
 </style>

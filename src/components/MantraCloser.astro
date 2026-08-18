@@ -80,9 +80,11 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		</span>
 		<span class="mantra__n">1</span>{" "}
 		{selfPage ? nouns[0] : <a href={href}>{nouns[0]}</a>} <b>=</b>
-		<span class="mantra__cells" aria-hidden="true">
-			{faces.map((f) => <i style={`background:${f.color}`} title={f.title}></i>)}
-		</span>
+		<span class="mantra__cells" aria-hidden="true"
+			><span class="mantra__cells-grid">
+				{faces.map((f) => <i style={`background:${f.color}`} title={f.title}></i>)}
+			</span></span
+		>
 		<span class="mantra__n">6</span> {nouns[1]} <b>=</b>
 		<span class="mantra__n mantra__empty" aria-hidden="true">Ø</span>
 		<span class="u-sr">0</span> {nouns[2]}
@@ -124,16 +126,23 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 
 	/* the six faces ride IN FRONT of the figure, stacked (2x3) so the block
 	   matches the numeral's height instead of running along the line */
+	/* The block SITS on the text baseline. An inline-BLOCK whose content has
+	   no line box takes its bottom margin edge as baseline (CSS 2.1 §10.8);
+	   an inline-GRID instead synthesises one from its first row, which is why
+	   the earlier version floated (founder: "no quiero que bailen"). Hence
+	   the wrapper: inline-block outside, grid inside. */
 	.mantra__cells {
-		display: inline-grid;
+		display: inline-block;
+		overflow: hidden;
+		vertical-align: baseline;
+		line-height: 0;
+		margin-right: 8px;
+	}
+	.mantra__cells-grid {
+		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 2px;
 		width: 16px;
-		margin-right: 8px;
-		/* centred on the numerals, not hanging from the baseline */
-		vertical-align: middle;
-		position: relative;
-		top: -2px;
 	}
 	.mantra__cells i {
 		aspect-ratio: 1;
@@ -152,9 +161,8 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	.mantra__cube-wrap {
 		display: inline-block;
 		margin-right: 8px;
-		vertical-align: middle;
-		position: relative;
-		top: -2px;
+		vertical-align: baseline;
+		overflow: hidden;
 		line-height: 0;
 	}
 

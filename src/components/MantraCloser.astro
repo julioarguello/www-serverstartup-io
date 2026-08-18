@@ -23,7 +23,9 @@
  * Chrome: the house box (left rule + 4% ink tint), the same pattern and
  * margins as `.s-partner` — nothing invented here.
  */
+import { getEmDashCollection } from "emdash";
 import { getUiLabels } from "../utils/ui-labels";
+import { FACE_BY_SLUG, FACE_ORDER } from "../utils/nav";
 
 interface Props {
 	/** true on Quiénes somos / About us: no self-link */
@@ -41,8 +43,24 @@ const beats = [
 ];
 const href = en ? "/en/about-us" : "/quienes-somos";
 
-// canonical vertical colors, cube order (ec · int · bd · cdn · gf · ia)
-const FACE_COLORS = ["#008FD3", "#1D4E89", "#EA4335", "#F38020", "#3E7D50", "#6B4FBB"];
+// the six faces come from the CMS in canonical cube order, and each one
+// LINKS to its vertical — the glyph is navigation, not decoration
+const { entries: serviceEntries } = await getEmDashCollection("services", {
+	orderBy: { created_at: "asc" },
+	locale,
+});
+const faces = (serviceEntries ?? [])
+	.map((s: any) => {
+		const slug = s.slug ?? s.id;
+		return {
+			key: FACE_BY_SLUG[slug],
+			href: `${en ? "/en" : ""}/${slug}`,
+			title: s.data.title ?? slug,
+			color: s.data.color ?? "#1E1E1E",
+		};
+	})
+	.filter((f) => f.key)
+	.sort((a, b) => FACE_ORDER.indexOf(a.key) - FACE_ORDER.indexOf(b.key));
 // the figure carries the number, so the noun drops its quantifier
 const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, ""));
 ---
@@ -51,14 +69,18 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	<p class="mantra__eq">
 		<span class="mantra__fig">
 			<span class="mantra__n">1</span>
-			<span class="mantra__glyph" aria-hidden="true">
-				<svg class="mantra__cube" width="17" height="19" viewBox="0 0 200 228">
-					<polygon points="100,14 186,64 100,114 14,64" fill="#CED4DA"></polygon>
-					<polygon points="14,64 100,114 100,214 14,164" fill="#CED4DA"></polygon>
-					<polygon points="100,114 186,64 186,164 100,214" fill="#E3E7EB"></polygon>
-					<path d="M100,14 186,64 186,164 100,214 14,164 14,64 Z"></path>
-					<path d="M14,64 100,114 186,64 M100,114 100,214"></path>
-				</svg>
+			<span class="mantra__glyph">
+				<a href={href} class="mantra__cube-link" aria-label={beats[0]}>
+					<svg class="mantra__cube" width="21" height="24" viewBox="0 0 200 228" role="presentation">
+						<polygon points="100,14 186,64 100,114 14,64" fill="#CED4DA"></polygon>
+						<polygon points="14,64 100,114 100,214 14,164" fill="#CED4DA"></polygon>
+						<polygon points="100,114 186,64 186,164 100,214" fill="#E3E7EB"></polygon>
+						<path d="M100,14 186,64 186,164 100,214 14,164 14,64 Z"></path>
+						<path d="M14,64 100,114 186,64 M100,114 100,214"></path>
+						<path d="M57,39 143,89 M143,39 57,89"></path>
+						<path d="M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114"></path>
+					</svg>
+				</a>
 			</span>
 		</span>{" "}
 		{selfPage ? nouns[0] : <a href={href}>{nouns[0]}</a>} <b>=</b>
@@ -66,7 +88,7 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 			<span class="mantra__n">6</span>
 			<span class="mantra__glyph" aria-hidden="true">
 				<span class="mantra__cells">
-					{FACE_COLORS.map((c) => <i style={`background:${c}`}></i>)}
+					{faces.map((f) => <i style={`background:${f.color}`} title={f.title}></i>)}
 				</span>
 			</span>
 		</span>{" "}
@@ -109,6 +131,9 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		font-size: 31px;
 	}
 
+	/* both glyphs share one band under the line, centred in it: the cube is
+	   24px tall and the colour row ~7px, so aligning their tops left them
+	   visually off (founder review) */
 	.mantra__glyph {
 		position: absolute;
 		top: 100%;
@@ -116,7 +141,9 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		transform: translateX(-50%);
 		margin-top: 4px;
 		line-height: 0;
+		height: 24px;
 		display: flex;
+		align-items: center;
 		justify-content: center;
 	}
 
@@ -128,13 +155,42 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	}
 	.mantra__cells i {
 		aspect-ratio: 1;
+		display: block;
 	}
 
+	/* ink edges over grey faces — the mark reads at 21px only if the strokes
+	   carry it (founder review: the first cut had no legible edges) */
 	.mantra__cube path {
 		fill: none;
 		stroke: var(--color-primary, #1e1e1e);
-		stroke-width: 14;
+		stroke-width: 13;
 		stroke-linejoin: round;
+		stroke-linecap: round;
+	}
+	.mantra__cube-link {
+		display: block;
+		position: relative;
+		text-decoration: none;
+		transition: transform 0.12s ease;
+	}
+	/* WCAG 2.2 target size: the mark is 21px wide, the target must be 24 */
+	.mantra__cube-link::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 26px;
+		height: 26px;
+		transform: translate(-50%, -50%);
+	}
+	.mantra__cube-link:hover,
+	.mantra__cube-link:focus-visible {
+		transform: scale(1.12);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.mantra__cube-link { transition: none; }
+		.mantra__cube-link:hover { transform: none; }
 	}
 
 	.mantra__eq b {
@@ -163,6 +219,7 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		.mantra__eq { font-size: 20px; line-height: 34px; }
 		.mantra__n { font-size: 23px; }
 		.mantra__cells { width: 36px; }
-		.mantra__cube { width: 14px; height: 16px; }
+		.mantra__cube { width: 17px; height: 19px; }
+		.mantra__glyph { height: 19px; }
 	}
 </style>

@@ -21,6 +21,7 @@ import { PortableText } from "emdash/ui";
 import PtLink from "./PtLink.astro";
 import CtaGlobal from "./CtaGlobal.astro";
 import { FACE_BY_SLUG } from "../utils/nav";
+import CubeEmblem from "./CubeEmblem.astro";
 import { getUiLabels } from "../utils/ui-labels";
 import { excerptPlain } from "../utils/excerpt";
 
@@ -154,7 +155,7 @@ const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text)
 					return (
 						<li class="area-row" style={`--cc:${cardColor}`}>
 							<a href={`${localePrefix}/${slug}`} class="area-row__link">
-								<span class="area-row__mini" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+								<CubeEmblem class="area-row__die" color={cardColor} faceKey={FACE_BY_SLUG[slug] ?? undefined} size={54} />
 								<div class="area-row__text">
 									<h3>{d.title}</h3>
 									<p class="text-body">{excerptPlain(d.excerpt || "")}</p>

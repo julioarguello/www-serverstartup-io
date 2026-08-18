@@ -100,7 +100,8 @@
 
 .s-cf__card {
 	width: 100%;
-	border: 1px solid var(--color-primary);
+	/* no frame: the partner lockup carries its own clear space per the
+	   Cloudflare brand guidelines — the old ink border was ours (#273) */
 	padding: 32px;
 	text-align: center;
 	display: flex;
@@ -232,24 +233,13 @@
 	.area-row__link { transition: none; }
 }
 
-.area-row__mini {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr 1fr;
-	gap: 2px;
-	width: 30px;
-	height: 30px;
-	border: 2px solid var(--color-primary);
-	border-radius: 3px;
-	background: var(--color-primary);
+.area-row__die {
 	flex: none;
-	overflow: hidden;
-	margin-top: 3px;
+	width: 54px;
+	height: auto;
+	margin-top: -2px;
 }
 
-.area-row__mini i {
-	background: var(--cc);
-}
 
 .area-row h3 {
 	margin: 0 0 6px;
@@ -269,7 +259,15 @@
 	.s-areas__inner { gap: 34px; }
 
 	.s-areas__header {
-		max-width: 760px;
+		max-width: none;
+	}
+
+	/* the section title reads as one line — it wrapped inside the old
+	   two-column header and the break looked like a layout fault (#273) */
+	.s-areas__header h2 {
+		font-size: clamp(28px, 3.2vw, 40px);
+		line-height: 1.15;
+		white-space: nowrap;
 	}
 
 	.s-areas__rows {

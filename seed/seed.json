@@ -367,6 +367,11 @@
 			"name": "site_es",
 			"label": "Sitio",
 			"items": [
+				{
+					"type": "custom",
+					"label": "Inicio",
+					"url": "/"
+				},
 				{ "type": "custom", "label": "Quiénes somos", "url": "/quienes-somos" },
 				{ "type": "custom", "label": "Referencias", "url": "/referencias" },
 				{ "type": "custom", "label": "Contacto", "url": "/contacto" },
@@ -378,6 +383,11 @@
 			"name": "site_en",
 			"label": "Site",
 			"items": [
+				{
+					"type": "custom",
+					"label": "Home",
+					"url": "/en/"
+				},
 				{ "type": "custom", "label": "About us", "url": "/en/about-us" },
 				{ "type": "custom", "label": "References", "url": "/en/references" },
 				{ "type": "custom", "label": "Contact", "url": "/en/contact" },
@@ -12020,20 +12030,9 @@
 				"slug": "home",
 				"status": "published",
 				"data": {
-					"title": "Ingeniería de software e integración de sistemas",
+					"title": "Ingeniería de software: arquitectura, integración y operación",
 					"excerpt": "Partners oficiales de Cloudflare desde 2019. Tres ingenieros senior: quien diseña tu arquitectura escribe el código. Un equipo. Seis verticales. Cero traspasos.",
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "h_thesis",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Sistemas que funcionan juntos — y siguen funcionando años después de la demo."
-								}
-							]
-						},
 						{
 							"_type": "block",
 							"style": "normal",
@@ -13185,20 +13184,9 @@
 				"locale": "en",
 				"translationOf": "page-home",
 				"data": {
-					"title": "Software engineering and systems integration",
+					"title": "Software engineering: architecture, integration and operations",
 					"excerpt": "Official Cloudflare partners since 2019. Three senior engineers: whoever designs your architecture writes the code. One team. Six verticals. Zero handoffs.",
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "h_thesis",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Systems that work together — and keep working years after the demo."
-								}
-							]
-						},
 						{
 							"_type": "block",
 							"style": "normal",

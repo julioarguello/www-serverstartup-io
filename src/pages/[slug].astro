@@ -118,9 +118,11 @@ const labels = await getUiLabels(locale);
 		/>
 	)}
 
-	<div class="container mantra-wrap">
-		<MantraCloser />
-	</div>
+		{entryCollection === "services" && (
+		<div class="container mantra-wrap">
+			<MantraCloser />
+		</div>
+	)}
 
 	<!-- ══════ CTA (from cta_global widget) ══════ -->
 	<CtaGlobal />

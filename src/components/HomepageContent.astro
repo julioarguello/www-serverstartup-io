@@ -107,7 +107,7 @@ const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text)
 <!-- ══════ SECTION 2: TECNOLOGÍA / TECHNOLOGY ══════ -->
 {techSection && (
 	<section class="s-tech" aria-label={techSection.heading}>
-		<div class="container s-tech__inner">
+		<div class="container"><div class="s-tech__inner">
 			<div class="s-tech__col-left">
 				<h2>{techSection.heading}</h2>
 			</div>
@@ -123,6 +123,7 @@ const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text)
 					</div>
 				)}
 			</div>
+		</div>
 		</div>
 	</section>
 )}

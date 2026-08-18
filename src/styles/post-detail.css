@@ -71,7 +71,7 @@
 		font-size: 12px;
 		color: rgba(30,30,30,0.7);
 		background: var(--color-surface);
-		border-radius: 4px;
+		border-radius: var(--radius);
 		text-decoration: none;
 		transition:
 			color 0.2s,
@@ -185,9 +185,9 @@
 	.article-content :global(blockquote) {
 		margin: 2em 0;
 		padding: 16px 24px;
-		border-left: 3px solid rgba(30,30,30,0.15);
+		border-left: var(--statement-rule) solid var(--color-border);
 		background: var(--color-surface-soft);
-		border-radius: 0 4px 4px 0;
+		border-radius: 0 var(--radius) var(--radius) 0;
 		color: rgba(30,30,30,0.7);
 		font-style: italic;
 	}
@@ -196,7 +196,7 @@
 		margin: 2em 0;
 		padding: 20px;
 		background: var(--color-surface);
-		border: 1px solid rgba(30,30,30,0.15);
+		border: 1px solid var(--color-border);
 		border-radius: var(--card-radius);
 		overflow-x: auto;
 		font-family: monospace;
@@ -209,7 +209,7 @@
 		font-size: 0.9em;
 		background: var(--color-surface);
 		padding: 0.2em 0.4em;
-		border-radius: 4px;
+		border-radius: var(--radius);
 	}
 
 	.article-content :global(pre code) {
@@ -340,8 +340,8 @@
 		padding: 8px 12px;
 		font-family: var(--font-family);
 		font-size: 14px;
-		border: 1px solid rgba(30,30,30,0.15);
-		border-radius: 4px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
 		background: var(--color-secondary);
 		color: var(--color-text);
 		transition:
@@ -357,7 +357,7 @@
 	.sidebar-widgets :global(.widget-search__input):focus-visible {
 		outline: none;
 		border-color: var(--color-accent);
-		box-shadow: 0 0 0 3px rgba(30,30,30,0.2);
+		box-shadow: var(--focus-ring);
 	}
 
 	.sidebar-widgets :global(.widget-search__button) {
@@ -398,7 +398,7 @@
 		color: rgba(30,30,30,0.5);
 		background: var(--color-surface);
 		padding: 4px 8px;
-		border-radius: 4px;
+		border-radius: var(--radius);
 	}
 
 	/* Sidebar tags widget - pill style */
@@ -421,7 +421,7 @@
 		font-size: 14px;
 		color: rgba(30,30,30,0.7);
 		background: var(--color-surface);
-		border-radius: 4px;
+		border-radius: var(--radius);
 		text-decoration: none;
 		transition:
 			color 0.2s,
@@ -498,7 +498,7 @@
 		color: rgba(30,30,30,0.5);
 		background: var(--color-surface);
 		padding: 4px 8px;
-		border-radius: 4px;
+		border-radius: var(--radius);
 	}
 
 	/* More posts section */
@@ -547,7 +547,7 @@
 	@media (max-width: 900px) {
 		.article-hero {
 			margin: 16px 16px 32px;
-			border-radius: 4px;
+			border-radius: var(--radius);
 		}
 
 		.article-grid {

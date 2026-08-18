@@ -48,8 +48,10 @@
 
 /* ═══ TECH SECTION — dark bg, 2-col ═══ */
 .s-tech {
-	background-color: var(--color-primary);
-	padding: 32px 0;
+	/* #304: black is the machine voice (consoles) and the closing CTA — a
+	   content section in black steals the consoles' meaning. Emphasis now
+	   comes from the statement block (left rule + tint), family 2. */
+	padding: var(--rhythm-section) 0;
 }
 
 .s-tech__inner {
@@ -59,18 +61,18 @@
 }
 
 .s-tech__col-left h2 {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 }
 
 .s-tech__subtitle-wrap p {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	font-size: var(--text-sub-size, 26px);
 	font-weight: var(--text-sub-weight, 500);
 	line-height: var(--text-sub-lh, 30px);
 }
 
 .s-tech__body-wrap p {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	margin-top: 16px;
 	font-size: 20px;
 	font-weight: 300;
@@ -178,8 +180,10 @@
 }
 
 /* the dark band inherits ink tokens — its text and links flip to paper */
-.s-tech :is(p, a) {
-	color: var(--color-secondary);
+.s-tech__inner {
+	border-left: var(--statement-rule) solid var(--color-primary);
+	background: var(--color-tint);
+	padding: var(--space-5) var(--space-6);
 }
 
 .s-areas {
@@ -213,9 +217,9 @@
 	gap: 16px;
 	align-items: flex-start;
 	background: var(--color-secondary);
-	border: 1px solid var(--color-border, #e3e7eb);
+	border: 1px solid var(--color-border);
 	border-left: 4px solid var(--cc);
-	border-radius: 4px;
+	border-radius: var(--radius);
 	padding: 20px 22px;
 	text-decoration: none;
 	color: var(--color-primary);

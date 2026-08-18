@@ -239,7 +239,7 @@
 .s-history__inner blockquote {
 	margin: 48px 0 0;
 	padding: 24px 28px;
-	border-left: 3px solid var(--color-primary);
+	border-left: var(--statement-rule) solid var(--color-primary);
 	background: color-mix(in srgb, var(--color-primary) 4%, transparent);
 	max-width: 700px;
 	font-size: 20px;
@@ -257,7 +257,7 @@
    integration instrument (.inst--dark/.term in service.css) ═══ */
 .s-boot {
 	background: #14161a;
-	border-radius: 10px;
+	border-radius: var(--radius);
 	overflow: hidden;
 	margin: 24px 0 20px;
 }
@@ -327,15 +327,21 @@
 	.s-boot__term p { font-size: 17px; }
 }
 
-/* ═══ VALUES — dark bg ═══ */
+/* ═══ VALUES — light band with a statement block (#304) ═══ */
 .s-values {
-	background-color: var(--color-primary);
-	padding: 60px 0 80px;
+	/* #304: no dark content bands — see homepage.css .s-tech */
+	padding: var(--rhythm-section) 0;
+}
+
+.s-values__inner {
+	border-left: var(--statement-rule) solid var(--color-primary);
+	background: var(--color-tint);
+	padding: var(--space-5) var(--space-6);
 }
 
 .s-values__inner h2 {
-	color: var(--color-secondary);
-	margin-bottom: 24px;
+	color: var(--color-primary);
+	margin-bottom: var(--space-4);
 }
 
 /* value titles read as their own line, not inline bold (founder) */
@@ -345,22 +351,6 @@
 	margin-bottom: 4px;
 }
 
-/* the closing motto — standout quote on the dark band (text sits directly
-   inside the blockquote, see note above) */
-.s-values__inner blockquote {
-	margin: 48px 0 0;
-	padding: 4px 0 4px 24px;
-	border-left: 3px solid var(--color-secondary);
-	color: var(--color-secondary);
-	font-size: 24px;
-	font-weight: 700;
-	line-height: 34px;
-}
-
-.s-values__inner blockquote strong {
-	display: inline;
-	margin: 0;
-}
 
 /* ═══ SPONSOR — light band: grassroots sport ═══ */
 .s-sponsor {
@@ -408,7 +398,7 @@
 
 
 .s-values__inner p {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	max-width: 700px;
 	font-size: 20px;
 	font-weight: 300;

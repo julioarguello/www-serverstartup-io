@@ -105,9 +105,11 @@ const labels = await getUiLabels(locale);
 		/>
 	)}
 
-	<div class="container mantra-wrap">
-		<MantraCloser />
-	</div>
+		{entryCollection === "services" && (
+		<div class="container mantra-wrap">
+			<MantraCloser />
+		</div>
+	)}
 
 	<CtaGlobal />
 </Base>

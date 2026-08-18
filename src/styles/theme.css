@@ -67,6 +67,49 @@
 	--card-radius: 24px;
 	--card-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 	--widget-spacing: 20px;
+
+	/* ═══════════════════════════════════════════════════════════════
+	   DESIGN TOKENS (#304) — the ONLY place these values are declared.
+	   Every other stylesheet consumes them; a literal colour, radius or
+	   shadow outside this block is a defect the CI guard rejects.
+	   The portal audit found five radii, three shadow policies and an
+	   ad-hoc spacing ladder living across nine stylesheets.
+	   ═══════════════════════════════════════════════════════════════ */
+
+	/* Surfaces & lines */
+	--color-border: #E3E7EB;          /* hairline on light ground */
+	--color-border-soft: #EDEEF0;     /* data separation INSIDE instruments */
+	--color-console: #101214;         /* the machine voice: terminal windows */
+	--color-tint: color-mix(in srgb, var(--color-primary) 4%, transparent);
+
+	/* One radius for the whole portal */
+	--radius: 4px;
+
+	/* One shadow policy: data cards only */
+	--shadow-card: 0 2px 10px rgba(0, 0, 0, 0.06);
+
+	/* 8-point spacing scale */
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 16px;
+	--space-4: 24px;
+	--space-5: 32px;
+	--space-6: 40px;
+	--space-7: 64px;
+	--space-8: 80px;
+	--space-9: 120px;
+
+	/* Named rhythms — sections and blocks draw from these, never raw px */
+	--rhythm-section: var(--space-8);   /* between page sections */
+	--rhythm-band: var(--space-7);      /* inside a band */
+	--rhythm-block: var(--space-6);     /* between blocks in a section */
+	--rhythm-inline: var(--space-3);    /* between related lines */
+
+	--radius-pill: 99px;              /* pills and toggles only */
+	--focus-ring: 0 0 0 3px rgba(30, 30, 30, 0.2);
+
+	/* Statement block (family 2): left rule + tint, no radius */
+	--statement-rule: 3px;
 }
 
 /* ─────────────────────────────────────────

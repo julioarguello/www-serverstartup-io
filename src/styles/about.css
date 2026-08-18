@@ -1,6 +1,6 @@
 /* ═══ HERO ═══ */
 .s-hero {
-	padding: calc(80px + 24px) 0 60px;
+	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
 }
 
 .s-hero__body {
@@ -40,13 +40,13 @@
 }
 
 @media (min-width: 768px) {
-	.s-hero { padding: 160px 0 80px; }
+	.s-hero { padding: calc(80px + var(--space-8)) 0 var(--rhythm-section); }
 }
 
 /* ═══ TEAM — light band: the page alternates light (narrative: historia,
    equipo) and dark (statements: hoy, valores) ═══ */
 .s-team {
-	padding: 40px 0;
+	padding: var(--rhythm-section) 0;
 }
 
 .s-team__inner h2 {
@@ -72,7 +72,7 @@
 }
 
 .s-team__intro + .s-team__grid {
-	margin-top: 44px;
+	margin-top: var(--space-6);
 }
 
 /* mobile: compact rows — square photo left, name/role right. Three tidy
@@ -120,7 +120,8 @@
 	justify-content: center;
 	font-size: 32px;
 	font-weight: 600;
-	color: rgba(255, 255, 255, 0.3);
+	color: var(--color-secondary);
+	opacity: 0.3;
 	background: var(--color-ink-soft);
 }
 
@@ -130,8 +131,9 @@
 	margin-bottom: 2px;
 }
 
+/* #304: it was paper-coloured — invisible once the band went light */
 .team-card__role {
-	color: var(--color-secondary);
+	color: var(--color-text-muted);
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 22px;
@@ -156,7 +158,6 @@
 }
 
 @media (min-width: 768px) {
-	.s-team { padding: 80px 0; }
 	.s-team__grid {
 		grid-template-columns: repeat(3, 1fr);
 		gap: 40px;
@@ -172,7 +173,7 @@
 
 /* ═══ HISTORY — light bg, anchor target ═══ */
 .s-history {
-	padding: 60px 0 80px;
+	padding: var(--rhythm-section) 0;
 	/* anchor lands below the fixed header */
 	scroll-margin-top: 96px;
 }
@@ -204,8 +205,8 @@
 	font-weight: 600;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: #70757a;
-	margin: 48px 0 14px;
+	color: var(--color-text-muted);
+	margin: var(--space-6) 0 var(--space-3);
 }
 
 .s-history__inner h3::before {
@@ -237,7 +238,7 @@
 }
 
 .s-history__inner blockquote {
-	margin: 48px 0 0;
+	margin: var(--space-6) 0 0;
 	padding: 24px 28px;
 	border-left: var(--statement-rule) solid var(--color-primary);
 	background: color-mix(in srgb, var(--color-primary) 4%, transparent);
@@ -256,7 +257,7 @@
 /* ═══ BOOT TERMINAL — the Catalina line inside a console window; echoes the
    integration instrument (.inst--dark/.term in service.css) ═══ */
 .s-boot {
-	background: #14161a;
+	background: var(--color-console);
 	border-radius: var(--radius);
 	overflow: hidden;
 	margin: 24px 0 20px;
@@ -267,7 +268,7 @@
 	align-items: center;
 	gap: 8px;
 	padding: 12px 18px;
-	background: #1d2026;
+	background: var(--color-console-bar);
 }
 
 .s-boot__bar i {
@@ -294,7 +295,7 @@
 .s-boot code {
 	font-family: var(--font-family-mono);
 	font-size: inherit;
-	color: #b6bcc6;
+	color: var(--color-console-dim);
 	background: none;
 	padding: 0;
 }
@@ -302,7 +303,7 @@
 /* blinking block cursor after the log line (the wordmark's ▮) */
 .s-boot code::after {
 	content: "▮";
-	color: #5bb974;
+	color: var(--color-console-ok);
 	margin-left: 8px;
 	animation: s-boot-blink 1.1s steps(1) infinite;
 }
@@ -336,7 +337,8 @@
 .s-values__inner {
 	border-left: var(--statement-rule) solid var(--color-primary);
 	background: var(--color-tint);
-	padding: var(--space-5) var(--space-6);
+	padding: var(--space-4) var(--space-5);
+	max-width: var(--measure-statement);
 }
 
 .s-values__inner h2 {
@@ -354,7 +356,7 @@
 
 /* ═══ SPONSOR — light band: grassroots sport ═══ */
 .s-sponsor {
-	padding: 60px 0 80px;
+	padding: var(--rhythm-section) 0;
 }
 
 /* deliberately quieter than the page's other section headings (founder) */
@@ -392,7 +394,7 @@
 	font-size: 13px;
 	line-height: 1.6;
 	font-weight: 400;
-	color: #70757a;
+	color: var(--color-text-muted);
 	max-width: none;
 }
 

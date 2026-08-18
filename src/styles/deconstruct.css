@@ -1,7 +1,7 @@
 /* ═══ Deconstructing this website — assembly-manual page (#161) ═══ */
 
 .s-manual {
-	padding: calc(80px + 24px) 0 72px;
+	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
 }
 
 .s-manual__inner {
@@ -27,7 +27,7 @@
 
 .s-manual__prose {
 	max-width: 700px;
-	margin-top: 48px;
+	margin-top: var(--space-6);
 }
 
 .s-manual__prose h2 {
@@ -41,7 +41,7 @@
 	border: 2px solid var(--color-primary);
 	padding: 26px 30px;
 	margin-top: 36px;
-	background: #fdfdfb;
+	background: var(--color-surface-sheet);
 }
 
 .manual__head {

@@ -11,7 +11,7 @@
 .refs {
 	/* light section: the dark terminal window floats on the page like the
 	   About boot console and the service instruments (the house motif) */
-	padding: 8px 0 84px;
+	padding: var(--space-2) 0 var(--rhythm-section);
 }
 
 .refs__inner {
@@ -23,8 +23,8 @@
 	margin: 34px 0 10px;
 	/* a breath of glass: the page's cube watermark ghosts through
 	   (paired with the page-scoped emblem boost below) */
-	background: rgba(14, 16, 18, 0.82);
-	border: 1px solid rgba(255, 255, 255, 0.16);
+	background: var(--color-console-glass);
+	border: 1px solid var(--color-console-line);
 	border-radius: var(--radius);
 	padding: 16px 20px 20px;
 	overflow-x: auto; /* wide listing scrolls inside itself, never the page */
@@ -39,18 +39,18 @@
 	width: 9px;
 	height: 9px;
 	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.28);
+	background: var(--color-console-faint);
 }
 
 .ls__cmd {
 	font-family: var(--font-family-mono, monospace);
 	font-size: 13px;
-	color: rgba(255, 255, 255, 0.6);
+	color: var(--color-console-dim);
 	margin: 0 0 10px;
 }
 .ls__cmd::before {
 	content: "$ ";
-	color: rgba(255, 255, 255, 0.35);
+	color: var(--color-console-faint);
 }
 
 .ls__out {
@@ -59,7 +59,7 @@
 	padding: 0;
 	font-family: var(--font-family-mono, monospace);
 	font-size: 13px;
-	color: rgba(255, 255, 255, 0.55);
+	color: var(--color-console-dim);
 	min-width: 560px; /* column integrity; the window scrolls if narrower */
 }
 
@@ -75,7 +75,7 @@
 
 .ls-row--dim {
 	/* 0.32 failed AA on the terminal ground — dim, but readable */
-	color: rgba(255, 255, 255, 0.55);
+	color: var(--color-console-dim);
 	min-height: 26px;
 }
 .ls-row--dim .ls-name {
@@ -93,7 +93,7 @@
 }
 
 .ls-group {
-	color: rgba(255, 255, 255, 0.72);
+	color: var(--color-console-ink);
 }
 
 /* the filename column IS the logo */

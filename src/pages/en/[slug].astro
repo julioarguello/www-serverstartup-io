@@ -89,7 +89,10 @@ const labels = await getUiLabels(locale);
 						<p class="text-body" set:html={excerptHtml(excerpt)} />
 					</div>
 				)}
-				<a href="/en/contact" class="btn btn-dark">{ctaLabel}</a>
+				{/* #304: one CTA label per page — see the ES route */}
+				{entryCollection === "services" && (
+					<a href="/en/contact" class="btn btn-dark">{ctaLabel}</a>
+				)}
 			</div>
 		</div>
 	</section>

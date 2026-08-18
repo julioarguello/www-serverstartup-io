@@ -83,7 +83,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	}
 
 	.site-header.is-sticky {
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+		box-shadow: var(--shadow-card);
 	}
 
 	.header-inner {
@@ -106,7 +106,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		cursor: pointer;
 		padding: 4px;
 		line-height: 0;
-		border-radius: 4px;
+		border-radius: var(--radius);
 	}
 
 	.menu-toggle:hover .brand-cube,
@@ -146,7 +146,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		   failed color-contrast: #F38020 is 2.4:1). */
 		color: var(--color-primary);
 		background: color-mix(in srgb, var(--accent, transparent) 22%, transparent);
-		border-radius: 3px;
+		border-radius: var(--radius);
 		padding-inline: 2px;
 		overflow: hidden;
 		text-overflow: ellipsis;

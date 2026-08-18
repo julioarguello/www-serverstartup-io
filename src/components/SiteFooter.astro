@@ -150,10 +150,9 @@ const t = Astro.locals.t;
 
 	/* Footer grid */
 	.footer-main {
-		border-top: 1px solid rgba(30, 30, 30, 0.48);
-		border-bottom: 1px solid rgba(30, 30, 30, 0.48);
-		margin-top: 48px;
-		padding: 40px 0;
+		/* #304: no rules between sections — space separates */
+		margin-top: var(--space-6);
+		padding: var(--space-6) 0 var(--space-7);
 	}
 	.footer-grid {
 		display: flex;

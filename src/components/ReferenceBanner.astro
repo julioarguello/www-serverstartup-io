@@ -43,7 +43,7 @@ const logos = (entries ?? [])
 {logos.length > 0 && (
 	<section class="ref-banner" aria-label={ariaLabel}>
 		<div class="container ref-banner__inner">
-			<a class="ref-banner__title" href={href}>{title}</a>
+			<h2 class="ref-banner__title"><a href={href}>{title}</a></h2>
 			<ul class="ref-banner__row" role="list">
 				{logos.map((l) => (
 					<li>
@@ -70,16 +70,25 @@ const logos = (entries ?? [])
 	}
 
 	.ref-banner__title {
+		margin: 0;
+		font-weight: 400;
+		line-height: 1.2;
 		font-family: var(--font-family-mono, monospace);
 		font-size: 13px;
 		letter-spacing: 0.06em;
 		text-transform: lowercase;
-		color: color-mix(in srgb, var(--color-primary, #1e1e1e) 55%, transparent);
+		/* 78%: AA contrast on white at 13px — 55% failed Lighthouse a11y */
+		color: color-mix(in srgb, var(--color-primary, #1e1e1e) 78%, transparent);
 		text-decoration: underline;
 		text-decoration-style: dashed;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 4px;
 		text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+	}
+	.ref-banner__title a {
+		color: inherit;
+		text-decoration: inherit;
+		text-decoration-color: inherit;
 	}
 	.ref-banner__title:hover,
 	.ref-banner__title:focus-visible {

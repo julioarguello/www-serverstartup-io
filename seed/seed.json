@@ -1126,7 +1126,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "quince años"
+									"text": "más de veinte años"
 								}
 							]
 						},
@@ -2432,7 +2432,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "fifteen years"
+									"text": "over twenty years"
 								}
 							]
 						},
@@ -3272,7 +3272,7 @@
 				"status": "published",
 				"data": {
 					"title": "Comercio electrónico",
-					"excerpt": "Quince años dentro de [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del *core*, ajustada al estándar, para que sobreviva versión tras versión, es lo que casi nadie hace. Y el rendimiento, nuestra especialidad.",
+					"excerpt": "Más de veinte años dentro de [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del *core*, ajustada al estándar, para que sobreviva versión tras versión, es lo que casi nadie hace. Y el rendimiento, nuestra especialidad.",
 					"cta_label": "Audita tu e-commerce",
 					"content": [
 						{
@@ -3360,7 +3360,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": "Llevamos quince años dentro de ",
+									"text": "Llevamos más de veinte años dentro de ",
 									"marks": []
 								},
 								{
@@ -6942,7 +6942,7 @@
 				"translationOf": "svc-ecommerce",
 				"data": {
 					"title": "E-commerce",
-					"excerpt": "Fifteen years inside [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.",
+					"excerpt": "Over twenty years inside [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.",
 					"cta_label": "Audit your e-commerce",
 					"content": [
 						{
@@ -7030,7 +7030,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": "We've spent fifteen years inside ",
+									"text": "We've spent over twenty years inside ",
 									"marks": []
 								},
 								{
@@ -12073,7 +12073,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " desde 2019, y quince años de oficio en "
+									"text": " desde 2019, y más de veinte años de oficio en "
 								},
 								{
 									"_type": "span",
@@ -13227,7 +13227,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " partners since 2019, and fifteen years of craft in "
+									"text": " partners since 2019, and over twenty years of craft in "
 								},
 								{
 									"_type": "span",

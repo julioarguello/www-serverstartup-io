@@ -130,6 +130,19 @@
 	}
 }
 
+/* ≤480px: the size column folds too. At 360 the four remaining columns
+   (11+16+7ch plus the logo) measured 294px inside a 286px window — an 8px
+   internal scroll, which §14 forbids outright. Permissions and group carry
+   the joke; the byte count does not. */
+@media (max-width: 480px) {
+	.ls-row {
+		grid-template-columns: 11ch 15ch 1fr;
+	}
+	.ls-size {
+		display: none;
+	}
+}
+
 /* this page is only a title and a window — it can carry a stronger
    watermark, which is also what makes the glass read as glass */
 .s-emblem-bg--refs {

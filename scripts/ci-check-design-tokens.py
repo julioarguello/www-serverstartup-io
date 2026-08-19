@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Design-token guard (#304).
+"""Design-token guard (#304) — colour, radius, shadow and the column.
 
 `src/styles/theme.css` is the only place a colour, a radius or a shadow may be
 declared. Everything else — the other stylesheets and the `<style>` blocks
@@ -12,6 +12,16 @@ What counts as a violation, in a *declaration* outside the token file:
   · a colour literal — `#abc`, `#aabbcc`, `rgb(...)`, `rgba(...)`, `hsl(...)`
   · `border-radius` with anything but a token (or 0 / 50% / a percentage)
   · `box-shadow` with anything but a token (or `none`)
+  · `max-width` with anything but the column token (or `100%` / `none`)
+
+That last one is the layout rule made executable. A page has ONE width: every
+heading, paragraph, box, panel and row ends at the column's right edge. The
+portal had drifted to seven measures (1400 / 1040 / 1000 / 880 / 780 / 700 /
+680) and the founder's reaction was the correct one — *"me pierdo con el
+criterio… busco consistencia"*. Prose is not exempt: a second, narrower
+measure for body copy alternates long and short lines down the page, which is
+what reads as no criterion at all. A bespoke `max-width` is how that comes
+back, one component at a time, so it is the thing to reject.
 
 Two things are deliberately NOT violations:
 
@@ -58,6 +68,9 @@ COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
 RADIUS_ATOM = r"(0|0px|\d+%|var\(--[\w-]+\)|inherit|initial|unset)"
 RADIUS_OK = re.compile(rf"^{RADIUS_ATOM}(\s*/?\s*{RADIUS_ATOM})*$")
 SHADOW_OK = re.compile(r"^(none|var\(--[\w-]+\)|inherit|initial|unset)$")
+# the column, or "as wide as whatever contains me" — nothing else
+WIDTH_OK = re.compile(r"^(100%|none|var\(--container-max\)|var\(--measure-statement\)"
+                      r"|100vw|fit-content|max-content|min-content|inherit|initial|unset)$")
 
 
 def scan(path: Path) -> tuple[list[tuple[int, str, str]], int]:
@@ -97,6 +110,10 @@ def scan(path: Path) -> tuple[list[tuple[int, str, str]], int]:
         elif prop == "box-shadow":
             if not SHADOW_OK.match(value):
                 findings.append((n, prop, f"{value!r} is not var(--shadow…) or none"))
+        elif prop == "max-width":
+            if not WIDTH_OK.match(value):
+                findings.append((n, prop, f"{value!r} is a width of its own — a page has one "
+                                          f"(var(--container-max)); use 100% inside a box"))
 
         # a literal inside `var(--token, …)` is a fallback, not a declaration
         for lit in COLOR_LITERAL.findall(VAR_FALLBACK.sub("", value)):
@@ -139,7 +156,7 @@ def main() -> int:
         print("  value belongs to a product being imitated, wrap that region in")
         print("  `/* token-guard: off — reason */ … /* token-guard: on */`.")
         return 1
-    print("✓ colour, radius and shadow are declared in theme.css only.")
+    print("✓ colour, radius, shadow and width come from theme.css only.")
     return 0
 
 

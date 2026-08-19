@@ -5,7 +5,6 @@
 
 .s-hero__body {
 	margin-top: 16px;
-	max-width: var(--measure-prose);
 }
 
 .s-hero__body p {
@@ -55,7 +54,6 @@
 
 /* CMS intro of the team section (renamed from Hoy): dark-on-light body text */
 .s-team__intro p {
-	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -183,7 +181,6 @@
 }
 
 .s-history__inner p {
-	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -242,7 +239,6 @@
 	padding: 24px 28px;
 	border-left: var(--statement-rule) solid var(--color-primary);
 	background: color-mix(in srgb, var(--color-primary) 4%, transparent);
-	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -271,7 +267,6 @@
 
 /* the console breaks out of the prose column it is nested in */
 .s-hero__body:has(.s-boot) { max-width: none; }
-.s-hero__body:has(.s-boot) > :not(.s-boot) { max-width: var(--measure-prose); }
 
 .s-boot__bar {
 	display: flex;
@@ -377,7 +372,6 @@
 }
 
 .s-sponsor__inner p {
-	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -385,7 +379,6 @@
 
 .s-sponsor__media {
 	margin-top: 36px;
-	max-width: 680px;
 }
 
 .s-sponsor__figure {
@@ -411,7 +404,6 @@
 
 .s-values__inner p {
 	color: var(--color-primary);
-	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;

@@ -151,7 +151,10 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		/* token-guard: off — truncation, not a measure: the breadcrumb path
+		   ellipsises against the viewport so the brand never wraps. */
 		max-width: 34vw;
+		/* token-guard: on */
 	}
 
 	.brand-word {
@@ -201,6 +204,8 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	@media (min-width: 768px) {
 		.brand-cube { width: 34px; height: 39px; }
 		.brand-prompt { font-size: 1.05rem; }
+		/* token-guard: off — same truncation, wider on small screens */
 		.brand-path { max-width: 44vw; }
+		/* token-guard: on */
 	}
 </style>

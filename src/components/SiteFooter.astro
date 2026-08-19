@@ -187,7 +187,10 @@ const t = Astro.locals.t;
 		color: var(--color-primary);
 	}
 	.footer-partner-logo {
+		/* token-guard: off — a logo is drawn at its own size; the partner
+		   lockup has a minimum legible width and clear space of its own. */
 		max-width: 200px;
+		/* token-guard: on */
 		margin-top: 8px;
 		margin-inline: auto;
 	}

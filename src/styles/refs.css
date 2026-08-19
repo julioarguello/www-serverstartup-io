@@ -15,7 +15,8 @@
 }
 
 .refs__inner {
-	max-width: 780px;
+	/* #304: it used to stop at 780 — a width of its own on a page that is
+	   only a title and a window. It ends where every other page ends. */
 }
 
 /* ── the console window ── */

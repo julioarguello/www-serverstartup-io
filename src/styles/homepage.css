@@ -103,10 +103,17 @@
 	   Frameless means no inset either: the block starts on the page's own
 	   left edge like every other section (#304). */
 	padding: 0;
-	/* #304: the portal aligns left — this card was the only centred block */
+	/* #304: the portal aligns left — this card was the only centred block.
+	   `align-items: stretch` (the default) matters here: with flex-start the
+	   description shrank to its own text and stopped 164px short of the
+	   column, which is a width nobody declared. Only the button opts out. */
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: stretch;
+}
+
+.s-cf__card > .btn {
+	align-self: flex-start;
 }
 
 .s-cf__logo {

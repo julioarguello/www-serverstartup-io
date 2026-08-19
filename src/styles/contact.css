@@ -108,9 +108,11 @@
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	/* Hug the content: icon + short label + arrow. Wider cards leave a
-	   dead span between label and arrow (founder, #272). */
+	/* token-guard: off — a control, not a block. Icon + short label + arrow:
+	   a full-width button leaves a dead span between label and arrow
+	   (founder decision, #272). Controls are sized by their content. */
 	max-width: 340px;
+	/* token-guard: on */
 }
 
 /* Same chrome as the homepage face-cards: white face, ink border, flat

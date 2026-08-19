@@ -289,8 +289,11 @@ PR → quality-gates green → merge to main
   html-validate ×15 routes, header suite, Lighthouse 3-run median
   (perf ≥ 95, a11y/bp/seo = 100).
 - **Design-token gate** (`scripts/ci-check-design-tokens.py`): a colour
-  literal, a non-token `border-radius` or a non-token `box-shadow` outside
-  `theme.css` fails the build. A `var(--token, fallback)` is a token use, not
+  literal, a non-token `border-radius`, a non-token `box-shadow` or a bespoke
+  `max-width` outside `theme.css` fails the build. The width rule is the
+  layout criterion made executable: a page has ONE column
+  (`--container-max`) and everything ends at its right edge, so `max-width`
+  may only be the column token, `100%` or `none`. A `var(--token, fallback)` is a token use, not
   a declaration; a region may exempt itself with
   `/* token-guard: off — reason */ … /* token-guard: on */`, which the service
   instruments use because they quote another product's chrome (a cart, a

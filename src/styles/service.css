@@ -23,7 +23,6 @@
 
 .s-hero__body {
 	margin-top: 20px;
-	max-width: var(--measure-prose);
 }
 
 .s-hero .btn {
@@ -73,7 +72,6 @@
 }
 
 .s-inst__intro {
-	max-width: var(--measure-prose);
 }
 
 .s-inst__intro p {
@@ -111,7 +109,6 @@
 }
 
 .s-inst__lead {
-	max-width: var(--measure-prose);
 	margin: 0 0 20px;
 }
 
@@ -147,7 +144,6 @@
 }
 
 .s-inst__closer {
-	max-width: var(--measure-prose);
 	margin-top: var(--space-6);
 }
 
@@ -493,7 +489,6 @@
 .s-content__inner h3 { margin-bottom: var(--space-3); }
 
 .s-content__inner p {
-	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 26px;
@@ -533,7 +528,6 @@
 	list-style: none;
 	padding: 0;
 	margin: 28px 0 0;
-	max-width: var(--measure-prose);
 }
 
 /* When the list arrives as rendered Portable Text (bigquery), the ul lives

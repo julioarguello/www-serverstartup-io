@@ -3,7 +3,7 @@
 }
 
 .legal-inner {
-	max-width: 700px;
+	max-width: var(--measure-prose);
 }
 
 .legal h1 {

@@ -6,14 +6,13 @@
 
 .s-manual__inner {
 	/* #304: it is also the .container, which is margin:0 auto — capping it
-	   at 900px centred the whole page and moved the portal's left edge.
-	   The prose columns below already cap the measure at 700px. */
-	max-width: 1000px;
+	   here centred the whole page and moved the portal's left edge. The
+	   column is the container's own width now; prose caps at --measure-prose. */
 	margin-inline: 0;
 }
 
 .s-manual__intro {
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	margin-top: 20px;
 }
 
@@ -26,7 +25,7 @@
 }
 
 .s-manual__prose {
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	margin-top: var(--space-6);
 }
 

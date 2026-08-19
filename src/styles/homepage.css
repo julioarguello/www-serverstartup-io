@@ -295,8 +295,7 @@
 	margin-top: 32px;
 }
 
-@media (min-width: 768px) {
-	.s-cta__heading { width: 70%; }
-}
+/* #304: the closing heading shares the column like everything else —
+   70% was the page's fifth width */
 
 

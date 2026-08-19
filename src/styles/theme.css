@@ -62,7 +62,11 @@
 	--font-family-mono: "JetBrains Mono", monospace;
 
 	/* Layout */
-	--container-max: 1440px;
+	/* THE column. One right edge for every structural element on a page —
+	   headings, boxes, instrument panels, rows, band content, the header
+	   and the footer. At 1440 the home ran five different widths and the
+	   hero paragraph reached ~150 characters per line (#304, founder). */
+	--container-max: 1040px;
 	--section-padding: 80px;
 	--card-radius: 24px;
 	--card-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
@@ -124,8 +128,12 @@
 	--rhythm-block: var(--space-6);     /* between blocks in a section */
 	--rhythm-inline: var(--space-3);    /* between related lines */
 
-	/* One measure for every statement block and prose column (#304) */
-	--measure-statement: 760px;
+	/* Statement blocks fill the column: they are structure, not running text */
+	--measure-statement: var(--container-max);
+	/* The ONE exception to the single edge: long-form body copy (service
+	   bodies, Historia, legal). A 1040px line is ~115 characters — past
+	   what anyone reads comfortably. Nothing else narrows. */
+	--measure-prose: 700px;
 
 	--radius-pill: 99px;              /* pills and toggles only */
 	--focus-ring: 0 0 0 3px rgba(30, 30, 30, 0.2);

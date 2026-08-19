@@ -5,7 +5,7 @@
 
 .s-hero__body {
 	margin-top: 16px;
-	max-width: 700px;
+	max-width: var(--measure-prose);
 }
 
 .s-hero__body p {
@@ -55,7 +55,7 @@
 
 /* CMS intro of the team section (renamed from Hoy): dark-on-light body text */
 .s-team__intro p {
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -183,7 +183,7 @@
 }
 
 .s-history__inner p {
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -242,7 +242,7 @@
 	padding: 24px 28px;
 	border-left: var(--statement-rule) solid var(--color-primary);
 	background: color-mix(in srgb, var(--color-primary) 4%, transparent);
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -261,7 +261,17 @@
 	border-radius: var(--radius);
 	overflow: hidden;
 	margin: 24px 0 20px;
+	/* #304: an instrument, not running text — it takes the column, not the
+	   reading measure. It sits inside .s-hero__body (capped at
+	   --measure-prose) and the log line is one nowrap string from tablet up;
+	   at the reading measure the tail is clipped. */
+	width: 100%;
+	max-width: none;
 }
+
+/* the console breaks out of the prose column it is nested in */
+.s-hero__body:has(.s-boot) { max-width: none; }
+.s-hero__body:has(.s-boot) > :not(.s-boot) { max-width: var(--measure-prose); }
 
 .s-boot__bar {
 	display: flex;
@@ -367,7 +377,7 @@
 }
 
 .s-sponsor__inner p {
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -401,7 +411,7 @@
 
 .s-values__inner p {
 	color: var(--color-primary);
-	max-width: 700px;
+	max-width: var(--measure-prose);
 	font-size: 20px;
 	font-weight: 300;
 	line-height: 30px;
@@ -411,13 +421,6 @@
 	margin-top: 22px;
 }
 
-/* desktop: 700px reads as half-screen on wide monitors — let the text breathe */
-@media (min-width: 1100px) {
-	.s-hero__body,
-	.s-history__inner p,
-	.s-history__inner blockquote,
-	.s-team__intro p,
-	.s-values__inner p {
-		max-width: 880px;
-	}
-}
+/* #304: this was a sixth width. The reading measure is one token
+   (--measure-prose) and it does not change with the viewport; what changed
+   is the column around it, which is now 1040 instead of 1440. */

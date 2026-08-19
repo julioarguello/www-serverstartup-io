@@ -8,10 +8,11 @@
  * Content source: pages/home (EmDash CMS, locale-scoped)
  * PT sections split by h2 headings, read BY POSITION:
  *   [0] hero — blocks before the first h2
- *   [1] how we work — lead + body
- *   [2] the team — one line; the faces come from the members collection
- *   [3] areas — one closing line, rendered after the rows
- *   [4] the proof — one line linking to Deconstruyendo
+ *   [1] the team — how they work AND who they are, merged (founder
+ *       2026-08-19: the method and the people were two sections saying the
+ *       same thing); lead + body, then the faces from the members collection
+ *   [2] areas — heading only
+ *   [3] quality and performance — the craft, then this site as its sample
  *
  * CTA block sourced from cta_global widget area.
  * Service cards derived from services collection.
@@ -78,14 +79,13 @@ if (currentSection.heading || currentSection.blocks.length > 0) {
 // old text match silently dropped the whole section from the page).
 // CMS order for pages/home: [hero ¶s] · h2 how-we-work · h2 areas.
 const heroSection = sections[0]; // blocks before first h2
-const techSection = sections[1];
-const teamSection = sections[2];
-const areasSection = sections[3];
-const proofSection = sections[4];
+const teamSection = sections[1];
+const areasSection = sections[2];
+const proofSection = sections[3];
 
-// Second band: lead line (first block) + body (second block)
-const techSubtitleBlock = techSection?.blocks[0];
-const techBodyBlock = techSection?.blocks[1];
+// The team band: the statement (first block) then the body (second)
+const teamLeadBlock = teamSection?.blocks[0];
+const teamBodyBlock = teamSection?.blocks[1];
 
 // The team's faces: the home asserts "the same three engineers" twice before
 // this point and never showed one (#304 founder review). Same collection the
@@ -116,38 +116,19 @@ const members = memberEntries ?? [];
 	</div>
 </section>
 
-<!-- ══════ SECTION 2: TECNOLOGÍA / TECHNOLOGY ══════ -->
-{techSection && (
-	<section class="s-tech" aria-label={techSection.heading}>
-		<div class="container"><div class="s-tech__inner">
-			<div class="s-tech__col-left">
-				<h2>{techSection.heading}</h2>
-			</div>
-			<div class="s-tech__col-right">
-				{techSubtitleBlock && (
-					<div class="s-tech__subtitle-wrap">
-						<PortableText value={[techSubtitleBlock]} components={ptComponents} />
-					</div>
-				)}
-				{techBodyBlock && (
-					<div class="s-tech__body-wrap">
-						<PortableText value={[techBodyBlock]} components={ptComponents} />
-					</div>
-				)}
-			</div>
-		</div>
-		</div>
-	</section>
-)}
-
-<!-- ══════ SECTION 3: EL EQUIPO — the faces behind "the same three" ══════ -->
+<!-- ══════ SECTION 2: EL EQUIPO — how they work and who they are ══════ -->
 {teamSection && members.length > 0 && (
 	<section class="s-team-strip" aria-label={teamSection.heading}>
 		<div class="container">
 			<h2>{teamSection.heading}</h2>
-			{teamSection.blocks.length > 0 && (
+			{teamLeadBlock && (
+				<div class="s-team-strip__statement">
+					<PortableText value={[teamLeadBlock]} components={ptComponents} />
+				</div>
+			)}
+			{teamBodyBlock && (
 				<div class="s-team-strip__lead">
-					<PortableText value={teamSection.blocks} components={ptComponents} />
+					<PortableText value={[teamBodyBlock]} components={ptComponents} />
 				</div>
 			)}
 			<ul class="s-team-strip__grid" role="list">
@@ -167,7 +148,7 @@ const members = memberEntries ?? [];
 	</section>
 )}
 
-<!-- ══════ SECTION 4: CLOUDFLARE PARTNER (CMS-driven) ══════ -->
+<!-- ══════ SECTION 3: CLOUDFLARE PARTNER (CMS-driven) ══════ -->
 <CloudflarePartner />
 
 <!-- ══════ SECTION 4: ÁREAS DE ESPECIALIZACIÓN (CMS-driven) ══════ -->
@@ -208,7 +189,7 @@ const members = memberEntries ?? [];
 	</div>
 </section>
 
-<!-- ══════ SECTION 6: LA PRUEBA — this site is the sample ══════ -->
+<!-- ══════ SECTION 5: CALIDAD Y RENDIMIENTO — the craft, and this site as its sample ══════ -->
 {proofSection && (
 	<section class="s-proof" aria-label={proofSection.heading}>
 		<div class="container">
@@ -223,7 +204,7 @@ const members = memberEntries ?? [];
 	</section>
 )}
 
-<!-- ══════ SECTION 7: CTA (from cta_global widget) ══════ -->
+<!-- ══════ SECTION 6: CTA (from cta_global widget) ══════ -->
 <div class="container mantra-wrap">
 	<MantraCloser />
 </div>

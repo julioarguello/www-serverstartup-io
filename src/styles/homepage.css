@@ -315,6 +315,18 @@
 	padding: var(--rhythm-section) 0;
 }
 
+/* the statement that used to head its own band: same weight, now inside the
+   section it was always talking about */
+.s-team-strip__statement {
+	margin-top: var(--space-3);
+}
+
+.s-team-strip__statement p {
+	font-size: var(--text-sub-size, 26px);
+	font-weight: var(--text-sub-weight, 500);
+	line-height: var(--text-sub-lh, 30px);
+}
+
 .s-team-strip__lead {
 	margin-top: var(--space-3);
 }
@@ -384,6 +396,8 @@
 
 /* the house dashed link convention reaches the new blocks */
 .s-team-strip__lead a,
+.s-team-strip__statement a,
+.s-cf__desc a,
 .s-proof__inner a {
 	color: inherit;
 	text-decoration: underline;
@@ -394,8 +408,12 @@
 }
 
 .s-team-strip__lead a:hover,
+.s-team-strip__statement a:hover,
+.s-cf__desc a:hover,
 .s-proof__inner a:hover,
 .s-team-strip__lead a:focus-visible,
+.s-team-strip__statement a:focus-visible,
+.s-cf__desc a:focus-visible,
 .s-proof__inner a:focus-visible {
 	text-decoration-style: solid;
 	text-decoration-color: currentColor;

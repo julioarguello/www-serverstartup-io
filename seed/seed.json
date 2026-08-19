@@ -11836,7 +11836,7 @@
 								{
 									"_key": "hk5",
 									"_type": "link",
-									"href": "/quienes-somos"
+									"href": "/quienes-somos#equipo"
 								}
 							],
 							"children": [
@@ -11871,11 +11871,11 @@
 						{
 							"_type": "block",
 							"style": "h2",
-							"_key": "w_h2",
+							"_key": "t_h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Cómo trabajamos"
+									"text": "El equipo"
 								}
 							]
 						},
@@ -11886,10 +11886,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Sin intermediarios y sin traspasos.",
-									"marks": [
-										"strong"
-									]
+									"text": "Sin intermediarios y sin traspasos."
 								}
 							]
 						},
@@ -11901,7 +11898,7 @@
 								{
 									"_key": "wk1",
 									"_type": "link",
-									"href": "/quienes-somos"
+									"href": "/quienes-somos#equipo"
 								}
 							],
 							"children": [
@@ -11919,46 +11916,6 @@
 								{
 									"_type": "span",
 									"text": " recorren todas las capas: el que diseña, escribe; el que escribe, opera."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"_key": "t_h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El equipo"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "t_body",
-							"markDefs": [
-								{
-									"_key": "tk1",
-									"_type": "link",
-									"href": "/quienes-somos#equipo"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Daniel, Ignacio y Julio. Los tres que ves aquí son los tres que van a tocar tu sistema — "
-								},
-								{
-									"_type": "span",
-									"text": "con nombre, cara y responsabilidad",
-									"marks": [
-										"tk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": "."
 								}
 							]
 						},
@@ -13056,7 +13013,7 @@
 								{
 									"_key": "hk5",
 									"_type": "link",
-									"href": "/en/about-us"
+									"href": "/en/about-us#team"
 								}
 							],
 							"children": [
@@ -13080,11 +13037,11 @@
 						{
 							"_type": "block",
 							"style": "h2",
-							"_key": "w_h2",
+							"_key": "t_h2",
 							"children": [
 								{
 									"_type": "span",
-									"text": "How we work"
+									"text": "The team"
 								}
 							]
 						},
@@ -13095,10 +13052,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "No middlemen, no handovers.",
-									"marks": [
-										"strong"
-									]
+									"text": "No middlemen, no handovers."
 								}
 							]
 						},
@@ -13110,7 +13064,7 @@
 								{
 									"_key": "wk1",
 									"_type": "link",
-									"href": "/en/about-us"
+									"href": "/en/about-us#team"
 								}
 							],
 							"children": [
@@ -13128,46 +13082,6 @@
 								{
 									"_type": "span",
 									"text": " cover every layer: whoever designs, writes; whoever writes, operates."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"_key": "t_h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The team"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "t_body",
-							"markDefs": [
-								{
-									"_key": "tk1",
-									"_type": "link",
-									"href": "/en/about-us#team"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Daniel, Ignacio and Julio. The three you see here are the three who will touch your system — "
-								},
-								{
-									"_type": "span",
-									"text": "with a name, a face and the responsibility",
-									"marks": [
-										"tk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": "."
 								}
 							]
 						},
@@ -14583,10 +14497,25 @@
 							{
 								"_type": "block",
 								"style": "normal",
+								"markDefs": [
+									{
+										"_key": "cfk1",
+										"_type": "link",
+										"href": "https://www.cloudflare.com/es-es/",
+										"blank": true
+									}
+								],
 								"children": [
 									{
 										"_type": "span",
-										"text": "Aceleramos y protegemos tu infraestructura con las soluciones más avanzadas de Cloudflare"
+										"text": "Aceleramos y protegemos tu infraestructura con las soluciones más avanzadas de "
+									},
+									{
+										"_type": "span",
+										"text": "Cloudflare",
+										"marks": [
+											"cfk1"
+										]
 									}
 								]
 							},

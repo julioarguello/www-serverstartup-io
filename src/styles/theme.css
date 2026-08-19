@@ -69,7 +69,13 @@
 	   classic reading measure. A second, narrower measure for prose was
 	   tried and rejected: two measures alternate long and short lines down
 	   the page, which is exactly what reads as "no criterion" (#304). */
-	--container-max: 880px;
+	/* Fluid between 1440 and 2400: the column and the body type grow TOGETHER
+	   (see the body rule below), so the line keeps measuring ~80 characters
+	   at every size. Growing the column alone would just lengthen the line;
+	   growing neither leaves 20px text stranded in the middle of a 27-inch
+	   monitor. Below 1440 both are frozen — a laptop is already right. */
+	--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px);
+	--text-body: clamp(20px, calc(20px + (100vw - 1440px) * 0.004167), 24px);
 	--section-padding: 80px;
 	--card-radius: 24px;
 	--card-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
@@ -188,7 +194,7 @@ ul, ol { list-style: none; }
 
 /* Tablet typography */
 @media (min-width: 768px) {
-	body { font-size: 20px; line-height: 28px; }
+	body { font-size: var(--text-body); line-height: 1.4; }
 	h1 { font-size: 64px; line-height: 72px; }
 	h2 { font-size: 48px; line-height: 56px; }
 	h3 { font-size: 32px; line-height: 40px; }
@@ -219,9 +225,9 @@ ul, ol { list-style: none; }
 /* Body text style (typography-efb39b7) */
 .text-body {
 	font-family: var(--font-family);
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 26px;
+	line-height: 1.4;
 }
 
 /* Highlighted text (from custom CSS) */

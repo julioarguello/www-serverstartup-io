@@ -8,9 +8,9 @@
 }
 
 .s-hero__body p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 30px;
+	line-height: 1.45;
 }
 
 .s-hero__body p + p {
@@ -54,9 +54,9 @@
 
 /* CMS intro of the team section (renamed from Hoy): dark-on-light body text */
 .s-team__intro p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 30px;
+	line-height: 1.45;
 }
 
 .s-team__intro p + p {
@@ -181,9 +181,9 @@
 }
 
 .s-history__inner p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 30px;
+	line-height: 1.45;
 }
 
 .s-history__inner p + p {
@@ -239,9 +239,9 @@
 	padding: 24px 28px;
 	border-left: var(--statement-rule) solid var(--color-primary);
 	background: color-mix(in srgb, var(--color-primary) 4%, transparent);
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 30px;
+	line-height: 1.45;
 }
 
 /* the Catalina log line: one long monospace token must wrap at 360px */
@@ -372,9 +372,9 @@
 }
 
 .s-sponsor__inner p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 30px;
+	line-height: 1.45;
 }
 
 .s-sponsor__media {
@@ -404,9 +404,9 @@
 
 .s-values__inner p {
 	color: var(--color-primary);
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 30px;
+	line-height: 1.45;
 }
 
 .s-values__inner p + p {

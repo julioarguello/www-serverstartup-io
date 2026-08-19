@@ -30,9 +30,9 @@
 	margin-top: 24px;
 }
 .s-hero__body p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 26px;
+	line-height: 1.45;
 	margin-block-end: 12px;
 }
 
@@ -75,9 +75,9 @@
 .s-tech__body-wrap p {
 	color: var(--color-primary);
 	margin-top: 16px;
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 26px;
+	line-height: 1.45;
 }
 
 @media (min-width: 768px) {
@@ -136,9 +136,9 @@
 }
 
 .s-cf__feature p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 26px;
+	line-height: 1.45;
 }
 
 @media (min-width: 768px) {

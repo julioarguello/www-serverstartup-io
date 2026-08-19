@@ -75,9 +75,9 @@
 }
 
 .s-inst__intro p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 28px;
+	line-height: 1.45;
 }
 
 /* ═══ Vertical rhythm (founder 2026-08-16, #269) ═══
@@ -113,9 +113,9 @@
 }
 
 .s-inst__lead p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 28px;
+	line-height: 1.45;
 }
 
 /* content links: thin dashed underline, solid on hover (founder 2026-08-15,
@@ -154,9 +154,9 @@
 }
 
 .s-inst__closer p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 28px;
+	line-height: 1.45;
 	margin-block-end: 14px;
 }
 
@@ -197,9 +197,9 @@
 }
 
 .s-inst__closer li {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 28px;
+	line-height: 1.45;
 	padding-left: 22px;
 	text-indent: -22px;
 	margin-block: 10px;
@@ -489,9 +489,9 @@
 .s-content__inner h3 { margin-bottom: var(--space-3); }
 
 .s-content__inner p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 26px;
+	line-height: 1.45;
 	margin-block-end: 12px;
 }
 
@@ -501,9 +501,9 @@
 }
 
 .s-content__inner li {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 28px;
+	line-height: 1.45;
 }
 
 /* ═══ CTA ═══ */

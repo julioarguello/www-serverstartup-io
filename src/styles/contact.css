@@ -11,9 +11,9 @@
 }
 
 .s-contact__content p {
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 300;
-	line-height: 28px;
+	line-height: 1.45;
 }
 
 .s-contact__content ul {
@@ -24,9 +24,9 @@
 
 .s-contact__content li {
 	font-family: var(--font-family);
-	font-size: 20px;
+	font-size: var(--text-body);
 	font-weight: 400;
-	line-height: 28px;
+	line-height: 1.45;
 }
 
 /* ── Team row — the three engineers who answer: photo (or initial-letter

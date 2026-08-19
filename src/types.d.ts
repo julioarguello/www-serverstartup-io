@@ -22,6 +22,10 @@ export interface SiteSettings {
 	emailEn?: string;
 	whatsapp?: string;
 	defaultCtaLabel?: string;
+	/** base64 of the address — what templates render (#311); the plain
+	    `email` stays for the CMS admin and server-side consumers */
+	emailEncoded?: string;
+	phoneEncoded?: string;
 	contactWhatsappLabel?: string;
 	contactPhoneLabel?: string;
 	contactEmailLabel?: string;

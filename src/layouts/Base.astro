@@ -97,6 +97,11 @@ const s = settings as SiteSettings;
 const phone = s.phone || "";
 const phoneDisplay = s.phoneDisplay || "";
 const email = s.email || "info@serverstartup.io";
+// #311: templates render the ENCODED value; the plain one never reaches HTML
+const emailEncoded = s.emailEncoded || "";
+const phoneEncoded = s.phoneEncoded || "";
+const emailLabel = labels.get("footer_headings", "email_label",
+	locale === "en" ? "Email us" : "Escríbenos");
 // #306: this used to read site settings, which are locale-NEUTRAL by design
 // (phone, email, company name). A CTA label is translatable copy, so every
 // English page shipped the Spanish button while the band above it was in
@@ -209,6 +214,9 @@ const resolvedOgType = ogType || "website";
 		aboutUsLabel={aboutUsLabel}
 		manualLabel={manualLabel}
 		defaultCtaLabel={defaultCtaLabel}
+		emailEncoded={emailEncoded}
+		phoneEncoded={phoneEncoded}
+		emailLabel={emailLabel}
 		email={email}
 		phone={phone}
 		phoneDisplay={phoneDisplay}

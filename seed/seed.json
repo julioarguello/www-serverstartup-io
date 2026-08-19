@@ -12,6 +12,7 @@
 		"phone": "",
 		"phoneDisplay": "",
 		"email": "hola@serverstartup.io",
+		"emailEncoded": "aG9sYUBzZXJ2ZXJzdGFydHVwLmlv",
 		"emailEn": "hello@serverstartup.io",
 		"repoUrl": "https://github.com/julioarguello/serverstartup-io",
 		"phoneEncoded": "KzM0NjY1ODU5NTEw",
@@ -1387,6 +1388,17 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "email_label",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Escríbenos"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "default_cta",
 							"children": [
 								{
@@ -2736,6 +2748,17 @@
 								{
 									"_type": "span",
 									"text": "References"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "email_label",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Email us"
 								}
 							]
 						},

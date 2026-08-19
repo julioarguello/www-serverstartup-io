@@ -98,13 +98,16 @@
 
 .s-cf__card {
 	width: 100%;
-	/* no frame: the partner lockup carries its own clear space per the
-	   Cloudflare brand guidelines — the old ink border was ours (#273).
-	   Frameless means no inset either: the block starts on the page's own
-	   left edge like every other section (#304). */
-	padding: 0;
-	/* #304: the portal aligns left — this card was the only centred block.
-	   `align-items: stretch` (the default) matters here: with flex-start the
+	/* The one block tinted with a discipline colour instead of ink: the edge
+	   orange (founder, 2026-08-19 — "así separa sin líneas y destaca"). It is
+	   the statement-block pattern, not a new one: left rule + tint, radius 0.
+	   The lockup keeps its clear space per Cloudflare's brand guidelines, so
+	   the padding is generous rather than the usual box inset. */
+	/* same inset as every other statement block, so their contents line up */
+	padding: var(--space-5);
+	border-left: var(--statement-rule) solid var(--color-edge);
+	background: var(--color-tint-edge);
+	/* `align-items: stretch` (the default) matters here: with flex-start the
 	   description shrank to its own text and stopped 164px short of the
 	   column, which is a width nobody declared. Only the button opts out. */
 	display: flex;

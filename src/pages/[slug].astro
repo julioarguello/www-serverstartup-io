@@ -14,6 +14,7 @@ import Base from "../layouts/Base.astro";
 import CtaGlobal from "../components/CtaGlobal.astro";
 import MantraCloser from "../components/MantraCloser.astro";
 import ServiceInstrument from "../components/service/ServiceInstrument.astro";
+import { accentFill as accentButton } from "../utils/accent";
 import CubeEmblem from "../components/CubeEmblem.astro";
 import { FACE_BY_SLUG, SITE_BY_PATH } from "../utils/nav";
 import { serviceJsonLd, breadcrumbJsonLd } from "../utils/jsonld";
@@ -57,6 +58,9 @@ const { title, content, excerpt } = entry.data;
 
 // Theme color from CMS entry (fallback to teal)
 const accentColor = entry.data.color || "#1E1E1E";
+// the filled (hover) state of every button on this page: the section's own
+// colour, with a label the palette can actually carry — see utils/accent.ts
+const { fill: accentFill, label: accentLabel } = accentButton(accentColor);
 const emblemKey = FACE_BY_SLUG[slug!] ?? SITE_BY_PATH[Astro.url.pathname.replace(/\/$/, "")];
 
 // CTA label from CMS (fallback to site settings default)
@@ -133,6 +137,6 @@ const labels = await getUiLabels(locale);
 	<CtaGlobal />
 </Base>
 
-<style is:global define:vars={{ accentColor }}>
+<style is:global define:vars={{ accentColor, accentFill, accentLabel }}>
 	@import "../styles/service.css";
 </style>

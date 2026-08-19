@@ -93,6 +93,10 @@
 	--color-border: #E3E7EB;          /* hairline on light ground */
 	--color-border-soft: #EDEEF0;     /* data separation INSIDE instruments */
 	--color-tint: color-mix(in srgb, var(--color-primary) 4%, transparent);
+	/* the edge discipline's own colour — the partner block is tinted with
+	   it so it separates by ground instead of by a rule (founder #304) */
+	--color-edge: #F38020;
+	--color-tint-edge: color-mix(in srgb, var(--color-edge) 8%, transparent);
 	--color-surface-sheet: #FDFDFB;   /* paper of the assembly manual sheet */
 	--color-scrim: rgba(0, 0, 0, 0.3); /* behind a modal */
 
@@ -259,10 +263,15 @@ ul, ol { list-style: none; }
 	color: var(--color-primary);
 	border: 1px solid var(--color-primary);
 }
+/* The filled state carries the SECTION's colour, ink where there is no
+   section (founder, 2026-08-19). The pair is computed per colour in
+   utils/accent.ts because CSS cannot branch on luminance and the palette
+   cannot carry one label colour: white on the CDN orange is 2.65:1. */
 .btn-dark:hover,
 .btn-dark:focus-visible {
-	background-color: var(--color-primary);
-	color: var(--color-secondary);
+	background-color: var(--accentFill, var(--color-primary));
+	border-color: var(--accentFill, var(--color-primary));
+	color: var(--accentLabel, var(--color-secondary));
 }
 
 .btn-light {
@@ -270,10 +279,12 @@ ul, ol { list-style: none; }
 	color: var(--color-secondary);
 	border: 1px solid var(--color-secondary);
 }
+/* on a dark band the outline is paper; it fills with the section colour too */
 .btn-light:hover,
 .btn-light:focus-visible {
-	background-color: var(--color-secondary);
-	color: var(--color-primary);
+	background-color: var(--accentFill, var(--color-secondary));
+	border-color: var(--accentFill, var(--color-secondary));
+	color: var(--accentLabel, var(--color-primary));
 }
 
 /* ─────────────────────────────────────────

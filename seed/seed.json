@@ -11932,35 +11932,6 @@
 									"text": "Áreas de especialización"
 								}
 							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "a_body",
-							"markDefs": [
-								{
-									"_key": "ak1",
-									"_type": "link",
-									"href": "/referencias"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Seis verticales, las mismas tres personas. Y las "
-								},
-								{
-									"_type": "span",
-									"text": "referencias",
-									"marks": [
-										"ak1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " que podemos nombrar."
-								}
-							]
 						}
 					]
 				},
@@ -13043,35 +13014,6 @@
 								{
 									"_type": "span",
 									"text": "Areas of expertise"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "a_body",
-							"markDefs": [
-								{
-									"_key": "ak1",
-									"_type": "link",
-									"href": "/en/references"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Six verticals, the same three people. And the "
-								},
-								{
-									"_type": "span",
-									"text": "references",
-									"marks": [
-										"ak1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " we are free to name."
 								}
 							]
 						}

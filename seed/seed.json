@@ -11925,11 +11925,120 @@
 						{
 							"_type": "block",
 							"style": "h2",
+							"_key": "t_h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "El equipo"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "t_body",
+							"markDefs": [
+								{
+									"_key": "tk1",
+									"_type": "link",
+									"href": "/quienes-somos"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Daniel, Ignacio y Julio. Los tres que ves aquí son los tres que van a tocar tu sistema — "
+								},
+								{
+									"_type": "span",
+									"text": "con nombre, cara y responsabilidad",
+									"marks": [
+										"tk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
 							"_key": "a_h2",
 							"children": [
 								{
 									"_type": "span",
 									"text": "Áreas de especialización"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "a_step",
+							"markDefs": [
+								{
+									"_key": "sk1",
+									"_type": "link",
+									"href": "/contacto"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "¿No sabes por cuál empezar? "
+								},
+								{
+									"_type": "span",
+									"text": "Escríbenos el síntoma",
+									"marks": [
+										"sk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " y te decimos dónde mirar. Sin reunión previa."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"_key": "p_h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Esta web es la muestra"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "p_body",
+							"markDefs": [
+								{
+									"_key": "pk1",
+									"_type": "link",
+									"href": "/deconstruyendo"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "No prometemos rendimiento: esta página lo tiene. Lighthouse 100 en rendimiento, accesibilidad, buenas prácticas y SEO, medido el 6 de agosto de 2026 sobre el build de producción. LCP por debajo de 1,3 segundos en móvil. Cada palabra vive versionada en Git, y un rebuild desde cero reproduce el sitio entero. "
+								},
+								{
+									"_type": "span",
+									"text": "Mira cómo está hecha",
+									"marks": [
+										"pk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
 								}
 							]
 						}
@@ -13009,11 +13118,120 @@
 						{
 							"_type": "block",
 							"style": "h2",
+							"_key": "t_h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The team"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "t_body",
+							"markDefs": [
+								{
+									"_key": "tk1",
+									"_type": "link",
+									"href": "/en/about-us"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Daniel, Ignacio and Julio. The three you see here are the three who will touch your system — "
+								},
+								{
+									"_type": "span",
+									"text": "with a name, a face and the responsibility",
+									"marks": [
+										"tk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
 							"_key": "a_h2",
 							"children": [
 								{
 									"_type": "span",
 									"text": "Areas of expertise"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "a_step",
+							"markDefs": [
+								{
+									"_key": "sk1",
+									"_type": "link",
+									"href": "/en/contact"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Not sure which one? "
+								},
+								{
+									"_type": "span",
+									"text": "Send us the symptom",
+									"marks": [
+										"sk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " and we will tell you where to look. No meeting first."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"_key": "p_h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "This website is the sample"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "p_body",
+							"markDefs": [
+								{
+									"_key": "pk1",
+									"_type": "link",
+									"href": "/en/deconstructing"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "We do not promise performance: this page has it. Lighthouse 100 in performance, accessibility, best practices and SEO, measured on 6 August 2026 against the production build. LCP under 1.3 seconds on mobile. Every word lives versioned in Git, and a rebuild from scratch reproduces the whole site. "
+								},
+								{
+									"_type": "span",
+									"text": "See how it is built",
+									"marks": [
+										"pk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
 								}
 							]
 						}

@@ -6,10 +6,12 @@
  * index.astro (ES) and en/index.astro (EN).
  *
  * Content source: pages/home (EmDash CMS, locale-scoped)
- * PT sections split by h2 headings:
- *   - hero: blocks before first h2
- *   - "~ Tecnología..." / "~ Technology...": h2 + body
- *   - "~ Áreas..." / "~ Areas...": h2 + subtitle
+ * PT sections split by h2 headings, read BY POSITION:
+ *   [0] hero — blocks before the first h2
+ *   [1] how we work — lead + body
+ *   [2] the team — one line; the faces come from the members collection
+ *   [3] areas — one closing line, rendered after the rows
+ *   [4] the proof — one line linking to Deconstruyendo
  *
  * CTA block sourced from cta_global widget area.
  * Service cards derived from services collection.
@@ -48,6 +50,7 @@ const { entries: serviceEntries } = await getEmDashCollection("services", {
 const services = serviceEntries ?? [];
 
 const labels = await getUiLabels(locale);
+const engineerCaption = labels.get("footer_headings", "engineer_caption", locale === "en" ? "Engineer" : "Ingeniero");
 const heroServicesBtn = labels.get("footer_headings", "hero_services_btn", locale === "en" ? "Our services" : "Nuestros servicios");
 
 // Split PT content by h2 headings into named sections
@@ -76,14 +79,23 @@ if (currentSection.heading || currentSection.blocks.length > 0) {
 // CMS order for pages/home: [hero ¶s] · h2 how-we-work · h2 areas.
 const heroSection = sections[0]; // blocks before first h2
 const techSection = sections[1];
-const areasSection = sections[2];
+const teamSection = sections[2];
+const areasSection = sections[3];
+const proofSection = sections[4];
 
 // Second band: lead line (first block) + body (second block)
 const techSubtitleBlock = techSection?.blocks[0];
 const techBodyBlock = techSection?.blocks[1];
 
-// Extract areas subtitle
-const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text).join("") || "";
+// The team's faces: the home asserts "the same three engineers" twice before
+// this point and never showed one (#304 founder review). Same collection the
+// About page uses — no new content, no new component.
+const { entries: memberEntries } = await getEmDashCollection("members", {
+	limit: 50,
+	orderBy: { title: "asc" },
+	locale,
+});
+const members = memberEntries ?? [];
 ---
 
 <!-- ══════ SECTION 1: HERO ══════ -->
@@ -128,7 +140,34 @@ const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text)
 	</section>
 )}
 
-<!-- ══════ SECTION 3: CLOUDFLARE PARTNER (CMS-driven) ══════ -->
+<!-- ══════ SECTION 3: EL EQUIPO — the faces behind "the same three" ══════ -->
+{teamSection && members.length > 0 && (
+	<section class="s-team-strip" aria-label={teamSection.heading}>
+		<div class="container">
+			<h2>{teamSection.heading}</h2>
+			{teamSection.blocks.length > 0 && (
+				<div class="s-team-strip__lead">
+					<PortableText value={teamSection.blocks} components={ptComponents} />
+				</div>
+			)}
+			<ul class="s-team-strip__grid" role="list">
+				{members.map((m: any) => (
+					<li class="s-team-strip__card">
+						{m.data.featured_image?.src && (
+							<img src={m.data.featured_image.src} alt={m.data.title} loading="lazy" decoding="async" />
+						)}
+						<h3>{m.data.title}</h3>
+						{/* the role is a UI label, like on Contacto — the members
+						    collection carries no excerpt */}
+						<p>{engineerCaption}</p>
+					</li>
+				))}
+			</ul>
+		</div>
+	</section>
+)}
+
+<!-- ══════ SECTION 4: CLOUDFLARE PARTNER (CMS-driven) ══════ -->
 <CloudflarePartner />
 
 <!-- ══════ SECTION 4: ÁREAS DE ESPECIALIZACIÓN (CMS-driven) ══════ -->
@@ -136,7 +175,6 @@ const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text)
 	<div class="container s-areas__inner">
 		<div class="s-areas__header">
 			<h2>{areasSection?.heading || `~ ${labels.get("footer_headings", "services_title", "Áreas de especialización")}`}</h2>
-			<p class="text-sub">{areasSubtitle}</p>
 		</div>
 
 		<!-- Full-width rows (#273): every vertical gets a color bar and room
@@ -167,10 +205,29 @@ const areasSubtitle = areasSection?.blocks[0]?.children?.map((c: any) => c.text)
 					);
 				})}
 		</ul>
+
+		{/* the cheap way in: a symptom, not a project (#304 founder review) */}
+		{areasSection && areasSection.blocks.length > 0 && (
+			<div class="s-areas__step">
+				<PortableText value={areasSection.blocks} components={ptComponents} />
+			</div>
+		)}
 	</div>
 </section>
 
-<!-- ══════ SECTION 5: CTA (from cta_global widget) ══════ -->
+<!-- ══════ SECTION 6: LA PRUEBA — this site is the sample ══════ -->
+{proofSection && (
+	<section class="s-proof" aria-label={proofSection.heading}>
+		<div class="container">
+			<div class="s-proof__inner">
+				<h2>{proofSection.heading}</h2>
+				<PortableText value={proofSection.blocks} components={ptComponents} />
+			</div>
+		</div>
+	</section>
+)}
+
+<!-- ══════ SECTION 7: CTA (from cta_global widget) ══════ -->
 <div class="container mantra-wrap">
 	<MantraCloser />
 </div>

@@ -308,4 +308,91 @@
 /* #304: the closing heading shares the column like everything else —
    70% was the page's fifth width */
 
+/* ═══ EL EQUIPO — the faces behind "the same three engineers" (#304) ═══
+   The home asserted it twice and never showed anyone. Data card family:
+   the photo IS the card, the name and role sit under it. */
+.s-team-strip {
+	padding: var(--rhythm-section) 0;
+}
 
+.s-team-strip__lead {
+	margin-top: var(--space-3);
+}
+
+.s-team-strip__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-4);
+	list-style: none;
+	margin: var(--space-5) 0 0;
+	padding: 0;
+}
+
+.s-team-strip__card img {
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	margin-bottom: var(--space-3);
+}
+
+.s-team-strip__card h3 {
+	font-size: 20px;
+	line-height: 1.2;
+}
+
+.s-team-strip__card p {
+	color: var(--color-text-muted);
+	font-size: 16px;
+	line-height: 1.4;
+	margin-top: 2px;
+}
+
+@media (min-width: 768px) {
+	.s-team-strip__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ═══ LA PRUEBA — the site as its own evidence (#304) ═══
+   Statement block: the claim is checkable, so it gets the weight. */
+.s-proof {
+	padding: var(--rhythm-section) 0;
+}
+
+/* deliberately NOT a statement box: it would sit directly on top of the
+   mantra, and two tinted boxes stacked read as a pile rather than as two
+   ideas. The claim carries its own weight — it is checkable. */
+.s-proof__inner {
+	padding: 0;
+}
+
+.s-proof__inner h2 {
+	margin-bottom: var(--space-3);
+}
+
+/* the cheap way in, closing the areas list */
+.s-areas__step {
+	margin-top: var(--space-4);
+}
+
+/* the house dashed link convention reaches the new blocks */
+.s-team-strip__lead a,
+.s-proof__inner a,
+.s-areas__step a {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-style: dashed;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+	text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
+}
+
+.s-team-strip__lead a:hover,
+.s-proof__inner a:hover,
+.s-areas__step a:hover,
+.s-team-strip__lead a:focus-visible,
+.s-proof__inner a:focus-visible,
+.s-areas__step a:focus-visible {
+	text-decoration-style: solid;
+	text-decoration-color: currentColor;
+}

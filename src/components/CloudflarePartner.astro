@@ -27,7 +27,11 @@ const logo = d.featured_image;
 const ctaLabel = d.cta_label;
 const locale = Astro.currentLocale || "es";
 const localePrefix = locale === "es" ? "" : `/${locale}`;
-const ctaHref = `${localePrefix}/${(featuredPartner as any).slug ?? featuredPartner.id}`;
+// The block introduces the partnership; the button sends you where that
+// partnership is actually work — the edge vertical — not to the partner's own
+// page, which repeats what you just read (founder, 2026-08-19).
+const edgeSlug = locale === "en" ? "cdn-waf-edge-security-cloudflare" : "cdn-waf-seguridad-edge-cloudflare";
+const ctaHref = `${localePrefix}/${edgeSlug}`;
 
 // Parse PT blocks into heading, description, and features
 const blocks = d.content || [];

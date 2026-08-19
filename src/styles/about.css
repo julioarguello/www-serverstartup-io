@@ -170,10 +170,14 @@
 }
 
 /* ═══ HISTORY — light bg, anchor target ═══ */
-.s-history {
-	padding: var(--rhythm-section) 0;
+.s-history,
+.s-team {
 	/* anchor lands below the fixed header */
 	scroll-margin-top: 96px;
+}
+
+.s-history {
+	padding: var(--rhythm-section) 0;
 }
 
 .s-history__inner h2 {

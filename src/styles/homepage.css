@@ -370,15 +370,17 @@
 	margin-bottom: var(--space-3);
 }
 
-/* the cheap way in, closing the areas list */
-.s-areas__step {
-	margin-top: var(--space-4);
+/* the deconstruction die, floated so the heading wraps around it */
+.s-proof__die {
+	float: right;
+	width: 72px;
+	height: auto;
+	margin: 0 0 var(--space-3) var(--space-4);
 }
 
 /* the house dashed link convention reaches the new blocks */
 .s-team-strip__lead a,
-.s-proof__inner a,
-.s-areas__step a {
+.s-proof__inner a {
 	color: inherit;
 	text-decoration: underline;
 	text-decoration-style: dashed;
@@ -389,10 +391,8 @@
 
 .s-team-strip__lead a:hover,
 .s-proof__inner a:hover,
-.s-areas__step a:hover,
 .s-team-strip__lead a:focus-visible,
-.s-proof__inner a:focus-visible,
-.s-areas__step a:focus-visible {
+.s-proof__inner a:focus-visible {
 	text-decoration-style: solid;
 	text-decoration-color: currentColor;
 }

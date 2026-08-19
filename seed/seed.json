@@ -11757,11 +11757,6 @@
 							"_key": "h_cred",
 							"markDefs": [
 								{
-									"_key": "hk1",
-									"_type": "link",
-									"href": "/cdn-waf-seguridad-edge-cloudflare"
-								},
-								{
 									"_key": "hk2",
 									"_type": "link",
 									"href": "/comercio-electronico"
@@ -11775,23 +11770,17 @@
 									"_key": "hk4",
 									"_type": "link",
 									"href": "/big-data-cloud-analytics"
+								},
+								{
+									"_key": "hk1",
+									"_type": "link",
+									"href": "/cdn-waf-seguridad-edge-cloudflare"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Partners oficiales de "
-								},
-								{
-									"_type": "span",
-									"text": "Cloudflare",
-									"marks": [
-										"hk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " desde 2019, y más de veinte años de oficio en "
+									"text": "Más de veinte años de oficio en "
 								},
 								{
 									"_type": "span",
@@ -11824,7 +11813,18 @@
 								},
 								{
 									"_type": "span",
-									"text": "."
+									"text": ". Partners oficiales de "
+								},
+								{
+									"_type": "span",
+									"text": "Cloudflare",
+									"marks": [
+										"hk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " desde 2019."
 								}
 							]
 						},
@@ -11941,7 +11941,7 @@
 								{
 									"_key": "tk1",
 									"_type": "link",
-									"href": "/quienes-somos"
+									"href": "/quienes-somos#equipo"
 								}
 							],
 							"children": [
@@ -11975,35 +11975,6 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
-							"_key": "a_step",
-							"markDefs": [
-								{
-									"_key": "sk1",
-									"_type": "link",
-									"href": "/contacto"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "¿No sabes por cuál empezar? "
-								},
-								{
-									"_type": "span",
-									"text": "Escríbenos el síntoma",
-									"marks": [
-										"sk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " y te decimos dónde mirar. Sin reunión previa."
-								}
-							]
-						},
-						{
-							"_type": "block",
 							"style": "h2",
 							"_key": "p_h2",
 							"children": [
@@ -12021,19 +11992,35 @@
 								{
 									"_key": "pk1",
 									"_type": "link",
+									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json"
+								},
+								{
+									"_key": "pk2",
+									"_type": "link",
 									"href": "/deconstruyendo"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"text": "No prometemos rendimiento: esta página lo tiene. Lighthouse 100 en rendimiento, accesibilidad, buenas prácticas y SEO, medido el 6 de agosto de 2026 sobre el build de producción. LCP por debajo de 1,3 segundos en móvil. Cada palabra vive versionada en Git, y un rebuild desde cero reproduce el sitio entero. "
+									"text": "El rendimiento lo prometemos, y lo dejamos comprobable. Ninguna versión de esta web se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El umbral no es una declaración nuestra — está escrito en el "
+								},
+								{
+									"_type": "span",
+									"text": "repositorio público",
+									"marks": [
+										"pk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ", junto a cada palabra de esta página. "
 								},
 								{
 									"_type": "span",
 									"text": "Mira cómo está hecha",
 									"marks": [
-										"pk1"
+										"pk2"
 									]
 								},
 								{
@@ -12961,11 +12948,6 @@
 							"_key": "h_cred",
 							"markDefs": [
 								{
-									"_key": "hk1",
-									"_type": "link",
-									"href": "/en/cdn-waf-edge-security-cloudflare"
-								},
-								{
 									"_key": "hk2",
 									"_type": "link",
 									"href": "/en/e-commerce"
@@ -12979,23 +12961,17 @@
 									"_key": "hk4",
 									"_type": "link",
 									"href": "/en/big-data-cloud-analytics"
+								},
+								{
+									"_key": "hk1",
+									"_type": "link",
+									"href": "/en/cdn-waf-edge-security-cloudflare"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Official "
-								},
-								{
-									"_type": "span",
-									"text": "Cloudflare",
-									"marks": [
-										"hk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " partners since 2019, and over twenty years of craft in "
+									"text": "Over twenty years of craft in "
 								},
 								{
 									"_type": "span",
@@ -13028,7 +13004,18 @@
 								},
 								{
 									"_type": "span",
-									"text": "."
+									"text": ". Official "
+								},
+								{
+									"_type": "span",
+									"text": "Cloudflare",
+									"marks": [
+										"hk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " partners since 2019."
 								}
 							]
 						},
@@ -13134,7 +13121,7 @@
 								{
 									"_key": "tk1",
 									"_type": "link",
-									"href": "/en/about-us"
+									"href": "/en/about-us#team"
 								}
 							],
 							"children": [
@@ -13168,35 +13155,6 @@
 						},
 						{
 							"_type": "block",
-							"style": "normal",
-							"_key": "a_step",
-							"markDefs": [
-								{
-									"_key": "sk1",
-									"_type": "link",
-									"href": "/en/contact"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Not sure which one? "
-								},
-								{
-									"_type": "span",
-									"text": "Send us the symptom",
-									"marks": [
-										"sk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " and we will tell you where to look. No meeting first."
-								}
-							]
-						},
-						{
-							"_type": "block",
 							"style": "h2",
 							"_key": "p_h2",
 							"children": [
@@ -13214,19 +13172,35 @@
 								{
 									"_key": "pk1",
 									"_type": "link",
+									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json"
+								},
+								{
+									"_key": "pk2",
+									"_type": "link",
 									"href": "/en/deconstructing"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"text": "We do not promise performance: this page has it. Lighthouse 100 in performance, accessibility, best practices and SEO, measured on 6 August 2026 against the production build. LCP under 1.3 seconds on mobile. Every word lives versioned in Git, and a rebuild from scratch reproduces the whole site. "
+									"text": "We do promise performance, and we make it checkable. No version of this site ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The threshold is not a claim of ours — it is written in the "
+								},
+								{
+									"_type": "span",
+									"text": "public repository",
+									"marks": [
+										"pk1"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ", next to every word on this page. "
 								},
 								{
 									"_type": "span",
 									"text": "See how it is built",
 									"marks": [
-										"pk1"
+										"pk2"
 									]
 								},
 								{

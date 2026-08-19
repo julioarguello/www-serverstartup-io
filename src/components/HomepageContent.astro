@@ -205,13 +205,6 @@ const members = memberEntries ?? [];
 					);
 				})}
 		</ul>
-
-		{/* the cheap way in: a symptom, not a project (#304 founder review) */}
-		{areasSection && areasSection.blocks.length > 0 && (
-			<div class="s-areas__step">
-				<PortableText value={areasSection.blocks} components={ptComponents} />
-			</div>
-		)}
 	</div>
 </section>
 
@@ -220,6 +213,9 @@ const members = memberEntries ?? [];
 	<section class="s-proof" aria-label={proofSection.heading}>
 		<div class="container">
 			<div class="s-proof__inner">
+				{/* the deconstruction face: the same mark that page wears, so the
+				    claim and the page that backs it read as one thing */}
+				<CubeEmblem class="s-proof__die" color="var(--color-primary)" faceKey="dec" size={104} />
 				<h2>{proofSection.heading}</h2>
 				<PortableText value={proofSection.blocks} components={ptComponents} />
 			</div>

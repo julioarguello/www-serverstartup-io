@@ -147,6 +147,9 @@ const altPath = entry ? await entryAlternatePath("pages", entry.data.id, "en") :
 	</section>
 </Base>
 
-<style>
+{/* is:global (#311): the method rows render inside ContactAction now,
+    and scoped styles only reach this component's own markup — every
+    other page in the project already imports its sheet globally. */}
+<style is:global>
 	@import "../../styles/contact.css";
 </style>

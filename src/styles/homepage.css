@@ -370,6 +370,10 @@
 	margin-bottom: var(--space-3);
 }
 
+.s-proof__inner p + p {
+	margin-top: var(--space-3);
+}
+
 /* the deconstruction die, floated so the heading wraps around it */
 .s-proof__die {
 	float: right;

@@ -11980,7 +11980,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Esta web es la muestra"
+									"text": "Calidad y rendimiento"
 								}
 							]
 						},
@@ -11988,11 +11988,29 @@
 							"_type": "block",
 							"style": "normal",
 							"_key": "p_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Nuestro oficio es la calidad y el rendimiento donde salen caros: procesos críticos y volúmenes grandes. El pico de campaña, el catálogo que hay que reindexar, la integración que tiene que cerrar el día."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "p_body2",
 							"markDefs": [
 								{
 									"_key": "pk1",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json"
+									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json",
+									"blank": true
+								},
+								{
+									"_key": "pk3",
+									"_type": "link",
+									"href": "https://github.com/julioarguello/serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
+									"blank": true
 								},
 								{
 									"_key": "pk2",
@@ -12003,18 +12021,29 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El rendimiento lo prometemos, y lo dejamos comprobable. Ninguna versión de esta web se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El umbral no es una declaración nuestra — está escrito en el "
+									"text": "Esta web es una muestra pequeña de la misma disciplina, aplicada a nuestro propio escaparate. Ninguna versión se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El "
 								},
 								{
 									"_type": "span",
-									"text": "repositorio público",
+									"text": "umbral",
 									"marks": [
 										"pk1"
 									]
 								},
 								{
 									"_type": "span",
-									"text": ", junto a cada palabra de esta página. "
+									"text": " está escrito en el repositorio público, y "
+								},
+								{
+									"_type": "span",
+									"text": "cada ejecución del control",
+									"marks": [
+										"pk3"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " también. "
 								},
 								{
 									"_type": "span",
@@ -13160,7 +13189,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This website is the sample"
+									"text": "Quality and performance"
 								}
 							]
 						},
@@ -13168,11 +13197,29 @@
 							"_type": "block",
 							"style": "normal",
 							"_key": "p_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Our craft is quality and performance where they get expensive: critical processes and large volumes. The campaign peak, the catalogue that has to be reindexed, the integration that has to close the day."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "p_body2",
 							"markDefs": [
 								{
 									"_key": "pk1",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json"
+									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json",
+									"blank": true
+								},
+								{
+									"_key": "pk3",
+									"_type": "link",
+									"href": "https://github.com/julioarguello/serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
+									"blank": true
 								},
 								{
 									"_key": "pk2",
@@ -13183,18 +13230,29 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We do promise performance, and we make it checkable. No version of this site ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The threshold is not a claim of ours — it is written in the "
+									"text": "This site is a small sample of the same discipline, applied to our own shop window. No version ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The "
 								},
 								{
 									"_type": "span",
-									"text": "public repository",
+									"text": "threshold",
 									"marks": [
 										"pk1"
 									]
 								},
 								{
 									"_type": "span",
-									"text": ", next to every word on this page. "
+									"text": " is written in the public repository, and so is "
+								},
+								{
+									"_type": "span",
+									"text": "every run of the check",
+									"marks": [
+										"pk3"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ". "
 								},
 								{
 									"_type": "span",

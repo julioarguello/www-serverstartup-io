@@ -27,8 +27,16 @@ interface Props {
 	pathname: string;
 	/** section colour from CMS, ink on site pages */
 	accent: string;
+	/**
+	 * Where this instance lives. "header" is the second line under the bar,
+	 * toggled by the magnifier — desktop only, because §14 forbids internal
+	 * horizontal scroll and the bar already splits cube, wordmark, path and
+	 * locale. "menu" is the phone's answer: the dialog is full-screen and has
+	 * the room, and the cube stays the only door.
+	 */
+	place?: "header" | "menu";
 }
-const { pathname, accent } = Astro.props;
+const { pathname, accent, place = "header" } = Astro.props;
 
 const locale = Astro.currentLocale || "es";
 const labels = await getUiLabels(locale);
@@ -51,6 +59,7 @@ const cmdOpen = labels.get("search", "cmd_open", 'find . -name "');
 const cmdClose = labels.get("search", "cmd_close", '"');
 
 const action = locale === "en" ? "/en/search" : "/search";
+const inMenu = place === "menu";
 const hintEnter = labels.get("search", "hint_enter", "buscar");
 const hintEsc = labels.get("search", "hint_esc", "cerrar");
 ---
@@ -58,8 +67,14 @@ const hintEsc = labels.get("search", "hint_esc", "cerrar");
 <!-- A terminal does not overwrite the line you are looking at: you press
      Enter and a NEW prompt appears underneath. So the breadcrumb line is left
      exactly as it is, and the command opens as a second line below it. -->
-<form class="search-form" method="get" action={action} role="search" style={`--accent:${accent}`}>
-	<div class="container search-line">
+<form
+	class:list={["search-form", inMenu && "search-form--menu"]}
+	method="get"
+	action={action}
+	role="search"
+	style={`--accent:${accent}`}
+>
+	<div class:list={[!inMenu && "container", "search-line"]}>
 		<span class="search-ps" aria-hidden="true">$</span>
 		<span class="search-chrome" aria-hidden="true">{cmdOpen}</span>
 		<span class="search-slot">
@@ -80,11 +95,12 @@ const hintEsc = labels.get("search", "hint_esc", "cerrar");
 		    hidden, focusable, and it is what a screen reader announces. */}
 		<button type="submit" class="sr-only">{hintEnter}</button>
 		<span class="search-hint" aria-hidden="true">
-			<kbd>enter</kbd> {hintEnter}<i>·</i><kbd>esc</kbd> {hintEsc}
+			<kbd>enter</kbd> {hintEnter}{!inMenu && (<><i>·</i><kbd>esc</kbd> {hintEsc}</>)}
 		</span>
 	</div>
 </form>
 
+{!inMenu && (
 <script>
 	const toggle = document.getElementById("search-toggle") as HTMLInputElement | null;
 	const input = document.querySelector<HTMLInputElement>(".search-input");
@@ -110,3 +126,4 @@ const hintEsc = labels.get("search", "hint_esc", "cerrar");
 		});
 	}
 </script>
+)}

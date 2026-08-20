@@ -298,10 +298,23 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   internal horizontal scroll outright, so the control does not compete for
 	   that width — on phones it belongs in the menu, which is full-screen. */
 	@media (max-width: 767px) {
-		.search-form,
+		/* scoped to the header: the menu's copy must survive this rule */
+		.site-header .search-form,
 		.search-btn { display: none; }
 		.site-header:has(.search-toggle:checked) .search-form { display: none; }
+	}
 
+	/* The menu copy IS the phone's search: always open inside the dialog, and
+	   absent from tablet up, where the header line already exists. */
+	.search-form--menu {
+		display: block;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		margin-bottom: var(--space-3);
+	}
+	.search-form--menu .search-line { padding: 12px 14px; }
+	@media (min-width: 768px) {
+		.search-form--menu { display: none; }
 	}
 
 	/* ≤480: everything cedes to the breadcrumb — flush cube, tight gaps,

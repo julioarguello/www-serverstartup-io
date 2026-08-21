@@ -54,21 +54,52 @@ wait_http "[0-9]{3}"
 # under 4.125 it is lost — the second boot then fails with `Address already in
 # use` while wait_http keeps polling, presenting an instant error as minutes of
 # HTTP 000.
+# The supervisor is a GRANDCHILD, not a child: `npx` → node → wrangler → workerd.
+# `pkill -P` reaches only direct children, so the real supervisor survived and
+# kept respawning workerd — which is how CI failed with "port still has a
+# listener 30s after stopping the stack" while the tree looked dead.
+#
+# Matching on the command line rather than walking the tree, for two reasons.
+# `ps -o comm` shows these supervisors as plain `node` (the word "wrangler" is
+# only in the args), so a comm-based filter reports zero and reads like success.
+# And a recursive tree walk spawns one `ps` per node, which is slow enough to
+# look like a hang.
+#
+# The pattern is `dev --port $PORT`, not `wrangler dev --port $PORT`, because
+# the process that actually supervises workerd does not carry the word
+# "wrangler" next to "dev" at all. Measured:
+#
+#   node .../node_modules/.bin/wrangler dev --port 8787          ← the parent
+#   node --no-warnings .../wrangler-dist/cli.js dev --port 8787  ← the supervisor
+#
+# A pattern matching only the first leaves the second alive, respawning workerd
+# forever — and `pkill` then reports nothing to kill, which reads like success.
+# `dev --port $PORT` matches both and is still port-scoped, so it cannot reach
+# another project's stack.
 stop_stack() {
-	kill -TERM "$WRANGLER_PID" 2>/dev/null || true
-	pkill -TERM -P "$WRANGLER_PID" 2>/dev/null || true
-	for _ in $(seq 1 30); do
-		if [ -z "$(lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null)" ]; then
+	local holders pid
+	pkill -TERM -f "dev --port $PORT" 2>/dev/null || true
+	pkill -KILL -f "dev --port $PORT" 2>/dev/null || true
+	# With nothing left alive to spawn more, whatever still holds the port is an
+	# orphan and stays dead once killed. `xargs -r` is a GNU extension BSD xargs
+	# lacks, so iterate instead.
+	for _ in $(seq 1 45); do
+		# `|| true` is load-bearing: lsof exits 1 when it finds nothing, and under
+		# `set -euo pipefail` that failing pipeline kills the script through the
+		# assignment — silently, and precisely in the SUCCESS case (port free).
+		holders="$(lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | sort -u || true)"
+		if [ -z "$holders" ]; then
 			return 0
 		fi
-		kill -KILL "$WRANGLER_PID" 2>/dev/null || true
-		pkill -KILL -P "$WRANGLER_PID" 2>/dev/null || true
-		lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | xargs kill -9 2>/dev/null || true
+		for pid in $holders; do
+			kill -KILL "$pid" 2>/dev/null || true
+		done
 		sleep 1
 	done
 	# Observed fact and where to look — never a guessed cause.
 	echo "ERROR: port $PORT still has a listener 30s after stopping the stack" >&2
 	lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >&2 || true
+	ps -eo pid=,ppid=,etime=,comm= | grep -iE "workerd|wrangler" >&2 || true
 	return 1
 }
 stop_stack

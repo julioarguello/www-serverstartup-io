@@ -21,12 +21,17 @@ that cannot find anything.
      same secret, which is circular. That gap is real; it is bounded by the
      shape check and named here rather than papered over.
 
-     The canary itself needed a second pass (2026-08-23, first production
-     run): a per-name pattern written as "^Name$" or "\bName\b", or one with
-     spaces around the "|" separator, planted as plain text does NOT
-     self-match without care — an anchor character or a literal "\b" in the
-     text is not the anchor it represents. Verified against five plausible
-     secret shapes before calling it fixed.
+     The canary needed two passes before it matched production (2026-08-23).
+     First: a per-name pattern written as "^Name$" or "\bName\b" plants as
+     plain text with the anchor character or a literal "\b" still attached,
+     which is not the anchor it represents — fixed by stripping them. Second,
+     deeper: the real secret's FIRST alternative is itself fuzzy — shaped
+     like `Toys.?R.?Us`, an any-char-optional construct for exactly the
+     shape-changing name this file already used as its own example. A fuzzy
+     alternative's raw regex text is not text it matches, by construction, so
+     no amount of anchor-stripping fixes it — the canary now scans every
+     alternative for one that is plain (no backslash, no quantifier) and
+     tests with that instead of blindly trusting the first.
 
   3. The list was negative; the policy (§13) is positive. Grepping for known
      bad names cannot catch a NEW client nobody thought to forbid. So the
@@ -111,48 +116,48 @@ def check_forbidden(pattern: str) -> int:
               "nothing. Check the repository secret.", file=sys.stderr)
         return 1
 
-    # TEMPORARY DIAGNOSTIC (2026-08-23): two guesses at the real secret's
-    # shape both failed against production. Print its STRUCTURE without ever
-    # printing a name: every letter becomes 'X', every digit becomes '9' —
-    # punctuation, spaces, anchors and separators survive untouched. This is
-    # not the secret; it cannot be turned back into one. Removed once the
-    # real shape is known.
-    masked = re.sub(r"[0-9]", "9", re.sub(r"[^\W\d_]", "X", pattern))
-    print(f"citability: DIAGNOSTIC pattern length={len(pattern)} "
-          f"alternatives={len(alternatives)} structure={masked[:300]!r}",
-          file=sys.stderr)
-
     # ── positive control: the scan must be able to find something ──
-    # First run in production failed here (2026-08-23, PR #380): the real
-    # secret's first alternative carries either per-name line anchors
-    # ("^Name$") or a space against the "|" separator ("Name | Name2") —
-    # both plausible, human-formatted ways to write the list — and the
-    # naive "canary: <stripped name>" line satisfied neither. Two fixes:
-    # strip a leading ^/trailing $ (anchor artifacts, never part of a real
-    # name) before planting, and use the RAW (unstripped) alternative on a
-    # bare line so a required trailing space is still there. A second line
-    # with padding covers \b-wrapped patterns too. Verified against five
-    # plausible secret shapes before shipping; the one that still cannot
-    # pass — a name containing regex-escaped literal parens — matches no
-    # name in the actual policy (checked against §13's list).
-    raw = pattern.split("|")[0]
-    # Strip anchor artifacts a per-name pattern might carry: ^, $, and a
-    # literal \b — the last one matters because the canary is PLAIN TEXT: a
-    # literal "\bAcme" contains the word character "b" right before "A",
-    # which defeats the very boundary the real \b would enforce. Verified
-    # this exact shape fails without the strip, passes with it.
-    # (Never write a real forbidden name here — this file is scanned too,
-    # and it just caught itself doing that.)
-    core = re.sub(r"^(\^|\\b)+", "", raw)
-    core = re.sub(r"(\$|\\b)+$", "", core)
+    # Two earlier attempts failed against the real secret. A structural
+    # diagnostic (letters->X, digits->9, everything else untouched — printed
+    # nothing that could be turned back into a name) showed why: of 24
+    # alternatives, one is deliberately FUZZY — something shaped like
+    # `Name.?N.?ame`, an any-char-optional construct for matching a name
+    # whose real-world spelling varies by a punctuation mark (the classic
+    # "Toys \"R\" Us" vs "ToysRUs" case this file's own docstring already
+    # names). A fuzzy alternative's raw regex text is not text it matches —
+    # that is the whole point of writing it that way — so planting it
+    # literally can never self-match, by design, regardless of anchor
+    # handling. The other 23 alternatives are plain text.
+    #
+    # So: pick an alternative to test, don't just take the first one. A
+    # "clean" alternative — after stripping ^, $, \b anchors — has no
+    # backslash and no quantifier (the constructs that make raw regex text
+    # diverge from matched text); anything else about it is just letters,
+    # digits, spaces and ordinary punctuation, safe to plant as-is.
+    UNSAFE = re.compile(r"[\\?*+{}]")
+    core = None
+    for alt in alternatives:
+        candidate = re.sub(r"^(\^|\\b)+", "", alt)
+        candidate = re.sub(r"(\$|\\b)+$", "", candidate).strip()
+        if candidate and not UNSAFE.search(candidate):
+            core = candidate
+            break
+    if core is None:
+        print("citability: every alternative in FORBIDDEN_NAMES uses a "
+              "backslash or a quantifier — none is safe to plant as a "
+              "literal positive control. Add one plain-text alternative, "
+              "or extend this script's canary construction.", file=sys.stderr)
+        return 1
+
     canary = ROOT / ".citability-canary.tmp"
     try:
-        canary.write_text(f"{core}\ncontext {core.strip()} context\n", encoding="utf-8")
+        canary.write_text(f"{core}\ncontext {core} context\n", encoding="utf-8")
         if not scan(pattern, [canary.name]):
             print("citability: DEAD GUARD — the pattern did not match a file "
-                  "containing its own first name (tried bare and padded). "
-                  "The secret's regex cannot match anything, so a clean "
-                  "result would prove nothing.", file=sys.stderr)
+                  "containing one of its own plain-text alternatives (tried "
+                  "bare and padded). The secret's regex cannot match "
+                  "anything, so a clean result would prove nothing.",
+                  file=sys.stderr)
             return 1
     finally:
         canary.unlink(missing_ok=True)

@@ -12,7 +12,7 @@ that cannot find anything.
      absent secret is a failure.
 
   2. Nothing proved the pattern could match. A broken regex, a name that
-     changed shape ("Toys \"R\" Us" vs "ToysRUs"), a secret set to something
+     changed shape (a name with an optional internal punctuation mark), a secret set to something
      that matches nothing — all indistinguishable from a clean tree. A
      positive control now runs first: a name from the secret is planted in a
      canary file and the scan MUST find it, plus a shape check that the secret
@@ -26,8 +26,8 @@ that cannot find anything.
      plain text with the anchor character or a literal "\b" still attached,
      which is not the anchor it represents — fixed by stripping them. Second,
      deeper: the real secret's FIRST alternative is itself fuzzy — shaped
-     like `Toys.?R.?Us`, an any-char-optional construct for exactly the
-     shape-changing name this file already used as its own example. A fuzzy
+     like `Word.?Word.?Word`, an any-char-optional construct for exactly the
+     kind of shape-changing name real client lists carry. A fuzzy
      alternative's raw regex text is not text it matches, by construction, so
      no amount of anchor-stripping fixes it — the canary now scans every
      alternative for one that is plain (no backslash, no quantifier) and
@@ -123,7 +123,7 @@ def check_forbidden(pattern: str) -> int:
     # alternatives, one is deliberately FUZZY — something shaped like
     # `Name.?N.?ame`, an any-char-optional construct for matching a name
     # whose real-world spelling varies by a punctuation mark (the classic
-    # "Toys \"R\" Us" vs "ToysRUs" case this file's own docstring already
+    # any-char-optional shape-changing case the module docstring already
     # names). A fuzzy alternative's raw regex text is not text it matches —
     # that is the whole point of writing it that way — so planting it
     # literally can never self-match, by design, regardless of anchor

@@ -40,15 +40,11 @@ jobs:
       - name: Citability guard
         env:
           FORBIDDEN_NAMES: ${{ secrets.FORBIDDEN_NAMES }}
-        run: |
-          if [ -z "$FORBIDDEN_NAMES" ]; then
-            echo "FORBIDDEN_NAMES secret not present — skipping (public mirror)"; exit 0
-          fi
-          # The tree must never name non-citable clients (policy lives outside the repo).
-          if grep -rIlE "$FORBIDDEN_NAMES" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.wrangler; then
-            echo "::error::Citability violation: forbidden name found in the tree"; exit 1
-          fi
-          echo "citability clean"
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        # Scans the TRACKED tree for non-citable names, proves it can find one
+        # before trusting a clean result, refuses if the secret is missing on
+        # the private repo, and checks the whitelist the other way round (#347).
+        run: python3 scripts/ci-check-citability.py
 
       - name: Types (astro check)
         run: |

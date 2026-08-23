@@ -67,7 +67,10 @@ fi
 # and the directory IS the locale. Ask the database who owns that pair.
 declare_index() {
   [[ -n "$DRY_RUN" ]] && return 0
-  INDEX_JSON=$(npx emdash content list "$COLLECTION" -u "$BASE_URL" --json 2>/dev/null) || INDEX_JSON=""
+  # --limit: the API pages at a default well below a large collection, and a
+  # truncated listing would report every entry past the cut as "no such slug"
+  # — a wrong diagnosis, which is worse than a missing one.
+  INDEX_JSON=$(npx emdash content list "$COLLECTION" -u "$BASE_URL" --limit 500 --json 2>/dev/null) || INDEX_JSON=""
   INDEX=$(python3 -c "
 import json, sys
 raw = sys.argv[1]

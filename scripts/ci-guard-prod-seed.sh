@@ -60,9 +60,12 @@ TYPED="${2:-}"
 # Count rows across every content table. A collection table that does not exist
 # yet contributes nothing rather than aborting the guard: a database too young
 # to have the table is, by definition, empty of its content.
+# `|| true`, deliberately: under `set -e` a failing wrangler would abort the
+# script here and the diagnostic below would never print — a refusal message
+# that cannot be reached is the same dead-guard shape this file exists to fix.
 TABLES=$(npx wrangler d1 execute "$D1_NAME" --remote --json -y \
 	--command "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'ec\\_%' ESCAPE '\\';" 2>/dev/null \
-	| node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results.map(r=>r.name).join(' '))}catch{console.log('')}})")
+	| node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results.map(r=>r.name).join(' '))}catch{console.log('')}})" || true)
 
 if [ -z "$TABLES" ]; then
 	echo "REFUSE: could not read the table list from '$D1_NAME'." >&2
@@ -77,7 +80,8 @@ echo "content rows in '$D1_NAME' (measured before any write, from $(hostname)):"
 for t in $TABLES; do
 	n=$(npx wrangler d1 execute "$D1_NAME" --remote --json -y \
 		--command "SELECT count(*) AS c FROM \"$t\";" 2>/dev/null \
-		| node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results[0].c)}catch{console.log(-1)}})")
+		| node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results[0].c)}catch{console.log(-1)}})" || true)
+	[ -n "$n" ] || n=-1
 	if [ "$n" -lt 0 ]; then
 		echo "REFUSE: could not count rows in '$t' — refusing on an unknown state." >&2
 		exit 1

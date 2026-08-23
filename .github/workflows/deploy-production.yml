@@ -77,11 +77,15 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: d70cd71aecc76f94c73d7a6f3cc1265d
+          # Through env, never interpolated into the run: body. This job holds
+          # CLOUDFLARE_API_TOKEN, and a quote in the typed value would break the
+          # shell — a crafted one would run in it.
+          SEED_D1_CONFIRM: ${{ inputs.seed_d1_confirm }}
         # The machine condition "pre-launch only" used to be prose in the
         # input description above (#358). Prints the per-table counts —
         # the record, taken before anything is written — and refuses unless
         # the database is empty or the operator typed the confirmation.
-        run: scripts/ci-guard-prod-seed.sh www-serverstartup-io "${{ inputs.seed_d1_confirm }}"
+        run: scripts/ci-guard-prod-seed.sh www-serverstartup-io "$SEED_D1_CONFIRM"
 
       - name: Seed production D1 from seed/seed.json (opt-in, destructive)
         if: inputs.seed_d1

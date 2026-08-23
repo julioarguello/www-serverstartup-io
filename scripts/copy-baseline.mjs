@@ -112,7 +112,13 @@ async function renderText(page, baseUrl, route) {
 }
 
 async function withPage(fn) {
-	const browser = await puppeteer.launch({ headless: "new" });
+	// Same flags as ci-check-a11y.mjs: the GitHub Actions Ubuntu runner has no
+	// usable Chromium sandbox (AppArmor user-namespace restrictions), and
+	// /dev/shm is too small for Chromium's default shared-memory usage.
+	const browser = await puppeteer.launch({
+		headless: "new",
+		args: ["--no-sandbox", "--disable-dev-shm-usage"],
+	});
 	try {
 		const page = await browser.newPage();
 		await page.setViewport(VIEWPORT);

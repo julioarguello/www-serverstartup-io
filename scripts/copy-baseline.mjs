@@ -182,6 +182,27 @@ async function verify(baseUrl) {
 	});
 }
 
+/*
+ * Re-baselining: the procedure, and why it is not optional
+ * --------------------------------------------------------
+ * `verify` runs as a permanent step of ci.yml (#366). A failure is exactly
+ * one of two things, never a third:
+ *
+ *   1. A REGRESSION — copy changed and nobody meant it. Fix the code.
+ *   2. An INTENDED copy change — then re-capture and commit the new baseline
+ *      IN THE SAME PR, so the diff is reviewed as content:
+ *
+ *          scripts/ci-local-stack.sh 8787
+ *          node scripts/copy-baseline.mjs capture --base-url http://localhost:8787
+ *          git add tests/copy-baseline/   # review this diff like prose
+ *
+ * What must never happen is a re-capture on a red run "to make it pass". This
+ * gate already died once that way: its first version cried wolf on 26 of 26
+ * routes, and a gate that always fires is a gate nobody reads on the day it is
+ * right. If a diff is not obviously one of the two cases above, it is the
+ * first one until proven otherwise.
+ */
+
 const [mode] = process.argv.slice(2);
 const urlFlag = process.argv.indexOf("--base-url");
 const baseUrl = urlFlag > -1 ? process.argv[urlFlag + 1] : "http://localhost:8787";

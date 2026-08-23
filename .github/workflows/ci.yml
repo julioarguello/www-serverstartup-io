@@ -91,6 +91,13 @@ jobs:
           npx --yes html-validate --config .htmlvalidate.json /tmp/html/*.html
           echo "html-validate: 0 problems across $(ls /tmp/html | wc -l) templates"
 
+      - name: Rendered copy matches the baseline
+        # F3 of #355: a permanent step, not a one-off. Reuses the puppeteer
+        # the a11y step already installs — no second browser path. A diff here
+        # is either a regression or an intentional copy change whose baseline
+        # was not re-captured; scripts/copy-baseline.mjs documents which.
+        run: node scripts/copy-baseline.mjs verify --base-url http://localhost:8787
+
       - name: Security headers
         run: scripts/ci-check-headers.sh http://localhost:8787
 

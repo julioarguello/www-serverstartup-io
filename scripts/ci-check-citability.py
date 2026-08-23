@@ -21,6 +21,13 @@ that cannot find anything.
      same secret, which is circular. That gap is real; it is bounded by the
      shape check and named here rather than papered over.
 
+     The canary itself needed a second pass (2026-08-23, first production
+     run): a per-name pattern written as "^Name$" or "\bName\b", or one with
+     spaces around the "|" separator, planted as plain text does NOT
+     self-match without care — an anchor character or a literal "\b" in the
+     text is not the anchor it represents. Verified against five plausible
+     secret shapes before calling it fixed.
+
   3. The list was negative; the policy (§13) is positive. Grepping for known
      bad names cannot catch a NEW client nobody thought to forbid. So the
      structured surface is checked the other way round: every reference entry
@@ -105,15 +112,36 @@ def check_forbidden(pattern: str) -> int:
         return 1
 
     # ── positive control: the scan must be able to find something ──
+    # First run in production failed here (2026-08-23, PR #380): the real
+    # secret's first alternative carries either per-name line anchors
+    # ("^Name$") or a space against the "|" separator ("Name | Name2") —
+    # both plausible, human-formatted ways to write the list — and the
+    # naive "canary: <stripped name>" line satisfied neither. Two fixes:
+    # strip a leading ^/trailing $ (anchor artifacts, never part of a real
+    # name) before planting, and use the RAW (unstripped) alternative on a
+    # bare line so a required trailing space is still there. A second line
+    # with padding covers \b-wrapped patterns too. Verified against five
+    # plausible secret shapes before shipping; the one that still cannot
+    # pass — a name containing regex-escaped literal parens — matches no
+    # name in the actual policy (checked against §13's list).
+    raw = pattern.split("|")[0]
+    # Strip anchor artifacts a per-name pattern might carry: ^, $, and a
+    # literal \b — the last one matters because the canary is PLAIN TEXT: a
+    # literal "\bAcme" contains the word character "b" right before "A",
+    # which defeats the very boundary the real \b would enforce. Verified
+    # this exact shape fails without the strip, passes with it.
+    # (Never write a real forbidden name here — this file is scanned too,
+    # and it just caught itself doing that.)
+    core = re.sub(r"^(\^|\\b)+", "", raw)
+    core = re.sub(r"(\$|\\b)+$", "", core)
     canary = ROOT / ".citability-canary.tmp"
     try:
-        canary.write_text(f"canary: {pattern.split('|')[0].strip()}\n",
-                          encoding="utf-8")
+        canary.write_text(f"{core}\ncontext {core.strip()} context\n", encoding="utf-8")
         if not scan(pattern, [canary.name]):
             print("citability: DEAD GUARD — the pattern did not match a file "
-                  "containing its own first name. The secret's regex cannot "
-                  "match anything, so a clean result would prove nothing.",
-                  file=sys.stderr)
+                  "containing its own first name (tried bare and padded). "
+                  "The secret's regex cannot match anything, so a clean "
+                  "result would prove nothing.", file=sys.stderr)
             return 1
     finally:
         canary.unlink(missing_ok=True)

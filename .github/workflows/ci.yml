@@ -64,6 +64,9 @@ jobs:
       - name: Cache hints (cache.set only where it reaches the headers)
         run: python3 scripts/ci-check-cache-hints.py
 
+      - name: Unit tests (accent, panels, excerpt — the silent-failure modules)
+        run: npm test
+
       - name: Build
         run: npx astro build
 

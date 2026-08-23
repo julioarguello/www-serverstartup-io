@@ -111,6 +111,17 @@ def check_forbidden(pattern: str) -> int:
               "nothing. Check the repository secret.", file=sys.stderr)
         return 1
 
+    # TEMPORARY DIAGNOSTIC (2026-08-23): two guesses at the real secret's
+    # shape both failed against production. Print its STRUCTURE without ever
+    # printing a name: every letter becomes 'X', every digit becomes '9' —
+    # punctuation, spaces, anchors and separators survive untouched. This is
+    # not the secret; it cannot be turned back into one. Removed once the
+    # real shape is known.
+    masked = re.sub(r"[0-9]", "9", re.sub(r"[^\W\d_]", "X", pattern))
+    print(f"citability: DIAGNOSTIC pattern length={len(pattern)} "
+          f"alternatives={len(alternatives)} structure={masked[:300]!r}",
+          file=sys.stderr)
+
     # ── positive control: the scan must be able to find something ──
     # First run in production failed here (2026-08-23, PR #380): the real
     # secret's first alternative carries either per-name line anchors

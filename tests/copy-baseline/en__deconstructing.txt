@@ -3,91 +3,99 @@ Skip to content
 /en/deconstructing
 ES
 Deconstructing this website
-This page explains how the website you are reading is built. Not out of vanity: it is how we work, applied to our own shop window. If someone tells you how they work and cannot show you the workshop, be suspicious.
-The tour goes downwards. From the point of presence that answered your request to the commit that authorised these words there are six layers. None of them is interesting for the technology it uses. They are interesting for what they decide, and for what they refuse to let through.
+If someone tells you how they work and cannot show you the workshop, be suspicious. This is ours.
+The tour runs downwards, from the point of presence that answered your request to the commit that authorised these words. Every layer opens if you want the detail, and everything claimed here is in the repository.
 The architecture
-There are no servers to look after, and that is the least of it. What matters is where the response you are reading was made: at the edge, in a nearby point of presence, on Cloudflare Workers. The cache sits in front of the worker, so on a hit the code never runs at all.
-Below that, the CMS is not a separate service to call over the network. EmDash runs inside the same worker, with content in D1, images in R2 and sessions in KV. One process serves the page and the editing panel alike.
-And at the bottom of the descent there is no database: there is a text file in Git. It is the only layer a human writes by hand, which makes it the only one that can lie.
+There are no servers to look after, and that is the least of it. What matters is where the response you are reading was made: at the edge, on Cloudflare Workers. Cache sits in front, and on a hit the code never runs.
+Below that, the CMS is EmDash, which Cloudflare released under an MIT licence as a successor to WordPress, and not a service to call over the network: it is the same application, served by the same worker. And at the bottom of the descent there is no database, there is a text file in Git.
 L5
 the edge
 Workers · cache in front
 A hit returns the page without running any code.
+The Workers cache sits in front of the worker, so a hit answers without running anything. Nothing is cached by default: a page only gets in if it asks to. Once in it lasts an hour, and publishing purges it by tag.
 L4
 the door
 middleware
 Decides what may be cached and adds the security headers.
+One middleware for every response: it resolves the locale, loads the accessibility labels, decides the cache policy and stamps seven security headers. The editing panel is excluded, because it brings its own.
 L3
 the render
 Astro SSR
 Builds the HTML in the same worker that took the request.
+26 public routes, 24 components and 12 stylesheets, on Astro on-demand rendering — Astro has been part of Cloudflare since January 2026. Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404.
 L2
 the CMS
 EmDash
-Runs inside the worker: no external service to call.
+Runs inside the same worker: no external service to call.
+EmDash is not a service you subscribe to: it is the CMS Cloudflare released in April 2026 under an MIT licence as a successor to WordPress, and has run its own blog since 12 August. Here it injects 183 routes under /_emdash into this very application, with 7 collections and 43 entries: same script, same bindings, no network call. Third-party plugins are the deliberate exception, running in a separate isolate through Worker Loader, with no way out to the internet.
+The panel, editing this page. It runs in the same worker that just served it to you.
 L1
 the data
 D1 · R2 · KV
 Content, images and sessions, at the edge.
+Content in D1, files in R2 and sessions in KV. Static assets never come through here: the asset layer serves them without ever waking the worker.
 L0
 the origin
-seed.json in Git
-The only thing a human writes. Everything else derives from it.
-The request comes in at the top. The only layer a person writes lives at the bottom, which is why it is the only one reviewed by hand.
+seed.json · markdown
+What a person writes. Everything above derives from it.
+A text file in Git, plus the service bodies in markdown. The whole site comes out of it in a rebuild from nothing, which is what continuous integration does before every merge.
+The request comes in at the top. What a person writes lives at the bottom, which is why that is the layer reviewed by hand.
 Content as code
-Every text on this site lives in seed/seed.json — 43 entries, two locales, 353 KB — plus the service bodies as markdown files where the filename is the slug and the directory is the locale. There is no state a rebuild cannot reproduce.
-That is not a claim, it is what continuous integration does before every merge: it boots the stack from nothing, seeds the database from that file and serves the whole site. If the rebuild did not reproduce the site, there would be no site to review.
-Caching inherits the same discipline. A page is only cached if it asked to be, and publishing purges by tag: the entry is invalidated and so are the pages that embed it. One gap is worth saying out loud: menus and site settings emit no event when published, so their staleness is bounded by the one-hour TTL. A limit stated plainly is a limit somebody can fix.
+Almost every text lives in seed/seed.json, with the service bodies in markdown: the filename is the slug, the directory is the locale. A rebuild from nothing remakes the whole site, and continuous integration checks that before every merge.
+Caching inherits the discipline: a page is cached only if it asks to be, and publishing purges it by tag. One gap is worth saying out loud: menus and site settings emit no event, so a one-hour TTL is what bounds their staleness.
 ➜ serverstartup.io rebuild --from-nothing
 ✓ database created, empty
 ✓ seeds applied: 43 entries, two locales
-✓ site served: 26 routes
+✓ frozen copy: 26 routes
 ✓ rendered copy: matches the frozen baseline
 ╰─ done. The rebuild is the proof, and it runs before every merge.
 The agents
-A model writing the first draft is neither impressive nor mysterious — anyone can do that. What decides whether it is serious is who has authority over what.
-The agent can propose anything and merge nothing. The gates can refuse and cannot write. The human can do both, which makes them the only party who can be wrong on the record. The house voice is not a prompt in somebody's history either: it is a versioned artefact, with its forbidden-word list and its policy on anglicisms, reviewed the way code is reviewed.
-Before a person is asked anything, the branch goes through fourteen checks. These refuse things a human review cannot see:
-Non-citable names: a client who must not appear in a public repository, caught before the mirror publishes them.
-Copy outside the CMS: a label that exists in one locale only, or a sentence hardcoded into a template.
-Colours outside the system: a colour literal or a new width — which is how seven different measures came back once.
-Caching in the wrong place: a call placed after the headers have left, which caches nothing and looks like it does.
-Copy that changes by itself: the rendered text of 26 routes is frozen; a different word with no decision behind it fails the build.
-Accessibility and contrast: keyboard traversal, reflow at 320 pixels and W3C validation.
-A gate is only worth having if it can fail. One that finds nothing and one that cannot find anything look identical from outside, so each is proven by breaking it on purpose before its green is trusted. And the last door is not automatic: production is deployed by hand, and that gesture is the approval.
+A model writing the first draft is neither impressive nor mysterious. What decides whether this is serious is who has authority over what.
+The agent proposes and cannot merge. The checks refuse and cannot write: their credential is read-only. The human can do both, which is why the human is the only one who can be wrong by name. The small print: the agent not merging is a written rule, not a lock on the server.
+Before a person is asked anything, the branch goes through fifteen steps that can fail. They refuse what a reading by eye does not catch:
+A guard is only worth having if it can fail, and one that finds nothing looks like one that cannot. The two most delicate carry a positive control that blows them up the moment they stop looking. The last door is not automatic either: production is deployed by hand.
 agent/draft → main
 Open
 −
 publish without anyone reading it
 +
-Non-citable names: a client who must not appear in a public repository, caught before the mirror publishes them.
+Non-citable names: a client who must not appear in a public repository.
 +
-Copy outside the CMS: a label that exists in one locale only, or a sentence hardcoded into a template.
+Copy outside the CMS: a label that exists in one locale only, or a sentence burnt into a template.
 +
-Colours outside the system: a colour literal or a new width — which is how seven different measures came back once.
+Colours outside the system: a literal or a new width, which is how seven different measures come back.
 +
-Caching in the wrong place: a call placed after the headers have left, which caches nothing and looks like it does.
+Caching in the wrong place: a call placed after the headers have gone, which caches nothing and looks like it does.
 +
-Copy that changes by itself: the rendered text of 26 routes is frozen; a different word with no decision behind it fails the build.
+Copy that changes by itself: the rendered text of 26 routes is frozen.
 +
 Accessibility and contrast: keyboard traversal, reflow at 320 pixels and W3C validation.
-✓ ci/citability
-✓ ci/cms-text
-✓ ci/tokens
-✓ ci/cache
-✓ ci/copy
-✓ ci/a11y
-✓ ci/lighthouse
+All checks have passed — quality-gates / gates
+✓ gitleaks
+✓ citability
+✓ astro check
+✓ seed schema
+✓ CMS text
+✓ design tokens
+✓ cache hints
+✓ unit tests
+✓ build
+✓ boot the stack
+✓ html-validate
+✓ frozen copy
+✓ headers
+✓ accessibility
+✓ Lighthouse
 ✔ Approved
-Signed-off-by: a person with a name
-Merge
+Signed-off-by: julio.arguello
+Merge pull request
 The numbers
-On a page about rigour, an undated number is the worst possible place for drift. So there are two kinds of figure here and they never mix: the threshold continuous integration demands before it will merge, which is permanent and lives in a file in the repository; and the measurement, which carries its date beside it.
-The threshold: performance above 95, and 100 in accessibility, best practices and SEO, taken as the median of three runs under mobile emulation. The measurement on 24 August 2026, against the production build served locally: 100 across all four categories on all five templates measured, with largest contentful paint at 1.1 seconds on this page. We quote the median rather than the best run, because a single run drops on its own and means nothing.
+An undated number is the worst possible place for drift, so there are two kinds here and they never mix. The threshold lives in a file: 95 or more for performance, 100 for accessibility, best practices and SEO, over the median of three runs under mobile emulation.
+The measurement carries its date. On 24 August 2026, against the production build: 100 in all four categories across all five addresses, with the largest content painted in under 1.6 seconds. Each figure is a median, and the bound is the worst of the five.
 Thresholds · continuous integration
 REQUIRED
 performance
-> 95
+95 or more
 accessibility
 100
 best practices
@@ -96,29 +104,41 @@ SEO
 100
 routes with frozen copy
 26
-checks per branch
-14
+steps that can fail
+15
 The workshop, in plain sight
-The repository is public and syncs on every push, whole history, unfiltered. Publishing like that has a cost, and that cost is exactly what forces the non-citable-names guard to exist: when you show everything, what must not get out has to be encoded at rest, not hidden.
-Code, seeds, skills, gates and deployment workflows: it is all there. Look inside and tell us if you would do it better. You probably would, and that is how good conversations start.
+The repository is public and syncs on every change to the main branch, whole history, unfiltered. Publishing like that has a cost: that is why the non-citable-names guard exists.
+Code, seeds, checks and deployments: it is all there. Look inside and tell us if you would do it differently.
 SERVERSTARTUP.io
 assembly manual · ES/EN · sheet 1 of 1
 PARTS INCLUDED
-Workers + WAF ×1
-the shield
-D1 + R2 ×1
-data and media
-Astro SSR + EmDash ×1
-render and CMS
-seeds ×43
+L5
+the edge
+×1
+the worker that answers
+L4
+the door
+×7
+the security headers
+L3
+the render
+×26
+the public routes
+L2
+the CMS
+×5
+a plugin of ours on the EmDash API
+L1
+the data
+×3
+D1, R2 and KV
+L0
+the origin
+×43
 the whole corpus
-copywriting skill ×1
-the voice with a blacklist
-agent ×N
-drafts never decides
-repository ×1
-look inside
-engineers ×3
+—
+the engineers
+×3
 not included: already there
 ASSEMBLY
 01
@@ -137,7 +157,7 @@ deploy to the edge
 Do not assemble without step 04. The agent drafts, the human signs.
 Step 03 never merges. Ever.
 ℹ Assembly data
-Estimated time: one afternoon and its commits.
+Assembly time: three weeks, in odd hours.
 Hardware included: zero handoffs.
 View the repository →
 Let's talk, engineer to engineer.

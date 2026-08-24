@@ -8,9 +8,13 @@
  * cell is a plain-text slot with brittle delimiters. ServiceInstrument does
  * the same for the AI page.
  *
- * The check names are real gate ids from .github/workflows/ci.yml. If a gate
- * is renamed there and not here, this panel starts lying — which is why they
- * live in the CMS, where a copy review can see them.
+ * The chips are the fifteen failable STEPS of .github/workflows/ci.yml, and
+ * the title is the one check run GitHub actually reports. They used to be seven
+ * invented `ci/*` check contexts — no such context exists anywhere in the repo,
+ * because CI is a single job, so the panel was decorating rather than showing
+ * (caught by the #305 fact-check, 2026-08-24). If a step is renamed there and
+ * not here the panel starts lying again, which is why the names live in the
+ * CMS, where a copy review can see them.
  */
 import { PortableText } from "emdash/ui";
 import PtLink from "../PtLink.astro";
@@ -48,6 +52,7 @@ const del = L("rv_del", "");
 		</div>
 		{checks.length > 0 && (
 			<div class="pr__checks">
+				{L("rv_checks_title", "") && <p class="pr__checks-title">{L("rv_checks_title", "")}</p>}
 				{checks.map((c) => <span class="pr__check">✓ {c}</span>)}
 			</div>
 		)}

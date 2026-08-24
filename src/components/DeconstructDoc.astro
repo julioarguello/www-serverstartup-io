@@ -34,6 +34,23 @@ const { intro, sections } = splitByHeading(content);
 /** The document was written with five sections; anything else renders plain. */
 const EXPECTED_SECTIONS = 5;
 const withInstruments = sections.length === EXPECTED_SECTIONS;
+
+/** The index whose bullets the PR panel consumes as its `+` lines. */
+const REVIEW_SECTION = 2;
+
+/**
+ * Blocks to render as prose. When an instrument already draws a section's
+ * bullets, the prose must NOT draw them too: the first version passed the
+ * whole section to PortableText *and* the same listItems to DecReview, so six
+ * bullets appeared twice, verbatim, 119 words apart — a third of the section
+ * and the loudest half of the founder's "veo mucha verbosidad" (2026-08-24).
+ * It reached the frozen baseline, because a baseline freezes what renders,
+ * including what renders twice.
+ */
+const proseOf = (section: { blocks: any[] }, i: number) =>
+	withInstruments && i === REVIEW_SECTION
+		? section.blocks.filter((b: any) => !b.listItem)
+		: section.blocks;
 ---
 
 {intro.length > 0 && (
@@ -43,11 +60,24 @@ const withInstruments = sections.length === EXPECTED_SECTIONS;
 {sections.map((section, i) => (
 	<section class="s-doc__section">
 		<h2>{section.heading}</h2>
-		<PortableText value={section.blocks} components={ptComponents} />
+		<PortableText value={proseOf(section, i)} components={ptComponents} />
 
-		{withInstruments && i === 0 && <LayerStack labels={labels} />}
+		{withInstruments && i === 0 && (
+			<LayerStack
+				labels={labels}
+				figureRank="L2"
+				figureSrc="/assets/emdash-editor-deconstruyendo.webp"
+				figureWidth={1600}
+				figureHeight={1006}
+				figureSrcNarrow="/assets/emdash-editor-deconstruyendo-narrow.webp"
+				figureNarrowWidth={780}
+				figureNarrowHeight={674}
+				figureAlt={labels.get("manual_labels", "ly_shot_alt", "")}
+				figureCaption={labels.get("manual_labels", "ly_shot_caption", "")}
+			/>
+		)}
 		{withInstruments && i === 1 && <DecTerminal labels={labels} label={section.heading} />}
-		{withInstruments && i === 2 && (
+		{withInstruments && i === REVIEW_SECTION && (
 			<DecReview
 				labels={labels}
 				label={section.heading}

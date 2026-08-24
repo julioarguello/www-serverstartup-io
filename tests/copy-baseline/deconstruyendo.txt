@@ -3,91 +3,99 @@ Saltar al contenido
 /deconstruyendo
 EN
 Deconstruyendo esta web
-Esta página explica cómo está construida la web que estás leyendo. No por vanidad: es nuestra manera de trabajar, aplicada a nuestro propio escaparate. Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía.
-El recorrido va hacia abajo. Desde el punto de presencia que respondió a tu petición hasta el commit que autorizó estas palabras, hay seis capas. Ninguna es interesante por la tecnología que usa: lo son por lo que deciden y por lo que se niegan a dejar pasar.
+Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro.
+El recorrido va hacia abajo, del punto de presencia que respondió a tu petición al commit que autorizó estas palabras. Cada capa se abre si quieres el detalle, y todo lo que se afirma aquí está en el repositorio.
 La arquitectura
-No hay servidores que cuidar, y eso es lo de menos. Lo que importa es dónde se fabricó la respuesta que estás leyendo: en el edge, en un punto de presencia cercano, sobre Cloudflare Workers. Delante del worker hay caché: cuando acierta, el código ni siquiera se ejecuta.
-Debajo, el CMS no es un servicio aparte al que llamar por red. EmDash corre dentro del mismo worker, con el contenido en D1, las imágenes en R2 y las sesiones en KV. Un solo proceso responde la página y sirve el panel de edición.
-Y al final del descenso no hay una base de datos: hay un fichero de texto en Git. Esa es la única capa que un humano escribe a mano, y por eso es la única que puede mentir.
+No hay servidores que cuidar, y eso es lo de menos. Importa dónde se fabricó la respuesta que estás leyendo: en el edge, sobre Cloudflare Workers. Delante hay caché, y cuando acierta el código ni se ejecuta.
+Debajo, el CMS es EmDash, que Cloudflare publicó con licencia MIT como sucesor de WordPress, y no un servicio al que llamar por red: es la misma aplicación, servida por el mismo worker. Y al final del descenso no hay base de datos, hay un fichero de texto en Git.
 L5
 el borde
 Workers · caché delante
 Un acierto devuelve la página sin ejecutar código.
+La caché de Workers se sienta delante del worker, así que un acierto responde sin ejecutar nada. Por defecto no se cachea: una página solo entra si ella misma lo pide. Cuando entra dura una hora, y al publicar se purga por etiquetas.
 L4
 la puerta
 middleware
 Decide qué se cachea y añade las cabeceras de seguridad.
+Un único middleware para todas las respuestas: resuelve el idioma, carga las etiquetas de accesibilidad, decide la política de caché y estampa siete cabeceras de seguridad. El panel de edición queda fuera, porque trae las suyas.
 L3
 el render
 Astro SSR
 Construye el HTML en el mismo worker que recibió la petición.
+26 rutas públicas, 24 componentes y 12 hojas de estilo, con render bajo demanda de Astro, que también es de Cloudflare desde enero de 2026. Los idiomas no se separan por prefijo sino por slug traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404.
 L2
 el CMS
 EmDash
-Corre dentro del worker: no hay servicio externo al que llamar.
+Corre dentro del mismo worker: no hay servicio externo al que llamar.
+EmDash no es un servicio contratado: es el CMS que Cloudflare publicó en abril de 2026 con licencia MIT como sucesor de WordPress, y que usa en su propio blog desde el 12 de agosto. Aquí inyecta 183 rutas bajo /_emdash en esta misma aplicación, con 7 colecciones y 43 entradas: mismo script, mismos enlaces de recursos, ninguna llamada de red. Los plugins de terceros son la excepción deliberada, y corren en un aislado aparte con Worker Loader, sin salida a internet.
+El panel, editando esta página. Corre en el mismo worker que acaba de servírtela.
 L1
 los datos
 D1 · R2 · KV
-Contenido, imágenes y sesiones, en el borde.
+Contenido, imágenes y sesiones, en el edge.
+El contenido en D1, los ficheros en R2 y las sesiones en KV. Los estáticos no pasan por aquí: los sirve la capa de recursos sin llegar a despertar al worker.
 L0
 el origen
-seed.json en Git
-Lo único que escribe un humano. Todo lo demás se deriva.
-La petición entra por arriba. Lo único que escribe una persona vive abajo, y por eso es lo único que se revisa a mano.
+seed.json · markdown
+Lo que escribe una persona. Todo lo de encima se deriva de aquí.
+Un fichero de texto en Git, más los cuerpos de los servicios en markdown. De ahí sale la web entera en una reconstrucción desde cero, que es lo que hace la integración continua antes de cada fusión.
+La petición entra por arriba. Abajo vive lo que escribe una persona, y por eso es la capa que se revisa a mano.
 Contenido como código
-Cada texto de esta web vive en seed/seed.json — 43 entradas, dos idiomas, 353 KB — más los cuerpos de los servicios en ficheros markdown donde el nombre del fichero es el slug y el directorio es el idioma. No hay estado que una reconstrucción no reproduzca.
-Eso no es una promesa: es lo que hace la integración continua antes de cada fusión. Arranca la pila desde cero, siembra la base de datos desde ese fichero y sirve el sitio entero. Si la reconstrucción no reprodujese la web, no habría web que revisar.
-El caché hereda esa disciplina. Una página solo se cachea si ella misma lo pidió, y al publicar se purga por etiquetas: se invalida la entrada y, con ella, las páginas que la incrustan. Queda un hueco y conviene decirlo: los menús y los ajustes del sitio no emiten evento al publicarse, así que su desfase lo acota el TTL de una hora. Un límite dicho en voz alta es un límite que alguien puede arreglar.
+Casi cada texto vive en seed/seed.json, y los cuerpos de los servicios en markdown: el nombre del fichero es el slug, el directorio es el idioma. Una reconstrucción desde cero rehace la web entera, y eso lo comprueba la integración continua antes de cada fusión.
+La caché hereda la disciplina: una página solo se cachea si lo pide, y al publicar se purga por etiquetas. Queda un hueco y conviene decirlo: los menús y los ajustes no emiten evento, así que su desfase lo acota el TTL de una hora.
 ➜ serverstartup.io reconstruir --desde-cero
 ✓ base de datos creada, vacía
 ✓ semillas aplicadas: 43 entradas, dos idiomas
-✓ sitio servido: 26 rutas
+✓ copia congelada: 26 rutas
 ✓ copia renderizada: coincide con la congelada
 ╰─ listo. La reconstrucción es la prueba, y corre antes de cada fusión.
 Los agentes
-Que un modelo redacte el primer borrador no tiene mérito ni misterio: lo hace cualquiera. Lo que decide si eso es serio o no es quién tiene autoridad para qué.
-El agente puede proponer cualquier cosa y no puede fusionar ninguna. Los gates pueden rechazar y no pueden escribir. El humano puede las dos cosas, y por eso es el único que puede equivocarse con nombre y apellidos. La voz de la casa tampoco es un prompt en el historial de alguien: es un artefacto versionado, con su lista de palabras prohibidas y su política de anglicismos, que se revisa como se revisa el código.
-Antes de que a una persona se le pregunte nada, la rama pasa por catorce comprobaciones. Estas se niegan a dejar pasar cosas que una revisión a ojo no ve:
-Nombres no citables: un cliente que no puede aparecer en un repositorio público, encontrado antes de que el espejo lo publique.
-Textos fuera del CMS: una etiqueta que solo existe en un idioma, o una frase escrita a fuego en una plantilla.
-Colores fuera del sistema: un literal de color o una anchura nueva, que es como vuelven las siete medidas distintas.
-Caché en el sitio equivocado: una llamada colocada donde las cabeceras ya se han ido, que no cachea nada y lo parece.
-Copia que cambia sola: el texto renderizado de 26 rutas está congelado; una palabra distinta sin decisión detrás rompe la construcción.
-Accesibilidad y contraste: recorrido con tabulador, reflujo a 320 píxeles y validación del W3C.
-Un gate solo vale si puede fallar. Uno que no encuentra nada y otro que no puede encontrar nada se ven exactamente igual desde fuera, así que cada uno se prueba rompiéndolo a propósito antes de confiar en su verde. Y la última puerta no es automática: producción se despliega a mano, y ese gesto es la aprobación.
-agente/borrador → main
-Abierto
+Que un modelo redacte el primer borrador no tiene mérito ni misterio. Lo que decide si esto es serio es quién tiene autoridad para qué.
+El agente propone y no fusiona. Las comprobaciones rechazan y no escriben: su credencial es de solo lectura. La persona puede las dos cosas, y por eso es la única que puede equivocarse con nombre y apellidos. La letra pequeña: que el agente no fusione es una regla escrita, no un candado del servidor.
+Antes de preguntarle nada a una persona, la rama pasa por quince pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:
+Un guardia solo vale si puede fallar, y uno que no encuentra nada se ve igual que uno que no puede. Los dos más delicados llevan un control positivo que los revienta si dejan de mirar. La última puerta tampoco es automática: producción se despliega a mano.
+agent/draft → main
+Open
 −
 publicar sin que nadie lo lea
 +
-Nombres no citables: un cliente que no puede aparecer en un repositorio público, encontrado antes de que el espejo lo publique.
+Nombres no citables: un cliente que no puede salir en un repositorio público.
 +
-Textos fuera del CMS: una etiqueta que solo existe en un idioma, o una frase escrita a fuego en una plantilla.
+Textos fuera del CMS: una etiqueta que solo existe en un idioma, o una frase escrita a fuego en la plantilla.
 +
-Colores fuera del sistema: un literal de color o una anchura nueva, que es como vuelven las siete medidas distintas.
+Colores fuera del sistema: un literal o una anchura nueva, que es como vuelven las siete medidas distintas.
 +
-Caché en el sitio equivocado: una llamada colocada donde las cabeceras ya se han ido, que no cachea nada y lo parece.
+Caché en el sitio equivocado: una llamada puesta donde las cabeceras ya se han ido, que no cachea nada y lo parece.
 +
-Copia que cambia sola: el texto renderizado de 26 rutas está congelado; una palabra distinta sin decisión detrás rompe la construcción.
+Copia que cambia sola: el texto renderizado de 26 rutas está congelado.
 +
-Accesibilidad y contraste: recorrido con tabulador, reflujo a 320 píxeles y validación del W3C.
-✓ ci/citabilidad
-✓ ci/textos-cms
-✓ ci/tokens
-✓ ci/caché
-✓ ci/copia
-✓ ci/accesibilidad
-✓ ci/lighthouse
-✔ Aprobado
-Firmado por: una persona con nombre
-Fusionar
+Accesibilidad y contraste: tabulador, reflujo a 320 píxeles y validación del W3C.
+All checks have passed — quality-gates / gates
+✓ gitleaks
+✓ citabilidad
+✓ astro check
+✓ esquema de semillas
+✓ textos del CMS
+✓ tokens de diseño
+✓ pistas de caché
+✓ tests unitarios
+✓ construcción
+✓ arranque de la pila
+✓ html-validate
+✓ copia congelada
+✓ cabeceras
+✓ accesibilidad
+✓ Lighthouse
+✔ Approved
+Signed-off-by: julio.arguello
+Merge pull request
 Los números
-En una página sobre rigor, un número sin fecha es el peor sitio para la deriva. Así que aquí hay dos clases de cifra y no se mezclan: el umbral que la integración continua exige para dejar fusionar, que es permanente y vive en un fichero del repositorio; y la medición, que lleva su fecha al lado.
-El umbral: rendimiento por encima de 95 y cien en accesibilidad, buenas prácticas y SEO, tomando la mediana de tres pasadas con emulación móvil. La medición del 24 de agosto de 2026, sobre la construcción de producción servida en local: cien en las cuatro categorías, en las cinco plantillas medidas, con el mayor contenido pintado en 1,1 segundos en esta página. Se cita la mediana y no la mejor pasada, porque una pasada suelta baja sola y no significa nada.
+Un número sin fecha es el peor sitio para la deriva, así que aquí hay dos clases y no se mezclan. El umbral vive en un fichero: 95 o más en rendimiento, cien en accesibilidad, buenas prácticas y SEO, sobre la mediana de tres pasadas con emulación móvil.
+La medición lleva su fecha. El 24 de agosto de 2026, sobre la construcción de producción: cien en las cuatro categorías y en las cinco direcciones, con el mayor contenido pintado por debajo de 1,6 segundos. Es la mediana de cada una, y la cota es la peor de las cinco.
 Umbrales · integración continua
 EXIGIDO
 rendimiento
-> 95
+95 o más
 accesibilidad
 100
 buenas prácticas
@@ -96,29 +104,41 @@ SEO
 100
 rutas con copia congelada
 26
-comprobaciones por rama
-14
+pasos que pueden fallar
+15
 El taller, a la vista
-El repositorio es público y se sincroniza en cada push, con la historia entera y sin filtrar. Publicar así tiene un coste, y ese coste es justamente lo que obliga a que exista el guardia de nombres no citables: cuando lo enseñas todo, lo que no debe salir tiene que estar cifrado en origen, no escondido.
-Código, semillas, skills, gates y flujos de despliegue: está todo. Mira dentro y dinos si harías algo mejor. Probablemente sí, y así empiezan las buenas conversaciones.
+El repositorio es público y se sincroniza con cada cambio en la rama principal, con la historia entera y sin filtrar. Publicar así tiene un coste: por eso existe el guardia de nombres no citables.
+Código, semillas, comprobaciones y despliegues: está todo. Mira dentro y dinos si harías algo distinto.
 SERVERSTARTUP.io
 manual de montaje · ES/EN · hoja 1 de 1
 PIEZAS INCLUIDAS
-Workers + WAF ×1
-el escudo
-D1 + R2 ×1
-datos y media
-Astro SSR + EmDash ×1
-render y CMS
-semillas ×43
+L5
+el borde
+×1
+el worker que responde
+L4
+la puerta
+×7
+las cabeceras de seguridad
+L3
+el render
+×26
+las rutas públicas
+L2
+el CMS
+×5
+un plugin nuestro con la API de EmDash
+L1
+los datos
+×3
+D1, R2 y KV
+L0
+el origen
+×43
 el corpus entero
-skill de copywriting ×1
-la voz con lista negra
-agente ×N
-redacta nunca decide
-repositorio ×1
-mira dentro
-ingenieros ×3
+—
+los ingenieros
+×3
 no incluidos: ya estaban
 MONTAJE
 01
@@ -137,7 +157,7 @@ deploy al edge
 No montar sin el paso 04. El agente redacta, el humano firma.
 El paso 03 nunca hace merge. Nunca.
 ℹ Datos de montaje
-Tiempo estimado: una tarde y sus commits.
+Tiempo de montaje: tres semanas a ratos.
 Tornillería incluida: cero traspasos.
 Ver el repositorio →
 Hablemos de ingeniero a ingeniero.

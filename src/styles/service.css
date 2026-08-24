@@ -462,7 +462,11 @@
 }
 
 .term__log {
-	color: #6b7280;
+	/* Was #6b7280: 3.88:1 on the console ground, below AA — a real failure on
+	   the pages that already render this instrument, never caught because
+	   none of them was in the a11y route list until #305 added one. The
+	   theme's own dim token is 6.18:1. */
+	color: var(--color-console-dim);
 	margin-top: 8px;
 }
 

@@ -1,36 +1,151 @@
-/* ═══ Deconstructing this website — assembly-manual page (#161) ═══ */
+/* ═══ Deconstructing this website — the layered document (#161, #305) ═══ */
 
-.s-manual {
+.s-doc {
 	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
 }
 
-.s-manual__inner {
+.s-doc__inner {
 	/* #304: it is also the .container, which is margin:0 auto — capping it
 	   here centred the whole page and moved the portal's left edge. The
-	   column is the container's own width now; prose caps at --measure-prose. */
+	   column is the container's own width now. */
 	margin-inline: 0;
 }
 
-.s-manual__intro {
+.s-doc__intro {
 	margin-top: 20px;
 }
 
-.s-manual__intro p,
-.s-manual__prose p {
+.s-doc__intro p,
+.s-doc__section p {
 	font-size: var(--text-body);
 	font-weight: 300;
 	line-height: 1.45;
 	margin-block-end: 14px;
 }
 
-.s-manual__prose {
+/* Rhythm lives on the top edge only: each section declares the space above
+   it and never below, or two neighbours both claim the same gap (#304). */
+.s-doc__section {
 	margin-top: var(--space-6);
 }
 
-.s-manual__prose h2 {
-	font-size: 32px;
-	line-height: 40px;
-	margin: 36px 0 14px;
+/* h2 size is sitewide since #304 — clamp(28px, 3.2vw, 40px) in theme.css.
+   The 32px override that used to live here was the third heading register
+   the design-token work went looking for. */
+.s-doc__section h2 {
+	margin: 0 0 14px;
+}
+
+/* The global reset drops list markers; the document's bullets need them
+   back. Same dash the instruments use, so the page has one list voice. */
+.s-doc__section ul {
+	list-style: none;
+	margin: 0 0 14px;
+	padding: 0;
+}
+
+.s-doc__section ul li {
+	position: relative;
+	padding-left: 18px;
+	font-size: var(--text-body);
+	font-weight: 300;
+	line-height: 1.45;
+	margin-bottom: 8px;
+}
+
+.s-doc__section ul li::before {
+	content: "–";
+	position: absolute;
+	left: 0;
+	color: var(--color-text-muted);
+}
+
+/* ── The layer stack: the architecture as a descent (#305) ── */
+.stack {
+	margin: var(--space-5) 0 0;
+}
+
+.stack__layers {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	overflow: hidden;
+	background: var(--color-surface-sheet);
+}
+
+.stack__layer {
+	position: relative;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 2px var(--space-2);
+	padding: 14px var(--space-3) 16px;
+}
+
+/* A rule here separates data inside an instrument, which is the one job #304
+   still allows a rule to do. */
+.stack__layer + .stack__layer {
+	border-top: 1px solid var(--color-border);
+}
+
+.stack__rank {
+	grid-row: 1 / 3;
+	align-self: start;
+	font-family: var(--font-family-mono);
+	font-size: 13px;
+	color: var(--color-text-muted);
+	padding-top: 2px;
+}
+
+.stack__name {
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.stack__tech {
+	grid-column: 2;
+	font-family: var(--font-family-mono);
+	font-size: 13px;
+	color: var(--color-text-muted);
+	/* the reflow gate runs at 320px and these are long unbroken tokens */
+	overflow-wrap: anywhere;
+}
+
+.stack__note {
+	grid-column: 2;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 1.4;
+	margin-top: 4px;
+}
+
+.stack__chevron {
+	position: absolute;
+	right: var(--space-3);
+	top: 50%;
+	color: var(--color-text-muted);
+	opacity: 0.5;
+}
+
+.stack__caption {
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 1.4;
+	color: var(--color-text-muted);
+	margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+	.stack__layer {
+		grid-template-columns: auto 200px 1fr;
+		align-items: baseline;
+		gap: var(--space-3);
+	}
+
+	.stack__rank { grid-row: auto; padding-top: 0; }
+	.stack__tech { grid-column: auto; }
+	.stack__note { grid-column: auto; margin-top: 0; }
 }
 
 /* ── The manual sheet ── */

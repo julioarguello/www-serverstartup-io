@@ -1,0 +1,57 @@
+---
+/**
+ * LayerStack — the architecture as a descent (#305).
+ *
+ * Reads top-down: where the request arrived, and how far you have to go
+ * before you reach something a human wrote. Each slab names what it decides,
+ * because a layer that decides nothing is not a layer, it is a dependency.
+ *
+ * DOM and CSS, deliberately not SVG: the text has to stay real — selectable,
+ * searchable, picked up by the rendered-copy baseline, and able to reflow at
+ * 320px. The only SVG here is the aria-hidden chevron between slabs.
+ *
+ * All text comes from the CMS (`manual_labels`), the way AssemblyManual does.
+ * Encoding: rows separated by ";", cells by "|" — NOT by commas, because
+ * these notes are prose and prose has commas (mn_parts had to write
+ * "no incluidos: ya estaban" to dodge exactly that). No cell may contain
+ * "|" or ";".
+ */
+interface Props {
+	labels: { get: (widget: string, key: string, fallback: string) => string };
+}
+const { labels } = Astro.props;
+const L = (k: string, fb: string) => labels.get("manual_labels", k, fb);
+
+const rows = L("ly_rows", "")
+	.split(";")
+	.map((r) => r.split("|").map((c) => c.trim()))
+	.filter((cells) => cells.length >= 2 && cells[1]);
+const caption = L("ly_caption", "");
+---
+
+{rows.length > 0 && (
+	<figure class="stack">
+		{/* ul, not ol: html-validate's prefer-native-element wants role="list"
+		    on a <ul>, and the sequence is already explicit in the visible
+		    L5…L0 rank. role="list" is required because the global reset sets
+		    list-style:none, which makes Safari drop list semantics — same
+		    reason AssemblyManual carries it. */}
+		<ul class="stack__layers" role="list">
+			{rows.map(([rank, name, tech, note], i) => (
+				<li class="stack__layer">
+					<span class="stack__rank">{rank}</span>
+					<span class="stack__name">{name}</span>
+					{tech && <span class="stack__tech">{tech}</span>}
+					{note && <span class="stack__note">{note}</span>}
+					{i < rows.length - 1 && (
+						<svg class="stack__chevron" width="16" height="16" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+							<path d="M6 9l6 6 6-6" />
+						</svg>
+					)}
+				</li>
+			))}
+		</ul>
+		{caption && <figcaption class="stack__caption">{caption}</figcaption>}
+	</figure>
+)}

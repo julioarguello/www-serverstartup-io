@@ -116,26 +116,32 @@ L5
 the edge
 ×1
 the worker that answers
+src/worker.ts ↗
 L4
 the door
 ×7
 the security headers
+src/middleware.ts ↗
 L3
 the render
 ×26
 the public routes
+src/pages/ ↗
 L2
 the CMS
 ×5
 a plugin of ours on the EmDash API
+src/plugins/cache-purge.ts ↗
 L1
 the data
 ×3
 D1, R2 and KV
+wrangler.jsonc ↗
 L0
 the origin
 ×43
 the whole corpus
+seed/seed.json ↗
 —
 the engineers
 ×3

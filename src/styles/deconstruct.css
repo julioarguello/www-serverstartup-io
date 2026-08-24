@@ -394,10 +394,18 @@
 }
 
 /* The reveal itself. Note and file share one grid cell, so the row never
-   changes height when they swap — a list that jumps on hover is unusable. */
+   changes height when they swap — a list that jumps on hover is unusable.
+   It swaps OPACITY, not visibility, and that is load-bearing: `innerText`
+   honours `visibility: hidden` but ignores `opacity: 0`, so with visibility the
+   rendered text of this page depended on whether `@media (hover: hover)`
+   matched — which the CI runner and this laptop disagreed about. The copy gate
+   caught it (run 32777424987). With opacity the path is in the text in every
+   environment and the reveal is still only visual. */
 @media (hover: hover) {
 	.manual__part--open .manual__file {
-		visibility: hidden;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.12s ease;
 	}
 
 	/* The colour is the edge orange, which is what this whole page is about.
@@ -418,13 +426,18 @@
 
 	.manual__part--open:hover .manual__note,
 	.manual__part--open:focus-within .manual__note {
-		visibility: hidden;
+		opacity: 0;
 	}
 
 	.manual__part--open:hover .manual__file,
 	.manual__part--open:focus-within .manual__file {
-		visibility: visible;
+		opacity: 1;
+		pointer-events: auto;
 	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.manual__file { transition: none; }
 }
 
 /* Touch has no hover, so nothing hides: the path sits under the note and the

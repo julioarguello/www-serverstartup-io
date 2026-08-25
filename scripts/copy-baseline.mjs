@@ -289,17 +289,26 @@ async function readMenu(page, baseUrl, route) {
 	});
 }
 
-function compareRow(where, expected, rendered) {
-	const problems = [];
+/**
+ * Structured rather than a list of strings, so the control below can assert the
+ * one number that means something — how many expected links went MISSING —
+ * instead of a total that also moves when a slug is renamed or a label empties.
+ */
+function compareRow(expected, rendered) {
 	const got = new Set(rendered.map((l) => l.href));
-	for (const href of expected) {
-		if (!got.has(href)) problems.push(`${where}: the menu does not render ${href}`);
-	}
-	for (const link of rendered) {
-		if (!expected.includes(link.href)) problems.push(`${where}: unexpected link ${link.href}`);
-		if (!link.text) problems.push(`${where}: ${link.href} renders with no label`);
-	}
-	return problems;
+	return {
+		missing: expected.filter((href) => !got.has(href)),
+		unexpected: rendered.filter((l) => !expected.includes(l.href)).map((l) => l.href),
+		unlabelled: rendered.filter((l) => !l.text).map((l) => l.href),
+	};
+}
+
+function rowProblems(where, cmp) {
+	return [
+		...cmp.missing.map((href) => `${where}: the menu does not render ${href}`),
+		...cmp.unexpected.map((href) => `${where}: unexpected link ${href}`),
+		...cmp.unlabelled.map((href) => `${where}: ${href} renders with no label`),
+	];
 }
 
 /**
@@ -320,34 +329,56 @@ async function verifyMenu(page, baseUrl) {
 			continue;
 		}
 		for (const route of [want.entry, want.spec[0]]) {
-			const menu = await readMenu(page, baseUrl, route);
-			problems.push(...compareRow(`${route} · specialties`, want.spec, menu.spec));
-			problems.push(...compareRow(`${route} · site`, want.site, menu.site));
+			// A menu that cannot be opened is the very regression class this
+			// check exists for — a missing #menu-trigger, a dialog that never
+			// opens. Left to throw it would reach the top-level handler, which
+			// reports "could not read <url> — is the stack up?" and exits 2,
+			// skipping all 26 baseline comparisons behind a cause that is not
+			// the real one.
+			let menu;
+			try {
+				menu = await readMenu(page, baseUrl, route);
+			} catch (error) {
+				problems.push(`${route}: the menu could not be opened and read — ${error.message}`);
+				continue;
+			}
+			problems.push(...rowProblems(`${route} · specialties`, compareRow(want.spec, menu.spec)));
+			problems.push(...rowProblems(`${route} · site`, compareRow(want.site, menu.site)));
 			links += menu.spec.length + menu.site.length;
 
-			// Positive control, on this very page: take the links away and
-			// confirm the comparison notices exactly that many more gaps. A
-			// selector that stopped matching would otherwise report an empty
-			// menu as "no problems" — the shape of blindness this check exists
-			// to end. Measured as a DELTA, because when the row is genuinely
-			// missing the comparison is already reporting it, and an absolute
-			// count would then accuse the control instead of the page.
-			const before = compareRow("", want.spec, menu.spec).length
-				+ compareRow("", want.site, menu.site).length;
+			// Positive control, on this very page: delete every link the menu
+			// rendered and require the comparison to then report EVERY link the
+			// seed declares as missing. A selector that stopped matching would
+			// otherwise report an empty menu as "no problems" — the shape of
+			// blindness this check exists to end.
+			//
+			// The invariant is the missing COUNT after the deletion, not a delta
+			// against the count before it. An earlier version subtracted the two,
+			// and a genuine regression — a renamed slug, which produces one
+			// missing link AND one unexpected one — made the arithmetic disagree
+			// and the control accuse itself while the check was working perfectly.
 			const removed = await page.evaluate(() => {
 				const row = [...document.querySelectorAll(".menu-spec a, .menu-site a")];
 				row.forEach((a) => a.remove());
 				return row.length;
 			});
-			const empty = { spec: [], site: [] };
-			const after = compareRow("", want.spec, empty.spec).length
-				+ compareRow("", want.site, empty.site).length;
+			const gone = await page.evaluate(() => {
+				const read = (sel) => [...document.querySelectorAll(sel)].map((a) => ({
+					href: new URL(a.getAttribute("href"), location.origin).pathname,
+					text: a.textContent.trim(),
+				}));
+				return { spec: read(".menu-spec a"), site: read(".menu-site a") };
+			});
+			const after = compareRow(want.spec, gone.spec).missing.length
+				+ compareRow(want.site, gone.site).missing.length;
+			const declared = want.spec.length + want.site.length;
 			if (removed === 0) {
 				problems.push(`the control could not run on ${route}: the page had no menu ` +
 					"links to delete, so nothing here proves the comparison still works");
-			} else if (after - before !== removed) {
-				problems.push(`THIS CHECK IS BLIND on ${route}: ${removed} link(s) were deleted ` +
-					`from the page and the comparison reported ${after - before} more gap(s)`);
+			} else if (after !== declared) {
+				problems.push(`THIS CHECK IS BLIND on ${route}: every rendered link was ` +
+					`deleted (${removed}) and the comparison reported ${after} of the ` +
+					`${declared} declared links missing`);
 			}
 		}
 	}
@@ -415,16 +446,18 @@ async function verify(baseUrl) {
 				failures++;
 			}
 		}
+		// Both results are always reported, whichever failed. A menu failure used
+		// to swallow the route outcome, so a run could not tell "the baselines
+		// were never compared" from "they compared clean".
 		if (failures) {
 			console.error(`\n${failures} route(s) differ from the baseline.`);
 			console.error("If the change is intentional, re-run `capture` and commit the new baseline.");
-			// Re-capturing does NOT apply to the menu check above: its expectation
-			// is the seed, so there is no baseline to refresh.
-			return 1;
+			// Re-capturing does NOT apply to the menu check: its expectation is
+			// the seed, so there is no baseline to refresh.
+		} else {
+			console.log(`${routes().length} routes match the baseline.`);
 		}
-		if (!menuOk) return 1;
-		console.log(`${routes().length} routes match the baseline.`);
-		return 0;
+		return failures || !menuOk ? 1 : 0;
 	});
 }
 

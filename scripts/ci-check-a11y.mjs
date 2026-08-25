@@ -343,6 +343,9 @@ for (const route of ["/", "/en"]) {
 			open: dialog?.open === true,
 			focusInside: !!dialog && dialog.contains(document.activeElement),
 			active: document.activeElement?.id || document.activeElement?.tagName.toLowerCase(),
+			// Set by the traversal below on its first stop, so a full cycle can be
+			// recognised by returning to where it began.
+			atFirstStop: document.activeElement === window.__menuFirstStop,
 		};
 	});
 
@@ -391,12 +394,20 @@ for (const route of ["/", "/en"]) {
 		// Failing on it would report the wrap point as a broken trap.
 		let escaped = null;
 		let wrapped = false;
-		for (let i = 0; i < 30 && !escaped; i++) {
+		for (let i = 0; i < 30 && !escaped && !wrapped; i++) {
 			await page.keyboard.press("Tab");
 			const s = await state();
-			if (s.focusInside) { if (wrapped === null) wrapped = true; }
-			else if (s.active === "body" || s.active === "html") wrapped = true;
-			else escaped = s.active;
+			if (i === 0) {
+				await page.evaluate(() => { window.__menuFirstStop = document.activeElement; });
+			} else if (s.focusInside && s.atFirstStop) {
+				// Back where the walk began: the cycle closed without ever leaving
+				// the panel. This is the reading that matters, and it does not
+				// depend on the browser parking focus on `body` on the way round.
+				wrapped = true;
+			} else if (!s.focusInside) {
+				if (s.active === "body" || s.active === "html") wrapped = true;
+				else escaped = s.active;
+			}
 		}
 		if (escaped) {
 			fail(route, `Tab leaves the open menu and lands on "${escaped}" behind the panel (2.1.2)`);

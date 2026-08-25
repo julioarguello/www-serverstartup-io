@@ -412,6 +412,21 @@ PR → quality-gates green → merge to main
   README recording that it came from `cloudflare[bot]`'s import commit on
   2026-04-21 when EmDash was **0.6.0**, and has not been touched since. The
   project runs **0.34.0**, so that README says plainly which parts to distrust.
+- **Astro 7's agent endpoints, evaluated and split** (#367). Astro 7.2.4 ships
+  `/_astro/status` and `astro dev --background`, and the parent issue asked
+  whether either lets us delete hand-rolled work. Measured, not reasoned:
+  `/_astro/status` answered 200 **6.2s** after start while `/` did not answer
+  until **15.0s**, and its body is the constant `{"ok":true}` from a Vite
+  middleware with no state behind it. It is a **liveness** probe, not a
+  readiness one, and `scripts/ci-local-stack.sh` runs `wrangler dev` over the
+  built output where Vite does not exist at all — so it is rejected twice over,
+  and adopting it would have replaced a probe that knows when the site works
+  with one that does not. `astro dev --background` is the opposite verdict:
+  `astro dev status` and `astro dev stop` are a real lockfile-backed lifecycle
+  (measured — `stop` freed the port), and they are what `stop_stack()`
+  approximates in forty lines of `pkill`/`lsof` archaeology. They manage **astro
+  dev** servers, though, and the CI stack is wrangler, so the win is for
+  interactive agent sessions rather than for the gate run.
 - **Blind exits 3, found exits 1 — in all seven guards** (#392). The
   convention was documented before it was uniform: five gates implemented it
   and `ci-check-cache-hints.py` and `ci-check-citability.py`, which came first,

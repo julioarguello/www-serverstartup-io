@@ -221,6 +221,151 @@ async function positiveControl(page, baseUrl) {
 	return true;
 }
 
+
+/*
+ * The menu is NOT in the frozen-copy contract — and why (#384)
+ * ------------------------------------------------------------
+ * The whole site row of the menu — Inicio, Quiénes somos, Referencias,
+ * Contacto, Deconstruyendo — vanished from both locales on every page and
+ * shipped to main (#382). Fourteen gates ran on every one of those commits and
+ * none could have caught it: `innerText` is defined as the RENDERED text, the
+ * menu lives in a `<dialog>` that is closed at rest, and a closed dialog
+ * renders nothing. The baseline for all 26 routes is byte-identical whether
+ * the menu has eleven links, six, or none.
+ *
+ * The obvious repair — open the dialog before reading, the way `<details>` is
+ * opened — was rejected, and this is the record of why:
+ *
+ *   · `showModal()` makes the rest of the document inert and moves focus, so
+ *     the capture would no longer be of the page a reader sees;
+ *   · the menu carries the die and the search prompt, so its text would join
+ *     the baseline of all 26 routes — a large one-time recapture, and every
+ *     future menu edit would touch 26 files for a change to one component.
+ *     That coupling has already cost a manual revert once (#381).
+ *
+ * So the menu gets its own, much smaller assertion, and it is a STRUCTURAL one
+ * rather than a copy one: the links the seed declares must be the links the
+ * menu renders. That is stronger than counting rows. Both `FACE_BY_SLUG` and
+ * `SITE_BY_PATH` drop an unmapped entry SILENTLY — the mechanism behind the
+ * site shipping with no way back home (#273) — and comparing against the seed
+ * catches a dropped entry, a renamed slug and a whole missing row alike, with
+ * no number for anyone to keep up to date.
+ */
+
+/** What the seed says each locale's menu must contain. */
+function menuExpectation() {
+	const data = JSON.parse(readFileSync(SEED, "utf8"));
+	const out = {};
+	for (const locale of ["es", "en"]) {
+		const prefix = locale === "en" ? "/en" : "";
+		const spec = (data.content.services ?? [])
+			.filter((e) => (e.locale ?? "es") === locale)
+			.map((e) => `${prefix}/${e.slug ?? e.id}`);
+		const menu = (data.menus ?? []).find((m) => (m.name ?? m.id) === `site_${locale}`);
+		const site = (menu?.items ?? []).map((i) => i.url).filter(Boolean);
+		out[locale] = { spec, site, entry: prefix || "/" };
+	}
+	return out;
+}
+
+/** Open the menu the way a reader does, and read both rows out of it. */
+async function readMenu(page, baseUrl, route) {
+	const response = await page.goto(baseUrl.replace(/\/$/, "") + route, {
+		waitUntil: "networkidle0",
+		timeout: 45000,
+	});
+	if (!response || response.status() !== 200) {
+		throw new Error(`${route} returned HTTP ${response ? response.status() : "no response"}`);
+	}
+	await page.click("#menu-trigger");
+	await page.waitForFunction(() => document.getElementById("menu-dialog")?.open === true,
+		{ timeout: 5000 });
+	return page.evaluate(() => {
+		const read = (sel) => [...document.querySelectorAll(sel)].map((a) => ({
+			href: new URL(a.getAttribute("href"), location.origin).pathname,
+			text: a.textContent.replace(/\s+/g, " ").trim(),
+		}));
+		return { spec: read(".menu-spec a"), site: read(".menu-site a") };
+	});
+}
+
+function compareRow(where, expected, rendered) {
+	const problems = [];
+	const got = new Set(rendered.map((l) => l.href));
+	for (const href of expected) {
+		if (!got.has(href)) problems.push(`${where}: the menu does not render ${href}`);
+	}
+	for (const link of rendered) {
+		if (!expected.includes(link.href)) problems.push(`${where}: unexpected link ${link.href}`);
+		if (!link.text) problems.push(`${where}: ${link.href} renders with no label`);
+	}
+	return problems;
+}
+
+/**
+ * Assert the menu of both locales, on two routes each — the home and a deep
+ * page, because the menu is shared chrome injected by Base and a page that
+ * passed it a different list would only show up on that page.
+ */
+async function verifyMenu(page, baseUrl) {
+	const expected = menuExpectation();
+	const problems = [];
+	let links = 0;
+
+	for (const [locale, want] of Object.entries(expected)) {
+		if (!want.spec.length || !want.site.length) {
+			problems.push(`the seed declares ${want.spec.length} specialty and ` +
+				`${want.site.length} site links for ${locale} — there is nothing to compare ` +
+				"against, so this check would pass over any menu at all");
+			continue;
+		}
+		for (const route of [want.entry, want.spec[0]]) {
+			const menu = await readMenu(page, baseUrl, route);
+			problems.push(...compareRow(`${route} · specialties`, want.spec, menu.spec));
+			problems.push(...compareRow(`${route} · site`, want.site, menu.site));
+			links += menu.spec.length + menu.site.length;
+
+			// Positive control, on this very page: take the links away and
+			// confirm the comparison notices exactly that many more gaps. A
+			// selector that stopped matching would otherwise report an empty
+			// menu as "no problems" — the shape of blindness this check exists
+			// to end. Measured as a DELTA, because when the row is genuinely
+			// missing the comparison is already reporting it, and an absolute
+			// count would then accuse the control instead of the page.
+			const before = compareRow("", want.spec, menu.spec).length
+				+ compareRow("", want.site, menu.site).length;
+			const removed = await page.evaluate(() => {
+				const row = [...document.querySelectorAll(".menu-spec a, .menu-site a")];
+				row.forEach((a) => a.remove());
+				return row.length;
+			});
+			const empty = { spec: [], site: [] };
+			const after = compareRow("", want.spec, empty.spec).length
+				+ compareRow("", want.site, empty.site).length;
+			if (removed === 0) {
+				problems.push(`the control could not run on ${route}: the page had no menu ` +
+					"links to delete, so nothing here proves the comparison still works");
+			} else if (after - before !== removed) {
+				problems.push(`THIS CHECK IS BLIND on ${route}: ${removed} link(s) were deleted ` +
+					`from the page and the comparison reported ${after - before} more gap(s)`);
+			}
+		}
+	}
+
+	if (problems.length) {
+		console.error("FAIL menu — the rendered menu does not match seed/seed.json:");
+		for (const p of problems) console.error(`  ${p}`);
+		console.error("  The menu lives in a closed <dialog>, so the copy baselines above");
+		console.error("  cannot see it: this is the only gate that can. If the change is");
+		console.error("  intentional, it belongs in seed/seed.json (menus.site_es/site_en)");
+		console.error("  or in the services collection — not in the template.");
+		return false;
+	}
+	console.log(`  ok   menu — ${links} links across 4 pages match seed/seed.json, ` +
+		"both locales, and deleting them was seen every time");
+	return true;
+}
+
 async function capture(baseUrl) {
 	mkdirSync(BASELINE_DIR, { recursive: true });
 	// A route removed from the seed must not leave a stale baseline behind,
@@ -250,6 +395,8 @@ async function verify(baseUrl) {
 	}
 	return withPage(async (page) => {
 		if (!(await positiveControl(page, baseUrl))) return 3;
+		// #384: the menu, which no baseline below can see.
+		const menuOk = await verifyMenu(page, baseUrl);
 		let failures = 0;
 		for (const route of routes()) {
 			const path = join(BASELINE_DIR, fileFor(route));
@@ -271,8 +418,11 @@ async function verify(baseUrl) {
 		if (failures) {
 			console.error(`\n${failures} route(s) differ from the baseline.`);
 			console.error("If the change is intentional, re-run `capture` and commit the new baseline.");
+			// Re-capturing does NOT apply to the menu check above: its expectation
+			// is the seed, so there is no baseline to refresh.
 			return 1;
 		}
+		if (!menuOk) return 1;
 		console.log(`${routes().length} routes match the baseline.`);
 		return 0;
 	});

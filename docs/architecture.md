@@ -412,6 +412,24 @@ PR → quality-gates green → merge to main
   README recording that it came from `cloudflare[bot]`'s import commit on
   2026-04-21 when EmDash was **0.6.0**, and has not been touched since. The
   project runs **0.34.0**, so that README says plainly which parts to distrust.
+- **A stack that dies mid-run says so** (`scripts/lib/stack-probe.mjs`, #390).
+  A `wrangler dev` session died in the middle of a gate run on 2026-08-25. Every
+  guard reported honestly what it saw — a navigation timeout on one route, then
+  `ERR_CONNECTION_REFUSED` — and every one of those messages points at the
+  route, the guard, or the diff under test. None pointed at the stack, because
+  none had looked, and ruling it out cost a full investigation. The guards now
+  spend one HTTP request answering the question `copy-baseline` used to merely
+  ask ("Is the stack up?"), and print wrangler's own last twelve log lines when
+  the answer is no. It adds information and nothing else — no retry, no wider
+  timeout, no changed exit code, because masking the crash would destroy the
+  only signal that reveals it. Two things the break test taught that reading
+  would not: a rejected **top-level `await`** in an entry module does not reach
+  `unhandledRejection` (the a11y guard needs `uncaughtException` as well, or it
+  still dies with a bare puppeteer trace), and a handler that prints only
+  `error.message` trades one blind spot for another on every failure that is
+  *not* a dead stack — so the trace stays. The crash itself remains open: #390
+  can only close on a reproduction, and seven clean sessions the same day say
+  it does not reproduce on demand.
 - **Astro 7's agent endpoints, evaluated and split** (#367). Astro 7.2.4 ships
   `/_astro/status` and `astro dev --background`, and the parent issue asked
   whether either lets us delete hand-rolled work. Measured, not reasoned:

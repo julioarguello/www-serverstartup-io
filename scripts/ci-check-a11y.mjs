@@ -50,6 +50,37 @@ const ROUTES = [
 const SETTLE_MS = 400;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * What the traversal asks about the focused element. A named function, not an
+ * inline arrow, so the positive control can run the SAME probe over a page it
+ * builds itself — a control that reimplements the predicate agrees with its
+ * own copy, never with the gate.
+ */
+const FOCUS_PROBE = () => {
+	const el = document.activeElement;
+	if (!el || el === document.body) return null;
+	const r = el.getBoundingClientRect();
+	const h = document.querySelector(".site-header")?.getBoundingClientRect();
+	const cs = getComputedStyle(el);
+	return {
+		name: el.tagName.toLowerCase() + "." + (el.className.toString().split(" ")[0] || ""),
+		offscreen: r.width === 0 && r.height === 0,
+		// obscured = overlapped by the fixed header while not part of it
+		obscured: !!h && r.top < h.bottom && r.bottom > h.top && !el.closest(".site-header"),
+		ring: cs.outlineStyle !== "none" && cs.outlineWidth !== "0px",
+	};
+};
+
+/** What the 1.4.10 check measures — same reason it is named. */
+const REFLOW_PROBE = () => {
+	const de = document.documentElement;
+	const over = [...document.querySelectorAll("*")]
+		.filter((e) => e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX !== "auto")
+		.map((e) => e.tagName.toLowerCase() + "." + (e.className.toString().split(" ")[0] || ""))
+		.slice(0, 3);
+	return { doc: de.scrollWidth, view: de.clientWidth, over };
+};
+
 const failures = [];
 const fail = (route, msg) => failures.push(`${route}: ${msg}`);
 const ok = (msg) => console.log(`  ok   ${msg}`);
@@ -58,6 +89,88 @@ const browser = await puppeteer.launch({
 	headless: "new",
 	args: ["--no-sandbox", "--disable-dev-shm-usage"],
 });
+
+
+// ── 0. Positive control: prove each probe can still fail ───────────────────
+// #385. The four checks below all report by NOT firing, which is exactly what
+// a broken selector, an unloaded axe or a stale predicate also look like. So
+// before auditing a single real route, each probe runs over a page this file
+// builds itself, carrying the exact defect it hunts. The fixture is a string
+// here — never a route the site serves — so it cannot be audited by accident
+// and cannot trip the gate it proves.
+console.log("── positive control (#385)");
+
+/** A header 80px tall, a link parked under it with its ring suppressed, a
+ *  block 720px wide, and an `<img>` with no alt. One planted defect per probe. */
+const CONTROL_HTML = `<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>canario</title><style>
+body { margin: 0 }
+.site-header { position: fixed; top: 0; left: 0; right: 0; height: 80px; background: #eee }
+#buried { position: absolute; top: 30px; left: 0 }
+#buried:focus { outline: none }
+#wide { width: 720px; height: 10px; background: #ccc }
+</style></head><body>
+<header class="site-header"><a href="#x" id="inheader">en la cabecera</a></header>
+<main><a href="#y" id="buried">bajo la cabecera, sin anillo</a>
+<div id="wide"></div>
+<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+</main></body></html>`;
+
+{
+	const blind = [];
+
+	// The viewport is set BEFORE the content on each page: `setViewport` with
+	// `isMobile` re-emulates the device and drops a document that was written
+	// with setContent — measured, it left an empty page whose only axe
+	// violations were "document-title" and "html-has-lang".
+	const desktop = await browser.newPage();
+	await desktop.setViewport({ width: 1280, height: 900 });
+	await desktop.setContent(CONTROL_HTML);
+
+	// FOCUS_PROBE — must report the planted element as obscured and ringless
+	await desktop.evaluate(() => document.getElementById("buried").focus());
+	const probed = await desktop.evaluate(FOCUS_PROBE);
+	if (!probed) blind.push("the focus probe returned nothing for a focused element");
+	else {
+		if (!probed.obscured) blind.push("an element parked under the fixed header was not reported as obscured (2.4.11)");
+		if (probed.ring) blind.push("an element with `outline: none` was reported as having a focus ring (2.4.7)");
+	}
+	// …and must NOT accuse the header's own link, which is not obscured by itself
+	await desktop.evaluate(() => document.getElementById("inheader").focus());
+	const inHeader = await desktop.evaluate(FOCUS_PROBE);
+	if (inHeader?.obscured) blind.push("the header's own link was reported as obscured by the header");
+
+	// axe — must be loaded, running, and finding a violation that is really there
+	await desktop.evaluate(axeSource);
+	const canary = await desktop.evaluate(async () =>
+		window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a"] } }));
+	if (!canary.violations.some((v) => v.id === "image-alt")) {
+		blind.push("axe did not report the planted `<img>` with no alt (image-alt) — it returned " +
+			`[${canary.violations.map((v) => v.id).join(", ") || "nothing"}] over ${canary.passes.length} passes`);
+	}
+	await desktop.close();
+
+	// REFLOW_PROBE — must see the overflow at the width the norm names
+	const narrow = await browser.newPage();
+	await narrow.setViewport({ width: 320, height: 640, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+	await narrow.setContent(CONTROL_HTML);
+	const reflow = await narrow.evaluate(REFLOW_PROBE);
+	if (!(reflow.doc > reflow.view + 1)) {
+		blind.push(`a 720px block in a 320px viewport was not seen as overflow (got ${reflow.doc}/${reflow.view})`);
+	}
+	await narrow.close();
+
+	if (blind.length) {
+		console.error("\n✗ THIS GATE IS BLIND — its probes can no longer find the defects");
+		console.error("  they exist to find, so every 'ok' below would be meaningless:");
+		for (const b of blind) console.error(`    ${b}`);
+		console.error("  → fix FOCUS_PROBE / REFLOW_PROBE / the axe load before trusting a green run.");
+		await browser.close();
+		process.exit(3);
+	}
+	ok("4 planted defects found — obscured focus, missing ring, 320px overflow, image-alt");
+}
 
 // ── 1. axe-core: the rules a machine can decide, on every audited route ─────
 console.log("── axe-core (WCAG 2.0/2.1/2.2 A+AA, plus best practices)");
@@ -116,20 +229,7 @@ for (const route of ["/", "/cdn-waf-seguridad-edge-cloudflare", "/en"]) {
 	let ringless = 0;
 	for (let i = 0; i < 40; i++) {
 		await page.keyboard.press("Tab");
-		const s = await page.evaluate(() => {
-			const el = document.activeElement;
-			if (!el || el === document.body) return null;
-			const r = el.getBoundingClientRect();
-			const h = document.querySelector(".site-header")?.getBoundingClientRect();
-			const cs = getComputedStyle(el);
-			return {
-				name: el.tagName.toLowerCase() + "." + (el.className.toString().split(" ")[0] || ""),
-				offscreen: r.width === 0 && r.height === 0,
-				// obscured = overlapped by the fixed header while not part of it
-				obscured: !!h && r.top < h.bottom && r.bottom > h.top && !el.closest(".site-header"),
-				ring: cs.outlineStyle !== "none" && cs.outlineWidth !== "0px",
-			};
-		});
+		const s = await page.evaluate(FOCUS_PROBE);
 		if (!s) break;
 		stops++;
 		if (s.obscured) { obscured++; fail(route, `focused element hidden behind the fixed header: ${s.name}`); }
@@ -172,14 +272,7 @@ for (const route of ["/", "/cdn-waf-seguridad-edge-cloudflare", "/referencias", 
 	const page = await browser.newPage();
 	await page.setViewport({ width: 320, height: 640, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 	await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
-	const s = await page.evaluate(() => {
-		const de = document.documentElement;
-		const over = [...document.querySelectorAll("*")]
-			.filter((e) => e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX !== "auto")
-			.map((e) => e.tagName.toLowerCase() + "." + (e.className.toString().split(" ")[0] || ""))
-			.slice(0, 3);
-		return { doc: de.scrollWidth, view: de.clientWidth, over };
-	});
+	const s = await page.evaluate(REFLOW_PROBE);
 	if (s.doc > s.view + 1) fail(route, `horizontal overflow at 320px: ${s.doc} > ${s.view} (${s.over.join(", ")})`);
 	else ok(`${route} — ${s.doc}/${s.view}`);
 	await page.close();

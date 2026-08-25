@@ -126,6 +126,21 @@ async function renderText(page, baseUrl, route) {
 	);
 }
 
+/**
+ * The first line where two captures disagree, or null when they are identical.
+ * Extracted so the positive control can exercise the very comparator `verify`
+ * uses — a control that reimplements the comparison agrees with itself, not
+ * with the gate.
+ */
+function firstDifference(expected, actual) {
+	for (let i = 0; i < Math.max(expected.length, actual.length); i++) {
+		const want = i < expected.length ? expected[i] : "<end of file>";
+		const got = i < actual.length ? actual[i] : "<end of file>";
+		if (want !== got) return { line: i + 1, want, got };
+	}
+	return null;
+}
+
 async function withPage(fn) {
 	// Same flags as ci-check-a11y.mjs: the GitHub Actions Ubuntu runner has no
 	// usable Chromium sandbox (AppArmor user-namespace restrictions), and
@@ -141,6 +156,69 @@ async function withPage(fn) {
 	} finally {
 		await browser.close();
 	}
+}
+
+
+/*
+ * Positive control (#385)
+ * -----------------------
+ * Three ways this gate can go quiet while still printing "26 routes match the
+ * baseline": the route list stops enumerating anything, `renderText` stops
+ * returning text (a selector change, a page that renders empty), or the
+ * comparator stops finding differences. All three look identical from the
+ * outside — a green line — so the run proves each of them false before it
+ * trusts a single route.
+ *
+ * The fixture is a mutation of what the browser just rendered, held in
+ * memory. Nothing is planted in `tests/copy-baseline/`: a canary living in the
+ * tree it guards is how the citability gate died the second time (#347).
+ */
+async function positiveControl(page, baseUrl) {
+	const blind = [];
+	const list = routes();
+
+	// Reported before anything is fetched: with no routes there is nothing to
+	// render, and the browser's own "invalid URL" would bury the real cause.
+	if (list.length < 2) {
+		console.error("THIS GATE IS BLIND — routes() enumerated " +
+			`${list.length} route(s) from seed/seed.json, so it would verify nothing.`);
+		console.error("  → the seed's collection names or shape changed; fix routes().");
+		return false;
+	}
+
+	const rendered = await renderText(page, baseUrl, list[0]);
+	const lines = rendered.split("\n");
+	if (lines.filter(Boolean).length < 5) {
+		blind.push(`${list[0]} rendered ${lines.filter(Boolean).length} line(s) of copy — ` +
+			"innerText is returning nothing to compare");
+	}
+
+	// a lost line, a changed word, and a truncated capture — the three shapes
+	// a real regression takes
+	const mutations = [
+		["a deleted line", lines.filter((_, i) => i !== 1)],
+		["a changed word", lines.map((l, i) => (i === 1 ? l + " CANARIO" : l))],
+		["a truncated capture", lines.slice(0, Math.max(1, lines.length - 2))],
+	];
+	for (const [what, mutated] of mutations) {
+		if (!firstDifference(lines, mutated)) blind.push(`the comparator did not notice ${what}`);
+	}
+	if (firstDifference(lines, [...lines])) {
+		blind.push("the comparator reported a difference between a capture and itself");
+	}
+
+	if (blind.length) {
+		console.error("THIS GATE IS BLIND — it can no longer tell a changed page from an");
+		console.error("unchanged one, so 'routes match the baseline' would mean nothing:");
+		for (const b of blind) console.error(`  ${b}`);
+		console.error("  → check routes(), renderText() and firstDifference() before");
+		console.error("    trusting any result, and do NOT re-capture to make it pass.");
+		return false;
+	}
+	console.log(`  ok   positive control — ${list.length} routes enumerated, ` +
+		`${lines.filter(Boolean).length} lines read from ${list[0]}, ` +
+		"3 planted differences all found");
+	return true;
 }
 
 async function capture(baseUrl) {
@@ -171,6 +249,7 @@ async function verify(baseUrl) {
 		return 2;
 	}
 	return withPage(async (page) => {
+		if (!(await positiveControl(page, baseUrl))) return 3;
 		let failures = 0;
 		for (const route of routes()) {
 			const path = join(BASELINE_DIR, fileFor(route));
@@ -181,16 +260,12 @@ async function verify(baseUrl) {
 			}
 			const expected = readFileSync(path, "utf8").split("\n");
 			const actual = (await renderText(page, baseUrl, route)).split("\n");
-			for (let i = 0; i < Math.max(expected.length, actual.length); i++) {
-				const want = i < expected.length ? expected[i] : "<end of file>";
-				const got = i < actual.length ? actual[i] : "<end of file>";
-				if (want !== got) {
-					console.error(`FAIL ${fileFor(route)}:${i + 1}  (${route})`);
-					console.error(`  baseline: ${want}`);
-					console.error(`  rendered: ${got}`);
-					failures++;
-					break;
-				}
+			const diff = firstDifference(expected, actual);
+			if (diff) {
+				console.error(`FAIL ${fileFor(route)}:${diff.line}  (${route})`);
+				console.error(`  baseline: ${diff.want}`);
+				console.error(`  rendered: ${diff.got}`);
+				failures++;
 			}
 		}
 		if (failures) {

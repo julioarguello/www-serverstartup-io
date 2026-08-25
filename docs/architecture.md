@@ -412,6 +412,22 @@ PR → quality-gates green → merge to main
   README recording that it came from `cloudflare[bot]`'s import commit on
   2026-04-21 when EmDash was **0.6.0**, and has not been touched since. The
   project runs **0.34.0**, so that README says plainly which parts to distrust.
+- **Blind exits 3, found exits 1 — in all seven guards** (#392). The
+  convention was documented before it was uniform: five gates implemented it
+  and `ci-check-cache-hints.py` and `ci-check-citability.py`, which came first,
+  still returned 1 when they went blind. Nothing was unguarded — CI fails on
+  any non-zero — but the two codes answer opposite questions, and a reader
+  debugging a red step would go looking for a violation that was never found.
+  Ten sites in the citability guard moved to 3; the three that report a real
+  finding (an unaccounted opaque file, a forbidden name in the tree, a
+  non-citable reference in the seed) stayed at 1. Every one of the twelve was
+  exercised by breaking it — which turned out to be possible locally after all,
+  the reason the issue was filed rather than fixed on the spot: the guard runs
+  end to end under a **synthetic** `FORBIDDEN_NAMES` (three plain alternatives
+  that appear nowhere in the tree), so its shape, its two positive controls and
+  its scan are all reachable without the real secret. What a synthetic secret
+  cannot check is that the real one still holds the real names, which the
+  script's own comment already explains is uncheckable from inside CI.
 - **The naming gate reads what grep skips** (`ci-check-citability.py`, #324).
   This repository is mirrored publicly and one guard decides who may be named
   in it (§13). `grep -I` stops at the first NUL byte and says nothing, which

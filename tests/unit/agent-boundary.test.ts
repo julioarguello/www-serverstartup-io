@@ -33,6 +33,21 @@ const ROOT = join(import.meta.dirname, "..", "..");
 const git = (...args: string[]): string =>
 	execFileSync("git", args, { cwd: ROOT, encoding: "utf8", maxBuffer: 32 * 1024 * 1024 });
 
+/**
+ * `git grep` exits 1 on "no matches", which `execFileSync` throws for. An empty
+ * result is the expected answer here, so it must not read as a crashed command
+ * — but a real failure (bad pathspec, not a repository) still has to surface.
+ */
+function gitGrep(pattern: string, ...pathspec: string[]): string[] {
+	try {
+		return git("grep", "-nI", "-e", pattern, "--", ...pathspec).split("\n").filter(Boolean);
+	} catch (err) {
+		const e = err as { status?: number; stdout?: string };
+		if (e.status === 1 && !e.stdout?.trim()) return [];
+		throw err;
+	}
+}
+
 /** What a clone receives — the index, not the disk. */
 function trackedPaths(): Set<string> {
 	return new Set(git("ls-files", "-z").split("\0").filter(Boolean));
@@ -96,5 +111,31 @@ describe("no tracked symlink escapes the repository", () => {
 			return !tracked.has(resolved) && ![...tracked].some((f) => f.startsWith(`${resolved}/`));
 		});
 		expect(escaping.map((s) => `${s.path} -> ${s.target}`)).toEqual([]);
+	});
+});
+
+describe("no tracked file points a reader inside the private rules repository", () => {
+	it("because the path resolves in no clone, and says nothing about which one", () => {
+		// The bare directory may be *named* — explaining why the public vendored
+		// pack was renamed away from it requires saying so. What may not appear is
+		// a path INTO it: a skill, a rule, a script. Those are the references that
+		// read as guidance and lead nowhere.
+		const pointers = gitGrep("\\.agent/[A-Za-z0-9_.]", ".", ":!tests/unit/agent-boundary.test.ts");
+		expect(pointers).toEqual([]);
+	});
+});
+
+describe("the pull request template asks for checks this project has", () => {
+	const template = readFileSync(join(ROOT, ".github", "pull_request_template.md"), "utf8");
+
+	it("names no npm script that does not exist", () => {
+		// It shipped `npm run lint`, which this project has never had, next to a
+		// row about a Cloudflare Worker build in a repository with no worker/.
+		// A checklist row nobody can tick is ticked anyway.
+		const scripts = new Set(
+			Object.keys(JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).scripts ?? {}),
+		);
+		const named = [...template.matchAll(/npm run ([a-z:-]+)/g)].map((m) => m[1]);
+		expect(named.filter((s) => !scripts.has(s))).toEqual([]);
 	});
 });

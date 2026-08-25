@@ -379,7 +379,14 @@ PR → quality-gates green → merge to main
   the reader the test protects), and no tracked symlink escaping the
   repository. The generator that wrote the old file lives in the private repo
   and can overwrite this one from outside anything CI sees; the test is what
-  turns that into a red build instead of a silent republication.
+  turns that into a red build instead of a silent republication. `AGENTS.md`
+  was not the only thing it wrote: the PR template asked every contributor to
+  tick `npm run lint`, a script this project has never had, beside a row about
+  a Cloudflare Worker build in a repository with no `worker/`. A checklist row
+  nobody can satisfy gets ticked anyway. Both are now asserted generically —
+  no tracked file may point *into* the private repository (naming the bare
+  directory is allowed; explaining the `.agents/` rename requires it), and the
+  template may name no npm script that `package.json` does not define.
 - **Vendored, and named so** (#325). The EmDash starter's skill pack sat at
   `.agents/` — one character from the private `.agent/`, public where the other
   is private, tracked where the other is excluded, and referenced by nothing.

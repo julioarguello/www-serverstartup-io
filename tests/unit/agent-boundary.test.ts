@@ -100,16 +100,36 @@ describe("AGENTS.md is a public guide, not a private index", () => {
 	});
 });
 
+/**
+ * Does this symlink point at something a clone will not have? The two early
+ * returns are shortcuts; the load-bearing check is the last line, which asks
+ * the index rather than the disk.
+ */
+function escapes({ path, target }: { path: string; target: string }, tracked: Set<string>): boolean {
+	if (target.startsWith("/")) return true;
+	const dir = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
+	const resolved = join(dir, target).replace(/\\/g, "/");
+	if (resolved.startsWith("..")) return true;
+	return !tracked.has(resolved) && ![...tracked].some((f) => f.startsWith(`${resolved}/`));
+}
+
 describe("no tracked symlink escapes the repository", () => {
+	const tracked = trackedPaths();
+
+	it("recognises one that does — the inventory below is empty, and has to be", () => {
+		// Nothing is expected to fail the real assertion any more, which means it
+		// would pass just as green with the predicate gutted. So the predicate is
+		// exercised here instead: the link this change removed, an absolute one,
+		// one that stays inside the tree but is not in the index (only the last
+		// line catches that one), and one that is genuinely fine.
+		expect(escapes({ path: ".claude/skills", target: "../.agent/skills" }, tracked)).toBe(true);
+		expect(escapes({ path: "docs/link.md", target: "/etc/passwd" }, tracked)).toBe(true);
+		expect(escapes({ path: "docs/link.md", target: "generated/out.md" }, tracked)).toBe(true);
+		expect(escapes({ path: "docs/link.md", target: "architecture.md" }, tracked)).toBe(false);
+	});
+
 	it("because a clone gets the link and not what it points at", () => {
-		const tracked = trackedPaths();
-		const escaping = trackedSymlinks().filter(({ path, target }) => {
-			if (target.startsWith("/")) return true;
-			const dir = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
-			const resolved = join(dir, target).replace(/\\/g, "/");
-			if (resolved.startsWith("..")) return true;
-			return !tracked.has(resolved) && ![...tracked].some((f) => f.startsWith(`${resolved}/`));
-		});
+		const escaping = trackedSymlinks().filter((s) => escapes(s, tracked));
 		expect(escaping.map((s) => `${s.path} -> ${s.target}`)).toEqual([]);
 	});
 });
@@ -135,7 +155,10 @@ describe("the pull request template asks for checks this project has", () => {
 		const scripts = new Set(
 			Object.keys(JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).scripts ?? {}),
 		);
-		const named = [...template.matchAll(/npm run ([a-z:-]+)/g)].map((m) => m[1]);
+		const named = [...template.matchAll(/`npm (?:run )?([a-z:-]+)`/g)].map((m) => m[1]);
+		// Positive control: `npm run lint` is gone, so a pattern that only knew the
+		// `run` form would now match nothing and pass for the wrong reason.
+		expect(named.length).toBeGreaterThan(0);
 		expect(named.filter((s) => !scripts.has(s))).toEqual([]);
 	});
 });

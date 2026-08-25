@@ -19,32 +19,41 @@ restated for a specific case.
 ## Running it
 
 ```bash
-npm ci
-npm run dev            # Astro dev server
+npm install
+npx emdash dev         # dev server on :4321, admin at /_emdash/admin
 ```
 
-The dev server talks to Wrangler's local D1 emulator, **not** to `./data.db`
-— which is where `npx emdash seed` writes by default. Seeding the wrong
-database is the most common way to lose an afternoon here; the symptom is
-pages redirecting to `/404` from an apparently healthy server. The seed
-recipe, the clean-rebuild procedure and the diagnosis query are in
-[`CONTRIBUTING.md`](CONTRIBUTING.md).
+The first boot creates the local D1 database and runs the CMS migrations. It
+is empty until you seed it, and this is where the afternoons go: `npx emdash
+seed` writes to `./data.db` by default, while the dev server reads **Wrangler's
+D1 emulator**. Seed the wrong one and the server looks perfectly healthy while
+every page redirects to `/404`.
+
+The seed recipe and the query that tells you which database has the content are
+in [`CONTRIBUTING.md`](CONTRIBUTING.md); the clean rebuild after a schema change
+is in [`docs/architecture.md`](docs/architecture.md) §10.1.
 
 ## The quality bar
 
-Fifteen CI steps can fail a PR, and every one of them runs locally first.
-[`CONTRIBUTING.md`](CONTRIBUTING.md) has the table: gate, local command,
-target. Run them before opening a PR — CI is confirmation, not discovery.
+Fifteen CI steps can fail a PR. All but one run locally too — the exception is
+the secret scan, a GitHub Action over the full history, which a working tree
+cannot reproduce. [`CONTRIBUTING.md`](CONTRIBUTING.md) has the table: gate,
+local command, target, in the order CI runs them. Run them before opening a PR
+— CI is confirmation, not discovery.
 
 One convention worth knowing before you add anything to `scripts/`:
 
 > **A check that finds no problems and a check that _cannot_ find problems
 > print the same green line.** Every gate here plants the exact defect it
 > hunts, in a fixture it owns, and refuses to report anything if it no longer
-> finds it. Exit **3** means *this guard went blind*, distinct from exit 1
-> meaning *it found something*. Fixtures live in temporary directories and
-> in-memory strings — never in the repository tree, because a canary in the
-> tree trips the guard it exists to prove.
+> finds it. Fixtures live in temporary directories and in-memory strings —
+> never in the repository tree, because a canary in the tree trips the guard it
+> exists to prove.
+>
+> A blind guard exits **3**, distinct from exit 1 meaning *it found something*.
+> Five of the seven do; `ci-check-cache-hints.py` and `ci-check-citability.py`
+> came first and still say `DEAD GATE` on exit 1. Both refuse to report — only
+> the code is inconsistent, and issue #392 tracks it. Use 3 in anything new.
 
 If you add a gate, break it on purpose first and watch it fail. A gate never
 observed failing is not known to work.
@@ -73,8 +82,11 @@ down the page, and that alternation is what reads as having no criterion.
 
 **Who may be named.** Public copy names only the clients already published on
 the site. Everyone else appears anonymously ("a grocery chain") or in aggregate.
-`scripts/ci-check-citability.py` checks the whole tree against that policy on
-every PR, including the text inside documents that `grep` skips.
+A second, easier rule to trip: some names are published on the site and still
+must not sit in the tree as plaintext — the page draws them on a `<canvas>`, and
+the repository keeps them encoded. `scripts/ci-check-citability.py` checks the
+whole tree against both on every PR, including the text inside documents that
+`grep` skips, and its failure message tells you which rule you hit.
 
 ## Where things are
 

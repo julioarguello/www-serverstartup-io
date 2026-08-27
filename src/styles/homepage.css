@@ -137,16 +137,32 @@
 	text-wrap: pretty;
 }
 
-.s-hero__body {
+/* The vertical's own words, changing with its picture. Stacked in one grid
+   cell like the index line, so the six take the height of the longest and the
+   band never jumps as they swap. */
+.s-hero__pitch {
+	display: grid;
 	margin-top: 24px;
+	max-width: var(--measure-statement);
 }
-.s-hero__body p {
+
+.s-hero__pitch-item {
+	grid-area: 1 / 1;
 	color: var(--color-hero-ink-soft);
 	font-size: var(--text-body);
 	font-weight: 300;
 	line-height: 1.45;
-	margin-block-end: 12px;
 	text-wrap: pretty;
+	opacity: 0;
+	visibility: hidden;
+	animation: s-hero-item var(--hero-cycle) linear infinite;
+	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+}
+
+.s-hero__pitch-item:first-child {
+	opacity: 1;
+	visibility: visible;
+	animation-name: s-hero-item-lead;
 }
 
 /* ── the ticker: which of the six is showing, and the way to stop it ── */
@@ -155,6 +171,27 @@
 	align-items: center;
 	gap: var(--space-3);
 	margin-top: var(--space-5);
+}
+
+/* The two arrows sit with the dots and the stop, one control cluster rather
+   than chevrons floating over the picture — over a photograph they would need
+   their own scrim to stay legible, and the band already has one. */
+.s-hero__nav {
+	display: grid;
+	place-items: center;
+	width: 26px;
+	height: 26px;
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius);
+	background: none;
+	color: var(--color-hero-ink-soft);
+	cursor: pointer;
+}
+
+.s-hero__nav:hover {
+	color: var(--color-secondary);
+	background-color: var(--color-hero-dot);
 }
 
 .s-hero__dots {
@@ -209,13 +246,68 @@
 .s-hero__pause:checked ~ .s-hero__pause-btn .s-hero__glyph--stop { display: none; }
 .s-hero__pause:checked ~ .s-hero__pause-btn .s-hero__glyph--go { display: block; }
 
+/* ── manual mode: the visitor took the wheel ──
+   The script adds `.is-manual` and `data-slide` the first time an arrow is
+   used. Every animation stops for good — so the stop button has nothing left
+   to stop and steps aside — and the six states are spelled out rather than
+   computed, because a `calc()` comparison between two custom properties would
+   fail CLOSED on an engine that cannot do it: a hero with no picture at all. */
+.s-hero.is-manual .s-hero__plate,
+.s-hero.is-manual .s-hero__item,
+.s-hero.is-manual .s-hero__pitch-item,
+.s-hero.is-manual .s-hero__dot {
+	animation: none;
+}
+
+.s-hero.is-manual .s-hero__plate { opacity: 0; }
+.s-hero.is-manual .s-hero__item,
+.s-hero.is-manual .s-hero__pitch-item { opacity: 0; visibility: hidden; }
+.s-hero.is-manual .s-hero__dot { background-color: var(--color-hero-dot); }
+.s-hero.is-manual .s-hero__pause-btn { display: none; }
+
+.s-hero.is-manual[data-slide="0"] .s-hero__plate:nth-child(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__plate:nth-child(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__plate:nth-child(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__plate:nth-child(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__plate:nth-child(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__plate:nth-child(6) {
+	opacity: 1;
+}
+
+.s-hero.is-manual[data-slide="0"] .s-hero__item:nth-child(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__item:nth-child(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__item:nth-child(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__item:nth-child(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__item:nth-child(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__item:nth-child(6),
+.s-hero.is-manual[data-slide="0"] .s-hero__pitch-item:nth-child(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__pitch-item:nth-child(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__pitch-item:nth-child(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__pitch-item:nth-child(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__pitch-item:nth-child(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__pitch-item:nth-child(6) {
+	opacity: 1;
+	visibility: visible;
+}
+
+.s-hero.is-manual[data-slide="0"] .s-hero__dot:nth-child(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__dot:nth-child(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__dot:nth-child(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__dot:nth-child(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__dot:nth-child(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__dot:nth-child(6) {
+	background-color: var(--cc);
+}
+
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
    lands on the index link must not have it slide out from under them. */
 .s-hero:has(.s-hero__pause:checked) .s-hero__plate,
 .s-hero:has(.s-hero__pause:checked) .s-hero__item,
+.s-hero:has(.s-hero__pause:checked) .s-hero__pitch-item,
 .s-hero:has(.s-hero__pause:checked) .s-hero__dot,
 .s-hero:focus-within .s-hero__plate,
 .s-hero:focus-within .s-hero__item,
+.s-hero:focus-within .s-hero__pitch-item,
 .s-hero:focus-within .s-hero__dot {
 	animation-play-state: paused;
 }
@@ -259,10 +351,16 @@
 @media (prefers-reduced-motion: reduce) {
 	.s-hero__plate,
 	.s-hero__item,
+	.s-hero__pitch-item,
 	.s-hero__dot {
 		animation: none;
 	}
-	.s-hero__ticker {
+	/* The ticker used to disappear whole here, which was right when the arrows
+	   did not exist. Nothing moves, so the STOP has nothing to stop and goes —
+	   but the arrows are now the only way to reach the other five plates, and
+	   the dots are the only thing saying which one you are on. They stay. */
+	.s-hero__pause,
+	.s-hero__pause-btn {
 		display: none;
 	}
 }
@@ -375,6 +473,29 @@
 }
 
 .s-cf__feature {
+}
+
+/* The band's headings were promoted a level (#416) so the home's outline does
+   not skip from h1 to h3; the sizes below are the ones the design already had,
+   pinned here so a semantic fix stays a semantic fix. */
+.s-cf__card h2 {
+	font-size: 24px;
+	line-height: 30px;
+}
+.s-cf__feature h3 {
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 30px;
+}
+@media (min-width: 768px) {
+	.s-cf__card h2 {
+		font-size: 32px;
+		line-height: 40px;
+	}
+	.s-cf__feature h3 {
+		font-size: 20px;
+		line-height: 28px;
+	}
 }
 
 .s-cf__feature p {

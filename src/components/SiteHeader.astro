@@ -202,6 +202,16 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		100% { border-bottom-color: var(--c1); }
 	}
 
+	/* Manual mode: the visitor picked a plate, so the clock is over. The edge
+	   stops with it and takes that plate's colour, which the hero's script
+	   parks on the root — the header is outside the component and a custom
+	   property is the only thing that crosses. The `:not()`s are repeated so
+	   this outweighs the animation rule above rather than tying with it. */
+	body:has(.s-hero.is-manual) .site-header.is-over-hero.is-rotating:not(.is-sticky):not(:has(.search-toggle:checked)) {
+		animation: none;
+		border-bottom-color: var(--hero-now, var(--c1));
+	}
+
 	/* …and it stops when the hero stops, or the two drift apart within one
 	   cycle and the bar starts announcing a slide that is not on screen. */
 	body:has(.s-hero__pause:checked) .site-header,

@@ -128,6 +128,42 @@ const FOCUS_PROBE = () => {
 	};
 };
 
+/**
+ * What the aspect-ratio check measures (#416).
+ *
+ * A stretched logo is not a rounding error, it is a different logo. The one
+ * that shipped was two correct rules meeting: the global `img { max-width:
+ * 100% }` clamped the width, a declared `height` held, and a 480×120 mark
+ * rendered 105×32 on a phone. No rule engine decides this and no static
+ * stylesheet read can either — it depends on how wide the container came out.
+ *
+ * Only `object-fit: fill` (the initial value) can distort. `cover`, `contain`,
+ * `scale-down` and `none` crop, letterbox or overflow — never squash — so a
+ * deliberate crop must not be reported as a defect.
+ */
+const RATIO_PROBE = () => {
+	const out = [];
+	for (const img of document.querySelectorAll("img")) {
+		// naturalWidth is 0 for an unloaded image and for an SVG with no
+		// intrinsic size: nothing to compare against, not a finding.
+		if (!img.naturalWidth || !img.naturalHeight) continue;
+		if (getComputedStyle(img).objectFit !== "fill") continue;
+		const r = img.getBoundingClientRect();
+		if (r.width < 1 || r.height < 1) continue;
+		const nat = img.naturalWidth / img.naturalHeight;
+		const skew = Math.abs(nat - r.width / r.height) / nat;
+		// 2%: below it lies subpixel layout, above it lies a visible squash
+		if (skew <= 0.02) continue;
+		out.push({
+			src: (img.currentSrc || img.src).replace(location.origin, "").slice(-48),
+			nat: `${img.naturalWidth}×${img.naturalHeight}`,
+			box: `${Math.round(r.width)}×${Math.round(r.height)}`,
+			pct: Math.round(skew * 100),
+		});
+	}
+	return out;
+};
+
 /** What the 1.4.10 check measures — same reason it is named. */
 const REFLOW_PROBE = () => {
 	const de = document.documentElement;
@@ -167,11 +203,16 @@ body { margin: 0 }
 #buried { position: absolute; top: 30px; left: 0 }
 #buried:focus { outline: none }
 #wide { width: 720px; height: 10px; background: #ccc }
+#column { width: 105px }
+#squashed { height: 32px; width: auto; max-width: 100% }
+#cropped { width: 105px; height: 32px; object-fit: cover }
 </style></head><body>
 <header class="site-header"><a href="#x" id="inheader">en la cabecera</a></header>
 <main><a href="#y" id="buried">bajo la cabecera, sin anillo</a>
 <div id="wide"></div>
 <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+<div id="column"><img id="squashed" alt="marca aplastada" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0ODAnIGhlaWdodD0nMTIwJz48cmVjdCB3aWR0aD0nNDgwJyBoZWlnaHQ9JzEyMCcgZmlsbD0nIzg4OCcvPjwvc3ZnPg=="></div>
+<img id="cropped" alt="marca recortada a proposito" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0ODAnIGhlaWdodD0nMTIwJz48cmVjdCB3aWR0aD0nNDgwJyBoZWlnaHQ9JzEyMCcgZmlsbD0nIzg4OCcvPjwvc3ZnPg==">
 </main></body></html>`;
 
 {
@@ -197,6 +238,21 @@ body { margin: 0 }
 	await desktop.evaluate(() => document.getElementById("inheader").focus());
 	const inHeader = await desktop.evaluate(FOCUS_PROBE);
 	if (inHeader?.obscured) blind.push("the header's own link was reported as obscured by the header");
+
+	// RATIO_PROBE — must see the squashed mark and must NOT accuse the crop.
+	// The negative half is the one that matters: a probe that flags every
+	// `object-fit: cover` photo would be turned off within a week.
+	{
+		const seen = await desktop.evaluate(RATIO_PROBE);
+		if (!seen.some((f) => f.src.endsWith("=") && f.pct >= 15)) {
+			blind.push("a 480×120 mark rendered 105×32 was not reported as stretched (#416) — " +
+				`the probe returned [${seen.map((f) => f.pct + "%").join(", ") || "nothing"}]`);
+		}
+		if (seen.length !== 1) {
+			blind.push(`the deliberate \`object-fit: cover\` crop was reported as a defect ` +
+				`(${seen.length} findings on a fixture carrying one)`);
+		}
+	}
 
 	// axe — must be loaded, running, and finding a violation that is really there
 	await desktop.evaluate(axeSource);
@@ -226,7 +282,7 @@ body { margin: 0 }
 		await browser.close();
 		process.exit(3);
 	}
-	ok("4 planted defects found — obscured focus, missing ring, 320px overflow, image-alt");
+	ok("5 planted defects found — obscured focus, missing ring, 320px overflow, image-alt, squashed logo");
 }
 
 // ── 1. axe-core: the rules a machine can decide, on every audited route ─────
@@ -250,6 +306,11 @@ for (const route of AXE_ROUTES) {
 		}
 	} else {
 		ok(`${route} — 0 violations`);
+	}
+	// #416 rides along: the page is open, loaded and settled, and a stretched
+	// image costs one more evaluate rather than one more navigation.
+	for (const f of await page.evaluate(RATIO_PROBE)) {
+		fail(route, `image stretched ${f.pct}% at 1280px: ${f.nat} rendered ${f.box} — ${f.src}`);
 	}
 	await page.close();
 }
@@ -482,7 +543,30 @@ for (const route of ["/", "/cdn-waf-seguridad-edge-cloudflare", "/referencias", 
 	await page.close();
 }
 
-// ── 6. W3C Nu — the rules html-validate does not carry ─────────────────────
+// ── 6. Aspect ratio at 320px — no image may be squashed (#416) ─────────────
+// Its own loop, and over EVERY route, because narrow is where the defect
+// lives: the global `img { max-width: 100% }` only clamps once the container
+// is too narrow for the image, so a desktop pass sees nothing. The two rules
+// that produced it were each correct in isolation — this measures the outcome
+// instead, comparing every rendered box against its own natural ratio.
+console.log(`── image aspect ratio at 320px — ${ROUTES.length} routes`);
+{
+	const page = await browser.newPage();
+	await page.setViewport({ width: 320, height: 640, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+	let checked = 0;
+	for (const route of ROUTES) {
+		await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
+		const bad = await page.evaluate(RATIO_PROBE);
+		for (const f of bad) {
+			fail(route, `image stretched ${f.pct}% at 320px: ${f.nat} rendered ${f.box} — ${f.src}`);
+		}
+		checked += await page.evaluate(() => document.querySelectorAll("img").length);
+	}
+	await page.close();
+	ok(`${checked} images across ${ROUTES.length} routes keep their ratio`);
+}
+
+// ── 7. W3C Nu — the rules html-validate does not carry ─────────────────────
 // The local suite validates with html-validate; CI additionally runs Nu after
 // the deploy. They disagree, and the gap is not academic: `aria-hidden` on a
 // label bound to a control passed html-validate and was rejected by Nu, after

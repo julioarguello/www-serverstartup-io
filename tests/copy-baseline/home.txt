@@ -1,10 +1,12 @@
 Saltar al contenido
 ~Server Startup
 EN
+01 / 6
+Comercio electrónico
+→
 Ingeniería de software: arquitectura, integración y operación
 Más de veinte años de oficio en comercio electrónico, integración de sistemas y el dato. Partners oficiales de Cloudflare desde 2019.
 En tu proyecto, siempre los mismos tres ingenieros senior. Quien diseña tu arquitectura escribe el código. Y da la cara si algo se rompe.
-Nuestros servicios
 El equipo
 Sin intermediarios y sin traspasos.
 Los mismos tres ingenieros recorren todas las capas: el que diseña, escribe; el que escribe, opera.

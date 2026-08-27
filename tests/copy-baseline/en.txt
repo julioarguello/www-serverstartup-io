@@ -2,10 +2,12 @@ Skip to content
 ~Server Startup
 /en
 ES
+01 / 6
+E-commerce
+→
 Software engineering: architecture, integration and operations
 Over twenty years of craft in e-commerce, systems integration and data. Official Cloudflare partners since 2019.
 On your project, always the same three senior engineers. Whoever designs your architecture writes the code. And answers for it when something breaks.
-Our services
 The team
 No middlemen, no handovers.
 The same three engineers cover every layer: whoever designs, writes; whoever writes, operates.

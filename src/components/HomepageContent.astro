@@ -29,6 +29,7 @@ import { FACE_BY_SLUG, sortByFace } from "../utils/nav";
 import CubeEmblem from "./CubeEmblem.astro";
 import { getUiLabels } from "../utils/ui-labels";
 import { excerptPlain } from "../utils/excerpt";
+import { HERO_ART } from "../utils/hero-art";
 
 // Whitespace-safe link mark: EmDash's default renderer inserts a space
 // before punctuation that follows a link (#273 — the hero is link-heavy)
@@ -55,7 +56,25 @@ const services = serviceEntries ?? [];
 
 const labels = await getUiLabels(locale);
 const engineerCaption = labels.get("footer_headings", "engineer_caption", locale === "en" ? "Engineer" : "Ingeniero");
-const heroServicesBtn = labels.get("footer_headings", "hero_services_btn", locale === "en" ? "Our services" : "Nuestros servicios");
+
+// ── The rotating hero (#413) ────────────────────────────────────────────
+// Six plates, one per vertical, in the canonical order — the same order the
+// menu, the footer and the rows below use, so the hero cannot disagree with
+// them. Anything not mapped to a face drops out rather than borrowing a
+// picture that belongs to another discipline.
+const heroSlides = sortByFace(services)
+	.map((svc: any) => {
+		const slug = svc.slug ?? svc.id;
+		const face = FACE_BY_SLUG[slug];
+		if (!face) return null;
+		return {
+			href: `${localePrefix}/${slug}`,
+			title: svc.data.title as string,
+			color: (svc.data.color as string) || "#1E1E1E",
+			art: HERO_ART[face],
+		};
+	})
+	.filter((s): s is { href: string; title: string; color: string; art: string } => s !== null);
 
 // Split PT content by h2 headings into named sections
 type Section = { heading: string; blocks: any[] };
@@ -101,9 +120,45 @@ const { entries: memberEntries } = await getEmDashCollection("members", {
 const members = memberEntries ?? [];
 ---
 
-<!-- ══════ SECTION 1: HERO ══════ -->
+<!-- ══════ SECTION 1: HERO — six plates, one object (#413) ══════
+     The picture rotates; the <h1> does not. One stable heading is what SEO
+     and a screen reader read, and it is also the only honest one: the six
+     verticals are what the company does, not six different companies.
+     The only link in the band is the vertical's name — the founder removed
+     both CTA buttons ("con clicar en el title suficiente"). -->
 <section class="s-hero" aria-label={t("hero_intro")}>
+	{heroSlides.length > 0 && (
+		<div class="s-hero__stage" aria-hidden="true">
+			{heroSlides.map((slide, i) => (
+				<img
+					class="s-hero__plate"
+					src={slide.art}
+					alt=""
+					width="1440"
+					height="900"
+					style={`--i:${i}`}
+					fetchpriority={i === 0 ? "high" : "low"}
+					loading={i === 0 ? "eager" : "lazy"}
+					decoding="async"
+				/>
+			))}
+			<span class="s-hero__scrim"></span>
+		</div>
+	)}
 	<div class="container s-hero__inner">
+		{heroSlides.length > 0 && (
+			<ul class="s-hero__index" role="list">
+				{heroSlides.map((slide, i) => (
+					<li class="s-hero__item" style={`--i:${i};--cc:${slide.color}`}>
+						<a href={slide.href} class="s-hero__link">
+							<span class="s-hero__n">{`0${i + 1} / ${heroSlides.length}`}</span>
+							<span class="s-hero__name">{slide.title}</span>
+							<span class="s-hero__arrow" aria-hidden="true">&rarr;</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		)}
 		<h1>{title}</h1>
 		{heroSection?.blocks.length > 0 && (
 			<div class="s-hero__kicker">
@@ -115,7 +170,33 @@ const members = memberEntries ?? [];
 				<PortableText value={heroSection.blocks.slice(1)} components={ptComponents} />
 			</div>
 		)}
-		<a href="#areas-especializacion" class="btn btn-dark">{heroServicesBtn}</a>
+		{heroSlides.length > 1 && (
+			<div class="s-hero__ticker">
+				<span class="s-hero__dots" aria-hidden="true">
+					{heroSlides.map((slide, i) => (
+						<span class="s-hero__dot" style={`--i:${i};--cc:${slide.color}`}></span>
+					))}
+				</span>
+				{/* WCAG 2.2.2 made real: rotation that lasts more than five
+				    seconds needs a way to stop it, and a system-level motion
+				    preference is not a control the visitor can reach here. A
+				    checkbox drives it in pure CSS (`animation-play-state`), the
+				    same mechanism the search toggle uses — invisible but REAL:
+				    Tab reaches it, Space stops the hero, and it is announced
+				    from its own aria-label. The hero also freezes on
+				    `:focus-within`, so a keyboard user never chases a link. */}
+				<input type="checkbox" id="hero-pause" class="s-hero__pause" aria-label={t("hero_pause")} />
+				<label for="hero-pause" class="s-hero__pause-btn">
+					<svg class="s-hero__glyph s-hero__glyph--stop" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+						<rect x="3.5" y="2.5" width="3" height="11"></rect>
+						<rect x="9.5" y="2.5" width="3" height="11"></rect>
+					</svg>
+					<svg class="s-hero__glyph s-hero__glyph--go" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+						<path d="M4 2.5l9 5.5-9 5.5z"></path>
+					</svg>
+				</label>
+			</div>
+		)}
 	</div>
 </section>
 

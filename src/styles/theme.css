@@ -119,6 +119,40 @@
 	--color-console-line: rgba(255, 255, 255, 0.16);
 	--color-console-ok: #5BB974;      /* the live cursor / OK state */
 
+	/* ── The hero band (#413) ────────────────────────────────────────────
+	   The one place the site goes dark outside the machine voice. The ground
+	   is `--color-primary` itself — the founder chose the soft version over
+	   near-black ("suave, tinta de marca"), so the band introduces no new
+	   colour and #304 keeps its meaning: near-black stays the console's. The
+	   drawn plates in `public/assets/hero/` are generated on the same ink.
+	   The scrim is what makes the headline legible over any of the six: it
+	   sweeps across the picture rather than dimming it flat, so the drawing
+	   survives on the side the text leaves free. Portrait needs its own
+	   angle — a horizontal sweep on a phone darkens the wrong half. */
+	--hero-scrim: linear-gradient(
+		101deg,
+		rgba(30, 30, 30, 0.94) 0%,
+		rgba(30, 30, 30, 0.84) 32%,
+		rgba(30, 30, 30, 0.20) 64%,
+		rgba(30, 30, 30, 0) 100%
+	);
+	--hero-scrim-portrait: linear-gradient(
+		184deg,
+		rgba(30, 30, 30, 0.96) 0%,
+		rgba(30, 30, 30, 0.88) 44%,
+		rgba(30, 30, 30, 0.18) 74%,
+		rgba(30, 30, 30, 0) 100%
+	);
+	/* paper at reduced weight, the counterpart of --color-text-muted: 10.4:1
+	   on the ink ground, so the kicker holds AA over the darkened side */
+	--color-hero-ink-soft: rgba(255, 255, 255, 0.82);
+	--color-hero-rule: rgba(255, 255, 255, 0.35);  /* the locale chip's box */
+	--color-hero-dot: rgba(255, 255, 255, 0.22);   /* a slide not showing */
+	/* Six slides, six seconds each. Named here because the header's edge
+	   rotates on the same clock as the images and the two must not drift. */
+	--hero-cycle: 36s;
+	--hero-step: 6s;
+
 	/* One radius for the whole portal */
 	--radius: 4px;
 

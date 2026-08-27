@@ -107,7 +107,15 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: lighthouserc.json
-          uploadArtifacts: true
+          # Off deliberately (#399). The raw reports are ~8.5 MB per run (five
+          # URLs x three runs) and the action exposes no retention input, so 219
+          # of them filled the repo's artifact quota — and a full quota makes
+          # gitleaks-action die uploading its 7 KB SARIF *after* reporting "no
+          # leaks found", which reads as a failed secret scan on a clean tree.
+          # Nothing read these reports: the assertions gate the build and name
+          # the failing category in the log, and the record that survives is the
+          # summary committed under docs/audits/ (#305).
+          uploadArtifacts: false
 
       - name: Summary
         if: always()

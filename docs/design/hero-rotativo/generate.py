@@ -45,25 +45,111 @@ def glow(fid, blur=22):
     return ('<filter id="%s" x="-70%%" y="-70%%" width="240%%" height="240%%">'
             '<feGaussianBlur stdDeviation="%d"></feGaussianBlur></filter>' % (fid, blur))
 
-def ground(key):
-    return ('<defs><radialGradient id="vig%s" cx="50%%" cy="46%%" r="72%%">'
-            '<stop offset="0%%" stop-color="#2C2C2C"></stop>'
-            '<stop offset="100%%" stop-color="#171717"></stop></radialGradient></defs>'
-            '<rect x="0" y="0" width="1440" height="900" fill="url(#vig%s)"></rect>' % (key, key))
+def _r(v):
+    """`0.4` -> "0.4", `1.0` -> "1". Naive rstrip turns "0.4" into "0"."""
+    t = "%.1f" % v
+    return t[:-2] if t.endswith(".0") else t
 
-def stars(rng, n, xr=(0, 1440), yr=(0, 900), rmax=1.5, op=(0.10, 0.85)):
-    o = []
+def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True):
+    """The ground is DEEP SKY, not grey with specks in it (founder, 2026-08-27:
+    "asegúrate de que se note que estamos en el cielo").
+
+    Three things make a field read as sky instead of noise, and the first
+    version had none of them:
+
+    * **Magnitudes.** Many faint, some middling, a few bright. A field of
+      equal dots reads as texture.
+    * **Diffraction spikes** on the brightest ones. The tapered cross is the
+      gesture the eye files under "star"; without it a bright dot is a dot.
+    * **Dust.** Two long, almost imperceptible washes across the frame, so the
+      ground is not a flat grey the stars sit on top of.
+
+    Stars are grouped into twelve opacity buckets, which drops each circle to
+    ~30 bytes and compresses the whole field to about 2 KB. Without that,
+    six skies of ~700 stars would double the folder.
+
+    `seed` is the sky's OWN generator on purpose: the subjects were approved
+    as they are, and sharing a stream would redraw them every time a star
+    count changes.
+    """
+    rng = random.Random(seed)
+    lo, hi = yr
+    span = hi - lo
+    o = ['<defs><radialGradient id="vig%s" cx="50%%" cy="46%%" r="72%%">'
+         '<stop offset="0%%" stop-color="#242424"></stop>'
+         '<stop offset="100%%" stop-color="#141414"></stop></radialGradient>'
+         '<radialGradient id="dust%s" cx="50%%" cy="50%%" r="50%%">'
+         '<stop offset="0%%" stop-color="#FFFFFF" stop-opacity="0.06"></stop>'
+         '<stop offset="100%%" stop-color="#FFFFFF" stop-opacity="0"></stop></radialGradient>'
+         '<linearGradient id="fx%s"><stop offset="0%%" stop-color="#FFFFFF" stop-opacity="0"></stop>'
+         '<stop offset="50%%" stop-color="#FFFFFF" stop-opacity="0.92"></stop>'
+         '<stop offset="100%%" stop-color="#FFFFFF" stop-opacity="0"></stop></linearGradient>'
+         '<linearGradient id="fy%s" x1="0" y1="0" x2="0" y2="1">'
+         '<stop offset="0%%" stop-color="#FFFFFF" stop-opacity="0"></stop>'
+         '<stop offset="50%%" stop-color="#FFFFFF" stop-opacity="0.92"></stop>'
+         '<stop offset="100%%" stop-color="#FFFFFF" stop-opacity="0"></stop></linearGradient>'
+         '<filter id="fh%s" x="-300%%" y="-300%%" width="700%%" height="700%%">'
+         '<feGaussianBlur stdDeviation="3.5"></feGaussianBlur></filter></defs>'
+         % (key, key, key, key, key)]
+    o.append('<rect x="0" y="0" width="%d" height="%d" fill="url(#vig%s)"></rect>' % (W, H, key))
+    if dust:
+        for fx, fy, rx, ry, rot in ((0.68, 0.32, 940, 220, -24), (0.28, 0.72, 780, 180, -17)):
+            cxd, cyd = int(fx * W), int(lo + fy * span)
+            o.append('<ellipse cx="%d" cy="%d" rx="%d" ry="%d" fill="url(#dust%s)" '
+                     'transform="rotate(%d %d %d)"></ellipse>'
+                     % (cxd, cyd, rx, min(ry, max(70, int(span * 0.30))), key, rot, cxd, cyd))
+
+    # A real sky clumps. Roughly a quarter of the field falls near one of five
+    # loose centres; the rest is scattered.
+    cl = [(rng.uniform(0, W), rng.uniform(lo, hi), rng.uniform(90, 250)) for _ in range(5)]
+    field = []
     for _ in range(n):
-        x, y = rng.uniform(*xr), rng.uniform(*yr)
-        r = rng.uniform(0.35, rmax)
-        o.append('<circle cx="%.0f" cy="%.0f" r="%.1f" fill="#fff" opacity="%.2f"></circle>'
-                 % (x, y, r, rng.uniform(*op) * (r / rmax) ** 0.6))
+        if rng.random() < 0.26:
+            ccx, ccy, cr = cl[rng.randrange(len(cl))]
+            x, y = ccx + rng.gauss(0, cr), ccy + rng.gauss(0, cr * 0.7)
+        else:
+            x, y = rng.uniform(-8, W + 8), rng.uniform(lo, hi)
+        if not (-6 <= x <= W + 6 and lo - 6 <= y <= hi + 6):
+            continue
+        u = rng.random()
+        if u < 0.64:
+            r, op = rng.uniform(0.4, 0.8), rng.uniform(0.18, 0.46)
+        elif u < 0.91:
+            r, op = rng.uniform(0.9, 1.5), rng.uniform(0.48, 0.80)
+        else:
+            r, op = rng.uniform(1.6, 2.7), rng.uniform(0.82, 1.00)
+        field.append((min(11, int(op * 12)), round(x), round(y), r))
+    field.sort()
+    cur = None
+    for b, x, y, r in field:
+        if b != cur:
+            if cur is not None:
+                o.append('</g>')
+            o.append('<g fill="#fff" fill-opacity="%.2f">' % ((b + 0.5) / 12.0))
+            cur = b
+        o.append('<circle cx="%d" cy="%d" r="%s"/>' % (x, y, _r(r)))
+    if cur is not None:
+        o.append('</g>')
+
+    for _ in range(flares):
+        x, y = rng.uniform(50, W - 50), rng.uniform(lo + 40, max(lo + 41, hi - 40))
+        L, rr = rng.uniform(26, 52), rng.uniform(1.7, 2.8)
+        o.append('<g opacity="%.2f">' % rng.uniform(0.7, 1.0))
+        o.append('<circle cx="%.0f" cy="%.0f" r="%.0f" fill="#fff" opacity="0.30" filter="url(#fh%s)"/>'
+                 % (x, y, rr * 2.1, key))
+        o.append('<path d="M%.0f %.0f h%.0f" stroke="url(#fx%s)" stroke-width="1.5"/>'
+                 % (x - L, y, 2 * L, key))
+        o.append('<path d="M%.0f %.0f v%.0f" stroke="url(#fy%s)" stroke-width="1.5"/>'
+                 % (x, y - L * 0.72, 1.44 * L, key))
+        o.append('<circle cx="%.0f" cy="%.0f" r="%s" fill="#fff"/>' % (x, y, _r(rr)))
+        o.append('</g>')
     return "".join(o)
 
 # 1 · COMERCIO ELECTRÓNICO — un muro de cubos, uno encendido
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
-    s = [ground("ec"), '<defs>%s%s</defs>' % (glow("gec", 18), glow("gec2", 60))]
+    s = [sky("ec", 901, n=880, flares=17),
+         '<defs>%s%s</defs>' % (glow("gec", 18), glow("gec2", 60))]
     cols, rows = 15, 9
     cw, ch = 1440.0 / cols, 900.0 / rows
     k = (cw * 0.60) / 172.0
@@ -75,8 +161,21 @@ def img_ec():
             cy = r * ch + ch / 2
             if c == HC and r == HR:
                 hero = (cx, cy); continue
-            d = math.hypot((c - cols / 2.0) / cols, (r - rows / 2.0) / rows) * 2.0
-            op = max(0.05, (0.34 - 0.19 * d) * rng.uniform(0.7, 1.25))
+            # The wall used to fade from the CENTRE of the frame, which left an
+            # even lattice over every star — "no se nota que estamos en el
+            # cielo" (founder). It now falls away from the lit cube instead, so
+            # the ones near your order stay legible and the rest dissolve into
+            # the sky they are floating in.
+            # Two falloffs, not one. The radial makes the wall a halo around
+            # your order; the vertical clears the top third completely, so the
+            # frame opens onto the sky the wall is hanging in. A regular
+            # lattice edge to edge is the one thing that cannot read as space,
+            # however many stars are behind it.
+            d = math.hypot((c - HC) / 7.0, (r - HR) / 4.2)
+            vf = min(1.0, max(0.06, (r - 0.2) / 2.6))
+            op = 0.46 * math.exp(-1.45 * d) * vf * rng.uniform(0.75, 1.25)
+            if op < 0.030:
+                continue
             body.append(cube(cx, cy, k, op=op, w=1.1, hint=False))
     s.append("".join(body))
     hx, hy = hero
@@ -91,7 +190,7 @@ def img_ec():
 def img_cdn():
     rng = random.Random(11); C = "#F38020"
     cx, cy, r = 1006, 466, 296
-    s = [ground("cdn"), stars(rng, 620), '<defs>%s%s' % (glow("gcdn", 26), glow("gcdn2", 62))]
+    s = [sky("cdn", 902, n=780, flares=14), '<defs>%s%s' % (glow("gcdn", 26), glow("gcdn2", 62))]
     s.append('<clipPath id="pcdn"><circle cx="%d" cy="%d" r="%d"></circle></clipPath></defs>' % (cx, cy, r))
     s.append('<circle cx="%d" cy="%d" r="%d" fill="#131313"></circle>' % (cx, cy, r))
     mesh = []
@@ -118,7 +217,7 @@ def img_cdn():
 # 3 · BIG DATA — el cubo emerge de la nube de puntos
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
-    s = [ground("bd"), '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
+    s = [sky("bd", 903, n=430, flares=9), '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
     p = M(cx, cy, k)
     pts = []
@@ -158,7 +257,7 @@ def img_bd():
 def img_int():
     rng = random.Random(53); C, CL = "#1D4E89", "#5B94DA"
     cx, cy, k = 760, 450, 2.35
-    s = [ground("int"), '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
+    s = [sky("int", 904, n=720, flares=13), '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
     wires = []
     for _ in range(96):
         y0 = rng.uniform(-60, 960); y1 = rng.uniform(-60, 960)
@@ -169,7 +268,6 @@ def img_int():
                      % (cx, cy + rng.gauss(0, 40), rng.uniform(820, 1160), cy + rng.gauss(0, 90),
                         rng.uniform(1100, 1400), rng.uniform(-140, 1040), y1, rng.uniform(0.05, 0.22), rng.uniform(0.6, 1.2)))
     s.append("".join(wires))
-    s.append(stars(rng, 140, rmax=1.1, op=(0.06, 0.32)))
     # el cubo: el punto por el que pasa todo
     s.append('<polygon points="%s" fill="#171717" opacity="0.92"></polygon>'
              % " ".join("%.1f,%.1f" % M(cx, cy, k)(*v) for v in VERTS))
@@ -187,7 +285,7 @@ def img_int():
 def img_gf():
     rng = random.Random(71); C, CL = "#3E7D50", "#5FBE7C"
     hz = 392
-    s = [ground("gf"), stars(rng, 420, yr=(0, hz - 8), rmax=1.3, op=(0.08, 0.7)),
+    s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12),
          '<defs>%s%s</defs>' % (glow("ggf", 18), glow("ggf2", 56))]
     lines = []
     vx = 700
@@ -219,7 +317,7 @@ def img_ia():
     rng = random.Random(97); C, CL = "#6B4FBB", "#9A7BEE"
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
-    s = [ground("ia"), '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
+    s = [sky("ia", 906, n=760, flares=14), '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos
     grid = []
     for u in (14, 57, 100, 143, 186):

@@ -2209,6 +2209,28 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "hero_prev",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ver la especialidad anterior"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "hero_next",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ver la especialidad siguiente"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "content",
 							"children": [
 								{
@@ -4115,6 +4137,28 @@
 								{
 									"_type": "span",
 									"text": "Pause the image rotation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "hero_prev",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Show the previous specialty"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "hero_next",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Show the next specialty"
 								}
 							]
 						},

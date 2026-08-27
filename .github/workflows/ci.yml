@@ -36,6 +36,13 @@ jobs:
         uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The gate is the scan's exit code, never the upload. Observed on PR
+          # #397: "1 commits scanned / no leaks found", then the step died in
+          # CreateArtifact because the artifact quota was full (#399) — a red
+          # secret scan on a clean tree, which is the one lie a security gate
+          # must never tell. Nothing consumed those 236 SARIFs: they were never
+          # fed to code scanning, and no one downloaded one.
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
 
       - name: Citability guard
         env:

@@ -35,7 +35,7 @@ Nuestro oficio es la calidad y el rendimiento donde salen caros: procesos críti
 Esta web es una muestra pequeña de la misma disciplina, aplicada a nuestro propio escaparate. Ninguna versión se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El umbral está escrito en el repositorio público, y cada ejecución del control también. Mira cómo está hecha.
 El equipo
 Sin intermediarios y sin traspasos.
-Los mismos tres ingenieros recorren todas las capas: el que diseña, escribe; el que escribe, opera.
+Los mismos ingenieros recorren todas las capas: el que diseña, escribe; el que escribe, opera.
 Daniel Sío
 Ingeniero
 Ignacio Ibaseta

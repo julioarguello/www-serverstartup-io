@@ -201,13 +201,6 @@
 	--menu-ink-muted: rgba(255, 255, 255, 0.62);   /* 7.1:1 — the site links */
 	--menu-rule: var(--color-hero-rule);
 	--menu-tint: rgba(255, 255, 255, 0.14);        /* the breadcrumb's chip */
-	/* The die, re-inked. Its resting greys (#1E1E1E over #ced4da) were drawn
-	   for paper: on the panel's own ink the dark plate vanishes and the light
-	   one glares. The cells stay above the plate they sit on so the 2x2 still
-	   reads once nothing in the drawing is light any more. */
-	--menu-die-back: #0B0B0B;
-	--menu-die-plate: #33373D;
-	--menu-die-cell: #3B4048;
 	/* Three of the six brand hues are dark by design (#1D4E89, #3E7D50,
 	   #6B4FBB) and simply do not exist on ink. Rather than six new literals —
 	   a second palette to keep in sync forever — the menu raises whatever the

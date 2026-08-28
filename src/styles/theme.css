@@ -128,20 +128,31 @@
 	   The scrim is what makes the headline legible over any of the six: it
 	   sweeps across the picture rather than dimming it flat, so the drawing
 	   survives on the side the text leaves free. Portrait needs its own
-	   angle — a horizontal sweep on a phone darkens the wrong half. */
+	   angle — a horizontal sweep on a phone darkens the wrong half.
+
+	   The stops are MEASURED, not judged by eye. The first sweep faded to
+	   0.20 by 64% and to nothing by the frame's edge, which was fine for the
+	   headline (white, 72px) and failed for the pitch (white at 82%, 20px,
+	   weight 300) on the greenfield plate, whose lit cube sits at ~68% and
+	   ran straight under the last two lines: 3.1:1 landscape, 3.5:1 portrait,
+	   against the 4.5:1 that size and weight are owed. The plateau now holds
+	   to 70% (landscape) and 80% (portrait) and the portrait sweep never
+	   reaches zero, because on a phone the copy ends at the bottom edge. Six
+	   plates × two viewports now measure 5.3:1 or better. Anything that moves
+	   a plate's subject left, or the copy right, must be re-measured. */
 	--hero-scrim: linear-gradient(
 		101deg,
 		rgba(30, 30, 30, 0.94) 0%,
-		rgba(30, 30, 30, 0.84) 32%,
-		rgba(30, 30, 30, 0.20) 64%,
+		rgba(30, 30, 30, 0.86) 42%,
+		rgba(30, 30, 30, 0.44) 70%,
 		rgba(30, 30, 30, 0) 100%
 	);
 	--hero-scrim-portrait: linear-gradient(
 		184deg,
 		rgba(30, 30, 30, 0.96) 0%,
-		rgba(30, 30, 30, 0.88) 44%,
-		rgba(30, 30, 30, 0.18) 74%,
-		rgba(30, 30, 30, 0) 100%
+		rgba(30, 30, 30, 0.90) 48%,
+		rgba(30, 30, 30, 0.38) 80%,
+		rgba(30, 30, 30, 0.20) 100%
 	);
 	/* paper at reduced weight, the counterpart of --color-text-muted: 10.4:1
 	   on the ink ground, so the kicker holds AA over the darkened side */

@@ -213,6 +213,12 @@ const readBoxes = (sel) => {
 		const m = raw.match(/[\d.]+/g);
 		if (!m) continue;
 		const [r8, g8, b8] = m.slice(0, 3).map(Number);
+		// The ALPHA, which this used to throw away. `--color-hero-ink-soft` is
+		// rgba(255,255,255,.82) and `--menu-ink-soft` is the same token: read
+		// as opaque white they score about a third more contrast than a reader
+		// ever sees, and the gate would sign off on copy that fails. It is
+		// composited over whatever pixel wins the percentile, below.
+		const alpha = m.length > 3 ? Number(m[3]) : 1;
 		// Borders and underlines are DECORATION, not the ground the glyphs sit
 		// on: `.s-hero__name` wears a 1px rule in its vertical's colour, and a
 		// box that includes it reads that colour as the background. Inset by
@@ -227,6 +233,8 @@ const readBoxes = (sel) => {
 			x: Math.max(0, Math.round(r.left + bl + 1)), y: Math.max(0, Math.round(r.top + bt + 1)),
 			w: Math.max(1, Math.round(r.width - bl - br - 2)),
 			h: Math.max(1, Math.round(r.height - bt - bb - 4)),
+			ink: [r8, g8, b8],
+			alpha,
 			lum: 0.2126 * srgb(r8 / 255) + 0.7152 * srgb(g8 / 255) + 0.0722 * srgb(b8 / 255),
 			// 1.4.3: 3:1 for large text (>=24px, or >=18.66px bold), else 4.5:1
 			need: size >= 24 || (size >= 18.66 && weight >= 700) ? 3 : 4.5,
@@ -268,7 +276,16 @@ const worstAgainst = async (b64, boxes) => {
 		const idx = order[Math.min(order.length - 1,
 			Math.max(0, Math.round((dark ? 0.98 : 0.02) * (order.length - 1))))];
 		const L = lums[idx];
-		const hi = Math.max(L, b.lum), lo = Math.min(L, b.lum);
+		// Translucent ink is not its own colour: it is its colour laid over
+		// THIS pixel. Composite before comparing, or 82% paper reads as paper.
+		const a = b.alpha == null ? 1 : b.alpha;
+		const [ir, ig, ib] = b.ink || [0, 0, 0];
+		const [br, bg, bb] = rgbs[idx];
+		const inkL = a >= 1 ? b.lum
+			: 0.2126 * srgb((a * ir + (1 - a) * br) / 255)
+			+ 0.7152 * srgb((a * ig + (1 - a) * bg) / 255)
+			+ 0.0722 * srgb((a * ib + (1 - a) * bb) / 255);
+		const hi = Math.max(L, inkL), lo = Math.min(L, inkL);
 		const hex = "#" + rgbs[idx].map((v) => v.toString(16).padStart(2, "0")).join("");
 		return { ...b, ratio: Math.round(((hi + 0.05) / (lo + 0.05)) * 10) / 10, hex };
 	});
@@ -770,7 +787,7 @@ console.log("── the hero band: ink over the plates");
 
 	const TEXT_SELECTOR = [
 		"h1", ".s-hero__kicker p", ".s-hero__pitch-item",
-		".s-hero__name", ".s-hero__n", ".s-hero__body",
+		".s-hero__name", ".s-hero__n", ".s-hero__tag", ".s-hero__body",
 	].map((c) => `.s-hero ${c}`).join(", ");
 
 	// Freeze the band on plate `k`. Returns how many plates the band has, so

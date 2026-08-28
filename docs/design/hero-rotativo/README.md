@@ -31,11 +31,22 @@ make the six read as space rather than as texture, and all three are in `generat
   drawn **before** the stars, so the field sits inside the cloud instead of on top of it.
 - **A band.** 34% of every star field falls along a galactic band with gaussian falloff and
   26% in clusters. A uniform scatter is the one distribution the real sky never has.
+- **Two constellations you already know.** The Plough and the Little Dipper, drawn to their
+  real relative magnitudes and joined by the same hairline the cubes are drawn in, tilted a
+  different amount on each plate — six fields at the same angle would read as one stamp used
+  six times. They are the reason the sky is *recognisably* a sky and not a particle effect.
 
 **The body lives in the right half of the frame.** That is a composition rule, not a
 preference: the scrim darkens the left because the copy is there, so a world on the left is a
 world nobody sees — and on a phone, where the plate is cropped to `object-position: 72%`, it
 is cropped away entirely. `ec`, `int` and `bd` were drawn left first and moved.
+
+The same rule governs the constellations, and two plates pay for it. `gf` has a horizon at
+`y=392`, so a third of the sky the others have: it gets the Plough alone, which is landscape
+where the pair is portrait, low in the strip between its planet and the ground. `cdn` gets
+none at all — its globe is the largest body of the six and its halo fills the one quarter the
+scrim leaves bright, so the dippers could only be drawn in front of a lit atmosphere or in the
+dark left third. Absent beats wrong.
 
 ## Regenerating them
 
@@ -52,7 +63,7 @@ that shows them has `alt=""` and the vertical's name sits beside it as a real li
 the file would be locale-bound copy living outside the CMS, and it would announce the picture
 twice.
 
-All six together are ~63 KB gzipped (`bd` is the outlier at 26 KB — it is ~4,000 circles). That
+All six together are ~67 KB gzipped (`bd` is the outlier at 28 KB — it is ~4,000 circles). That
 measurement is what makes six plates and a pure-CSS cross-fade cheaper than the one stock
 photograph they replace, with no JavaScript involved.
 

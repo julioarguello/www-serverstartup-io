@@ -136,6 +136,105 @@ def body(key, cx, cy, r, hue, lit=(28, 24), rings=3, atmos=True):
     return "".join(o)
 
 
+# ── The two bears ─────────────────────────────────────────────────────────
+# Real stars, real magnitudes, real shape. The founder asked for them by name
+# (2026-08-28: "quizás poner la osa mayor y menor ayude"), and he is right for
+# a reason worth writing down: a random field is *a* sky, but a field with an
+# asterism you already know is *the* sky. Recognition is what turns texture
+# into place, and it costs about 40 lines and 700 bytes.
+#
+# Coordinates are normalised to the Plough's own width (Alkaid to Dubhe = 1.0),
+# y down. Magnitudes are the catalogue's, and they drive both the radius and
+# the opacity, so the Guardians read brighter than Yildun exactly as they do
+# outside.
+UMA_STARS = [  # Ursa Major — the Plough. Handle first, then round the bowl.
+    ("alkaid", 0.000, 0.100, 1.85), ("mizar", 0.163, 0.183, 2.23),
+    ("alioth", 0.311, 0.252, 1.77), ("megrez", 0.470, 0.338, 3.31),
+    ("phecda", 0.505, 0.552, 2.44), ("merak", 0.792, 0.601, 2.37),
+    ("dubhe", 0.803, 0.360, 1.79),
+]
+UMA_LINES = [("alkaid", "mizar"), ("mizar", "alioth"), ("alioth", "megrez"),
+             ("megrez", "phecda"), ("phecda", "merak"), ("merak", "dubhe"),
+             ("dubhe", "megrez")]
+
+# Ursa Minor, given relative to Polaris at (0, 0). Polaris is placed on the
+# line Merak→Dubhe extended, which is how anyone actually finds it — but at
+# 4.4x that step against the true ~5x. Drawn at the honest distance the pair
+# is a tall, thin group that no plate has room for; at 4.4 it fits and the
+# error is under a Plough-bowl. Direction true, distance a shade short: the
+# only liberty taken here.
+UMI_STARS = [
+    ("polaris", 0.000, 0.000, 1.98), ("yildun", -0.150, 0.112, 4.35),
+    ("eps", -0.318, 0.214, 4.21), ("zeta", -0.452, 0.336, 4.29),
+    ("eta", -0.396, 0.516, 4.95), ("pherkad", -0.598, 0.566, 3.05),
+    ("kochab", -0.652, 0.386, 2.08),
+]
+UMI_LINES = [("polaris", "yildun"), ("yildun", "eps"), ("eps", "zeta"),
+             ("zeta", "eta"), ("eta", "pherkad"), ("pherkad", "kochab"),
+             ("kochab", "zeta")]
+POINTER = 4.4  # Merak→Dubhe steps from Dubhe to Polaris
+
+
+def asterism(key, cx, cy, w, rot=0.0, line_op=0.11, only=None):
+    """The Plough and the Little Dipper, as one group, centred on (cx, cy).
+
+    `w` is the Plough's width in px — everything else follows from it, so a
+    plate only ever chooses how big and where. `rot` tilts the pair: the sky
+    turns through the night and six plates drawn at the same angle would read
+    as one stamp used six times.
+
+    The joining lines are deliberately faint (0.11). Louder and this becomes a
+    planetarium chart; absent and the asterism is just seven more dots. At
+    this weight it is the same technical hairline the cubes are drawn in,
+    which is the drawing language the rest of the plate already speaks.
+
+    `only="uma"` draws the Plough on its own. The pair is a tall shape — half
+    again as high as it is wide — and a plate whose horizon eats most of the
+    sky has nowhere to put it that is both above the ground and out from
+    under the scrim. The Plough alone is landscape, and fits that strip.
+    """
+    mrk = dict((n, (x, y)) for n, x, y, _ in UMA_STARS)
+    px, py = mrk["dubhe"]
+    dx, dy = px - mrk["merak"][0], py - mrk["merak"][1]
+    ox, oy = px + POINTER * dx, py + POINTER * dy   # where Polaris lands
+
+    pts, mags = {}, {}
+    for n, x, y, m in UMA_STARS:
+        pts["a_" + n], mags["a_" + n] = (x, y), m
+    lines = [("a_" + a, "a_" + b) for a, b in UMA_LINES]
+    if only != "uma":
+        for n, x, y, m in UMI_STARS:
+            pts["i_" + n], mags["i_" + n] = (ox + x, oy + y), m
+        lines += [("i_" + a, "i_" + b) for a, b in UMI_LINES]
+
+    xs = [p[0] for p in pts.values()]
+    ys = [p[1] for p in pts.values()]
+    mx, my = (min(xs) + max(xs)) / 2.0, (min(ys) + max(ys)) / 2.0
+    ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
+
+    def place(p):
+        x, y = (p[0] - mx) * w, (p[1] - my) * w
+        return cx + x * ca - y * sa, cy + x * sa + y * ca
+
+    at = dict((n, place(p)) for n, p in pts.items())
+    o = ['<defs><filter id="as%s" x="-300%%" y="-300%%" width="700%%" height="700%%">'
+         '<feGaussianBlur stdDeviation="3"></feGaussianBlur></filter></defs>' % key]
+    o.append('<g fill="none" stroke="#FFFFFF" stroke-opacity="%.2f" stroke-width="0.9">' % line_op)
+    for a, b in lines:
+        o.append('<path d="M%.1f %.1f L%.1f %.1f"></path>' % (at[a] + at[b]))
+    o.append('</g>')
+    for n, (x, y) in at.items():
+        m = mags[n]
+        r = max(1.1, min(3.6, 3.4 - 0.62 * (m - 1.7)))
+        op = max(0.55, min(1.0, 1.12 - 0.13 * (m - 1.7)))
+        if m < 2.5:  # the ones you can see from a city get a halo
+            o.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#fff" opacity="0.26" '
+                     'filter="url(#as%s)"></circle>' % (x, y, r * 2.4, key))
+        o.append('<circle cx="%.1f" cy="%.1f" r="%s" fill="#fff" fill-opacity="%.2f"></circle>'
+                 % (x, y, _r(r), op))
+    return "".join(o)
+
+
 def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=True):
     """The ground is DEEP SKY, not grey with specks in it (founder, 2026-08-27:
     "asegúrate de que se note que estamos en el cielo").
@@ -240,6 +339,7 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=T
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
     s = [sky("ec", 901, n=880, flares=17, hue=C),
+         asterism("ec", 1285, 262, 300, rot=-8),
          # The wall hangs OVER something. Cropped by two edges, so the curve
          # can only belong to something far larger than the frame.
          body("ec", 1318, 1004, 420, C, lit=(26, 16), rings=3),
@@ -285,6 +385,11 @@ def img_cdn():
     rng = random.Random(11); C = "#F38020"
     cx, cy, r = 1006, 466, 296
     s = [sky("cdn", 902, n=780, flares=14, hue=C),
+         # No asterism on this plate. The globe is the largest body of the
+         # six and its halo reaches the top-right corner, the only quarter
+         # the scrim leaves bright; anywhere else the dippers either cross
+         # that halo — stars in front of a lit atmosphere — or sit in the
+         # left third, where the scrim erases them. Better absent than wrong.
          # No second planet here — the subject already is one. A moon, off in
          # the empty quarter, for the depth two bodies give and one cannot.
          body("cdnm", 232, 690, 96, C, lit=(70, 30), rings=2, atmos=False),
@@ -316,6 +421,7 @@ def img_cdn():
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
     s = [sky("bd", 903, n=430, flares=9, hue=C),
+         asterism("bd", 1282, 396, 194, rot=14),
          body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
          '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
@@ -358,6 +464,7 @@ def img_int():
     rng = random.Random(53); C, CL = "#1D4E89", "#5B94DA"
     cx, cy, k = 760, 450, 2.35
     s = [sky("int", 904, n=720, flares=13, hue=CL),
+         asterism("int", 1268, 150, 220, rot=6, line_op=0.17),
          body("int", 1330, 872, 262, CL, lit=(30, 24), rings=3),
          '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
     wires = []
@@ -388,6 +495,10 @@ def img_gf():
     rng = random.Random(71); C, CL = "#3E7D50", "#5FBE7C"
     hz = 392
     s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12, hue=CL),
+         # The Plough alone, and low: the horizon at y=392 leaves this plate
+         # a third of the sky the others have, and the pair drawn whole only
+         # fits far enough left for the scrim to swallow it.
+         asterism("gf", 1288, 322, 248, rot=-6, only="uma"),
          # Above the horizon, never below it: a planet drawn over the plain
          # would be sitting ON the ground instead of hanging in the sky.
          body("gf", 1206, 126, 162, CL, lit=(32, 60), rings=3),
@@ -423,6 +534,7 @@ def img_ia():
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
     s = [sky("ia", 906, n=760, flares=14, hue=CL),
+         asterism("ia", 1250, 238, 268, rot=10),
          body("ia", 1352, 806, 288, CL, lit=(26, 22), rings=3),
          '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos

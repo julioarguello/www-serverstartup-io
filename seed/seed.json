@@ -453,7 +453,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Ingeniería de sistemas, integración y seguridad edge. Con tres ingenieros senior en el núcleo, desde Getxo y desde 2019."
+									"text": "Ingeniería de sistemas, integración y seguridad edge. Con ingenieros senior en el núcleo, desde Getxo y desde 2019."
 								}
 							]
 						}
@@ -1364,7 +1364,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "los mismos tres ingenieros, de principio a fin"
+									"text": "los mismos ingenieros, de principio a fin"
 								}
 							]
 						},
@@ -3298,7 +3298,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "the same three engineers, start to finish"
+									"text": "the same engineers, start to finish"
 								}
 							]
 						},
@@ -8031,7 +8031,7 @@
 								{
 									"_type": "span",
 									"_key": "k2l",
-									"text": "Quien diseña el sistema lo despliega y responde por su estabilidad. Los mismos tres ingenieros *senior*, del primer *commit* a la operación. No entregamos y desaparecemos. Acompañamos la transición y el conocimiento se queda en tu casa, no en la nuestra.",
+									"text": "Quien diseña el sistema lo despliega y responde por su estabilidad. Los mismos ingenieros *senior*, del primer *commit* a la operación. No entregamos y desaparecemos. Acompañamos la transición y el conocimiento se queda en tu casa, no en la nuestra.",
 									"marks": []
 								}
 							]
@@ -11533,7 +11533,7 @@
 								{
 									"_type": "span",
 									"_key": "k2l",
-									"text": "Whoever designs the system deploys it and answers for its stability. The same three senior engineers, from first *commit* to operations. We don't hand over and vanish. We walk the transition with you, and the knowledge stays in your house, not ours.",
+									"text": "Whoever designs the system deploys it and answers for its stability. The same senior engineers, from first *commit* to operations. We don't hand over and vanish. We walk the transition with you, and the knowledge stays in your house, not ours.",
 									"marks": []
 								}
 							]
@@ -12928,7 +12928,7 @@
 				"status": "published",
 				"data": {
 					"title": "Ingeniería de software: arquitectura, integración y operación",
-					"excerpt": "Partners oficiales de Cloudflare desde 2019. Siempre los mismos tres ingenieros senior: quien diseña tu arquitectura escribe el código. Un equipo. Seis verticales. Cero traspasos.",
+					"excerpt": "Partners oficiales de Cloudflare desde 2019. Siempre los mismos ingenieros senior: quien diseña tu arquitectura escribe el código. Un equipo. Seis verticales. Cero traspasos.",
 					"content": [
 						{
 							"_type": "block",
@@ -13025,7 +13025,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "tres ingenieros",
+									"text": "ingenieros",
 									"marks": [
 										"hk5"
 									]
@@ -13087,7 +13087,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "tres ingenieros",
+									"text": "ingenieros",
 									"marks": [
 										"wk1"
 									]
@@ -14176,7 +14176,7 @@
 				"translationOf": "page-home",
 				"data": {
 					"title": "Software engineering: architecture, integration and operations",
-					"excerpt": "Official Cloudflare partners since 2019. Always the same three senior engineers: whoever designs your architecture writes the code. One team. Six verticals. Zero handoffs.",
+					"excerpt": "Official Cloudflare partners since 2019. Always the same senior engineers: whoever designs your architecture writes the code. One team. Six verticals. Zero handoffs.",
 					"content": [
 						{
 							"_type": "block",
@@ -14273,7 +14273,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "three senior engineers",
+									"text": "senior engineers",
 									"marks": [
 										"hk5"
 									]
@@ -14324,7 +14324,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "three engineers",
+									"text": "engineers",
 									"marks": [
 										"wk1"
 									]

@@ -36,7 +36,7 @@ Our craft is quality and performance where they get expensive: critical processe
 This site is a small sample of the same discipline, applied to our own shop window. No version ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The threshold is written in the public repository, and so is every run of the check. See how it is built.
 The team
 No middlemen, no handovers.
-The same three engineers cover every layer: whoever designs, writes; whoever writes, operates.
+The same engineers cover every layer: whoever designs, writes; whoever writes, operates.
 Daniel Sío
 Engineer
 Ignacio Ibaseta

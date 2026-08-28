@@ -31,22 +31,36 @@ make the six read as space rather than as texture, and all three are in `generat
   drawn **before** the stars, so the field sits inside the cloud instead of on top of it.
 - **A band.** 34% of every star field falls along a galactic band with gaussian falloff and
   26% in clusters. A uniform scatter is the one distribution the real sky never has.
-- **Two constellations you already know.** The Plough and the Little Dipper, drawn to their
-  real relative magnitudes and joined by the same hairline the cubes are drawn in, tilted a
-  different amount on each plate — six fields at the same angle would read as one stamp used
-  six times. They are the reason the sky is *recognisably* a sky and not a particle effect.
+- **Two constellations you already know, on all six.** The Plough and the Little Dipper,
+  drawn to their real relative magnitudes and joined by the same hairline the cubes are drawn
+  in, tilted a different amount on each plate — six fields at the same angle would read as one
+  stamp used six times. They are the reason the sky is *recognisably* a sky and not a particle
+  effect, and they are the plates' one piece of argument: Polaris is the star you steer by,
+  the Plough is how anyone finds it, and a firm that says it guides its clients can put the
+  oldest instrument for being guided in the sky behind the claim. Nothing on the page names
+  them. An allegory that has to be captioned has already failed.
 
 **The body lives in the right half of the frame.** That is a composition rule, not a
 preference: the scrim darkens the left because the copy is there, so a world on the left is a
 world nobody sees — and on a phone, where the plate is cropped to `object-position: 72%`, it
 is cropped away entirely. `ec`, `int` and `bd` were drawn left first and moved.
 
-The same rule governs the constellations, and two plates pay for it. `gf` has a horizon at
-`y=392`, so a third of the sky the others have: it gets the Plough alone, which is landscape
-where the pair is portrait, low in the strip between its planet and the ground. `cdn` gets
-none at all — its globe is the largest body of the six and its halo fills the one quarter the
-scrim leaves bright, so the dippers could only be drawn in front of a lit atmosphere or in the
-dark left third. Absent beats wrong.
+**The constellations outrank the bodies.** An earlier pass had it the other way round and put
+the Plough alone on `gf` and nothing at all on `cdn`, because on those two the planet was
+already standing where the pair had to go. Wrong order of priorities: the body is decoration
+and the asterism is the argument, so on both plates the body moved. `cdn`'s globe went from
+296px to 250 and dropped 34px; `gf`'s planet went from 162 to 116 and now runs off the top
+edge, which reads as *larger*, not smaller — a limb leaving the frame can only belong to
+something too big to fit. `int` pays differently: its 96 crossing wires are drawn around a
+reserved corner (rejection-sampled, so the tangle keeps its weight everywhere else) and its
+pair is drawn *over* the tangle rather than under it, because on that plate the wires are a
+diagram laid on the picture and they already run across the planet.
+
+**Every group sits inside `y` 150–760**, and that is a hard constraint rather than a
+composition choice. The band is `min-height: 100svh` with `object-fit: cover`, so any viewport
+that is not 3:2 crops the plate top and bottom — 112px each at 1920×860, 100px at 1440×700.
+The groups used to sit as high as `cy=150`, which put Polaris in the strip a laptop throws
+away.
 
 ## Regenerating them
 
@@ -63,7 +77,7 @@ that shows them has `alt=""` and the vertical's name sits beside it as a real li
 the file would be locale-bound copy living outside the CMS, and it would announce the picture
 twice.
 
-All six together are ~67 KB gzipped (`bd` is the outlier at 28 KB — it is ~4,000 circles). That
+All six together are ~68 KB gzipped (`bd` is the outlier at 28 KB — it is ~4,000 circles). That
 measurement is what makes six plates and a pure-CSS cross-fade cheaper than the one stock
 photograph they replace, with no JavaScript involved.
 

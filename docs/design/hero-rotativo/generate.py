@@ -175,23 +175,44 @@ UMI_LINES = [("polaris", "yildun"), ("yildun", "eps"), ("eps", "zeta"),
 POINTER = 4.4  # Merak→Dubhe steps from Dubhe to Polaris
 
 
-def asterism(key, cx, cy, w, rot=0.0, line_op=0.11, only=None):
+def asterism(key, cx, cy, w, rot=0.0, line_op=0.24):
     """The Plough and the Little Dipper, as one group, centred on (cx, cy).
+
+    **Both bears and Polaris, on every plate.** Not a composition preference —
+    a brief (founder, 2026-08-28: "esas osa mayor, menor y la estrella esa que
+    siempre marca el norte tienen que verse siempre que se muestre uno de esos
+    banners"). An earlier pass drew the Plough alone on `gf` and nothing at
+    all on `cdn`, on the argument that neither plate had room. It had room; it
+    had a planet sitting in it. On both, the BODY moved and shrank, because
+    the body is decoration and this is the picture's argument.
+
+    That argument is the founder's too: "es una alegoría a que les guiamos".
+    Polaris is the star you steer by, and Ursa Major is how anyone finds it —
+    the pointer Merak→Dubhe, extended, is drawn here at its real angle. A
+    consultancy that says it guides its clients can put the oldest instrument
+    for being guided in the sky behind the claim, and say nothing about it.
+    Nothing on the page names the constellations. They either land or they do
+    not, which is the correct test for an allegory.
 
     `w` is the Plough's width in px — everything else follows from it, so a
     plate only ever chooses how big and where. `rot` tilts the pair: the sky
     turns through the night and six plates drawn at the same angle would read
     as one stamp used six times.
 
-    The joining lines are deliberately faint (0.11). Louder and this becomes a
-    planetarium chart; absent and the asterism is just seven more dots. At
-    this weight it is the same technical hairline the cubes are drawn in,
-    which is the drawing language the rest of the plate already speaks.
+    **Every group is drawn inside y 150-760, and that is not taste.** The band
+    is `min-height: 100svh` and the plate is `object-fit: cover`, so a viewport
+    shorter or wider than 3:2 crops the plate top and bottom: 1920x860 loses
+    112px off each edge, 1440x700 loses 100. The groups used to sit at cy 150
+    to 262, which put Polaris — the whole point of the exercise — in the strip
+    a laptop throws away. It is invisible in the one place it has to be seen.
+    Keep the extremes of the group inside 150-760 and every desktop crop keeps
+    the pair whole.
 
-    `only="uma"` draws the Plough on its own. The pair is a tall shape — half
-    again as high as it is wide — and a plate whose horizon eats most of the
-    sky has nowhere to put it that is both above the ground and out from
-    under the scrim. The Plough alone is landscape, and fits that strip.
+    The joining lines stay a HAIRLINE — 0.9px, the same weight the cubes are
+    drawn in ("con delgadas línea"). What changed is their opacity, 0.11 →
+    0.24: at 0.11 they measured as present and read as absent, which is the
+    one outcome that fails both briefs at once. A figure has to be joined to
+    be a figure. Louder than this and it is a planetarium chart.
     """
     mrk = dict((n, (x, y)) for n, x, y, _ in UMA_STARS)
     px, py = mrk["dubhe"]
@@ -202,10 +223,9 @@ def asterism(key, cx, cy, w, rot=0.0, line_op=0.11, only=None):
     for n, x, y, m in UMA_STARS:
         pts["a_" + n], mags["a_" + n] = (x, y), m
     lines = [("a_" + a, "a_" + b) for a, b in UMA_LINES]
-    if only != "uma":
-        for n, x, y, m in UMI_STARS:
-            pts["i_" + n], mags["i_" + n] = (ox + x, oy + y), m
-        lines += [("i_" + a, "i_" + b) for a, b in UMI_LINES]
+    for n, x, y, m in UMI_STARS:
+        pts["i_" + n], mags["i_" + n] = (ox + x, oy + y), m
+    lines += [("i_" + a, "i_" + b) for a, b in UMI_LINES]
 
     xs = [p[0] for p in pts.values()]
     ys = [p[1] for p in pts.values()]
@@ -223,6 +243,16 @@ def asterism(key, cx, cy, w, rot=0.0, line_op=0.11, only=None):
     for a, b in lines:
         o.append('<path d="M%.1f %.1f L%.1f %.1f"></path>' % (at[a] + at[b]))
     o.append('</g>')
+    # The north star, one step further out than its magnitude buys it. Not a
+    # marker and not a label — a second, wider breath of the same halo every
+    # bright star here already has, so the eye lands on it first without
+    # anything on the plate pointing at it. It is the one the whole group is
+    # for; drawn at 1.98 alone it is merely the fourth brightest thing in the
+    # corner, and the allegory rests on nobody having to hunt for it.
+    if "i_polaris" in at:
+        px_, py_ = at["i_polaris"]
+        o.append('<circle cx="%.1f" cy="%.1f" r="11" fill="#fff" opacity="0.13" '
+                 'filter="url(#as%s)"></circle>' % (px_, py_, key))
     for n, (x, y) in at.items():
         m = mags[n]
         r = max(1.1, min(3.6, 3.4 - 0.62 * (m - 1.7)))
@@ -339,7 +369,7 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=T
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
     s = [sky("ec", 901, n=880, flares=17, hue=C),
-         asterism("ec", 1285, 262, 300, rot=-8),
+         asterism("ec", 1285, 364, 284, rot=-8),
          # The wall hangs OVER something. Cropped by two edges, so the curve
          # can only belong to something far larger than the frame.
          body("ec", 1318, 1004, 420, C, lit=(26, 16), rings=3),
@@ -383,13 +413,15 @@ def img_ec():
 # 2 · CDN / EDGE — el cubo envuelve el mundo; el limbo es el borde
 def img_cdn():
     rng = random.Random(11); C = "#F38020"
-    cx, cy, r = 1006, 466, 296
+    # 296 at (1006, 466) until the bears became compulsory. The globe and the
+    # cube circumscribing it filled the one quarter the scrim leaves bright,
+    # so the plate was drawn without an asterism at all. Wrong call: the globe
+    # is 15% smaller and a little lower now, and it has lost nothing — it is
+    # still the largest body of the six by a wide margin, and the extra sky
+    # above its shoulder is what makes it read as hanging in something.
+    cx, cy, r = 940, 500, 250
     s = [sky("cdn", 902, n=780, flares=14, hue=C),
-         # No asterism on this plate. The globe is the largest body of the
-         # six and its halo reaches the top-right corner, the only quarter
-         # the scrim leaves bright; anywhere else the dippers either cross
-         # that halo — stars in front of a lit atmosphere — or sit in the
-         # left third, where the scrim erases them. Better absent than wrong.
+         asterism("cdn", 1328, 300, 186, rot=-4),
          # No second planet here — the subject already is one. A moon, off in
          # the empty quarter, for the depth two bodies give and one cannot.
          body("cdnm", 232, 690, 96, C, lit=(70, 30), rings=2, atmos=False),
@@ -405,7 +437,7 @@ def img_cdn():
     s.append('<circle cx="%d" cy="%d" r="%d" fill="none" stroke="%s" stroke-width="6" opacity="0.85" filter="url(#gcdn)"></circle>' % (cx, cy, r, C))
     s.append('<circle cx="%d" cy="%d" r="%d" fill="none" stroke="%s" stroke-width="2.2"></circle>' % (cx, cy, r, C))
     # el cubo, circunscrito: la coraza que envuelve el mundo
-    k = 4.06
+    k = 3.43   # the cube stays circumscribed: 4.06 * 250/296
     s.append(cube(cx, cy, k, stroke="#fff", op=0.30, w=1.6, hint=True))
     p = M(cx, cy, k)
     nodes = []
@@ -421,7 +453,7 @@ def img_cdn():
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
     s = [sky("bd", 903, n=430, flares=9, hue=C),
-         asterism("bd", 1282, 396, 194, rot=14),
+         asterism("bd", 1282, 400, 194, rot=14),
          body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
          '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
@@ -464,19 +496,51 @@ def img_int():
     rng = random.Random(53); C, CL = "#1D4E89", "#5B94DA"
     cx, cy, k = 760, 450, 2.35
     s = [sky("int", 904, n=720, flares=13, hue=CL),
-         asterism("int", 1268, 150, 220, rot=6, line_op=0.17),
          body("int", 1330, 872, 262, CL, lit=(30, 24), rings=3),
          '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
+    # The corner the tangle is not allowed into. 96 crossing beziers is the
+    # right density for "everything goes through the cube" and the wrong one
+    # for anything else to be read through it: drawn without this, the two
+    # bears landed in the busiest quarter of the busiest plate and dissolved.
+    # Rejection sampling rather than a smaller number of wires — the tangle
+    # keeps its weight everywhere it is the subject, and simply thins where
+    # the sky has something to say.
+    KEEP = (1136, 96, 1440, 500)   # x0, y0, x1, y1
+
+    def clear_of_keep(p0, c1, c2, p3):
+        for i in range(15):
+            t = i / 14.0
+            u = 1 - t
+            x = u * u * u * p0[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * p3[0]
+            y = u * u * u * p0[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * p3[1]
+            if KEEP[0] < x < KEEP[2] and KEEP[1] < y < KEEP[3]:
+                return False
+        return True
+
     wires = []
     for _ in range(96):
         y0 = rng.uniform(-60, 960); y1 = rng.uniform(-60, 960)
         wires.append('<path d="M-120 %.0f C%.0f %.0f %.0f %.0f %.0f %.0f" fill="none" stroke="#fff" stroke-opacity="%.2f" stroke-width="%.1f"></path>'
                      % (y0, rng.uniform(180, 620), rng.uniform(-140, 1040), rng.uniform(360, 700), cy + rng.gauss(0, 90),
                         cx, cy + rng.gauss(0, 40), rng.uniform(0.05, 0.22), rng.uniform(0.6, 1.2)))
-        wires.append('<path d="M%.0f %.0f C%.0f %.0f %.0f %.0f 1560 %.0f" fill="none" stroke="#fff" stroke-opacity="%.2f" stroke-width="%.1f"></path>'
-                     % (cx, cy + rng.gauss(0, 40), rng.uniform(820, 1160), cy + rng.gauss(0, 90),
-                        rng.uniform(1100, 1400), rng.uniform(-140, 1040), y1, rng.uniform(0.05, 0.22), rng.uniform(0.6, 1.2)))
+        # the outbound half, redrawn until it misses the reserved corner
+        for _try in range(8):
+            p0 = (cx, cy + rng.gauss(0, 40))
+            c1 = (rng.uniform(820, 1160), cy + rng.gauss(0, 90))
+            c2 = (rng.uniform(1100, 1400), rng.uniform(-140, 1040))
+            p3 = (1560, y1)
+            if clear_of_keep(p0, c1, c2, p3):
+                wires.append('<path d="M%.0f %.0f C%.0f %.0f %.0f %.0f %.0f %.0f" fill="none" stroke="#fff" stroke-opacity="%.2f" stroke-width="%.1f"></path>'
+                             % (p0 + c1 + c2 + p3 + (rng.uniform(0.05, 0.22), rng.uniform(0.6, 1.2))))
+                break
     s.append("".join(wires))
+    # The one plate that draws its asterism ABOVE the subject rather than
+    # behind it. 96 bezier wires cross the whole frame here, and under them
+    # the pair was a rumour — legible in the file, invisible on the page.
+    # There is no depth argument against it either: the wires already run
+    # over the planet at bottom right, so on this plate they are a diagram
+    # laid on the picture, not objects in the sky.
+    s.append(asterism("int", 1276, 300, 200, rot=6))
     # el cubo: el punto por el que pasa todo
     s.append('<polygon points="%s" fill="#171717" opacity="0.92"></polygon>'
              % " ".join("%.1f,%.1f" % M(cx, cy, k)(*v) for v in VERTS))
@@ -495,13 +559,17 @@ def img_gf():
     rng = random.Random(71); C, CL = "#3E7D50", "#5FBE7C"
     hz = 392
     s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12, hue=CL),
-         # The Plough alone, and low: the horizon at y=392 leaves this plate
-         # a third of the sky the others have, and the pair drawn whole only
-         # fits far enough left for the scrim to swallow it.
-         asterism("gf", 1288, 322, 248, rot=-6, only="uma"),
+         # The pair whole, in the tallest slice of sky this plate has. The
+         # horizon at y=392 leaves it a third of the sky the others get, so
+         # the group is the smallest of the six and the planet gives way.
+         asterism("gf", 1284, 266, 166, rot=-6),
          # Above the horizon, never below it: a planet drawn over the plain
-         # would be sitting ON the ground instead of hanging in the sky.
-         body("gf", 1206, 126, 162, CL, lit=(32, 60), rings=3),
+         # would be sitting ON the ground instead of hanging in the sky. It
+         # used to be 162px at (1206, 126), which is exactly where the bears
+         # had to go; now it is smaller and runs off the top edge instead —
+         # a limb leaving the frame reads as bigger than a disc inside it,
+         # so the plate arguably gained a planet by losing 50px of one.
+         body("gf", 1078, 78, 116, CL, lit=(32, 60), rings=3),
          '<defs>%s%s</defs>' % (glow("ggf", 18), glow("ggf2", 56))]
     lines = []
     vx = 700
@@ -513,7 +581,17 @@ def img_gf():
         lines.append('<path d="M-40 %.0f H1480" fill="none" stroke="#fff" stroke-opacity="%.2f" stroke-width="1"></path>' % (y, 0.05 + 0.13 * t))
     s.append("".join(lines))
     s.append('<path d="M-40 %d H1480" fill="none" stroke="#fff" stroke-opacity="0.30" stroke-width="1"></path>' % hz)
-    s.append('<rect x="0" y="%d" width="1440" height="120" fill="#171717" opacity="0.5"></rect>' % (hz - 120))
+    # Haze at the horizon, as a GRADIENT and not the flat 120px band this was.
+    # A flat band draws its own hard edge straight across the frame at
+    # y=hz-120 — a line the eye reads as a second horizon — and it took a
+    # fixed 50% off everything in it, which on this plate is where the Plough
+    # has to sit. A ramp does the job the band was for (air thickens toward
+    # the ground; stars dim into it) and does it the way the sky does.
+    s.append('<defs><linearGradient id="ghz" x1="0" y1="0" x2="0" y2="1">'
+             '<stop offset="0%%" stop-color="#171717" stop-opacity="0"></stop>'
+             '<stop offset="100%%" stop-color="#171717" stop-opacity="0.62"></stop>'
+             '</linearGradient></defs>'
+             '<rect x="0" y="%d" width="1440" height="164" fill="url(#ghz)"></rect>' % (hz - 164))
     # el cubo por levantar: silueta en discontinuo, y la primera pieza puesta
     cx, cy, k = 980, 560, 2.1
     s.append(cube(cx, cy, k, stroke="#fff", op=0.34, w=1.5, hint=True, dash="10 9"))
@@ -534,7 +612,7 @@ def img_ia():
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
     s = [sky("ia", 906, n=760, flares=14, hue=CL),
-         asterism("ia", 1250, 238, 268, rot=10),
+         asterism("ia", 1246, 330, 250, rot=10),
          body("ia", 1352, 806, 288, CL, lit=(26, 22), rings=3),
          '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos

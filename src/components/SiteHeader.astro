@@ -449,11 +449,42 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   absent from tablet up, where the header line already exists. */
 	.search-form--menu {
 		display: block;
-		border: 1px solid var(--color-border);
+		border: 1px solid var(--color-console-line);
 		border-radius: var(--radius);
 		margin-bottom: var(--space-3);
+		/* #338 made this console LIGHT, and on a white bar that was right: a
+		   dark strip under it was a hole in the page. The menu went dark in
+		   #417 and the argument inverts with the ground — a light console in
+		   a dark panel is a lit strip, and #304 already says the near-black
+		   is the machine's voice. So the DECISION is unchanged (the console
+		   is the inverse of what it sits on); only the panel moved.
+		   Nothing here escapes .search-form--menu, and that class only
+		   exists below 768px, so the header's own console is untouched. */
+		background: var(--color-console);
+		color: var(--color-console-ink);
 	}
 	.search-form--menu .search-line { padding: 12px 14px; }
+	.search-form--menu .search-chrome,
+	.search-form--menu .search-hint,
+	.search-form--menu .search-mag { color: var(--color-console-ink); }
+	.search-form--menu .search-hint { color: var(--color-console-dim); }
+	.search-form--menu .search-hint kbd {
+		border-color: var(--color-console-line);
+		background: var(--color-console-bar);
+		color: var(--color-console-ink);
+	}
+	/* the slot is a tint of paper, not of the accent: the green prompt glyph
+	   is the console's colour signal and a green wash under the argument
+	   would be the same signal said twice, dimmer */
+	.search-form--menu .search-slot {
+		background: var(--color-console-line);
+		border-bottom-color: var(--color-console-dim);
+	}
+	.search-form--menu .search-slot:focus-within {
+		border-bottom-color: var(--color-console-ok);
+	}
+	.search-form--menu .search-input { color: var(--color-secondary); }
+	.search-form--menu .search-input::placeholder { color: var(--color-console-dim); }
 	@media (min-width: 768px) {
 		.search-form--menu { display: none; }
 	}

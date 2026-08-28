@@ -600,6 +600,78 @@
 			"widgets": [
 				{
 					"type": "content",
+					"title": "menu_short",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "E-commerce"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Integración"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Big data"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "CDN y WAF"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Greenfield"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "IA"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
 					"title": "mantra",
 					"content": [
 						{
@@ -2132,6 +2204,17 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "menu_kicker",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Seis verticales"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "close_menu",
 							"children": [
 								{
@@ -2532,6 +2615,78 @@
 			"label": "UI Labels (English)",
 			"description": "English UI micro-copy — footer headings, error page, search, aria-labels",
 			"widgets": [
+				{
+					"type": "content",
+					"title": "menu_short",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "E-commerce"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Integration"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Big data"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "CDN & WAF"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Greenfield"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "AI"
+								}
+							]
+						}
+					]
+				},
 				{
 					"type": "content",
 					"title": "mantra",
@@ -4060,6 +4215,17 @@
 								{
 									"_type": "span",
 									"text": "Tap the die"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "menu_kicker",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Six specialties"
 								}
 							]
 						},

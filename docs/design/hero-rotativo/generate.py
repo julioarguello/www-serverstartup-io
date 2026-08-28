@@ -358,6 +358,36 @@ IMAGES = {
 }
 SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d">%%s</svg>' % (W, H, W, H)
 
+def menu_ground():
+    """The ground for the menu panel (#417).
+
+    The menu went dark so it would stop reading as a different website, and
+    the thing that ties it to the home is not the colour — the home's dark is
+    everywhere now — it is the DRAWING. So the panel gets the same sky the six
+    plates are built on and the same wire cubes, drawn by the same functions,
+    and nothing is copied by hand into a stylesheet.
+
+    Two departures from a hero plate, both because a menu is read, not looked
+    at: no subject (there is nothing here to be about), and the cubes fade out
+    toward the left, where the six specialty links sit. A texture that runs
+    under 32px type at full strength is a texture that wins.
+    """
+    rng = random.Random(910)
+    out = [sky("menu", 907, n=420, flares=8)]
+    for row in range(5):
+        for col in range(8):
+            cx = 92 + col * 184 + rng.uniform(-26, 26)
+            cy = 96 + row * 182 + rng.uniform(-24, 24)
+            # quiet on the reading side, present on the right
+            side = min(1.0, max(0.30, cx / W))
+            op = 0.13 * side * rng.uniform(0.75, 1.2)
+            if op < 0.035:
+                continue
+            out.append(cube(cx, cy, 0.30 * rng.uniform(0.85, 1.15), op=op, w=1.2, hint=False))
+    return "".join(out)
+
+
+
 if __name__ == "__main__":
     import os
     here = os.path.dirname(os.path.abspath(__file__))
@@ -375,3 +405,11 @@ if __name__ == "__main__":
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(SVG % v[4])
         print("%-4s %4d KB  %s" % (k, os.path.getsize(path) // 1024, path))
+
+    # …and the menu panel's ground, same vocabulary, no subject (#417)
+    mout = os.path.normpath(os.path.join(here, "..", "..", "..", "public", "assets", "menu"))
+    os.makedirs(mout, exist_ok=True)
+    mpath = os.path.join(mout, "ground.svg")
+    with open(mpath, "w", encoding="utf-8") as fh:
+        fh.write(SVG % menu_ground())
+    print("%-4s %4d KB  %s" % ("menu", os.path.getsize(mpath) // 1024, mpath))

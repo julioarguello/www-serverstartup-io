@@ -18,6 +18,25 @@ would swap a distinctive identity for a generic one. The ground is `--color-prim
 ink, deliberately **not** the console's near-black, because #304 gave black to the machine
 voice and a picture band that borrowed it would take the consoles' meaning away.
 
+## The sky, and where the world goes
+
+A black rectangle with white specks is a photograph of a night sky, not a place. Three things
+make the six read as space rather than as texture, and all three are in `generate.py`:
+
+- **A body.** Every plate carries a world — usually a limb running off the edge, because a
+  curve that leaves the frame can only be something enormous. It occludes the stars behind
+  it, which is what turns a flat field into a volume. `cdn` gets a small moon instead: its
+  subject already *is* a planet, and a second world would have argued with the first.
+- **Cloud, not dust.** Three soft lobes — two in the vertical's own hue, one cold neutral —
+  drawn **before** the stars, so the field sits inside the cloud instead of on top of it.
+- **A band.** 34% of every star field falls along a galactic band with gaussian falloff and
+  26% in clusters. A uniform scatter is the one distribution the real sky never has.
+
+**The body lives in the right half of the frame.** That is a composition rule, not a
+preference: the scrim darkens the left because the copy is there, so a world on the left is a
+world nobody sees — and on a phone, where the plate is cropped to `object-position: 72%`, it
+is cropped away entirely. `ec`, `int` and `bd` were drawn left first and moved.
+
 ## Regenerating them
 
 ```sh
@@ -33,7 +52,7 @@ that shows them has `alt=""` and the vertical's name sits beside it as a real li
 the file would be locale-bound copy living outside the CMS, and it would announce the picture
 twice.
 
-All six together are ~46 KB gzipped (`bd` is the outlier at 23 KB — it is ~4,000 circles). That
+All six together are ~63 KB gzipped (`bd` is the outlier at 26 KB — it is ~4,000 circles). That
 measurement is what makes six plates and a pure-CSS cross-fade cheaper than the one stock
 photograph they replace, with no JavaScript involved.
 
@@ -46,6 +65,7 @@ photograph they replace, with no JavaScript involved.
 | The vertical page's still plate | [`src/pages/[slug].astro`](../../../src/pages/%5Bslug%5D.astro), [`src/styles/service.css`](../../../src/styles/service.css) |
 | The bar over the picture | [`src/components/SiteHeader.astro`](../../../src/components/SiteHeader.astro) |
 | Scrim, ink and clock tokens | [`src/styles/theme.css`](../../../src/styles/theme.css) |
+| The gate that measures ink over the plates | [`scripts/ci-check-a11y.mjs`](../../../scripts/ci-check-a11y.mjs) §5 |
 
 ## Previews
 

@@ -50,7 +50,93 @@ def _r(v):
     t = "%.1f" % v
     return t[:-2] if t.endswith(".0") else t
 
-def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True):
+def nebula(key, rng, hue, lo, hi):
+    """Cloud, not dust.
+
+    The first version washed the frame with white at 0.06 opacity, which is
+    below the threshold at which anything reads as anything: the founder saw
+    "un fondo negro con puntitos blancos", and he was describing the file
+    accurately. A star field alone does not say space — every dark page with
+    specks on it looks like this. What says space is CLOUD: coloured, uneven,
+    with lobes that overlap and edges you cannot find.
+
+    Three lobes, two in the vertical's own hue and one cold neutral, at
+    opacities you can actually see (0.10-0.20). They go down before the stars,
+    so the field sits inside the cloud instead of on top of it.
+    """
+    o = ['<defs>']
+    lobes = []
+    for i, (col, op, rx, ry) in enumerate((
+            (hue, 0.20, 760, 300),
+            (hue, 0.12, 520, 380),
+            ("#8FA6C8", 0.10, 640, 260))):
+        o.append('<radialGradient id="nb%s%d">'
+                 '<stop offset="0%%" stop-color="%s" stop-opacity="%.2f"></stop>'
+                 '<stop offset="55%%" stop-color="%s" stop-opacity="%.2f"></stop>'
+                 '<stop offset="100%%" stop-color="%s" stop-opacity="0"></stop>'
+                 '</radialGradient>' % (key, i, col, op, col, op * 0.42, col))
+        cx = rng.uniform(0.12, 0.88) * W
+        cy = lo + rng.uniform(0.15, 0.85) * (hi - lo)
+        lobes.append((i, cx, cy, rx * rng.uniform(0.8, 1.15),
+                      min(ry, max(90, (hi - lo) * 0.55)) * rng.uniform(0.8, 1.15),
+                      rng.uniform(-40, 40)))
+    o.append('</defs>')
+    for i, cx, cy, rx, ry, rot in lobes:
+        o.append('<ellipse cx="%.0f" cy="%.0f" rx="%.0f" ry="%.0f" fill="url(#nb%s%d)" '
+                 'transform="rotate(%.0f %.0f %.0f)"></ellipse>'
+                 % (cx, cy, rx, ry, key, i, rot, cx, cy))
+    return "".join(o)
+
+
+def body(key, cx, cy, r, hue, lit=(28, 24), rings=3, atmos=True):
+    """A world in the frame.
+
+    This is the single thing that separates the one plate that reads as space
+    from the five that do not. `cdn` has a planet as its subject and nobody
+    has to be told what they are looking at; the other five are diagrams on a
+    speckled ground, and no number of stars fixes that. A body gives the two
+    things a star field cannot: MASS, because it occludes the stars behind it,
+    and SCALE, because a curve that runs off the edge of the frame can only be
+    something enormous.
+
+    Drawn as: the dark mass, a lit limb from `lit` (the direction the light
+    comes from, in percent), a few surface bands clipped to the sphere, and a
+    thin atmosphere outside the edge. All of it stays dark — this is the
+    BACKGROUND of a plate whose subject is the cube, and a bright planet would
+    take the picture over.
+    """
+    lx, ly = lit
+    o = ['<defs><radialGradient id="bd%s" cx="%d%%" cy="%d%%" r="76%%">'
+         '<stop offset="0%%" stop-color="%s" stop-opacity="0.42"></stop>'
+         '<stop offset="38%%" stop-color="%s" stop-opacity="0.13"></stop>'
+         '<stop offset="100%%" stop-color="%s" stop-opacity="0"></stop>'
+         '</radialGradient>'
+         '<clipPath id="bc%s"><circle cx="%.0f" cy="%.0f" r="%.0f"></circle></clipPath>'
+         '<filter id="ba%s" x="-40%%" y="-40%%" width="180%%" height="180%%">'
+         '<feGaussianBlur stdDeviation="9"></feGaussianBlur></filter></defs>'
+         % (key, lx, ly, hue, hue, hue, key, cx, cy, r, key)]
+    if atmos:
+        o.append('<circle cx="%.0f" cy="%.0f" r="%.0f" fill="none" stroke="%s" '
+                 'stroke-opacity="0.30" stroke-width="7" filter="url(#ba%s)"></circle>'
+                 % (cx, cy, r + 3, hue, key))
+    # the mass. #0A0B0C, not the ground: a body has to be DARKER than the sky
+    # it hangs in, or it is a hole rather than a planet.
+    o.append('<circle cx="%.0f" cy="%.0f" r="%.0f" fill="#0A0B0C"></circle>' % (cx, cy, r))
+    o.append('<circle cx="%.0f" cy="%.0f" r="%.0f" fill="url(#bd%s)"></circle>' % (cx, cy, r, key))
+    if rings:
+        o.append('<g clip-path="url(#bc%s)" fill="none" stroke="%s" stroke-opacity="0.10">' % (key, hue))
+        for i in range(rings):
+            f = -0.55 + 1.10 * (i + 0.5) / rings
+            o.append('<ellipse cx="%.0f" cy="%.0f" rx="%.0f" ry="%.0f" stroke-width="1.2"></ellipse>'
+                     % (cx, cy + f * r, r * 0.99, r * 0.30 * (1 - abs(f) * 0.5)))
+        o.append('</g>')
+    # the limb: the lit edge, brightest on the side the light is on
+    o.append('<circle cx="%.0f" cy="%.0f" r="%.0f" fill="none" stroke="%s" '
+             'stroke-opacity="0.55" stroke-width="1.6"></circle>' % (cx, cy, r, hue))
+    return "".join(o)
+
+
+def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=True):
     """The ground is DEEP SKY, not grey with specks in it (founder, 2026-08-27:
     "asegúrate de que se note que estamos en el cielo").
 
@@ -93,20 +179,25 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True):
          % (key, key, key, key, key)]
     o.append('<rect x="0" y="0" width="%d" height="%d" fill="url(#vig%s)"></rect>' % (W, H, key))
     if dust:
-        for fx, fy, rx, ry, rot in ((0.68, 0.32, 940, 220, -24), (0.28, 0.72, 780, 180, -17)):
-            cxd, cyd = int(fx * W), int(lo + fy * span)
-            o.append('<ellipse cx="%d" cy="%d" rx="%d" ry="%d" fill="url(#dust%s)" '
-                     'transform="rotate(%d %d %d)"></ellipse>'
-                     % (cxd, cyd, rx, min(ry, max(70, int(span * 0.30))), key, rot, cxd, cyd))
+        o.append(nebula(key, rng, hue, lo, hi))
 
     # A real sky clumps. Roughly a quarter of the field falls near one of five
     # loose centres; the rest is scattered.
     cl = [(rng.uniform(0, W), rng.uniform(lo, hi), rng.uniform(90, 250)) for _ in range(5)]
+    # A galactic band. A field of uniform density reads as wallpaper however
+    # well the magnitudes are graded — the sky you actually remember has a
+    # river of stars across it and empty quarters either side. A third of the
+    # field falls within a soft distance of one diagonal.
+    ba, bb = rng.uniform(-0.55, -0.20), lo + rng.uniform(0.25, 0.75) * span
     field = []
     for _ in range(n):
-        if rng.random() < 0.26:
+        u0 = rng.random()
+        if u0 < 0.26:
             ccx, ccy, cr = cl[rng.randrange(len(cl))]
             x, y = ccx + rng.gauss(0, cr), ccy + rng.gauss(0, cr * 0.7)
+        elif band and u0 < 0.60:
+            x = rng.uniform(-8, W + 8)
+            y = ba * x + bb + rng.gauss(0, span * 0.11)
         else:
             x, y = rng.uniform(-8, W + 8), rng.uniform(lo, hi)
         if not (-6 <= x <= W + 6 and lo - 6 <= y <= hi + 6):
@@ -148,13 +239,16 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True):
 # 1 · COMERCIO ELECTRÓNICO — un muro de cubos, uno encendido
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
-    s = [sky("ec", 901, n=880, flares=17),
+    s = [sky("ec", 901, n=880, flares=17, hue=C),
+         # The wall hangs OVER something. Cropped by two edges, so the curve
+         # can only belong to something far larger than the frame.
+         body("ec", 1318, 1004, 420, C, lit=(26, 16), rings=3),
          '<defs>%s%s</defs>' % (glow("gec", 18), glow("gec2", 60))]
     cols, rows = 15, 9
     cw, ch = 1440.0 / cols, 900.0 / rows
     k = (cw * 0.60) / 172.0
     HC, HR = 10, 3
-    body, hero = [], None
+    wall, hero = [], None
     for r in range(rows):
         for c in range(cols):
             cx = c * cw + cw / 2 + (ch * 0.0)
@@ -176,8 +270,8 @@ def img_ec():
             op = 0.46 * math.exp(-1.45 * d) * vf * rng.uniform(0.75, 1.25)
             if op < 0.030:
                 continue
-            body.append(cube(cx, cy, k, op=op, w=1.1, hint=False))
-    s.append("".join(body))
+            wall.append(cube(cx, cy, k, op=op, w=1.1, hint=False))
+    s.append("".join(wall))
     hx, hy = hero
     s.append('<g filter="url(#gec2)" opacity="0.55">%s</g>' % cube_solid(hx, hy, k * 1.06, C))
     s.append('<g filter="url(#gec)">%s</g>' % cube_solid(hx, hy, k, C))
@@ -190,7 +284,11 @@ def img_ec():
 def img_cdn():
     rng = random.Random(11); C = "#F38020"
     cx, cy, r = 1006, 466, 296
-    s = [sky("cdn", 902, n=780, flares=14), '<defs>%s%s' % (glow("gcdn", 26), glow("gcdn2", 62))]
+    s = [sky("cdn", 902, n=780, flares=14, hue=C),
+         # No second planet here — the subject already is one. A moon, off in
+         # the empty quarter, for the depth two bodies give and one cannot.
+         body("cdnm", 232, 690, 96, C, lit=(70, 30), rings=2, atmos=False),
+         '<defs>%s%s' % (glow("gcdn", 26), glow("gcdn2", 62))]
     s.append('<clipPath id="pcdn"><circle cx="%d" cy="%d" r="%d"></circle></clipPath></defs>' % (cx, cy, r))
     s.append('<circle cx="%d" cy="%d" r="%d" fill="#131313"></circle>' % (cx, cy, r))
     mesh = []
@@ -217,7 +315,9 @@ def img_cdn():
 # 3 · BIG DATA — el cubo emerge de la nube de puntos
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
-    s = [sky("bd", 903, n=430, flares=9), '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
+    s = [sky("bd", 903, n=430, flares=9, hue=C),
+         body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
+         '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
     p = M(cx, cy, k)
     pts = []
@@ -257,7 +357,9 @@ def img_bd():
 def img_int():
     rng = random.Random(53); C, CL = "#1D4E89", "#5B94DA"
     cx, cy, k = 760, 450, 2.35
-    s = [sky("int", 904, n=720, flares=13), '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
+    s = [sky("int", 904, n=720, flares=13, hue=CL),
+         body("int", 1330, 872, 262, CL, lit=(30, 24), rings=3),
+         '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
     wires = []
     for _ in range(96):
         y0 = rng.uniform(-60, 960); y1 = rng.uniform(-60, 960)
@@ -285,7 +387,10 @@ def img_int():
 def img_gf():
     rng = random.Random(71); C, CL = "#3E7D50", "#5FBE7C"
     hz = 392
-    s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12),
+    s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12, hue=CL),
+         # Above the horizon, never below it: a planet drawn over the plain
+         # would be sitting ON the ground instead of hanging in the sky.
+         body("gf", 1206, 126, 162, CL, lit=(32, 60), rings=3),
          '<defs>%s%s</defs>' % (glow("ggf", 18), glow("ggf2", 56))]
     lines = []
     vx = 700
@@ -317,7 +422,9 @@ def img_ia():
     rng = random.Random(97); C, CL = "#6B4FBB", "#9A7BEE"
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
-    s = [sky("ia", 906, n=760, flares=14), '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
+    s = [sky("ia", 906, n=760, flares=14, hue=CL),
+         body("ia", 1352, 806, 288, CL, lit=(26, 22), rings=3),
+         '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos
     grid = []
     for u in (14, 57, 100, 143, 186):

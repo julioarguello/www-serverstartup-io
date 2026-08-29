@@ -13,124 +13,108 @@ changes is what each trade does to it.
 | `gf` | Desarrollo greenfield | `#3E7D50` | Being built on an empty plane; exactly one voxel is placed |
 | `ia` | Inteligencia artificial | `#6B4FBB` | Lit from the inside, vertex to vertex |
 
-Drawn, not photographed: the repo has no photography beyond three team snapshots, and stock
-would swap a distinctive identity for a generic one. The ground is `--color-primary` — brand
-ink, deliberately **not** the console's near-black, because #304 gave black to the machine
-voice and a picture band that borrowed it would take the consoles' meaning away.
+**The drawing is the subject; the photograph is the room.** Each plate is two files — a
+transparent SVG drawing and, under it, a real NASA frame. Stock photography would have swapped
+a distinctive identity for a generic one, and it still would; what a NASA image gives instead
+is a ground no competitor can buy and nobody has to license.
 
-## The sky, and where the world goes
+## The ground is a photograph now
 
-A black rectangle with white specks is a photograph of a night sky, not a place. Three things
-make the six read as space rather than as texture, and all three are in `generate.py`:
+The six used to invent their own sky: a vignette, three cloud lobes, seven hundred drawn stars
+and a dozen diffraction flares per plate. The founder killed it twice — first as *"un fondo
+negro con puntitos blancos"*, and then, when a real star catalogue replaced the invented one,
+as *"lo veo muy aburrido, a la mierda… me parece bien que haya una base real, real real, es
+decir con una imagen de la NASA y NO generada por computador"*. He was right both times: a
+drawing of a sky under a drawing is two drawings, and the second one always loses.
 
-- **A body.** Every plate carries a world — usually a limb running off the edge, because a
-  curve that leaves the frame can only be something enormous. It occludes the stars behind
-  it, which is what turns a flat field into a volume. `cdn` gets a small moon instead: its
-  subject already *is* a planet, and a second world would have argued with the first.
-- **Cloud, not dust.** Three soft lobes — two in the vertical's own hue, one cold neutral —
-  drawn **before** the stars, so the field sits inside the cloud instead of on top of it.
-- **A band.** 34% of every star field falls along a galactic band with gaussian falloff and
-  26% in clusters. A uniform scatter is the one distribution the real sky never has.
+So `sky()` now returns nothing but its defs, and under each plate sits a photograph from
+NASA's public archive, prepared by [`grounds.py`](grounds.py). Three rules chose them:
+
+- **Source colour, not tint.** Each vertical's photograph was picked because it already IS
+  roughly that colour in the archive — the mean hue of every pixel, weighted by saturation,
+  measured against the vertical's own token, not eyeballed. The tint at the end is a nudge of
+  14-20%, not a duotone: a duotone would have made the source irrelevant, and the whole point
+  of a NASA frame is that it is real. The founder's words: *"que la imagen original no sólo sea
+  del color objetivo"*.
+- **Room for the drawing.** *"Que el dibujito pudiera encajarle para ponerse ENCIMA del real."*
+  Every plate puts its cube in the right-centre of the frame, so every crop pushes the
+  photograph's own subject — the Helix ring, the Rosette, the Crab — into the LEFT, where the
+  scrim eats it anyway, and leaves the right-centre as quiet field. The crop windows in
+  `GROUNDS` are that arithmetic, not taste.
+- **Pushed back, hard.** *"Tendrás que quitarles peso mediante capas que difuminen."* Blurred,
+  darkened and desaturated at BUILD time, never in CSS — a `filter: blur()` on a full-bleed
+  element is a composite the GPU pays for on every frame of the cross-fade. And a defocused sky
+  is the one image a JPEG can almost not encode: **the six grounds together are 58 KB**, less
+  than the six drawings that sit on them. The visual decision and the performance decision
+  turned out to be the same decision.
+
+| Face | Photograph | Credit |
+| --- | --- | --- |
+| `ec` | Helix Nebula (NGC 7293) | NASA/JPL-Caltech/Univ. of Arizona |
+| `int` | Mystic Mountain, Carina Nebula | NASA, ESA, M. Livio and the Hubble 20th Anniversary Team (STScI) |
+| `bd` | Rosette Nebula | NASA/JPL-Caltech/Univ. of Arizona |
+| `cdn` | Cosmic Cliffs, NGC 3324 | NASA, ESA, CSA, STScI |
+| `gf` | Aurora over Earth's limb, ISS Expedition 3 | NASA |
+| `ia` | Crab Nebula (M1) | NASA, ESA, J. Hester and A. Loll (Arizona State University) |
+
+**Green is the one honest problem.** Deep sky has no green: the eye's response and the filters
+observatories map to RGB conspire against it, and there is not one green nebula in the archive.
+The only real green NASA photographs of space are auroras seen from the ISS, so `gf` is an
+aurora crowning the Earth's limb with the star field above it — a photograph taken in space, of
+space, green because the sky was green that night. It also happens to be the right picture: the
+plate draws an empty plane with the first voxel placed on it, and a limb is what an empty plane
+looks like from orbit.
+
+**The drawing keeps its own bed.** A 1.4px stroke at 0.3 opacity reads over brand ink and
+disappears over the Rosette, so each plate lays a soft out-of-focus ellipse of `#1E1E1E` under
+its own subject before drawing it (`bed()` in `generate.py`). The photograph stays a photograph
+at the edges of the frame and gives way exactly where the drawing has to be read — the same job
+the scrim does for the headline, done for the picture. It is what lets the grounds stay as
+bright and as coloured as they are.
+
+**Licensing.** NASA imagery is public domain and free for commercial use. The conditions are
+attribution — the table above — and no implied endorsement, which is why the credits belong in
+the colophon and never beside a claim about the company.
+
+## The subject still lives in the right half
 
 **The body lives in the right half of the frame.** That is a composition rule, not a
 preference: the scrim darkens the left because the copy is there, so a world on the left is a
 world nobody sees — and on a phone, where the plate is cropped to `object-position: 72%`, it
 is cropped away entirely. `ec`, `int` and `bd` were drawn left first and moved.
 
-**Every subject sits inside `y` 150–760**, and that is a hard constraint rather than a
+**Every subject sits inside `y` 150-760**, and that is a hard constraint rather than a
 composition choice. The band is `min-height: 100svh` with `object-fit: cover`, so any viewport
-that is not 3:2 crops the plate top and bottom — 112px each at 1920×860, 100px at 1440×700.
-
-## The shared sky
-
-The constellations are **not** in the six plates. They are one file,
-`constellations.svg`, drawn once and placed identically on the home carousel and on every
-vertical page — the founder's brief, and the correct one: *"digamos que es un fondo común"*.
-Six plates that each tilted a pair differently made the pair part of the picture; one layer
-that never moves while the pictures turn makes it the fixed point the pictures move against,
-which is what a pole star is for.
-
-It is also the **whole circumpolar sky**, not two asterisms, and that was the second half of
-the same correction: *"lo que no quiero es que sean silos inconexos. Busca cómo es el
-universo, toma como referencia ese mapa, y construye ese fondo común de forma fiel a la
-realidad."* Two figures alone on ink are two icons floating in a void, and nobody navigates
-by an icon.
-
-**The source is a catalogue, not a drawing.** [`bsc5-north.tsv`](bsc5-north.tsv) is the Yale
-Bright Star Catalogue, 5th Revised Edition (Hoffleit & Warren, 1991, public domain), filtered
-to every star north of Dec +25° down to magnitude 6.0 — the naked-eye limit on a good night.
-**1,449 stars**, at their J2000 positions, with their real magnitudes. `generate.py` puts them
-through a stereographic projection tangent to the north celestial pole, which is what every
-planisphere uses: conformal, so every figure keeps its true shape, with the pole dead centre.
-Size and opacity come off one magnitude ramp, so a third-magnitude star is dimmer than a
-second-magnitude one here for the same reason it is dimmer in the sky.
-
-Five traditional figures are joined: **Ursa Major**, **Ursa Minor**, **Draco**, **Cepheus** and
-**Cassiopeia**. Draco is not decoration — it is the answer to "inconexos". The dragon winds
-physically between the two bears, from its tail beside the Plough's bowl to its head past the
-Little Dipper, and drawing it is what turns two figures into one continuous sky. Cepheus and
-Cassiopeia come round the far side of the pole because that is where they are. Everything
-between them is the real field.
-
-The figures are the brightest members of that field, joined — not a layer of ornament laid
-over a random scatter. Which is why the joining lines can be as faint as they are and the
-shape still comes through: the stars were going to be there anyway.
-
-**Polaris gets one extra breath of halo**, and nothing else. It is the star the whole picture
-is for — Polaris is what you steer by, the Plough is how anyone finds it, and a firm that says
-it guides its clients can put the oldest instrument for being guided in the sky behind the
-claim. At magnitude 1.98 alone it is merely the fifth brightest thing in the frame. Nothing on
-the page names it; an allegory that has to be captioned has already failed.
-
-The pointer is not fudged. The projection puts Polaris **5.30** Merak→Dubhe steps beyond
-Dubhe — the founder's own "cinco veces la distancia", to two decimals — and Merak→Dubhe
-extended misses it by 2.4°, which is not an error but what the sky does. Drawing it dead-on
-would be the lie. The hand-typed table this replaces got 4.4 steps, was 4.5% out on the Plough
-and 16% out on the Little Dipper, and was right to be doubted.
-
-**It sits above the scrim, and only that makes the left half usable.** Inside a plate the left
-is exactly where `--hero-scrim` runs 0.86–0.94 opaque, because that is what keeps the headline
-legible: measured at 1440, the brightest star of a left-placed group *in the plate* reached
-**53/255** where the same star on the right reached 220. Lifting the sky out of the plates and
-painting it over the scrim is what makes the left margin available at all, and it is the same
-change that gave the six a common sky.
-
-**The east fade is in the SVG, not the CSS**, because it has to follow the drawing rather than
-the viewport: two multiplied masks carry the field from full strength at the left edge to
-nothing before the right half, where each vertical's own subject lives by rule. The shared sky
-and the vertical's picture hand over instead of arguing. The vertical mask keeps the field
-from ending on a straight line at the top and bottom of the band — a star map with a visible
-border is a poster of the sky, and the sky has no border.
-
-**Below 1200px it is hidden, and that is the honest limit of the idea.** The margin is 300px
-wide at 1440 and 220 at 1280; at 1024 the copy starts 92px from the edge, at 768 it starts at
-20 and at 390 at 16. There is no room for a sky to be read in, and putting it behind the copy
-would be exactly the prominence the brief asked it not to have.
+that is not 3:2 crops the plate top and bottom — 112px each at 1920x860, 100px at 1440x700.
 
 ## Regenerating them
 
 ```sh
-python3 docs/design/hero-rotativo/generate.py
+python3 docs/design/hero-rotativo/generate.py   # the drawings
+python3 docs/design/hero-rotativo/grounds.py    # the photographs under them
 ```
 
-It writes `public/assets/hero/{ec,int,bd,cdn,gf,ia}.svg` — the files the site serves —
-`public/assets/hero/constellations.svg` (the shared sky), `public/assets/menu/ground.svg` (the
-menu panel's ground: the same cube lattice, no stars and no subject, #417) and `images.json`
-next to itself for the design canvas. The RNG is seeded, so a re-run reproduces
-the same bytes; change composition **here**, never by hand-editing an SVG.
+`generate.py` writes `public/assets/hero/{ec,int,bd,cdn,gf,ia}.svg` — the transparent drawings
+the site serves — plus `public/assets/menu/ground.svg` (the menu panel's ground: the same cube
+lattice, no stars and no subject, #417) and `images.json` next to itself for the design canvas.
+The RNG is seeded, so a re-run reproduces the same bytes; change composition **here**, never by
+hand-editing an SVG. Setting `PHOTO_GROUND = False` brings the old self-contained plates back —
+the drawings themselves never changed.
+
+`grounds.py` downloads the originals into a git-ignored `.cache/` and writes
+`public/assets/hero/ground/*.jpg`, which ARE committed: the site never fetches from NASA at
+runtime. It needs ImageMagick (`magick`) on the path.
 
 The plates carry no `role`, no `aria-label` and no `<title>`: they are decorative. The `<img>`
 that shows them has `alt=""` and the vertical's name sits beside it as a real link — a label in
 the file would be locale-bound copy living outside the CMS, and it would announce the picture
 twice.
 
-All six together are ~62 KB gzipped (`bd` is the outlier at 26 KB — it is ~4,000 circles), and
-the shared sky adds **12 KB** for 1,449 real stars, once, cached across every slide and every
-page. Its glow is a single reusable radial gradient rather than a Gaussian blur per star: same
-picture, and a thousand filter passes on every page of the site is not the same cost as a
-paint. That
-measurement is what makes six plates and a pure-CSS cross-fade cheaper than the one stock
-photograph they replace, with no JavaScript involved.
+All six drawings together are ~60 KB gzipped (`bd` is the outlier — it is ~4,000 circles) and
+the six photographs add **58 KB** for all of them. Dropping the invented sky paid for most of
+the photograph: the plates lost seven hundred circles and twelve flare filters each. Six slides,
+two layers apiece and a pure-CSS cross-fade still cost less than the one stock photograph they
+replace, with no JavaScript involved.
 
 ## Where the code is
 
@@ -139,8 +123,9 @@ photograph they replace, with no JavaScript involved.
 | Face → file map | [`src/utils/hero-art.ts`](../../../src/utils/hero-art.ts) |
 | The home's rotation | [`src/components/HomepageContent.astro`](../../../src/components/HomepageContent.astro), [`src/styles/homepage.css`](../../../src/styles/homepage.css) |
 | The vertical page's still plate | [`src/pages/[slug].astro`](../../../src/pages/%5Bslug%5D.astro), [`src/styles/service.css`](../../../src/styles/service.css) |
-| The shared sky layer | `chart()` / `constellations()` in [`generate.py`](generate.py); `.s-hero__stars` in [`homepage.css`](../../../src/styles/homepage.css) and [`service.css`](../../../src/styles/service.css) |
-| The star catalogue | [`bsc5-north.tsv`](bsc5-north.tsv) — Yale BSC5, J2000, Dec > +25, V <= 6.0 |
+| The photographic ground | [`grounds.py`](grounds.py); `.s-hero__ground` in [`homepage.css`](../../../src/styles/homepage.css) and [`service.css`](../../../src/styles/service.css) |
+| The bed under each subject | `bed()` in [`generate.py`](generate.py) |
+| Face -> ground file map | [`src/utils/hero-art.ts`](../../../src/utils/hero-art.ts) |
 | The bar over the picture | [`src/components/SiteHeader.astro`](../../../src/components/SiteHeader.astro) |
 | Scrim, ink and clock tokens | [`src/styles/theme.css`](../../../src/styles/theme.css) |
 | The gate that measures ink over the plates | [`scripts/ci-check-a11y.mjs`](../../../scripts/ci-check-a11y.mjs) §5 |

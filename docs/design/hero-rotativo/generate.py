@@ -5,6 +5,16 @@ import random, json, math
 
 W, H = 1440, 900
 GROUND = "#1E1E1E"
+
+# The ground under the drawing is a real NASA photograph, defocused and pushed
+# back by `grounds.py`, not a sky this file invents. The founder, 2026-08-29:
+# *"que NO pierda los dibujitos que teníamos antes… usemos las fotos como
+# background (sustituye al fondo negro con estrellas ficticias de antes), pero
+# de alguna forma tendrás que quitarles peso… que el dibujito pudiera encajarle
+# para ponerse ENCIMA del real."* So the plates are TRANSPARENT now: the
+# subject and its bed, and nothing underneath them. Set this False to get the
+# old self-contained plates back — the drawings themselves never changed.
+PHOTO_GROUND = True
 VERTS = [(100, 14), (186, 64), (186, 164), (100, 214), (14, 164), (14, 64)]
 HINT = [((57, 39), (143, 89)), ((143, 39), (57, 89)), ((57, 89), (57, 189)),
         ((14, 114), (100, 164)), ((143, 89), (143, 189)), ((100, 164), (186, 114))]
@@ -44,6 +54,25 @@ def cube_solid(cx, cy, k, color):
 def glow(fid, blur=22):
     return ('<filter id="%s" x="-70%%" y="-70%%" width="240%%" height="240%%">'
             '<feGaussianBlur stdDeviation="%d"></feGaussianBlur></filter>' % (fid, blur))
+
+def bed(key, cx, cy, rx, ry, op=0.62):
+    """A soft dark bed under the subject, so line art survives a nebula.
+
+    A 1.4px stroke at 0.3 opacity reads over brand ink and disappears over the
+    Rosette. So each plate lays an out-of-focus ellipse of ink under its OWN
+    subject before drawing it: the photograph stays a photograph at the edges
+    of the frame and gives way exactly where the drawing has to be read. It is
+    the same job the scrim does for the headline, done for the picture — and it
+    is what lets the grounds stay as bright and as coloured as they are.
+    """
+    return ('<defs><radialGradient id="bed%s">'
+            '<stop offset="0%%" stop-color="#1E1E1E" stop-opacity="%.2f"></stop>'
+            '<stop offset="52%%" stop-color="#1E1E1E" stop-opacity="%.2f"></stop>'
+            '<stop offset="100%%" stop-color="#1E1E1E" stop-opacity="0"></stop>'
+            '</radialGradient></defs>'
+            '<ellipse cx="%d" cy="%d" rx="%d" ry="%d" fill="url(#bed%s)"></ellipse>'
+            % (key, op, op * 0.52, cx, cy, rx, ry, key))
+
 
 def _r(v):
     """`0.4` -> "0.4", `1.0` -> "1". Naive rstrip turns "0.4" into "0"."""
@@ -136,171 +165,6 @@ def body(key, cx, cy, r, hue, lit=(28, 24), rings=3, atmos=True):
     return "".join(o)
 
 
-# ── The real sky ──────────────────────────────────────────────────────────
-# Not "two constellations": the CIRCUMPOLAR SKY, as it is. The founder threw
-# out the first version for the right reason (2026-08-29: "lo que no quiero es
-# que sean silos inconexos… busca cómo es el universo, toma como referencia
-# ese mapa, y construye ese fondo común de forma fiel a la realidad"). Two
-# asterisms alone on ink are two icons floating in a void; nobody navigates by
-# an icon. What makes them read as SKY is everything around them — the field
-# they sit in, and Draco winding between the two bears, which is the thing
-# that actually connects them.
-#
-# So the source is a catalogue, not a drawing: the Yale Bright Star Catalogue,
-# 5th Revised Edition (Hoffleit & Warren, 1991), public domain, vendored next
-# to this file as `bsc5-north.tsv` — every star north of Dec +25 down to
-# magnitude 6.0, which is the naked-eye limit on a good night. 1,449 stars, at
-# their J2000 positions, with their real magnitudes. Nothing here is placed by
-# hand, and the earlier hand-typed table is exactly the mistake this replaces:
-# fitted against the true projection it was 4.5% out on the Plough, 16% out on
-# the Little Dipper, and it put Polaris 4.4 Merak->Dubhe steps from Dubhe
-# where the sky puts it 5.3.
-CATALOGUE = "bsc5-north.tsv"
-
-# The stick figures, by Bayer letter. These are the traditional Western
-# figures, and the five chosen are the ones that are actually up there
-# together all night, every night, from Madrid: the two bears, the dragon
-# between them, and Cepheus and Cassiopeia on the far side of the pole.
-FIGURES = [
-    ("UMa", [("Eta", "Zet"), ("Zet", "Eps"), ("Eps", "Del"), ("Del", "Gam"),
-             ("Gam", "Bet"), ("Bet", "Alp"), ("Alp", "Del")]),
-    ("UMi", [("Alp", "Del"), ("Del", "Eps"), ("Eps", "Zet"), ("Zet", "Eta"),
-             ("Eta", "Gam"), ("Gam", "Bet"), ("Bet", "Zet")]),
-    # tail first, at Lambda, which sits right on the Plough's bowl; then the
-    # body north of the Little Dipper and the head doubling back at Xi
-    ("Dra", [("Lam", "Kap"), ("Kap", "Alp"), ("Alp", "Iot"), ("Iot", "The"),
-             ("The", "Eta"), ("Eta", "Zet"), ("Zet", "Chi"), ("Chi", "Del"),
-             ("Del", "Xi"), ("Xi", "Nu1"), ("Nu1", "Bet"), ("Bet", "Gam"),
-             ("Gam", "Xi")]),
-    ("Cep", [("Alp", "Bet"), ("Bet", "Gam"), ("Gam", "Iot"), ("Iot", "Zet"),
-             ("Zet", "Alp")]),                       # the house, apex at Errai
-    ("Cas", [("Bet", "Alp"), ("Alp", "Gam"), ("Gam", "Del"), ("Del", "Eps")]),
-]
-
-
-def _catalogue():
-    """Read the vendored BSC subset and project it, once, at import.
-
-    STEREOGRAPHIC ON THE NORTH CELESTIAL POLE — the projection every planisphere
-    and every circumpolar chart uses, and for the same two reasons: it is
-    conformal, so every figure keeps its true local shape, and the pole lands
-    dead centre, which is the one thing this picture is about.
-
-    Two conventions, both standard and both load-bearing: east to the LEFT (a
-    star chart is drawn as seen from inside the sphere, looking up), and y down
-    the screen. The result is then scaled so ALKAID->DUBHE is one unit, which
-    makes `w` in `chart()` mean exactly "the Plough's width in px" — the only
-    number anyone reading a composition actually has an instinct for.
-
-    What falls out, and none of it is a decision: the naked-eye field reaches
-    2.6 Plough widths from the pole, Cassiopeia sits 1.23 out on the opposite
-    side from the Plough, Polaris misses the pole by 0.7 degrees, and the
-    pointer Merak->Dubhe extended 5.30 times lands 2.4 degrees off Polaris —
-    which is not an error but what the sky does, and drawing it dead-on would
-    be the lie.
-    """
-    import os
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), CATALOGUE)
-    stars = []
-    with open(path, encoding="utf-8") as fh:
-        for line in fh:
-            if line.startswith("#"):
-                continue
-            f = (line.rstrip("\n").split("\t") + [""])[:4]
-            ra, dec, vmag, tag = float(f[0]), float(f[1]), float(f[2]), f[3]
-            ra_r, dec_r = math.radians(ra), math.radians(dec)
-            k = 2.0 / (1.0 + math.sin(dec_r))
-            x = -k * math.cos(dec_r) * math.sin(ra_r)   # east to the left
-            y = k * math.cos(dec_r) * math.cos(ra_r)    # y down the screen
-            stars.append((x, y, vmag, tag))
-    named = {}
-    for x, y, vmag, tag in stars:
-        if tag and (tag not in named or vmag < named[tag][2]):
-            named[tag] = (x, y, vmag)
-    ax, ay, _ = named["Eta UMa"]                        # Alkaid
-    bx, by, _ = named["Alp UMa"]                        # Dubhe
-    unit = math.hypot(bx - ax, by - ay)
-    stars = [(x / unit, y / unit, v, t) for x, y, v, t in stars]
-    named = dict((t, (x / unit, y / unit, v)) for t, (x, y, v) in named.items())
-    return stars, named
-
-
-SKY, NAMED = _catalogue()
-
-
-def chart(key, cx, cy, w, rot=0.0, px=0.0, py=0.0, line_op=0.36, faint=6.0):
-    """The circumpolar sky, centred so the celestial pole lands at (cx, cy)
-    offset by (px, py) Plough widths, with the Plough `w` px across.
-
-    Every star in the catalogue is drawn — that is the point. The figures are
-    not a separate layer of ornament laid over a random field; they are the
-    brightest members of the same field, joined. Which is why the joining
-    lines can be as faint as they are and the shape still comes through: the
-    stars were going to be there anyway.
-
-    Size and opacity come from magnitude alone, on one continuous ramp, so a
-    third-magnitude star is dimmer than a second-magnitude one here for the
-    same reason it is dimmer in the sky. The only two departures are argued
-    for: figure members get a hair more presence so the traditional lines read
-    against a field of 1,449, and Polaris gets one extra, wider breath of the
-    halo the bright stars already have — it is the star the whole picture is
-    for, and at magnitude 1.98 alone it is merely the fifth brightest thing in
-    the frame.
-    """
-    ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
-
-    def place(x, y):
-        x, y = (x + px) * w, (y + py) * w
-        return cx + x * ca - y * sa, cy + x * sa + y * ca
-
-    infig = set()
-    for con, pairs in FIGURES:
-        for a, b in pairs:
-            infig.add(a + " " + con)
-            infig.add(b + " " + con)
-
-    # The glow is a radial gradient, not a Gaussian blur. Same picture, and it
-    # matters: a blur is a filter pass per star, and this layer carries a
-    # thousand of them on every page of the site. One reusable gradient is a
-    # paint.
-    o = ['<defs><radialGradient id="g%s">'
-         '<stop offset="0%%" stop-color="#fff" stop-opacity="0.42"></stop>'
-         '<stop offset="45%%" stop-color="#fff" stop-opacity="0.13"></stop>'
-         '<stop offset="100%%" stop-color="#fff" stop-opacity="0"></stop>'
-         '</radialGradient></defs>' % key]
-
-    o.append('<g fill="none" stroke="#FFFFFF" stroke-opacity="%.2f" stroke-width="1.1" '
-             'stroke-linecap="round">' % line_op)
-    for con, pairs in FIGURES:
-        for a, b in pairs:
-            ka, kb = a + " " + con, b + " " + con
-            if ka not in NAMED or kb not in NAMED:
-                continue
-            x1, y1 = place(NAMED[ka][0], NAMED[ka][1])
-            x2, y2 = place(NAMED[kb][0], NAMED[kb][1])
-            o.append('<path d="M%.1f %.1f L%.1f %.1f"></path>' % (x1, y1, x2, y2))
-    o.append('</g>')
-
-    px_, py_, _ = NAMED["Alp UMi"]
-    hx, hy = place(px_, py_)
-    o.append('<circle cx="%.1f" cy="%.1f" r="20" fill="url(#g%s)" opacity="0.55">'
-             '</circle>' % (hx, hy, key))
-
-    for x, y, m, tag in SKY:
-        if m > faint:
-            continue
-        sx, sy = place(x, y)
-        fig = tag in infig
-        r = 0.55 + (6.2 - m) * 0.36 + (0.55 if fig else 0.0)
-        op = min(0.98, 0.22 + (6.2 - m) * 0.105 + (0.30 if fig else 0.0))
-        if m < 1.7 or (fig and m < 3.3):   # a halo is a star you would name
-            o.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="url(#g%s)"></circle>'
-                     % (sx, sy, r * 3.4, key))
-        o.append('<circle cx="%.1f" cy="%.1f" r="%s" fill="#fff" fill-opacity="%.2f"></circle>'
-                 % (sx, sy, _r(r), op))
-    return "".join(o)
-
-
 def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=True):
     """The ground is DEEP SKY, not grey with specks in it (founder, 2026-08-27:
     "asegúrate de que se note que estamos en el cielo").
@@ -342,6 +206,13 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=T
          '<filter id="fh%s" x="-300%%" y="-300%%" width="700%%" height="700%%">'
          '<feGaussianBlur stdDeviation="3.5"></feGaussianBlur></filter></defs>'
          % (key, key, key, key, key)]
+    if PHOTO_GROUND:
+        # Everything this function used to draw — the vignette, the cloud, the
+        # invented star field, the diffraction flares — is what the photograph
+        # already IS, and better. Keeping any of it would be a drawing of a sky
+        # laid over a sky, and the seams would show at every crop. Only the
+        # defs survive: the subjects still reference them.
+        return "".join(o)
     o.append('<rect x="0" y="0" width="%d" height="%d" fill="url(#vig%s)"></rect>' % (W, H, key))
     if dust:
         o.append(nebula(key, rng, hue, lo, hi))
@@ -405,6 +276,7 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=T
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
     s = [sky("ec", 901, n=880, flares=17, hue=C),
+         bed("ec", 1008, 350, 470, 360),
          # The wall hangs OVER something. Cropped by two edges, so the curve
          # can only belong to something far larger than the frame.
          body("ec", 1318, 1004, 420, C, lit=(26, 16), rings=3),
@@ -456,6 +328,7 @@ def img_cdn():
     # above its shoulder is what makes it read as hanging in something.
     cx, cy, r = 940, 500, 250
     s = [sky("cdn", 902, n=780, flares=14, hue=C),
+         bed("cdn", 940, 500, 520, 430),
          # No second planet here — the subject already is one. A moon, off in
          # the empty quarter, for the depth two bodies give and one cannot.
          body("cdnm", 232, 690, 96, C, lit=(70, 30), rings=2, atmos=False),
@@ -487,6 +360,7 @@ def img_cdn():
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
     s = [sky("bd", 903, n=430, flares=9, hue=C),
+         bed("bd", 900, 470, 500, 400),
          body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
          '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
@@ -529,6 +403,7 @@ def img_int():
     rng = random.Random(53); C, CL = "#1D4E89", "#5B94DA"
     cx, cy, k = 760, 450, 2.35
     s = [sky("int", 904, n=720, flares=13, hue=CL),
+         bed("int", 900, 470, 520, 410),
          body("int", 1330, 872, 262, CL, lit=(30, 24), rings=3),
          '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
     # The corner the tangle is not allowed into. 96 crossing beziers is the
@@ -584,6 +459,7 @@ def img_gf():
     rng = random.Random(71); C, CL = "#3E7D50", "#5FBE7C"
     hz = 392
     s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12, hue=CL),
+         bed("gf", 980, 545, 520, 380),
          # Above the horizon, never below it: a planet drawn over the plain
          # would be sitting ON the ground instead of hanging in the sky. It
          # used to be 162px at (1206, 126), which is exactly where the bears
@@ -633,6 +509,7 @@ def img_ia():
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
     s = [sky("ia", 906, n=760, flares=14, hue=CL),
+         bed("ia", 940, 470, 490, 400),
          body("ia", 1352, 806, 288, CL, lit=(26, 22), rings=3),
          '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos
@@ -674,84 +551,6 @@ IMAGES = {
     "ia":  ("Inteligencia artificial", "inteligencia-artificial", "#6B4FBB", "La ruta que se enciende dentro del cubo", img_ia()),
 }
 SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d">%%s</svg>' % (W, H, W, H)
-
-
-def constellations(rot=-15.0, box=(8, 150, 452, 760)):
-    """The circumpolar sky as ONE file the whole site shares.
-
-    It used to be drawn into each of the six plates, in six places at six
-    angles, on the argument that six fields at the same angle would read as
-    one stamp used six times. The founder wants the stamp (2026-08-29:
-    "espero que absolutamente todas las imágenes del carrusel tengan osa
-    mayor, osa menor, las estrellitas en la misma posición… digamos que es un
-    fondo común"), and he is right in a way the argument missed: a carousel
-    that moves the sky between slides is not showing you a sky, it is showing
-    you six pictures. Fixed, it becomes the one thing that does NOT move while
-    everything else does — which is what a pole star is for.
-
-    It is also the whole sky and not two asterisms, which was the second half
-    of the same correction ("lo que no quiero es que sean silos inconexos").
-    Draco runs between the two bears
-    because that is where Draco is, Cepheus and Cassiopeia come round the far
-    side, and 1,449 catalogued stars fill everything between them. Crop it
-    anywhere and it is still a real piece of sky.
-
-    Living outside the plates buys the last part of the brief. "Yo las pondría
-    a la izquierda de la pantalla donde hay mucho más hueco": inside a plate
-    that is impossible, because the left of the *page* is where the scrim sits
-    at 0.86-0.94 opacity to keep the headline legible, and a star under it
-    renders at 53/255 against 220 on the right. As its own element the layer
-    sits ABOVE the scrim, so the left margin is finally usable.
-
-    Two masks, multiplied. The horizontal one carries the sky from full
-    strength at the left edge to nothing before the plate's own subject, which
-    lives in the right half by rule — so the shared sky and the vertical's own
-    picture never argue, they hand over. The vertical one keeps the field from
-    ending on a straight line at the top and bottom of the band. Neither is
-    decoration: a star map with a visible border is a poster of the sky, and
-    the sky does not have a border.
-    """
-    ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
-    infig = set()
-    for con, pairs in FIGURES:
-        for a, b in pairs:
-            infig.add(a + " " + con)
-            infig.add(b + " " + con)
-    us, vs = [], []
-    for t, (x, y, _m) in NAMED.items():
-        if t in infig:
-            us.append(x * ca - y * sa)
-            vs.append(x * sa + y * ca)
-    x0, y0, x1, y1 = box
-    bw, bh = max(us) - min(us), max(vs) - min(vs)
-    w = min((x1 - x0) / bw, (y1 - y0) / bh)
-    cx = x0 + ((x1 - x0) - bw * w) / 2.0 - min(us) * w
-    cy = y0 + ((y1 - y0) - bh * w) / 2.0 - min(vs) * w
-
-    fw, fh = str(W), str(H)
-    defs = (
-        '<defs>'
-        '<linearGradient id="cstE" x1="0" y1="0" x2="1" y2="0">'
-        '<stop offset="0%" stop-color="#fff" stop-opacity="1"></stop>'
-        '<stop offset="12%" stop-color="#fff" stop-opacity="1"></stop>'
-        '<stop offset="24%" stop-color="#fff" stop-opacity="0.62"></stop>'
-        '<stop offset="40%" stop-color="#fff" stop-opacity="0.24"></stop>'
-        '<stop offset="60%" stop-color="#fff" stop-opacity="0.07"></stop>'
-        '<stop offset="78%" stop-color="#fff" stop-opacity="0"></stop>'
-        '</linearGradient>'
-        '<linearGradient id="cstV" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0%" stop-color="#fff" stop-opacity="0"></stop>'
-        '<stop offset="10%" stop-color="#fff" stop-opacity="1"></stop>'
-        '<stop offset="88%" stop-color="#fff" stop-opacity="1"></stop>'
-        '<stop offset="100%" stop-color="#fff" stop-opacity="0"></stop>'
-        '</linearGradient>'
-        '<mask id="cstME"><rect width="' + fw + '" height="' + fh + '" fill="url(#cstE)"></rect></mask>'
-        '<mask id="cstMV"><rect width="' + fw + '" height="' + fh + '" fill="url(#cstV)"></rect></mask>'
-        '</defs>')
-    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + fw + ' ' + fh + '" '
-            'width="' + fw + '" height="' + fh + '">' + defs +
-            '<g mask="url(#cstME)"><g mask="url(#cstMV)">' + chart("c", cx, cy, w, rot=rot) +
-            '</g></g></svg>')
 
 
 def menu_ground():
@@ -810,12 +609,6 @@ if __name__ == "__main__":
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(SVG % v[4])
         print("%-4s %4d KB  %s" % (k, os.path.getsize(path) // 1024, path))
-
-    # …the shared sky layer: one file, above the scrim, same on every slide
-    cpath = os.path.join(out, "constellations.svg")
-    with open(cpath, "w", encoding="utf-8") as fh:
-        fh.write(constellations())
-    print("%-4s %4d KB  %s" % ("cst", os.path.getsize(cpath) // 1024, cpath))
 
     # …and the menu panel's ground, same vocabulary, no subject (#417)
     mout = os.path.normpath(os.path.join(here, "..", "..", "..", "public", "assets", "menu"))

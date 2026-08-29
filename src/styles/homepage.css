@@ -51,7 +51,7 @@
 
 /* The first plate is on screen at load, not fading in: it is the LCP element
    and an opacity ramp would cost the measurement half a second. */
-.s-hero__plate:first-child {
+.s-hero__plate:first-of-type {
 	opacity: 1;
 	animation-name: s-hero-plate-lead;
 }
@@ -67,39 +67,47 @@
 	z-index: 1;
 }
 
-/* ── the shared sky ──
-   One star chart, identical on every slide and every vertical page, painted
-   over the whole band ABOVE the scrim (founder, 2026-08-29: "digamos que es
-   un fondo común… que el fondo en toda imagen sea el espacio").
+/* ── the ground: a real photograph, pushed back ──
+   Under every drawing there is now a NASA frame instead of a sky this repo
+   invented (founder, 2026-08-29: "usemos las fotos como background,
+   sustituye al fondo negro con estrellas ficticias de antes… pero tendrás
+   que quitarles peso").
 
-   Above, because the left half of the band is 0.86-0.94 opaque so the
-   headline stays legible over the picture, and a star drawn under it renders
-   at 53/255 against 220 on the right — measured, not guessed. The east fade
-   is baked into the SVG rather than done here: it has to follow the drawing,
-   not the viewport, so the sky hands over to each vertical's own subject —
-   which lives in the right half by rule — instead of arguing with it.
+   All of the pushing back happens at BUILD time, in
+   `docs/design/hero-rotativo/grounds.py`: blurred, darkened, desaturated and
+   nudged toward the vertical's own colour before it is ever encoded. Nothing
+   is done here — no `filter: blur()` on a full-bleed element, which is a
+   composite the GPU would pay for on every frame of the cross-fade, and no
+   overlay div either. A defocused sky is also the cheapest thing a JPEG can
+   hold: the six grounds together are 53 KB, LESS than the six drawings they
+   sit under, so the picture got real and the page got lighter.
 
-   HIDDEN below 1200px, and that is the honest limit of the idea: at 1024 the
-   copy starts 92px from the edge, at 768 it starts at 20 and at 390 at 16.
-   There is no margin for a sky to be read in, and putting it behind the copy
-   at phone size would be exactly the prominence the brief asked it not to
-   have. */
-.s-hero__stars {
-	display: none;
+   The drawing keeps its own bed: each plate lays a soft ellipse of brand ink
+   under its cube, in the SVG, so line art still reads over a nebula. Between
+   that and the scrim, nothing needed to be darkened twice. */
+.s-hero__grounds {
+	position: absolute;
+	inset: 0;
 }
 
-@media (min-width: 1200px) {
-	.s-hero__stars {
-		display: block;
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		opacity: 0.8;
-		pointer-events: none;
-	}
+/* Same box, same crop and the SAME animation as the plate above it, keyed off
+   the same `--i`: ground and drawing are one slide in two files and must turn
+   together. */
+.s-hero__ground {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 72% 50%;
+	opacity: 0;
+	animation: s-hero-plate var(--hero-cycle) linear infinite;
+	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+}
+
+.s-hero__ground:first-child {
+	opacity: 1;
+	animation-name: s-hero-plate-lead;
 }
 
 
@@ -341,6 +349,7 @@
    to stop and steps aside — and the six states are spelled out rather than
    computed, because a `calc()` comparison between two custom properties would
    fail CLOSED on an engine that cannot do it: a hero with no picture at all. */
+.s-hero.is-manual .s-hero__ground,
 .s-hero.is-manual .s-hero__plate,
 .s-hero.is-manual .s-hero__item,
 .s-hero.is-manual .s-hero__rule,
@@ -348,18 +357,25 @@
 	animation: none;
 }
 
+.s-hero.is-manual .s-hero__ground,
 .s-hero.is-manual .s-hero__plate { opacity: 0; }
 .s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
 .s-hero.is-manual .s-hero__rule { opacity: 0; }
 .s-hero.is-manual .s-hero__dot { background-color: var(--color-hero-dot); }
 .s-hero.is-manual .s-hero__pause-btn { display: none; }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__plate:nth-child(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__plate:nth-child(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__plate:nth-child(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__plate:nth-child(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__plate:nth-child(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__plate:nth-child(6) {
+.s-hero.is-manual[data-slide="0"] .s-hero__ground:nth-child(1),
+.s-hero.is-manual[data-slide="0"] .s-hero__plate:nth-of-type(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__ground:nth-child(2),
+.s-hero.is-manual[data-slide="1"] .s-hero__plate:nth-of-type(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__ground:nth-child(3),
+.s-hero.is-manual[data-slide="2"] .s-hero__plate:nth-of-type(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__ground:nth-child(4),
+.s-hero.is-manual[data-slide="3"] .s-hero__plate:nth-of-type(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__ground:nth-child(5),
+.s-hero.is-manual[data-slide="4"] .s-hero__plate:nth-of-type(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__ground:nth-child(6),
+.s-hero.is-manual[data-slide="5"] .s-hero__plate:nth-of-type(6) {
 	opacity: 1;
 }
 
@@ -390,10 +406,12 @@
 
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
    lands on the index link must not have it slide out from under them. */
+.s-hero:has(.s-hero__pause:checked) .s-hero__ground,
 .s-hero:has(.s-hero__pause:checked) .s-hero__plate,
 .s-hero:has(.s-hero__pause:checked) .s-hero__item,
 .s-hero:has(.s-hero__pause:checked) .s-hero__rule,
 .s-hero:has(.s-hero__pause:checked) .s-hero__dot,
+.s-hero:focus-within .s-hero__ground,
 .s-hero:focus-within .s-hero__plate,
 .s-hero:focus-within .s-hero__item,
 .s-hero:focus-within .s-hero__rule,
@@ -438,6 +456,7 @@
    other five never appear, and the ticker goes with them — dots that never
    advance and a stop button for something that is not moving are furniture. */
 @media (prefers-reduced-motion: reduce) {
+	.s-hero__ground,
 	.s-hero__plate,
 	.s-hero__item,
 	.s-hero__rule,

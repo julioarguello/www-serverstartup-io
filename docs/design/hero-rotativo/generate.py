@@ -438,7 +438,6 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=T
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
     s = [sky("ec", 901, n=880, flares=17, hue=C),
-         asterism("ec", 1283, 366, 228, rot=-8),
          # The wall hangs OVER something. Cropped by two edges, so the curve
          # can only belong to something far larger than the frame.
          body("ec", 1318, 1004, 420, C, lit=(26, 16), rings=3),
@@ -490,7 +489,6 @@ def img_cdn():
     # above its shoulder is what makes it read as hanging in something.
     cx, cy, r = 940, 500, 250
     s = [sky("cdn", 902, n=780, flares=14, hue=C),
-         asterism("cdn", 1322, 302, 148, rot=-4),
          # No second planet here — the subject already is one. A moon, off in
          # the empty quarter, for the depth two bodies give and one cannot.
          body("cdnm", 232, 690, 96, C, lit=(70, 30), rings=2, atmos=False),
@@ -522,7 +520,6 @@ def img_cdn():
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
     s = [sky("bd", 903, n=430, flares=9, hue=C),
-         asterism("bd", 1278, 402, 158, rot=14),
          body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
          '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
@@ -569,11 +566,10 @@ def img_int():
          '<defs>%s%s</defs>' % (glow("gint", 18), glow("gint2", 54))]
     # The corner the tangle is not allowed into. 96 crossing beziers is the
     # right density for "everything goes through the cube" and the wrong one
-    # for anything else to be read through it: drawn without this, the two
-    # bears landed in the busiest quarter of the busiest plate and dissolved.
-    # Rejection sampling rather than a smaller number of wires — the tangle
-    # keeps its weight everywhere it is the subject, and simply thins where
-    # the sky has something to say.
+    # for anything else to be read through it. The pair no longer lives on
+    # this plate, but the quiet corner stays: the sky needs somewhere to be
+    # visible as sky, and rejection sampling costs nothing — the tangle keeps
+    # its full weight everywhere it is the subject.
     KEEP = (1136, 130, 1440, 500)   # x0, y0, x1, y1
 
     def clear_of_keep(p0, c1, c2, p3):
@@ -603,13 +599,6 @@ def img_int():
                              % (p0 + c1 + c2 + p3 + (rng.uniform(0.05, 0.22), rng.uniform(0.6, 1.2))))
                 break
     s.append("".join(wires))
-    # The one plate that draws its asterism ABOVE the subject rather than
-    # behind it. 96 bezier wires cross the whole frame here, and under them
-    # the pair was a rumour — legible in the file, invisible on the page.
-    # There is no depth argument against it either: the wires already run
-    # over the planet at bottom right, so on this plate they are a diagram
-    # laid on the picture, not objects in the sky.
-    s.append(asterism("int", 1274, 304, 172, rot=6))
     # el cubo: el punto por el que pasa todo
     s.append('<polygon points="%s" fill="#171717" opacity="0.92"></polygon>'
              % " ".join("%.1f,%.1f" % M(cx, cy, k)(*v) for v in VERTS))
@@ -628,10 +617,6 @@ def img_gf():
     rng = random.Random(71); C, CL = "#3E7D50", "#5FBE7C"
     hz = 392
     s = [sky("gf", 905, n=700, yr=(0, hz - 8), flares=12, hue=CL),
-         # The pair whole, in the tallest slice of sky this plate has. The
-         # horizon at y=392 leaves it a third of the sky the others get, so
-         # the group is the smallest of the six and the planet gives way.
-         asterism("gf", 1282, 268, 138, rot=-6),
          # Above the horizon, never below it: a planet drawn over the plain
          # would be sitting ON the ground instead of hanging in the sky. It
          # used to be 162px at (1206, 126), which is exactly where the bears
@@ -681,7 +666,6 @@ def img_ia():
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
     s = [sky("ia", 906, n=760, flares=14, hue=CL),
-         asterism("ia", 1244, 336, 194, rot=10),
          body("ia", 1352, 806, 288, CL, lit=(26, 22), rings=3),
          '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos
@@ -724,6 +708,52 @@ IMAGES = {
 }
 SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d">%%s</svg>' % (W, H, W, H)
 
+
+def constellations(w=250.0, rot=-8.0, pad=30.0):
+    """The pair, on its own, as ONE file the whole site shares.
+
+    It used to be drawn into each of the six plates, in six different places
+    at six different angles, on the argument that six fields at the same angle
+    would read as one stamp used six times. The founder wants the stamp
+    (2026-08-29: "espero que absolutamente todas las imágenes del carrusel
+    tengan osa mayor, osa menor, las estrellitas en la misma posición…
+    digamos que es un fondo común"), and he is right in a way the argument
+    missed: a carousel that moves the sky between slides is not showing you a
+    sky, it is showing you six pictures. Fixed, it becomes the one thing that
+    does NOT move while everything else does — which is what a pole star is
+    for. One file, one position, and the carousel turns underneath it.
+
+    Living outside the plates buys the other half of the brief. "Yo las
+    pondría a la izquierda de la pantalla donde hay mucho más hueco": inside a
+    plate that is impossible, because the left of the *page* is where the
+    scrim sits at 0.86-0.94 opacity to keep the headline legible, and a star
+    under it renders at 53/255 against 220 on the right. As its own element
+    the layer sits ABOVE the scrim, so the left margin is finally usable and
+    the pair can be as quiet as it likes — "no le des un papel tan relevante"
+    is an opacity now, not a compromise.
+
+    The box is the figure's own bounding box plus `pad` for the halos, so the
+    caller sizes it with one CSS width and nothing here needs to know about
+    the page.
+    """
+    import math as _m
+    xs = [p2[0] for p2 in STARS.values()]
+    ys = [p2[1] for p2 in STARS.values()]
+    mx, my = (min(xs) + max(xs)) / 2.0, (min(ys) + max(ys)) / 2.0
+    ca, sa = _m.cos(_m.radians(rot)), _m.sin(_m.radians(rot))
+    px, py = [], []
+    for x, y in STARS.values():
+        u, v = (x - mx) * w, (y - my) * w
+        px.append(u * ca - v * sa)
+        py.append(u * sa + v * ca)
+    bw = max(px) - min(px) + 2 * pad
+    bh = max(py) - min(py) + 2 * pad
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
+            'width="%d" height="%d">%s</svg>'
+            % (round(bw), round(bh), round(bw), round(bh),
+               asterism("cst", bw / 2.0, bh / 2.0, w, rot=rot)))
+
+
 def menu_ground():
     """The ground for the menu panel (#417).
 
@@ -733,13 +763,22 @@ def menu_ground():
     plates are built on and the same wire cubes, drawn by the same functions,
     and nothing is copied by hand into a stylesheet.
 
-    Two departures from a hero plate, both because a menu is read, not looked
-    at: no subject (there is nothing here to be about), and the cubes fade out
-    toward the left, where the six specialty links sit. A texture that runs
-    under 32px type at full strength is a texture that wins.
+    Three departures from a hero plate, all because a menu is read, not looked
+    at: no subject (there is nothing here to be about), the cubes fade out
+    toward the left where the six specialty links sit (a texture that runs
+    under 32px type at full strength is a texture that wins), and NO SKY.
+
+    The sky was here first and the founder called it (2026-08-29: "el menú más
+    sobrio, sí. Parece unos fuegos artificiales con las estrellas, ahí me
+    equivoqué"). He is right, and the reason is worth keeping: a hero band is
+    looked at for two seconds and a menu is scanned for the one word you came
+    for. Diffraction spikes and magnitude-graded stars are exactly the wrong
+    amount of event behind a list of six links. What ties the panel to the
+    home was never the stars anyway — it is the wire cubes and the colour
+    rule, both of which stay.
     """
     rng = random.Random(910)
-    out = [sky("menu", 907, n=420, flares=8)]
+    out = []
     for row in range(5):
         for col in range(8):
             cx = 92 + col * 184 + rng.uniform(-26, 26)
@@ -771,6 +810,12 @@ if __name__ == "__main__":
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(SVG % v[4])
         print("%-4s %4d KB  %s" % (k, os.path.getsize(path) // 1024, path))
+
+    # …the shared sky layer: one file, above the scrim, same on every slide
+    cpath = os.path.join(out, "constellations.svg")
+    with open(cpath, "w", encoding="utf-8") as fh:
+        fh.write(constellations())
+    print("%-4s %4d KB  %s" % ("cst", os.path.getsize(cpath) // 1024, cpath))
 
     # …and the menu panel's ground, same vocabulary, no subject (#417)
     mout = os.path.normpath(os.path.join(here, "..", "..", "..", "public", "assets", "menu"))

@@ -31,56 +31,53 @@ make the six read as space rather than as texture, and all three are in `generat
   drawn **before** the stars, so the field sits inside the cloud instead of on top of it.
 - **A band.** 34% of every star field falls along a galactic band with gaussian falloff and
   26% in clusters. A uniform scatter is the one distribution the real sky never has.
-- **Two constellations you already know, on all six.** The Plough and the Little Dipper,
-  **projected from the J2000 catalogue**, not traced from a picture: `generate.py` carries the
-  fourteen stars' RA/Dec and puts them through a stereographic projection tangent to the
-  group's own mean direction, which is what a circumpolar chart uses and is conformal, so both
-  figures keep their true shapes. Joined by the same hairline the cubes are drawn
-  in, tilted a different amount on each plate — six fields at the same angle would read as one
-  stamp used six times. They are the reason the sky is *recognisably* a sky and not a particle
-  effect, and they are the plates' one piece of argument: Polaris is the star you steer by,
-  the Plough is how anyone finds it, and a firm that says it guides its clients can put the
-  oldest instrument for being guided in the sky behind the claim. Nothing on the page names
-  them. An allegory that has to be captioned has already failed.
 
 **The body lives in the right half of the frame.** That is a composition rule, not a
 preference: the scrim darkens the left because the copy is there, so a world on the left is a
 world nobody sees — and on a phone, where the plate is cropped to `object-position: 72%`, it
 is cropped away entirely. `ec`, `int` and `bd` were drawn left first and moved.
 
-**The shape is checked, not eyeballed.** The first version carried a table of xy pairs typed
-in by hand, and it did not survive being asked: fitted against the true projection it was 4.5%
-out on the Plough, **16% out on the Little Dipper** — the bowl was the wrong shape — and it
-placed Polaris 4.4 Merak→Dubhe steps beyond Dubhe where the sky puts it **5.3**. The pointer is
-the single most famous fact about this asterism and the entire allegory rests on it, so an
-approximate one was not good enough. Nothing is placed by hand now; Polaris comes out of the
-same projection as everything else, and the pointer extended misses it by 2.4°, which is not an
-error — it is what the sky does, and drawing it dead-on would be the lie.
-
-**They stay on the right, and that is measured.** Moving them to the empty left half is the
-obvious idea and it was tried: on the *plate* the left is wide open, but on the *page* it is
-exactly where `--hero-scrim` is 0.86–0.94 opaque, because that is what keeps the headline
-legible. Rendered at 1440, the brightest star of a left-placed group reaches **53/255** where
-the same star on the right reaches **220/255** — four times dimmer — and half the figure ends up
-behind the `h1`. The empty half of the picture and the empty half of the page are not the same
-half.
-
-**The constellations outrank the bodies.** An earlier pass had it the other way round and put
-the Plough alone on `gf` and nothing at all on `cdn`, because on those two the planet was
-already standing where the pair had to go. Wrong order of priorities: the body is decoration
-and the asterism is the argument, so on both plates the body moved. `cdn`'s globe went from
-296px to 250 and dropped 34px; `gf`'s planet went from 162 to 116 and now runs off the top
-edge, which reads as *larger*, not smaller — a limb leaving the frame can only belong to
-something too big to fit. `int` pays differently: its 96 crossing wires are drawn around a
-reserved corner (rejection-sampled, so the tangle keeps its weight everywhere else) and its
-pair is drawn *over* the tangle rather than under it, because on that plate the wires are a
-diagram laid on the picture and they already run across the planet.
-
-**Every group sits inside `y` 150–760**, and that is a hard constraint rather than a
+**Every subject sits inside `y` 150–760**, and that is a hard constraint rather than a
 composition choice. The band is `min-height: 100svh` with `object-fit: cover`, so any viewport
 that is not 3:2 crops the plate top and bottom — 112px each at 1920×860, 100px at 1440×700.
-The groups used to sit as high as `cy=150`, which put Polaris in the strip a laptop throws
-away.
+
+## The shared sky
+
+The Plough and the Little Dipper are **not** in the six plates. They are one file,
+`constellations.svg`, drawn once and placed identically on the home carousel and on every
+vertical page — the founder's brief, and the correct one: *"digamos que es un fondo común"*.
+Six plates that each tilted the pair differently made the pair part of the picture; one layer
+that never moves while the pictures turn makes it the fixed point the pictures move against,
+which is what a pole star is for.
+
+It is the plates' one piece of argument. Polaris is the star you steer by, the Plough is how
+anyone finds it, and a firm that says it guides its clients can put the oldest instrument for
+being guided in the sky behind the claim. Nothing on the page names it. An allegory that has
+to be captioned has already failed — which is also why the layer is drawn at 0.6 opacity in a
+138–184px column: found, not announced.
+
+**The shape is projected, not eyeballed.** `generate.py` carries the fourteen stars' J2000
+RA/Dec and puts them through a stereographic projection tangent to the group's own mean
+direction — what a circumpolar chart uses, and conformal, so both figures keep their true
+shapes. The first version was a table of xy pairs typed in by hand and it did not survive
+being asked: fitted against the true projection it was 4.5% out on the Plough, **16% out on
+the Little Dipper** — the bowl was the wrong shape — and it placed Polaris 4.4 Merak→Dubhe
+steps beyond Dubhe where the sky puts it **5.3**. The pointer is the single most famous fact
+about this asterism and the whole allegory rests on it. Nothing is placed by hand now; Polaris
+comes out of the same projection as everything else, and the pointer extended misses it by
+2.4°, which is not an error — it is what the sky does, and drawing it dead-on would be the lie.
+
+**It sits in the left margin, and only because it is above the scrim.** Inside a plate the
+left half is unusable: it is exactly where `--hero-scrim` is 0.86–0.94 opaque, because that is
+what keeps the headline legible. Rendered at 1440, the brightest star of a left-placed group
+*in the plate* reaches **53/255** where the same star on the right reaches 220 — four times
+dimmer. Lifting the pair out of the plates and painting it over the scrim is what makes the
+left margin available at all, and it is the same change that gave the six a common sky.
+
+**Below 1200px it is hidden, and that is the honest limit of the idea.** The margin it lives
+in is 300px wide at 1440 and 220 at 1280; at 1024 the copy starts 92px from the edge, at 768 it
+starts at 20 and at 390 at 16. There is no margin left to occupy, and putting it behind the
+headline instead would be exactly the prominence the brief asked it not to have.
 
 ## Regenerating them
 
@@ -88,8 +85,10 @@ away.
 python3 docs/design/hero-rotativo/generate.py
 ```
 
-It writes `public/assets/hero/{ec,int,bd,cdn,gf,ia}.svg` — the files the site serves — and
-`images.json` next to itself for the design canvas. The RNG is seeded, so a re-run reproduces
+It writes `public/assets/hero/{ec,int,bd,cdn,gf,ia}.svg` — the files the site serves —
+`public/assets/hero/constellations.svg` (the shared sky), `public/assets/menu/ground.svg` (the
+menu panel's ground: the same cube lattice, no stars and no subject, #417) and `images.json`
+next to itself for the design canvas. The RNG is seeded, so a re-run reproduces
 the same bytes; change composition **here**, never by hand-editing an SVG.
 
 The plates carry no `role`, no `aria-label` and no `<title>`: they are decorative. The `<img>`
@@ -97,7 +96,8 @@ that shows them has `alt=""` and the vertical's name sits beside it as a real li
 the file would be locale-bound copy living outside the CMS, and it would announce the picture
 twice.
 
-All six together are ~68 KB gzipped (`bd` is the outlier at 28 KB — it is ~4,000 circles). That
+All six together are ~62 KB gzipped (`bd` is the outlier at 26 KB — it is ~4,000 circles), and
+the shared sky adds **694 bytes**, once, cached across every slide and every page. That
 measurement is what makes six plates and a pure-CSS cross-fade cheaper than the one stock
 photograph they replace, with no JavaScript involved.
 
@@ -108,6 +108,7 @@ photograph they replace, with no JavaScript involved.
 | Face → file map | [`src/utils/hero-art.ts`](../../../src/utils/hero-art.ts) |
 | The home's rotation | [`src/components/HomepageContent.astro`](../../../src/components/HomepageContent.astro), [`src/styles/homepage.css`](../../../src/styles/homepage.css) |
 | The vertical page's still plate | [`src/pages/[slug].astro`](../../../src/pages/%5Bslug%5D.astro), [`src/styles/service.css`](../../../src/styles/service.css) |
+| The shared sky layer | `constellations()` in [`generate.py`](generate.py); `.s-hero__stars` in [`homepage.css`](../../../src/styles/homepage.css) and [`service.css`](../../../src/styles/service.css) |
 | The bar over the picture | [`src/components/SiteHeader.astro`](../../../src/components/SiteHeader.astro) |
 | Scrim, ink and clock tokens | [`src/styles/theme.css`](../../../src/styles/theme.css) |
 | The gate that measures ink over the plates | [`scripts/ci-check-a11y.mjs`](../../../scripts/ci-check-a11y.mjs) §5 |

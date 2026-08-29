@@ -67,6 +67,48 @@
 	z-index: 1;
 }
 
+/* ── the shared sky ──
+   One constellation layer, identical on every slide and on every vertical
+   page, sitting in the left margin ABOVE the scrim (founder, 2026-08-29:
+   "yo las pondría a la izquierda… digamos que es un fondo común"). Above,
+   because that half of the band is 0.86-0.94 opaque so the headline stays
+   legible over the picture, and a star drawn under it renders at 53/255
+   against 220 on the right — measured, not guessed.
+
+   It is HIDDEN below 1200px, and that is the honest limit of the idea: at
+   1024 the copy starts 92px from the edge, at 768 it starts at 20, at 390 at
+   16. There is no left margin to put it in, and putting it behind the copy
+   would be exactly the prominence the brief asked it not to have.
+
+   Its opacity is the brief too — "no le des un papel tan relevante". Quiet
+   enough to be found rather than announced, which is the correct volume for
+   an allegory nothing on the page explains. */
+.s-hero__stars {
+	display: none;
+}
+
+@media (min-width: 1200px) {
+	.s-hero__stars {
+		display: block;
+		position: absolute;
+		left: 26px;
+		top: 50%;
+		width: 138px;
+		height: auto;
+		transform: translateY(-50%);
+		opacity: 0.6;
+		pointer-events: none;
+	}
+}
+
+@media (min-width: 1440px) {
+	.s-hero__stars {
+		left: 44px;
+		width: 184px;
+	}
+}
+
+
 /* ── the card: everything that rotates, in one piece (founder's direction C)
       The band used to put the vertical's name in 12px mono above a 72px
       heading that never changed, and its words in a 20px paragraph below one

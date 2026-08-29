@@ -155,6 +155,22 @@ const members = memberEntries ?? [];
 				/>
 			))}
 			<span class="s-hero__scrim"></span>
+			{/* The sky the six slides share (founder, 2026-08-29: "digamos que
+			    es un fondo común"). One file, one position, ABOVE the scrim —
+			    which is the only reason it can live in the left margin at
+			    all: under the scrim the left half of the band is 0.86-0.94
+			    opaque, and a star there renders at 53/255 against 220 on the
+			    right. It is the one thing that does not move while the
+			    carousel turns, which is what a pole star is for. */}
+			<img
+				class="s-hero__stars"
+				src="/assets/hero/constellations.svg"
+				alt=""
+				width="310"
+				height="409"
+				loading="lazy"
+				decoding="async"
+			/>
 		</div>
 	)}
 	<div class="container s-hero__inner">

@@ -136,201 +136,168 @@ def body(key, cx, cy, r, hue, lit=(28, 24), rings=3, atmos=True):
     return "".join(o)
 
 
-# ── The two bears ─────────────────────────────────────────────────────────
-# Real stars, real magnitudes, real shape. The founder asked for them by name
-# (2026-08-28: "quizás poner la osa mayor y menor ayude"), and he is right for
-# a reason worth writing down: a random field is *a* sky, but a field with an
-# asterism you already know is *the* sky. Recognition is what turns texture
-# into place.
+# ── The real sky ──────────────────────────────────────────────────────────
+# Not "two constellations": the CIRCUMPOLAR SKY, as it is. The founder threw
+# out the first version for the right reason (2026-08-29: "lo que no quiero es
+# que sean silos inconexos… busca cómo es el universo, toma como referencia
+# ese mapa, y construye ese fondo común de forma fiel a la realidad"). Two
+# asterisms alone on ink are two icons floating in a void; nobody navigates by
+# an icon. What makes them read as SKY is everything around them — the field
+# they sit in, and Draco winding between the two bears, which is the thing
+# that actually connects them.
 #
-# The first version of this carried a table of xy pairs typed in by hand from
-# a picture, and the founder was right to doubt it (2026-08-29: "asegúrate de
-# que la osa mayor y menor sean realmente así, me genera dudas"). Fitted
-# against the true projection it was 4.5% out on the Plough, 16% out on the
-# Little Dipper — its bowl was the wrong shape — and it put Polaris 4.4
-# Merak->Dubhe steps from Dubhe where the sky puts it 5.3. The pointer is the
-# single most famous fact about this asterism and the whole allegory rests on
-# it, so an eyeballed one is not good enough.
-#
-# So nothing below is drawn from a picture. These are J2000 catalogue
-# positions, projected here, and the shape falls out of the arithmetic.
-UMA_CAT = [  # name, RA (h m s), Dec (d m s), V magnitude
-    ("dubhe",   11,  3, 43.7,  61, 45,  3, 1.79),
-    ("merak",   11,  1, 50.5,  56, 22, 57, 2.37),
-    ("phecda",  11, 53, 49.8,  53, 41, 41, 2.44),
-    ("megrez",  12, 15, 25.6,  57,  1, 57, 3.31),
-    ("alioth",  12, 54,  1.7,  55, 57, 35, 1.77),
-    ("mizar",   13, 23, 55.5,  54, 55, 31, 2.23),
-    ("alkaid",  13, 47, 32.4,  49, 18, 48, 1.86),
+# So the source is a catalogue, not a drawing: the Yale Bright Star Catalogue,
+# 5th Revised Edition (Hoffleit & Warren, 1991), public domain, vendored next
+# to this file as `bsc5-north.tsv` — every star north of Dec +25 down to
+# magnitude 6.0, which is the naked-eye limit on a good night. 1,449 stars, at
+# their J2000 positions, with their real magnitudes. Nothing here is placed by
+# hand, and the earlier hand-typed table is exactly the mistake this replaces:
+# fitted against the true projection it was 4.5% out on the Plough, 16% out on
+# the Little Dipper, and it put Polaris 4.4 Merak->Dubhe steps from Dubhe
+# where the sky puts it 5.3.
+CATALOGUE = "bsc5-north.tsv"
+
+# The stick figures, by Bayer letter. These are the traditional Western
+# figures, and the five chosen are the ones that are actually up there
+# together all night, every night, from Madrid: the two bears, the dragon
+# between them, and Cepheus and Cassiopeia on the far side of the pole.
+FIGURES = [
+    ("UMa", [("Eta", "Zet"), ("Zet", "Eps"), ("Eps", "Del"), ("Del", "Gam"),
+             ("Gam", "Bet"), ("Bet", "Alp"), ("Alp", "Del")]),
+    ("UMi", [("Alp", "Del"), ("Del", "Eps"), ("Eps", "Zet"), ("Zet", "Eta"),
+             ("Eta", "Gam"), ("Gam", "Bet"), ("Bet", "Zet")]),
+    # tail first, at Lambda, which sits right on the Plough's bowl; then the
+    # body north of the Little Dipper and the head doubling back at Xi
+    ("Dra", [("Lam", "Kap"), ("Kap", "Alp"), ("Alp", "Iot"), ("Iot", "The"),
+             ("The", "Eta"), ("Eta", "Zet"), ("Zet", "Chi"), ("Chi", "Del"),
+             ("Del", "Xi"), ("Xi", "Nu1"), ("Nu1", "Bet"), ("Bet", "Gam"),
+             ("Gam", "Xi")]),
+    ("Cep", [("Alp", "Bet"), ("Bet", "Gam"), ("Gam", "Iot"), ("Iot", "Zet"),
+             ("Zet", "Alp")]),                       # the house, apex at Errai
+    ("Cas", [("Bet", "Alp"), ("Alp", "Gam"), ("Gam", "Del"), ("Del", "Eps")]),
 ]
-UMI_CAT = [
-    ("polaris",  2, 31, 49.1,  89, 15, 51, 1.98),
-    ("yildun",  17, 32, 12.9,  86, 35, 11, 4.36),
-    ("eps",     16, 45, 58.2,  82,  2, 14, 4.21),
-    ("zeta",    15, 44,  3.5,  77, 47, 40, 4.32),
-    ("eta",     16, 17, 30.5,  75, 45, 19, 4.95),
-    ("pherkad", 15, 20, 43.7,  71, 50,  2, 3.05),
-    ("kochab",  14, 50, 42.3,  74,  9, 20, 2.08),
-]
-UMA_LINES = [("alkaid", "mizar"), ("mizar", "alioth"), ("alioth", "megrez"),
-             ("megrez", "phecda"), ("phecda", "merak"), ("merak", "dubhe"),
-             ("dubhe", "megrez")]
-UMI_LINES = [("polaris", "yildun"), ("yildun", "eps"), ("eps", "zeta"),
-             ("zeta", "eta"), ("eta", "pherkad"), ("pherkad", "kochab"),
-             ("kochab", "zeta")]
 
 
-def _project():
-    """Catalogue RA/Dec to the plane, once, at import.
+def _catalogue():
+    """Read the vendored BSC subset and project it, once, at import.
 
-    STEREOGRAPHIC, tangent at the group's own mean direction (RA 13.2h, Dec
-    +69.7). Conformal, so both figures keep their true local shapes — which is
-    the whole point of the exercise — and centring it on the pair rather than
-    on the celestial pole keeps the distortion of a 40-degree field down to
-    something under a star's own radius. It is the projection every
-    circumpolar chart uses, for the same reason.
+    STEREOGRAPHIC ON THE NORTH CELESTIAL POLE — the projection every planisphere
+    and every circumpolar chart uses, and for the same two reasons: it is
+    conformal, so every figure keeps its true local shape, and the pole lands
+    dead centre, which is the one thing this picture is about.
 
-    Two conventions, both standard and both load-bearing: north up, east LEFT
-    (a chart is drawn as seen from inside the sphere), and the result is then
-    turned so Merak->Dubhe... no: so ALKAID->DUBHE lies horizontal and one
-    unit long. That is the framing every guide draws the Plough in, and it
-    makes `w` in `asterism()` mean exactly "the Plough's width in px".
+    Two conventions, both standard and both load-bearing: east to the LEFT (a
+    star chart is drawn as seen from inside the sphere, looking up), and y down
+    the screen. The result is then scaled so ALKAID->DUBHE is one unit, which
+    makes `w` in `chart()` mean exactly "the Plough's width in px" — the only
+    number anyone reading a composition actually has an instinct for.
 
-    What comes out, and what the hand-typed table got wrong: the pair is 1.16
-    times as high as it is wide (the old table said 1.53), Polaris sits 5.30
-    Merak->Dubhe steps beyond Dubhe (the old table said 4.4), and the pointer
-    extended misses Polaris by 2.4 degrees, which is not an error — it is what
-    the sky does, and drawing it dead-on would be the lie.
+    What falls out, and none of it is a decision: the naked-eye field reaches
+    2.6 Plough widths from the pole, Cassiopeia sits 1.23 out on the opposite
+    side from the Plough, Polaris misses the pole by 0.7 degrees, and the
+    pointer Merak->Dubhe extended 5.30 times lands 2.4 degrees off Polaris —
+    which is not an error but what the sky does, and drawing it dead-on would
+    be the lie.
     """
-    def rd(v):
-        return (math.radians((v[1] + v[2] / 60.0 + v[3] / 3600.0) * 15.0),
-                math.radians(v[4] + v[5] / 60.0 + v[6] / 3600.0))
-    cat = UMA_CAT + UMI_CAT
-    sx = sy = sz = 0.0
-    for v in cat:
-        ra, dec = rd(v)
-        sx += math.cos(dec) * math.cos(ra)
-        sy += math.cos(dec) * math.sin(ra)
-        sz += math.sin(dec)
-    n = math.sqrt(sx * sx + sy * sy + sz * sz)
-    ra0, dec0 = math.atan2(sy / n, sx / n), math.asin(sz / n)
-
-    pos = {}
-    for v in cat:
-        ra, dec = rd(v)
-        k = 2.0 / (1 + math.sin(dec0) * math.sin(dec)
-                   + math.cos(dec0) * math.cos(dec) * math.cos(ra - ra0))
-        x = k * math.cos(dec) * math.sin(ra - ra0)
-        y = k * (math.cos(dec0) * math.sin(dec)
-                 - math.sin(dec0) * math.cos(dec) * math.cos(ra - ra0))
-        pos[v[0]] = (-x, -y)          # east to the left, y down the screen
-
-    ax, ay = pos["alkaid"]
-    bx, by = pos["dubhe"]
-    L = math.hypot(bx - ax, by - ay)
-    th = math.atan2(by - ay, bx - ax)
-    ca, sa = math.cos(-th), math.sin(-th)
-    out = {}
-    for k2, (x, y) in pos.items():
-        u, v2 = (x - ax) / L, (y - ay) / L
-        out[k2] = (u * ca - v2 * sa, u * sa + v2 * ca)
-    return out
+    import os
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), CATALOGUE)
+    stars = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = (line.rstrip("\n").split("\t") + [""])[:4]
+            ra, dec, vmag, tag = float(f[0]), float(f[1]), float(f[2]), f[3]
+            ra_r, dec_r = math.radians(ra), math.radians(dec)
+            k = 2.0 / (1.0 + math.sin(dec_r))
+            x = -k * math.cos(dec_r) * math.sin(ra_r)   # east to the left
+            y = k * math.cos(dec_r) * math.cos(ra_r)    # y down the screen
+            stars.append((x, y, vmag, tag))
+    named = {}
+    for x, y, vmag, tag in stars:
+        if tag and (tag not in named or vmag < named[tag][2]):
+            named[tag] = (x, y, vmag)
+    ax, ay, _ = named["Eta UMa"]                        # Alkaid
+    bx, by, _ = named["Alp UMa"]                        # Dubhe
+    unit = math.hypot(bx - ax, by - ay)
+    stars = [(x / unit, y / unit, v, t) for x, y, v, t in stars]
+    named = dict((t, (x / unit, y / unit, v)) for t, (x, y, v) in named.items())
+    return stars, named
 
 
-STARS = _project()
-MAGS = dict((v[0], v[7]) for v in UMA_CAT + UMI_CAT)
+SKY, NAMED = _catalogue()
 
 
-def asterism(key, cx, cy, w, rot=0.0, line_op=0.24):
-    """The Plough and the Little Dipper, as one group, centred on (cx, cy).
+def chart(key, cx, cy, w, rot=0.0, px=0.0, py=0.0, line_op=0.36, faint=6.0):
+    """The circumpolar sky, centred so the celestial pole lands at (cx, cy)
+    offset by (px, py) Plough widths, with the Plough `w` px across.
 
-    **Both bears and Polaris, on every plate.** Not a composition preference —
-    a brief (founder, 2026-08-28: "esas osa mayor, menor y la estrella esa que
-    siempre marca el norte tienen que verse siempre que se muestre uno de esos
-    banners"). An earlier pass drew the Plough alone on `gf` and nothing at
-    all on `cdn`, on the argument that neither plate had room. It had room; it
-    had a planet sitting in it. On both, the BODY moved and shrank, because
-    the body is decoration and this is the picture's argument.
+    Every star in the catalogue is drawn — that is the point. The figures are
+    not a separate layer of ornament laid over a random field; they are the
+    brightest members of the same field, joined. Which is why the joining
+    lines can be as faint as they are and the shape still comes through: the
+    stars were going to be there anyway.
 
-    That argument is the founder's too: "es una alegoría a que les guiamos".
-    Polaris is the star you steer by, and Ursa Major is how anyone finds it —
-    the pointer Merak→Dubhe, extended, is drawn here at its real angle. A
-    consultancy that says it guides its clients can put the oldest instrument
-    for being guided in the sky behind the claim, and say nothing about it.
-    Nothing on the page names the constellations. They either land or they do
-    not, which is the correct test for an allegory.
-
-    `w` is the Plough's width in px — everything else follows from it, so a
-    plate only ever chooses how big and where. `rot` tilts the pair: the sky
-    turns through the night and six plates drawn at the same angle would read
-    as one stamp used six times.
-
-    **Every group is drawn inside y 150-760, and that is not taste.** The band
-    is `min-height: 100svh` and the plate is `object-fit: cover`, so a viewport
-    shorter or wider than 3:2 crops the plate top and bottom: 1920x860 loses
-    112px off each edge, 1440x700 loses 100. The groups used to sit at cy 150
-    to 262, which put Polaris — the whole point of the exercise — in the strip
-    a laptop throws away. It is invisible in the one place it has to be seen.
-    Keep the extremes of the group inside 150-760 and every desktop crop keeps
-    the pair whole.
-
-    The joining lines stay a HAIRLINE — 0.9px, the same weight the cubes are
-    drawn in ("con delgadas línea"). What changed is their opacity, 0.11 →
-    0.24: at 0.11 they measured as present and read as absent, which is the
-    one outcome that fails both briefs at once. A figure has to be joined to
-    be a figure. Louder than this and it is a planetarium chart.
-
-    `w` is the PLOUGH's width, not the group's: the pair as a whole comes out
-    1.163 wide and 1.354 high in those units, so a call asking for w=200 draws
-    a figure 233 x 271 px. Both numbers fall out of `_project()`; neither is
-    a constant anyone may tune.
+    Size and opacity come from magnitude alone, on one continuous ramp, so a
+    third-magnitude star is dimmer than a second-magnitude one here for the
+    same reason it is dimmer in the sky. The only two departures are argued
+    for: figure members get a hair more presence so the traditional lines read
+    against a field of 1,449, and Polaris gets one extra, wider breath of the
+    halo the bright stars already have — it is the star the whole picture is
+    for, and at magnitude 1.98 alone it is merely the fifth brightest thing in
+    the frame.
     """
-    # One frame for both figures. Polaris is not placed by extending the
-    # pointer a chosen number of steps any more — it comes out of the same
-    # projection as everything else, so the pointer aims where the sky aims
-    # it and nothing here can drift out of agreement with the catalogue.
-    pts = dict(("a_" + v[0], STARS[v[0]]) for v in UMA_CAT)
-    mags = dict(("a_" + v[0], MAGS[v[0]]) for v in UMA_CAT)
-    pts.update(("i_" + v[0], STARS[v[0]]) for v in UMI_CAT)
-    mags.update(("i_" + v[0], MAGS[v[0]]) for v in UMI_CAT)
-    lines = [("a_" + a, "a_" + b) for a, b in UMA_LINES]
-    lines += [("i_" + a, "i_" + b) for a, b in UMI_LINES]
-
-    xs = [p[0] for p in pts.values()]
-    ys = [p[1] for p in pts.values()]
-    mx, my = (min(xs) + max(xs)) / 2.0, (min(ys) + max(ys)) / 2.0
     ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
 
-    def place(p):
-        x, y = (p[0] - mx) * w, (p[1] - my) * w
+    def place(x, y):
+        x, y = (x + px) * w, (y + py) * w
         return cx + x * ca - y * sa, cy + x * sa + y * ca
 
-    at = dict((n, place(p)) for n, p in pts.items())
-    o = ['<defs><filter id="as%s" x="-300%%" y="-300%%" width="700%%" height="700%%">'
-         '<feGaussianBlur stdDeviation="3"></feGaussianBlur></filter></defs>' % key]
-    o.append('<g fill="none" stroke="#FFFFFF" stroke-opacity="%.2f" stroke-width="0.9">' % line_op)
-    for a, b in lines:
-        o.append('<path d="M%.1f %.1f L%.1f %.1f"></path>' % (at[a] + at[b]))
+    infig = set()
+    for con, pairs in FIGURES:
+        for a, b in pairs:
+            infig.add(a + " " + con)
+            infig.add(b + " " + con)
+
+    # The glow is a radial gradient, not a Gaussian blur. Same picture, and it
+    # matters: a blur is a filter pass per star, and this layer carries a
+    # thousand of them on every page of the site. One reusable gradient is a
+    # paint.
+    o = ['<defs><radialGradient id="g%s">'
+         '<stop offset="0%%" stop-color="#fff" stop-opacity="0.42"></stop>'
+         '<stop offset="45%%" stop-color="#fff" stop-opacity="0.13"></stop>'
+         '<stop offset="100%%" stop-color="#fff" stop-opacity="0"></stop>'
+         '</radialGradient></defs>' % key]
+
+    o.append('<g fill="none" stroke="#FFFFFF" stroke-opacity="%.2f" stroke-width="1.1" '
+             'stroke-linecap="round">' % line_op)
+    for con, pairs in FIGURES:
+        for a, b in pairs:
+            ka, kb = a + " " + con, b + " " + con
+            if ka not in NAMED or kb not in NAMED:
+                continue
+            x1, y1 = place(NAMED[ka][0], NAMED[ka][1])
+            x2, y2 = place(NAMED[kb][0], NAMED[kb][1])
+            o.append('<path d="M%.1f %.1f L%.1f %.1f"></path>' % (x1, y1, x2, y2))
     o.append('</g>')
-    # The north star, one step further out than its magnitude buys it. Not a
-    # marker and not a label — a second, wider breath of the same halo every
-    # bright star here already has, so the eye lands on it first without
-    # anything on the plate pointing at it. It is the one the whole group is
-    # for; drawn at 1.98 alone it is merely the fourth brightest thing in the
-    # corner, and the allegory rests on nobody having to hunt for it.
-    if "i_polaris" in at:
-        px_, py_ = at["i_polaris"]
-        o.append('<circle cx="%.1f" cy="%.1f" r="11" fill="#fff" opacity="0.13" '
-                 'filter="url(#as%s)"></circle>' % (px_, py_, key))
-    for n, (x, y) in at.items():
-        m = mags[n]
-        r = max(1.1, min(3.6, 3.4 - 0.62 * (m - 1.7)))
-        op = max(0.55, min(1.0, 1.12 - 0.13 * (m - 1.7)))
-        if m < 2.5:  # the ones you can see from a city get a halo
-            o.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#fff" opacity="0.26" '
-                     'filter="url(#as%s)"></circle>' % (x, y, r * 2.4, key))
+
+    px_, py_, _ = NAMED["Alp UMi"]
+    hx, hy = place(px_, py_)
+    o.append('<circle cx="%.1f" cy="%.1f" r="20" fill="url(#g%s)" opacity="0.55">'
+             '</circle>' % (hx, hy, key))
+
+    for x, y, m, tag in SKY:
+        if m > faint:
+            continue
+        sx, sy = place(x, y)
+        fig = tag in infig
+        r = 0.55 + (6.2 - m) * 0.36 + (0.55 if fig else 0.0)
+        op = min(0.98, 0.22 + (6.2 - m) * 0.105 + (0.30 if fig else 0.0))
+        if m < 1.7 or (fig and m < 3.3):   # a halo is a star you would name
+            o.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="url(#g%s)"></circle>'
+                     % (sx, sy, r * 3.4, key))
         o.append('<circle cx="%.1f" cy="%.1f" r="%s" fill="#fff" fill-opacity="%.2f"></circle>'
-                 % (x, y, _r(r), op))
+                 % (sx, sy, _r(r), op))
     return "".join(o)
 
 
@@ -709,49 +676,82 @@ IMAGES = {
 SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d">%%s</svg>' % (W, H, W, H)
 
 
-def constellations(w=250.0, rot=-8.0, pad=30.0):
-    """The pair, on its own, as ONE file the whole site shares.
+def constellations(rot=-15.0, box=(8, 150, 452, 760)):
+    """The circumpolar sky as ONE file the whole site shares.
 
-    It used to be drawn into each of the six plates, in six different places
-    at six different angles, on the argument that six fields at the same angle
-    would read as one stamp used six times. The founder wants the stamp
-    (2026-08-29: "espero que absolutamente todas las imágenes del carrusel
-    tengan osa mayor, osa menor, las estrellitas en la misma posición…
-    digamos que es un fondo común"), and he is right in a way the argument
-    missed: a carousel that moves the sky between slides is not showing you a
-    sky, it is showing you six pictures. Fixed, it becomes the one thing that
-    does NOT move while everything else does — which is what a pole star is
-    for. One file, one position, and the carousel turns underneath it.
+    It used to be drawn into each of the six plates, in six places at six
+    angles, on the argument that six fields at the same angle would read as
+    one stamp used six times. The founder wants the stamp (2026-08-29:
+    "espero que absolutamente todas las imágenes del carrusel tengan osa
+    mayor, osa menor, las estrellitas en la misma posición… digamos que es un
+    fondo común"), and he is right in a way the argument missed: a carousel
+    that moves the sky between slides is not showing you a sky, it is showing
+    you six pictures. Fixed, it becomes the one thing that does NOT move while
+    everything else does — which is what a pole star is for.
 
-    Living outside the plates buys the other half of the brief. "Yo las
-    pondría a la izquierda de la pantalla donde hay mucho más hueco": inside a
-    plate that is impossible, because the left of the *page* is where the
-    scrim sits at 0.86-0.94 opacity to keep the headline legible, and a star
-    under it renders at 53/255 against 220 on the right. As its own element
-    the layer sits ABOVE the scrim, so the left margin is finally usable and
-    the pair can be as quiet as it likes — "no le des un papel tan relevante"
-    is an opacity now, not a compromise.
+    It is also the whole sky and not two asterisms, which was the second half
+    of the same correction ("lo que no quiero es que sean silos inconexos").
+    Draco runs between the two bears
+    because that is where Draco is, Cepheus and Cassiopeia come round the far
+    side, and 1,449 catalogued stars fill everything between them. Crop it
+    anywhere and it is still a real piece of sky.
 
-    The box is the figure's own bounding box plus `pad` for the halos, so the
-    caller sizes it with one CSS width and nothing here needs to know about
-    the page.
+    Living outside the plates buys the last part of the brief. "Yo las pondría
+    a la izquierda de la pantalla donde hay mucho más hueco": inside a plate
+    that is impossible, because the left of the *page* is where the scrim sits
+    at 0.86-0.94 opacity to keep the headline legible, and a star under it
+    renders at 53/255 against 220 on the right. As its own element the layer
+    sits ABOVE the scrim, so the left margin is finally usable.
+
+    Two masks, multiplied. The horizontal one carries the sky from full
+    strength at the left edge to nothing before the plate's own subject, which
+    lives in the right half by rule — so the shared sky and the vertical's own
+    picture never argue, they hand over. The vertical one keeps the field from
+    ending on a straight line at the top and bottom of the band. Neither is
+    decoration: a star map with a visible border is a poster of the sky, and
+    the sky does not have a border.
     """
-    import math as _m
-    xs = [p2[0] for p2 in STARS.values()]
-    ys = [p2[1] for p2 in STARS.values()]
-    mx, my = (min(xs) + max(xs)) / 2.0, (min(ys) + max(ys)) / 2.0
-    ca, sa = _m.cos(_m.radians(rot)), _m.sin(_m.radians(rot))
-    px, py = [], []
-    for x, y in STARS.values():
-        u, v = (x - mx) * w, (y - my) * w
-        px.append(u * ca - v * sa)
-        py.append(u * sa + v * ca)
-    bw = max(px) - min(px) + 2 * pad
-    bh = max(py) - min(py) + 2 * pad
-    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
-            'width="%d" height="%d">%s</svg>'
-            % (round(bw), round(bh), round(bw), round(bh),
-               asterism("cst", bw / 2.0, bh / 2.0, w, rot=rot)))
+    ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
+    infig = set()
+    for con, pairs in FIGURES:
+        for a, b in pairs:
+            infig.add(a + " " + con)
+            infig.add(b + " " + con)
+    us, vs = [], []
+    for t, (x, y, _m) in NAMED.items():
+        if t in infig:
+            us.append(x * ca - y * sa)
+            vs.append(x * sa + y * ca)
+    x0, y0, x1, y1 = box
+    bw, bh = max(us) - min(us), max(vs) - min(vs)
+    w = min((x1 - x0) / bw, (y1 - y0) / bh)
+    cx = x0 + ((x1 - x0) - bw * w) / 2.0 - min(us) * w
+    cy = y0 + ((y1 - y0) - bh * w) / 2.0 - min(vs) * w
+
+    fw, fh = str(W), str(H)
+    defs = (
+        '<defs>'
+        '<linearGradient id="cstE" x1="0" y1="0" x2="1" y2="0">'
+        '<stop offset="0%" stop-color="#fff" stop-opacity="1"></stop>'
+        '<stop offset="12%" stop-color="#fff" stop-opacity="1"></stop>'
+        '<stop offset="24%" stop-color="#fff" stop-opacity="0.62"></stop>'
+        '<stop offset="40%" stop-color="#fff" stop-opacity="0.24"></stop>'
+        '<stop offset="60%" stop-color="#fff" stop-opacity="0.07"></stop>'
+        '<stop offset="78%" stop-color="#fff" stop-opacity="0"></stop>'
+        '</linearGradient>'
+        '<linearGradient id="cstV" x1="0" y1="0" x2="0" y2="1">'
+        '<stop offset="0%" stop-color="#fff" stop-opacity="0"></stop>'
+        '<stop offset="10%" stop-color="#fff" stop-opacity="1"></stop>'
+        '<stop offset="88%" stop-color="#fff" stop-opacity="1"></stop>'
+        '<stop offset="100%" stop-color="#fff" stop-opacity="0"></stop>'
+        '</linearGradient>'
+        '<mask id="cstME"><rect width="' + fw + '" height="' + fh + '" fill="url(#cstE)"></rect></mask>'
+        '<mask id="cstMV"><rect width="' + fw + '" height="' + fh + '" fill="url(#cstV)"></rect></mask>'
+        '</defs>')
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + fw + ' ' + fh + '" '
+            'width="' + fw + '" height="' + fh + '">' + defs +
+            '<g mask="url(#cstME)"><g mask="url(#cstMV)">' + chart("c", cx, cy, w, rot=rot) +
+            '</g></g></svg>')
 
 
 def menu_ground():

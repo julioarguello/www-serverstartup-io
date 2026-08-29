@@ -88,21 +88,22 @@
 
 
 /* ── the shared sky ──
-   One constellation layer, identical on every slide and on every vertical
-   page, sitting in the left margin ABOVE the scrim (founder, 2026-08-29:
-   "yo las pondría a la izquierda… digamos que es un fondo común"). Above,
-   because that half of the band is 0.86-0.94 opaque so the headline stays
-   legible over the picture, and a star drawn under it renders at 53/255
-   against 220 on the right — measured, not guessed.
+   One star chart, identical on every slide and every vertical page, painted
+   over the whole band ABOVE the scrim (founder, 2026-08-29: "digamos que es
+   un fondo común… que el fondo en toda imagen sea el espacio").
 
-   It is HIDDEN below 1200px, and that is the honest limit of the idea: at
-   1024 the copy starts 92px from the edge, at 768 it starts at 20, at 390 at
-   16. There is no left margin to put it in, and putting it behind the copy
-   would be exactly the prominence the brief asked it not to have.
+   Above, because the left half of the band is 0.86-0.94 opaque so the
+   headline stays legible over the picture, and a star drawn under it renders
+   at 53/255 against 220 on the right — measured, not guessed. The east fade
+   is baked into the SVG rather than done here: it has to follow the drawing,
+   not the viewport, so the sky hands over to each vertical's own subject —
+   which lives in the right half by rule — instead of arguing with it.
 
-   Its opacity is the brief too — "no le des un papel tan relevante". Quiet
-   enough to be found rather than announced, which is the correct volume for
-   an allegory nothing on the page explains. */
+   HIDDEN below 1200px, and that is the honest limit of the idea: at 1024 the
+   copy starts 92px from the edge, at 768 it starts at 20 and at 390 at 16.
+   There is no margin for a sky to be read in, and putting it behind the copy
+   at phone size would be exactly the prominence the brief asked it not to
+   have. */
 .s-hero--art .s-hero__stars {
 	display: none;
 }
@@ -111,20 +112,13 @@
 	.s-hero--art .s-hero__stars {
 		display: block;
 		position: absolute;
-		left: 26px;
-		top: 50%;
-		width: 138px;
-		height: auto;
-		transform: translateY(-50%);
-		opacity: 0.6;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0.8;
 		pointer-events: none;
-	}
-}
-
-@media (min-width: 1440px) {
-	.s-hero--art .s-hero__stars {
-		left: 44px;
-		width: 184px;
 	}
 }
 

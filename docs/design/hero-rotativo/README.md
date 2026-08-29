@@ -43,41 +43,69 @@ that is not 3:2 crops the plate top and bottom — 112px each at 1920×860, 100p
 
 ## The shared sky
 
-The Plough and the Little Dipper are **not** in the six plates. They are one file,
+The constellations are **not** in the six plates. They are one file,
 `constellations.svg`, drawn once and placed identically on the home carousel and on every
 vertical page — the founder's brief, and the correct one: *"digamos que es un fondo común"*.
-Six plates that each tilted the pair differently made the pair part of the picture; one layer
+Six plates that each tilted a pair differently made the pair part of the picture; one layer
 that never moves while the pictures turn makes it the fixed point the pictures move against,
 which is what a pole star is for.
 
-It is the plates' one piece of argument. Polaris is the star you steer by, the Plough is how
-anyone finds it, and a firm that says it guides its clients can put the oldest instrument for
-being guided in the sky behind the claim. Nothing on the page names it. An allegory that has
-to be captioned has already failed — which is also why the layer is drawn at 0.6 opacity in a
-138–184px column: found, not announced.
+It is also the **whole circumpolar sky**, not two asterisms, and that was the second half of
+the same correction: *"lo que no quiero es que sean silos inconexos. Busca cómo es el
+universo, toma como referencia ese mapa, y construye ese fondo común de forma fiel a la
+realidad."* Two figures alone on ink are two icons floating in a void, and nobody navigates
+by an icon.
 
-**The shape is projected, not eyeballed.** `generate.py` carries the fourteen stars' J2000
-RA/Dec and puts them through a stereographic projection tangent to the group's own mean
-direction — what a circumpolar chart uses, and conformal, so both figures keep their true
-shapes. The first version was a table of xy pairs typed in by hand and it did not survive
-being asked: fitted against the true projection it was 4.5% out on the Plough, **16% out on
-the Little Dipper** — the bowl was the wrong shape — and it placed Polaris 4.4 Merak→Dubhe
-steps beyond Dubhe where the sky puts it **5.3**. The pointer is the single most famous fact
-about this asterism and the whole allegory rests on it. Nothing is placed by hand now; Polaris
-comes out of the same projection as everything else, and the pointer extended misses it by
-2.4°, which is not an error — it is what the sky does, and drawing it dead-on would be the lie.
+**The source is a catalogue, not a drawing.** [`bsc5-north.tsv`](bsc5-north.tsv) is the Yale
+Bright Star Catalogue, 5th Revised Edition (Hoffleit & Warren, 1991, public domain), filtered
+to every star north of Dec +25° down to magnitude 6.0 — the naked-eye limit on a good night.
+**1,449 stars**, at their J2000 positions, with their real magnitudes. `generate.py` puts them
+through a stereographic projection tangent to the north celestial pole, which is what every
+planisphere uses: conformal, so every figure keeps its true shape, with the pole dead centre.
+Size and opacity come off one magnitude ramp, so a third-magnitude star is dimmer than a
+second-magnitude one here for the same reason it is dimmer in the sky.
 
-**It sits in the left margin, and only because it is above the scrim.** Inside a plate the
-left half is unusable: it is exactly where `--hero-scrim` is 0.86–0.94 opaque, because that is
-what keeps the headline legible. Rendered at 1440, the brightest star of a left-placed group
-*in the plate* reaches **53/255** where the same star on the right reaches 220 — four times
-dimmer. Lifting the pair out of the plates and painting it over the scrim is what makes the
-left margin available at all, and it is the same change that gave the six a common sky.
+Five traditional figures are joined: **Ursa Major**, **Ursa Minor**, **Draco**, **Cepheus** and
+**Cassiopeia**. Draco is not decoration — it is the answer to "inconexos". The dragon winds
+physically between the two bears, from its tail beside the Plough's bowl to its head past the
+Little Dipper, and drawing it is what turns two figures into one continuous sky. Cepheus and
+Cassiopeia come round the far side of the pole because that is where they are. Everything
+between them is the real field.
 
-**Below 1200px it is hidden, and that is the honest limit of the idea.** The margin it lives
-in is 300px wide at 1440 and 220 at 1280; at 1024 the copy starts 92px from the edge, at 768 it
-starts at 20 and at 390 at 16. There is no margin left to occupy, and putting it behind the
-headline instead would be exactly the prominence the brief asked it not to have.
+The figures are the brightest members of that field, joined — not a layer of ornament laid
+over a random scatter. Which is why the joining lines can be as faint as they are and the
+shape still comes through: the stars were going to be there anyway.
+
+**Polaris gets one extra breath of halo**, and nothing else. It is the star the whole picture
+is for — Polaris is what you steer by, the Plough is how anyone finds it, and a firm that says
+it guides its clients can put the oldest instrument for being guided in the sky behind the
+claim. At magnitude 1.98 alone it is merely the fifth brightest thing in the frame. Nothing on
+the page names it; an allegory that has to be captioned has already failed.
+
+The pointer is not fudged. The projection puts Polaris **5.30** Merak→Dubhe steps beyond
+Dubhe — the founder's own "cinco veces la distancia", to two decimals — and Merak→Dubhe
+extended misses it by 2.4°, which is not an error but what the sky does. Drawing it dead-on
+would be the lie. The hand-typed table this replaces got 4.4 steps, was 4.5% out on the Plough
+and 16% out on the Little Dipper, and was right to be doubted.
+
+**It sits above the scrim, and only that makes the left half usable.** Inside a plate the left
+is exactly where `--hero-scrim` runs 0.86–0.94 opaque, because that is what keeps the headline
+legible: measured at 1440, the brightest star of a left-placed group *in the plate* reached
+**53/255** where the same star on the right reached 220. Lifting the sky out of the plates and
+painting it over the scrim is what makes the left margin available at all, and it is the same
+change that gave the six a common sky.
+
+**The east fade is in the SVG, not the CSS**, because it has to follow the drawing rather than
+the viewport: two multiplied masks carry the field from full strength at the left edge to
+nothing before the right half, where each vertical's own subject lives by rule. The shared sky
+and the vertical's picture hand over instead of arguing. The vertical mask keeps the field
+from ending on a straight line at the top and bottom of the band — a star map with a visible
+border is a poster of the sky, and the sky has no border.
+
+**Below 1200px it is hidden, and that is the honest limit of the idea.** The margin is 300px
+wide at 1440 and 220 at 1280; at 1024 the copy starts 92px from the edge, at 768 it starts at
+20 and at 390 at 16. There is no room for a sky to be read in, and putting it behind the copy
+would be exactly the prominence the brief asked it not to have.
 
 ## Regenerating them
 
@@ -97,7 +125,10 @@ the file would be locale-bound copy living outside the CMS, and it would announc
 twice.
 
 All six together are ~62 KB gzipped (`bd` is the outlier at 26 KB — it is ~4,000 circles), and
-the shared sky adds **694 bytes**, once, cached across every slide and every page. That
+the shared sky adds **12 KB** for 1,449 real stars, once, cached across every slide and every
+page. Its glow is a single reusable radial gradient rather than a Gaussian blur per star: same
+picture, and a thousand filter passes on every page of the site is not the same cost as a
+paint. That
 measurement is what makes six plates and a pure-CSS cross-fade cheaper than the one stock
 photograph they replace, with no JavaScript involved.
 
@@ -108,7 +139,8 @@ photograph they replace, with no JavaScript involved.
 | Face → file map | [`src/utils/hero-art.ts`](../../../src/utils/hero-art.ts) |
 | The home's rotation | [`src/components/HomepageContent.astro`](../../../src/components/HomepageContent.astro), [`src/styles/homepage.css`](../../../src/styles/homepage.css) |
 | The vertical page's still plate | [`src/pages/[slug].astro`](../../../src/pages/%5Bslug%5D.astro), [`src/styles/service.css`](../../../src/styles/service.css) |
-| The shared sky layer | `constellations()` in [`generate.py`](generate.py); `.s-hero__stars` in [`homepage.css`](../../../src/styles/homepage.css) and [`service.css`](../../../src/styles/service.css) |
+| The shared sky layer | `chart()` / `constellations()` in [`generate.py`](generate.py); `.s-hero__stars` in [`homepage.css`](../../../src/styles/homepage.css) and [`service.css`](../../../src/styles/service.css) |
+| The star catalogue | [`bsc5-north.tsv`](bsc5-north.tsv) — Yale BSC5, J2000, Dec > +25, V <= 6.0 |
 | The bar over the picture | [`src/components/SiteHeader.astro`](../../../src/components/SiteHeader.astro) |
 | Scrim, ink and clock tokens | [`src/styles/theme.css`](../../../src/styles/theme.css) |
 | The gate that measures ink over the plates | [`scripts/ci-check-a11y.mjs`](../../../scripts/ci-check-a11y.mjs) §5 |

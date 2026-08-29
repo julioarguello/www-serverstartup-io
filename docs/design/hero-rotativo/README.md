@@ -32,7 +32,10 @@ make the six read as space rather than as texture, and all three are in `generat
 - **A band.** 34% of every star field falls along a galactic band with gaussian falloff and
   26% in clusters. A uniform scatter is the one distribution the real sky never has.
 - **Two constellations you already know, on all six.** The Plough and the Little Dipper,
-  drawn to their real relative magnitudes and joined by the same hairline the cubes are drawn
+  **projected from the J2000 catalogue**, not traced from a picture: `generate.py` carries the
+  fourteen stars' RA/Dec and puts them through a stereographic projection tangent to the
+  group's own mean direction, which is what a circumpolar chart uses and is conformal, so both
+  figures keep their true shapes. Joined by the same hairline the cubes are drawn
   in, tilted a different amount on each plate — six fields at the same angle would read as one
   stamp used six times. They are the reason the sky is *recognisably* a sky and not a particle
   effect, and they are the plates' one piece of argument: Polaris is the star you steer by,
@@ -44,6 +47,23 @@ make the six read as space rather than as texture, and all three are in `generat
 preference: the scrim darkens the left because the copy is there, so a world on the left is a
 world nobody sees — and on a phone, where the plate is cropped to `object-position: 72%`, it
 is cropped away entirely. `ec`, `int` and `bd` were drawn left first and moved.
+
+**The shape is checked, not eyeballed.** The first version carried a table of xy pairs typed
+in by hand, and it did not survive being asked: fitted against the true projection it was 4.5%
+out on the Plough, **16% out on the Little Dipper** — the bowl was the wrong shape — and it
+placed Polaris 4.4 Merak→Dubhe steps beyond Dubhe where the sky puts it **5.3**. The pointer is
+the single most famous fact about this asterism and the entire allegory rests on it, so an
+approximate one was not good enough. Nothing is placed by hand now; Polaris comes out of the
+same projection as everything else, and the pointer extended misses it by 2.4°, which is not an
+error — it is what the sky does, and drawing it dead-on would be the lie.
+
+**They stay on the right, and that is measured.** Moving them to the empty left half is the
+obvious idea and it was tried: on the *plate* the left is wide open, but on the *page* it is
+exactly where `--hero-scrim` is 0.86–0.94 opaque, because that is what keeps the headline
+legible. Rendered at 1440, the brightest star of a left-placed group reaches **53/255** where
+the same star on the right reaches **220/255** — four times dimmer — and half the figure ends up
+behind the `h1`. The empty half of the picture and the empty half of the page are not the same
+half.
 
 **The constellations outrank the bodies.** An earlier pass had it the other way round and put
 the Plough alone on `gf` and nothing at all on `cdn`, because on those two the planet was

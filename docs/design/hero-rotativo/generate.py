@@ -141,38 +141,104 @@ def body(key, cx, cy, r, hue, lit=(28, 24), rings=3, atmos=True):
 # (2026-08-28: "quizás poner la osa mayor y menor ayude"), and he is right for
 # a reason worth writing down: a random field is *a* sky, but a field with an
 # asterism you already know is *the* sky. Recognition is what turns texture
-# into place, and it costs about 40 lines and 700 bytes.
+# into place.
 #
-# Coordinates are normalised to the Plough's own width (Alkaid to Dubhe = 1.0),
-# y down. Magnitudes are the catalogue's, and they drive both the radius and
-# the opacity, so the Guardians read brighter than Yildun exactly as they do
-# outside.
-UMA_STARS = [  # Ursa Major — the Plough. Handle first, then round the bowl.
-    ("alkaid", 0.000, 0.100, 1.85), ("mizar", 0.163, 0.183, 2.23),
-    ("alioth", 0.311, 0.252, 1.77), ("megrez", 0.470, 0.338, 3.31),
-    ("phecda", 0.505, 0.552, 2.44), ("merak", 0.792, 0.601, 2.37),
-    ("dubhe", 0.803, 0.360, 1.79),
+# The first version of this carried a table of xy pairs typed in by hand from
+# a picture, and the founder was right to doubt it (2026-08-29: "asegúrate de
+# que la osa mayor y menor sean realmente así, me genera dudas"). Fitted
+# against the true projection it was 4.5% out on the Plough, 16% out on the
+# Little Dipper — its bowl was the wrong shape — and it put Polaris 4.4
+# Merak->Dubhe steps from Dubhe where the sky puts it 5.3. The pointer is the
+# single most famous fact about this asterism and the whole allegory rests on
+# it, so an eyeballed one is not good enough.
+#
+# So nothing below is drawn from a picture. These are J2000 catalogue
+# positions, projected here, and the shape falls out of the arithmetic.
+UMA_CAT = [  # name, RA (h m s), Dec (d m s), V magnitude
+    ("dubhe",   11,  3, 43.7,  61, 45,  3, 1.79),
+    ("merak",   11,  1, 50.5,  56, 22, 57, 2.37),
+    ("phecda",  11, 53, 49.8,  53, 41, 41, 2.44),
+    ("megrez",  12, 15, 25.6,  57,  1, 57, 3.31),
+    ("alioth",  12, 54,  1.7,  55, 57, 35, 1.77),
+    ("mizar",   13, 23, 55.5,  54, 55, 31, 2.23),
+    ("alkaid",  13, 47, 32.4,  49, 18, 48, 1.86),
+]
+UMI_CAT = [
+    ("polaris",  2, 31, 49.1,  89, 15, 51, 1.98),
+    ("yildun",  17, 32, 12.9,  86, 35, 11, 4.36),
+    ("eps",     16, 45, 58.2,  82,  2, 14, 4.21),
+    ("zeta",    15, 44,  3.5,  77, 47, 40, 4.32),
+    ("eta",     16, 17, 30.5,  75, 45, 19, 4.95),
+    ("pherkad", 15, 20, 43.7,  71, 50,  2, 3.05),
+    ("kochab",  14, 50, 42.3,  74,  9, 20, 2.08),
 ]
 UMA_LINES = [("alkaid", "mizar"), ("mizar", "alioth"), ("alioth", "megrez"),
              ("megrez", "phecda"), ("phecda", "merak"), ("merak", "dubhe"),
              ("dubhe", "megrez")]
-
-# Ursa Minor, given relative to Polaris at (0, 0). Polaris is placed on the
-# line Merak→Dubhe extended, which is how anyone actually finds it — but at
-# 4.4x that step against the true ~5x. Drawn at the honest distance the pair
-# is a tall, thin group that no plate has room for; at 4.4 it fits and the
-# error is under a Plough-bowl. Direction true, distance a shade short: the
-# only liberty taken here.
-UMI_STARS = [
-    ("polaris", 0.000, 0.000, 1.98), ("yildun", -0.150, 0.112, 4.35),
-    ("eps", -0.318, 0.214, 4.21), ("zeta", -0.452, 0.336, 4.29),
-    ("eta", -0.396, 0.516, 4.95), ("pherkad", -0.598, 0.566, 3.05),
-    ("kochab", -0.652, 0.386, 2.08),
-]
 UMI_LINES = [("polaris", "yildun"), ("yildun", "eps"), ("eps", "zeta"),
              ("zeta", "eta"), ("eta", "pherkad"), ("pherkad", "kochab"),
              ("kochab", "zeta")]
-POINTER = 4.4  # Merak→Dubhe steps from Dubhe to Polaris
+
+
+def _project():
+    """Catalogue RA/Dec to the plane, once, at import.
+
+    STEREOGRAPHIC, tangent at the group's own mean direction (RA 13.2h, Dec
+    +69.7). Conformal, so both figures keep their true local shapes — which is
+    the whole point of the exercise — and centring it on the pair rather than
+    on the celestial pole keeps the distortion of a 40-degree field down to
+    something under a star's own radius. It is the projection every
+    circumpolar chart uses, for the same reason.
+
+    Two conventions, both standard and both load-bearing: north up, east LEFT
+    (a chart is drawn as seen from inside the sphere), and the result is then
+    turned so Merak->Dubhe... no: so ALKAID->DUBHE lies horizontal and one
+    unit long. That is the framing every guide draws the Plough in, and it
+    makes `w` in `asterism()` mean exactly "the Plough's width in px".
+
+    What comes out, and what the hand-typed table got wrong: the pair is 1.16
+    times as high as it is wide (the old table said 1.53), Polaris sits 5.30
+    Merak->Dubhe steps beyond Dubhe (the old table said 4.4), and the pointer
+    extended misses Polaris by 2.4 degrees, which is not an error — it is what
+    the sky does, and drawing it dead-on would be the lie.
+    """
+    def rd(v):
+        return (math.radians((v[1] + v[2] / 60.0 + v[3] / 3600.0) * 15.0),
+                math.radians(v[4] + v[5] / 60.0 + v[6] / 3600.0))
+    cat = UMA_CAT + UMI_CAT
+    sx = sy = sz = 0.0
+    for v in cat:
+        ra, dec = rd(v)
+        sx += math.cos(dec) * math.cos(ra)
+        sy += math.cos(dec) * math.sin(ra)
+        sz += math.sin(dec)
+    n = math.sqrt(sx * sx + sy * sy + sz * sz)
+    ra0, dec0 = math.atan2(sy / n, sx / n), math.asin(sz / n)
+
+    pos = {}
+    for v in cat:
+        ra, dec = rd(v)
+        k = 2.0 / (1 + math.sin(dec0) * math.sin(dec)
+                   + math.cos(dec0) * math.cos(dec) * math.cos(ra - ra0))
+        x = k * math.cos(dec) * math.sin(ra - ra0)
+        y = k * (math.cos(dec0) * math.sin(dec)
+                 - math.sin(dec0) * math.cos(dec) * math.cos(ra - ra0))
+        pos[v[0]] = (-x, -y)          # east to the left, y down the screen
+
+    ax, ay = pos["alkaid"]
+    bx, by = pos["dubhe"]
+    L = math.hypot(bx - ax, by - ay)
+    th = math.atan2(by - ay, bx - ax)
+    ca, sa = math.cos(-th), math.sin(-th)
+    out = {}
+    for k2, (x, y) in pos.items():
+        u, v2 = (x - ax) / L, (y - ay) / L
+        out[k2] = (u * ca - v2 * sa, u * sa + v2 * ca)
+    return out
+
+
+STARS = _project()
+MAGS = dict((v[0], v[7]) for v in UMA_CAT + UMI_CAT)
 
 
 def asterism(key, cx, cy, w, rot=0.0, line_op=0.24):
@@ -213,18 +279,21 @@ def asterism(key, cx, cy, w, rot=0.0, line_op=0.24):
     0.24: at 0.11 they measured as present and read as absent, which is the
     one outcome that fails both briefs at once. A figure has to be joined to
     be a figure. Louder than this and it is a planetarium chart.
-    """
-    mrk = dict((n, (x, y)) for n, x, y, _ in UMA_STARS)
-    px, py = mrk["dubhe"]
-    dx, dy = px - mrk["merak"][0], py - mrk["merak"][1]
-    ox, oy = px + POINTER * dx, py + POINTER * dy   # where Polaris lands
 
-    pts, mags = {}, {}
-    for n, x, y, m in UMA_STARS:
-        pts["a_" + n], mags["a_" + n] = (x, y), m
+    `w` is the PLOUGH's width, not the group's: the pair as a whole comes out
+    1.163 wide and 1.354 high in those units, so a call asking for w=200 draws
+    a figure 233 x 271 px. Both numbers fall out of `_project()`; neither is
+    a constant anyone may tune.
+    """
+    # One frame for both figures. Polaris is not placed by extending the
+    # pointer a chosen number of steps any more — it comes out of the same
+    # projection as everything else, so the pointer aims where the sky aims
+    # it and nothing here can drift out of agreement with the catalogue.
+    pts = dict(("a_" + v[0], STARS[v[0]]) for v in UMA_CAT)
+    mags = dict(("a_" + v[0], MAGS[v[0]]) for v in UMA_CAT)
+    pts.update(("i_" + v[0], STARS[v[0]]) for v in UMI_CAT)
+    mags.update(("i_" + v[0], MAGS[v[0]]) for v in UMI_CAT)
     lines = [("a_" + a, "a_" + b) for a, b in UMA_LINES]
-    for n, x, y, m in UMI_STARS:
-        pts["i_" + n], mags["i_" + n] = (ox + x, oy + y), m
     lines += [("i_" + a, "i_" + b) for a, b in UMI_LINES]
 
     xs = [p[0] for p in pts.values()]
@@ -369,7 +438,7 @@ def sky(key, seed, n=720, yr=(0, H), flares=12, dust=True, hue="#8FA6C8", band=T
 def img_ec():
     rng = random.Random(23); C = "#008FD3"
     s = [sky("ec", 901, n=880, flares=17, hue=C),
-         asterism("ec", 1285, 364, 284, rot=-8),
+         asterism("ec", 1283, 366, 228, rot=-8),
          # The wall hangs OVER something. Cropped by two edges, so the curve
          # can only belong to something far larger than the frame.
          body("ec", 1318, 1004, 420, C, lit=(26, 16), rings=3),
@@ -421,7 +490,7 @@ def img_cdn():
     # above its shoulder is what makes it read as hanging in something.
     cx, cy, r = 940, 500, 250
     s = [sky("cdn", 902, n=780, flares=14, hue=C),
-         asterism("cdn", 1328, 300, 186, rot=-4),
+         asterism("cdn", 1322, 302, 148, rot=-4),
          # No second planet here — the subject already is one. A moon, off in
          # the empty quarter, for the depth two bodies give and one cannot.
          body("cdnm", 232, 690, 96, C, lit=(70, 30), rings=2, atmos=False),
@@ -453,7 +522,7 @@ def img_cdn():
 def img_bd():
     rng = random.Random(37); C = "#EA4335"
     s = [sky("bd", 903, n=430, flares=9, hue=C),
-         asterism("bd", 1282, 400, 194, rot=14),
+         asterism("bd", 1278, 402, 158, rot=14),
          body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
          '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
@@ -505,7 +574,7 @@ def img_int():
     # Rejection sampling rather than a smaller number of wires — the tangle
     # keeps its weight everywhere it is the subject, and simply thins where
     # the sky has something to say.
-    KEEP = (1136, 96, 1440, 500)   # x0, y0, x1, y1
+    KEEP = (1136, 130, 1440, 500)   # x0, y0, x1, y1
 
     def clear_of_keep(p0, c1, c2, p3):
         for i in range(15):
@@ -540,7 +609,7 @@ def img_int():
     # There is no depth argument against it either: the wires already run
     # over the planet at bottom right, so on this plate they are a diagram
     # laid on the picture, not objects in the sky.
-    s.append(asterism("int", 1276, 300, 200, rot=6))
+    s.append(asterism("int", 1274, 304, 172, rot=6))
     # el cubo: el punto por el que pasa todo
     s.append('<polygon points="%s" fill="#171717" opacity="0.92"></polygon>'
              % " ".join("%.1f,%.1f" % M(cx, cy, k)(*v) for v in VERTS))
@@ -562,7 +631,7 @@ def img_gf():
          # The pair whole, in the tallest slice of sky this plate has. The
          # horizon at y=392 leaves it a third of the sky the others get, so
          # the group is the smallest of the six and the planet gives way.
-         asterism("gf", 1284, 266, 166, rot=-6),
+         asterism("gf", 1282, 268, 138, rot=-6),
          # Above the horizon, never below it: a planet drawn over the plain
          # would be sitting ON the ground instead of hanging in the sky. It
          # used to be 162px at (1206, 126), which is exactly where the bears
@@ -612,7 +681,7 @@ def img_ia():
     cx, cy, k = 760, 460, 3.5
     p = M(cx, cy, k)
     s = [sky("ia", 906, n=760, flares=14, hue=CL),
-         asterism("ia", 1246, 330, 250, rot=10),
+         asterism("ia", 1244, 336, 194, rot=10),
          body("ia", 1352, 806, 288, CL, lit=(26, 22), rings=3),
          '<defs>%s%s</defs>' % (glow("gia", 18), glow("gia2", 54))]
     # retícula de nodos en los cruces de la trama 2×2 del cubo, en tres planos

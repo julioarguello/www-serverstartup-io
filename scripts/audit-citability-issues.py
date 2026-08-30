@@ -25,6 +25,7 @@ on his own screen, and says so.
 Exit codes follow the house convention: 0 clean, 1 hits found, 3 the scan
 could not prove it can match anything — which is not the same as clean.
 """
+import hashlib
 import json
 import os
 import re
@@ -108,6 +109,28 @@ def main() -> int:
     except re.error as e:
         print(f"audit: FORBIDDEN_NAMES is not a valid regex: {e}", file=sys.stderr)
         return 3
+
+    # ── the pattern is a list, not the runbook's placeholder ──
+    # Observed on the very first real invocation: the runbook says
+    #     FORBIDDEN_NAMES='<the list>'
+    # and pasting that line verbatim scans cleanly. `<the list>` is a valid
+    # one-alternative pattern; the control below plants it, matches it, and
+    # reports "control ok" — then walks 429 items looking for a string nobody
+    # has ever written and exits 0. A green that means "I searched for
+    # nothing" is worse than a red, because it is the one that gets acted on.
+    if [a for a in pattern.split("|") if re.fullmatch(r"\s*<[^<>]*>\s*", a)]:
+        print("audit: FORBIDDEN_NAMES is still the PLACEHOLDER from the runbook, "
+              "not a list of names. Substitute your real list — this run would "
+              "have searched every issue and pull request for a string nobody "
+              "has ever written, and called the result clean.", file=sys.stderr)
+        return 3
+
+    # A fingerprint of the pattern, which reveals nothing about it, so two
+    # runs can be compared and a wrong list spotted: the count is the tell.
+    alts = [a for a in pattern.split("|") if a.strip()]
+    print(f"audit: pattern {hashlib.sha256(pattern.encode()).hexdigest()[:8]} · "
+          f"{len(alts)} alternative(s) — if that count is not the one you "
+          f"expect, stop: you are scanning for the wrong list.")
 
     # ── positive control, same doctrine as the tree scan ──
     # A secret that matches nothing is indistinguishable from a clean corpus.

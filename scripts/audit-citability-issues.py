@@ -20,7 +20,8 @@ environment, and the output can be pasted anywhere — a hit reads
 `issue #212 · body · 1 match [9 chars]`. `--show` exists for reading it alone
 on his own screen, and says so.
 
-    FORBIDDEN_NAMES='<the secret>' python3 scripts/audit-citability-issues.py
+    FORBIDDEN_NAMES_FILE=~/.config/serverstartup/forbidden-names \\
+        python3 scripts/audit-citability-issues.py
 
 Exit codes follow the house convention: 0 clean, 1 hits found, 3 the scan
 could not prove it can match anything — which is not the same as clean.
@@ -95,12 +96,118 @@ def texts(item: dict, comments: list[dict]) -> list[tuple[str, str]]:
     return [(f, t) for f, t in fields if t.strip()]
 
 
+def read_pattern() -> str:
+    """The list, from a file by preference and from the environment otherwise.
+
+    `FORBIDDEN_NAMES='...' script.py` puts the whole client list in a command
+    line, and a command line is world-readable: any process on the machine can
+    read it out of `ps`, and it lands in the shell history too. A mode-600 file
+    is neither. CI keeps using the variable — there the value comes from an
+    encrypted secret and there is no other process to hide it from.
+    """
+    path = os.environ.get("FORBIDDEN_NAMES_FILE", "")
+    if path:
+        try:
+            return open(path, encoding="utf-8").read().strip()
+        except OSError as e:
+            print(f"audit: FORBIDDEN_NAMES_FILE cannot be read: {e}",
+                  file=sys.stderr)
+            sys.exit(3)
+    return os.environ.get("FORBIDDEN_NAMES", "")
+
+
+EDITS_QUERY = """
+query($endCursor: String) {
+  repository(owner: "%s", name: "%s") {
+    %s(first: 25, after: $endCursor, states: [%s]) {
+      pageInfo { hasNextPage endCursor }
+      nodes {
+        number
+        url
+        userContentEdits(first: 100) { totalCount nodes { diff } }
+        comments(first: 100) {
+          totalCount
+          nodes { userContentEdits(first: 100) { totalCount nodes { diff } } }
+        }
+      }
+    }
+  }
+}
+"""
+
+
+def scan_edit_history(rx, rx_i, show: bool) -> tuple[int, int]:
+    """The revisions behind every `edited` marker.
+
+    On GitHub, editing is not redaction. The previous text stays in
+    `userContentEdits` and is readable by anyone who can read the issue, so a
+    name deleted in a hurry six months ago becomes public the moment the
+    repository does. Measured here before this pass existed: 83 hidden
+    revisions across 34 issues, none of which the body-and-comments scan can
+    see, because that scan reads only what the page shows TODAY.
+
+    The diff text carries both sides of the change, which is what we want: the
+    removed line is the one nobody meant to keep.
+    """
+    owner, name = REPO.split("/", 1)
+    hits = soft = 0
+    for kind, states, label in (("issues", "OPEN, CLOSED", "issue"),
+                                ("pullRequests", "OPEN, CLOSED, MERGED", "PR")):
+        out = gh("api", "graphql", "--paginate", "-f",
+                 "query=" + EDITS_QUERY % (owner, name, kind, states))
+        decoder, idx, pages = json.JSONDecoder(), 0, []
+        while idx < len(out):
+            while idx < len(out) and out[idx].isspace():
+                idx += 1
+            if idx >= len(out):
+                break
+            chunk, idx = decoder.raw_decode(out, idx)
+            pages.append(chunk)
+
+        revisions = 0
+        for page in pages:
+            for node in page["data"]["repository"][kind]["nodes"]:
+                n, url = node["number"], node["url"]
+                # Name the blind spot rather than truncate in silence.
+                if node["comments"]["totalCount"] > 100:
+                    print(f"  note {label} #{n} has "
+                          f"{node['comments']['totalCount']} comments; only the "
+                          f"first 100 were checked for edit history")
+                texts = [("body revision", e["diff"])
+                         for e in node["userContentEdits"]["nodes"]]
+                for ci, c in enumerate(node["comments"]["nodes"], 1):
+                    texts += [(f"comment {ci} revision", e["diff"])
+                              for e in c["userContentEdits"]["nodes"]]
+                for i, (field, text) in enumerate(texts, 1):
+                    if not text:
+                        continue
+                    revisions += 1
+                    found = rx.findall(text)
+                    if found:
+                        hits += 1
+                        where = (f"  HIT  {label} #{n} · EDIT HISTORY, {field} "
+                                 f"· {len(found)} match(es)")
+                        if show:
+                            print(f"{where} → {sorted(set(found))}")
+                        else:
+                            print(f"{where} [{len(found[0])} chars] {url}")
+                    elif rx_i.search(text):
+                        soft += 1
+                        print(f"  warn {label} #{n} · EDIT HISTORY, {field} · "
+                              f"matches only when case is ignored. {url}")
+        print(f"audit: {revisions} hidden revision(s) behind {label} edits")
+    return hits, soft
+
+
 def main() -> int:
-    pattern = os.environ.get("FORBIDDEN_NAMES", "")
+    pattern = read_pattern()
     show = "--show" in sys.argv
     if not pattern:
-        print("audit: FORBIDDEN_NAMES is empty. This scan proves NOTHING without "
-              "it — it is not a clean result, it is no result.", file=sys.stderr)
+        print("audit: no list given. Set FORBIDDEN_NAMES_FILE to a file holding "
+              "it (preferred — a command line is readable via `ps`), or "
+              "FORBIDDEN_NAMES in the environment. This scan proves NOTHING "
+              "without one — that is not a clean result, it is no result.",
+              file=sys.stderr)
         return 3
 
     try:
@@ -189,6 +296,11 @@ def main() -> int:
                     print(f"  warn {label} #{n} · {field} · matches only when "
                           f"case is ignored — the tree scan is case-sensitive, "
                           f"a reader is not. {item['html_url']}")
+
+    print("audit: now the revisions the `edited` markers hide —")
+    eh, es_ = scan_edit_history(rx, rx_i, show)
+    hits += eh
+    soft += es_
 
     print()
     if hits:

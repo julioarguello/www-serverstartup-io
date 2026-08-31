@@ -87,22 +87,69 @@ jobs:
         # the database is empty or the operator typed the confirmation.
         run: scripts/ci-guard-prod-seed.sh www-serverstartup-io "$SEED_D1_CONFIRM"
 
-      - name: Seed production D1 from seed/seed.json (opt-in, destructive)
-        if: inputs.seed_d1
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: d70cd71aecc76f94c73d7a6f3cc1265d
-        run: |
-          scripts/ci-local-stack.sh 8787
-          lsof -ti :8787 | xargs kill -9 2>/dev/null || true
-          scripts/seed-remote-preview.sh www-serverstartup-io
-
+      # The worker deploys BEFORE the D1 refresh, not after. This is the order
+      # deploy-preview.yml already learned the hard way, and production shipped
+      # without it: EmDash applies its migrations lazily in the request path
+      # under _emdash_migrations_lock, so only the NEW worker can bring the
+      # remote schema forward, and the refresh writes rows in the new shape.
+      # Preview measured the other order dying with "_emdash_collections has 17
+      # columns but 23 values were supplied" (2026-08-22). Production is worse
+      # off than preview was: on its first dispatch the remote sat 39
+      # migrations behind (30 applied, local canonical 69), so not one ec_*
+      # collection table existed for the refresh to write into (#162).
       - name: Deploy production worker
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: d70cd71aecc76f94c73d7a6f3cc1265d
           command: deploy
+
+      - name: Build local canonical D1 (defines the migration target)
+        if: inputs.seed_d1
+        id: canonical
+        # ci-local-stack seeds a fresh local sqlite the canonical way (emdash
+        # applies its migrations). Its _emdash_migrations count IS the target
+        # the remote must reach — derived, never hardcoded.
+        run: |
+          scripts/ci-local-stack.sh 8787
+          lsof -ti :8787 | xargs kill -9 2>/dev/null || true
+          D1_DB=$(find .wrangler -name "*.sqlite" -path "*/d1/*" -not -name "metadata.sqlite" | head -1)
+          TARGET=$(sqlite3 "$D1_DB" "SELECT count(*) FROM _emdash_migrations;")
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "local canonical DB has $TARGET applied migrations"
+
+      - name: Wait until the worker migrates the remote D1
+        if: inputs.seed_d1
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d70cd71aecc76f94c73d7a6f3cc1265d
+        # Anonymous page requests can take a cached-binding shortcut, so poke
+        # /_emdash/admin (guaranteed runtime init) and poll the REAL condition:
+        # the remote _emdash_migrations count reaching the canonical target.
+        # Gating on HTTP 200 of "/" is not equivalent — preview shipped that
+        # first and it passed while the schema stayed old (run 32586774068).
+        run: |
+          TARGET=${{ steps.canonical.outputs.target }}
+          for i in $(seq 1 36); do
+            curl -s -o /dev/null -m 15 "$PRODUCTION_URL/_emdash/admin" || true
+            COUNT=$(npx wrangler d1 execute www-serverstartup-io --remote --json \
+              --command "SELECT count(*) AS c FROM _emdash_migrations;" 2>/dev/null \
+              | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results[0].c)}catch{console.log(-1)}})")
+            echo "attempt $i: remote applied=$COUNT target=$TARGET (poked /_emdash/admin from the GitHub runner; count via wrangler d1 API)"
+            if [ "$COUNT" -ge "$TARGET" ] 2>/dev/null; then exit 0; fi
+            sleep 10
+          done
+          echo "::error::remote D1 never reached $TARGET applied migrations — the worker is not migrating; refusing to seed onto a stale schema"
+          exit 1
+
+      - name: Seed production D1 from seed/seed.json (opt-in, destructive)
+        if: inputs.seed_d1
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d70cd71aecc76f94c73d7a6f3cc1265d
+        # The local stack was already built by the canonical step above.
+        run: |
+          scripts/seed-remote-preview.sh www-serverstartup-io
 
       - name: Summary
         if: always()

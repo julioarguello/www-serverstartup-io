@@ -63,20 +63,37 @@ TYPED="${2:-}"
 # `|| true`, deliberately: under `set -e` a failing wrangler would abort the
 # script here and the diagnostic below would never print — a refusal message
 # that cannot be reached is the same dead-guard shape this file exists to fix.
-TABLES=$(npx wrangler d1 execute "$D1_NAME" --remote --json -y \
+# Three outcomes, not two. The extraction below used to print an empty string
+# both when the query failed and when it succeeded with no rows, and the caller
+# read that single empty string as "unreadable". So a database whose collection
+# tables do not exist yet — a schema that has never held content, which is
+# precisely the pre-launch case seed_d1 exists for — was refused as if the
+# token were missing (#162). `success` is tested explicitly because a D1 error
+# is a well-formed JSON object: parsing it proves nothing.
+READ=$(npx wrangler d1 execute "$D1_NAME" --remote --json -y \
 	--command "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'ec\\_%' ESCAPE '\\';" 2>/dev/null \
-	| node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results.map(r=>r.name).join(' '))}catch{console.log('')}})" || true)
+	| node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{const r=JSON.parse(s)[0];if(r.success!==true||!Array.isArray(r.results))throw 0;console.log('READ '+r.results.map(x=>x.name).join(' '))}catch{console.log('UNREADABLE')}})" || true)
 
-if [ -z "$TABLES" ]; then
+if [ "$READ" != "UNREADABLE" ] && [ -n "${READ##READ*}" ]; then
+	# Neither the sentinel nor the success marker: the pipeline itself broke.
+	READ=UNREADABLE
+fi
+
+if [ "$READ" = "UNREADABLE" ]; then
 	echo "REFUSE: could not read the table list from '$D1_NAME'." >&2
-	echo "        Not 'the database is empty' — the query returned nothing at all," >&2
+	echo "        Not 'the database is empty' — the query did not come back at all," >&2
 	echo "        which is what a wrong name or a missing token also looks like." >&2
+	echo "        An empty result is a different answer, and it is allowed." >&2
 	echo "        Check: npx wrangler d1 info $D1_NAME" >&2
 	exit 1
 fi
 
+TABLES="${READ#READ}"
+TABLES="${TABLES# }"
+
 TOTAL=0
 echo "content rows in '$D1_NAME' (measured before any write, from $(hostname)):"
+[ -n "$TABLES" ] || echo "  (no ec_ collection table exists — the schema has never held content)"
 for t in $TABLES; do
 	n=$(npx wrangler d1 execute "$D1_NAME" --remote --json -y \
 		--command "SELECT count(*) AS c FROM \"$t\";" 2>/dev/null \

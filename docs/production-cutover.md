@@ -127,6 +127,29 @@ dig +short A www.serverstartup.io  # expect 34.175.111.59
 
 Write both values down somewhere outside this repository.
 
+**Check which addresses the domain landed on, before adding the apex.** The
+worker's own `workers.dev` hostname resolves to `188.114.96.5` and
+`188.114.97.5`. On 2026-08-31, from a Spanish domestic connection, both
+accepted no TCP on 443 — while `188.114.98.1` and `188.114.99.1`, in the same
+`/20`, answered normally, as did every other Cloudflare range tried. Two
+specific anycast addresses null-routed rather than a range: the shape of the
+court-ordered blocks Spanish ISPs apply during football broadcasts, which take
+Cloudflare-hosted bystanders down with the target.
+
+The site being replaced is on Google Cloud (`34.175.111.59`) and is immune.
+Moving to Cloudflare is what creates the exposure, so measure it:
+
+```bash
+for ip in $(dig +short A www.serverstartup.io); do
+  curl -s -o /dev/null --connect-timeout 4 "https://$ip/" 2>/dev/null
+  [ $? -eq 28 ] && echo "$ip UNREACHABLE" || echo "$ip reachable"
+done
+```
+
+A Custom Domain takes the zone's anycast addresses, which need not be the two
+above — which is why this is a measurement and not a prediction. If it does
+land on blocked addresses, the rollback below is the immediate answer.
+
 **Verify** — and note that `%{http_code}` alone is not enough, because the old
 site also answers 200. The `server` header is what distinguishes them:
 
@@ -218,6 +241,13 @@ Each of these produced a green that was not true.
 - **`MERGED` is not proof of integration.** Squash rewrites the SHA, so
   `git log <base>..<branch>` keeps listing commits that are already in. Check
   by content.
+- **Spanish ISP blocks hit Cloudflare bystanders, and CI cannot see them.**
+  Measured 2026-08-31 from a domestic connection: the two addresses the
+  production worker resolves to accepted no TCP on 443, while their neighbours
+  in the same `/20` answered. A site that is up everywhere else is simply gone
+  for those users, and no check run from GitHub's runners will ever show it —
+  they are not behind the block. Reachability from Spain is a separate
+  measurement from a green deploy.
 - **The old site answers 200 too.** Any cutover check that reads only the
   status code cannot tell the two sites apart. Read `server`.
 

@@ -182,7 +182,7 @@ def scan_edit_history(rx, rx_i, show: bool) -> tuple[int, int]:
                     if not text:
                         continue
                     revisions += 1
-                    found = rx.findall(text)
+                    found = [m.group(0) for m in rx.finditer(text)]
                     if found:
                         hits += 1
                         where = (f"  HIT  {label} #{n} · EDIT HISTORY, {field} "
@@ -283,7 +283,12 @@ def main() -> int:
                 comments += json.loads(gh("api", "--paginate",
                                           f"repos/{REPO}/pulls/{n}/comments") or "[]")
             for field, text in texts(item, comments):
-                found = rx.findall(text)
+                # `findall` returns GROUPS when the pattern has any, so a
+                # single `(€|EUR)` anywhere in the list turns every reported
+                # match into a capture — measured: 103 hits all reading
+                # `[0 chars]`. `finditer` + group(0) is right whatever the
+                # pattern's shape, and the shape is the founder's to choose.
+                found = [m.group(0) for m in rx.finditer(text)]
                 if found:
                     hits += 1
                     where = f"  HIT  {label} #{n} · {field} · {len(found)} match(es)"

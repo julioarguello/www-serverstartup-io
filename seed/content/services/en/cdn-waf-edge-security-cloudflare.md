@@ -26,7 +26,7 @@ We don't set up `Cloudflare` and disappear. We watch the traffic, adjust rules a
 
 We've deployed `Cloudflare` for:
 
-> b64:QURJIEliZXJpYSwgQWxjYW1wbywgRG9vZXJzIFNuZWFrZXJzLCBGb3J1bSBTcG9ydCwgSm9iJlRhbGVudCwgTWFyYXRob24sIFB1bnQgUm9tYSwgVG95cyJSIlVzIEliZXJpYSw=
+> b64:QWxjYW1wbywgRm9ydW0gU3BvcnQsIEpvYiZUYWxlbnQsIFB1bnQgUm9tYSw=
 
 The platform doesn't end at `CDN` and `WAF`. `Zero Trust`, `Access`, `Stream`, `R2`. We help you decide which pieces fit, and which don't.
 

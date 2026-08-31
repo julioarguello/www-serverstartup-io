@@ -2,21 +2,25 @@
 
 This document is the complete operating manual for working on the site:
 local setup, conventions, the quality bar, and how a change travels from
-branch to production. It serves two audiences — the team, and anyone reading
-the public mirror who wants to understand (or challenge) how we work.
+branch to production. It serves two audiences — the team, and anyone who has
+followed a link from *Deconstruyendo* and wants to understand (or challenge)
+how we work.
 
 ## Where development happens
 
-Development lives in a private working repository. The public repository
-([julioarguello/serverstartup-io](https://github.com/julioarguello/serverstartup-io))
-is a mirror that receives `main` and release tags automatically on every
-push — it only ever fast-forwards, never force-pushes.
+Here. [julioarguello/www-serverstartup-io](https://github.com/julioarguello/www-serverstartup-io)
+is the working repository and the public one — the same repository, not a copy
+of it. Branches, pull requests, issues and CI logs are all in the open.
 
-- **You are on the team**: branch in the private repo, open a PR there.
-- **You are an outside reader**: we cannot merge PRs on the mirror, but
-  issues are welcome and read, and
-  [ventas@serverstartup.io](mailto:ventas@serverstartup.io) reaches the
-  people who wrote the code.
+There were three repositories until #428 and now there is one. The public
+mirror this document used to describe — a second repo fed by `mirror.yml` on
+every push to `main` — is archived. What you are reading is no longer a
+selection: it is the thing itself, conversations included.
+
+- **You are on the team**: branch here, open a PR here.
+- **You are an outside reader**: pull requests are welcome, and so are issues;
+  [ventas@serverstartup.io](mailto:ventas@serverstartup.io) reaches the people
+  who wrote the code.
 
 ## Local setup
 

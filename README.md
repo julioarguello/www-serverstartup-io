@@ -45,8 +45,8 @@ keeps us honest.
 | [`src/components/`](src/components/) | Layout shell, service "instruments", assembly manual |
 | [`src/styles/`](src/styles/) | Shared CSS and design tokens (documented in [`docs/design-system.md`](docs/design-system.md)) |
 | [`src/middleware.ts`](src/middleware.ts) | Security headers on every response, CSP included |
-| [`scripts/`](scripts/) | CI helpers (local stack, headers, deploy verification, remote seeding), environment wrappers, content loader, mirror sync |
-| [`.github/workflows/`](.github/workflows/) | Quality gates, preview and production deploys, mirror sync, tech-debt tracking |
+| [`scripts/`](scripts/) | CI helpers (local stack, headers, deploy verification, remote seeding), environment wrappers, content loader |
+| [`.github/workflows/`](.github/workflows/) | Quality gates, preview and production deploys, tech-debt tracking |
 | [`docs/`](docs/) | Architecture, design system, audit receipts |
 
 ## Running it
@@ -82,14 +82,16 @@ before a human reads a single line. Merges deploy nothing to production by
 themselves; production only ever moves when a maintainer dispatches it. The whole ritual
 is documented in [`docs/architecture.md`](docs/architecture.md) §10.2.
 
-## Two homes
+## One home
 
-Development happens in a private working repository; this public repository
-is its mirror, receiving `main` and release tags automatically on every push.
-That has one honest consequence: we cannot merge pull requests here. If you
-spot a bug, a broken standard, or something you would build better — open an
-issue, or write to [ventas@serverstartup.io](mailto:ventas@serverstartup.io).
-Both get read by the people who wrote the code.
+This is the working repository and the public one — the same repository, not a
+selection from a bigger private one. Branches, pull requests, issues and CI
+logs are all here, in the open, and the history goes back to the first commit.
+
+So pull requests merge here. If you spot a bug, a broken standard, or something
+you would build better — open one, or an issue, or write to
+[ventas@serverstartup.io](mailto:ventas@serverstartup.io). All three get read by
+the people who wrote the code.
 
 ## Security
 

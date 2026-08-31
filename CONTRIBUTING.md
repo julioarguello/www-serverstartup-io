@@ -14,7 +14,8 @@ of it. Branches, pull requests, issues and CI logs are all in the open.
 
 There were three repositories until #428 and now there is one. The public
 mirror this document used to describe — a second repo fed by `mirror.yml` on
-every push to `main` — is archived. What you are reading is no longer a
+every push to `main` — no longer receives anything: #435 deleted the workflow
+and the sync script. What you are reading is no longer a
 selection: it is the thing itself, conversations included.
 
 - **You are on the team**: branch here, open a PR here.

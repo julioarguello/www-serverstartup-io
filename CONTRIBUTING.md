@@ -160,6 +160,9 @@ Not a PR gate, but the same family:
 
 | Post-deploy | `scripts/verify-deploy.sh <base-url>` | 20 routes + headers + W3C Nu, all green |
 
+Going live on the real domain is a separate, ordered procedure with a rollback
+per step: [`docs/production-cutover.md`](docs/production-cutover.md) (#162).
+
 Two habits that keep these gates meaningful:
 
 - TypeScript stays pinned to 5.x — `astro check` has no working API on

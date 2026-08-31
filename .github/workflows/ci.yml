@@ -48,9 +48,10 @@ jobs:
         env:
           FORBIDDEN_NAMES: ${{ secrets.FORBIDDEN_NAMES }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-        # Scans the TRACKED tree for non-citable names, proves it can find one
-        # before trusting a clean result, refuses if the secret is missing on
-        # the private repo, and checks the whitelist the other way round (#347).
+        # Scans the TRACKED tree for non-citable names, proves it can find
+        # one before trusting a clean result, refuses outright if the secret
+        # is missing, and checks the whitelist the other way round (#347).
+        # A fork's PR gets no secrets, so it lands on that refusal — #434.
         run: python3 scripts/ci-check-citability.py
 
       - name: Types (astro check)

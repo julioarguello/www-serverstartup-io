@@ -13,7 +13,7 @@
 		"phoneDisplay": "",
 		"email": "hola@serverstartup.io",
 		"emailEn": "hello@serverstartup.io",
-		"repoUrl": "https://github.com/julioarguello/serverstartup-io",
+		"repoUrl": "https://github.com/julioarguello/www-serverstartup-io",
 		"phoneEncoded": "KzM0NjY1ODU5NTEw",
 		"whatsappEncoded": "MzQ2NjU4NTk1MTA=",
 		"whatsapp": "",
@@ -13691,13 +13691,13 @@
 								{
 									"_key": "pk1",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json",
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json",
 									"blank": true
 								},
 								{
 									"_key": "pk3",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
+									"href": "https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
 									"blank": true
 								},
 								{
@@ -14928,13 +14928,13 @@
 								{
 									"_key": "pk1",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json",
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json",
 									"blank": true
 								},
 								{
 									"_key": "pk3",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
+									"href": "https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
 									"blank": true
 								},
 								{
@@ -15886,7 +15886,7 @@
 								{
 									"_key": "k3",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io"
+									"href": "https://github.com/julioarguello/www-serverstartup-io"
 								}
 							],
 							"children": [
@@ -16044,7 +16044,7 @@
 								{
 									"_key": "kq",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/seed/seed.json"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json"
 								},
 								{
 									"_key": "kt",
@@ -16054,7 +16054,7 @@
 								{
 									"_key": "ky",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/.github/workflows/ci.yml"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/.github/workflows/ci.yml"
 								}
 							],
 							"children": [
@@ -16326,7 +16326,7 @@
 								{
 									"_key": "k1u",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/tree/main/tests/copy-baseline"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/tests/copy-baseline"
 								}
 							],
 							"children": [
@@ -16464,7 +16464,7 @@
 								{
 									"_key": "k29",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json"
 								}
 							],
 							"children": [
@@ -16540,7 +16540,7 @@
 								{
 									"_key": "k2k",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io"
+									"href": "https://github.com/julioarguello/www-serverstartup-io"
 								},
 								{
 									"_key": "k2n",
@@ -16621,7 +16621,7 @@
 								{
 									"_key": "k3",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io"
+									"href": "https://github.com/julioarguello/www-serverstartup-io"
 								}
 							],
 							"children": [
@@ -16779,7 +16779,7 @@
 								{
 									"_key": "kq",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/seed/seed.json"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json"
 								},
 								{
 									"_key": "kt",
@@ -16789,7 +16789,7 @@
 								{
 									"_key": "ky",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/.github/workflows/ci.yml"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/.github/workflows/ci.yml"
 								}
 							],
 							"children": [
@@ -17061,7 +17061,7 @@
 								{
 									"_key": "k1u",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/tree/main/tests/copy-baseline"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/tests/copy-baseline"
 								}
 							],
 							"children": [
@@ -17199,7 +17199,7 @@
 								{
 									"_key": "k29",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io/blob/main/lighthouserc.json"
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json"
 								}
 							],
 							"children": [
@@ -17275,7 +17275,7 @@
 								{
 									"_key": "k2k",
 									"_type": "link",
-									"href": "https://github.com/julioarguello/serverstartup-io"
+									"href": "https://github.com/julioarguello/www-serverstartup-io"
 								},
 								{
 									"_key": "k2n",

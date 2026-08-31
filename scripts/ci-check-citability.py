@@ -57,7 +57,6 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-MIRROR_REPO = "julioarguello/serverstartup-io"
 
 # §13, plus the #266 amendment. Names that MAY appear in public material.
 WHITELIST = {
@@ -68,7 +67,7 @@ WHITELIST = {
 NEUTRAL = re.compile(r"^[a-z]\d+$")
 
 def tracked_files() -> list[str]:
-    """What the repository actually publishes — and what the mirror copies.
+    """What the repository actually publishes.
 
     Scanning the working tree instead was wrong in both directions: locally it
     flags the gitignored private KB (docs/company/, which is SUPPOSED to hold
@@ -356,23 +355,31 @@ def main() -> int:
     repo = os.environ.get("GITHUB_REPOSITORY", "")
     pattern = os.environ.get("FORBIDDEN_NAMES", "")
 
-    # check_opaque runs everywhere, mirror included: it needs no secret, and
-    # the mirror is precisely the tree whose unreadable files are published to
-    # strangers. Called at the return sites so its output lands after the
-    # scans it qualifies, rather than above them.
-    if repo == MIRROR_REPO:
-        print(f"citability: running on the public mirror ({repo}) — the secret "
-              "does not exist there by design; skipping the forbidden-name scan")
-        return check_whitelist() | check_opaque(tracked_files())
-
+    # check_opaque needs no secret, so it runs on every path that runs at all.
+    # Called at the return sites so its output lands after the scans it
+    # qualifies, rather than above them.
+    #
+    # There was a branch here for the public mirror, which had no
+    # FORBIDDEN_NAMES secret and therefore skipped the forbidden-name scan.
+    # #428 archived the mirror; this repository is now the public one and it
+    # does hold the secret, so the exemption is gone and the scan runs
+    # unconditionally.
+    #
+    # One context inherits the mirror's shape without inheriting its
+    # exemption: a pull request from a fork gets no repository secrets, so
+    # `pattern` is empty and this returns 3 — "nobody can currently tell",
+    # which is not "clean". That is deliberately not softened into a pass;
+    # #434 decides what an outside contributor's PR should look like instead.
     if not pattern:
         # The observed fact and where to look — never a guessed cause.
-        print("citability: FORBIDDEN_NAMES is empty or unset, and this is not "
-              f"the public mirror (GITHUB_REPOSITORY={repo or '<unset>'}).",
-              file=sys.stderr)
+        print("citability: FORBIDDEN_NAMES is empty or unset "
+              f"(GITHUB_REPOSITORY={repo or '<unset>'}).", file=sys.stderr)
         print("  Refusing to pass: an absent secret and a clean tree produce "
               "the same green, and only one of them is safe.", file=sys.stderr)
-        print("  Check the repository secret FORBIDDEN_NAMES.", file=sys.stderr)
+        print("  Check the repository secret FORBIDDEN_NAMES. On a pull "
+              "request from a fork the secret is unavailable by design — "
+              "re-run the gate from a branch in this repository (#434).",
+              file=sys.stderr)
         return 3
 
     return (check_forbidden(pattern) | check_whitelist()

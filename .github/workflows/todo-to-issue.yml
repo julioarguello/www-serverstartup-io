@@ -8,9 +8,10 @@ name: track-tech-debt
 # main only. On a feature branch the action re-scans every WIP commit and opens
 # a duplicate issue for the same marker (dev-tech-debt.md §3).
 #
-# This file travels WITH the mirror (see mirror.yml), so the job hard-gates on
-# the source repository — on the public mirror it is inert by construction,
-# and the debt backlog stays in one place.
+# The `if: github.repository ==` gate below outlived its reason. It was there
+# because this file travelled with the public mirror and had to stay inert on
+# it; #428 archived the mirror and there is one repository now. Kept anyway: it
+# costs nothing, and it is exactly the guard a fork would need.
 on:
   push:
     branches: [main]

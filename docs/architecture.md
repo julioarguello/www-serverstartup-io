@@ -553,8 +553,8 @@ PR → quality-gates green → merge to main
   cannot check is that the real one still holds the real names, which the
   script's own comment already explains is uncheckable from inside CI.
 - **The naming gate reads what grep skips** (`ci-check-citability.py`, #324).
-  This repository is mirrored publicly and one guard decides who may be named
-  in it (§13). `grep -I` stops at the first NUL byte and says nothing, which
+  This repository is public (#428) and one guard decides who may be named in
+  it (§13). `grep -I` stops at the first NUL byte and says nothing, which
   left 125 of 414 tracked files — around 30 MB, the whole `reference/` archive
   — outside it: a skipped file and a clean file produced the same green. The
   issue proved it the honest way, grepping a WordPress export for three words

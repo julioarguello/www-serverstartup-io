@@ -34,8 +34,8 @@ the citability gate now (§ below); whether they should be here at all is #324.
 
 > Four further documents were removed from this archive in #160 because they
 > were company-internal. Their entries stayed in this table for three months,
-> on a repository that is mirrored publicly — an index describing internal
-> documents, with no way for a reader to tell they were gone, which is worse
+> on a repository open to the public — an index describing internal documents,
+> with no way for a reader to tell they were gone, which is worse
 > than the files themselves would have been. They are named here by count and
 > not by title on purpose. If you need them, they are in the private knowledge
 > base, not in this tree.

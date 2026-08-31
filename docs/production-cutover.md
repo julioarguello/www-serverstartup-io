@@ -71,6 +71,16 @@ Leave `seed_d1_confirm` empty. That input exists only to overwrite a database
 that already holds content, and `scripts/ci-guard-prod-seed.sh` refuses
 without it — the refusal is the safety net, so do not pre-empt it.
 
+> **What the first dispatch actually did** — run 33423944295, 2026-08-31.
+> It failed at the guard, which reported the production database unreadable.
+> It was not: the query succeeded and returned nothing, because production sat
+> **39 migrations behind** (30 applied against a canonical 69) and not one
+> `ec_*` collection table existed for the seed to write into. #442 fixed both
+> halves — the guard now tells "empty" from "could not measure", and the
+> worker deploys *before* the seed so it can migrate the schema the seed
+> writes into, with an explicit wait on the remote migration count. That is
+> the order `deploy-preview.yml` has used since 2026-08-22.
+
 Watch it, because the seed step is where a first run goes wrong:
 
 ```bash

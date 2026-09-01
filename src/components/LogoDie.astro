@@ -191,6 +191,11 @@ const faces = services
 	}
 	.logo-stage .sticker text {
 		stroke: none;
+		/* The AI face letters its glyph where the other five draw a path, so it
+		   is the one sticker made of type — and it has to be the same mono face
+		   as the section cube's (CubeEmblem.astro). Nothing set it here, so it
+		   inherited the document's sans. */
+		font-family: var(--font-family-mono);
 	}
 	.logo-stage .gsticker svg {
 		width: 56%;

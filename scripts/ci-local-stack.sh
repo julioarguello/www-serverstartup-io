@@ -50,9 +50,11 @@ wait_http "[0-9]{3}"
 
 # 2. Seed with the server DOWN (FTS-corruption rule).
 #
-# The supervisor dies FIRST, then its children. wrangler 4.125 supervises its
+# The supervisor dies FIRST, then its children. wrangler supervises its
 # workerd children and respawns one the instant you kill it, so killing the
-# child first only produces a fresh child that retakes the port. Measured
+# child first only produces a fresh child that retakes the port. Measured on
+# 4.125 and re-measured on 4.127.1 when the pin moved (#390): the command-line
+# pattern below still reaches the supervisor, and the port comes back free. Measured
 # 2026-08-21 while migrating to Astro 7: after each `kill -9` the workerd on
 # the port came back with an `etime` of seconds, and one supervisor survived
 # with PPID 1 between runs, holding the port across invocations.

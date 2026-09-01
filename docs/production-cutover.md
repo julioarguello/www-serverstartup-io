@@ -111,6 +111,26 @@ This is the step with no local command, and the one that actually moves
 traffic. In the Cloudflare dashboard: **Workers & Pages → `www-serverstartup-io`
 → Settings → Domains & Routes → Add → Custom Domain**.
 
+### Before any of it: the bot settings (#333)
+
+Going orange is the moment the zone's edge features begin applying to real
+traffic. Until then they are inert, which is why nobody has had to think about
+them. **Security → Settings → Bot traffic**, on the `serverstartup.io` zone:
+read the state of *Block AI bots*, and of Bot Fight Mode and Super Bot Fight
+Mode while you are there.
+
+If *Block AI bots* is on, move to the newer control that blocks training while
+**keeping search allowed**. On 2026-09-15 the legacy option starts blocking
+mixed-purpose crawlers, Googlebot among them, and a corporate site has no
+reason to block search. Two minutes here, and the failure it prevents is
+silent: nothing breaks on cutover day, and weeks later the site stops being
+crawled.
+
+This cannot be measured from outside. Cloudflare classifies crawlers by IP and
+reverse DNS, not by `User-Agent`, so a spoofed Googlebot request from any
+ordinary connection is classified as an unverified bot and tells you nothing
+about the setting. It has to be read in the dashboard.
+
 ### Rehearse on `serverstartup.dev` first
 
 `serverstartup.dev` is registered in the same Cloudflare account and serves no
@@ -173,6 +193,37 @@ Create**, if hostname equals `serverstartup.io`, static redirect to
 `https://www.serverstartup.io` with status **301**, *preserving path and query
 string*. Create it before binding `www`, so the apex is never even briefly a
 second origin for the same content.
+
+**And the apex record has to be orange first, or that rule never runs.** A
+Redirect Rule only executes for hostnames Cloudflare proxies, and today the
+apex is grey — DNS-only. Measured 2026-09-01:
+
+```
+https://serverstartup.io/       301  nginx   (no cf-ray)
+https://www.serverstartup.io/   200  nginx   (no cf-ray)
+```
+
+The `301` there is real, but it comes from the origin being replaced, not from
+Cloudflare. So the order has one more step than it looked:
+
+1. **DNS → `A` record for `serverstartup.io` → Proxied.** Leave the value at
+   `34.175.111.59`; this changes who answers, not where it points.
+2. Create the Redirect Rule above.
+3. Verify it is Cloudflare answering, not nginx — the status code alone cannot
+   tell you, because both return `301`:
+
+   ```bash
+   curl -sI https://serverstartup.io/ | grep -iE '^(HTTP|location|cf-ray|server)'
+   ```
+
+   No `cf-ray` means step 1 did not take, and the redirect you are looking at
+   is still the old server's.
+
+Skipping step 1 is not a visible failure, which is what makes it worth writing
+down. The apex goes on redirecting exactly as before — from nginx, on the host
+this whole procedure exists to decommission. The site would read as migrated
+while one of its two public hostnames still depended on the machine we are
+walking away from.
 
 Adding a Custom Domain makes Cloudflare replace the existing `A` record with
 the proxied worker binding automatically. **Record the current records before

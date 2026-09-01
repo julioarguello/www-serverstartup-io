@@ -54,6 +54,13 @@
 		"preview": {
 			"name": "www-serverstartup-io-preview",
 			"cache": { "enabled": true },
+			// #444: the test environment, on its own D1/R2/KV, reachable by a
+			// name that says so. `workers_dev` is NOT decorative here — wrangler
+			// reads `const defaultWorkersDev = routes.length === 0`, so declaring
+			// a route turns the *.workers.dev hostname OFF unless this line says
+			// otherwise, and deploy-preview.yml verifies against that hostname.
+			"workers_dev": true,
+			"routes": [{ "pattern": "preview.serverstartup.dev", "custom_domain": true }],
 			"d1_databases": [
 				{
 					"binding": "DB",
@@ -85,6 +92,27 @@
 		"production": {
 			"name": "www-serverstartup-io",
 			"cache": { "enabled": true },
+			// #444: NOT a second test environment — this hostname serves the
+			// production worker and the production D1, and /_emdash/admin
+			// through it edits live content. It exists for two things: to
+			// rehearse the §3 custom-domain step of docs/production-cutover.md
+			// on a domain nobody depends on, and as a standing A/B probe for the
+			// Spanish ISP block, because it answers from the zone's own anycast
+			// range (104.21.x.x / 172.67.x.x) while *.workers.dev answers from
+			// 188.114.9x.x. One worker, two ranges: when one goes quiet, the
+			// other says whether the cause is the network or the site.
+			//
+			// The apex serverstartup.dev is deliberately absent. A custom domain
+			// binds the hostname straight to the worker, so the apex would answer
+			// 200 instead of 301 — the #334 defect moved from the trailing slash
+			// to the host. It belongs in a Redirect Rule, which is a dashboard
+			// action, not a config one.
+			//
+			// `workers_dev` as above: without it, declaring a route silently
+			// switches off the hostname deploy-production.yml polls for D1
+			// migrations and then verifies.
+			"workers_dev": true,
+			"routes": [{ "pattern": "www.serverstartup.dev", "custom_domain": true }],
 			"d1_databases": [
 				{
 					"binding": "DB",

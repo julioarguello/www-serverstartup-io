@@ -111,10 +111,55 @@ This is the step with no local command, and the one that actually moves
 traffic. In the Cloudflare dashboard: **Workers & Pages → `www-serverstartup-io`
 → Settings → Domains & Routes → Add → Custom Domain**.
 
-Add **both**, in this order:
+### Rehearse on `serverstartup.dev` first
+
+`serverstartup.dev` is registered in the same Cloudflare account and serves no
+content of its own. Bound to the production worker it exercises every part of
+this section — certificate issuance, the DNS record Cloudflare writes for you,
+edge caching on a real zone, and `scripts/verify-deploy.sh` against a custom
+domain — without touching the domain that carries the business.
+
+Set this on that zone before pointing anything at it: **Rules → Transform Rules
+→ Modify Response Header**, if hostname equals `serverstartup.dev`, set static
+`X-Robots-Tag` to `noindex, nofollow`. `public/robots.txt` says `Allow: /`, so
+without it the rehearsal is crawlable. Confirm it from the wire, not the panel:
+
+```bash
+curl -sI https://serverstartup.dev/ | grep -i x-robots-tag
+```
+
+Expect the zone's own anycast addresses (`104.21.x.x`, `172.67.x.x`), not the
+`188.114.9x.x` pair `workers.dev` uses. That difference is what makes the
+rehearsal domain a standing A/B probe for the block described below: one
+worker, two address ranges, so when one stops answering, the other says whether
+the cause is the network or the site.
+
+Measured 2026-09-01, `scripts/verify-deploy.sh https://www.serverstartup.dev`
+returned ALL GREEN — 26 sitemap URLs agreeing with the route inventory both
+ways, all 10 redirects, the header suite on every sampled route, 0 W3C Nu
+errors.
+
+### Then the real one
+
+Add **one** Custom Domain, and only one:
 
 1. `www.serverstartup.io` — the canonical host, where the 200 lives.
-2. `serverstartup.io` — the apex, which must keep returning `301` to `www`.
+
+**Do not add the apex as a Custom Domain.** An earlier revision of this step
+said to add both, on the assumption that the apex would go on returning `301`
+to `www`. It will not. A Custom Domain binds the hostname straight to the
+worker, and the worker answers on every host it is handed. Measured on the
+rehearsal zone with both hostnames bound: apex and `www` each returned `200`
+with the full page, and both emitted the same
+`<link rel="canonical" href="https://www.serverstartup.io/">`. That is #334
+again — one page reachable at two URLs — moved from the trailing slash to the
+host.
+
+The apex belongs in a redirect, not a binding: **Rules → Redirect Rules →
+Create**, if hostname equals `serverstartup.io`, static redirect to
+`https://www.serverstartup.io` with status **301**, *preserving path and query
+string*. Create it before binding `www`, so the apex is never even briefly a
+second origin for the same content.
 
 Adding a Custom Domain makes Cloudflare replace the existing `A` record with
 the proxied worker binding automatically. **Record the current records before
@@ -127,7 +172,7 @@ dig +short A www.serverstartup.io  # expect 34.175.111.59
 
 Write both values down somewhere outside this repository.
 
-**Check which addresses the domain landed on, before adding the apex.** The
+**Check which addresses the domain landed on, and keep checking.** The
 worker's own `workers.dev` hostname resolves to `188.114.96.5` and
 `188.114.97.5`. On 2026-08-31, from a Spanish domestic connection, both
 accepted no TCP on 443 — while `188.114.98.1` and `188.114.99.1`, in the same
@@ -135,6 +180,14 @@ accepted no TCP on 443 — while `188.114.98.1` and `188.114.99.1`, in the same
 specific anycast addresses null-routed rather than a range: the shape of the
 court-ordered blocks Spanish ISPs apply during football broadcasts, which take
 Cloudflare-hosted bystanders down with the target.
+
+**And it comes and goes.** The same two addresses answered normally on
+2026-09-01 at 09:11, from the same connection, with nothing changed in between.
+So one reading decides nothing in either direction: a red measurement on
+cutover day is not grounds to roll back a deploy that is fine everywhere else,
+and a green one is not clearance. Read it more than once, at different hours,
+and give weight to an evening during a league fixture — that is when the order
+is in force.
 
 The site being replaced is on Google Cloud (`34.175.111.59`) and is immune.
 Moving to Cloudflare is what creates the exposure, so measure it:
@@ -162,11 +215,14 @@ done
 ```
 
 **Continue when** `www` answers `200` and the `server` header is no longer
-`nginx`, and the apex still answers `301`. While it still says `nginx`, the
-change has not propagated or has not been applied.
+`nginx`, and the apex answers `301` — now from the Redirect Rule rather than
+from the old origin, which is why the rule goes in first. While `www` still
+says `nginx`, the change has not propagated or has not been applied. If the
+apex answers `200`, it was bound as a Custom Domain after all; remove that
+binding before continuing.
 
-**Rollback**: remove the Custom Domain in the same screen and re-create the two
-`A` records with the values captured above. Cloudflare proxies these records,
+**Rollback**: remove the Custom Domain in the same screen, delete the Redirect
+Rule, and re-create the two `A` records with the values captured above. Cloudflare proxies these records,
 so the TTL a resolver sees is short and reversal is fast — this is the whole
 reason the cutover is low-risk, and the reason to capture those values first.
 
@@ -259,7 +315,10 @@ Each of these produced a green that was not true.
   in the same `/20` answered. A site that is up everywhere else is simply gone
   for those users, and no check run from GitHub's runners will ever show it —
   they are not behind the block. Reachability from Spain is a separate
-  measurement from a green deploy.
+  measurement from a green deploy — and an intermittent one: the same
+  addresses answered on 2026-09-01. Measure repeatedly, and use
+  `serverstartup.dev` as the control, because it serves the same worker from a
+  different address range.
 - **The old site answers 200 too.** Any cutover check that reads only the
   status code cannot tell the two sites apart. Read `server`.
 

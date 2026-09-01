@@ -119,6 +119,19 @@ this section — certificate issuance, the DNS record Cloudflare writes for you,
 edge caching on a real zone, and `scripts/verify-deploy.sh` against a custom
 domain — without touching the domain that carries the business.
 
+Since #444 both hostnames are declared in `wrangler.jsonc`, so a deploy
+recreates them and no reader has to open the dashboard to learn they exist:
+
+| Hostname | Worker | What it is |
+| :--- | :--- | :--- |
+| `www.serverstartup.dev` | `www-serverstartup-io` | This rehearsal, and the A/B probe below. **Production data** — `/_emdash/admin` here edits live content |
+| `preview.serverstartup.dev` | `www-serverstartup-io-preview` | The test environment, on its own D1, R2 and KV |
+
+The apex is deliberately not among them, for the reason given below, and
+`workers_dev: true` is explicit in both environments because wrangler switches
+that hostname off as soon as a route is declared — see the comments in the
+file. Both deploy workflows verify through it.
+
 Set this on that zone before pointing anything at it: **Rules → Transform Rules
 → Modify Response Header**, if hostname equals `serverstartup.dev`, set static
 `X-Robots-Tag` to `noindex, nofollow`. `public/robots.txt` says `Allow: /`, so

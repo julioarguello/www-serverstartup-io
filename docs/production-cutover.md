@@ -241,6 +241,18 @@ Each of these produced a green that was not true.
 - **`MERGED` is not proof of integration.** Squash rewrites the SHA, so
   `git log <base>..<branch>` keeps listing commits that are already in. Check
   by content.
+- **A half-applied migration wedges the schema forever, and looks like a hang.**
+  Production sat at 30 applied migrations while the deploy polled 36 times
+  without the number moving. It was not slow: `032_rate_limits` had run its
+  first statement in April, creating `_emdash_rate_limits`, and had never been
+  recorded in `_emdash_migrations` — its index and its `_emdash_device_codes`
+  column were both absent. `createTable` carries no `ifNotExists`, so every
+  retry died on the table it had itself created, wrote nothing, and the
+  middleware backed the isolate off. The tell is D1's own counters: **1,378
+  reads and 0 writes in 24 h** while preview showed 47 writes. Reads without
+  writes means the worker is alive and refusing to migrate, not idle. The fix
+  was to drop the orphan table — it held 0 rows — and let EmDash own the
+  schema, rather than hand-writing the migration row.
 - **Spanish ISP blocks hit Cloudflare bystanders, and CI cannot see them.**
   Measured 2026-08-31 from a domestic connection: the two addresses the
   production worker resolves to accepted no TCP on 443, while their neighbours

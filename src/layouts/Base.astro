@@ -8,6 +8,7 @@
  * - <slot/> for page content
  * - Footer: "Confían en nosotros" logos, 4-col grid, Kit Digital banner
  */
+import { Font } from "astro:assets";
 import { getMenu, getSiteSettings, getEmDashCollection } from "emdash";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
 import { getUiLabels } from "../utils/ui-labels";
@@ -229,6 +230,17 @@ const resolvedOgType = ogType || "website";
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	{/* The two brand faces. `astro.config.mjs` buys and optimises them; these two
+	     components are what actually emits their @font-face rules and defines
+	     --font-sans / --font-mono. Without them the site silently renders in the
+	     visitor's OS default — Helvetica, Arial or Roboto depending on the
+	     machine — which is what it did until #450.
+	     Only the two weights the first screen needs get a preload link, and only
+	     the latin subset: the rest swap in. Never hand-write these @font-face
+	     blocks — the generated ones carry the size-adjust / ascent-override that
+	     hold CLS at zero while the real face arrives. */}
+	<Font cssVariable="--font-sans" preload={[{ weight: 300, subset: "latin" }, { weight: 700, subset: "latin" }]} />
+	<Font cssVariable="--font-mono" />
 	<title>{pageTitle}</title>
 	<meta name="description" content={pageDescription} />
 	{robots && <meta name="robots" content={robots} />}

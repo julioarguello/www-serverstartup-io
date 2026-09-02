@@ -1,0 +1,100 @@
+---
+/**
+ * SiteMark — the house's mark, drawn the way the header draws it (#454).
+ *
+ * The footer used to carry `logo-vertical.png`: a 33 KB WordPress-era raster
+ * with a hard drop shadow and a `~Server Startup` plate baked into the bitmap,
+ * on a site whose only shadow token is `--shadow-card` and whose header renders
+ * the same mark as live SVG plus live mono type. Two drawings of one mark, and
+ * the one at the bottom of every page was the off-system one.
+ *
+ * So the mark is one component now: the 2×2 wireframe cube as vector, and
+ * `~Server Startup` as real text in the mono face with its blinking cursor —
+ * the same shapes, the same cursor, at any size, in any ink, selectable and
+ * searchable. The geometry is copied from `SiteHeader.astro:71-78` deliberately
+ * rather than shared through a third file: the header's cube inverts its cells
+ * over a hero and this one never does, and one component with a mode flag for
+ * that would be harder to read than two literal polygons.
+ */
+interface Props {
+	/** Cube height in px. The wordmark scales with it. */
+	size?: number;
+	/** Extra classes for the wrapping link/element. */
+	class?: string;
+	/** Where the mark points. Omit for a non-interactive mark. */
+	href?: string;
+	/** Accessible name when it is a link. */
+	label?: string;
+}
+const { size = 34, class: klass = "", href, label } = Astro.props;
+const Tag = href ? "a" : "span";
+const cube = { h: size, w: Math.round((size * 200) / 228) };
+---
+
+<Tag
+	class:list={["site-mark", klass]}
+	style={`--mark-size:${size}px`}
+	{...(href ? { href, "aria-label": label } : {})}
+>
+	<svg class="site-mark__cube" width={cube.w} height={cube.h} viewBox="0 0 200 228" aria-hidden="true">
+		<polygon class="site-mark__cell" points="100,14 186,64 100,114 14,64"></polygon>
+		<polygon class="site-mark__cell" points="14,64 100,114 100,214 14,164"></polygon>
+		<polygon class="site-mark__cell site-mark__cell--b" points="100,114 186,64 186,164 100,214"></polygon>
+		<path class="site-mark__edge" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z"></path>
+		<path class="site-mark__edge" d="M14,64 100,114 186,64 M100,114 100,214"></path>
+		<path class="site-mark__edge" d="M57,39 143,89 M143,39 57,89"></path>
+		<path class="site-mark__edge" d="M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114"></path>
+	</svg>
+	<span class="site-mark__word">~Server Startup</span><span class="site-mark__cursor" aria-hidden="true"></span>
+</Tag>
+
+<style is:global>
+	.site-mark {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		text-decoration: none;
+		color: var(--color-primary);
+	}
+
+	.site-mark__cube { display: block; flex: none; }
+	.site-mark__cell { fill: var(--color-border); }
+	.site-mark__cell--b { fill: var(--color-border-soft); }
+	.site-mark__edge {
+		fill: none;
+		stroke: currentColor;
+		/* token-guard: off — stroke width in the mark's own 200×228 user space,
+		   which is not the page's px grid; a length token here would be a
+		   different quantity wearing the same name. */
+		stroke-width: 13;
+		/* token-guard: on */
+		stroke-linejoin: round;
+		stroke-linecap: round;
+	}
+
+	.site-mark__word {
+		font-family: var(--font-family-mono);
+		font-size: calc(var(--mark-size, 34px) * 0.45);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		line-height: 1;
+	}
+
+	/* the prompt is only a prompt with something waiting in it */
+	.site-mark__cursor {
+		width: 0.5em;
+		height: 1.05em;
+		margin-left: 2px;
+		background: currentColor;
+		font-size: calc(var(--mark-size, 34px) * 0.45);
+		animation: site-mark-blink 1.2s steps(1) infinite;
+	}
+
+	@keyframes site-mark-blink {
+		50% { opacity: 0; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site-mark__cursor { animation: none; }
+	}
+</style>

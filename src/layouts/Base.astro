@@ -164,7 +164,6 @@ const heroSlideColors: string[] =
 
 // Contact info from site settings
 const s = settings as SiteSettings;
-const phone = s.phone || "";
 const phoneDisplay = s.phoneDisplay || "";
 // The address is locale-specific: `hello@` answers in English, `hola@` in
 // Spanish. The footer picked the Spanish one on every locale, so an English
@@ -191,7 +190,11 @@ const rssPath = locale === "en" ? "/en/rss.xml" : "/rss.xml";
 const rssTitle = labels.get("footer_headings", "rss_title",
 	locale === "en" ? "Journal — RSS" : "Bitácora — RSS");
 const trustTitle = labels.get("footer_headings", "trust_title", "Confían en nosotros");
-const servicesTitle = labels.get("footer_headings", "services_title", "Áreas de especialización");
+// #454: the footer no longer reprints the six vertical names — the menu carries
+// them, one tap away on every page — so `services_title` is not read here any
+// more. The label stays in the CMS: `/referencias` and the home both use it.
+const houseTitle = labels.get("footer_headings", "house_title", locale === "en" ? "The house" : "La casa");
+const signature = labels.get("footer_headings", "signature", "");
 const partnersTitle = labels.get("footer_headings", "partners_title", "Somos partners");
 const legalNoticeLabel = labels.get("footer_headings", "legal_notice", "Aviso legal");
 const privacyLabel = labels.get("footer_headings", "privacy_policy", "Política de privacidad");
@@ -320,7 +323,8 @@ const resolvedOgType = ogType || "website";
 
 	<SiteFooter
 		trustTitle={trustTitle}
-		servicesTitle={servicesTitle}
+		houseTitle={houseTitle}
+		signature={signature}
 		partnersTitle={partnersTitle}
 		legalNoticeLabel={legalNoticeLabel}
 		privacyLabel={privacyLabel}
@@ -331,11 +335,8 @@ const resolvedOgType = ogType || "website";
 		emailEncoded={emailEncoded}
 		phoneEncoded={phoneEncoded}
 		emailLabel={emailLabel}
-		email={email}
-		phone={phone}
 		phoneDisplay={phoneDisplay}
 		partnerLogos={partnerLogos}
-		services={services}
 		localePrefix={localePrefix}
 		locale={locale}
 	/>

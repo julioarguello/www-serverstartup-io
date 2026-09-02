@@ -18,7 +18,7 @@
  *   · `ci-check-var-resolves.mjs` asks whether a declaration survived, not
  *     what it drew.
  *
- * Three assertions, all over the rendered page:
+ * Three assertions to begin with, all over the rendered page:
  *
  *   G1  every ROW list has equal row heights — max − min ≤ 8px — at 390, 768
  *       and 1440. Eight pixels is a hairline plus a rounding error, not a
@@ -35,6 +35,44 @@
  *       row, twenty lines apart, which is what made the block read as filler.
  *       That defect is invisible to every other gate: the copy baseline had it
  *       frozen in, and a duplicate is neither a contrast nor a token fault.
+ *
+ * Six more arrived with the footer (#454), which had the same class of defect —
+ * geometry no gate could see:
+ *
+ *   G4  the reference strip is ONE line where there is room for one. Measured
+ *       before the change: 6 marks and a seventh alone below, at both 1024 and
+ *       1440, because the strip inherited the reading column's 840px while the
+ *       set needs ~930. A lone mark under a full line reads as an accident, and
+ *       the marks are the credibility of the page.
+ *
+ *   G5  every line of the strip is centred within it (±8px). Flex centres a
+ *       partial line for free; a grid does not, and the obvious "tidy this into
+ *       a grid" refactor is exactly what would leave a wrapped mark hard left.
+ *
+ *   G6  nothing in the footer is centre-aligned. It used to be centred below
+ *       768px and left above it, so the same footer read as two designs
+ *       depending on the phone in your hand. Checked at all four widths, which
+ *       is what makes "one alignment everywhere" a measurement and not a hope.
+ *
+ *   G7  the EU emblem renders at least 37.8 CSS px tall — 1cm at 96dpi, the
+ *       minimum in `eu-emblem-rules_es.pdf` p.10, whose duty that same document
+ *       extends to "sitios web y sus versiones móviles". Measured on the FLAG,
+ *       not the lockup around it: each mark declares the flag's share of its own
+ *       artwork in `data-emblem-ratio`, because a 40px lockup whose flag is 88%
+ *       of it renders a 35px emblem while looking compliant. The single 2560×242
+ *       JPEG we shipped rendered it at 18.2px on a 390px phone: a compliance
+ *       failure, penalty 10% of the aid, that no gate here could see and no
+ *       amount of reading the CSS would reveal.
+ *
+ *   G8  every link in the footer's nav lists renders at one size. There were
+ *       five — 13, 14, 17, 18 and 20px — and the home's own body copy sat below
+ *       two of them.
+ *
+ *   G9  the footer paints no ground of its own — transparent, or at worst the
+ *       body's own colour. Giving the footer its own band is what makes a footer
+ *       read as bolt-on, and the rule that used to be here painted
+ *       `--color-secondary` over a body that is already that colour: a band
+ *       waiting to become visible the day either token moves.
  *
  * Deliberately NOT a screenshot diff. A pixel diff over 26 routes would go red
  * on every PR in this redesign by design, get re-baselined on sight, and become
@@ -58,8 +96,29 @@ const ROW_LISTS = [
 ];
 /** Pages whose whole copy must not repeat itself. */
 const PROSE_ROUTES = ["/", "/en"];
+/** The footer is the same on every route; one per locale is the whole surface. */
+const FOOTER_ROUTES = ["/", "/en"];
+/**
+ * The width from which the whole reference set must fit on one line. Below it
+ * the strip wraps and G5 takes over; above it a wrapped mark is the orphan.
+ */
+const STRIP_ONE_LINE_FROM = 1024;
+/**
+ * 1cm at 96dpi — the emblem minimum in `eu-emblem-rules_es.pdf` p.10. It is the
+ * FLAG's height, not the lockup's, which is why each mark declares the flag's
+ * share of its own artwork in `data-emblem-ratio`: a 40px lockup whose flag is
+ * 88% of it renders a 35px emblem and fails while looking compliant.
+ */
+const EMBLEM_MIN_PX = 37.8;
 
 const WIDTHS = [390, 768, 1440];
+/**
+ * 1024 is in here and not in WIDTHS because it is where the strip has least to
+ * spare: the measure is capped at 1140px, so 1024 leaves 984px of room for a
+ * set that needs ~932. Fifty-two pixels. That is the width a new reference, or
+ * a wider mark, breaks first — and it is invisible at 1440.
+ */
+const FOOTER_WIDTHS = [390, 768, 1024, 1440];
 /** A hairline plus a rounding error. Not a design allowance. */
 const TOLERANCE = 8;
 /** Shorter than this and a repeat is a label ("Ver más"), not duplicated prose. */
@@ -121,6 +180,81 @@ const MEASURE_PROSE = (min) => {
 	return seen;
 };
 
+/**
+ * G4–G9: the footer's geometry.
+ *
+ * `aligned` is a fixed selector list rather than every element: `text-align`
+ * inherits, so walking the whole subtree would report one planted centre a
+ * dozen times, and the `.btn` CTA centres its own label legitimately. If one of
+ * these classes is renamed the list stops matching and the control below turns
+ * that into exit 3 — the same contract the row selectors already carry.
+ */
+const MEASURE_FOOTER = () => {
+	const footer = document.querySelector(".site-footer");
+	if (!footer) return null;
+
+	const row = footer.querySelector(".ref-banner__row");
+	const marks = row ? [...row.querySelectorAll("img")] : [];
+	let stripLines = [];
+	if (row && marks.length) {
+		const strip = row.getBoundingClientRect();
+		const byTop = new Map();
+		for (const img of marks) {
+			const b = img.getBoundingClientRect();
+			const top = Math.round(b.top);
+			if (!byTop.has(top)) byTop.set(top, []);
+			byTop.get(top).push(b);
+		}
+		stripLines = [...byTop.entries()].map(([top, bs]) => ({
+			top,
+			n: bs.length,
+			// the line's own centre against the strip's. Measured from the marks
+			// themselves, not from their tracks: a grid centres tracks, and a
+			// half-empty last track is exactly how a wrapped mark drifts left.
+			offset:
+				(Math.min(...bs.map((b) => b.left)) + Math.max(...bs.map((b) => b.right))) / 2 -
+				(strip.left + strip.right) / 2,
+		}));
+	}
+
+	const ALIGNED = [
+		".footer-signature",
+		".footer-signature__house",
+		".footer-signature__line",
+		".footer-cols",
+		".footer-col",
+		".footer-col h3",
+		".footer-list",
+		".footer-list li",
+		".footer-legal__inner",
+	];
+	const aligns = [];
+	for (const sel of ALIGNED)
+		for (const el of footer.querySelectorAll(sel))
+			aligns.push({ sel, align: getComputedStyle(el).textAlign });
+
+	return {
+		marks: marks.length,
+		stripLines,
+		aligns,
+		alignedSelectors: ALIGNED.filter((sel) => footer.querySelector(sel)).length,
+		// only the images that carry the EU emblem: the ratio is the flag's share
+		// of the artwork's height, because the 1cm floor is the FLAG's, not the
+		// lockup's, and the flag is 88% of the cut we ship
+		funding: [...footer.querySelectorAll(".footer-funding__mark[data-emblem-ratio]")].map((img) => ({
+			alt: (img.alt || "").slice(0, 32),
+			ratio: parseFloat(img.dataset.emblemRatio),
+			h: img.getBoundingClientRect().height,
+		})),
+		links: [...footer.querySelectorAll(".footer-list a, .footer-list button")].map((el) => ({
+			text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 28),
+			size: getComputedStyle(el).fontSize,
+		})),
+		footerBg: getComputedStyle(footer).backgroundColor,
+		bodyBg: getComputedStyle(document.body).backgroundColor,
+	};
+};
+
 /* ── the positive control ──────────────────────────────────────────────── */
 
 /**
@@ -158,6 +292,64 @@ const PLANT = ({ item, claim }) => {
 	return { missing: null };
 };
 
+/**
+ * The footer's plant. Same contract: one violation per assertion, one shape
+ * that must stay unreported, and every finding judged by difference.
+ */
+const PLANT_FOOTER = () => {
+	const footer = document.querySelector(".site-footer");
+	if (!footer) return { missing: ".site-footer" };
+	const need = (sel) => {
+		const el = footer.querySelector(sel);
+		return el || null;
+	};
+
+	// A — the strip is made to wrap, and the lines it wraps into are made to stop
+	//     being centred. G4 (more than one line) and G5 (off-centre) both.
+	//
+	//     Three overrides, because the plant must not assume how the strip is
+	//     laid out today: `--ref-cols` is what wraps a grid, a narrow measure is
+	//     what wraps a flex row, and `justify-content` is what pushes the lines
+	//     off centre in either. The first draft planted only the grid variable,
+	//     and reverting the strip to its old flex row made this control exit 3
+	//     ("the scan is blind") while the real orphan sat there unreported —
+	//     which is the failure mode a control exists to prevent, not to cause.
+	const row = need(".ref-banner__row");
+	if (!row) return { missing: ".ref-banner__row" };
+	const marks = row.querySelectorAll("img").length;
+	if (marks < 3) return { missing: `.ref-banner__row img — only ${marks}, need 3 to plant` };
+	row.style.setProperty("--ref-cols", String(marks - 1));
+	row.style.maxWidth = "220px";
+	row.style.justifyContent = "flex-start";
+
+	// B — the signature block goes centred. text-align inherits, so its children
+	//     go with it; the legal row is a sibling and must NOT.
+	const sig = need(".footer-signature");
+	if (!sig) return { missing: ".footer-signature" };
+	sig.style.textAlign = "center";
+
+	// C — an emblem shrunk to what the old single JPEG actually rendered at 390.
+	const emblem = need(".footer-funding__mark[data-emblem-ratio]");
+	if (!emblem) return { missing: ".footer-funding__mark[data-emblem-ratio]" };
+	emblem.style.height = "18.2px";
+
+	// D — one link out of step with the rest.
+	const link = need(".footer-list a, .footer-list button");
+	if (!link) return { missing: ".footer-list a" };
+	link.style.fontSize = "13px";
+
+	// E — the footer takes a ground of its own.
+	footer.style.backgroundColor = "rgb(244, 244, 244)";
+
+	// F — the legal row gets a change that is not geometry. Nothing new may be
+	//     reported about it, and in particular it must not go centred with B.
+	const legal = need(".footer-legal__inner");
+	if (!legal) return { missing: ".footer-legal__inner" };
+	legal.style.fontStyle = "italic";
+
+	return { missing: null };
+};
+
 /* ── the scan ──────────────────────────────────────────────────────────── */
 
 const judgeRows = (m, where) => {
@@ -184,6 +376,68 @@ const judgeProse = (runs, where) => {
 		.map(([t, n]) => ({ g: "G3", where, msg: `printed ${n}× — "${t.slice(0, 72)}…"` }));
 };
 
+const judgeFooter = (m, where, width) => {
+	const found = [];
+
+	// G4 — one line where there is room for one
+	if (width >= STRIP_ONE_LINE_FROM && m.stripLines.length > 1)
+		found.push({
+			g: "G4",
+			where,
+			msg: `the reference strip wraps into ${m.stripLines.length} lines (${m.stripLines
+				.map((l) => l.n)
+				.join(" + ")}) with ${width}px to work in`,
+		});
+
+	// G5 — and every line it does draw is centred in it
+	for (const l of m.stripLines)
+		if (Math.abs(l.offset) > TOLERANCE)
+			found.push({
+				g: "G5",
+				where,
+				msg: `a strip line of ${l.n} mark(s) sits ${l.offset.toFixed(1)}px off the strip's centre`,
+			});
+
+	// G6 — one alignment, and it is not centre
+	for (const a of m.aligns)
+		if (a.align === "center" || a.align === "right" || a.align === "end")
+			found.push({ g: "G6", where, msg: `\`${a.sel}\` is text-align: ${a.align}` });
+
+	// G7 — the emblem keeps its mandated size
+	for (const f of m.funding) {
+		const emblem = f.h * (f.ratio || 1);
+		if (emblem < EMBLEM_MIN_PX)
+			found.push({
+				g: "G7",
+				where,
+				msg: `the emblem renders ${emblem.toFixed(1)}px tall (a ${f.h.toFixed(1)}px lockup × ${
+					f.ratio || 1
+				}), under the ${EMBLEM_MIN_PX}px minimum — "${f.alt}"`,
+			});
+	}
+
+	// G8 — one link size
+	const sizes = [...new Set(m.links.map((l) => l.size))];
+	if (sizes.length > 1)
+		found.push({
+			g: "G8",
+			where,
+			msg: `footer links render at ${sizes.length} sizes (${sizes.join(", ")}) — ${m.links
+				.map((l) => `${l.text}=${l.size}`)
+				.join(" · ")}`,
+		});
+
+	// G9 — no ground of its own. Transparent is the strongest form of that: the
+	// document's ground simply continues. Equal-to-the-body also passes, because
+	// a footer that repaints the body colour draws no band either — it is only
+	// fragile, and G9 is what catches it the day one of the two tokens moves.
+	const noGround = m.footerBg === m.bodyBg || /,\s*0\s*\)$/.test(m.footerBg) || m.footerBg === "transparent";
+	if (!noGround)
+		found.push({ g: "G9", where, msg: `the footer is ${m.footerBg} over a body that is ${m.bodyBg}` });
+
+	return found;
+};
+
 const browser = await puppeteer.launch({
 	headless: "new",
 	args: ["--no-sandbox"],
@@ -196,6 +450,33 @@ const open = async (route, width) => {
 	await page.goto(BASE + route, { waitUntil: "domcontentloaded", timeout: 60_000 });
 	await page.evaluate(() => document.fonts.ready);
 	return page;
+};
+
+/**
+ * Bring the footer into play before measuring it.
+ *
+ * Every mark down there is `loading="lazy"` and below the fold, and an unloaded
+ * `<img>` with `width:auto;height:auto` lays out at 0×0 — so a scan that does
+ * not scroll measures seven marks stacked at one coordinate and calls it a
+ * single, perfectly centred line. That is not a hypothetical: the first
+ * measurement taken for #454 reported exactly that, and the strip's real
+ * behaviour (6 + 1 at 1440) only appeared once the images were made to load.
+ */
+const settleFooter = async (page) => {
+	await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+	await page.evaluate(
+		() =>
+			new Promise((resolve) => {
+				const imgs = [...document.querySelectorAll(".site-footer img")];
+				let left = imgs.filter((i) => !i.complete).length;
+				if (!left) return resolve();
+				const done = () => --left <= 0 && resolve();
+				for (const i of imgs) if (!i.complete) i.addEventListener("load", done), i.addEventListener("error", done);
+				setTimeout(resolve, 5000);
+			})
+	);
+	// one frame for the wrap to settle after the last decode
+	await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 };
 
 // ── positive control first: a gate that has not proved it can see is not a gate.
@@ -259,6 +540,57 @@ const open = async (route, width) => {
 	await page.close();
 }
 
+// ── and the same for the footer half, at 1440, where G4 has something to say.
+{
+	const page = await open(FOOTER_ROUTES[0], 1440);
+	await settleFooter(page);
+	const key = (f) => `${f.g}|${f.msg}`;
+	const scan = async () => judgeFooter(await page.evaluate(MEASURE_FOOTER), "control", 1440);
+
+	const first = await page.evaluate(MEASURE_FOOTER);
+	if (!first || !first.marks || !first.funding.length || !first.links.length || first.alignedSelectors < 5) {
+		console.error(`✗ blind: the footer on ${FOOTER_ROUTES[0]} does not present what this gate measures.`);
+		console.error(
+			`  marks=${first?.marks ?? "—"} emblems=${first?.funding.length ?? "—"} links=${
+				first?.links.length ?? "—"
+			} aligned selectors matched=${first?.alignedSelectors ?? "—"}/9`
+		);
+		console.error("  A renamed class makes this gate report clean forever. Update the selectors here in");
+		console.error("  the same commit that renames them.");
+		await browser.close();
+		process.exit(3);
+	}
+
+	const before = new Set((await scan()).map(key));
+	const planted = await page.evaluate(PLANT_FOOTER);
+	if (planted.missing) {
+		console.error(`✗ blind: cannot plant on the footer — \`${planted.missing}\` is not there.`);
+		await browser.close();
+		process.exit(3);
+	}
+	const after = await scan();
+	const fresh = after.filter((f) => !before.has(key(f)));
+
+	const problems = [];
+	for (const g of ["G4", "G5", "G6", "G7", "G8", "G9"])
+		if (!fresh.some((f) => f.g === g)) problems.push(`${g} did not fire on a planted violation`);
+	// the plant centred the signature block; the legal row is its sibling and
+	// must have stayed where it was
+	for (const f of fresh.filter((f) => f.g === "G6" && /footer-legal/.test(f.msg)))
+		problems.push(`false positive — the plant centred the signature only, but: ${f.msg}`);
+	const groupsOf = (fs) => new Set([...fs].map((f) => (typeof f === "string" ? f.split("|")[0] : f.g)));
+	for (const g of groupsOf(before)) if (!groupsOf(after).has(g)) problems.push(`a plant silenced ${g}`);
+
+	if (problems.length) {
+		console.error("✗ the positive control failed: the footer scan is not measuring what it claims.");
+		for (const p of problems) console.error(`    ${p}`);
+		await browser.close();
+		process.exit(3);
+	}
+	ok("6 more planted defects judged correctly — an orphaned mark, an off-centre line, a centred block, a shrunken emblem, an odd link size, a ground of its own — and a legal row it left alone");
+	await page.close();
+}
+
 // ── the real scan
 const findings = [];
 let rowsSeen = 0;
@@ -285,6 +617,23 @@ for (const route of PROSE_ROUTES) {
 	findings.push(...judgeProse(runs, route));
 }
 
+let marksSeen = 0;
+for (const route of FOOTER_ROUTES) {
+	for (const width of FOOTER_WIDTHS) {
+		const page = await open(route, width);
+		await settleFooter(page);
+		const m = await page.evaluate(MEASURE_FOOTER);
+		await page.close();
+		if (!m || !m.marks || !m.funding.length || !m.links.length) {
+			console.error(`✗ blind: the footer on ${route} @${width} does not present what this gate measures.`);
+			await browser.close();
+			process.exit(3);
+		}
+		marksSeen = Math.max(marksSeen, m.marks);
+		findings.push(...judgeFooter(m, `${route} @${width}`, width));
+	}
+}
+
 await browser.close();
 
 if (findings.length) {
@@ -308,9 +657,51 @@ if (findings.length) {
 		console.error("  it freezes the duplicate along with everything else.");
 		for (const f of by("G3")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G4").length) {
+		fail(`the reference strip leaves a mark on a line of its own where the whole set fits.`);
+		console.error("  Six marks and a seventh alone below is what the strip did at 1024 and 1440 (#454),");
+		console.error("  because it inherited the reading column's width. The marks are the page's credibility;");
+		console.error("  an orphan reads as an accident. Widen `.ref-banner__inner`, or drop the column count.");
+		for (const f of by("G4")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G5").length) {
+		fail(`${by("G5").length} line(s) of the reference strip are not centred within it.`);
+		console.error("  Flex centres a partial line for free; a grid does not. If the strip was just tidied");
+		console.error("  into columns, the wrapped line is now hard left in track one.");
+		for (const f of by("G5")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G6").length) {
+		fail(`${by("G6").length} footer element(s) are not left-aligned.`);
+		console.error("  The footer was centred below 768px and left above it, so it read as two designs (#454).");
+		console.error("  One alignment at every width — the site has one edge and the footer keeps it.");
+		for (const f of by("G6")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G7").length) {
+		fail(`${by("G7").length} funding emblem(s) render below the mandated minimum.`);
+		console.error(`  ${EMBLEM_MIN_PX}px is 1cm at 96dpi — the floor in \`eu-emblem-rules_es.pdf\` p.10, whose duty that`);
+		console.error("  same document extends to mobile versions. The composite JPEG we used to ship rendered");
+		console.error("  the EU emblem at 18.2px on a 390px phone. Penalty for publicity failures: 10% of the aid");
+		console.error("  (Orden ETD/1498/2021 art. 36.4). This is not a taste question.");
+		for (const f of by("G7")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G8").length) {
+		fail(`footer links render at more than one size.`);
+		console.error("  There were five — 13, 14, 17, 18 and 20px — and the home's own body copy sat below two");
+		console.error("  of them (#454). One list, one size.");
+		for (const f of by("G8")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G9").length) {
+		fail(`the footer paints a ground of its own.`);
+		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
+		console.error("  footer read as bolt-on.");
+		for (const f of by("G9")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	process.exit(1);
 }
 
 ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} items each, heights within ${TOLERANCE}px, no chrome at rest`);
 ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join(" or ")}`);
+ok(
+	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, and emblems at or above ${EMBLEM_MIN_PX}px`
+);
 process.exit(0);

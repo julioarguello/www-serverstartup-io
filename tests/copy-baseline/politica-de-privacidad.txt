@@ -26,17 +26,14 @@ Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookie
 Cambios en esta política
 Si cambia la forma en que tratamos los datos, actualizaremos esta página. La versión publicada es siempre la vigente.
 referencias
-Áreas de especialización
-Comercio electrónico
-Integración de sistemas
-Big Data & Cloud Analytics
-CDN, WAF y seguridad edge
-Desarrollo greenfield
-Inteligencia artificial
-Somos partners
-Contacto
+~Server Startup
+Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019.
+somos partners
+La casa
 Quiénes somos
 Deconstruyendo esta web
+Referencias
+Contacto
 Escríbenos
 Cuéntanos tu proyecto
 © 2026 Server Startup, S.L.

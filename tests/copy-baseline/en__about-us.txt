@@ -45,17 +45,14 @@ Urdaneta under-14 boys. Bizkaia provincial champions 2024/25 and runners-up 2025
 0
 handoffs
 references
-Areas of expertise
-E-commerce
-Systems Integration
-Big Data & Cloud Analytics
-CDN, WAF & Edge Security
-Greenfield development
-Artificial Intelligence
-We are partners
-Contact
+~Server Startup
+Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019.
+we are partners
+The house
 About us
 Deconstructing this website
+References
+Contact
 Email us
 Tell us about your project
 © 2026 Server Startup, S.L.

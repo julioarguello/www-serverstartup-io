@@ -90,3 +90,30 @@ export function accentFill(accent: string | undefined | null): AccentPair {
 	}
 	return { fill: INK, label: PAPER, ratio: contrast(INK, PAPER) };
 }
+
+/**
+ * The accent as INK on paper (#460).
+ *
+ * `accentFill` above answers "what fills a button and what label can sit on
+ * it". This answers the other half: the section colour used as TEXT, on the
+ * white panel. Two of the six do not clear AA raw — the e-commerce blue is
+ * 3.57:1 at 16px bold and the CDN orange is 2.65:1 — so the colour that made
+ * the instrument's total and its headline figure readable had to be derived,
+ * not declared.
+ *
+ * One threshold for all of them, AA 4.5, even where the type is large enough
+ * to be allowed 3: "the accent, as text" should be one colour per section, not
+ * one per size. The shift is the smallest that reaches it, so it still reads
+ * as that section's colour — the blue moves about a fifth of the way to ink.
+ */
+export function accentInk(accent: string | undefined | null): { color: string; ratio: number } {
+	const base = accent && /^#?[0-9a-fA-F]{3,6}$/.test(accent.trim()) ? accent : INK;
+	if (contrast(base, PAPER) >= AA) return { color: base, ratio: contrast(base, PAPER) };
+
+	const rgb = parse(base);
+	for (let step = 0.02; step <= 1; step += 0.02) {
+		const darker = toHex(mix(rgb, parse(INK), step));
+		if (contrast(darker, PAPER) >= AA) return { color: darker, ratio: contrast(darker, PAPER) };
+	}
+	return { color: INK, ratio: contrast(INK, PAPER) };
+}

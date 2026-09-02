@@ -35,6 +35,15 @@
 /* Six plates stacked in one box, cross-fading. Only one is `eager` — the
    other five are 1–23 KB gzipped each (46 KB for all six, less than a single
    stock photograph), so the rotation costs less than the picture it replaces. */
+/* The six slide colours and the row colours arrive as `--cc` on an inline
+   `style=` from `HomepageContent.astro`, and the stagger index as `--i`. No
+   stylesheet declares either, so a template that stops emitting one does not
+   make the colour wrong — it makes the whole declaration invalid at
+   computed-value time and the element loses the property (#462). That is how
+   the vertical's accent died on twelve routes (#460) and how six mono
+   declarations silently became sans (#450). Every reference below carries a
+   fallback for that reason: the worst this degrades to is ink and no stagger,
+   never a missing left rule on a link nobody can tell is a link. */
 .s-hero__plate {
 	position: absolute;
 	inset: 0;
@@ -46,7 +55,7 @@
 	object-position: 72% 50%;
 	opacity: 0;
 	animation: s-hero-plate var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 /* The first plate is on screen at load, not fading in: it is the LCP element
@@ -103,7 +112,7 @@
 	inset: 0;
 	opacity: 0;
 	animation: s-hero-plate var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 .s-hero__ground img {
@@ -154,10 +163,10 @@
 .s-hero__rule {
 	position: absolute;
 	inset: 0;
-	background-color: var(--cc);
+	background-color: var(--cc, var(--color-primary));
 	opacity: 0;
 	animation: s-hero-item var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 .s-hero__rule:first-child {
@@ -175,7 +184,7 @@
 	opacity: 0;
 	visibility: hidden;
 	animation: s-hero-item var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 .s-hero__item:first-child {
@@ -221,13 +230,13 @@
 
 .s-hero__arrow {
 	font-size: 22px;
-	color: var(--cc);
+	color: var(--cc, var(--color-primary));
 }
 
 .s-hero__link:hover .s-hero__name,
 .s-hero__link:focus-visible .s-hero__name {
 	/* the same terminal selection the breadcrumb and the search slot wear */
-	background-color: color-mix(in srgb, var(--cc) 40%, transparent);
+	background-color: color-mix(in srgb, var(--cc, var(--color-primary)) 40%, transparent);
 }
 
 /* ── the copy, in paper ── */
@@ -310,11 +319,11 @@
 	height: 3px;
 	background-color: var(--color-hero-dot);
 	animation: s-hero-dot var(--hero-cycle) steps(1, end) infinite;
-	animation-delay: calc(var(--i) * var(--hero-step) - 0.5s);
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 .s-hero__dot:first-child {
-	background-color: var(--cc);
+	background-color: var(--cc, var(--color-primary));
 }
 
 /* Invisible but REAL, exactly like the search toggle: Tab reaches it, Space
@@ -410,7 +419,7 @@
 .s-hero.is-manual[data-slide="3"] .s-hero__dot:nth-child(4),
 .s-hero.is-manual[data-slide="4"] .s-hero__dot:nth-child(5),
 .s-hero.is-manual[data-slide="5"] .s-hero__dot:nth-child(6) {
-	background-color: var(--cc);
+	background-color: var(--cc, var(--color-primary));
 }
 
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
@@ -455,7 +464,7 @@
 }
 
 @keyframes s-hero-dot {
-	0% { background-color: var(--cc); }
+	0% { background-color: var(--cc, var(--color-primary)); }
 	16.6667% { background-color: var(--color-hero-dot); }
 	100% { background-color: var(--color-hero-dot); }
 }
@@ -724,7 +733,7 @@
 	align-items: flex-start;
 	background: var(--color-secondary);
 	border: 1px solid var(--color-border);
-	border-left: 4px solid var(--cc);
+	border-left: 4px solid var(--cc, var(--color-primary));
 	border-radius: var(--radius);
 	padding: 20px 22px;
 	text-decoration: none;
@@ -734,9 +743,9 @@
 
 .area-row__link:hover,
 .area-row__link:focus-visible {
-	background: color-mix(in srgb, var(--cc) 5%, var(--color-secondary));
-	border-color: color-mix(in srgb, var(--cc) 45%, var(--color-border, #e3e7eb));
-	border-left-color: var(--cc);
+	background: color-mix(in srgb, var(--cc, var(--color-primary)) 5%, var(--color-secondary));
+	border-color: color-mix(in srgb, var(--cc, var(--color-primary)) 45%, var(--color-border, #e3e7eb));
+	border-left-color: var(--cc, var(--color-primary));
 }
 
 @media (prefers-reduced-motion: reduce) {

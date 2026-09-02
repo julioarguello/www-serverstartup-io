@@ -126,6 +126,17 @@ jobs:
         # nobody is looking at the size of a 200.
         run: python3 scripts/ci-check-image-hrefs.py http://localhost:8787
 
+      - name: Every var() resolves, and the template-fed ones carry a fallback
+        # #462. An unresolved `var()` with no fallback does not fall back: it
+        # invalidates the whole declaration, and the element loses the property.
+        # That is #450 (six mono declarations silently rendering sans) and #460
+        # (a filled CTA whose background vanished while its white label did not,
+        # on twelve routes). Neither was visible to anything else here:
+        # ci-check-design-tokens.py reads CSS as text and never starts a
+        # browser, and axe is right that an absent background is not a contrast
+        # failure. Runs against the same booted stack as the steps above.
+        run: node scripts/ci-check-var-resolves.mjs http://localhost:8787
+
       - name: Accessibility (axe + keyboard + shortcuts + reflow)
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 

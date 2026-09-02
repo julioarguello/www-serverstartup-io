@@ -62,6 +62,14 @@ const services = serviceEntries ?? [];
 const labels = await getUiLabels(locale);
 const engineerCaption = labels.get("footer_headings", "engineer_caption", locale === "en" ? "Engineer" : "Ingeniero");
 
+// The areas rows carry one line of claim each (#453), keyed by cube face —
+// deliberately NOT `services.excerpt`, which feeds the hero card, the vertical
+// page lede and the meta description, and would move search snippets on twelve
+// pages if it were cut to fit a row. The short titles are the menu's own
+// `menu_short` (#428): the same six names, so no new copy to keep in sync.
+const claims = labels.getAll("areas_claim");
+const short = labels.getAll("menu_short");
+
 // ── The rotating hero (#413) ────────────────────────────────────────────
 // Six plates, one per vertical, in the canonical order — the same order the
 // menu, the footer and the rows below use, so the hero cannot disagree with
@@ -302,23 +310,52 @@ const members = memberEntries ?? [];
 			<h2>{areasSection?.heading || `~ ${labels.get("footer_headings", "services_title", "Áreas de especialización")}`}</h2>
 		</div>
 
-		<!-- Full-width rows (#273): every vertical gets a color bar and room
-		     for its whole thesis. The two-column layout collided once the
-		     #264 excerpts grew — a stacked row cannot overlap by construction. -->
+		<!-- ROW, not card (#453). Six white boxes with a full paragraph each
+		     ran 1695px on a 390px phone — two whole screens for six names —
+		     with row heights of 214 to 305px, because the paragraphs differ
+		     in length. Ragged item heights are the actual reason a list
+		     starts demanding boxes to tidy it up; equalise the lines and the
+		     box has nothing left to do.
+
+		     So: one title line, one claim line, the cube in a fixed left
+		     gutter, and the vertical's colour only on hover, focus and
+		     current. At rest the block is monochrome. Six colours shouting
+		     at a reader who has not asked anything yet is decoration; the
+		     same colour arriving under the pointer is the signal that the
+		     row is a link — which the old chrome never gave.
+
+		     The claim is `areas_claim`, a NEW CMS key, not a shortened
+		     excerpt. `services.excerpt` feeds four places — the hero card,
+		     the vertical page lede, and the meta description with the
+		     JSON-LD — so cutting it would move search snippets on twelve
+		     pages. And the excerpt was already printed VERBATIM twice on
+		     this screen, once in the hero card and once here, twenty lines
+		     apart; that repetition is what made the block read as filler.
+
+		     The title ships twice, like the menu's (#428): "CDN, WAF y
+		     seguridad edge" is two lines at 390px, and a two-line title
+		     un-equalises the very rows this change equalises. Both spans
+		     are in the HTML and CSS picks one at 700px — `display:none`
+		     also drops the other from the accessibility tree, so a screen
+		     reader reads exactly one. No JS measuring: the answer must not
+		     depend on which text happens to be there. `menu_short` already
+		     holds those six names, so this costs no new copy. -->
 		<ul class="s-areas__rows" role="list">
 			{sortByFace(services)
 				.map((svc) => {
 					const d = svc.data;
 					const cardColor = d.color || "#1E1E1E";
 					const slug = (svc as any).slug ?? svc.id;
+					const face = FACE_BY_SLUG[slug];
+					const title = d.title ?? slug;
 					return (
 						<li class="area-row" style={`--cc:${cardColor}`}>
 							<a href={`${localePrefix}/${slug}`} class="area-row__link">
-								<CubeEmblem class="area-row__die" color={cardColor} faceKey={FACE_BY_SLUG[slug] ?? undefined} size={54} />
-								<div class="area-row__text">
-									<h3>{d.title}</h3>
-									<p class="text-body">{excerptPlain(d.excerpt || "")}</p>
-								</div>
+								<CubeEmblem class="area-row__die" color={cardColor} faceKey={face ?? undefined} size={40} />
+								<span class="area-row__title area-row__title--long">{title}</span>
+								{/* no short name in the CMS = the long one, never an empty title */}
+								<span class="area-row__title area-row__title--short">{(face && short[face]) || title}</span>
+								<span class="area-row__claim">{(face && claims[face]) || excerptPlain(d.excerpt || "")}</span>
 							</a>
 						</li>
 					);

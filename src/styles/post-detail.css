@@ -168,6 +168,12 @@
 		margin-bottom: 1.5em;
 	}
 
+	/* Deliberately left pinned by #451. Everything from `.article-content` down
+	   is a self-contained long-form scale — body 18, h2 28, h3 22 — and it is
+	   the only one on the site. Unpinning just the h2 would put a 40px heading
+	   over a 22px h3 and break the scale rather than join a system. No post
+	   renders this today (the placeholders were deleted from the seeds), so
+	   the invariant is not violated in the meantime. */
 	.article-content :global(h2) {
 		font-size: 28px;
 		margin-top: 2.5em;

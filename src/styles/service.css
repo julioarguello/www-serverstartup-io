@@ -212,10 +212,17 @@
 	margin-top: 40px;
 }
 
+/* The equation headline (`A medida ≠ acoplado`). It used to be the site's one
+   monospace h2, at 26/34 and then 32/40, sitting next to a sans heading at
+   32/40 while the site rule said 40. Both halves of that were private: the
+   size AND the face. `docs/design-system.md` §2 is explicit — mono is
+   accents-only, headings stay in Alexandria — and the equation-headline accent
+   it lists as *pending* is a portable-text renderer hook for CMS-authored
+   headlines (#156), not a licence for a hard-coded template heading. So this
+   rule now sets neither: size and leading come from `main h2` (theme.css) and
+   the face comes with them. What makes the line an equation is the `≠`, not
+   the typeface. */
 .s-inst__heading {
-	font-family: var(--font-family-mono);
-	font-size: 26px;
-	line-height: 34px;
 	margin: 40px 0 20px;
 }
 
@@ -259,8 +266,9 @@
 }
 
 .s-inst__closer h2 {
-	font-size: 32px;
-	line-height: 40px;
+	/* Size and leading come from `main h2` (theme.css). Pinning them here is
+	   what put two headings of the same structural level at two sizes on the
+	   same page (#451). Only the space below is this block's business. */
 	margin-bottom: 16px;
 }
 
@@ -318,13 +326,6 @@
 
 .s-inst__closer li::before {
 	content: "–\00a0";
-}
-
-@media (min-width: 768px) {
-	.s-inst__heading {
-		font-size: 32px;
-		line-height: 40px;
-	}
 }
 
 /* ═══ Panel frame (shared) ═══ */

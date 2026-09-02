@@ -624,23 +624,17 @@
 .s-cf__feature {
 }
 
-/* The band's headings were promoted a level (#416) so the home's outline does
-   not skip from h1 to h3; the sizes below are the ones the design already had,
-   pinned here so a semantic fix stays a semantic fix. */
-.s-cf__card h2 {
-	font-size: 24px;
-	line-height: 30px;
-}
+/* #416 promoted these a level so the home's outline does not skip from h1 to
+   h3, and pinned the old sizes here so a semantic fix stayed a semantic fix.
+   #451 unpins the h2: the band is a section and its heading takes the
+   section-heading size like every other. The h3 below is an item title inside
+   the band, not a section heading, and keeps its own step. */
 .s-cf__feature h3 {
 	font-size: 22px;
 	font-weight: 400;
 	line-height: 30px;
 }
 @media (min-width: 768px) {
-	.s-cf__card h2 {
-		font-size: 32px;
-		line-height: 40px;
-	}
 	.s-cf__feature h3 {
 		font-size: 20px;
 		line-height: 28px;

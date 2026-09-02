@@ -137,7 +137,7 @@ jobs:
         # failure. Runs against the same booted stack as the steps above.
         run: node scripts/ci-check-var-resolves.mjs http://localhost:8787
 
-      - name: Rows stay equal, ROWs draw no box, and no copy is printed twice
+      - name: Rows stay equal, ROWs draw no box, no copy is printed twice, and the footer holds its line and its measure
         # #453. The areas block was six white boxes carrying a full paragraph
         # each: 1695px on a 390px phone, row heights from 214 to 305, and the
         # e-commerce excerpt printed VERBATIM in the hero card and again in its

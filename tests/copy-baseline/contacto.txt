@@ -20,19 +20,16 @@ Server Startup S.L. · Bizkaia · desde 2019.
 0
 traspasos
 referencias
-Áreas de especialización
-Comercio electrónico
-Integración de sistemas
-Big Data & Cloud Analytics
-CDN, WAF y seguridad edge
-Desarrollo greenfield
-Inteligencia artificial
-Somos partners
-Contacto
+~Server Startup
+Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019.
+La casa
 Quiénes somos
 Deconstruyendo esta web
+Referencias
+Contacto
 Escríbenos
 Cuéntanos tu proyecto
+somos partners
 © 2026 Server Startup, S.L.
 Aviso legal
 Política de privacidad

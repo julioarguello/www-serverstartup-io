@@ -20,19 +20,16 @@ Server Startup S.L. · Bizkaia, Spain · since 2019.
 0
 handoffs
 references
-Areas of expertise
-E-commerce
-Systems Integration
-Big Data & Cloud Analytics
-CDN, WAF & Edge Security
-Greenfield development
-Artificial Intelligence
-We are partners
-Contact
+~Server Startup
+Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019.
+The house
 About us
 Deconstructing this website
+References
+Contact
 Email us
 Tell us about your project
+we are partners
 © 2026 Server Startup, S.L.
 Legal notice
 Privacy policy

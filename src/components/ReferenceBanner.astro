@@ -43,9 +43,9 @@ const logos = (entries ?? [])
 
 {logos.length > 0 && (
 	<section class="ref-banner" aria-label={ariaLabel}>
-		<div class="container ref-banner__inner">
+		<div class="ref-banner__inner">
 			<h2 class="ref-banner__title"><a href={href}>{title}</a></h2>
-			<ul class="ref-banner__row" role="list">
+			<ul class="ref-banner__row" role="list" style={`--ref-cols:${logos.length}`}>
 				{logos.map((l) => (
 					<li>
 						<img src={l.src} alt={l.alt} width="480" height="120" loading="lazy" decoding="async" />
@@ -62,11 +62,28 @@ const logos = (entries ?? [])
 		padding: 34px 0 30px;
 	}
 
+	/* Its own measure, not the reading column's (#454). Seven marks at their
+	   equalized size need ~930px; `.container` gives 840, so the seventh wrapped
+	   onto a line of its own at 1024 and 1440 — the orphan. Nothing here is
+	   text, so the reading width was never the right constraint. */
 	.ref-banner__inner {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 18px;
+		width: 100%;
+		margin-inline: auto;
+		padding-inline: 16px;
+		/* token-guard: off — not a second measure. `theme.css` rules out a
+		   narrower measure for PROSE, because two measures alternate long and
+		   short lines down a page; nothing in this band is prose. This width is
+		   set by arithmetic — how many marks must sit on one line — and it
+		   changes the day a reference is added, which no type token should. */
+		max-width: 1140px;
+		/* token-guard: on */
+	}
+	@media (min-width: 768px) {
+		.ref-banner__inner { padding-inline: 20px; }
 	}
 
 	.ref-banner__title {
@@ -96,7 +113,9 @@ const logos = (entries ?? [])
 		text-decoration-style: solid;
 	}
 
-	/* one row, wrapping on narrow screens — never a scroller */
+	/* One row, wrapping on narrow screens — never a scroller.
+	   Below 900px this is flex: every line, including a partial last one,
+	   is centred, which is the best a wrap can do. */
 	.ref-banner__row {
 		display: flex;
 		flex-wrap: wrap;
@@ -106,6 +125,19 @@ const logos = (entries ?? [])
 		list-style: none;
 		margin: 0;
 		padding: 0;
+	}
+
+	/* From 900px there is room for the whole set, so it stops being a wrap and
+	   becomes a rank: one track per mark, equal widths, even rhythm. The count
+	   comes from the data (`--ref-cols`), so featuring an eighth reference
+	   widens the rank instead of orphaning a mark. */
+	@media (min-width: 900px) {
+		.ref-banner__row {
+			display: grid;
+			grid-template-columns: repeat(var(--ref-cols, 7), minmax(0, 1fr));
+			justify-items: center;
+			gap: 34px 24px;
+		}
 	}
 
 	/* single ink on a light ground: the mirror of the dark wall at

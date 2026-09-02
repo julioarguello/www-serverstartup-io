@@ -1,19 +1,50 @@
 ---
 import ReferenceBanner from "./ReferenceBanner.astro";
 import ContactAction from "./ContactAction.astro";
+import SiteMark from "./SiteMark.astro";
 /**
- * SiteFooter — trust logos, 4-column grid, Kit Digital banner.
- * Extracted from Base.astro for maintainability.
+ * SiteFooter — the signature, not a second site map (#454, option B).
+ *
+ * It used to be four columns that reprinted the six vertical names a third time
+ * on the home, headed by a 33 KB WordPress-era raster of the mark with a hard
+ * drop shadow and a `~Server Startup` plate baked into the bitmap — the most
+ * off-system element on a site whose header draws that same mark as live vector
+ * and live mono type. 834px tall on desktop, 1187 on a phone.
+ *
+ * Now it signs the page: the mark, one line saying what the house is, two short
+ * link columns, the funding line, the legal row. 570px on desktop and 976 on a
+ * phone, measured the same way. The six verticals are not here because the menu
+ * carries them one tap away from every page; the accepted cost is that reaching
+ * a vertical from the bottom of a page means opening the menu.
+ *
+ * Kit Digital (#454, replacing the reading at the old :146-153). Researched from
+ * primary sources: `Orden ETD/1498/2021 art. 34.3` mandates a SET of three
+ * things — the EU emblem, the funding statement «Financiado por la Unión Europea
+ * - NextGenerationEU», and the PRTR logo — and prescribes NO composition.
+ * `eu-emblem-rules_es.pdf` scopes the duty to "sitios web y sus versiones
+ * móviles" and says the emblem's placement "dependerá del diseño de la
+ * publicación"; the *Libro de imagen PRTR V4* p.6 permits several compositions
+ * explicitly. So re-flowing is allowed; redrawing the artworks is not, and these
+ * two are the official artworks, cut apart from the lockup we already shipped.
+ *
+ * The red.es, Gobierno de España and Kit Digital marks are gone: they bind an
+ * *Agente Digitalizador adherido* in the header of its Kit-Digital pages, not a
+ * beneficiary in its footer, and Server Startup is a beneficiary (founder,
+ * 2026-09-02). They were also what was eating the space — the single 2560×242
+ * JPEG rendered the EU emblem 18.2px tall at 390px, against the 1cm the rules
+ * require.
+ *
+ * The size that matters is the EMBLEM's, not the lockup's. Measured on the cut
+ * asset, the blue flag spans rows 14–189 of 200 — 88% of the artwork's height —
+ * so a 40px lockup renders a 35px flag and still fails. At 46px the flag is
+ * 40.5px ≈ 1.07cm, and it is 46px at every breakpoint by construction. That
+ * ratio travels with the image as `data-emblem-ratio`, and `ci-check-layout.mjs`
+ * G7 multiplies by it rather than trusting the box.
  */
-interface ServiceEntry {
-	slug?: string;
-	id: string;
-	data: { title: string };
-}
-
 interface Props {
 	trustTitle: string;
-	servicesTitle: string;
+	houseTitle: string;
+	signature: string;
 	partnersTitle: string;
 	legalNoticeLabel: string;
 	privacyLabel: string;
@@ -21,21 +52,20 @@ interface Props {
 	aboutUsLabel: string;
 	manualLabel: string;
 	defaultCtaLabel: string;
-	email: string;
 	emailEncoded?: string;
 	phoneEncoded?: string;
 	emailLabel: string;
-	phone: string;
 	phoneDisplay: string;
 	partnerLogos: { src: string; alt: string }[];
-	services: ServiceEntry[];
+	partnerUrl?: string;
 	localePrefix: string;
 	locale: string;
 }
 
 const {
 	trustTitle,
-	servicesTitle,
+	houseTitle,
+	signature,
 	partnersTitle,
 	legalNoticeLabel,
 	privacyLabel,
@@ -43,20 +73,29 @@ const {
 	aboutUsLabel,
 	manualLabel,
 	defaultCtaLabel,
-	email,
 	emailEncoded,
 	phoneEncoded,
 	emailLabel,
-	phone,
 	phoneDisplay,
 	partnerLogos,
-	services,
+	partnerUrl,
 	localePrefix,
 	locale,
 } = Astro.props;
 const t = Astro.locals.t;
-const legalSlug = (Astro.currentLocale || "es") === "en" ? "legal-notice" : "aviso-legal";
-const privacySlug = (Astro.currentLocale || "es") === "en" ? "privacy-policy" : "politica-de-privacidad";
+const en = (Astro.currentLocale || "es") === "en";
+const legalSlug = en ? "legal-notice" : "aviso-legal";
+const privacySlug = en ? "privacy-policy" : "politica-de-privacidad";
+const referencesSlug = locale === "en" ? "references" : "referencias";
+
+// One shape for the partner marks, whether they come from the CMS or from the
+// built-in fallback, so the template does not carry the same <img> twice. The
+// URL is the partner's own (`data.url` in the CMS); without one the mark stays
+// inert, which is the reference marks' rule and the safe default.
+const partnerMarks = (partnerLogos.length > 0
+	? partnerLogos.map((logo) => ({ src: logo.src, alt: logo.alt, w: 691, h: 120 }))
+	: [{ src: "/assets/logo-cloudflare.svg", alt: t("cf_partner"), w: 268, h: 88 }]
+).map((mark) => ({ ...mark, href: partnerUrl }));
 ---
 
 <footer class="site-footer">
@@ -65,99 +104,94 @@ const privacySlug = (Astro.currentLocale || "es") === "en" ? "privacy-policy" : 
 	     Cloudflare placeholders lived — the same logo, five times, sitewide. -->
 	<ReferenceBanner
 		title={trustTitle}
-		href={`${localePrefix}/${locale === "en" ? "references" : "referencias"}`}
+		href={`${localePrefix}/${referencesSlug}`}
 		ariaLabel={t("trust_section")}
 	/>
 
-	<!-- 4-column footer grid -->
 	<div class="footer-main">
-		<div class="container footer-grid">
-			<!-- Col 1: Logo -->
-			<div class="footer-col">
-				<a href="/" aria-label={t("go_home")}>
-					<img
-						src="/assets/logo-vertical.png"
-						alt="Server Startup"
-						width="460"
-						height="460"
-						class="footer-logo-img"
-						loading="lazy"
-					/>
-				</a>
+		<div class="container footer-signature">
+			<!-- Who signs: the mark as the header draws it, one line of what the
+			     house is, and the one credential we may show. -->
+			<div class="footer-signature__house">
+				<SiteMark href="/" label={t("go_home")} size={38} class="footer-mark" />
+				{signature && <p class="footer-signature__line">{signature}</p>}
 			</div>
 
-			<!-- Col 2: Services -->
-			<div class="footer-col">
-				<h3>{servicesTitle}</h3>
-				<ul class="footer-list">
-					{services.map((svc) => (
-						<li><a href={`${localePrefix}/${svc.slug ?? svc.id}`}>{svc.data.title}</a></li>
-					))}
-				</ul>
-			</div>
+			<!-- Two short columns. Not the site map: the pages a reader who got
+			     to the bottom might still want, and the way to reach a person. -->
+			<nav class="footer-cols" aria-label={t("footer_nav")}>
+				<div class="footer-col">
+					<h3>{houseTitle}</h3>
+					<ul class="footer-list">
+						<li><a href={`${localePrefix}/${en ? "about-us" : "quienes-somos"}`}>{aboutUsLabel}</a></li>
+						<li><a href={`${localePrefix}/${en ? "deconstructing" : "deconstruyendo"}`}>{manualLabel}</a></li>
+						<li><a href={`${localePrefix}/${referencesSlug}`}>{trustTitle}</a></li>
+					</ul>
+				</div>
 
-			<!-- Col 3: Partner -->
-			<div class="footer-col">
-				<h3>{partnersTitle}</h3>
-				{partnerLogos.length > 0 ? (
-					partnerLogos.map((logo) => (
-						<img
-							src={logo.src}
-							alt={logo.alt}
-							width="691"
-							height="120"
-							class="footer-partner-logo"
-							loading="lazy"
-						/>
-					))
-				) : (
-					<img
-						src="/assets/logo-cloudflare.svg"
-						alt={t("cf_partner")}
-						width="268"
-						height="88"
-						class="footer-partner-logo"
-						loading="lazy"
-					/>
-				)}
-			</div>
+				<div class="footer-col">
+					<h3>{contactTitle}</h3>
+					<ul class="footer-list">
+						{/* #311: encoded, like the contact page. This link was the only
+						    plain address on the site and it shipped on every route, which
+						    made the contact page's own protection pointless. */}
+						{emailEncoded && (
+							<li><ContactAction kind="mail" encoded={emailEncoded} label={emailLabel} class="footer-contact" /></li>
+						)}
+						{phoneEncoded && phoneDisplay && (
+							<li><ContactAction kind="tel" encoded={phoneEncoded} label={phoneDisplay} class="footer-contact" /></li>
+						)}
+					</ul>
+					<a href={`${localePrefix}/${en ? "contact" : "contacto"}`} class="btn btn-dark footer-cta">{defaultCtaLabel}</a>
 
-			<!-- Col 4: Contact -->
-			<div class="footer-col">
-				<h3>{contactTitle}</h3>
-				<ul class="footer-list">
-					<li><a href={`${localePrefix}/${locale === "en" ? "about-us" : "quienes-somos"}`}>{aboutUsLabel}</a></li>
-					<li><a href={`${localePrefix}/${locale === "en" ? "deconstructing" : "deconstruyendo"}`}>{manualLabel}</a></li>
-					{/* #311: encoded, like the contact page. This link was the only
-					    plain address on the site and it shipped on every route, which
-					    made the contact page's own protection pointless. */}
-					{emailEncoded && (
-						<li><ContactAction kind="mail" encoded={emailEncoded} label={emailLabel} class="footer-contact" /></li>
-					)}
-					{phoneEncoded && phoneDisplay && (
-						<li><ContactAction kind="tel" encoded={phoneEncoded} label={phoneDisplay} class="footer-contact" /></li>
-					)}
-				</ul>
-				<a href={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`} class="btn btn-dark footer-cta">{defaultCtaLabel}</a>
-			</div>
+					{/* The credential sits with the ask (#454, after the founder's review
+					    of the rendered footer): it fills the column the CTA left short and
+					    puts the platform we are certified on next to the way to reach us.
+					    Linked, unlike the reference marks in the banner above — those are
+					    clients, and a link there would imply an endorsement we have no
+					    permission to claim. This is a partnership we are party to (official
+					    since 2019), and it points at Cloudflare's own partner network
+					    rather than at anything we assert about ourselves. */}
+					<div class="footer-partners">
+						<span class="footer-partner-title">{partnersTitle}</span>
+						{partnerMarks.map((mark) =>
+							mark.href ? (
+								<a class="footer-partner-link" href={mark.href} target="_blank" rel="noopener noreferrer">
+									<img src={mark.src} alt={mark.alt} width={mark.w} height={mark.h} class="footer-partner-logo" loading="lazy" />
+								</a>
+							) : (
+								<img src={mark.src} alt={mark.alt} width={mark.w} height={mark.h} class="footer-partner-logo" loading="lazy" />
+							),
+						)}
+					</div>
+				</div>
+			</nav>
 		</div>
 	</div>
 
-	<!-- Kit Digital acknowledgement (#308). Everything INSIDE the image belongs
-	     to red.es: the five emblems, their order, the endorsement sentence and
-	     even the short rule under it are the "sin banderas" lockup shipped as a
-	     single artefact (LogosEnero2024) — the manual reserves the "con bandera"
-	     version for the header of pages dedicated to the programme, which this
-	     site does not have. So the composition is not ours to re-cut; where it
-	     sits is. It ends at the column like everything else, and the alt says
-	     what the artwork says instead of a sentence of our own. -->
-	<div class="footer-banner container">
+	<!-- The funding line, on its own (#454). Two official artworks and nothing
+	     else: the EU lockup already carries the mandated statement, and the PRTR
+	     logo completes the set. `height` is fixed at 46px so the emblem cannot be
+	     shrunk out of compliance by a narrow viewport, which is exactly how the
+	     single-JPEG version failed at 390px — and 46, not 40, because the floor
+	     is the flag's and the flag is 88% of the lockup. -->
+	<div class="footer-funding container">
 		<img
-			src="/assets/kit-digital-banner.jpg"
-			alt={t("kit_digital")}
-			class="footer-banner-img"
-			width="2560"
-			height="242"
+			src="/assets/eu-nextgenerationeu.webp"
+			alt={t("eu_funding_alt")}
+			width="757"
+			height="200"
+			class="footer-funding__mark"
+			data-emblem-ratio="0.88"
+			loading="lazy"
+			decoding="async"
+		/>
+		<img
+			src="/assets/prtr.webp"
+			alt={t("prtr_alt")}
+			width="520"
+			height="200"
+			class="footer-funding__mark"
 			loading="lazy"
 			decoding="async"
 		/>
@@ -178,62 +212,106 @@ const privacySlug = (Astro.currentLocale || "es") === "en" ? "privacy-policy" : 
 
 <style is:global>
 	/* ═══════════════════════════════════════════
-	   FOOTER — mobile-first
+	   FOOTER (#454) — one band, one alignment, one ground.
+	   No background of its own: it inherits the document's. Giving the footer
+	   its own ground is what makes a footer read as bolt-on, and the old rule
+	   here painted `--color-secondary` over a body that is already that colour
+	   — a band waiting to become visible the day either token moves.
 	   ═══════════════════════════════════════════ */
-	.site-footer {
-		background: var(--color-secondary);
-	}
-
-	/* Trust logos */
-	.trust-logo {
-		height: 60px;
-		width: auto;
-		object-fit: contain;
-	}
-	@media (min-width: 768px) {
-		.trust-logos { gap: 40px; }
-		.trust-logo { height: 100px; }
-	}
-
-	/* Footer grid */
 	.footer-main {
 		/* #304: no rules between sections — space separates */
-		margin-top: var(--space-6);
-		padding: var(--space-6) 0 var(--space-7);
+		margin-top: var(--space-5);
+		padding: var(--space-5) 0 var(--space-6);
 	}
-	.footer-grid {
+
+	/* One alignment at every width (#454). It used to be centred below 768 and
+	   left above it, so the same footer read as two different designs depending
+	   on the phone in your hand. */
+	.footer-signature {
 		display: flex;
 		flex-direction: column;
-		gap: 32px;
-		/* stacked mobile footer reads centered — logo, columns and partner
-		   marks alike (the desktop row overrides below) */
-		align-items: center;
-		text-align: center;
+		gap: var(--space-5);
+		align-items: flex-start;
+		text-align: left;
 	}
+
+	/* No max-width here on purpose. A narrower measure for this one paragraph
+	   would be a SECOND measure, which `theme.css` rules out by name: "A page
+	   has ONE width and everything inside it shares one edge." Below 900px the
+	   signature spans the container like any other prose on the site; above it,
+	   the link columns take the width they need and this takes the rest. */
+	.footer-signature__house {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 14px;
+	}
+
+	.footer-signature__line {
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.5;
+		color: color-mix(in srgb, var(--color-primary) 72%, transparent);
+	}
+
+	.footer-partners {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin-top: var(--space-4);
+	}
+
+	/* The mark is the whole target: a logo with a caption-sized label above it
+	   gives a pointer-sized hit area only if the image is inside the anchor. */
+	.footer-partner-link {
+		display: inline-block;
+		margin-top: 10px;
+	}
+
+	.footer-partner-title {
+		font-family: var(--font-family-mono);
+		font-size: 12px;
+		letter-spacing: 0.06em;
+		text-transform: lowercase;
+		color: color-mix(in srgb, var(--color-primary) 62%, transparent);
+	}
+
+	/* The columns keep the width their content asks for and wrap when there is
+	   no room, rather than shrinking. Letting them shrink is what turned
+	   "Cuéntanos tu proyecto" into a four-line button inside a 131px column. */
+	.footer-cols {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-5);
+	}
+	.footer-col { flex: 0 0 auto; }
+
 	.footer-col h3 {
-		margin-bottom: 16px;
-		/* h3 for document outline; visual size stays as the old h5 */
+		margin-bottom: 14px;
+		/* h3 for the document outline; the visual size is the small heading step */
 		font-size: 20px;
 		line-height: 26px;
 	}
-	.footer-logo-img {
-		width: 180px;
-		height: auto;
-	}
+
 	.footer-list {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
 	}
+
+	/* One size for every link in the footer (#454). There were five — 13, 14,
+	   17, 18 and 20px — and the body copy of the home's own areas rows sat
+	   below two of them, which is a hierarchy upside down. */
 	.footer-list,
 	.footer-list a,
 	.footer-contact {
 		font-family: var(--font-family);
-		font-size: 18px;
+		font-size: 16px;
 		font-weight: 300;
 		line-height: 26px;
 		color: var(--color-primary);
 	}
+
 	/* #311: the contact detail is a <button> so it can decode on click, but it
 	   belongs to this list and must read as one of its links — a browser
 	   default button box in a column of links reads as a mistake. */
@@ -248,6 +326,59 @@ const privacySlug = (Astro.currentLocale || "es") === "en" ? "privacy-policy" : 
 	.footer-contact:hover {
 		text-decoration: underline;
 	}
+
+	.footer-partner-logo {
+		/* token-guard: off — a logo is drawn at its own size; the partner
+		   lockup has a minimum legible width and clear space of its own. */
+		max-width: 200px;
+		/* token-guard: on */
+		display: block;
+		height: auto;
+	}
+
+	.footer-cta {
+		margin-top: 24px;
+		/* a CTA that breaks across four lines is not a button any more */
+		white-space: nowrap;
+	}
+
+	/* The funding line. 46px tall at EVERY width, by construction: the rules
+	   scope the duty to mobile versions too, and the previous single image
+	   rendered the emblem at 18.2px on a 390px phone. 46 and not 40 because the
+	   floor applies to the flag, which is 88% of the lockup — see the header. */
+	.footer-funding {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-3) var(--space-5);
+		padding-bottom: var(--space-6);
+	}
+	.footer-funding__mark {
+		/* token-guard: off — a mandated emblem has a minimum height fixed by the
+		   publicity rules, not by this site's spacing scale. */
+		height: 46px;
+		/* token-guard: on */
+		width: auto;
+		max-width: 100%;
+		display: block;
+	}
+
+	/* The EU emblem outweighs every other mark on this line. The binding rule is
+	   `Orden HFP/1030/2021` art. 9.4 — "al menos de forma tan prominente y
+	   visible como los otros logotipos" — which equal heights already satisfied.
+	   The `Guía de Justificación` red.es asks a screenshot against goes further
+	   and recommends the emblem be "como mínimo, un 30% más grande que el resto
+	   de los logotipos", and the January 2022 identity manual makes exactly that
+	   ratio binding for cartelería. It costs nothing to meet the stricter of the
+	   three, so we do, and G11 holds it: 62/46 = 1.35 on the artwork, and
+	   54.3/40.7 = 1.33 on the ink inside it, so the ratio survives either way of
+	   measuring it. The flag lands at 54.3px ≈ 1.44cm, against a 1cm floor. */
+	.footer-funding__mark[data-emblem-ratio] {
+		/* token-guard: off — see above; this height is set by publicity rules. */
+		height: 62px;
+		/* token-guard: on */
+	}
+
 	/* Legal row: quiet, last, and always there (#335) */
 	.footer-legal {
 		border-top: 1px solid var(--color-border);
@@ -258,7 +389,7 @@ const privacySlug = (Astro.currentLocale || "es") === "en" ? "privacy-policy" : 
 		flex-wrap: wrap;
 		gap: var(--space-2) var(--space-4);
 		align-items: baseline;
-		justify-content: center;
+		justify-content: flex-start;
 		font-size: 14px;
 	}
 	.footer-legal__copy { color: var(--color-text-muted); }
@@ -268,45 +399,24 @@ const privacySlug = (Astro.currentLocale || "es") === "en" ? "privacy-policy" : 
 		text-underline-offset: 3px;
 	}
 	.footer-legal a:hover { color: var(--color-text); text-decoration-style: solid; }
-	@media (min-width: 768px) {
-		.footer-legal__inner { justify-content: flex-start; }
-	}
 
-	.footer-partner-logo {
-		/* token-guard: off — a logo is drawn at its own size; the partner
-		   lockup has a minimum legible width and clear space of its own. */
-		max-width: 200px;
-		/* token-guard: on */
-		margin-top: 8px;
-		margin-inline: auto;
-	}
-	.footer-cta {
-		margin-top: 32px;
-	}
-
-	@media (min-width: 768px) {
-		.footer-grid {
+	/* 900, not 768: below it the signature line and two full-width columns do
+	   not fit side by side without squeezing one of them, and a squeezed column
+	   is what the four-line button was. */
+	@media (min-width: 900px) {
+		/* the signature and the columns share a row; both keep the same edge */
+		.footer-signature {
 			flex-direction: row;
-			gap: 40px;
 			align-items: flex-start;
-			text-align: left;
+			justify-content: space-between;
+			gap: var(--space-6);
 		}
-		.footer-partner-logo { margin-inline: 0; }
-		.footer-col {
-			flex: 1;
-		}
-		.footer-logo-img { width: 250px; }
-	}
-
-	/* Kit Digital banner (#308). No padding-inline here — .container owns the
-	   horizontal inset, and a shorthand would wipe it. Only the space below is
-	   ours, so the strip stops sitting flush against the legal rule. */
-	.footer-banner {
-		padding-bottom: var(--space-6);
-	}
-	.footer-banner-img {
-		width: 100%;
-		height: auto;
-		display: block;
+		/* The line of prose is what gives, not the links — and the links must
+		   say so explicitly. With both sides shrinkable the columns lost the
+		   fight, shrank to 403px, and their own `nowrap` children painted 73px
+		   past the container's right edge: the CTA hung outside the one measure
+		   `theme.css` gives the page. G10 now measures that edge. */
+		.footer-signature__house { flex: 1 1 auto; min-width: 0; }
+		.footer-cols { flex: 0 0 auto; flex-wrap: nowrap; }
 	}
 </style>

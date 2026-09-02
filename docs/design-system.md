@@ -129,6 +129,15 @@ A row that draws a box is a card, and six of them are a grid pretending to be a
 list. `ci-check-layout.mjs` asserts rows carry no chrome at rest and that their
 heights agree within 8px.
 
+Where the rule comes from: [`design/2026-09-visual-benchmark.md`](design/2026-09-visual-benchmark.md),
+which measures eight comparable sites and this one on one run. The short version
+is that the sites reading as senior use no container for a list of capabilities —
+thoughtbot four underlined links, MarsBased five title-plus-two-lines items,
+37signals 38 numbered links and **zero containers on the whole page** — while the
+one site that does use cards for that job carries 25 container idioms. That file
+also records where we sit on the same instrument, including the one thing it found
+that the design review did not: our line measure is the widest of the nine.
+
 ## Layout
 
 `--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px)`

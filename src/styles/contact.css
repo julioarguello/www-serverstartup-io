@@ -1,5 +1,5 @@
 .s-contact {
-	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .s-contact__inner h1 {
@@ -180,13 +180,12 @@
 
 @media (min-width: 768px) {
 	.s-contact {
-		/* Keep the vertical centering, but reserve the fixed-header band:
-		   with the team row + colophon the page is tall enough to slide
-		   under it otherwise. */
-		padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
+		/* #456 — the floor stays so a short contact page still fills the
+		   screen, but the content starts at the opening's inset like every
+		   other page type instead of being centred in whatever is left. */
 		min-height: calc(100vh - 200px);
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 	}
 
 	.s-contact__method {

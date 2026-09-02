@@ -119,6 +119,39 @@
  *       `--color-secondary` over a body that is already that colour: a band
  *       waiting to become visible the day either token moves.
  *
+ * Four more with the page openings (#456), where the defect was that the
+ * header's own height was a magic number nobody had measured:
+ *
+ *   G15 `--header-h` matches the header the browser actually draws. Twelve
+ *       declarations across eight stylesheets used to spell the opening inset
+ *       as `calc(80px + …)` below 768 and `calc(100px + …)` above it. The
+ *       header measures 69px and 78px. BOTH literals were wrong — the desktop
+ *       one by 22px — and nothing could say so, because a wrong constant is
+ *       not a wrong declaration. This is the assertion that makes the token a
+ *       measurement instead of a guess.
+ *
+ *   G16 every document opening reserves the same inset: `--header-h` plus
+ *       `--open-clear`, and nothing else. Before, the same h1 opened at 104,
+ *       140 or 160px depending on which stylesheet the page happened to
+ *       import — six different values across the page types at 1440. The two
+ *       photographic bands are exempt BY NAME in `OPENING_ROUTES`, not by
+ *       accident: their copy is centred against a plate whose subject is
+ *       registered to that column at build time, and top-aligning it ran the
+ *       kicker straight through the drawing. Measured, then reverted.
+ *
+ *   G17 nothing decorative is painted `position: fixed` behind the document.
+ *       `.s-emblem-bg` was a 340px cube at 7% opacity fixed across the whole
+ *       viewport at `z-index: -1`. Being fixed, its relationship to the copy
+ *       was whatever the scroll offset happened to be: on «Quiénes somos» it
+ *       crossed the boot console, the lede, a section heading and four
+ *       paragraphs at once. A fixed layer below the content cannot be composed
+ *       with anything, which is the whole objection, and it is invisible to
+ *       every other gate — it changes no contrast, no token and no word.
+ *
+ *   G18 `.s-hero__card` opens above the fold at 390×844. The card is the only
+ *       thing in the hero band that says what we do; a phone that has to
+ *       scroll to reach it is a phone that was shown a picture and a heading.
+ *
  * Deliberately NOT a screenshot diff. A pixel diff over 26 routes would go red
  * on every PR in this redesign by design, get re-baselined on sight, and become
  * furniture. Machines assert geometry; whether the composition is any good is a
@@ -216,6 +249,40 @@ const WIDTHS = [390, 768, 1440];
  * a wider mark, breaks first — and it is invisible at 1440.
  */
 const FOOTER_WIDTHS = [390, 768, 1024, 1440];
+/**
+ * One route per page type, both locales, with the selector of the section that
+ * opens it.
+ *
+ * `photographic: true` marks a band that carries a plate. Those two are exempt
+ * from G16 and from nothing else: the plate's cube is registered to a centred
+ * column at build time, so the copy cannot be top-aligned to the shared inset
+ * without landing on the drawing. That was measured on this branch and
+ * reverted, and the exemption is written down here rather than being a hole in
+ * the assertion.
+ */
+const OPENING_ROUTES = [
+	{ route: "/", opening: ".s-hero", photographic: true },
+	{ route: "/comercio-electronico", opening: ".s-hero--art", photographic: true },
+	{ route: "/quienes-somos", opening: ".s-hero" },
+	{ route: "/contacto", opening: ".s-contact" },
+	{ route: "/deconstruyendo", opening: ".s-doc" },
+	{ route: "/referencias", opening: ".s-hero" },
+	{ route: "/politica-de-privacidad", opening: ".legal" },
+	{ route: "/en", opening: ".s-hero", photographic: true },
+	{ route: "/en/e-commerce", opening: ".s-hero--art", photographic: true },
+	{ route: "/en/about-us", opening: ".s-hero" },
+	{ route: "/en/contact", opening: ".s-contact" },
+	{ route: "/en/deconstructing", opening: ".s-doc" },
+	{ route: "/en/references", opening: ".s-hero" },
+	{ route: "/en/privacy-policy", opening: ".legal" },
+];
+/** The openings are measured at the two widths the tokens switch between. */
+const OPENING_WIDTHS = [390, 1440];
+/** The phone the hero card has to fit on. iPhone 14/15 at 1×. */
+const FOLD = { width: 390, height: 844 };
+/** Routes whose hero carries the card. */
+const CARD_ROUTES = ["/", "/en"];
+
 /** A hairline plus a rounding error. Not a design allowance. */
 const TOLERANCE = 8;
 /** Shorter than this and a repeat is a label ("Ver más"), not duplicated prose. */
@@ -762,15 +829,134 @@ const judgeMenu = (m, hovered, where) => {
 	return found;
 };
 
+/** G15 + G16 + G17 + G18: the opening, the token it is spelled from, and what
+ *  is painted behind the page. */
+const MEASURE_OPENING = (sel) => {
+	const px = (v) => parseFloat(v) || 0;
+	const root = getComputedStyle(document.documentElement);
+	const header = document.querySelector("header");
+	const opening = document.querySelector(sel);
+	const card = document.querySelector(".s-hero__card");
+
+	// Every layer painted behind the document. `position: fixed` with a
+	// negative z-index is the shape: the header is fixed and positive, a
+	// modal's scrim is fixed and positive, and nothing legitimate on this
+	// site sits below the content and outside the scroll at once.
+	const behind = [];
+	for (const el of document.querySelectorAll("body *")) {
+		const cs = getComputedStyle(el);
+		if (cs.position !== "fixed" || cs.display === "none") continue;
+		const z = parseInt(cs.zIndex, 10);
+		if (!Number.isFinite(z) || z >= 0) continue;
+		const r = el.getBoundingClientRect();
+		const cls = typeof el.className === "string" ? el.className.trim() : "";
+		behind.push({
+			sel: el.tagName.toLowerCase() + (cls ? "." + cls.split(/\s+/).join(".") : ""),
+			w: Math.round(r.width),
+			h: Math.round(r.height),
+			opacity: cs.opacity,
+		});
+	}
+
+	return {
+		headerFound: !!header,
+		headerH: header ? header.getBoundingClientRect().height : null,
+		tokenHeaderH: px(root.getPropertyValue("--header-h")),
+		tokenClear: px(root.getPropertyValue("--open-clear")),
+		openingFound: !!opening,
+		padTop: opening ? px(getComputedStyle(opening).paddingTop) : null,
+		cardFound: !!card,
+		cardTop: card ? card.getBoundingClientRect().top : null,
+		vh: window.innerHeight,
+		behind,
+	};
+};
+
+/** G15: the token drifts from the box it claims to describe. */
+const PLANT_HEADER_TOKEN = () => {
+	if (!document.querySelector("header")) return { missing: "header" };
+	document.documentElement.style.setProperty("--header-h", "40px");
+	return {};
+};
+
+/** G16: one opening reserves an inset of its own invention. */
+const PLANT_OPENING_INSET = (sel) => {
+	if (!document.querySelector(sel)) return { missing: sel };
+	const st = document.createElement("style");
+	st.textContent = `${sel} { padding-top: 213px !important; }`;
+	document.head.append(st);
+	return {};
+};
+
+/** G17: the watermark comes back. */
+const PLANT_FIXED_LAYER = () => {
+	document.body.insertAdjacentHTML(
+		"beforeend",
+		'<div class="ci-plant-watermark" aria-hidden="true" style="position:fixed;inset:0;z-index:-1;opacity:0.07"></div>'
+	);
+	return {};
+};
+
+/** G18: the card falls below the fold. */
+const PLANT_CARD_BELOW_FOLD = () => {
+	if (!document.querySelector(".s-hero__card")) return { missing: ".s-hero__card" };
+	const st = document.createElement("style");
+	st.textContent = ".s-hero__kicker { margin-top: 900px !important; }";
+	document.head.append(st);
+	return {};
+};
+
+/* ── judgement ─────────────────────────────────────────────────────────── */
+
+/** G15 + G16 + G17. */
+const judgeOpening = (m, where, spec) => {
+	const found = [];
+	const r = (n) => Math.round(n * 10) / 10;
+
+	if (Math.abs(m.tokenHeaderH - m.headerH) > 1)
+		found.push({
+			g: "G15",
+			where,
+			msg: `--header-h says ${m.tokenHeaderH}px, the header draws ${r(m.headerH)}px`,
+		});
+
+	if (!spec.photographic) {
+		const want = m.tokenHeaderH + m.tokenClear;
+		if (Math.abs(m.padTop - want) > 1)
+			found.push({
+				g: "G16",
+				where,
+				msg: `\`${spec.opening}\` reserves ${r(m.padTop)}px where the opening inset is ${want}px`,
+			});
+	}
+
+	for (const b of m.behind)
+		found.push({
+			g: "G17",
+			where,
+			msg: `\`${b.sel}\` is painted fixed behind the document at ${b.w}\u00d7${b.h}, opacity ${b.opacity}`,
+		});
+
+	return found;
+};
+
+/** G18. */
+const judgeCard = (m, where) => {
+	if (m.cardTop == null) return [];
+	return m.cardTop < m.vh
+		? []
+		: [{ g: "G18", where, msg: `\`.s-hero__card\` opens at ${Math.round(m.cardTop)}px in a ${m.vh}px viewport` }];
+};
+
 const browser = await puppeteer.launch({
 	headless: "new",
 	args: ["--no-sandbox"],
 	protocolTimeout: 300_000,
 });
 
-const open = async (route, width) => {
+const open = async (route, width, height = 900) => {
 	const page = await browser.newPage();
-	await page.setViewport({ width, height: 900, isMobile: width < 768, hasTouch: width < 768 });
+	await page.setViewport({ width, height, isMobile: width < 768, hasTouch: width < 768 });
 	await page.goto(BASE + route, { waitUntil: "domcontentloaded", timeout: 60_000 });
 	await page.evaluate(() => document.fonts.ready);
 	return page;
@@ -1076,6 +1262,92 @@ const hoverSkins = async (page, m) => {
 	ok(`control — a panel floating a short block and a transparent current-chip were both reported (${after.found.length} finding(s))`);
 }
 
+// ── and the openings (#456). Four plants, one per SHAPE, each on its own page:
+// G12 in #470 carried two assertions under one id, the first fired, the second
+// was blind, and the control was satisfied anyway. One id, one plant, one
+// message pattern — and every OTHER gate must stay exactly as it was, which is
+// what catches a plant that fires the right gate for the wrong reason.
+{
+	const doc = OPENING_ROUTES.find((o) => !o.photographic && o.route === "/quienes-somos");
+	const key = (f) => `${f.g}|${f.msg}`;
+
+	const probe = async (route, spec, width, height, plant, arg) => {
+		const page = await open(route, width, height);
+		const first = await page.evaluate(MEASURE_OPENING, spec.opening);
+		if (!first.headerFound || !first.openingFound || !first.tokenHeaderH) {
+			await page.close();
+			return {
+				blind: `${route} @${width}: header=${first.headerFound} \`${spec.opening}\`=${first.openingFound} --header-h=${first.tokenHeaderH || "unset"}`,
+			};
+		}
+		const scan = async () => {
+			const m = await page.evaluate(MEASURE_OPENING, spec.opening);
+			return [...judgeOpening(m, "control", spec), ...judgeCard(m, "control")];
+		};
+		const before = new Set((await scan()).map(key));
+		const planted = await page.evaluate(plant, arg);
+		if (planted?.missing) {
+			await page.close();
+			return { blind: `cannot plant on ${route} — \`${planted.missing}\` is not there` };
+		}
+		const after = await scan();
+		await page.close();
+		return { before, after, fresh: after.filter((f) => !before.has(key(f))) };
+	};
+
+	const problems = [];
+	const shapes = [
+		{ id: "G15", why: "a header token that lies", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_HEADER_TOKEN, arg: undefined, expect: /--header-h says/ },
+		{ id: "G16", why: "an opening with an inset of its own", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_OPENING_INSET, arg: doc.opening, expect: /reserves .* where the opening inset is/ },
+		{ id: "G17", why: "a watermark fixed behind the page", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_FIXED_LAYER, arg: undefined, expect: /painted fixed behind the document/ },
+		{
+			id: "G18",
+			why: "a hero card pushed below the fold",
+			route: CARD_ROUTES[0],
+			spec: OPENING_ROUTES.find((o) => o.route === CARD_ROUTES[0]),
+			w: FOLD.width,
+			h: FOLD.height,
+			plant: PLANT_CARD_BELOW_FOLD,
+			arg: undefined,
+			expect: /opens at \d+px in a \d+px viewport/,
+		},
+	];
+
+	for (const sh of shapes) {
+		const r = await probe(sh.route, sh.spec, sh.w, sh.h, sh.plant, sh.arg);
+		if (r.blind) {
+			console.error(`✗ blind: ${r.blind}`);
+			console.error("  A renamed class or a deleted token makes this gate report clean forever. Update");
+			console.error("  `OPENING_ROUTES` here in the same commit that renames them.");
+			await browser.close();
+			process.exit(3);
+		}
+		const mine = r.fresh.filter((f) => f.g === sh.id);
+		if (!mine.length) problems.push(`${sh.id} did not fire on ${sh.why}`);
+		else if (!mine.some((f) => sh.expect.test(f.msg)))
+			problems.push(`${sh.id} fired but said something else: ${mine[0].msg}`);
+		const groupsOf = (fs) => new Set([...fs].map((f) => (typeof f === "string" ? f.split("|")[0] : f.g)));
+		// The plant is one shape; no gate that was quiet may start speaking.
+		// Compared by GROUP and not by message: a gate already firing legitimately
+		// rewords itself under a plant — move `--header-h` on a tree where an
+		// opening still spells its own inset and G16 says "…is 80px" where it said
+		// "…is 118px". That is a mutation, not cross-talk, and reading it as
+		// cross-talk exits 3 on precisely the tree the gate exists to catch.
+		const quietBefore = (g) => !groupsOf(r.before).has(g);
+		for (const f of r.fresh.filter((f) => f.g !== sh.id && quietBefore(f.g)))
+			problems.push(`${sh.id}'s plant also tripped ${f.g} — the shapes are not independent: ${f.msg}`);
+		for (const g of groupsOf(r.before)) if (!groupsOf(r.after).has(g)) problems.push(`${sh.id}'s plant silenced ${g}`);
+	}
+
+	if (problems.length) {
+		console.error("✗ the positive control failed: the opening scan is not measuring what it claims.");
+		for (const p of problems) console.error(`    ${p}`);
+		await browser.close();
+		process.exit(3);
+	}
+	ok("4 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, a watermark fixed behind the page, and a hero card below the fold");
+}
+
 // ── the real scan
 const findings = [];
 let rowsSeen = 0;
@@ -1168,6 +1440,36 @@ if (menuMarked < menuPanels) {
 	console.error(`✗ blind: across ${menuPanels} open panels only ${menuMarked} carried a row with \`aria-current\`, so G14 measured almost nothing.`);
 	await browser.close();
 	process.exit(3);
+}
+let openingsSeen = 0;
+for (const spec of OPENING_ROUTES) {
+	for (const width of OPENING_WIDTHS) {
+		const page = await open(spec.route, width);
+		const m = await page.evaluate(MEASURE_OPENING, spec.opening);
+		await page.close();
+		if (!m.headerFound || !m.openingFound || !m.tokenHeaderH) {
+			console.error(`✗ blind: ${spec.route} @${width} does not present what this gate measures.`);
+			console.error(
+				`  header=${m.headerFound} \`${spec.opening}\`=${m.openingFound} --header-h=${m.tokenHeaderH || "unset"}`
+			);
+			await browser.close();
+			process.exit(3);
+		}
+		openingsSeen++;
+		findings.push(...judgeOpening(m, `${spec.route} @${width}`, spec));
+	}
+}
+
+for (const route of CARD_ROUTES) {
+	const page = await open(route, FOLD.width, FOLD.height);
+	const m = await page.evaluate(MEASURE_OPENING, ".s-hero");
+	await page.close();
+	if (!m.cardFound) {
+		console.error(`✗ blind: \`.s-hero__card\` is not on ${route} — G18 has nothing to measure.`);
+		await browser.close();
+		process.exit(3);
+	}
+	findings.push(...judgeCard(m, `${route} @${FOLD.width}\u00d7${FOLD.height}`));
 }
 
 await browser.close();
@@ -1270,6 +1572,39 @@ if (findings.length) {
 		console.error("  hovering any other row performs, so the two states were one picture (#455).");
 		for (const f of by("G14")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G15").length) {
+		fail(`\`--header-h\` does not match the header the browser draws.`);
+		console.error("  The opening inset used to be spelled `calc(80px + …)` below 768 and `calc(100px + …)`");
+		console.error("  above it, in twelve declarations across eight stylesheets. The header measures 69px");
+		console.error("  and 78px: both literals were wrong, the desktop one by 22px, and nothing in CI could");
+		console.error("  say so because a wrong constant is not a wrong declaration. Fix the token, not the");
+		console.error("  consumers — that is the whole point of there being one.");
+		for (const f of by("G15")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G16").length) {
+		fail(`${by("G16").length} opening(s) reserve an inset of their own.`);
+		console.error("  Every page type starts the same distance below the header: `--header-h` plus");
+		console.error("  `--open-clear`, and nothing else (#456). The same h1 used to open at 104, 140 or 160px");
+		console.error("  depending on which stylesheet the page imported. If a new opening genuinely needs its");
+		console.error("  own column — a band built around a plate does — add it to `OPENING_ROUTES` as");
+		console.error("  `photographic: true`, with the reason, rather than widening the assertion.");
+		for (const f of by("G16")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G17").length) {
+		fail(`${by("G17").length} decorative layer(s) are painted fixed behind the document.`);
+		console.error("  A fixed layer below the content cannot be composed with anything: its relationship to");
+		console.error("  the copy is whatever the scroll offset happens to be. `.s-emblem-bg` was a 340px cube");
+		console.error("  at 7% that crossed the boot console, the lede, a section heading and four paragraphs");
+		console.error("  of «Quiénes somos» at once (#456). If the page needs a mark, put it in the opening and");
+		console.error("  let it scroll away with the thing it names.");
+		for (const f of by("G17")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G18").length) {
+		fail(`the hero card does not open above the fold.`);
+		console.error(`  ${FOLD.width}\u00d7${FOLD.height} is the phone this has to fit on. The card is the only thing in the band`);
+		console.error("  that says what we do; below the fold it is a picture and a heading and nothing else.");
+		for (const f of by("G18")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -1283,6 +1618,9 @@ ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} item
 ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join(" or ")}`);
 ok(
 	`${MENU_ROUTES.length} routes × ${MENU_SIZES.length} sizes: the open panel wastes at most ${MENU_WASTE_MAX}% of the viewport and every current row is marked unlike a hovered one`
+);
+ok(
+	`${openingsSeen / OPENING_WIDTHS.length} page openings \u00d7 ${OPENING_WIDTHS.length} widths: \`--header-h\` matches the rendered header, every document opening reserves the same inset, nothing is painted fixed behind the page, and the hero card opens above the fold at ${FOLD.width}\u00d7${FOLD.height}`
 );
 ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`

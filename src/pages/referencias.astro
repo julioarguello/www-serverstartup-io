@@ -73,14 +73,11 @@ const accentColor = "#1E1E1E";
 ---
 
 <Base title={title} description={excerpt || `${title} — Server Startup`} altPath={altPath}>
-	<div class="s-emblem-bg s-emblem-bg--refs" aria-hidden="true">
-		<CubeEmblem color="var(--color-primary)" faceKey={emblemKey} size={340} />
-	</div>
-
 	<!-- ══════ HERO ══════ -->
 	<section class="s-hero" aria-label={title}>
 		<div class="container s-hero__inner">
 			<div class="s-hero__copy">
+				<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey={emblemKey} size={104} />
 				<h1>{title}</h1>
 				{(content || []).length > 0 && (
 					<div class="s-hero__body">

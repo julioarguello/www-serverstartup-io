@@ -30,13 +30,9 @@ const accentColor = "var(--color-primary)";
 ---
 
 <Base title={title} description={excerpt || `${title} — Server Startup`} altPath={altPath}>
-	<div class="s-emblem-bg" aria-hidden="true">
-		<CubeEmblem color="var(--color-primary)" faceKey="dec" size={340} />
-	</div>
-
 	<section class="s-doc" aria-label={title}>
 		<div class="container s-doc__inner">
-			<CubeEmblem class="s-emblem-mini" color="var(--color-primary)" faceKey="dec" size={104} />
+			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="dec" size={104} />
 			<h1>{title}</h1>
 			<DeconstructDoc content={content as any[]} labels={labels} repoUrl={repoUrl} />
 		</div>

@@ -38,13 +38,9 @@ const altPath = page ? await entryAlternatePath("pages", page.data.id, "en") : n
 >
 	{/* #350: every page carries the mark with its own detail — these were
 	    the only two without one. `legal` is a nav key with no menu entry. */}
-	<div class="s-emblem-bg" aria-hidden="true">
-		<CubeEmblem color="var(--color-primary)" faceKey="legal" size={340} />
-	</div>
-
 	<section class="legal" aria-label={title}>
 		<div class="container legal-inner">
-			<CubeEmblem class="s-emblem-mini" color="var(--color-primary)" faceKey="legal" size={104} />
+			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="legal" size={104} />
 			<h1>{title}</h1>
 			{content && <PortableText value={content} />}
 		</div>

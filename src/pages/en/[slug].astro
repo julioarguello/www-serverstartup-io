@@ -85,12 +85,6 @@ const heroGround = heroGroundForSlug(slug);
 		trail: [{ name: title, path: `/en/${slug}` }],
 	}))} />
 	<!-- ══════ HERO — compact, solid cube glyph in the discipline color ══════ -->
-	<!-- Mobile: the section emblem lives as a fixed full-viewport watermark
-	     instead of an in-flow icon (always in view, adds no scroll — #216) -->
-	<div class="s-emblem-bg" aria-hidden="true">
-		<CubeEmblem color={accentColor} faceKey={emblemKey} size={340} />
-	</div>
-
 	<section class:list={["s-hero", heroArt && "s-hero--art"]} aria-label={title}>
 		{heroArt && (
 			<div class="s-hero__stage" aria-hidden="true">
@@ -125,8 +119,8 @@ const heroGround = heroGroundForSlug(slug);
 		<div class="container s-hero__inner">
 			<div class="s-hero__copy">
 				{/* the plate IS the mark, drawn at full size in this discipline's
-				    colour — the floated mini would be the same cube twice */}
-				{!heroArt && <CubeEmblem class="s-emblem-mini" color={accentColor} faceKey={emblemKey} size={104} />}
+				    colour — a cube beside it would be the same cube twice */}
+				{!heroArt && <CubeEmblem class="s-open-mark" color={accentColor} faceKey={emblemKey} size={104} />}
 				<h1>{title}</h1>
 				{excerpt && (
 					<div class="s-hero__body">

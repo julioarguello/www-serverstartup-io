@@ -1,5 +1,5 @@
 .legal {
-	padding: calc(80px + 40px) 0 80px;
+	padding: var(--open-pad-top) 0 var(--space-8);
 }
 
 .legal-inner {
@@ -22,6 +22,3 @@
 	line-height: 1.45;
 }
 
-@media (min-width: 768px) {
-	.legal { padding: 160px 0 80px; }
-}

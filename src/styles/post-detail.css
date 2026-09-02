@@ -36,7 +36,7 @@
 
 	.meta-sticky {
 		position: sticky;
-		top: calc(80px + 32px);
+		top: calc(var(--header-h) + var(--space-5));
 	}
 
 	.meta-block {
@@ -178,14 +178,14 @@
 		font-size: 28px;
 		margin-top: 2.5em;
 		margin-bottom: 0.75em;
-		scroll-margin-top: calc(80px + 16px);
+		scroll-margin-top: calc(var(--header-h) + var(--space-3));
 	}
 
 	.article-content :global(h3) {
 		font-size: 22px;
 		margin-top: 2em;
 		margin-bottom: 0.5em;
-		scroll-margin-top: calc(80px + 16px);
+		scroll-margin-top: calc(var(--header-h) + var(--space-3));
 	}
 
 	.article-content :global(blockquote) {
@@ -262,7 +262,7 @@
 
 	.sidebar-sticky {
 		position: sticky;
-		top: calc(80px + 32px);
+		top: calc(var(--header-h) + var(--space-5));
 	}
 
 	.toc {

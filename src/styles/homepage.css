@@ -18,7 +18,12 @@
 	justify-content: center;
 	align-items: flex-start;
 	min-height: 100svh;
-	padding: calc(80px + var(--space-6)) 0 var(--space-6);
+	/* #456 — the same inset as every other opening, but spelled from
+	   `--header-h` instead of the literal `80px` this used to guess with.
+	   The band stays centred: the six plates' cubes are registered to a
+	   centred column at build time, and top-aligning the copy ran the
+	   kicker straight through the drawing. */
+	padding: var(--open-pad-top) 0 var(--space-6);
 	/* the ground the plates are drawn on, and what shows while they load */
 	background-color: var(--color-primary);
 	/* the plates are cropped to the band; `clip` and not `hidden` so this
@@ -493,7 +498,7 @@
 
 @media (min-width: 768px) {
 	.s-hero {
-		padding: calc(80px + var(--space-8)) 0 var(--space-8);
+		padding: calc(var(--header-h) + var(--space-8)) 0 var(--space-8);
 	}
 	.s-hero__scrim {
 		background-image: var(--hero-scrim);

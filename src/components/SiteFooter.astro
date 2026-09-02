@@ -171,30 +171,50 @@ const partnerMarks = (partnerLogos.length > 0
 
 	<!-- The funding line, on its own (#454). Two official artworks and nothing
 	     else: the EU lockup already carries the mandated statement, and the PRTR
-	     logo completes the set. `height` is fixed at 46px so the emblem cannot be
-	     shrunk out of compliance by a narrow viewport, which is exactly how the
-	     single-JPEG version failed at 390px — and 46, not 40, because the floor
-	     is the flag's and the flag is 88% of the lockup. -->
+	     logo completes the set. `height` is fixed so the emblem cannot be shrunk
+	     out of compliance by a narrow viewport, which is exactly how the
+	     single-JPEG version failed at 390px — and it is the FLAG's floor, not the
+	     lockup's, so the ratio travels on the element as `data-emblem-ratio`.
+
+	     Each mark links to its own institution (#469). Nothing in the rules asks
+	     for this and nothing forbids it — the only linking duty in the whole body
+	     (`Orden ETD/1498/2021` art. 10.3.d) binds an Agente Digitalizador to its
+	     own Kit Digital page, which is not us. It is here because two inert logos
+	     beside a linked Cloudflare mark read as an oversight, and because a reader
+	     who can verify the claim is the stated point of the duty (art. 34.3).
+
+	     The destinations are NOT CMS data, unlike the partner mark's. They are
+	     part of a legally-scoped artefact, like the `src` and the ratio beside
+	     them: a commercial partner can change its address, these two cannot.
+
+	     `Orden HFP/1030/2021` art. 9.4 is why the link must be visually inert —
+	     "el emblema … no puede modificarse". An anchor adds no visual mark, but
+	     an underline, a hover fade or a tint would. G12 holds that, by walking the
+	     stylesheet rather than the rest state, so a `:hover` rule is caught too. -->
 	<div class="footer-funding container">
-		<img
-			src="/assets/eu-nextgenerationeu.webp"
-			alt={t("eu_funding_alt")}
-			width="757"
-			height="200"
-			class="footer-funding__mark"
-			data-emblem-ratio="0.88"
-			loading="lazy"
-			decoding="async"
-		/>
-		<img
-			src="/assets/prtr.webp"
-			alt={t("prtr_alt")}
-			width="520"
-			height="200"
-			class="footer-funding__mark"
-			loading="lazy"
-			decoding="async"
-		/>
+		<a class="footer-funding__link" href="https://next-generation-eu.europa.eu/" target="_blank" rel="noopener noreferrer">
+			<img
+				src="/assets/eu-nextgenerationeu.webp"
+				alt={t("eu_funding_alt")}
+				width="757"
+				height="200"
+				class="footer-funding__mark"
+				data-emblem-ratio="0.88"
+				loading="lazy"
+				decoding="async"
+			/>
+		</a>
+		<a class="footer-funding__link" href="https://planderecuperacion.gob.es/" target="_blank" rel="noopener noreferrer">
+			<img
+				src="/assets/prtr.webp"
+				alt={t("prtr_alt")}
+				width="520"
+				height="200"
+				class="footer-funding__mark"
+				loading="lazy"
+				decoding="async"
+			/>
+		</a>
 	</div>
 
 	<!-- Legal row (#335). RGPD art. 12.1 asks for information "de fácil acceso"
@@ -361,6 +381,20 @@ const partnerMarks = (partnerLogos.length > 0
 		width: auto;
 		max-width: 100%;
 		display: block;
+	}
+
+	/* The anchor is a hit area and nothing else. No underline, no fade, no tint,
+	   no lift: `Orden HFP/1030/2021` art. 9.4 forbids modifying the emblem, and
+	   the ordinary link reflexes are exactly how it would get modified. The focus
+	   ring is the one thing allowed to appear, and it sits outside the artwork.
+	   G12 holds this by reading the stylesheet, not the rest state. */
+	.footer-funding__link {
+		display: block;
+		text-decoration: none;
+	}
+	.footer-funding__link:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 4px;
 	}
 
 	/* The EU emblem outweighs every other mark on this line. The binding rule is

@@ -85,6 +85,15 @@
  *       logotipos", and the Enero 2022 identity manual makes that ratio binding
  *       for cartelería. Meeting the strictest of the three costs one declaration.
  *
+ *   G12 every mark on the funding line is a link to an absolute https
+ *       destination, and NOTHING in the stylesheet paints, fades, transforms or
+ *       decorates those marks. `Orden HFP/1030/2021` art. 9.4: "el emblema …
+ *       no puede modificarse". An anchor adds no visual mark, but the reflexes
+ *       that arrive with one do — an underline, a hover fade, a tint, a lift.
+ *       This reads the STYLESHEET rather than the rest state, so a `:hover` rule
+ *       is caught as surely as a rest-state one; nothing else in this gate could
+ *       see a hover.
+ *
  *   G9  the footer paints no ground of its own — transparent, or at worst the
  *       body's own colour. Giving the footer its own band is what makes a footer
  *       read as bolt-on, and the rule that used to be here painted
@@ -266,6 +275,46 @@ const MEASURE_FOOTER = () => {
 			ratio: parseFloat(img.dataset.emblemRatio),
 			h: img.getBoundingClientRect().height,
 		})),
+		// G12: the marks are links, and the destinations are absolute
+		fundingLinks: [...footer.querySelectorAll(".footer-funding__mark")].map((img) => {
+			const a = img.closest("a");
+			return { alt: (img.alt || "").slice(0, 32), href: a ? a.getAttribute("href") : null };
+		}),
+		// G12: any rule anywhere that would modify the artwork. Walked from the
+		// stylesheet, so `:hover` and `:focus` rules are visible to a scan that only
+		// ever measures a page at rest.
+		paintRules: (() => {
+			const PROPS = ["filter", "-webkit-filter", "opacity", "transform", "text-decoration-line"];
+			const INERT = new Set(["", "none", "1"]);
+			const hits = [];
+			// Read the declarations FIRST and recurse only into a non-empty list.
+			// CSS Nesting means every `CSSStyleRule` now exposes its own (usually
+			// empty) `cssRules`, so the obvious `if (r.cssRules) { recurse; continue }`
+			// treats every ordinary rule as a grouping rule and skips its
+			// declarations: 222 rules in `Base.css`, 14 of them reached, and this
+			// half of G12 reporting clean forever. Caught by the revert proof.
+			const walk = (list) => {
+				for (const r of list) {
+					if (r.style && r.selectorText && /footer-funding/.test(r.selectorText)) {
+						for (const prop of PROPS) {
+							const v = r.style.getPropertyValue(prop).trim();
+							if (!INERT.has(v)) hits.push({ sel: r.selectorText, prop, v });
+						}
+					}
+					if (r.cssRules && r.cssRules.length) walk(r.cssRules);
+				}
+			};
+			for (const sheet of document.styleSheets) {
+				let rules;
+				try {
+					rules = sheet.cssRules;
+				} catch {
+					continue;
+				}
+				if (rules) walk(rules);
+			}
+			return hits;
+		})(),
 		// every mark on the funding line, emblem or not: G11 compares them
 		fundingAll: [...footer.querySelectorAll(".footer-funding__mark")].map((img) => ({
 			alt: (img.alt || "").slice(0, 32),
@@ -413,6 +462,26 @@ const PLANT_FOOTER = () => {
 	if (!other) return { missing: ".footer-funding__mark:not([data-emblem-ratio])" };
 	other.style.height = "62px";
 
+	// I — a mark pointed at a relative path instead of its institution. It wraps a
+	//     FRESH anchor instead of rewriting the existing one, so the plant still
+	//     works when the links have been removed altogether — which is precisely
+	//     the defect G12 exists to catch. A plant that needed `.footer-funding__link`
+	//     to be there made the gate go blind (exit 3) on that defect instead of
+	//     red, and a reviewer who "fixes" a blind plant by chasing the selector
+	//     drops the assertion without noticing. Found by the revert proof.
+	const mark = need(".footer-funding__mark");
+	if (!mark) return { missing: ".footer-funding__mark" };
+	const wrap = document.createElement("a");
+	wrap.setAttribute("href", "/contacto");
+	mark.parentNode.insertBefore(wrap, mark);
+	wrap.appendChild(mark);
+
+	// J — the reflex that art. 9.4 forbids: a hover rule that fades the emblem.
+	//     Injected as a stylesheet, because no scan of a page at rest can see one.
+	const fade = document.createElement("style");
+	fade.textContent = ".footer-funding__mark:hover { opacity: 0.5; }";
+	document.head.appendChild(fade);
+
 	// F — the legal row gets a change that is not geometry. Nothing new may be
 	//     reported about it, and in particular it must not go centred with B.
 	const legal = need(".footer-legal__inner");
@@ -517,6 +586,15 @@ const judgeFooter = (m, where, width) => {
 					msg: `the EU emblem renders ${e.h.toFixed(1)}px against ${other.h.toFixed(1)}px for "${other.alt}" — ${ratio.toFixed(2)}×, under the ${EMBLEM_PROMINENCE}× the justification guide asks for`,
 				});
 		}
+
+	// G12 — the marks are links, and nothing modifies them.
+	for (const f of m.fundingLinks) {
+		if (!f.href) found.push({ g: "G12", where, msg: `the mark "${f.alt}" is not a link` });
+		else if (!/^https:\/\//.test(f.href))
+			found.push({ g: "G12", where, msg: `the mark "${f.alt}" links to \`${f.href}\`, which is not an absolute https destination` });
+	}
+	for (const r of m.paintRules || [])
+		found.push({ g: "G12", where, msg: `\`${r.sel}\` declares ${r.prop}: ${r.v} — the emblem may not be modified` });
 
 	// G9 — no ground of its own. Transparent is the strongest form of that: the
 	// document's ground simply continues. Equal-to-the-body also passes, because
@@ -663,8 +741,16 @@ const settleFooter = async (page) => {
 	const fresh = after.filter((f) => !before.has(key(f)));
 
 	const problems = [];
-	for (const g of ["G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11"])
+	for (const g of ["G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11", "G12"])
 		if (!fresh.some((f) => f.g === g)) problems.push(`${g} did not fire on a planted violation`);
+	// G12 carries two plants under one id — a relative href and an injected hover
+	// rule — so "G12 fired" is not proof that both halves work. It was not: the
+	// href half fired while the stylesheet half was blind, and the shared id hid
+	// it. Require one finding of each shape.
+	if (!fresh.some((f) => f.g === "G12" && /is not a link|not an absolute/.test(f.msg)))
+		problems.push("G12's href half did not fire on a planted violation");
+	if (!fresh.some((f) => f.g === "G12" && /may not be modified/.test(f.msg)))
+		problems.push("G12's stylesheet half did not fire on a planted violation");
 	// the plant centred the signature block; the legal row is its sibling and
 	// must have stayed where it was
 	for (const f of fresh.filter((f) => f.g === "G6" && /footer-legal/.test(f.msg)))
@@ -678,7 +764,7 @@ const settleFooter = async (page) => {
 		await browser.close();
 		process.exit(3);
 	}
-	ok("8 more planted defects judged correctly — an orphaned mark, an off-centre line, a centred block, a shrunken emblem, an odd link size, a ground of its own, a block wider than the measure, a mark raised to the emblem's height — and a legal row it left alone");
+	ok("10 more planted defects judged correctly — an orphaned mark, an off-centre line, a centred block, a shrunken emblem, an odd link size, a ground of its own, a block wider than the measure, a mark raised to the emblem's height, a relative funding href, a hover rule that fades the emblem — and a legal row it left alone");
 	await page.close();
 }
 
@@ -799,6 +885,15 @@ if (findings.length) {
 		console.error("  three costs one CSS declaration, so we meet it.");
 		for (const f of by("G11")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G12").length) {
+		fail(`the funding line's marks are not inert links to their institutions.`);
+		console.error("  `Orden HFP/1030/2021` art. 9.4: \"el emblema debe permanecer distinto y separado y no");
+		console.error("  puede modificarse\". An anchor adds no visual mark; an underline, a hover fade, a tint");
+		console.error("  or a lift does. The link is a hit area and nothing else — the focus ring is the only");
+		console.error("  thing allowed to appear, outside the artwork. Nothing in the rules asks for the link");
+		console.error("  itself (#469); having added it, this is the part that is not optional.");
+		for (const f of by("G12")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -811,6 +906,6 @@ if (findings.length) {
 ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} items each, heights within ${TOLERANCE}px, no chrome at rest`);
 ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join(" or ")}`);
 ok(
-	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`
+	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, nothing outside the one measure, and funding marks that link out without being repainted`
 );
 process.exit(0);

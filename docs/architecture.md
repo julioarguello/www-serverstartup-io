@@ -145,6 +145,24 @@ All routes exist in both ES and EN:
   strictest of the three costs one declaration, so the emblem renders at **62px** against
   the PRTR logo's 46px — 1.35× on the artwork, 1.33× on the ink inside it, flag at 54.6px
   ≈ 1.44cm. `ci-check-layout.mjs` G11 holds the ratio; G7 still holds the absolute floor.
+
+  Each mark links to its own institution — the emblem to `next-generation-eu.europa.eu`,
+  the PRTR logo to `planderecuperacion.gob.es` (#469). Nothing in the rules asks for the
+  link and nothing forbids it: the only linking duty in the whole body is art. 10.3.b/d),
+  which binds an *Agente Digitalizador* to its own Kit Digital page. It is there because
+  two inert logos beside a linked Cloudflare mark read as an oversight, and because a
+  reader who can verify the claim is the stated point of the duty. Unlike the partner
+  mark's, these destinations are **not CMS data**: they belong to a legally-scoped
+  artefact, like the `src` and the ratio beside them.
+
+  What is not optional is that the link stays visually inert — art. 9.4 again, "el emblema
+  … no puede modificarse". An anchor adds no visual mark; an underline, a hover fade, a
+  tint or a lift does. **G12** holds both halves, and it reads the *stylesheet* rather than
+  the rest state, because nothing else in that gate can see a `:hover`. Two traps worth
+  knowing if it is ever edited: CSS Nesting gives every `CSSStyleRule` its own (usually
+  empty) `cssRules`, so a walk that recurses on truthiness skips every declaration in the
+  sheet; and G12's two plants share one id, so the control asserts one finding of each
+  shape rather than merely that "G12 fired".
   Full audit (local KB): `docs/company/10-kit-digital.md`.
 
 ### 4.2 Shared Components

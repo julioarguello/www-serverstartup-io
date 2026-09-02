@@ -143,7 +143,7 @@ const faces = services
 	}
 	/* token-guard: on */
 	.logo-stage .cface.alive .cell {
-		fill: var(--fc);
+		fill: var(--fc, var(--color-primary));
 	}
 	.logo-stage .sticker,
 	.logo-stage .gsticker {
@@ -215,7 +215,7 @@ const faces = services
 	/* deconstruyendo: the logo's layers come apart */
 	.logo-stage.dec .plate--dark { transform: rotate(20deg) translate(14px, -10px); }
 	.logo-stage.dec .plate--light { transform: rotate(-6deg) translate(-12px, 8px); }
-	.logo-stage.dec .cube3d { transform: var(--rot) translateY(-10px) translateX(8px); }
+	.logo-stage.dec .cube3d { transform: var(--rot, rotateX(-35.264deg) rotateY(45deg)) translateY(-10px) translateX(8px); }
 	@media (prefers-reduced-motion: reduce) {
 		.logo-stage .cube3d,
 		.logo-stage .plate {

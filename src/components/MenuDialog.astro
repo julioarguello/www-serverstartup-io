@@ -381,10 +381,10 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 	   colours to keep in sync with the CMS. */
 	.spec-link:hover,
 	.spec-link:focus-visible {
-		background: color-mix(in srgb, var(--fc) 16%, transparent);
+		background: color-mix(in srgb, var(--fc, var(--color-primary)) 16%, transparent);
 	}
 	.spec-link[aria-current="page"] {
-		background: color-mix(in srgb, var(--fc) 24%, transparent);
+		background: color-mix(in srgb, var(--fc, var(--color-primary)) 24%, transparent);
 	}
 	.spec-mini {
 		display: inline-grid;
@@ -394,12 +394,12 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		width: 26px;
 		height: 26px;
 		/* the CMS hue, raw: these six were drawn for paper and this is paper */
-		border: 2px solid var(--fc);
+		border: 2px solid var(--fc, var(--color-primary));
 		padding: 2px;
 		flex: none;
 	}
 	.spec-mini i {
-		background: var(--fc);
+		background: var(--fc, var(--color-primary));
 		opacity: 0.28;
 	}
 	.spec-link[aria-current="page"] .spec-mini i { opacity: 1; }
@@ -482,7 +482,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 
 	/* The die highlights the specialty it lands on when rolled by tap */
 	.spec-link.rolled {
-		background: color-mix(in srgb, var(--fc) 16%, transparent);
+		background: color-mix(in srgb, var(--fc, var(--color-primary)) 16%, transparent);
 	}
 
 	/* tablet: the approved composition, compressed — die at ×0.85 with air */

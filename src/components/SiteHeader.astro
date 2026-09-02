@@ -173,11 +173,19 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	/* The mark never mutates, but on the picture its cells are cut from the
 	   ground instead of from paper — pale plates over a dark image read as a
 	   white blob, which is the one thing the cube must not become. */
+	/* `--accent`, `--cell-a`, `--cell-b` and `--c1…--c6` all arrive on this
+	   header's own `style=` attribute; nothing in CSS declares them. An
+	   unresolved `var()` with no fallback invalidates the entire declaration
+	   rather than falling back (#462), so a header rendered without its accent
+	   would lose the colour AND whatever else that declaration set. The
+	   fallbacks below are the ink page's own values, which is what `Base`
+	   already sends for a non-section route — so the degraded state is a state
+	   the design already has, not a new one. */
 	.site-header.is-over-hero:not(.is-sticky):not(:has(.search-toggle:checked)) .brand-cube-cell {
-		fill: color-mix(in srgb, var(--accent) 46%, var(--color-primary));
+		fill: color-mix(in srgb, var(--accent, var(--color-primary)) 46%, var(--color-primary));
 	}
 	.site-header.is-over-hero:not(.is-sticky):not(:has(.search-toggle:checked)) .brand-cube-cell--b {
-		fill: color-mix(in srgb, var(--accent) 26%, var(--color-primary));
+		fill: color-mix(in srgb, var(--accent, var(--color-primary)) 26%, var(--color-primary));
 	}
 
 	/* The edge rides the hero's clock. `--c1…--c6` are the CMS colours Base
@@ -185,7 +193,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   that page's accent, and `--c1` is the resting colour if the animation
 	   never runs — reduced motion, or a browser that skips it. */
 	.site-header.is-over-hero.is-rotating {
-		border-bottom-color: var(--c1, var(--accent));
+		border-bottom-color: var(--c1, var(--accent, var(--color-primary)));
 	}
 	.site-header.is-over-hero.is-rotating:not(.is-sticky):not(:has(.search-toggle:checked)) {
 		animation: site-header-edge var(--hero-cycle) steps(1, end) infinite;
@@ -193,13 +201,13 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	}
 
 	@keyframes site-header-edge {
-		0% { border-bottom-color: var(--c1); }
+		0% { border-bottom-color: var(--c1, var(--color-primary)); }
 		16.6667% { border-bottom-color: var(--c2); }
 		33.3333% { border-bottom-color: var(--c3); }
 		50% { border-bottom-color: var(--c4); }
 		66.6667% { border-bottom-color: var(--c5); }
 		83.3333% { border-bottom-color: var(--c6); }
-		100% { border-bottom-color: var(--c1); }
+		100% { border-bottom-color: var(--c1, var(--color-primary)); }
 	}
 
 	/* Manual mode: the visitor picked a plate, so the clock is over. The edge
@@ -209,7 +217,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   this outweighs the animation rule above rather than tying with it. */
 	body:has(.s-hero.is-manual) .site-header.is-over-hero.is-rotating:not(.is-sticky):not(:has(.search-toggle:checked)) {
 		animation: none;
-		border-bottom-color: var(--hero-now, var(--c1));
+		border-bottom-color: var(--hero-now, var(--c1, var(--color-primary)));
 	}
 
 	/* …and it stops when the hero stops, or the two drift apart within one
@@ -261,11 +269,11 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	}
 
 	.brand-cube-cell {
-		fill: var(--cell-a);
+		fill: var(--cell-a, var(--color-border));
 	}
 
 	.brand-cube-cell--b {
-		fill: var(--cell-b);
+		fill: var(--cell-b, var(--color-border-soft));
 	}
 
 	.brand-cube-edge {
@@ -355,7 +363,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   light ground the raw accent needs no lightening, and on ink pages it
 	   lands as the neutral grey-black the rest of the bar already uses */
 	.search-ps {
-		color: var(--accent);
+		color: var(--accent, var(--color-primary));
 		font-weight: 700;
 		margin-right: 9px;
 	}
@@ -373,15 +381,15 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   ground for what is selected, ink for the glyphs so contrast holds. */
 	.search-slot {
 		min-width: 0;
-		background: color-mix(in srgb, var(--accent) 22%, transparent);
+		background: color-mix(in srgb, var(--accent, var(--color-primary)) 22%, transparent);
 		border-radius: var(--radius);
 		padding-inline: 3px;
 		/* the rule is always 2px so focus recolours it without moving the
 		   baseline — a border, not a shadow: this underlines a blank to fill,
 		   and the token file owns shadows for depth, which this is not */
-		border-bottom: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+		border-bottom: 2px solid color-mix(in srgb, var(--accent, var(--color-primary)) 40%, transparent);
 	}
-	.search-slot:focus-within { border-bottom-color: var(--accent); }
+	.search-slot:focus-within { border-bottom-color: var(--accent, var(--color-primary)); }
 
 	/* the key hint sits where a shell would print its own status */
 	.search-hint {
@@ -431,7 +439,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		background: var(--color-surface);
 	}
 	.site-header:has(.search-toggle:focus-visible) .search-btn {
-		outline: 2px solid var(--accent);
+		outline: 2px solid var(--accent, var(--color-primary));
 		outline-offset: 2px;
 	}
 

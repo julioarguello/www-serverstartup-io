@@ -3,18 +3,26 @@ import { getEmDashCollection, getSiteSettings } from "emdash";
 
 import { resolveBlogSiteIdentity } from "../../utils/site-identity";
 
-export const GET: APIRoute = async ({ site, url, currentLocale }) => {
+export const GET: APIRoute = async ({ site, url, currentLocale, cache }) => {
 	const locale = currentLocale || "en";
 	const siteUrl = site?.toString() || url.origin;
 	const { siteTitle, siteTagline } = resolveBlogSiteIdentity(await getSiteSettings());
 
-	// Note: cacheHint is captured but cannot be used — APIRoutes don't have
-	// Astro.cache. The manual Cache-Control header below (max-age=3600) serves
-	// as the fallback TTL for CDN/Worker caching.
-	const { entries: posts, cacheHint: _cacheHint } = await getEmDashCollection("posts", {
+	// APIContext exposes `cache`. The Spanish feed was corrected in #332 and
+	// this one was not, so until #464 the English feed took the header TTL
+	// below and never the purge — a post published in English stayed absent
+	// from its own feed for an hour. Same code as ../rss.xml.ts now.
+	const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 		orderBy: { published_at: "desc" },
 		limit: 20,
 	});
+	cache.set(cacheHint);
+
+	// #464. No posts, no feed. An empty but valid RSS channel is a live public
+	// surface advertising a blog that does not exist — and it was reachable
+	// from every page's head until this issue. Same condition as the listing,
+	// so both come back together the day there is a first post (#340).
+	if (posts.length === 0) return new Response(null, { status: 404 });
 
 	const items = posts
 		.map((post) => {
@@ -42,7 +50,7 @@ export const GET: APIRoute = async ({ site, url, currentLocale }) => {
     <title>${escapeXml(siteTitle)}</title>
     <description>${escapeXml(siteTagline)}</description>
     <link>${siteUrl}/en</link>
-    <atom:link href="${siteUrl}/en/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${siteUrl.replace(/\/$/, "")}/en/rss.xml" rel="self" type="application/rss+xml"/>
     <language>${locale}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 ${items}

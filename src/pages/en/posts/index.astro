@@ -12,6 +12,17 @@ const { entries: posts, cacheHint } = await getEmDashCollection("posts");
 
 Astro.cache.set(cacheHint);
 
+// #464. The founder's call: this section is empty and stays empty. #335 saw the
+// same thing and settled for `noindex`, which was right for a section expected
+// to fill up — but a `noindex` still serves a 200, and a 200 is a page. An
+// absent section should be absent, so an empty collection is a 404.
+//
+// The condition is on the collection, not a switch, so the day #340 says there
+// is an editorial line the section returns by itself. A switch someone has to
+// remember is exactly what made #335 settle for the softer answer.
+if (posts.length === 0) return new Response(null, { status: 404 });
+
+
 const sortedPosts = [...posts].sort((a, b) => {
 	const dateA = a.data.publishedAt?.getTime() ?? 0;
 	const dateB = b.data.publishedAt?.getTime() ?? 0;
@@ -37,7 +48,12 @@ const formatDate = (date: Date) =>
 
 {/* #335: an empty index is a soft-404 candidate; it comes back the day there is a
 	     first post (#340) */}
-<Base title={t("articles_title")} description={t("articles_description")}
+{/* The `noindex` stays even though the 404 above makes it moot today (#464).
+    It is not redundancy: without it, the day #340 publishes a first post this
+    page starts being indexable by itself, and nobody decided that. Indexing the
+    blog is #340's call to make deliberately, not a side effect of content
+    arriving. */}
+<Base title={t("articles_title")} description={t("articles_description")} feed
 	robots="noindex">
 	<div class="posts-page">
 		<div class="container">

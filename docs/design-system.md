@@ -1,106 +1,201 @@
 # Design system — serverstartup.io
 
-> Consolidated 2026-08-05 (issue #155, master plan #165). Source of truth for
-> visual tokens: [`src/styles/theme.css`](../src/styles/theme.css) `:root` block.
-> Original values extracted from the WordPress Elementor Kit (see
-> [migration-guide.md](migration-guide.md)); the site is **light-theme** by design.
+> Rewritten 2026-09-02 (#457) against the tree, after the version consolidated
+> on 2026-08-05 (#155) had drifted far enough to contradict itself and the CMS.
+> **`src/styles/theme.css` is normative** — this file describes it, and CI
+> enforces the relationship in both directions. Where the two disagree,
+> theme.css is right and this file is a bug.
+
+## What enforces this
+
+The rules below are not conventions; each one has a gate that fails CI. That is
+the reason to read this file rather than grep for hex codes.
+
+| Gate | Asserts |
+| ---- | ------- |
+| `ci-check-design-tokens.py` | Every colour, radius, shadow and max-width literal outside theme.css is a defect **and** every token theme.css declares is consumed by something. Both directions, because each was violated in turn. |
+| `ci-check-var-resolves.mjs` | Every `var()` resolves on the elements its rule matches (26 routes × 2 widths), and every runtime-injected `var()` carries a fallback. An unresolved `var()` with no fallback does not fall back — it invalidates the whole declaration. |
+| `ci-check-layout.mjs` | The composition itself: one right edge per block, one heading system, equal row heights, the footer's alignment and the funding marks' size. Geometry, not a screenshot diff. |
+| `ci-check-a11y.mjs` | Measured contrast of every text box in the open menu and over every hero plate, axe on 28 routes, keyboard traversal, reflow at 320px, W3C Nu. |
+| `copy-baseline.mjs` | The rendered words of 26 routes, frozen. A CSS change that moves text is visible here. |
 
 ## Principles
 
-1. **No CSS frameworks.** Plain CSS with custom properties. Total source budget
-   **< 50 KB**; current: ~31 KB across 10 files (`wc -c src/styles/*.css`).
-2. **Mobile-first.** Base styles = mobile; enhancements at `min-width: 768px`
-   (tablet) and `min-width: 1025px` (desktop).
-3. **Tokens over literals.** Every color used more than once must be a `:root`
-   custom property. As of #155 there are zero hex literals outside `theme.css`.
-4. **Minimal but personal.** Personality comes from content, the per-vertical
-   card colors, and targeted monospace accents, not from decoration.
+1. **No CSS frameworks.** Plain CSS with custom properties, 12 files under
+   `src/styles/`.
+2. **Mobile-first.** Base styles are mobile; enhancements at `min-width: 768px`
+   (21 uses) and `min-width: 1025px` (2 uses).
+3. **Tokens over literals**, enforced in both directions — a literal outside
+   theme.css fails, and so does a token nothing consumes.
+4. **Light theme by design.** Dark mode is not adopted; black is reserved for
+   the machine voice (consoles) and the closing CTA, never for a content band.
+5. **Minimal but personal.** Personality comes from the content, the
+   per-vertical colour used as *state*, and targeted monospace accents — not
+   from decoration.
 
-## Color tokens
+## Colour
 
-| Token | Value | Use |
-| ----- | ----- | --- |
+Ink and paper first; everything else is a named role, never a second opinion
+about the same thing.
+
+| Token | Value | Role |
+| ----- | ----- | ---- |
 | `--color-primary` / `--color-text` / `--color-accent` | `#1E1E1E` | Ink |
 | `--color-secondary` | `#FFFFFF` | Paper |
-| `--color-card-blue/yellow/teal/pink/green` | pastels (`#B5E6F7`…) | Service cards (fed to CMS `color` field) |
-| `--color-btn-hover` / `--color-btn-cta-hover` | `#CACACA` / `#E7EAED` | Button states |
+| `--color-text-muted` / `--color-text-muted-dark` | `#6B6B6B` / `#8C8C8C` | Secondary copy |
+| `--color-ink-soft` | `#3a3a3a` | Softened ink |
+| `--color-border` / `--color-border-soft` | `#E3E7EB` / `#EDEEF0` | Hairlines |
+| `--color-tint` | `color-mix(… primary 4% …)` | A BLOCK's ground |
+| `--color-edge` / `--color-tint-edge` | `#F38020` / 8% of it | Cloudflare's own orange, and its tint |
+| `--color-surface` / `-soft` / `-hover` / `-sheet` | `#f5f5f5` / `#fafafa` / `#e8e8e8` / `#FDFDFB` | Neutral grounds |
 | `--color-marked` | `rgba(206,212,218,.5)` | Text highlight |
-| `--color-surface` / `--color-surface-soft` / `--color-surface-hover` | `#f5f5f5` / `#fafafa` / `#e8e8e8` | Neutral backgrounds (blog, code blocks) |
-| `--color-ink-soft` | `#3a3a3a` | Dark soft backgrounds (about team section) |
+| `--color-console-*` (10) | `#101214` … | The machine voice: console grounds, bars, dimmed ink, the green OK |
+| `--color-hero-*` / `--hero-scrim*` | paper at an opacity | Copy and chrome over a photographic plate (#413) |
 
-### Over the hero picture (#413)
+### The vertical palette lives in the CMS, not here
 
-The rotating hero and the vertical pages' plates put the header and the copy on a dark
-image. Every value that switch needs is a token; none of them is a new colour — the ground is
-`--color-primary` and the rest are paper at an opacity.
+The six verticals carry their own colour, stored in each service's `color`
+field in `seed/seed.json` and read at render:
 
-| Token | Value | Use |
-| ----- | ----- | --- |
-| `--hero-scrim` / `--hero-scrim-portrait` | `linear-gradient(…rgba(30,30,30,·)…)` | The ramp that keeps the text side readable — sideways on desktop, top-down on a phone |
-| `--color-hero-ink-soft` | `rgba(255,255,255,.82)` | Secondary copy on the picture |
-| `--color-hero-rule` | `rgba(255,255,255,.35)` | Hairlines on the picture (the locale chip's box) |
-| `--color-hero-dot` | `rgba(255,255,255,.22)` | A slide that is not showing; the search button's hover ground |
-| `--color-hero-card` | `rgba(0,0,0,.22)` | The pane the rotating half of the band sits in — deepens the plate rather than lifting it, so the copy over it keeps its measured contrast |
-| `--hero-cycle` / `--hero-step` | `36s` / `6s` | One clock for the plates, the index, the dots **and** the header's bottom edge |
+E-commerce `#008FD3` · Integration `#1D4E89` · Greenfield `#3E7D50` ·
+Big Data `#EA4335` · Cloudflare `#F38020` · AI `#6B4FBB`
 
-The header reads its own colours through `--bar-bg` / `--bar-ink` / `--bar-ink-soft` /
-`--bar-ink-invert` / `--bar-rule` / `--bar-surface`. They resolve to the ordinary light bar
-everywhere, and to the tokens above while `.is-over-hero` holds — which is how
-`LanguageSwitcher` flips to paper without knowing the hero exists.
+Two corrections to what this file used to say, both measured against
+`seed/seed.json` rather than remembered:
 
-### The two palette layers
+- The five `--color-card-*` pastels were **never** in the CMS. This file
+  claimed they were "fed to CMS `color` field" and were "what renders on cards
+  today"; the seed contains zero occurrences of any of them and has held the
+  six brand colours above throughout. They were dead tokens describing a
+  WordPress-era design, and they are deleted (#457).
+- The palette question this file listed as "a taste decision pending Julio" was
+  **answered in 2026-08-06** — in this same file, five sections further down.
+  The brand palette won. The contradiction is gone with the pastels.
 
-- **UI pastels** (above): what renders on cards today; they came from the Figma
-  design and live in the CMS `color` field of each service.
-- **Brand vertical palette** (identity, [docs/company/01](company/01-identity.md)):
-  E-commerce `#008FD3` · Greenfield `#3E7D50` · Cloudflare `#F38020` ·
-  Big Data `#EA4335` · Integration `#1D4E89`.
-
-They are related but not identical. Whether the site should adopt the brand
-palette (stronger, more personal) or keep the Figma pastels is a **taste
-decision pending Julio** — tracked in #155/#156, not decided by the agent.
+The colour is a **state, not decoration**: at rest a row in the verticals list
+is ink on paper, and the vertical's colour appears on hover, focus and
+`aria-current` (#453). Six colours at rest is a grid pretending to be a list.
 
 ## Typography
 
-Fonts load through **Astro's fonts API** (`astro.config.mjs`), Google provider,
-self-optimized at build:
+Both faces load through Astro's fonts API (`astro.config.mjs`, Google provider,
+self-optimised at build). The `<Font>` components render in `Base.astro` — they
+were configured but rendered nowhere until #450, so the site shipped neither
+face and fell back to the OS default on every route.
 
-- **Alexandria** 300–700 → `--font-sans` (body/headings; `theme.css` currently
-  re-declares it as `--font-family` — candidate cleanup, needs visual check)
-- **JetBrains Mono** 400–500 → `--font-mono`, mirrored as `--font-family-mono`
-  in `theme.css`. This is the "monospace as accent" carrier: intended for
-  equation-headlines (`WAF ≠ seguridad`), the Tomcat log line, code-ish accents.
-  Adopting it site-wide in headings is a taste decision — pending Julio.
+- **Alexandria** 300–700 → `--font-sans`, wrapped as
+  `--font-family: "Alexandria Symbols", var(--font-sans, "Alexandria", sans-serif)`
+- **JetBrains Mono** 400–500 → `--font-mono`, wrapped as `--font-family-mono`
 
-**Observed type scale (px)**: 12 · 14 · 18 · 20 · 22 · 24 · 26 · 28 · 32 · 40 ·
-48 · 72. Sizes are declared per component (not tokenized) — acceptable at this
-CSS size; tokenize only if the scale starts drifting.
+The wrapping is not redundancy. `--font-sans` is defined by the `<Font>`
+component, so a stylesheet that names it directly breaks if that component ever
+stops rendering — which is exactly what happened. The inner fallback keeps the
+family name requested even then, and `ci-check-var-resolves.mjs` fails the
+build if any `var()` reaches a page unresolved.
 
-## Layout tokens
+Heading scale, declared once on the elements in theme.css and inherited
+everywhere: **h1 48/56 · h2 40/48 · h3 24/30 · h4 22/30 · h5 20/26 · h6 18/24**,
+weight 700 except h4. Body is fluid: `--text-body` runs 20px → 24px between
+1440px and 2400px, in step with the column, so the line keeps measuring ~80
+characters at every width.
 
-`--container-max: 1440px` · `--section-padding: 80px` · `--card-radius: 24px` ·
-`--card-shadow: 0 0 10px rgba(0,0,0,.15)` · `--widget-spacing: 20px`
+Mono is **accents-only**: inline `code`, the console voice, the reference
+marks. Headings stay in Alexandria.
 
-## Breakpoints
+## Spacing and rhythm
 
-Canonical: **768px** (tablet, 17 uses) and **1025px** (desktop, 4 uses),
-`min-width`, mobile-first. Strays to normalize when touched: one `max-width:
-600px`, one `900px`, one `1100px` (post-detail/menu) — flagged, not urgent.
+An 8-point scale, `--space-1` … `--space-9` = **4 · 8 · 16 · 24 · 32 · 40 · 64
+· 80 · 120px**, fenced as a scale (see below) so unused rungs are allowed to
+exist. Sections draw from named rhythms rather than the scale directly:
 
-## Resolved taste decisions (Julio, 2026-08-06)
+- `--rhythm-section: var(--space-4)` — the padding **each side** of a section
+  declares, so two adjacent sections leave 48px between them. A section never
+  adds a one-off bottom; the neighbour's top is the other half.
+- `--rhythm-band: var(--space-6)` — inside a band (CTA, footer).
 
-1. **Service cards use the brand vertical palette** (#008FD3, #F38020, #EA4335,
-   #1D4E89, #3E7D50), stored in the CMS `color` field. Contrast mechanism:
-   cards compute YIQ luminance at render; dark backgrounds get `.area-card--dark`
-   (white text over a 25% ink overlay, lifting body copy to AA 4.5:1). The
-   orange card correctly keeps dark text (YIQ 151 > 150).
-2. **JetBrains Mono is accents-only**: inline `code` renders in mono site-wide;
-   headings stay in Alexandria. Pending accent: equation-headlines (needs a PT
-   h2 renderer hook — tracked in #156).
-3. **Placeholder blog posts deleted** from seeds; blog routes serve their
-   written empty states until real articles exist.
-4. **Phone/WhatsApp are click-to-decode**: base64 in settings
-   (`phoneEncoded`/`whatsappEncoded`), decoded on click; no plain number in
-   HTML, JSON-LD or the committed seed. Obfuscation, not secrecy — it defeats
-   scrapers, not a determined human.
-5. Dark mode: not adopted; the site is deliberately light (original design).
+## The container system — BLOCK / PANEL / ROW (#452)
+
+Three chromes and a rule for choosing between them. Before this, the home alone
+drew boxes five different ways with nothing saying which meant what, and that
+absence of a criterion is what read as disharmony.
+
+| | What it means | Chrome |
+| - | - | - |
+| **BLOCK** | The house making a claim | `--block-rule: 3px` left rule + a tint of the same hue. No border, no radius, no shadow. |
+| **PANEL** | A machine surface: instrument, console, photograph, quoted foreign UI | `--panel-border: 1px` hairline, `--radius`, `--shadow-card`, a `--panel-edge: 4px` accent along the top. **The only thing on the site that gets a shadow.** |
+| **ROW** | One item in a list of links | `--row-rule: 1px` hairline above, `--row-accent: 4px` left rule that appears on hover / focus / current. Nothing else. |
+
+A row that draws a box is a card, and six of them are a grid pretending to be a
+list. `ci-check-layout.mjs` asserts rows carry no chrome at rest and that their
+heights agree within 8px.
+
+## Layout
+
+`--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px)`
+
+There is **one** measure. The column and the body type grow together above
+1440px; below it both are frozen, because a laptop is already right. Growing
+the column alone would just lengthen the line. `--measure-statement` is an
+alias of it, not a second width — headings, paragraphs, boxes, panels and rows
+all end at the same right edge, which `ci-check-layout.mjs` asserts per block.
+
+Other layout tokens: `--radius: 4px` · `--radius-pill: 99px` ·
+`--shadow-card: 0 2px 10px rgba(0,0,0,.06)` · `--focus-ring` ·
+`--widget-spacing: 20px`.
+
+## The two escape hatches
+
+Both are comment fences, both are visible in a diff, and both are deliberately
+narrow — an escape hatch nobody can see is how a gate goes quiet.
+
+```css
+/* token-guard: off — reason */   …   /* token-guard: on */
+```
+Exempts a region from the **literal** check. For chrome that belongs to a
+product being imitated: the service instruments quote foreign UI, and a house
+token there would be a lie about someone else's brand. 295 declarations sit
+inside these regions today, almost all of them `service.css`'s instruments, and
+every run prints that count.
+
+```css
+/* token-scale: on */   …   /* token-scale: off */
+```
+Exempts a region from the **unconsumed-token** check, for a scale that is
+declared whole or not at all. A ladder is allowed rungs nobody currently stands
+on; deleting them is what makes the next author who needs 64px write `64px`,
+which the literal check then rejects, and the way out of *that* is
+`token-guard: off` — worse than an unused token.
+
+The fence is held to a shape, because otherwise it is simply an off switch: it
+must close, and it must cover **one family** of names. Widening it over the
+whole `:root` block silences all 56 tokens, so the gate reports that as
+blindness (exit 3) rather than obeying it.
+
+## Resolved decisions
+
+1. **The verticals carry the brand palette** (2026-08-06), stored in the CMS,
+   used as state rather than as a resting fill (#453).
+2. **JetBrains Mono is accents-only**; headings stay in Alexandria.
+3. **The blog is empty and stays empty** — routes serve their written empty
+   states, and nothing links to `/posts`.
+4. **Phone and WhatsApp are click-to-decode** — base64 in settings, decoded on
+   click. No plain number in HTML, JSON-LD or the committed seed. Obfuscation,
+   not secrecy: it defeats scrapers, not a determined human.
+5. **No dark mode.** The site is deliberately light.
+6. **No dark content bands** (#304). Black is the machine voice and the closing
+   CTA; the home's `.s-tech` was the last content band in black and it is gone
+   (#457).
+
+## Known drift
+
+**The CSS source budget is broken and this file was hiding it.** The 2026-08-05
+version claimed "< 50 KB; current ~31 KB across 10 files". Measured today:
+**130 KB across 12 files** — four times the stated figure, and 2.6× the budget.
+
+    28 KB homepage.css · 27 KB theme.css · 27 KB service.css · 13 KB
+    deconstruct.css · 11 KB post-detail.css · 24 KB the other seven
+
+There is no single culprit, and two of the three biggest files are not the
+instruments. The budget is **not** silently rewritten here to fit the tree —
+that is how a budget stops meaning anything. Whether it should be raised,
+enforced or dropped is [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475).

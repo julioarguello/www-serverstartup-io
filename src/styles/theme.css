@@ -76,16 +76,7 @@
 	--color-text: #1E1E1E;
 	--color-accent: #1E1E1E;
 
-	/* Service card pastel palette */
-	--color-card-blue: #B5E6F7;
-	--color-card-yellow: #FDEBB6;
-	--color-card-teal: #BFEDEE;
-	--color-card-pink: #ECDCE3;
-	--color-card-green: #C5EFCD;
-
 	/* Interactions */
-	--color-btn-hover: #CACACA;
-	--color-btn-cta-hover: #E7EAED;
 	--color-marked: rgba(206, 212, 218, 0.50);
 
 	/* Neutral surfaces (consolidated from per-page styles) */
@@ -122,8 +113,6 @@
 	   monitor. Below 1440 both are frozen — a laptop is already right. */
 	--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px);
 	--text-body: clamp(20px, calc(20px + (100vw - 1440px) * 0.004167), 24px);
-	--section-padding: 80px;
-	--card-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 	--widget-spacing: 20px;
 
 	/* ═══════════════════════════════════════════════════════════════
@@ -260,7 +249,15 @@
 	/* One shadow policy: data cards only */
 	--shadow-card: 0 2px 10px rgba(0, 0, 0, 0.06);
 
-	/* 8-point spacing scale */
+	/* 8-point spacing scale.
+
+	   `token-scale: on` exempts the rungs from the unconsumed-token check:
+	   a ladder is declared whole or not at all. Deleting the rungs nobody
+	   currently stands on is what makes the next author who needs 64px write
+	   `64px`, which the literal half of this same gate then rejects — and the
+	   way out of that is `token-guard: off`, which is worse than an unused
+	   token. Members are added and removed as a scale, deliberately. */
+	/* token-scale: on */
 	--space-1: 4px;
 	--space-2: 8px;
 	--space-3: 16px;
@@ -270,6 +267,7 @@
 	--space-7: 64px;
 	--space-8: 80px;
 	--space-9: 120px;
+	/* token-scale: off */
 
 	/* Named rhythms — sections and blocks draw from these, never raw px.
 	   `--rhythm-section` is the padding EACH side of a section declares, so
@@ -277,8 +275,6 @@
 	   never add a one-off bottom: the neighbour's top is the other half. */
 	--rhythm-section: var(--space-4);   /* per side; 48px between sections */
 	--rhythm-band: var(--space-6);      /* inside a band (CTA, footer) */
-	--rhythm-block: var(--space-6);     /* between blocks in a section */
-	--rhythm-inline: var(--space-3);    /* between related lines */
 
 	/* There is no second measure. A page has ONE width and everything inside
 	   it — headings, paragraphs, boxes, panels, rows — ends at the same

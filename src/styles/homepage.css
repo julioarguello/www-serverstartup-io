@@ -538,45 +538,6 @@
 	}
 }
 
-/* ═══ TECH SECTION — dark bg, 2-col ═══ */
-.s-tech {
-	/* #304: black is the machine voice (consoles) and the closing CTA — a
-	   content section in black steals the consoles' meaning. Emphasis now
-	   comes from the statement block (left rule + tint), family 2. */
-	padding: var(--rhythm-section) 0;
-}
-
-.s-tech__inner {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-}
-
-.s-tech__col-left h2 {
-	color: var(--color-primary);
-}
-
-.s-tech__subtitle-wrap p {
-	color: var(--color-primary);
-	font-size: var(--text-sub-size, 26px);
-	font-weight: var(--text-sub-weight, 500);
-	line-height: var(--text-sub-lh, 30px);
-}
-
-.s-tech__body-wrap p {
-	color: var(--color-primary);
-	margin-top: 16px;
-	font-size: var(--text-body);
-	font-weight: 300;
-	line-height: 1.45;
-}
-
-@media (min-width: 768px) {
-	.s-tech__inner { flex-direction: row; align-items: center; gap: 40px; }
-	.s-tech__col-left,
-	.s-tech__col-right { flex: 1; }
-}
-
 /* ═══ CLOUDFLARE SECTION ═══ */
 .s-cf {
 	padding: var(--rhythm-section) 0;
@@ -662,14 +623,12 @@
 	.s-cf__feature { flex: 1; }
 }
 
-/* ═══ ÁREAS — 2-col with sticky cards ═══ */
+/* ═══ ÁREAS — six ROWs (#453) ═══ */
 /* Content links (#273): the sitewide dashed convention reaches the home.
-   On the dark band they must flip to paper — ink-on-ink rendered the
-   "three engineers" link invisible. */
+   Every ground the home draws on is now paper, so the links are ink on all
+   of them — the dark band this rule used to also cover is gone (#457). */
 .s-hero__kicker a,
 .s-hero__body a,
-.s-tech__subtitle-wrap a,
-.s-tech__body-wrap a,
 .s-areas__header a {
 	color: inherit;
 	text-decoration: underline;
@@ -681,24 +640,12 @@
 
 .s-hero__kicker a:hover,
 .s-hero__body a:hover,
-.s-tech__subtitle-wrap a:hover,
-.s-tech__body-wrap a:hover,
 .s-areas__header a:hover,
 .s-hero__kicker a:focus-visible,
 .s-hero__body a:focus-visible,
-.s-tech__subtitle-wrap a:focus-visible,
-.s-tech__body-wrap a:focus-visible,
 .s-areas__header a:focus-visible {
 	text-decoration-style: solid;
 	text-decoration-color: currentColor;
-}
-
-/* the dark band inherits ink tokens — its text and links flip to paper */
-.s-tech__inner {
-	border-left: var(--block-rule) solid var(--color-primary);
-	background: var(--color-tint);
-	padding: var(--space-4) var(--space-5);
-	max-width: var(--measure-statement);
 }
 
 .s-areas {

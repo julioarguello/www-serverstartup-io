@@ -68,6 +68,23 @@
  *       five — 13, 14, 17, 18 and 20px — and the home's own body copy sat below
  *       two of them.
  *
+ *   G10 nothing in the footer crosses the page's ONE measure. `theme.css` says
+ *       it in as many words — "There is no second measure. A page has ONE width
+ *       and everything inside it shares one edge." Nothing could check it until
+ *       now, and the first draft of this very footer broke it: both sides of the
+ *       signature row were shrinkable, the columns lost, shrank to 403px, and
+ *       their `nowrap` children painted the CTA 73.7px past the container's
+ *       right edge. The reference banner is exempt by construction — it carries
+ *       its own, wider measure, for marks rather than prose.
+ *
+ *   G11 the EU emblem outweighs every other mark on the funding line by at least
+ *       1.3×. `Orden HFP/1030/2021` art. 9.4 binds only "al menos de forma tan
+ *       prominente y visible como los otros logotipos", which equal heights meet.
+ *       The `Guía de Justificación` red.es asks a compliance screenshot against
+ *       recommends "como mínimo, un 30% más grande que el resto de los
+ *       logotipos", and the Enero 2022 identity manual makes that ratio binding
+ *       for cartelería. Meeting the strictest of the three costs one declaration.
+ *
  *   G9  the footer paints no ground of its own — transparent, or at worst the
  *       body's own colour. Giving the footer its own band is what makes a footer
  *       read as bolt-on, and the rule that used to be here painted
@@ -110,6 +127,9 @@ const STRIP_ONE_LINE_FROM = 1024;
  * 88% of it renders a 35px emblem and fails while looking compliant.
  */
 const EMBLEM_MIN_PX = 37.8;
+
+/** How much larger the EU emblem must render than every other funding mark. */
+const EMBLEM_PROMINENCE = 1.3;
 
 const WIDTHS = [390, 768, 1440];
 /**
@@ -246,6 +266,42 @@ const MEASURE_FOOTER = () => {
 			ratio: parseFloat(img.dataset.emblemRatio),
 			h: img.getBoundingClientRect().height,
 		})),
+		// every mark on the funding line, emblem or not: G11 compares them
+		fundingAll: [...footer.querySelectorAll(".footer-funding__mark")].map((img) => ({
+			alt: (img.alt || "").slice(0, 32),
+			h: img.getBoundingClientRect().height,
+			emblem: img.hasAttribute("data-emblem-ratio"),
+		})),
+		// G10: the one measure, read off the funding row's content box — it is a
+		// plain `.container`, so its content edges ARE the page's edges. Anything in
+		// the footer painting outside them has invented a second measure. Skipped:
+		// `.container` elements themselves (their border box is the measure plus its
+		// own padding, by definition), the full-bleed bands, and the reference
+		// banner, which carries its own wider measure on purpose.
+		outside: (() => {
+			const box = footer.querySelector(".footer-funding");
+			if (!box) return null;
+			const r = box.getBoundingClientRect();
+			const cs = getComputedStyle(box);
+			const left = r.left + parseFloat(cs.paddingLeft);
+			const right = r.right - parseFloat(cs.paddingRight);
+			const skip = ".container, .site-footer, .footer-main, .footer-legal";
+			const worst = new Map();
+			for (const el of footer.querySelectorAll("*")) {
+				if (el.closest(".ref-banner") || el.matches(skip)) continue;
+				const b = el.getBoundingClientRect();
+				if (!b.width && !b.height) continue;
+				// 1px of slack: sub-pixel layout, not a second edge
+				const over = Math.max(left - b.left, b.right - right);
+				if (over <= 1) continue;
+				const cls = typeof el.className === "string" ? el.className.trim() : "";
+				const sel = el.tagName.toLowerCase() + (cls ? "." + cls.split(/\s+/).join(".") : "");
+				if (!worst.has(sel) || worst.get(sel) < over) worst.set(sel, over);
+			}
+			return [...worst]
+				.map(([sel, over]) => ({ sel, over: +over.toFixed(1) }))
+				.sort((a, b) => b.over - a.over);
+		})(),
 		links: [...footer.querySelectorAll(".footer-list a, .footer-list button")].map((el) => ({
 			text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 28),
 			size: getComputedStyle(el).fontSize,
@@ -341,6 +397,22 @@ const PLANT_FOOTER = () => {
 	// E — the footer takes a ground of its own.
 	footer.style.backgroundColor = "rgb(244, 244, 244)";
 
+	// G — a block wider than the measure. It has to be a LEFT-anchored one: the
+	//     column row is pinned to the right edge by `space-between`, so widening
+	//     anything inside it grows the row leftwards and the right edge never
+	//     moves. The first draft of this plant widened the CTA and changed the
+	//     overflow by exactly 0px — the revert proof is what caught that.
+	const line = need(".footer-signature__line");
+	if (!line) return { missing: ".footer-signature__line" };
+	line.style.width = "900px";
+
+	// H — the other funding mark rises to the emblem's height, so the emblem stops
+	//     outweighing it. C already trips G11 from the emblem's side; this trips it
+	//     from the other mark's side, the half of the comparison C cannot reach.
+	const other = footer.querySelector(".footer-funding__mark:not([data-emblem-ratio])");
+	if (!other) return { missing: ".footer-funding__mark:not([data-emblem-ratio])" };
+	other.style.height = "62px";
+
 	// F — the legal row gets a change that is not geometry. Nothing new may be
 	//     reported about it, and in particular it must not go centred with B.
 	const legal = need(".footer-legal__inner");
@@ -426,6 +498,25 @@ const judgeFooter = (m, where, width) => {
 				.map((l) => `${l.text}=${l.size}`)
 				.join(" · ")}`,
 		});
+
+	// G10 — one measure. `MEASURE_FOOTER` has already done the comparison in the
+	//       page and hands back only what crossed the line. 12, not 6: the list is
+	//       deduplicated by selector already, and a cap tight enough to truncate it
+	//       can swallow the very finding a positive control looks for. It did.
+	for (const x of (m.outside || []).slice(0, 12))
+		found.push({ g: "G10", where, msg: `\`${x.sel}\` paints ${x.over}px outside the measure` });
+
+	// G11 — the emblem outweighs every other mark on the funding line.
+	for (const e of m.fundingAll.filter((f) => f.emblem))
+		for (const other of m.fundingAll.filter((f) => !f.emblem)) {
+			const ratio = other.h ? e.h / other.h : Infinity;
+			if (ratio < EMBLEM_PROMINENCE)
+				found.push({
+					g: "G11",
+					where,
+					msg: `the EU emblem renders ${e.h.toFixed(1)}px against ${other.h.toFixed(1)}px for "${other.alt}" — ${ratio.toFixed(2)}×, under the ${EMBLEM_PROMINENCE}× the justification guide asks for`,
+				});
+		}
 
 	// G9 — no ground of its own. Transparent is the strongest form of that: the
 	// document's ground simply continues. Equal-to-the-body also passes, because
@@ -572,7 +663,7 @@ const settleFooter = async (page) => {
 	const fresh = after.filter((f) => !before.has(key(f)));
 
 	const problems = [];
-	for (const g of ["G4", "G5", "G6", "G7", "G8", "G9"])
+	for (const g of ["G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11"])
 		if (!fresh.some((f) => f.g === g)) problems.push(`${g} did not fire on a planted violation`);
 	// the plant centred the signature block; the legal row is its sibling and
 	// must have stayed where it was
@@ -587,7 +678,7 @@ const settleFooter = async (page) => {
 		await browser.close();
 		process.exit(3);
 	}
-	ok("6 more planted defects judged correctly — an orphaned mark, an off-centre line, a centred block, a shrunken emblem, an odd link size, a ground of its own — and a legal row it left alone");
+	ok("8 more planted defects judged correctly — an orphaned mark, an off-centre line, a centred block, a shrunken emblem, an odd link size, a ground of its own, a block wider than the measure, a mark raised to the emblem's height — and a legal row it left alone");
 	await page.close();
 }
 
@@ -690,6 +781,24 @@ if (findings.length) {
 		console.error("  of them (#454). One list, one size.");
 		for (const f of by("G8")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G10").length) {
+		fail(`${by("G10").length} footer element(s) paint outside the page's one measure.`);
+		console.error('  `theme.css`: "There is no second measure. A page has ONE width and everything');
+		console.error('  inside it shares one edge." The first draft of this footer let both sides of the');
+		console.error("  signature row shrink; the columns lost, shrank to 403px, and their `nowrap` children");
+		console.error("  hung the CTA 73.7px past the right edge. Give the columns `flex: 0 0 auto` and let");
+		console.error("  the line of prose be what gives.");
+		for (const f of by("G10")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G11").length) {
+		fail(`the EU emblem does not outweigh the other marks on the funding line.`);
+		console.error(`  ${EMBLEM_PROMINENCE}× is the "un 30% más grande que el resto de los logotipos" of the`);
+		console.error("  `Guía de Justificación` red.es asks a compliance screenshot against — a recommendation");
+		console.error("  there, binding for cartelería in the Enero 2022 identity manual, and above the \"al menos");
+		console.error("  tan prominente\" floor of Orden HFP/1030/2021 art. 9.4. Meeting the strictest of the");
+		console.error("  three costs one CSS declaration, so we meet it.");
+		for (const f of by("G11")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -702,6 +811,6 @@ if (findings.length) {
 ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} items each, heights within ${TOLERANCE}px, no chrome at rest`);
 ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join(" or ")}`);
 ok(
-	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, and emblems at or above ${EMBLEM_MIN_PX}px`
+	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`
 );
 process.exit(0);

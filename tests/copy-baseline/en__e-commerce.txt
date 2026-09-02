@@ -57,7 +57,6 @@ Tell us about your project
 references
 ~Server Startup
 Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019.
-we are partners
 The house
 About us
 Deconstructing this website
@@ -65,6 +64,7 @@ References
 Contact
 Email us
 Tell us about your project
+we are partners
 © 2026 Server Startup, S.L.
 Legal notice
 Privacy policy

@@ -57,6 +57,7 @@ interface Props {
 	emailLabel: string;
 	phoneDisplay: string;
 	partnerLogos: { src: string; alt: string }[];
+	partnerUrl?: string;
 	localePrefix: string;
 	locale: string;
 }
@@ -77,6 +78,7 @@ const {
 	emailLabel,
 	phoneDisplay,
 	partnerLogos,
+	partnerUrl,
 	localePrefix,
 	locale,
 } = Astro.props;
@@ -85,6 +87,15 @@ const en = (Astro.currentLocale || "es") === "en";
 const legalSlug = en ? "legal-notice" : "aviso-legal";
 const privacySlug = en ? "privacy-policy" : "politica-de-privacidad";
 const referencesSlug = locale === "en" ? "references" : "referencias";
+
+// One shape for the partner marks, whether they come from the CMS or from the
+// built-in fallback, so the template does not carry the same <img> twice. The
+// URL is the partner's own (`data.url` in the CMS); without one the mark stays
+// inert, which is the reference marks' rule and the safe default.
+const partnerMarks = (partnerLogos.length > 0
+	? partnerLogos.map((logo) => ({ src: logo.src, alt: logo.alt, w: 691, h: 120 }))
+	: [{ src: "/assets/logo-cloudflare.svg", alt: t("cf_partner"), w: 268, h: 88 }]
+).map((mark) => ({ ...mark, href: partnerUrl }));
 ---
 
 <footer class="site-footer">
@@ -104,30 +115,6 @@ const referencesSlug = locale === "en" ? "references" : "referencias";
 			<div class="footer-signature__house">
 				<SiteMark href="/" label={t("go_home")} size={38} class="footer-mark" />
 				{signature && <p class="footer-signature__line">{signature}</p>}
-				{/* the label above its logos, the way `~ referencias` sits above
-				    the reference marks — two logo groups, one reading order */}
-				<span class="footer-partner-title">{partnersTitle}</span>
-				{partnerLogos.length > 0 ? (
-					partnerLogos.map((logo) => (
-						<img
-							src={logo.src}
-							alt={logo.alt}
-							width="691"
-							height="120"
-							class="footer-partner-logo"
-							loading="lazy"
-						/>
-					))
-				) : (
-					<img
-						src="/assets/logo-cloudflare.svg"
-						alt={t("cf_partner")}
-						width="268"
-						height="88"
-						class="footer-partner-logo"
-						loading="lazy"
-					/>
-				)}
 			</div>
 
 			<!-- Two short columns. Not the site map: the pages a reader who got
@@ -156,6 +143,27 @@ const referencesSlug = locale === "en" ? "references" : "referencias";
 						)}
 					</ul>
 					<a href={`${localePrefix}/${en ? "contact" : "contacto"}`} class="btn btn-dark footer-cta">{defaultCtaLabel}</a>
+
+					{/* The credential sits with the ask (#454, after the founder's review
+					    of the rendered footer): it fills the column the CTA left short and
+					    puts the platform we are certified on next to the way to reach us.
+					    Linked, unlike the reference marks in the banner above — those are
+					    clients, and a link there would imply an endorsement we have no
+					    permission to claim. This is a partnership we are party to (official
+					    since 2019), and it points at Cloudflare's own partner network
+					    rather than at anything we assert about ourselves. */}
+					<div class="footer-partners">
+						<span class="footer-partner-title">{partnersTitle}</span>
+						{partnerMarks.map((mark) =>
+							mark.href ? (
+								<a class="footer-partner-link" href={mark.href} target="_blank" rel="noopener noreferrer">
+									<img src={mark.src} alt={mark.alt} width={mark.w} height={mark.h} class="footer-partner-logo" loading="lazy" />
+								</a>
+							) : (
+								<img src={mark.src} alt={mark.alt} width={mark.w} height={mark.h} class="footer-partner-logo" loading="lazy" />
+							),
+						)}
+					</div>
 				</div>
 			</nav>
 		</div>
@@ -246,8 +254,21 @@ const referencesSlug = locale === "en" ? "references" : "referencias";
 		color: color-mix(in srgb, var(--color-primary) 72%, transparent);
 	}
 
+	.footer-partners {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin-top: var(--space-4);
+	}
+
+	/* The mark is the whole target: a logo with a caption-sized label above it
+	   gives a pointer-sized hit area only if the image is inside the anchor. */
+	.footer-partner-link {
+		display: inline-block;
+		margin-top: 10px;
+	}
+
 	.footer-partner-title {
-		margin-top: var(--space-2);
 		font-family: var(--font-family-mono);
 		font-size: 12px;
 		letter-spacing: 0.06em;
@@ -261,7 +282,7 @@ const referencesSlug = locale === "en" ? "references" : "referencias";
 	.footer-cols {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-5) var(--space-6);
+		gap: var(--space-5);
 	}
 	.footer-col { flex: 0 0 auto; }
 
@@ -342,6 +363,22 @@ const referencesSlug = locale === "en" ? "references" : "referencias";
 		display: block;
 	}
 
+	/* The EU emblem outweighs every other mark on this line. The binding rule is
+	   `Orden HFP/1030/2021` art. 9.4 — "al menos de forma tan prominente y
+	   visible como los otros logotipos" — which equal heights already satisfied.
+	   The `Guía de Justificación` red.es asks a screenshot against goes further
+	   and recommends the emblem be "como mínimo, un 30% más grande que el resto
+	   de los logotipos", and the January 2022 identity manual makes exactly that
+	   ratio binding for cartelería. It costs nothing to meet the stricter of the
+	   three, so we do, and G11 holds it: 62/46 = 1.35 on the artwork, and
+	   54.3/40.7 = 1.33 on the ink inside it, so the ratio survives either way of
+	   measuring it. The flag lands at 54.3px ≈ 1.44cm, against a 1cm floor. */
+	.footer-funding__mark[data-emblem-ratio] {
+		/* token-guard: off — see above; this height is set by publicity rules. */
+		height: 62px;
+		/* token-guard: on */
+	}
+
 	/* Legal row: quiet, last, and always there (#335) */
 	.footer-legal {
 		border-top: 1px solid var(--color-border);
@@ -374,8 +411,12 @@ const referencesSlug = locale === "en" ? "references" : "referencias";
 			justify-content: space-between;
 			gap: var(--space-6);
 		}
-		/* the line of prose is what gives, not the links */
-		.footer-signature__house { flex: 0 1 auto; min-width: 0; }
-		.footer-cols { flex-wrap: nowrap; }
+		/* The line of prose is what gives, not the links — and the links must
+		   say so explicitly. With both sides shrinkable the columns lost the
+		   fight, shrank to 403px, and their own `nowrap` children painted 73px
+		   past the container's right edge: the CTA hung outside the one measure
+		   `theme.css` gives the page. G10 now measures that edge. */
+		.footer-signature__house { flex: 1 1 auto; min-width: 0; }
+		.footer-cols { flex: 0 0 auto; flex-wrap: nowrap; }
 	}
 </style>

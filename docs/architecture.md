@@ -122,14 +122,30 @@ All routes exist in both ES and EN:
   art. 34.3) is a *set* of three things with no prescribed composition: emblem, funding
   statement, PRTR logo. The red.es, Gobierno de España and Kit Digital marks bind an
   *Agente Digitalizador adherido* in the header of its Kit-Digital pages, and this site
-  has none. Server Startup is a beneficiary (founder, 2026-09-02).
+  has none. Server Startup is a beneficiary (founder, 2026-09-02) — and art. 34.3 binds
+  **"los beneficiarios y Agentes Digitalizadores Adheridos"** in the same breath, so the
+  duty attaches under either reading. The local KB's earlier note that a beneficiary
+  carries no publicity duty is corrected there: it was inferred from art. 10.3.b), which
+  is the *adhesion* duty, not the publicity article.
 
   The size floor is the **flag's**, not the lockup's: 1cm ≈ 37.8px at 96dpi
   (`eu-emblem-rules_es.pdf` p.10), whose duty that document extends to "sitios web y sus
   versiones móviles". The flag is 88% of the cut artwork, so the marks render at 46px at
   every breakpoint and the ratio travels on the element as `data-emblem-ratio`, which
   `ci-check-layout.mjs` G7 multiplies by. The composite JPEG rendered the emblem 18.2px
-  tall at 390px. Full audit (local KB): `docs/company/10-kit-digital.md`.
+  tall at 390px.
+
+  There is a second size rule, about *relative* size, and three sources set it at three
+  strengths. `Orden HFP/1030/2021` art. 9.4 binds the emblem to appear "al menos de forma
+  tan prominente y visible como los otros logotipos" — equal heights already met it. The
+  `Guía de Justificación — Sitio Web y Presencia en Internet` V5, which is the document
+  red.es asks a compliance **screenshot** against, goes further and *recommends* the
+  emblem be "como mínimo, un 30% más grande que el resto de los logotipos"; the Enero 2022
+  identity manual makes that same ratio binding, but only for cartelería. Meeting the
+  strictest of the three costs one declaration, so the emblem renders at **62px** against
+  the PRTR logo's 46px — 1.35× on the artwork, 1.33× on the ink inside it, flag at 54.6px
+  ≈ 1.44cm. `ci-check-layout.mjs` G11 holds the ratio; G7 still holds the absolute floor.
+  Full audit (local KB): `docs/company/10-kit-digital.md`.
 
 ### 4.2 Shared Components
 

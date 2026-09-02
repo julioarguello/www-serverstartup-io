@@ -52,6 +52,7 @@ export interface Partner {
   slug: string | null;
   status: string;
   title: string;
+  url?: string;
   featured_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
   excerpt?: string;
   content?: PortableTextBlock[];

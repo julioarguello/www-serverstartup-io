@@ -230,6 +230,12 @@ const partnerLogos = [
 	).values(),
 ].filter((l) => l.src);
 
+// Where the partner mark points (#454). The CMS carries it per partner
+// (`data.url`); with no URL the mark renders inert, which is what the reference
+// marks do and the right default for a logo we have no standing to link.
+const partnerUrl = (partnerEntries ?? []).find((p) => Boolean(p.data.featured))?.data
+	.url as string | undefined;
+
 // Alternate locale URL for hreflang (absolute URLs per Google spec).
 // The prop wins; the prefix-swap default is only correct for routes whose
 // path is identical in both locales (#291).
@@ -337,6 +343,7 @@ const resolvedOgType = ogType || "website";
 		emailLabel={emailLabel}
 		phoneDisplay={phoneDisplay}
 		partnerLogos={partnerLogos}
+		partnerUrl={partnerUrl}
 		localePrefix={localePrefix}
 		locale={locale}
 	/>

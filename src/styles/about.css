@@ -1,6 +1,6 @@
 /* ═══ HERO ═══ */
 .s-hero {
-	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .s-hero__body {
@@ -36,10 +36,6 @@
 .s-values__inner a:hover {
 	text-decoration-style: solid;
 	text-decoration-color: currentColor;
-}
-
-@media (min-width: 768px) {
-	.s-hero { padding: calc(80px + var(--space-8)) 0 var(--rhythm-section); }
 }
 
 /* ═══ TEAM — light band: the page alternates light (narrative: historia,

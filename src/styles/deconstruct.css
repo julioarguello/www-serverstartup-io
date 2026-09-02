@@ -1,7 +1,7 @@
 /* ═══ Deconstructing this website — the layered document (#161, #305) ═══ */
 
 .s-doc {
-	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .s-doc__inner {

@@ -9,7 +9,7 @@
 /* ═══ HERO — pattern B: floated emblem + watermark (shared classes in theme.css) ═══ */
 
 .s-hero {
-	padding: calc(80px + var(--space-4)) 0 var(--rhythm-section);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .s-hero__inner {
@@ -49,7 +49,10 @@
 	flex-direction: column;
 	justify-content: center;
 	min-height: 62svh;
-	padding: calc(80px + var(--space-6)) 0 var(--space-6);
+	/* #456 — the same inset as every other opening, from `--header-h`.
+	   Centred, like the home and for the same reason: the plate's cube is
+	   registered to a centred column. */
+	padding: var(--open-pad-top) 0 var(--space-6);
 	/* the ground the plate is drawn on, and what shows while it loads */
 	background-color: var(--color-primary);
 	/* `clip`, not `hidden`: this must never become a scroll container (§14) */
@@ -132,7 +135,6 @@
 @media (min-width: 768px) {
 	.s-hero--art {
 		min-height: 68svh;
-		padding: calc(100px + var(--space-6)) 0 var(--space-6);
 	}
 
 	.s-hero--art .s-hero__scrim {
@@ -169,12 +171,6 @@
 @media (max-width: 480px) {
 	.s-partner { gap: 18px; }
 	.s-partner__logo { width: 120px; }
-}
-
-@media (min-width: 768px) {
-	.s-hero {
-		padding: calc(100px + var(--space-6)) 0 var(--rhythm-section);
-	}
 }
 
 /* ═══ INSTRUMENT SECTION ═══ */

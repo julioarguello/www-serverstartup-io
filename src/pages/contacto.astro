@@ -70,13 +70,9 @@ const altPath = entry ? await entryAlternatePath("pages", entry.data.id, "es") :
 		siteUrl: Astro.site?.origin!,
 		description: excerpt || `${title} — Server Startup`,
 	}))} />
-	<div class="s-emblem-bg" aria-hidden="true">
-		<CubeEmblem color="var(--color-primary)" faceKey="contacto" size={340} />
-	</div>
-
 	<section class="s-contact" aria-label={title}>
 		<div class="container s-contact__inner">
-			<CubeEmblem class="s-emblem-mini" color="var(--color-primary)" faceKey="contacto" size={104} />
+			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="contacto" size={104} />
 			<h1>{title}</h1>
 			{introBlocks.length > 0 && (
 				<div class="s-contact__content">

@@ -99,13 +99,9 @@ const altPath = entry ? await entryAlternatePath("pages", entry.data.id, "es") :
 		})),
 	}))} />
 	<!-- ══════ HERO ══════ -->
-	<div class="s-emblem-bg" aria-hidden="true">
-		<CubeEmblem color="var(--color-primary)" faceKey="quienes" size={340} />
-	</div>
-
 	<section class="s-hero" aria-label={title}>
 		<div class="container s-hero__inner">
-			<CubeEmblem class="s-emblem-mini" color="var(--color-primary)" faceKey="quienes" size={104} />
+			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="quienes" size={104} />
 			<h1>{title}</h1>
 			{heroBlocks.length > 0 && (
 				<div class="s-hero__body">

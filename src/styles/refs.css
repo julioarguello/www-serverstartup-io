@@ -153,8 +153,3 @@
 	}
 }
 
-/* this page is only a title and a window — it can carry a stronger
-   watermark, which is also what makes the glass read as glass */
-.s-emblem-bg--refs {
-	opacity: 0.15;
-}

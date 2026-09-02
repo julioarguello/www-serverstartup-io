@@ -318,6 +318,35 @@
 	--panel-edge: 4px;         /* PANEL's accent top edge */
 	--row-rule: 1px;           /* ROW's hairline above */
 	--row-accent: 4px;         /* ROW's left rule — hover / focus / current only */
+
+	/* ── The opening (#456) ──────────────────────────────────────────────
+	   Every page type starts the same way: the fixed header's own height,
+	   then one measure of air, then the h1. It used to be spelled by hand
+	   in twelve declarations across eight stylesheets as `calc(80px + …)`
+	   or `calc(100px + …)`, and the sums landed on five different values —
+	   the h1 opened at 104, 140, 160, 168 or 222 depending on which file
+	   the page happened to import. Worse, BOTH literals were wrong: the
+	   header measures 69px on a phone and 78px from 768px up, so the
+	   desktop rule reserved 22px of clearance nobody had asked for.
+
+	   `--header-h` is a claim about a rendered box, so the layout gate
+	   measures the header and fails if the token has drifted from it.
+
+	   The two photographic bands — the home and a vertical with a plate —
+	   take the same inset but keep their centred column: their cube is
+	   registered to it at build time, and top-aligning the copy ran the
+	   kicker straight through the drawing. Measured, not assumed. */
+	--header-h: 69px;
+	--open-clear: var(--space-6);
+	--open-pad-top: calc(var(--header-h) + var(--open-clear));
+	--open-mark-w: 68px;
+}
+
+@media (min-width: 768px) {
+	:root {
+		--header-h: 78px;
+		--open-mark-w: 104px;
+	}
 }
 
 /* ─────────────────────────────────────────
@@ -507,38 +536,53 @@ main h2 {
 }
 
 /* ─────────────────────────────────────────
-   Section emblem — pattern B (#216)
-   A crisp floated mark the heading wraps around (zero added scroll),
-   plus the section-color watermark fixed behind the content on every
-   device. Site pages use ink via var(--color-primary).
+   The opening mark — one drawing per opening (#456)
+
+   This used to be two drawings of the same cube on the same screen: a 340px
+   `position: fixed` watermark behind the whole document (#216, `.s-emblem-bg`),
+   and this floated cube beside the heading. Being fixed, the watermark's
+   relationship to the copy was whatever the scroll offset happened to be — on
+   «Quiénes somos» it crossed the boot console, the lede, the «~ Historia»
+   heading and four paragraphs of body text, all at once and none of it
+   composed. It is gone. What is left is the mark that was already working:
+   in flow, beside the heading it names, at a fixed distance from it.
+
+   Pages whose opening already carries a photograph — the home and the six
+   verticals — take no cube. The plate is the mark there.
    ───────────────────────────────────────── */
-.s-emblem-bg {
-	display: flex;
-	position: fixed;
-	inset: 0;
-	z-index: -1;
-	align-items: center;
-	justify-content: center;
-	overflow: clip;
-	opacity: 0.07;
-	pointer-events: none;
-}
-.s-emblem-bg svg {
-	width: min(60vmin, 480px);
-	height: auto;
-}
-.s-emblem-mini {
+.s-open-mark {
 	float: right;
-	width: 68px;
+	width: var(--open-mark-w);
 	height: auto;
-	margin: 6px 0 10px 14px;
+	margin: var(--space-1) 0 var(--space-2) var(--space-3);
 }
-@media (min-width: 701px) {
-	.s-emblem-mini {
-		width: 104px;
-		margin: 8px 0 14px 20px;
+
+@media (min-width: 768px) {
+	.s-open-mark {
+		margin: var(--space-2) 0 var(--space-3) var(--space-4);
 	}
 }
+
+/* Whatever holds the mark contains it, so an opening is never shorter than
+   its own drawing. Referencias is the case that needs this: a title, a mark
+   and nothing else, in a band that would otherwise measure 118px. */
+:has(> .s-open-mark) {
+	display: flow-root;
+}
+
+/* The opening is the mark's frame: it positions it and crops it. The floor
+   that keeps it from cropping the mark in half is the containment above,
+   which is why no opening declares a min-height for it. */
+.s-hero,
+.s-contact,
+.s-doc,
+.legal {
+	position: relative;
+	/* `clip` and not `hidden`, so an opening never becomes a scroll
+	   container (§14) */
+	overflow: clip;
+}
+
 
 /* Screen reader only — accessible hidden */
 .sr-only {

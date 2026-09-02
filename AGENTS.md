@@ -80,13 +80,33 @@ right edge: headings, prose, boxes, panels. A second, narrower measure for body
 text was tried and rejected — two measures alternate long and short right edges
 down the page, and that alternation is what reads as having no criterion.
 
-**Who may be named.** Public copy names only the clients already published on
-the site. Everyone else appears anonymously ("a grocery chain") or in aggregate.
-A second, easier rule to trip: some names are published on the site and still
-must not sit in the tree as plaintext — the page draws them on a `<canvas>`, and
-the repository keeps them encoded. `scripts/ci-check-citability.py` checks the
-whole tree against both on every PR, including the text inside documents that
-`grep` skips, and its failure message tells you which rule you hit.
+**Who may be named.** Three tiers, and confusing them is easy — this paragraph
+was rewritten in #478 because its previous version described the second one
+wrongly and made a legitimate edit look like a policy breach.
+
+1. **Machine-readable public copy** — the `/referencias` logos, the `references`
+   collection, JSON-LD, anything a crawler reads. Only clients already published
+   on the site, which is the whitelist at `scripts/ci-check-citability.py:62`.
+   `check_whitelist()` enforces it on every PR.
+2. **The `<canvas>` closers** — the `Hemos montado X para:` lists on the vertical
+   pages. These carry names that are **not** publicly citable. They are drawn
+   onto a canvas at runtime, so they exist neither in the HTML source nor in the
+   DOM text, and they sit base64-encoded in `seed/seed.json` so they are not
+   plaintext in the tree either. A person reading the page sees them; a crawler,
+   a scraper and `grep` do not. `src/components/service/RefsNoIndex.astro` is
+   the whole mechanism.
+3. **Everyone else** — anonymously ("a grocery chain") or in aggregate.
+
+Say plainly what follows from tier 2: **no gate will question a name added to a
+canvas closer.** The forbidden-name scan reads text and the payload is base64;
+the whitelist check reads the `references` collection and a closer is not in it.
+So a green CI run there is not approval, it is silence — the decision to name a
+client that way is the founder's and is taken outside CI. Do not read the absence
+of a red check as one having been made.
+
+`scripts/ci-check-citability.py` still checks the whole tree on every PR for tier
+1, including the text inside documents that `grep` skips, and its failure message
+tells you which rule you hit.
 
 ## Where things are
 

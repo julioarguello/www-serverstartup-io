@@ -339,7 +339,8 @@
 
 /* ═══ VALUES — light band with a statement block (#304) ═══ */
 .s-values {
-	/* #304: no dark content bands — see homepage.css .s-tech */
+	/* #304: no dark content bands. The home's `.s-tech` was the last one and
+	   it is gone (#457); emphasis comes from the statement block, family 2. */
 	padding: var(--rhythm-section) 0;
 }
 

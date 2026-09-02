@@ -1,5 +1,12 @@
 # Guía de Migración — ServerStartup WordPress → Astro/EmDash
 
+> **Registro histórico.** Describe el Kit de Elementor tal como estaba al
+> migrar. La tabla de tokens de más abajo incluye las cinco pastel
+> `--color-card-*`, que se borraron en #457: nada las consumía y nunca
+> estuvieron en el CMS — los seis colores de vertical viven en el campo `color`
+> de `seed/seed.json`. El estado actual está en
+> [design-system.md](design-system.md).
+
 ## Arquitectura
 
 | Componente | WordPress (actual) | Astro/EmDash (nuevo) |

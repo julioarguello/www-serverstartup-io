@@ -4,6 +4,14 @@
 > **Fecha**: 2026-04-30
 > **Scope**: Todos los frames Figma (`reference/server-startup-design.fig`) vs. implementación Astro/EmDash
 > **Tag**: `v0.9.21`
+>
+> **Historical record — read the ✅ column as "true on 2026-04-30", not as
+> "true today".** Several rows below tick tokens that no longer exist: the five
+> `--color-card-*` pastels, `--card-shadow` and `--card-radius` were deleted in
+> #457 (nothing consumed them, and the pastels were never in the CMS), and the
+> `.s-tech` dark band went with them under #304's "no dark content bands". This
+> file is not updated to match the tree — that is
+> [design-system.md](design-system.md)'s job.
 
 ---
 

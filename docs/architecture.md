@@ -627,6 +627,23 @@ PR → quality-gates green → merge to main
   instruments use because they quote another product's chrome (a cart, a
   BigQuery console, a GitHub pull request). Each run prints how many
   declarations the fences covered, so silencing cannot masquerade as passing.
+
+  Since #457 it also checks the **reverse** direction: a token `theme.css`
+  declares that nothing consumes fails the build too. That direction has no
+  rendering symptom at all — the page is correct, the CSS is valid, nothing is
+  red — so it is found only by someone reading the file and grepping, which is
+  how `--card-shadow` and five `--color-card-*` pastels survived from the
+  WordPress-era design into 2026 while `docs/design-system.md` went on
+  describing them as the card palette and claiming the CMS stored them. It is
+  not tidiness: `theme.css` is normative, so a token declared there is a claim
+  about how the site draws that thing, and eleven stale claims made the
+  normative file unreadable as a description of the site. A scale meant to be
+  complete opts out with `/* token-scale: on */ … /* token-scale: off */` —
+  held to a shape, because an unbounded fence is just an off switch: it must
+  close, and it must cover one family of names, or the run exits 3 (blind)
+  rather than obeying it. Both were measured, not assumed: one deleted `off`
+  marker silently took the check from 56 tokens to 46, and widening the fence
+  over the whole `:root` block silenced all of them while still exiting 0.
 - **CSP constraint**: `script-src 'self'` with no hashes — Vite must never
   inline scripts into HTML (`assetsInlineLimit: 0` in astro.config.mjs) or
   the browser silently blocks them (menu + phone decode died this way).

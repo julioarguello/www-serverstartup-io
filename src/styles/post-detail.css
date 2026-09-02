@@ -6,7 +6,7 @@
 	/* Hero image - full width within container */
 	.article-hero {
 		margin: 64px 24px;
-		border-radius: var(--card-radius);
+		border-radius: var(--radius);
 		overflow: hidden;
 	}
 
@@ -191,7 +191,7 @@
 	.article-content :global(blockquote) {
 		margin: 2em 0;
 		padding: 16px 24px;
-		border-left: var(--statement-rule) solid var(--color-border);
+		border-left: var(--block-rule) solid var(--color-border);
 		background: var(--color-surface-soft);
 		border-radius: 0 var(--radius) var(--radius) 0;
 		color: var(--color-text-muted);
@@ -203,7 +203,7 @@
 		padding: 20px;
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
-		border-radius: var(--card-radius);
+		border-radius: var(--radius);
 		overflow-x: auto;
 		font-family: monospace;
 		font-size: 14px;
@@ -235,7 +235,7 @@
 
 	.article-content :global(img) {
 		margin: 2em 0;
-		border-radius: var(--card-radius);
+		border-radius: var(--radius);
 	}
 
 	.article-content :global(hr) {

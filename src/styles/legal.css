@@ -10,7 +10,8 @@
 }
 
 .legal :global(h2) {
-	font-size: 22px;
+	/* These already carry the section-heading tilde from theme.css, so they
+	   are section headings and take the section-heading size with it (#451). */
 	margin-top: 32px;
 	margin-bottom: 8px;
 }

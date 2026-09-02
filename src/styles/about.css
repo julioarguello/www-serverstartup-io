@@ -368,10 +368,12 @@
 	padding: var(--rhythm-section) 0;
 }
 
-/* deliberately quieter than the page's other section headings (founder) */
+/* The founder set this one two steps quieter than the page's other section
+   headings, to keep the sponsorship from competing with the argument above it.
+   #451 unpins it: a section heading is a section heading, and the way to make
+   this band quieter is the band, not a private type size. Only the space below
+   is this rule's business now. */
 .s-sponsor__inner h2 {
-	font-size: 24px;
-	line-height: 1.2;
 	margin-bottom: 20px;
 }
 

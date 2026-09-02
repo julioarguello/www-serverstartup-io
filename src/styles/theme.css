@@ -23,6 +23,43 @@
 	font-display: swap;
 }
 
+/* The three symbols the brand's own devices print, cut from the real faces.
+   Google's `latin` subset — which is what the fonts API downloads — carries
+   neither U+2260 nor the two arrows, so with #450 shipping Alexandria and
+   JetBrains Mono for the first time, the ≠ in the twelve equation headings
+   ("A medida ≠ acoplado") would have arrived in Courier New: same size, half
+   the weight, beside twenty JetBrains glyphs. These two cuts hold exactly
+   U+2192 U+2197 U+2260, come to 5 KB together, and are listed FIRST in the two
+   stacks below — a unicode-range this narrow claims those three codepoints and
+   lets every other character fall through to the real face.
+
+   Regenerate (both are variable, one file covers every weight):
+     curl -H 'User-Agent: <a modern Chrome UA>' \
+       'https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&text=%E2%89%A0%E2%86%92%E2%86%97'
+     curl -H 'User-Agent: <a modern Chrome UA>' \
+       'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&text=%E2%89%A0%E2%86%92%E2%86%97'
+   then download the `fonts.gstatic.com/l/font?kit=…` URL each answers with.
+
+   The other symbols the site prints — ✓ ✔ ✕ ⚠ ℹ ▶ ▾ ⌄ ─ │ ╰ ➜ ✋ 😉 — stay on
+   the system fallback deliberately. They are interface furniture, not type;
+   no text face carries them and every site on the web falls back for them. */
+@font-face {
+	font-family: "Alexandria Symbols";
+	src: url("/fonts/alexandria-symbols.woff2") format("woff2");
+	font-weight: 300 700;
+	font-style: normal;
+	font-display: swap;
+	unicode-range: U+2192, U+2197, U+2260;
+}
+@font-face {
+	font-family: "JetBrains Mono Symbols";
+	src: url("/fonts/jetbrains-mono-symbols.woff2") format("woff2");
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+	unicode-range: U+2192, U+2197, U+2260;
+}
+
 /*
  * Server Startup — Design System
  * EXACT values extracted from Elementor Kit (post-8.css).
@@ -57,9 +94,18 @@
 	--color-surface-hover: #e8e8e8;
 	--color-ink-soft: #3a3a3a;
 
-	/* Typography */
-	--font-family: "Alexandria", sans-serif;
-	--font-family-mono: "JetBrains Mono", monospace;
+	/* Typography.
+	   --font-sans / --font-mono are defined by the <Font> components in
+	   Base.astro's head; they carry the optimised, self-served faces plus the
+	   metric-matched fallbacks that keep CLS at zero. The raw family after the
+	   comma is the safety net: if the fonts API is ever turned off, the site
+	   asks the OS for the same names instead of falling back to nothing.
+	   These two names are the ONLY font stacks in the tree — nothing may spell
+	   var(--font-mono) directly, because an undefined var() with no fallback
+	   invalidates the whole declaration and the element silently inherits sans
+	   (#450). */
+	--font-family: "Alexandria Symbols", var(--font-sans, "Alexandria", sans-serif);
+	--font-family-mono: "JetBrains Mono Symbols", var(--font-mono, "JetBrains Mono", monospace);
 
 	/* Layout */
 	/* THE column, and the only width on a page. Everything ends at its right
@@ -270,6 +316,17 @@ body {
 	background: var(--color-secondary);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Form controls do not inherit type from their document — the UA gives them the
+   platform's own UI face — so the menu's close button and the search field were
+   still rendering in Arial after #450 shipped the brand faces to everything
+   else. Family only: the sizes here are deliberate and set per component. */
+button,
+input,
+select,
+textarea {
+	font-family: inherit;
 }
 
 /* ─────────────────────────────────────────

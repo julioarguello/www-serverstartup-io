@@ -59,7 +59,7 @@ const icon = faceKey ? ICON_BY_KEY[faceKey] : undefined;
 				x="12"
 				y="16.8"
 				text-anchor="middle"
-				font-family="var(--font-mono), monospace"
+				class="cube-glyph"
 				font-size="12.5"
 				font-weight="700"
 				fill={color}
@@ -78,3 +78,14 @@ const icon = faceKey ? ICON_BY_KEY[faceKey] : undefined;
 		</g>
 	) : null}
 </svg>
+
+<style>
+	/* The AI face letters its glyph instead of drawing it, and the letters have
+	   to be the mono face. It cannot ride on a `font-family` presentation
+	   attribute: those are parsed as CSS values but never run var()
+	   substitution, so `font-family="var(--font-family-mono)"` is dropped and
+	   the text quietly inherits sans. A rule does resolve the token. */
+	.cube-glyph {
+		font-family: var(--font-family-mono);
+	}
+</style>

@@ -85,6 +85,34 @@
  *       logotipos", and the Enero 2022 identity manual makes that ratio binding
  *       for cartelería. Meeting the strictest of the three costs one declaration.
  *
+ *   G12 no rule that selects a funding mark may fade, recolour, rotate, crop or
+ *       otherwise modify it. The marks are supplied artwork: the EU emblem's own
+ *       usage rules and the `Manual de Identidad` both say they may be SCALED and
+ *       nothing else, and art. 34.3 of Orden ETD/1498/2021 makes carrying them
+ *       correctly an obligation rather than a courtesy — art. 38.4 prices a
+ *       publicity breach at 10% of the awarded aid. G7 and G11 protect the size
+ *       half; nothing protected the integrity half.
+ *
+ *       This one reads the STYLESHEET, not the rendered rest state, and that is
+ *       the whole point: a `:hover` or `:focus` rule that fades a mark on
+ *       interaction is invisible to any measurement of the page at rest, and
+ *       interaction is the plausible way this breaks — somebody gives every
+ *       footer image a tasteful hover.
+ *
+ *       The walk reads declarations BEFORE recursing. The obvious shape is
+ *       wrong and fails silently, which is how #470's version of this reported
+ *       clean forever while its own control passed: CSS Nesting gives every
+ *       CSSStyleRule its own `cssRules` — an empty list when nothing is nested,
+ *       and truthy — so `if (r.cssRules) { walk(r.cssRules); continue; }` skips
+ *       every ordinary rule in the sheet. Measured on the built `Base` sheet on
+ *       2026-09-02: 222 top-level rules, 14 reached. So the gate does not take
+ *       its own walk on trust either — it counts the style rules it actually
+ *       READ against the number the sheet declares at top level, and refuses to
+ *       report clean if it read fewer. Counting rules *visited* would not do:
+ *       the wrong shape still enters every top-level rule, recurses into its
+ *       empty `cssRules` and reads nothing, so it scores 222 of 222 visited and
+ *       0 leaves. The leaf count is the one that tells them apart.
+ *
  *   G9  the footer paints no ground of its own — transparent, or at worst the
  *       body's own colour. Giving the footer its own band is what makes a footer
  *       read as bolt-on, and the rule that used to be here painted
@@ -130,6 +158,26 @@ const EMBLEM_MIN_PX = 37.8;
 
 /** How much larger the EU emblem must render than every other funding mark. */
 const EMBLEM_PROMINENCE = 1.3;
+
+// G12 — the properties that would modify a supplied mark rather than scale it.
+// The salvaged issue named five; the other seven are the same assertion reached
+// by other spellings, and a rule that says "no rotation" while `rotate: 45deg`
+// sails past is theatre. `clip-path` and `mask-image` are here because the
+// usage rules forbid cropping in as many words, and `mix-blend-mode` because
+// blending a flag into its ground recolours it without naming a colour.
+const INTEGRITY_PROPS = [
+	"filter", "-webkit-filter", "opacity", "transform", "rotate", "scale",
+	"translate", "clip-path", "-webkit-clip-path", "mask-image",
+	"-webkit-mask-image", "mix-blend-mode", "text-decoration-line",
+];
+
+// The identity value of each of the above — the value that means "unmodified".
+// `transition` is deliberately absent from the props list: a transition alone
+// changes nothing, and the state it transitions TO is a rule of its own, which
+// this gate reads.
+const INTEGRITY_IDENTITY = new Set(["", "none", "1", "normal", "0deg", "0px", "auto"]);
+
+const FUNDING_SELECTOR = "footer-funding";
 
 const WIDTHS = [390, 768, 1440];
 /**
@@ -529,6 +577,66 @@ const judgeFooter = (m, where, width) => {
 	return found;
 };
 
+/* ── G12: read the stylesheets, not the rest state ──────────────────────── */
+const MEASURE_FUNDING_CSS = ({ props, identity, needle }) => {
+	const idOK = new Set(identity);
+	const offenders = [];
+	const sheets = [];
+
+	for (const sheet of document.styleSheets) {
+		let list;
+		try { list = sheet.cssRules; } catch { continue; }   // cross-origin, not ours
+		if (!list) continue;
+
+		// `top` is what the sheet declares at depth 0; `topStyle` how many of
+		// those are ordinary style rules. `leaves` is how many style rules the
+		// walk actually READ, at any depth. The last two are what prove the
+		// walk: `visited` cannot, because the wrong shape still *enters* every
+		// top-level rule — it recurses into each one's empty `cssRules` and
+		// reads nothing. Measured: under the wrong walk this sheet reports
+		// visited 222 of 222 and leaves 0. That is why the issue asked for the
+		// leaf count and not the rule count.
+		const acc = { href: sheet.href || "inline", top: list.length, topStyle: 0, visited: 0, leaves: 0, matched: 0 };
+
+		// Declarations BEFORE recursion, and recursion only into a list with
+		// something in it. Reversing these two lines is the #470 bug: every
+		// CSSStyleRule owns a (usually empty, always truthy) `cssRules`, so
+		// `if (r.cssRules) { walk(...); continue; }` walks past the entire sheet.
+		const walk = (rules, depth) => {
+			for (const r of rules) {
+				acc.visited++;
+				if (depth === 0 && r.style && r.selectorText) acc.topStyle++;
+				if (r.style && r.selectorText) {
+					acc.leaves++;
+					if (r.selectorText.includes(needle)) {
+						acc.matched++;
+						for (const prop of props) {
+							const value = r.style.getPropertyValue(prop).trim().toLowerCase();
+							if (!idOK.has(value))
+								offenders.push({ sheet: acc.href, selector: r.selectorText, prop, value });
+						}
+					}
+				}
+				if (r.cssRules && r.cssRules.length) walk(r.cssRules, depth + 1);
+			}
+		};
+		walk(list, 0);
+		sheets.push(acc);
+	}
+	return { offenders, sheets };
+};
+
+const judgeFunding = (m, where) => {
+	const found = [];
+	for (const o of m.offenders)
+		found.push({
+			g: "G12",
+			where,
+			msg: `\`${o.selector}\` declares \`${o.prop}: ${o.value}\` — a funding mark may be scaled and not modified (${o.sheet.split("/").pop()})`,
+		});
+	return found;
+};
+
 const browser = await puppeteer.launch({
 	headless: "new",
 	args: ["--no-sandbox"],
@@ -682,6 +790,55 @@ const settleFooter = async (page) => {
 	await page.close();
 }
 
+// ── G12's own control. One assertion shape, one plant — the #470 lesson: that
+//    gate carried two unrelated assertions under one id, the first fired, the
+//    second was blind, and the control was satisfied by the first.
+//
+//    The plant is a top-level `:hover` rule, which is also what proves the walk
+//    reads declarations before recursing: under the wrong shape that rule owns
+//    an empty-but-truthy `cssRules`, gets walked past, and this control exits 3.
+{
+	const page = await open(FOOTER_ROUTES[0], 1440);
+	await settleFooter(page);
+	const args = { props: INTEGRITY_PROPS, identity: [...INTEGRITY_IDENTITY], needle: FUNDING_SELECTOR };
+	const scan = async () => judgeFunding(await page.evaluate(MEASURE_FUNDING_CSS, args), "control");
+
+	const first = await page.evaluate(MEASURE_FUNDING_CSS, args);
+	const problems = [];
+
+	// Blindness check 1 — the class still exists. A rename makes this gate
+	// report clean forever, so it must be updated in the commit that renames.
+	const matched = first.sheets.reduce((n, s) => n + s.matched, 0);
+	if (!matched)
+		problems.push(`no rule anywhere selects \`${FUNDING_SELECTOR}\` — renamed? update this gate in the same commit`);
+
+	// Blindness check 2 — the walk reached everything. This is the assertion
+	// #470 needed and did not have: a walk that visits fewer rules than the
+	// sheet has at top level has skipped whole branches, and every clean report
+	// it produces is worthless. Run once, over the real sheets.
+	for (const s of first.sheets)
+		if (s.leaves < s.topStyle)
+			problems.push(`the walk read ${s.leaves} style rules in ${s.href.split("/").pop()} but the sheet declares ${s.topStyle} at top level alone — it is walking past declarations`);
+
+	const before = new Set((await scan()).map((f) => f.msg));
+	await page.addStyleTag({ content: `.${FUNDING_SELECTOR}__mark:hover { opacity: 0.5; }` });
+	const fresh = (await scan()).filter((f) => !before.has(f.msg));
+
+	if (!fresh.some((f) => /may be scaled and not modified/.test(f.msg)))
+		problems.push("a planted `:hover { opacity: .5 }` on a funding mark went unreported");
+
+	if (problems.length) {
+		console.error("✗ the positive control failed: the funding-mark scan is not measuring what it claims.");
+		for (const p of problems) console.error(`    ${p}`);
+		await browser.close();
+		process.exit(3);
+	}
+	const leaves = first.sheets.reduce((n, s) => n + s.leaves, 0);
+	const topStyle = first.sheets.reduce((n, s) => n + s.topStyle, 0);
+	ok(`a planted hover-fade on a funding mark was reported — ${leaves} style rules read across ${first.sheets.length} sheets (${topStyle} of them at top level, none walked past), ${matched} selecting a mark`);
+	await page.close();
+}
+
 // ── the real scan
 const findings = [];
 let rowsSeen = 0;
@@ -723,6 +880,30 @@ for (const route of FOOTER_ROUTES) {
 		marksSeen = Math.max(marksSeen, m.marks);
 		findings.push(...judgeFooter(m, `${route} @${width}`, width));
 	}
+}
+
+// G12 reads stylesheets, so width does not enter into it — but the locales load
+// their own page sheets, so both routes are scanned.
+let fundingRules = 0;
+for (const route of FOOTER_ROUTES) {
+	const page = await open(route, 1440);
+	await settleFooter(page);
+	const m = await page.evaluate(MEASURE_FUNDING_CSS, {
+		props: INTEGRITY_PROPS, identity: [...INTEGRITY_IDENTITY], needle: FUNDING_SELECTOR,
+	});
+	await page.close();
+	const matched = m.sheets.reduce((n, s) => n + s.matched, 0);
+	const skipping = m.sheets.filter((s) => s.leaves < s.topStyle);
+	if (!matched || skipping.length) {
+		console.error(`✗ blind: the funding-mark scan on ${route} is not reading what it claims.`);
+		if (!matched) console.error(`  no rule selects \`${FUNDING_SELECTOR}\` — renamed?`);
+		for (const s of skipping)
+			console.error(`  ${s.href.split("/").pop()}: read ${s.leaves} style rules against ${s.topStyle} at top level`);
+		await browser.close();
+		process.exit(3);
+	}
+	fundingRules = Math.max(fundingRules, matched);
+	findings.push(...judgeFunding(m, route));
 }
 
 await browser.close();
@@ -799,6 +980,17 @@ if (findings.length) {
 		console.error("  three costs one CSS declaration, so we meet it.");
 		for (const f of by("G11")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G12").length) {
+		fail(`${by("G12").length} rule(s) modify a funding mark instead of scaling it.`);
+		console.error("  The EU emblem and the Plan de Recuperación logo are supplied artwork: they may be");
+		console.error("  scaled, and nothing else — no recolouring, fading, rotation, cropping, filter or");
+		console.error("  overlay. The emblem's own usage rules and the `Manual de Identidad` both say so, and");
+		console.error("  art. 34.3 of Orden ETD/1498/2021 makes carrying them correctly an obligation. A");
+		console.error("  publicity breach is priced at 10% of the awarded aid (art. 38.4).");
+		console.error("  If the declaration is on a :hover or :focus rule, note that this gate reads the");
+		console.error("  stylesheet precisely because no measurement of the page at rest can see it.");
+		for (const f of by("G12")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -813,4 +1005,5 @@ ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join("
 ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`
 );
+ok(`${fundingRules} rule(s) select a funding mark and none of them modifies it — scaled only`);
 process.exit(0);

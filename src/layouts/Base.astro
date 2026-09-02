@@ -9,6 +9,7 @@
  * - Footer: "Confían en nosotros" logos, 4-col grid, Kit Digital banner
  */
 import { getMenu, getSiteSettings, getEmDashCollection } from "emdash";
+import { accentFill, accentInk } from "../utils/accent";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
 import { getUiLabels } from "../utils/ui-labels";
 import { routeAlternatePath } from "../utils/alternate";
@@ -130,6 +131,21 @@ const promptPath = Astro.url.pathname.replace(/\/$/, "");
 const currentSlug = promptPath.replace(/^\/en/, "").replace(/^\//, "");
 const activeService = services.find((s: any) => (s.slug ?? s.id) === currentSlug);
 const headerAccent = activeService?.data?.color || "#1E1E1E";
+// The same colour the header wears has to reach the page's own content, and
+// until #460 it did not. The pages set it with `define:vars`, which puts the
+// custom property on the TOP-LEVEL elements of that page's template only — on
+// a vertical those are the watermark, the hero and the mantra wrapper. The
+// instrument comes from a child component, so it is a descendant of none of
+// them and every `var(--accentColor)` inside it resolved to nothing. An
+// unresolved var() with no fallback invalidates the whole declaration, so the
+// instrument's accent edge did not draw and its CTA lost its background while
+// keeping its white label: an invisible button on twelve routes.
+// The layout already knows the colour for the header. Handing it to `main`
+// puts it above every section on every route — verticals get their colour,
+// everything else gets ink — and the per-page `define:vars` keeps working as
+// an override with the identical value.
+const { fill: accentFillColor, label: accentLabelColor } = accentFill(headerAccent);
+const { color: accentInkColor } = accentInk(headerAccent);
 
 // The rotating hero's palette, handed to the header so its bottom edge can
 // keep the same clock as the picture (#413). Same list, same order, one
@@ -271,7 +287,7 @@ const resolvedOgType = ogType || "website";
 	<MenuDialog services={services} siteItems={siteMenuItems} currentPath={promptPath} localePrefix={localePrefix} />
 
 	<!-- ═══ MAIN CONTENT ═══ -->
-	<main id="content">
+	<main id="content" style={`--accentColor: ${headerAccent}; --accentInk: ${accentInkColor}; --accentFill: ${accentFillColor}; --accentLabel: ${accentLabelColor};`}>
 		<slot />
 	</main>
 

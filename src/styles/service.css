@@ -272,7 +272,7 @@
 }
 
 .s-inst__closer blockquote {
-	border-left: 3px solid var(--accentColor);
+	border-left: 3px solid var(--accentColor, var(--color-primary));
 	padding-left: 16px;
 	font-style: italic;
 	margin: 0 0 14px;
@@ -329,7 +329,7 @@
 
 /* ═══ Panel frame (shared) ═══ */
 .inst {
-	border-top: 4px solid var(--accentColor);
+	border-top: 4px solid var(--accentColor, var(--color-primary));
 	border-radius: var(--radius);
 	overflow: hidden;
 }
@@ -337,7 +337,7 @@
 .inst--light {
 	background: var(--color-secondary);
 	border: 1px solid var(--color-border);
-	border-top: 4px solid var(--accentColor);
+	border-top: 4px solid var(--accentColor, var(--color-primary));
 	box-shadow: var(--shadow-card);
 }
 
@@ -356,7 +356,7 @@
 }
 
 .inst__bar svg {
-	color: var(--accentColor);
+	color: var(--accentColor, var(--color-primary));
 }
 
 .inst__muted {
@@ -432,8 +432,8 @@
 	border-radius: var(--radius);
 	display: grid;
 	place-items: center;
-	color: var(--accentColor);
-	background: color-mix(in srgb, var(--accentColor) 12%, white);
+	color: var(--accentColor, var(--color-primary));
+	background: color-mix(in srgb, var(--accentColor, var(--color-primary)) 12%, white);
 }
 
 .cart__name {
@@ -492,14 +492,31 @@
 	font-size: 16px;
 }
 
+/* The section colour as TEXT needs the readable variant, not the raw one: the
+   e-commerce blue is 3.57:1 at this size and weight (#460). Borders, tints and
+   the partner's own mark below keep the raw colour — a brand mark is exempt,
+   and a rule is not text. */
 .cart__row--total b {
-	color: var(--accentColor);
+	color: var(--accentInk, var(--color-primary));
 }
 
+/* The one filled button on the page, so it is the one that had the most to
+   lose: `background: var(--accentColor)` with a hard-coded white label meant
+   that when the accent did not arrive the background vanished and the label
+   did not — white on the white panel, an invisible CTA on all twelve vertical
+   routes (#460). Two fixes, and both are needed. The pair from utils/accent.ts
+   instead of the raw colour, because white on the CDN orange is 2.65:1 and
+   this is the button that has to carry a label; and a fallback on each, so the
+   worst this can ever degrade to is the ink button it was before there were
+   sections. */
 .cart__cta {
-	background: var(--accentColor);
-	color: #ffffff;
+	background: var(--accentFill, var(--color-primary));
+	color: var(--accentLabel, var(--color-secondary));
 	text-align: center;
+	/* Now that the button is visible, its label is too: "Audita tu e-commerce"
+	   breaks at the hyphen and leaves "commerce" alone on line two. Balancing
+	   splits it where the words are. */
+	text-wrap: balance;
 	border-radius: var(--radius);
 	margin-top: 12px;
 }
@@ -820,7 +837,8 @@
 
 .cf__tile-label { font-size: 12px; color: #70757a; }
 .cf__tile-value { font-size: 24px; font-weight: 700; margin-top: 2px; }
-.cf__tile:last-child .cf__tile-value { color: var(--accentColor); }
+/* text, so the readable variant — the CDN orange is 2.65:1 raw (#460) */
+.cf__tile:last-child .cf__tile-value { color: var(--accentInk, var(--color-primary)); }
 
 .cf__toggles { padding: 6px 20px; }
 

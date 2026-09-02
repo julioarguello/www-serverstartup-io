@@ -718,33 +718,47 @@
 .s-areas__rows {
 	display: flex;
 	flex-direction: column;
-	gap: 14px;
+	/* no gap (#453): the hairline above each row IS the separator, and a gap
+	   on top of it draws two lines where the design has one */
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-/* Area rows (#273): the discipline color is a left bar, the thesis gets
-   the full width. Replaces the #215 face-cards, which overlapped once the
-   #264 excerpts grew. */
+/* ═══ ROW (#453) ═══ — see the chrome rule in theme.css.
+   Was #273's hybrid: white ground, hairline all round, 4px coloured left
+   border and a radius, at rest, six times. That is a card, and six cards are
+   a grid pretending to be a list. Now: a hairline above, and the vertical's
+   colour as a left rule that appears on hover, focus and current. Nothing at
+   rest.
+
+   The grid is `40px 1fr auto` with two rows, so the cube sits in a gutter
+   whose width does not depend on the title, the title and the claim share one
+   left edge down all six rows, and the arrow is pinned to the right. Equal
+   line counts + a fixed gutter = equal row heights, which is what the layout
+   gate asserts at 390, 768 and 1440. */
 .area-row__link {
-	display: flex;
-	gap: 16px;
-	align-items: flex-start;
-	background: var(--color-secondary);
-	border: 1px solid var(--color-border);
-	border-left: 4px solid var(--cc, var(--color-primary));
-	border-radius: var(--radius);
-	padding: 20px 22px;
+	display: grid;
+	grid-template-columns: 40px 1fr auto;
+	column-gap: 18px;
+	row-gap: 2px;
+	align-items: baseline;
+	border-top: var(--row-rule) solid var(--color-border);
+	border-left: var(--row-accent) solid transparent;
+	padding: 18px 4px 18px 16px;
 	text-decoration: none;
 	color: var(--color-primary);
 	transition: background-color 0.15s, border-color 0.15s;
 }
 
+/* the first row's hairline would double the section header's own edge */
+.s-areas__rows > .area-row:first-child .area-row__link {
+	border-top-color: transparent;
+}
+
 .area-row__link:hover,
 .area-row__link:focus-visible {
-	background: color-mix(in srgb, var(--cc, var(--color-primary)) 5%, var(--color-secondary));
-	border-color: color-mix(in srgb, var(--cc, var(--color-primary)) 45%, var(--color-border, #e3e7eb));
+	background: color-mix(in srgb, var(--cc, var(--color-primary)) 5%, transparent);
 	border-left-color: var(--cc, var(--color-primary));
 }
 
@@ -753,24 +767,68 @@
 }
 
 .area-row__die {
-	flex: none;
-	width: 54px;
+	grid-column: 1;
+	grid-row: 1 / 3;
+	align-self: center;
+	width: 40px;
 	height: auto;
-	margin-top: -2px;
 }
 
-
-.area-row h3 {
-	margin: 0 0 6px;
-	font-size: 19px;
-	line-height: 1.3;
+.area-row__title {
+	grid-column: 2;
+	grid-row: 1;
+	font-family: var(--font-family);
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 1.25;
 }
 
-.area-row .text-body {
-	margin: 0;
-	font-size: 15px;
-	line-height: 1.55;
-	color: color-mix(in srgb, var(--color-primary) 82%, transparent);
+/* Both names ship and the breakpoint picks one, exactly as the menu does
+   (#428) — `display:none` keeps the unused one out of the a11y tree too, so
+   a screen reader reads one title, not two. */
+.area-row__title--short { display: none; }
+
+.area-row__claim {
+	grid-column: 2;
+	grid-row: 2;
+	font-size: 16px;
+	line-height: 1.45;
+	color: color-mix(in srgb, var(--color-primary) 72%, transparent);
+}
+
+/* A pseudo-element, not a span (#453). `aria-hidden` keeps a decorative arrow
+   out of the accessibility tree but not out of the DOM, and copy-baseline reads
+   the DOM: the glyph landed in tests/copy-baseline/home.txt as if it were copy.
+   Nothing that is not language belongs in a file that freezes the language. */
+.area-row__link::after {
+	content: "→";
+	grid-column: 3;
+	grid-row: 1 / 3;
+	align-self: center;
+	font-family: var(--font-family-mono);
+	font-size: 18px;
+	color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+	transition: color 0.15s;
+}
+
+.area-row__link:hover::after,
+.area-row__link:focus-visible::after {
+	color: var(--cc, var(--color-primary));
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.area-row__link::after { transition: none; }
+}
+
+/* 390px leaves ~270px for the text column: "CDN, WAF y seguridad edge" is two
+   lines there and a two-line title un-equalises the rows. Same 700px switch as
+   the menu, and the same six names. */
+@media (max-width: 700px) {
+	.area-row__title--long { display: none; }
+	.area-row__title--short { display: inline; }
+	.area-row__link { column-gap: 14px; padding-left: 12px; }
+	.area-row__title { font-size: 18px; }
+	.area-row__claim { font-size: 15px; }
 }
 
 @media (min-width: 768px) {
@@ -785,10 +843,6 @@
 	   Its size is now the portal-wide section-heading size (theme.css). */
 	.s-areas__header h2 {
 		white-space: nowrap;
-	}
-
-	.s-areas__rows {
-		gap: 16px;
 	}
 
 }

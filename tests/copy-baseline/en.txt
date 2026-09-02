@@ -20,18 +20,18 @@ for modern, flexible architectures
 More about Cloudflare
 Areas of expertise
 E-commerce
-Over twenty years inside SAP Commerce Cloud. Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.
+Extending SAP Commerce is easy; surviving the upgrade is not.
 Systems Integration
-We're not “PowerPoint architects”: what we plan is what we ship. No overpromising — the objectively necessary and viable. A glove, not a hammer, with homogeneity, methodology, testability and absolute observability.
+A glove, not a hammer: what we plan is what we ship.
 Big Data & Cloud Analytics
-A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources is another story. Medallion architecture, and tests that number in the thousands.
+Building a data pipeline is fast; making it last years is not.
 CDN, WAF & Edge Security
-Official Cloudflare partners since 2019. We audit, migrate and run CDN, WAF and edge security, mostly for e-commerce.
+Cloudflare partners since 2019, usually in front of a shop.
 Greenfield development
-The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full SDLC, from specification to observability. We work contract first, focused on stability, security and governance.
+The code isn't the product; what's still alive years later is.
 AI
 Artificial Intelligence
-AI is a means, not an end. The machine writes the repetitive code; we bring the architecture and the judgment, from development to operations — one integral approach, a DevOps profile. The agent proposes; the engineer disposes.
+The agent proposes, the engineer disposes. AI is a means.
 Quality and performance
 Our craft is quality and performance where they get expensive: critical processes and large volumes. The campaign peak, the catalogue that has to be reindexed, the integration that has to close the day.
 This site is a small sample of the same discipline, applied to our own shop window. No version ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The threshold is written in the public repository, and so is every run of the check. See how it is built.

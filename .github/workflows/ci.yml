@@ -137,6 +137,19 @@ jobs:
         # failure. Runs against the same booted stack as the steps above.
         run: node scripts/ci-check-var-resolves.mjs http://localhost:8787
 
+      - name: Rows stay equal, ROWs draw no box, and no copy is printed twice
+        # #453. The areas block was six white boxes carrying a full paragraph
+        # each: 1695px on a 390px phone, row heights from 214 to 305, and the
+        # e-commerce excerpt printed VERBATIM in the hero card and again in its
+        # row twenty lines apart. Nothing here could see any of it — the copy
+        # baseline froze the duplicate along with everything else, the token
+        # scan never opens a browser, and a ragged list is neither illegible
+        # nor overflowing, so axe is right to stay quiet. Geometry assertions,
+        # not a screenshot diff: a pixel diff over 26 routes would go red on
+        # every PR of this redesign, get re-baselined on sight, and become
+        # furniture.
+        run: node scripts/ci-check-layout.mjs http://localhost:8787
+
       - name: Accessibility (axe + keyboard + shortcuts + reflow)
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 

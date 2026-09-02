@@ -672,6 +672,78 @@
 				},
 				{
 					"type": "content",
+					"title": "areas_claim",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ampliar SAP Commerce es fácil; sobrevivir a la actualización, no."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Partners de Cloudflare desde 2019, casi siempre ante una tienda."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Montar un flujo de datos es rápido; que aguante años, no."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Un guante, no un martillo: lo que planificamos es lo que ejecutamos."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "El código no es el producto; lo que sigue vivo años después, sí."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "El agente propone, el ingeniero dispone. La IA es un medio."
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
 					"title": "mantra",
 					"content": [
 						{
@@ -2875,6 +2947,78 @@
 								{
 									"_type": "span",
 									"text": "AI"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
+					"title": "areas_claim",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Extending SAP Commerce is easy; surviving the upgrade is not."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cloudflare partners since 2019, usually in front of a shop."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Building a data pipeline is fast; making it last years is not."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "A glove, not a hammer: what we plan is what we ship."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The code isn't the product; what's still alive years later is."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The agent proposes, the engineer disposes. AI is a means."
 								}
 							]
 						}

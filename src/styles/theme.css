@@ -123,7 +123,6 @@
 	--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px);
 	--text-body: clamp(20px, calc(20px + (100vw - 1440px) * 0.004167), 24px);
 	--section-padding: 80px;
-	--card-radius: 24px;
 	--card-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 	--widget-spacing: 20px;
 
@@ -291,8 +290,38 @@
 	--radius-pill: 99px;              /* pills and toggles only */
 	--focus-ring: 0 0 0 3px rgba(30, 30, 30, 0.2);
 
-	/* Statement block (family 2): left rule + tint, no radius */
-	--statement-rule: 3px;
+	/* ── The three chromes, and the rule for choosing between them (#452) ──
+	   The home alone used to draw a box five ways, and "Quiénes somos" added
+	   a sixth by borrowing the mantra's chrome for the values list. No one of
+	   those shapes was wrong; what read as disharmony was that nothing said
+	   which shape MEANT what. So the shapes are three, and each one answers a
+	   question about the content rather than about the layout:
+
+	     BLOCK   the house is making a claim in its own voice.
+	             Left rule + a tint of the same hue. No border, no radius, no
+	             shadow. A claim does not need a container, only an edge that
+	             says where it starts.
+
+	     PANEL   a machine surface is being quoted — an instrument, a console,
+	             a photograph, someone else's UI. Hairline border, `--radius`,
+	             `--shadow-card`, and a `--panel-edge` accent along the top.
+	             THE ONLY THING ON THE SITE THAT GETS A SHADOW: a shadow says
+	             "this is a separate surface", which is true of a quoted screen
+	             and false of a paragraph.
+
+	     ROW     one item in a list of links. A hairline above it, and a
+	             coloured left rule that appears on hover, focus and current.
+	             Nothing at rest. A row that draws a box at rest is a card, and
+	             six cards in a column are a grid pretending to be a list.
+
+	   The accent colour is a STATE on a ROW and a fixed edge on a PANEL. It is
+	   not decoration six times over at rest — that was how the areas block
+	   ended up shouting six colours at a reader who had not asked yet. */
+	--block-rule: 3px;         /* BLOCK's left rule */
+	--panel-border: 1px;       /* PANEL's hairline */
+	--panel-edge: 4px;         /* PANEL's accent top edge */
+	--row-rule: 1px;           /* ROW's hairline above */
+	--row-accent: 4px;         /* ROW's left rule — hover / focus / current only */
 }
 
 /* ─────────────────────────────────────────

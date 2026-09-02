@@ -157,7 +157,7 @@
 	left: 0;
 	top: 0;
 	bottom: 0;
-	width: var(--statement-rule);
+	width: var(--block-rule);
 }
 
 .s-hero__rule {
@@ -596,7 +596,7 @@
 	   the padding is generous rather than the usual box inset. */
 	/* same inset as every other statement block, so their contents line up */
 	padding: var(--space-5);
-	border-left: var(--statement-rule) solid var(--color-edge);
+	border-left: var(--block-rule) solid var(--color-edge);
 	background: var(--color-tint-edge);
 	/* `align-items: stretch` (the default) matters here: with flex-start the
 	   description shrank to its own text and stopped 164px short of the
@@ -695,7 +695,7 @@
 
 /* the dark band inherits ink tokens — its text and links flip to paper */
 .s-tech__inner {
-	border-left: var(--statement-rule) solid var(--color-primary);
+	border-left: var(--block-rule) solid var(--color-primary);
 	background: var(--color-tint);
 	padding: var(--space-4) var(--space-5);
 	max-width: var(--measure-statement);

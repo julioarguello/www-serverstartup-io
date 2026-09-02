@@ -151,7 +151,7 @@
 	align-items: center;
 	margin: 0 0 var(--space-4);
 	padding: var(--space-4) var(--space-5);
-	border-left: var(--statement-rule) solid var(--color-primary);
+	border-left: var(--block-rule) solid var(--color-primary);
 	background: var(--color-tint);
 }
 
@@ -328,17 +328,23 @@
 	content: "–\00a0";
 }
 
-/* ═══ Panel frame (shared) ═══ */
+/* ═══ PANEL (#452) ═══
+   The chrome for a quoted machine surface, and the site's only shadow. The
+   numbers were already these; what they lacked was a name saying they are a
+   system rather than this file's taste — `--panel-edge` is the same 4px on
+   every instrument for the same reason, not four separate decisions that
+   happen to agree. See theme.css for the rule that chooses between BLOCK,
+   PANEL and ROW. */
 .inst {
-	border-top: 4px solid var(--accentColor, var(--color-primary));
+	border-top: var(--panel-edge) solid var(--accentColor, var(--color-primary));
 	border-radius: var(--radius);
 	overflow: hidden;
 }
 
 .inst--light {
 	background: var(--color-secondary);
-	border: 1px solid var(--color-border);
-	border-top: 4px solid var(--accentColor, var(--color-primary));
+	border: var(--panel-border) solid var(--color-border);
+	border-top: var(--panel-edge) solid var(--accentColor, var(--color-primary));
 	box-shadow: var(--shadow-card);
 }
 

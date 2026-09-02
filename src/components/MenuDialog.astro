@@ -169,21 +169,29 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 					))}
 				</ul>
 			</nav>
-			<nav aria-label={t("nav_site")}>
-				<ul class="menu-site" role="list">
-					{siteLinks.map((l) => (
-						<li>
-							<a
-								href={l.href}
-								class="site-link"
-								data-die-site={l.key}
-								aria-current={l.key === activeSite ? "page" : undefined}
-							>{l.title}</a>
-						</li>
-					))}
-				</ul>
-			</nav>
 		</div>
+		{/* Out of the 1fr column and across the whole panel. Inside it the row had
+		    534px to seat five Spanish labels that measure 605 with their gaps, and
+		    it had been within a pixel of wrapping since #431 — "Deconstruyendo"
+		    dropped to a line of its own the moment the labels stopped being
+		    lowercased. Tuning the gap would have bought the 13px this particular
+		    wording needs and left the next label to break it again; the row simply
+		    is not a thing that belongs in the narrow column. Document order is
+		    unchanged — it still reads after the specialties and before the die. */}
+		<nav class="menu-site-nav" aria-label={t("nav_site")}>
+			<ul class="menu-site" role="list">
+				{siteLinks.map((l) => (
+					<li>
+						<a
+							href={l.href}
+							class="site-link"
+							data-die-site={l.key}
+							aria-current={l.key === activeSite ? "page" : undefined}
+						>{l.title}</a>
+					</li>
+				))}
+			</ul>
+		</nav>
 		<div class="menu-die">
 			<LogoDie services={services} currentPath={currentPath} />
 			<p class="die-hint" aria-hidden="true">{t("die_hint")}</p>
@@ -344,15 +352,56 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		color: var(--menu-ink-muted);
 	}
 
+	/* Measured before touching it, at 1440x900 on a vertical page: the list is
+	   458px tall, and `align-items: center` inside `min-height: 100vh` left
+	   169px of empty paper between the strip and the first link and 197px
+	   below the last — 41% of the viewport, none of it doing anything. The
+	   space above is the half that hurts: it pushes the first specialty a
+	   third of the way down a screen the reader just asked to be shown.
+
+	   So the content is anchored under the strip and the air is spent, not
+	   left over: the console moves in above the list (it was the phone's
+	   privilege only, see the `--menu` rules in SiteHeader), and the rows grow
+	   to a 72px target. `align-items: start` is what stops the re-centring;
+	   the die is put back on the middle of the column it sits beside with an
+	   explicit `grid-row`, which it needs anyway now that a third child
+	   exists — auto-placement would otherwise fill row 1 with the console and
+	   the list and push the die underneath. */
 	.menu-inner {
 		max-width: var(--container-max);
 		margin: 0 auto;
-		padding: 96px 24px 48px;
+		/* 76px of fixed strip plus air; the strip is `position: fixed`, so this
+		   padding is the only thing keeping the console out from under it. */
+		padding: 108px 24px var(--space-5);
 		display: grid;
 		grid-template-columns: 1fr auto;
-		gap: 48px;
-		align-items: center;
+		column-gap: 48px;
+		row-gap: var(--space-4);
+		align-items: start;
 		min-height: 100vh;
+	}
+	/* Every placement is explicit, and `span 2` is load-bearing: `1 / -1`
+	   counts to the end of the EXPLICIT grid, and this grid declares columns
+	   only. With no explicit rows, `-1` resolves back to line 1, the die keeps
+	   row 1 to itself, and row 1 becomes 230px tall — which pushed the list
+	   down to y=362 and the panel 120px past the fold. Measured, not reasoned:
+	   the first draft of this rule did exactly that. */
+	.menu-inner > .search-form--menu {
+		grid-column: 1;
+		grid-row: 1;
+	}
+	.menu-lists {
+		grid-column: 1;
+		grid-row: 2;
+	}
+	.menu-site-nav {
+		grid-column: 1 / span 2;
+		grid-row: 3;
+	}
+	.menu-die {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		align-self: center;
 	}
 
 	.menu-spec {
@@ -372,9 +421,23 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		line-height: 1.25;
 		color: var(--menu-ink);
 		text-decoration: none;
-		padding: 8px 10px;
+		/* 16px, not 8: six rows are what the panel is for, and the height the
+		   centring used to waste is theirs. It also takes the row past the 44px
+		   WCAG 2.5.8 target with room to spare, which 8px did only because the
+		   type is 32px. */
+		padding: var(--space-3) 10px;
 		transition: background 0.15s;
 	}
+	/* The rows breathe where there is height to breathe into and go back to
+	   compact where there is not. A 1280x800 laptop is the case that decides
+	   it: at 72px rows the panel needs 806px and grows a scrollbar, at 56px it
+	   needs 710px and does not. Height, not width — the defect this fixes is
+	   vertical, and asking about the viewport's width to answer it is how the
+	   panel came to centre 458px of list in 900px in the first place. */
+	@media (max-height: 860px) {
+		.spec-link { padding: var(--space-2) 10px; }
+	}
+
 	/* The tint is the face colour mixed toward the ground, which is what an
 	   alpha does. On paper that lands on the site's own pastel card palette
 	   — the same wash the service cards wear — without a second list of six
@@ -415,11 +478,19 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		gap: 12px 20px;
 		list-style: none;
 	}
-	.spec-title,
-	.site-link,
-	.die-hint {
-		text-transform: lowercase;
-	}
+	/* The navigation labels are CMS CONTENT and render as stored. Lowercasing
+	   them was the panel's own invention: it printed "comercio electrónico"
+	   over a title the editor wrote as "Comercio electrónico", so the menu
+	   disagreed with the page it opens, with the breadcrumb below it, and with
+	   the CMS field itself — and no editor could fix it from the admin.
+
+	   The device is not gone, it is scoped. Everywhere lowercase survives on
+	   this site it dresses the same object: a mono eyebrow at 11-13px with
+	   0.06-0.08em tracking in a muted ink — `.menu-kicker` and `.die-hint`
+	   here, `.footer-partner-title`, `.ref-banner__title`, `.nf-pieces p`
+	   elsewhere. Those are chrome the house writes. A 32px sans link carrying
+	   a name from the database is not, and it was the only one of the six
+	   breaking the rule. */
 	/* "cdn, waf y seguridad edge" does not fit a 390px phone, and a wrapped
 	   item in a six-item menu reads as a mistake (founder, 2026-08-28: "no
 	   quiero saltos de línea en un menú tan básico"). Both names ship and the
@@ -441,6 +512,30 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 	.site-link:focus-visible,
 	.site-link[aria-current="page"] {
 		color: var(--menu-ink);
+	}
+	/* The specialty rows say where you are four ways over — the tint, the
+	   filled mini-face, the die landing on that face, and the 6px edge down
+	   the panel. This row had one: it went from #6B6B6B to #1E1E1E, which is
+	   exactly what hovering any OTHER item does, so "current" and "the one
+	   under the pointer" were the same picture and 1.4.1 had nothing but
+	   colour to go on. The chip is the strip's own device — `.menu-bar__path`
+	   wears it over the path you are on — and it survives being read in one
+	   ink. Padding is on the rest state too, so marking a row moves nothing. */
+	.site-link {
+		border-radius: var(--radius);
+		/* The chip needs room to sit around the text, and the row cannot afford
+		   it: five links plus 60px of new padding wrapped "Deconstruyendo" onto
+		   a line of its own the first time this was tried — the same orphan G4
+		   refuses down in the reference strip. The negative margin gives the
+		   width straight back, so the margin box is the size it always was and
+		   the row cannot wrap because of this rule. The visible gap between two
+		   labels is unchanged: 20px of flex gap becomes 8px plus the 6px each
+		   chip now carries. */
+		padding-inline: 6px;
+		margin-inline: -6px;
+	}
+	.site-link[aria-current="page"] {
+		background: var(--menu-tint);
 	}
 
 	/* The grid item must be allowed to shrink below its content's automatic
@@ -488,7 +583,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 	/* tablet: the approved composition, compressed — die at ×0.85 with air */
 	@media (min-width: 701px) and (max-width: 1100px) {
 		.menu-inner {
-			gap: 28px;
+			column-gap: 28px;
 			padding-inline: 40px;
 		}
 		.logo-stage { transform: scale(0.85); margin: -14px 0; }
@@ -515,20 +610,46 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		.menu-kicker { display: none; }
 		.menu-inner {
 			grid-template-columns: 1fr;
-			gap: 20px;
+			column-gap: 20px;
+			row-gap: 20px;
 			padding: 76px 16px 40px;
 			align-content: start;
 		}
-		.menu-die { order: -1; }
+		/* The desktop placement has to be undone by hand: `grid-column: 2` in a
+		   one-column grid creates an implicit second column and the die leaves
+		   the page. `order` is what stacks it first here, so the row it lands in
+		   is whichever one auto-placement gives it. */
+		.menu-inner > .search-form--menu,
+		.menu-lists,
+		.menu-site-nav,
+		.menu-die {
+			grid-column: 1;
+			grid-row: auto;
+		}
+		.menu-die {
+			order: -1;
+			align-self: start;
+		}
 		.logo-stage { transform: scale(0.62); margin: -38px 0; }
 		.die-hint { display: block; }
-		.spec-link { font-size: 26px; }
+		.spec-link { font-size: 26px; padding: 10px 10px; }
 		.menu-site {
 			flex-direction: column;
 			gap: 2px;
 		}
+		/* `display: block` is what makes the 9px take room. As an inline box the
+		   vertical padding painted but did not lay out, so each link's box bled
+		   14.5px over the one under it — invisible until the current row started
+		   carrying a chip, and then the chip painted `--menu-tint` behind the
+		   NEXT link's text. The a11y pixel pass read it correctly and called it:
+		   "About us" measured 4.4:1 against #e6e9ec at 390 on /en.
+
+		   The shorthand is also why the chip needs its inline padding restated:
+		   `padding: 9px 0` resets `padding-inline`, and this block wins on source
+		   order, so the chip was hugging the glyphs with nothing around them. */
 		.site-link {
-			padding: 9px 0;
+			display: block;
+			padding: 9px 6px;
 			font-size: 17px;
 		}
 	}

@@ -178,6 +178,35 @@ const INTEGRITY_PROPS = [
 const INTEGRITY_IDENTITY = new Set(["", "none", "1", "normal", "0deg", "0px", "auto"]);
 
 const FUNDING_SELECTOR = "footer-funding";
+/**
+ * The open menu, and the two things about it a screenshot cannot argue with.
+ *
+ * One route per locale carries a current SPECIALTY, one a current SITE link:
+ * the two rows are marked by different machinery and only one of them was
+ * broken, so measuring a page where the specialty is current would have
+ * reported the site row green forever.
+ */
+const MENU_ROUTES = [
+	"/cdn-waf-seguridad-edge-cloudflare",
+	"/quienes-somos",
+	"/en/cdn-waf-edge-security-cloudflare",
+	"/en/about-us",
+];
+/** Desktop only: on a phone the panel stacks the die first and scrolling is correct. */
+const MENU_SIZES = [
+	{ width: 1440, height: 900 },
+	{ width: 1280, height: 800 },
+];
+/**
+ * How much of the viewport the open panel may leave empty above its first
+ * element and below its last. Measured on the defect (#455) at 1440x900: 169px
+ * above and 197px below a 458px list, which is 41% of the screen the reader
+ * just asked to be shown, and the half above pushes the first specialty a third
+ * of the way down it. The reworked panel measures 11%. 25% is the line: well
+ * clear of the fixed state, well under the broken one, and not a number the
+ * next honest layout has to negotiate with.
+ */
+const MENU_WASTE_MAX = 25;
 
 const WIDTHS = [390, 768, 1440];
 /**
@@ -368,6 +397,78 @@ const MEASURE_FOOTER = () => {
  * what a broken selector proves. #462's own gate was blind to the bug that
  * motivated it, and its control is the only reason anyone found out.
  */
+/**
+ * G13 + G14: what the open panel does with its own height, and whether the row
+ * you are ON looks different from the row under the pointer.
+ *
+ * `skin` deliberately reads more than colour. 1.4.1 is the reason the site row
+ * needed fixing at all — it went from #6B6B6B to #1E1E1E to say "you are here",
+ * which is exactly what hovering any OTHER row did, so the two states were one
+ * picture. Comparing the whole skin rather than one property is what keeps this
+ * honest when the marker later changes shape.
+ */
+const MEASURE_MENU = () => {
+	const bar = document.querySelector(".menu-bar");
+	const kids = [...document.querySelectorAll(".menu-inner > *")]
+		.map((e) => e.getBoundingClientRect())
+		.filter((r) => r.height > 0);
+	if (!bar || !kids.length) return null;
+	const top = Math.min(...kids.map((k) => k.top));
+	const bot = Math.max(...kids.map((k) => k.bottom));
+	const above = Math.max(0, Math.round(top - bar.getBoundingClientRect().bottom));
+	const below = Math.max(0, Math.round(innerHeight - bot));
+	const skin = (el) => {
+		const c = getComputedStyle(el);
+		return {
+			bg: c.backgroundColor,
+			color: c.color,
+			weight: c.fontWeight,
+			deco: c.textDecorationLine,
+			left: `${c.borderLeftWidth} ${c.borderLeftColor}`,
+			radius: c.borderRadius,
+			shadow: c.boxShadow,
+		};
+	};
+	const groups = [];
+	for (const sel of [".spec-link", ".site-link"]) {
+		const all = [...document.querySelectorAll(`#menu-dialog ${sel}`)];
+		const at = all.findIndex((a) => a.getAttribute("aria-current") === "page");
+		if (at < 0) continue;
+		const restAt = all.findIndex((a, i) => i !== at);
+		groups.push({
+			sel,
+			text: all[at].textContent.trim().replace(/\s+/g, " ").slice(0, 40),
+			cur: skin(all[at]),
+			restAt,
+		});
+	}
+	return {
+		above,
+		below,
+		vh: innerHeight,
+		waste: Math.round((100 * (above + below)) / innerHeight),
+		groups,
+		rows: document.querySelectorAll("#menu-dialog .spec-link").length,
+		console: getComputedStyle(document.querySelector(".search-form--menu") || document.body).display,
+	};
+};
+
+/** Read one link's skin again, now that the pointer is on it. */
+const MEASURE_HOVER = (sel, i) =>
+	((el) => {
+		if (!el) return null;
+		const c = getComputedStyle(el);
+		return {
+			bg: c.backgroundColor,
+			color: c.color,
+			weight: c.fontWeight,
+			deco: c.textDecorationLine,
+			left: `${c.borderLeftWidth} ${c.borderLeftColor}`,
+			radius: c.borderRadius,
+			shadow: c.boxShadow,
+		};
+	})(document.querySelectorAll(`#menu-dialog ${sel}`)[i]);
+
 const PLANT = ({ item, claim }) => {
 	// declared in here, not module scope: `page.evaluate` ships the function
 	// source to the browser and nothing that surrounds it
@@ -636,6 +737,30 @@ const judgeFunding = (m, where) => {
 		});
 	return found;
 };
+/** G13 + G14, from one measurement plus the hovered readings taken beside it. */
+const judgeMenu = (m, hovered, where) => {
+	const found = [];
+	if (m.waste > MENU_WASTE_MAX) {
+		found.push({
+			g: "G13",
+			where,
+			msg: `${m.waste}% of the viewport is empty paper — ${m.above}px above the panel's first element and ${m.below}px below its last, in ${m.vh}px`,
+		});
+	}
+	for (const grp of m.groups) {
+		const h = hovered[grp.sel];
+		if (!h) continue;
+		const differs = Object.keys(grp.cur).filter((k) => grp.cur[k] !== h[k]);
+		if (!differs.length) {
+			found.push({
+				g: "G14",
+				where,
+				msg: `\`${grp.sel}\` marks the current page ("${grp.text}") exactly as it marks the one under the pointer — same ${Object.keys(grp.cur).join(", ")}`,
+			});
+		}
+	}
+	return found;
+};
 
 const browser = await puppeteer.launch({
 	headless: "new",
@@ -676,6 +801,49 @@ const settleFooter = async (page) => {
 	);
 	// one frame for the wrap to settle after the last decode
 	await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+};
+
+/**
+ * Open the panel and let it finish arriving.
+ *
+ * The transform runs for 0.5s and a measurement taken mid-slide reads the start
+ * frame, which is the panel parked off the right edge — every box in it would
+ * report the same geometry and G13 would call a broken panel perfect. The wait
+ * is on `open === true` plus the transition, not on a fixed sleep alone.
+ */
+const openMenu = async (route, { width, height }) => {
+	const page = await browser.newPage();
+	await page.setViewport({ width, height, deviceScaleFactor: 1 });
+	await page.goto(BASE + route, { waitUntil: "domcontentloaded", timeout: 60_000 });
+	await page.evaluate(() => document.fonts.ready);
+	await page.click("#menu-trigger");
+	await page.waitForFunction(() => document.getElementById("menu-dialog")?.open === true, {
+		timeout: 5_000,
+	});
+	await page.evaluate(
+		() =>
+			new Promise((resolve) => {
+				const d = document.getElementById("menu-dialog");
+				const done = () => resolve();
+				d.addEventListener("transitionend", done, { once: true });
+				setTimeout(done, 1200);
+			})
+	);
+	return page;
+};
+
+/** The hovered readings G14 compares the current row against. */
+const hoverSkins = async (page, m) => {
+	const out = {};
+	for (const grp of m.groups) {
+		if (grp.restAt < 0) continue;
+		const handles = await page.$$(`#menu-dialog ${grp.sel}`);
+		if (!handles[grp.restAt]) continue;
+		await handles[grp.restAt].hover();
+		await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+		out[grp.sel] = await page.evaluate(MEASURE_HOVER, grp.sel, grp.restAt);
+	}
+	return out;
 };
 
 // ── positive control first: a gate that has not proved it can see is not a gate.
@@ -838,6 +1006,75 @@ const settleFooter = async (page) => {
 	ok(`a planted hover-fade on a funding mark was reported — ${leaves} style rules read across ${first.sheets.length} sheets (${topStyle} of them at top level, none walked past), ${matched} selecting a mark`);
 	await page.close();
 }
+// ── and the menu half, where the two plants are the two reverted bugs.
+//
+// One plant per SHAPE, not one per gate id. G12 in #470 carried two assertions
+// under one id, the first fired, the second was blind, and the control was
+// satisfied — so each of these is checked for its own message, not merely for
+// "something was reported".
+//
+// Both plants are the defect itself, put back: `align-items: center` is the
+// rule that left 41% of the panel empty, and a transparent chip is what made
+// "you are here" and "you are hovering" one picture on the site row.
+{
+	const size = { width: 1440, height: 900 };
+	const page = await openMenu("/quienes-somos", size);
+	const scan = async () => {
+		const m = await page.evaluate(MEASURE_MENU);
+		if (!m) return { m: null, found: [] };
+		return { m, found: judgeMenu(m, await hoverSkins(page, m), "control") };
+	};
+
+	const before = await scan();
+	if (!before.m) {
+		console.error("✗ THIS GATE IS BLIND — the open panel presents no `.menu-inner` children to measure.");
+		await browser.close();
+		process.exit(3);
+	}
+	if (!before.m.groups.some((g) => g.sel === ".site-link")) {
+		console.error("✗ THIS GATE IS BLIND — no `.site-link` carries `aria-current` on /quienes-somos, so G14 has nothing to compare.");
+		await browser.close();
+		process.exit(3);
+	}
+	if (before.found.length) {
+		console.error("✗ THIS GATE IS BLIND — the control page is already failing before anything was planted:");
+		for (const f of before.found) console.error(`    ${f.g}  ${f.msg}`);
+		await browser.close();
+		process.exit(3);
+	}
+
+	// The G13 plant reproduces the SYMPTOM, not the CSS that caused it. The
+	// first draft planted `align-items: center` — the literal reverted rule —
+	// and it stopped working the moment the panel gained a second grid row:
+	// `align-items` centres an item inside its row, `align-content` is what
+	// spreads the rows, and with two rows the free space split evenly and the
+	// bands never grew. A plant tied to the shape of the fix tests the fix, not
+	// the invariant. This one shortens the content and lets it float, which is
+	// the picture G13 exists to refuse however the CSS arrives at it.
+	await page.addStyleTag({
+		content:
+			".menu-inner { align-content: center !important; }" +
+			"#menu-dialog .menu-spec { display: none !important; }" +
+			'#menu-dialog .site-link[aria-current="page"] { background: transparent !important; }',
+	});
+	await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+	const after = await scan();
+	const said = (re) => after.found.some((f) => re.test(f.msg));
+	const problems = [];
+	if (!after.found.some((f) => f.g === "G13")) problems.push("G13 did not fire on a panel floating a short block in a tall viewport");
+	if (!said(/empty paper/)) problems.push("G13 fired without naming the empty band");
+	if (!after.found.some((f) => f.g === "G14")) problems.push("G14 did not fire on a current row painted like a hovered one");
+	if (!said(/under the pointer/)) problems.push("G14 fired without naming the hover comparison");
+	await page.close();
+	if (problems.length) {
+		console.error("✗ THIS GATE IS BLIND — the menu plants did not produce the findings they must:");
+		for (const p of problems) console.error(`    ${p}`);
+		console.error("  → a green run below would mean nothing.");
+		await browser.close();
+		process.exit(3);
+	}
+	ok(`control — a panel floating a short block and a transparent current-chip were both reported (${after.found.length} finding(s))`);
+}
 
 // ── the real scan
 const findings = [];
@@ -904,6 +1141,33 @@ for (const route of FOOTER_ROUTES) {
 	}
 	fundingRules = Math.max(fundingRules, matched);
 	findings.push(...judgeFunding(m, route));
+}
+let menuPanels = 0;
+let menuMarked = 0;
+for (const route of MENU_ROUTES) {
+	for (const size of MENU_SIZES) {
+		const page = await openMenu(route, size);
+		const m = await page.evaluate(MEASURE_MENU);
+		if (!m || !m.rows) {
+			console.error(`✗ blind: the open panel on ${route} @${size.width}x${size.height} presents no rows to measure.`);
+			await page.close();
+			await browser.close();
+			process.exit(3);
+		}
+		const hovered = await hoverSkins(page, m);
+		await page.close();
+		menuPanels++;
+		menuMarked += m.groups.length;
+		findings.push(...judgeMenu(m, hovered, `${route} @${size.width}x${size.height}`));
+	}
+}
+// Four routes were chosen so that BOTH marked rows are exercised in both
+// locales. If the seed or the nav changes and no page carries a current row any
+// more, G14 stops having anything to say and says so instead of passing.
+if (menuMarked < menuPanels) {
+	console.error(`✗ blind: across ${menuPanels} open panels only ${menuMarked} carried a row with \`aria-current\`, so G14 measured almost nothing.`);
+	await browser.close();
+	process.exit(3);
 }
 
 await browser.close();
@@ -991,6 +1255,21 @@ if (findings.length) {
 		console.error("  stylesheet precisely because no measurement of the page at rest can see it.");
 		for (const f of by("G12")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G13").length) {
+		fail(`${by("G13").length} open menu panel(s) waste more than ${MENU_WASTE_MAX}% of the viewport.`);
+		console.error("  A full-screen menu is a screen the reader asked for. Centring a 458px list inside");
+		console.error("  `min-height: 100vh` left 169px above the first link and 197px below the last (#455) —");
+		console.error("  and the half above is the one that hurts, because it pushes the first specialty a");
+		console.error("  third of the way down. Anchor the content under the strip and spend the air.");
+		for (const f of by("G13")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G14").length) {
+		fail(`${by("G14").length} menu row(s) mark the current page exactly as they mark a hovered one.`);
+		console.error("  1.4.1: colour alone may not carry information, and this was worse than colour alone —");
+		console.error("  the site row went #6B6B6B → #1E1E1E for `aria-current`, which is the same repaint");
+		console.error("  hovering any other row performs, so the two states were one picture (#455).");
+		for (const f of by("G14")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -1002,6 +1281,9 @@ if (findings.length) {
 
 ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} items each, heights within ${TOLERANCE}px, no chrome at rest`);
 ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join(" or ")}`);
+ok(
+	`${MENU_ROUTES.length} routes × ${MENU_SIZES.length} sizes: the open panel wastes at most ${MENU_WASTE_MAX}% of the viewport and every current row is marked unlike a hovered one`
+);
 ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`
 );

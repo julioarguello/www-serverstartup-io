@@ -147,6 +147,34 @@ All routes exist in both ES and EN:
   ≈ 1.44cm. `ci-check-layout.mjs` G11 holds the ratio; G7 still holds the absolute floor.
   Full audit (local KB): `docs/company/10-kit-digital.md`.
 
+  **Integrity, not just size (#472).** G7 and G11 both measure how big a mark renders.
+  Neither can see the other half of the same obligation: the artworks may be **scaled and
+  nothing else** — no recolouring, fading, rotation, cropping, filter or overlay. That is
+  the emblem's own usage rules and the *Manual de Identidad*, and art. 34.3 makes carrying
+  them correctly an obligation rather than a courtesy; art. 38.4 prices a publicity breach
+  at 10% of the awarded aid. **G12** holds it: no rule whose selector names
+  `footer-funding` may declare `filter`, `opacity`, `transform`, `rotate`, `scale`,
+  `translate`, `clip-path`, `mask-image`, `mix-blend-mode` or `text-decoration-line` at
+  anything but its identity value.
+
+  G12 reads the **stylesheet**, not the rendered page, and that is the whole design. The
+  plausible way this breaks is somebody giving every footer image a tasteful hover — and a
+  `:hover` rule that fades a mark is invisible to any measurement of the page at rest. It
+  was verified against exactly that: a `.footer-funding__mark:hover { opacity: .6;
+  transform: scale(1.03) }` added to `SiteFooter.astro` and shipped through a real build
+  is reported on both locales; every geometry assertion in the file stays green.
+
+  The walk carries its own proof, because the first attempt at this gate (#470, closed
+  unmerged) was blind and its control still passed. CSS Nesting gives **every**
+  `CSSStyleRule` its own `cssRules` — an empty list when nothing is nested, and truthy —
+  so the obvious `if (r.cssRules) { walk(r.cssRules); continue; }` walks past every
+  ordinary rule in the sheet: 222 top-level rules, 14 reached. G12 therefore reads
+  declarations *before* recursing, and counts the style rules it actually read against the
+  number each sheet declares at top level. Counting rules *visited* would not do — the
+  wrong shape still enters all 222 and reads none, scoring a perfect 222 of 222. Today:
+  **534 style rules read across 8 sheets, 406 of them at top level, none walked past, 3
+  selecting a mark.**
+
 ### 4.2 Shared Components
 
 | Component | Purpose |

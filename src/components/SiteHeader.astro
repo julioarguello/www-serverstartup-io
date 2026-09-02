@@ -502,9 +502,14 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   firmer clears it by 9.2:1, wide enough that a font-metric difference
 	   cannot flip it back the way it flipped this one (#436). */
 	.search-form--menu .search-hint { color: var(--color-ink-soft); }
-	@media (min-width: 768px) {
-		.search-form--menu { display: none; }
-	}
+	/* It used to be `display: none` from 768px up, on the reasoning that "the
+	   header line already exists" there. It exists and it cannot be reached:
+	   Base opens this panel with `showModal()`, so the header is inert behind
+	   it, and on desktop the header's console is behind a magnifier toggle
+	   anyway. The result was a full-screen menu with no way to search from it
+	   — while 41% of that screen was empty paper. The two consoles are never
+	   usable at the same moment, so this is not the duplicate control the
+	   language switcher would be. */
 
 	/* ≤480: everything cedes to the breadcrumb — flush cube, tight gaps,
 	   smaller type; the path takes ALL remaining width and only then

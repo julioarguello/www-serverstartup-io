@@ -614,7 +614,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "E-commerce"
+									"text": "Comercio"
 								}
 							]
 						},
@@ -636,7 +636,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Big data"
+									"text": "Big Data"
 								}
 							]
 						},
@@ -2957,7 +2957,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Big data"
+									"text": "Big Data"
 								}
 							]
 						},

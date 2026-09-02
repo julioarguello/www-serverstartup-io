@@ -63,7 +63,12 @@ def routes_from_seed() -> list[tuple[str, str]]:
     routes: list[tuple[str, str]] = [
         ("/", "es"), ("/en", "en"),
         ("/search", "es"), ("/en/search", "en"),
-        ("/posts", "es"), ("/en/posts", "en"),
+        # `/posts` and `/en/posts` are NOT here (#464): the blog 404s while the
+        # collection is empty, and this sweep fails any route that is not 200.
+        # They belong back in this list the day #340 publishes a first post —
+        # at which point they will answer 200 and the sweep will cover them
+        # again. Leaving them in would have made a correct 404 read as a broken
+        # hreflang contract.
     ]
     for coll in ("pages", "services"):
         for e in seed["content"][coll]:

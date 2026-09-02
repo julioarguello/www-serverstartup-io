@@ -17,6 +17,13 @@ export const GET: APIRoute = async ({ site, url, currentLocale, cache }) => {
 	});
 	cache.set(cacheHint);
 
+	// #464. No posts, no feed. An empty but valid RSS channel is a live public
+	// surface advertising a blog that does not exist — and it was reachable
+	// from every page's head until this issue. Same condition as the listing,
+	// so both come back together the day there is a first post (#340).
+	if (posts.length === 0) return new Response(null, { status: 404 });
+
+
 	const items = posts
 		.map((post) => {
 			if (!post.data.publishedAt) return null;
@@ -43,7 +50,7 @@ export const GET: APIRoute = async ({ site, url, currentLocale, cache }) => {
     <title>${escapeXml(siteTitle)}</title>
     <description>${escapeXml(siteTagline)}</description>
     <link>${siteUrl}</link>
-    <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${siteUrl.replace(/\/$/, "")}/rss.xml" rel="self" type="application/rss+xml"/>
     <language>${locale}</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 ${items}

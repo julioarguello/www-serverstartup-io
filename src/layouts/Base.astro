@@ -27,6 +27,8 @@ interface Props {
 	pageTitle?: string;
 	description?: string;
 	robots?: string;
+	/** Emit RSS autodiscovery. Only the blog listing has a feed to point at (#464). */
+	feed?: boolean;
 	image?: string;
 	/**
 	 * `null` emits NO canonical and no hreflang pair at all (#418).
@@ -74,6 +76,7 @@ const {
 	pageTitle: ogTitleOverride,
 	description,
 	robots,
+	feed = false,
 	image,
 	canonical,
 	type: ogType,
@@ -292,7 +295,12 @@ const resolvedOgType = ogType || "website";
 	<link rel="apple-touch-icon" href="/assets/icon-192.png" />
 	<link rel="manifest" href="/site.webmanifest" />
 	<meta name="theme-color" content="#1E1E1E" />
-	<link rel="alternate" type="application/rss+xml" title={rssTitle} href={rssPath} />
+	{/* #464. Feed autodiscovery belongs on the blog, not on a contact page. It
+	    used to sit here unconditionally, which meant every route in the site
+	    advertised a feed for a section with no posts. `feed` is opt-in and only
+	    the posts pages pass it — so when they 404 on an empty collection, the
+	    advertisement goes with them and there is no second switch to remember. */}
+	{feed && <link rel="alternate" type="application/rss+xml" title={rssTitle} href={rssPath} />}
 </head>
 <body>
 

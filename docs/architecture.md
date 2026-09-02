@@ -457,13 +457,38 @@ PR → quality-gates green → merge to main
 - **Remote D1 seeding** (`scripts/seed-remote-preview.sh`): per-table dumps
   (a whole-db dump writes `sqlite_schema` for the FTS5 virtual tables, which
   D1 rejects), explicit `CREATE VIRTUAL TABLE` + FTS rebuild statements,
-  rehearsed on a throwaway sqlite before touching remote. Automatic for
+  rehearsed on three throwaway sqlites before touching remote. Automatic for
   preview on every deploy; **opt-in and destructive** for production
   (`seed_d1` input — overwrites CMS edits made live), and gated:
   `scripts/ci-guard-prod-seed.sh` counts the rows already in the target and
   **refuses** unless the database is empty or the operator typed the
   confirmation string (#358). Per-table counts are printed before anything is
   written, allowed or refused.
+- **Three rehearsals, and what each one stands for** (#326, #484). Collection
+  tables (`ec_*`) are not migration-managed — EmDash creates them from the
+  collections declared in `seed.json` — so they drift from the remote in two
+  ways, and each rehearsal exists because the previous one could not see one of
+  them. (1) *Dropped*: the `ec_*` tables are dropped on a copy, so the file has
+  to rebuild them; catches a collection the remote never learned about. (2)
+  *Populated*: every row kept, so an FK-hostile DELETE order actually violates.
+  (3) *Remote-shaped*: local system tables, but the collection tables recreated
+  from the remote's own `sqlite_master`, read read-only before anything is
+  applied. The first two both descend from the local database and therefore
+  carry the canonical column set **by construction**, so neither can fail on a
+  remote that is a column behind — which is what froze preview for three deploys
+  when `url` was added to the `partners` collection. Missing columns are
+  repaired additively (`ALTER TABLE … ADD COLUMN`); a column the seed does not
+  declare, a type change, or a `NOT NULL` column with no default exits **3**,
+  because none of those can be repaired in place. The comparator carries two
+  positive controls, run offline against schemas it builds itself, one per
+  drift shape.
+- **INSERTs name their columns.** `.mode insert` emits positional `VALUES`,
+  which makes the whole file depend on the remote's column *order*. `ALTER
+  TABLE` can only append, so a remote repaired for a column the canonical schema
+  holds in the middle would take every later value one place to the left —
+  measured on a faithful copy of the broken preview: green apply, `featured`
+  landing in `url`, the URL in `featured_image`, the image JSON in `excerpt`.
+  Naming the columns removes the dependency (#484).
 - **Deploy order matters** (#369/#370): the worker is deployed **before** the D1
   refresh. EmDash applies its migrations lazily in the request path, so on a
   schema-bumping release only the new worker can move the remote schema

@@ -22,7 +22,7 @@ L3
 el render
 Astro SSR
 Construye el HTML en el mismo worker que recibió la petición.
-26 rutas públicas, 24 componentes y 12 hojas de estilo, con render bajo demanda de Astro, que también es de Cloudflare desde enero de 2026. Los idiomas no se separan por prefijo sino por slug traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404.
+26 rutas públicas, 24 componentes y 12 hojas de estilo, con render bajo demanda de Astro, que también es de Cloudflare desde enero de 2026. Los idiomas no se separan por prefijo sino por slug traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404. El ancho y el sizes de cada imagen los declara la plantilla, no el fichero: la plantilla sabe en qué hueco va a caber, y el fichero no.
 L2
 el CMS
 EmDash
@@ -95,6 +95,7 @@ Merge pull request
 Los números
 Un número sin fecha es el peor sitio para la deriva, así que aquí hay dos clases y no se mezclan. El umbral vive en un fichero: 95 o más en rendimiento, cien en accesibilidad, buenas prácticas y SEO, sobre la mediana de tres pasadas con emulación móvil.
 La medición lleva su fecha. El 24 de agosto de 2026, sobre la construcción de producción: cien en las cuatro categorías y en las cinco direcciones, con el mayor contenido pintado por debajo de 1,6 segundos. Es la mediana de cada una, y la cota es la peor de las cinco.
+Las imágenes llevan la suya. El 27 de agosto de 2026, con emulación de móvil y sobre las mismas páginas antes y después: entre un 43 % y un 60 % menos de bytes de imagen, según la página y el ancho. El ahorro no sale de comprimir más, sino de dejar de mandar el fichero original: cada imagen se pide del tamaño del hueco donde va a caber, y en contacto ese hueco es un avatar de 53 píxeles para un retrato de 1200.
 Umbrales · integración continua
 EXIGIDO
 rendimiento

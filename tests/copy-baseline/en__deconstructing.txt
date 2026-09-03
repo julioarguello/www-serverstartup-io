@@ -22,7 +22,7 @@ L3
 the render
 Astro SSR
 Builds the HTML in the same worker that took the request.
-26 public routes, 24 components and 12 stylesheets, on Astro on-demand rendering — Astro has been part of Cloudflare since January 2026. Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404.
+26 public routes, 24 components and 12 stylesheets, on Astro on-demand rendering — Astro has been part of Cloudflare since January 2026. Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404. The width and the sizes of every image are declared by the template, not by the file: the template knows the slot it has to fill, and the file does not.
 L2
 the CMS
 EmDash
@@ -95,6 +95,7 @@ Merge pull request
 The numbers
 An undated number is the worst possible place for drift, so there are two kinds here and they never mix. The threshold lives in a file: 95 or more for performance, 100 for accessibility, best practices and SEO, over the median of three runs under mobile emulation.
 The measurement carries its date. On 24 August 2026, against the production build: 100 in all four categories across all five addresses, with the largest content painted in under 1.6 seconds. Each figure is a median, and the bound is the worst of the five.
+The images carry a date of their own. On 27 August 2026, under mobile emulation, over the same pages before and after: between 43% and 60% fewer image bytes, depending on the page and the width. The saving does not come from compressing harder but from no longer sending the original file: every image is asked for at the size of the slot it has to fill, and on contact that slot is a 53-pixel avatar for a 1200-pixel portrait.
 Thresholds · continuous integration
 REQUIRED
 performance

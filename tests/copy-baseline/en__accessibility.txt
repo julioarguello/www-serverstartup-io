@@ -3,19 +3,12 @@ Skip to content
 /en/accessibility
 ES
 Accessibility
-How to report an accessibility barrier on this site, how to ask for content in an accessible format, and how quickly we answer.
-This page is the accessibility channel for this site. It does three things: it lets you tell us something here is not accessible, ask us for content in an accessible format, and escalate if what we answer does not help.
-Why this site is covered
-Server Startup, S.L. is a private company, and Royal Decree 1112/2018 governs the accessibility of public-sector websites. It reaches this one through its first additional provision, which extends the accessibility criteria to websites «que reciban financiación pública para su diseño o mantenimiento» — that receive public funding for their design or maintenance. This site did, and the footer says so. The duty is ours and we accept it.
-Accessibility communications
-If you hit a barrier — text your screen reader does not announce, contrast that falls short, something you cannot operate with the keyboard alone — tell us. The same channel covers any other difficulty reaching the content, and requests for information that is exempt from compliance. This is the modality in article 10.2 a).
-Email: legal@serverstartup.io. Phone: +34 665 859 510. In writing: C/ Los Fueros 11, 48992 Getxo (Bizkaia), Spain. Article 11 asks for an electronic channel and, on top of it, at least a phone number or a physical office; both are above.
-Requests for accessible information, and complaints
-The second modality, article 10.2 b), covers two different things: asking for content in an accessible format when it is not, and complaining about compliance with the royal decree. Both go to the addresses above; just say which one it is.
-This one carries a deadline, and we take it as written: we answer within twenty working days (article 12.3). If we need you to clarify something before we can handle it we will ask, and the clock stops for up to ten working days while we wait (article 12.4). Our answer will say who issues it, what we decided, the accessible information where that applies, the deadline and the party responsible for fixing any failure, and who you can escalate to (article 12.5).
-Escalation
-If we turn down your request or complaint, if you disagree with what we decide, or if our answer does not meet what article 12.5 requires, you can escalate.
-It is worth being exact about how that works here, because the royal decree is written for public administration. Article 13 directs the escalation to «la Unidad responsable de accesibilidad de ese ámbito competencial» — the accessibility unit for that area of competence. That is a public-sector role: a private company like this one has none, and the rule names no body to address it to in our case. What we can commit to is our own side. Write to the same address saying it is a reclamación and we will answer in writing within the maximum of two months set by article 13.4. The courts remain open to you in any event.
+How to report an accessibility barrier and how quickly we answer.
+This is the site's accessibility channel: use it to tell us something here is not accessible, to ask for content in a format that is, or to escalate if what we answer does not help.
+How to reach us
+Use the contact page and say it is about accessibility. That is enough.
+What we do with it
+We answer within twenty working days at most. If our answer does not satisfy you, you can escalate and we will reply in writing within two months at most. Those are the deadlines Royal Decree 1112/2018 sets, and we take them as written.
 Your data
 Whatever you write to us is handled according to the privacy policy.
 Let's talk, engineer to engineer.

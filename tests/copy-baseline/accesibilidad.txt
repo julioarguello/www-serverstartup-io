@@ -3,19 +3,12 @@ Saltar al contenido
 /accesibilidad
 EN
 Accesibilidad
-Cómo comunicarnos una barrera de accesibilidad de este sitio, cómo pedir un contenido en formato accesible y en qué plazo respondemos.
-Esta página es el canal de accesibilidad de este sitio. Sirve para tres cosas: avisarnos de que algo aquí no es accesible, pedirnos en un formato accesible un contenido que no lo sea, y reclamar si lo que respondemos no le sirve.
-Por qué este sitio está obligado
-Server Startup, S.L. es una empresa privada, y el Real Decreto 1112/2018 regula la accesibilidad de los sitios del sector público. Alcanza a este por su disposición adicional primera, que extiende los criterios de accesibilidad a los sitios web «que reciban financiación pública para su diseño o mantenimiento». Este sitio la recibió, y el pie de página lo reconoce. La obligación es nuestra y la asumimos.
-Comunicaciones sobre accesibilidad
-Si se encuentra una barrera —un texto que su lector de pantalla no anuncia, un contraste que no llega, algo que no puede usar solo con el teclado— díganoslo. También sirve para cualquier otra dificultad de acceso al contenido y para pedirnos información que esté excluida del cumplimiento. Es la modalidad del artículo 10.2 a).
-Correo electrónico: legal@serverstartup.io. Teléfono: +34 665 859 510. Por escrito: C/ Los Fueros 11, 48992 Getxo (Bizkaia). El artículo 11 pide un canal electrónico y, además, al menos un teléfono o una oficina física; los dos están ahí arriba.
-Solicitudes de información accesible y quejas
-La segunda modalidad, la del artículo 10.2 b), cubre dos cosas distintas: pedir en formato accesible un contenido que no lo sea, y presentar una queja sobre el cumplimiento del real decreto. Se dirigen a las mismas direcciones; basta con decir cuál de las dos es.
-Aquí sí hay plazo, y lo asumimos tal cual: respondemos en veinte días hábiles (artículo 12.3). Si necesitamos que nos aclare algo para tramitarlo se lo pediremos, y el plazo queda suspendido hasta diez días hábiles mientras tanto (artículo 12.4). La respuesta dirá quién la emite, qué hemos decidido, la información accesible cuando proceda, el plazo y el responsable de corregir el incumplimiento si lo hay, y ante quién puede reclamar (artículo 12.5).
-Reclamación
-Si desestimamos la solicitud o la queja, si no está de acuerdo con lo que decidamos, o si nuestra respuesta no reúne lo que exige el artículo 12.5, puede reclamar.
-Conviene ser exactos sobre cómo funciona esto aquí, porque el real decreto está escrito para la Administración. El artículo 13 dirige la reclamación a «la Unidad responsable de accesibilidad de ese ámbito competencial». Esa figura es del sector público: una empresa privada como esta no tiene ninguna, y la norma no designa un órgano al que dirigirla en nuestro caso. Lo que sí podemos comprometer es lo nuestro. Escríbanos a la misma dirección diciendo que se trata de una reclamación y le responderemos por escrito en el plazo máximo de dos meses que fija el artículo 13.4. Queda abierta, en todo caso, la vía judicial.
+Cómo avisarnos de una barrera de accesibilidad y en qué plazo respondemos.
+Este es el canal de accesibilidad del sitio: sirve para avisarnos de que algo aquí no es accesible, para pedirnos un contenido en un formato que sí lo sea, y para reclamar si lo que respondemos no le sirve.
+Cómo escribirnos
+Use la página de contacto y díganos que se trata de accesibilidad. Con eso basta.
+Qué hacemos con lo que llega
+Respondemos en un máximo de veinte días hábiles. Si la respuesta no le convence, puede reclamar y le contestaremos por escrito en un máximo de dos meses. Son los plazos que fija el Real Decreto 1112/2018 y los asumimos tal cual.
 Sus datos
 Lo que nos escriba se trata conforme a la política de privacidad.
 Hablemos de ingeniero a ingeniero.

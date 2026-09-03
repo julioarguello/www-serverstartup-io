@@ -69,6 +69,9 @@ jobs:
       - name: Design tokens (colour, radius and shadow live in theme.css)
         run: python3 scripts/ci-check-design-tokens.py
 
+      - name: CSS source budget (and the figure the doc prints beside it)
+        run: python3 scripts/ci-check-css-budget.py
+
       - name: Cache hints (cache.set only where it reaches the headers)
         run: python3 scripts/ci-check-cache-hints.py
 

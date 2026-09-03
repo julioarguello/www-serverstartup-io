@@ -95,9 +95,11 @@ The architecture is UI-first, content-driven: templates carry layout and CSS,
 the CMS carries every word.
 
 - **Content ownership has two phases.** Pre-release (now): seeds are the
-  source of truth — any content change lands in `seed/` (`seed.json` or
-  `seed/content/`), so a clean rebuild reproduces the whole site, and an
-  edit made only in the admin UI will not survive one. Once live: the
+  source of truth — any content change lands in `seed/seed.json`, so a clean
+  rebuild reproduces the whole site, and an edit made only in the admin UI
+  will not survive one. `seed/content/**.md` is an *input* to `seed.json`, not
+  an alternative to it: editing only the markdown changes nothing on the site.
+  Read `seed/content/README.md` before touching it (#500). Once live: the
   production database owns the content and the admin UI
   (`/_emdash/admin`) is the editing surface — that is what the CMS is
   for. The seeds then remain the bootstrap corpus and the fixture for

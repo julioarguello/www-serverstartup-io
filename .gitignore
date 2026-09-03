@@ -3,6 +3,9 @@ dist
 .astro
 uploads
 data.db
+# sqlite WAL companions: `emdash dev` leaves them behind on every run
+data.db-shm
+data.db-wal
 .env
 .wrangler
 .stream.env

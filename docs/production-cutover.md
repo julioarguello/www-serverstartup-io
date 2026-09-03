@@ -7,8 +7,10 @@ Written to be executed, not read: every command is copy-pasteable, and every
 step ends with the observation that decides whether to continue. Where a step
 cannot be verified from a terminal, it says so.
 
-**Measured 2026-08-31**, and the measurements are the reason the order is what
-it is. Re-measure before you start — this file records a state, not a promise.
+**First measured 2026-08-31, re-measured 2026-09-03**, and the measurements are
+the reason the order is what it is. Re-measure before you start — this file
+records a state, not a promise, and between those two dates three of the rows
+below changed value.
 
 ---
 
@@ -19,12 +21,17 @@ it is. Re-measure before you start — this file records a state, not a promise.
 | Zone nameservers | `tara.ns.cloudflare.com`, `kobe.ns.cloudflare.com` | Already Cloudflare. The cutover is a **record change inside the panel**, not a registrar nameserver change — minutes, not 48 hours, and reversible from the same screen. |
 | `serverstartup.io` | `301` → `https://www.serverstartup.io/` | Apex already funnels to `www`. Keep that shape after the cutover or every existing inbound link gains a hop. |
 | `www.serverstartup.io` | `200`, `server: nginx`, `34.175.111.59` | The old WordPress. Still the live site. |
-| Production worker | **`404`** | Never deployed. `deploy-production` has not run once. |
-| Production D1 | `1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1` | Exists as a binding; content state unknown from here — step 2's guard prints the per-table counts. |
-| Worker routes | **none in `wrangler.jsonc`** | No custom domain is attached. The worker is reachable only on `*.workers.dev`. This is the actual DNS work. |
+| Production worker | **`200`** | Deployed. Run `33481322489`, 2026-09-01, green — after two failures whose causes are recorded in step 2. |
+| Production commit | `4ac6a69`, **26 commits behind `main`** (`d12cc29`) | What is deployed is not what CI verified this morning. Step 2 is now a promotion, not a bootstrap. |
+| Production D1 | `1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1` | **Holds content**, seeded by that run. Not observable by counting rows from here without a token — observed instead through `www.serverstartup.dev`, which is bound to this worker and this database and serves 26 sitemap URLs. |
+| Worker routes | `www.serverstartup.dev`, `preview.serverstartup.dev` (#444) | Two `.dev` hostnames, both declared. **Neither `serverstartup.io` hostname is attached to anything.** That is still the actual DNS work. |
 
-The order below is forced by the last two rows: there is nothing to point DNS
-at until the worker is deployed and holds content.
+The order below was originally forced by an undeployed worker and an empty
+database. Both of those rows have flipped, so what forces it now is narrower
+and worth stating plainly: **the only things left that change what the public
+sees are step 3 and step 5**, and both are Julio's. Steps 1, 2 and 4 have been
+executed once already; they are re-run to promote a newer commit, not to reach
+a state for the first time.
 
 ---
 
@@ -47,7 +54,7 @@ ended when #428 made the repository public.
 
 ---
 
-## 2. Deploy the worker to production, with content
+## 2. Promote the verified commit to production — **without the seed**
 
 `deploy-production` is `workflow_dispatch` only, by design (#194): GitHub
 environment required-reviewers returned HTTP 422 on a private repo, so the
@@ -59,17 +66,29 @@ manual dispatch **is** the approval gate.
 > the gate a real one instead of a convention. Not done here — it is a repo
 > setting, and it is Julio's call.
 
-Production content is a **one-time** seed. The site has never been live, so
-the database is empty and this is the bootstrap; afterwards the CMS owns the
-content and a deploy must never overwrite it.
+**This step has already run, and that changes the command.** Production content
+was a one-time seed, and it happened: run `33481322489`, 2026-09-01. The
+database holds content now, the CMS owns it, and a deploy must never overwrite
+it. So the dispatch is the plain one:
 
 ```bash
-gh workflow run deploy-production.yml -f seed_d1=true
+gh workflow run deploy-production.yml --ref main
 ```
 
-Leave `seed_d1_confirm` empty. That input exists only to overwrite a database
-that already holds content, and `scripts/ci-guard-prod-seed.sh` refuses
-without it — the refusal is the safety net, so do not pre-empt it.
+Pin the ref, because a Cloudflare-adapter build cannot be promoted as an
+artifact — bindings are flattened in at build time, so promotion means
+rebuilding the same commit with `CLOUDFLARE_ENV=production`. `--ref main` is
+right only while `main` is the commit step 1 saw green on preview; name the SHA
+explicitly if anything landed in between.
+
+> **Do not pass `-f seed_d1=true` any more.** An earlier revision of this step
+> said to, and it was correct exactly once. Today `scripts/ci-guard-prod-seed.sh`
+> would count the content rows, find them non-zero, and refuse — a failed run
+> rather than a lost database, which is the guard doing its job. The failure
+> mode worth naming is the next one: reading that refusal as an obstacle and
+> re-dispatching with `seed_d1_confirm` filled in. That string exists to
+> overwrite live CMS content deliberately. On the cutover path there is no
+> reason to type it.
 
 > **What the first dispatch actually did** — run 33423944295, 2026-08-31.
 > It failed at the guard, which reported the production database unreadable.
@@ -81,7 +100,10 @@ without it — the refusal is the safety net, so do not pre-empt it.
 > writes into, with an explicit wait on the remote migration count. That is
 > the order `deploy-preview.yml` has used since 2026-08-22.
 
-Watch it, because the seed step is where a first run goes wrong:
+Watch it. On a re-run without the seed there is much less to go wrong — the
+guard, the canonical-schema build, the migration wait and the seed itself are
+all `if: inputs.seed_d1` and are skipped — which leaves the build, the deploy
+and `verify`:
 
 ```bash
 gh run watch "$(gh run list --workflow=deploy-production.yml \
@@ -97,8 +119,12 @@ curl -s -o /dev/null -w '%{http_code}\n' \
   https://www-serverstartup-io.serverstartup-s-partner-demo-account3612.workers.dev/
 ```
 
-`200` replaces today's `404`. **If it is still `404`, stop** — DNS pointed at
-a 404 is a worse outage than the WordPress site it replaced.
+`200` — as it already does today, which is why this is a weaker check than it
+was when the row above read `404`. **The question is no longer whether it
+answers, but whether it answers with the commit you just dispatched.** A failed
+deploy leaves the previous worker serving happily. Read the run's conclusion,
+not only the status code. **If it is `404`, stop** — DNS pointed at a 404 is a
+worse outage than the WordPress site it replaced.
 
 **Rollback**: none required. Nothing public has changed; the old site is still
 serving `www.serverstartup.io`. A bad deploy can simply be re-run.
@@ -111,11 +137,18 @@ This is the step with no local command, and the one that actually moves
 traffic. In the Cloudflare dashboard: **Workers & Pages → `www-serverstartup-io`
 → Settings → Domains & Routes → Add → Custom Domain**.
 
-### Before any of it: the bot settings (#333)
+### Before any of it: the bot settings (#333) — and this one has its own clock
 
 Going orange is the moment the zone's edge features begin applying to real
 traffic. Until then they are inert, which is why nobody has had to think about
-them. **Security → Settings → Bot traffic**, on the `serverstartup.io` zone:
+them.
+
+**Re-read 2026-09-03: twelve days left.** Cloudflare's reclassification lands
+on **2026-09-15** whether or not this cutover has happened, so this is the one
+item here that is not paced by the cutover. If the cutover slips past the 15th,
+the check does not slip with it: the toggle would already be blocking
+mixed-purpose crawlers by the time the domain goes orange, and the first
+symptom would be an absence of crawling nobody is watching for. **Security → Settings → Bot traffic**, on the `serverstartup.io` zone:
 read the state of *Block AI bots*, and of Bot Fight Mode and Super Bot Fight
 Mode while you are there.
 
@@ -171,6 +204,20 @@ Measured 2026-09-01, `scripts/verify-deploy.sh https://www.serverstartup.dev`
 returned ALL GREEN — 26 sitemap URLs agreeing with the route inventory both
 ways, all 10 redirects, the header suite on every sampled route, 0 W3C Nu
 errors.
+
+> **The rehearsal zone is currently rehearsing the mistake, too.** Measured
+> 2026-09-03: `https://serverstartup.dev/` — the bare apex, which is
+> deliberately *not* in `wrangler.jsonc` — answers `200` from Cloudflare with
+> the full page, and emits
+> `<link rel="canonical" href="https://www.serverstartup.io/">`, byte-identical
+> to what `www.serverstartup.dev` emits. So the duplicate-host shape described
+> below is not a prediction any more; it is running, on the rehearsal zone,
+> right now. It costs nothing there — the `X-Robots-Tag` rule keeps the whole
+> zone out of the index — which is precisely why it went unnoticed, and why it
+> is worth reading before doing the same thing on the zone that has no such
+> rule. Something in the panel binds that apex; find it and remove it while you
+> are in the dashboard for the bot settings, and the rehearsal becomes a
+> rehearsal of the right thing.
 
 ### Then the real one
 
@@ -313,7 +360,20 @@ done
 
 Expect `200` for `/` and `301 → 200` for the other seven. All eight were
 verified against the local stack on 2026-08-31, landing on semantically
-correct pages.
+correct pages, and **re-verified 2026-09-03 against `www.serverstartup.dev`** —
+the same worker and the same production database this domain will be pointed
+at. That run is the strongest evidence available before the cutover, and it is
+still not the cutover: it exercises the redirect mechanism on the production
+build, not the hostname. It also exercised the commit that is deployed
+(`4ac6a69`), not the one step 2 promotes — so run it again after step 2, and
+again after step 3, on the real host.
+
+Measured the same day on that host, and the reason the three remaining
+checkboxes on #162 can be read as met by the *mechanism*: `/sitemap.xml` `200`
+with 26 `<loc>` entries, `/robots.txt` `200` declaring
+`Sitemap: https://www.serverstartup.io/sitemap.xml` and `Disallow: /_emdash/`,
+and an unknown path answering `404` with the Spanish custom page rather than a
+framework default.
 
 **There is no redirect map, and there does not need to be one.** Anyone looking
 for one in `src/` will not find it and may conclude the checkbox is unmet. The

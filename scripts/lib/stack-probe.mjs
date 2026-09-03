@@ -21,6 +21,33 @@ import { join } from "node:path";
 const LOG = join(process.env.RUNNER_TEMP || "/tmp", "wrangler-ci.log");
 
 /**
+ * Wrangler's own debug log, put here by `scripts/ci-local-stack.sh` via
+ * WRANGLER_LOG_PATH. It is a different file from $LOG on purpose: $LOG is
+ * stdout, and stdout is where this crash prints `✘ [ERROR]` with nothing
+ * after it. Only the debug log carries the `cause`.
+ */
+const DEBUG_LOG = join(process.env.RUNNER_TEMP || "/tmp", "wrangler-debug.log");
+
+/**
+ * Pull the cause out of the last ProxyController error in wrangler's debug log.
+ *
+ * `castErrorCause` wraps a plain object crossing the ProxyWorker boundary in an
+ * `Error` with an empty message, so the console banner is blank and the only
+ * copy of the real message is the `cause` block written here at debug level
+ * (cloudflare/workers-sdk#15317). The last block, not the first: the stack
+ * boots twice — unseeded, then seeded — and both write to this file.
+ *
+ * Returns "" when the log is absent or holds no such block, so a stack that
+ * died some other way is not given a cause it never had.
+ */
+export function proxyErrorCause(text) {
+	const blocks = [...text.matchAll(/Error in ProxyController[\s\S]*?cause: \{[\s\S]*?\n\s*\}/g)];
+	const last = blocks.at(-1)?.[0];
+	if (!last) return "";
+	return (/message: '([^']*)'/.exec(last)?.[1] ?? "").trim();
+}
+
+/**
  * The OTHER way a browser-driven gate dies while the stack is fine (#425).
  *
  * Chrome stops answering the debugger — not the server, the browser. Measured
@@ -76,6 +103,20 @@ export async function stackDiagnosis(baseUrl) {
 		for (const l of tail) lines.push(`      ${l}`);
 	} else {
 		lines.push(`    No wrangler log at ${LOG} — boot it with scripts/ci-local-stack.sh`);
+	}
+
+	// The tail above can only ever show an empty `✘ [ERROR]` for this crash.
+	// This is the line that says what actually happened.
+	const cause = existsSync(DEBUG_LOG) ? proxyErrorCause(readFileSync(DEBUG_LOG, "utf8")) : "";
+	if (cause) {
+		lines.push(
+			`    Cause, from ${DEBUG_LOG}: ${cause}`,
+			"    That is wrangler's ProxyWorker losing its connection to the runtime,",
+			"    not a fault in the change under test — cloudflare/workers-sdk#15317,",
+			"    open upstream with fixes in review. Re-run it (#390).",
+		);
+	} else if (!existsSync(DEBUG_LOG)) {
+		lines.push(`    No wrangler debug log at ${DEBUG_LOG} — WRANGLER_LOG_PATH was not set (#390)`);
 	}
 	return lines.join("\n");
 }

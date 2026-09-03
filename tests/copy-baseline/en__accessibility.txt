@@ -4,6 +4,10 @@ Skip to content
 ES
 Accessibility
 How to report an accessibility barrier and how quickly we answer.
+Accessibility statement
+Server Startup, S.L. is committed to making this site accessible under Spanish Royal Decree 1112/2018. This site is partially conformant with UNE-EN 301549:2019, which maps to WCAG 2.1 level AA.
+Partially, not fully, for a specific reason: no complete evaluation using the WCAG-EM methodology has been carried out yet. Automated checks run on every change — axe, a keyboard sweep, contrast measured against the rendered ground, and reflow at 320px — and today they report nothing, but that is a floor, not conformance. This statement will be updated with whatever the evaluation finds.
+Statement prepared on 3 September 2026 by self-assessment. If you hit a barrier, the channel is below.
 This is the site's accessibility channel: use it to tell us something here is not accessible, to ask for content in a format that is, or to escalate if what we answer does not help.
 How to reach us
 Use the contact page and say it is about accessibility. That is enough.

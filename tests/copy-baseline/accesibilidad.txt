@@ -4,6 +4,10 @@ Saltar al contenido
 EN
 Accesibilidad
 Cómo avisarnos de una barrera de accesibilidad y en qué plazo respondemos.
+Declaración de accesibilidad
+Server Startup, S.L. se compromete a hacer accesible este sitio conforme al Real Decreto 1112/2018. Este sitio es parcialmente conforme con la norma UNE-EN 301549:2019, equivalente a las WCAG 2.1 en nivel AA.
+Parcialmente y no plenamente por una razón concreta: todavía no se ha hecho una evaluación completa con la metodología WCAG-EM. En cada cambio se ejecutan comprobaciones automáticas —axe, recorrido por teclado, contraste medido sobre el fondo real y reflujo a 320 px— y hoy no señalan ninguna incidencia, pero eso es un suelo, no una conformidad. Cuando la evaluación esté hecha, esta declaración se actualizará con lo que encuentre.
+Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación. Si encuentra una barrera, el canal está aquí abajo.
 Este es el canal de accesibilidad del sitio: sirve para avisarnos de que algo aquí no es accesible, para pedirnos un contenido en un formato que sí lo sea, y para reclamar si lo que respondemos no le sirve.
 Cómo escribirnos
 Use la página de contacto y díganos que se trata de accesibilidad. Con eso basta.

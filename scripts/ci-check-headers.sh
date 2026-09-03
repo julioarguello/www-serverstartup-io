@@ -64,6 +64,58 @@ for path in "/" "/comercio-electronico"; do
 	check "$path" "Cross-Origin-Opener-Policy" "same-origin"
 done
 
+# ── no public route sets a cookie (#471) ─────────────────────────────────────
+# The privacy page tells the visitor, in both locales, that this site "no
+# instala cookies que requieran tu consentimiento". The other half of that
+# same paragraph — that the page loads nothing from a third party — is already
+# enforced by something real: the `default-src 'self'` asserted above, which
+# the browser itself imposes. The cookie half was measured by hand once, when
+# #471 was filed, and after that nothing watched it.
+#
+# It is the half likelier to become false without anyone deciding to make it
+# false: an EmDash session cookie escaping /_emdash/*, a Worker that starts
+# remembering a locale choice, a middleware added for something else entirely.
+# Each one turns a statement on a legal page into a false one, and no gate in
+# this repo reads Set-Cookie at all.
+#
+# Absence is a different assertion SHAPE from presence, so it gets its own
+# control rather than borrowing the matcher's. That is not ceremony: a matcher
+# that had gone blind and answered "no" to every question would report every
+# route above as FAIL — loudly — but would report every route HERE as clean.
+# The one direction the control above cannot cover is the one this needs.
+absent() { # blob, header
+	! echo "$1" | grep -qi "^$2:"
+}
+
+check_no_cookie() { # path
+	local hdrs
+	hdrs=$(curl -sI "$BASE$1")
+	if absent "$hdrs" "Set-Cookie"; then
+		echo "  ok   $1 sets no cookie"
+	else
+		echo "  FAIL $1 sets a cookie, and the privacy page says it does not:" >&2
+		echo "$hdrs" | grep -i "^Set-Cookie:" | sed 's/^/         /' >&2
+		FAIL=1
+	fi
+}
+
+CONTROL_COOKIE=$'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nSet-Cookie: sid=abc123; Path=/; HttpOnly\r\n'
+blind=""
+absent "$CONTROL_COOKIE" "Set-Cookie" \
+	&& blind="$blind\n    a response that DOES set a cookie was reported as clean"
+absent "$CONTROL_ABSENT" "Set-Cookie" \
+	|| blind="$blind\n    a response that sets no cookie was reported as setting one"
+if [ -n "$blind" ]; then
+	echo "  THIS GATE IS BLIND — the Set-Cookie check no longer decides anything," >&2
+	printf "%b\n" "${blind#\\n}" >&2
+	exit 3
+fi
+echo "  ok   positive control — a planted Set-Cookie is seen, a clean response is not accused"
+
+for path in "/" "/en" "/politica-de-privacidad" "/en/privacy-policy" "/comercio-electronico" "/contacto"; do
+	check_no_cookie "$path"
+done
+
 # security.txt must be served
 if curl -s "$BASE/.well-known/security.txt" | grep -q "^Contact: mailto:"; then
 	echo "  ok   /.well-known/security.txt"

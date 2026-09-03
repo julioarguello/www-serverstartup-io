@@ -42,6 +42,8 @@ An undated number is the worst possible place for drift, so there are two kinds 
 
 The measurement carries its date. On 24 August 2026, against the production build: 100 in all four categories across all five addresses, with the largest content painted in under 1.6 seconds. Each figure is a median, and the bound is the worst of the five.
 
+The images carry a date of their own. On 27 August 2026, under mobile emulation, over the same pages before and after: between 43% and 60% fewer image bytes, depending on the page and the width. The saving does not come from compressing harder but from no longer sending the original file: every image is asked for at the size of the slot it has to fill, and on [contact](/en/contact) that slot is a 53-pixel avatar for a 1200-pixel portrait.
+
 ## The workshop, in plain sight
 
 The repository is public and syncs on every change to the main branch, whole history, unfiltered. Publishing like that has a cost: that is why the non-citable-names guard exists.

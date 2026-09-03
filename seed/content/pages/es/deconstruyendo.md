@@ -42,6 +42,8 @@ Un número sin fecha es el peor sitio para la deriva, así que aquí hay dos cla
 
 La medición lleva su fecha. El 24 de agosto de 2026, sobre la construcción de producción: cien en las cuatro categorías y en las cinco direcciones, con el mayor contenido pintado por debajo de 1,6 segundos. Es la mediana de cada una, y la cota es la peor de las cinco.
 
+Las imágenes llevan la suya. El 27 de agosto de 2026, con emulación de móvil y sobre las mismas páginas antes y después: entre un 43 % y un 60 % menos de bytes de imagen, según la página y el ancho. El ahorro no sale de comprimir más, sino de dejar de mandar el fichero original: cada imagen se pide del tamaño del hueco donde va a caber, y en [contacto](/contacto) ese hueco es un avatar de 53 píxeles para un retrato de 1200.
+
 ## El taller, a la vista
 
 El repositorio es público y se sincroniza con cada cambio en la rama principal, con la historia entera y sin filtrar. Publicar así tiene un coste: por eso existe el guardia de nombres no citables.

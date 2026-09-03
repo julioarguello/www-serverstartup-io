@@ -880,7 +880,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "26 rutas públicas, 24 componentes y 12 hojas de estilo, con [render bajo demanda](https://docs.astro.build/en/guides/on-demand-rendering/) de `Astro`, que también es de Cloudflare [desde enero de 2026](https://blog.cloudflare.com/astro-joins-cloudflare/). Los idiomas no se separan por prefijo sino por *slug* traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404."
+									"text": "26 rutas públicas, 24 componentes y 12 hojas de estilo, con [render bajo demanda](https://docs.astro.build/en/guides/on-demand-rendering/) de `Astro`, que también es de Cloudflare [desde enero de 2026](https://blog.cloudflare.com/astro-joins-cloudflare/). Los idiomas no se separan por prefijo sino por *slug* traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404. El ancho y el `sizes` de cada imagen los declara la plantilla, no el fichero: la plantilla sabe en qué hueco va a caber, y el fichero no."
 								}
 							]
 						},
@@ -3201,7 +3201,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "26 public routes, 24 components and 12 stylesheets, on `Astro` [on-demand rendering](https://docs.astro.build/en/guides/on-demand-rendering/) — Astro has been part of Cloudflare [since January 2026](https://blog.cloudflare.com/astro-joins-cloudflare/). Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404."
+									"text": "26 public routes, 24 components and 12 stylesheets, on `Astro` [on-demand rendering](https://docs.astro.build/en/guides/on-demand-rendering/) — Astro has been part of Cloudflare [since January 2026](https://blog.cloudflare.com/astro-joins-cloudflare/). Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404. The width and the `sizes` of every image are declared by the template, not by the file: the template knows the slot it has to fill, and the file does not."
 								}
 							]
 						},
@@ -16733,6 +16733,38 @@
 						},
 						{
 							"_type": "block",
+							"_key": "kimgblk",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "kimglnk",
+									"_type": "link",
+									"href": "/contacto"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kimga",
+									"text": "Las imágenes llevan la suya. El 27 de agosto de 2026, con emulación de móvil y sobre las mismas páginas antes y después: entre un 43 % y un 60 % menos de bytes de imagen, según la página y el ancho. El ahorro no sale de comprimir más, sino de dejar de mandar el fichero original: cada imagen se pide del tamaño del hueco donde va a caber, y en ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "kimgb",
+									"text": "contacto",
+									"marks": ["kimglnk"]
+								},
+								{
+									"_type": "span",
+									"_key": "kimgc",
+									"text": " ese hueco es un avatar de 53 píxeles para un retrato de 1200.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
 							"_key": "k2g",
 							"style": "h2",
 							"markDefs": [],
@@ -17462,6 +17494,38 @@
 									"_type": "span",
 									"_key": "k2d",
 									"text": "The measurement carries its date. On 24 August 2026, against the production build: 100 in all four categories across all five addresses, with the largest content painted in under 1.6 seconds. Each figure is a median, and the bound is the worst of the five.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "kimgblk",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "kimglnk",
+									"_type": "link",
+									"href": "/en/contact"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "kimga",
+									"text": "The images carry a date of their own. On 27 August 2026, under mobile emulation, over the same pages before and after: between 43% and 60% fewer image bytes, depending on the page and the width. The saving does not come from compressing harder but from no longer sending the original file: every image is asked for at the size of the slot it has to fill, and on ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "kimgb",
+									"text": "contact",
+									"marks": ["kimglnk"]
+								},
+								{
+									"_type": "span",
+									"_key": "kimgc",
+									"text": " that slot is a 53-pixel avatar for a 1200-pixel portrait.",
 									"marks": []
 								}
 							]

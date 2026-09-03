@@ -18045,6 +18045,46 @@
 					"content": [
 						{
 							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Declaración de accesibilidad"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Server Startup, S.L. se compromete a hacer accesible este sitio conforme al Real Decreto 1112/2018. Este sitio es parcialmente conforme con la norma UNE-EN 301549:2019, equivalente a las WCAG 2.1 en nivel AA."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Parcialmente y no plenamente por una razón concreta: todavía no se ha hecho una evaluación completa con la metodología WCAG-EM. En cada cambio se ejecutan comprobaciones automáticas —axe, recorrido por teclado, contraste medido sobre el fondo real y reflujo a 320 px— y hoy no señalan ninguna incidencia, pero eso es un suelo, no una conformidad. Cuando la evaluación esté hecha, esta declaración se actualizará con lo que encuentre."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación. Si encuentra una barrera, el canal está aquí abajo."
+								}
+							]
+						},
+						{
+							"_type": "block",
 							"style": "normal",
 							"children": [
 								{
@@ -18166,6 +18206,46 @@
 					"title": "Accessibility",
 					"excerpt": "How to report an accessibility barrier and how quickly we answer.",
 					"content": [
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Accessibility statement"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Server Startup, S.L. is committed to making this site accessible under Spanish Royal Decree 1112/2018. This site is partially conformant with UNE-EN 301549:2019, which maps to WCAG 2.1 level AA."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Partially, not fully, for a specific reason: no complete evaluation using the WCAG-EM methodology has been carried out yet. Automated checks run on every change — axe, a keyboard sweep, contrast measured against the rendered ground, and reflow at 320px — and today they report nothing, but that is a floor, not conformance. This statement will be updated with whatever the evaluation finds."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Statement prepared on 3 September 2026 by self-assessment. If you hit a barrier, the channel is below."
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"style": "normal",

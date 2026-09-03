@@ -47,6 +47,8 @@ export const SITE_BY_PATH: Record<string, SiteKey> = {
 	"/en/legal-notice": "legal",
 	"/politica-de-privacidad": "legal",
 	"/en/privacy-policy": "legal",
+	"/accesibilidad": "legal",
+	"/en/accessibility": "legal",
 };
 
 /**

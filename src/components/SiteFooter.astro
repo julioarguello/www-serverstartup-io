@@ -48,6 +48,7 @@ interface Props {
 	partnersTitle: string;
 	legalNoticeLabel: string;
 	privacyLabel: string;
+	accessibilityLabel: string;
 	contactTitle: string;
 	aboutUsLabel: string;
 	manualLabel: string;
@@ -69,6 +70,7 @@ const {
 	partnersTitle,
 	legalNoticeLabel,
 	privacyLabel,
+	accessibilityLabel,
 	contactTitle,
 	aboutUsLabel,
 	manualLabel,
@@ -86,6 +88,9 @@ const t = Astro.locals.t;
 const en = (Astro.currentLocale || "es") === "en";
 const legalSlug = en ? "legal-notice" : "aviso-legal";
 const privacySlug = en ? "privacy-policy" : "politica-de-privacidad";
+// #507: RD 1112/2018 art. 10 wants the accessibility channel findable, and the
+// legal row is where a reader already looks for the duties a site owes them.
+const accessibilitySlug = en ? "accessibility" : "accesibilidad";
 const referencesSlug = locale === "en" ? "references" : "referencias";
 
 // One shape for the partner marks, whether they come from the CMS or from the
@@ -206,6 +211,7 @@ const partnerMarks = (partnerLogos.length > 0
 			<span class="footer-legal__copy">© {new Date().getFullYear()} Server Startup, S.L.</span>
 			<a href={`${localePrefix}/${legalSlug}`}>{legalNoticeLabel}</a>
 			<a href={`${localePrefix}/${privacySlug}`}>{privacyLabel}</a>
+			<a href={`${localePrefix}/${accessibilitySlug}`}>{accessibilityLabel}</a>
 		</nav>
 	</div>
 </footer>

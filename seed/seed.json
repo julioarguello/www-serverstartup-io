@@ -1946,6 +1946,12 @@
 							"_key": "team_title",
 							"style": "normal",
 							"children": [{ "_type": "span", "text": "El equipo" }]
+						},
+						{
+							"_type": "block",
+							"_key": "accessibility",
+							"style": "normal",
+							"children": [{ "_type": "span", "text": "Accesibilidad" }]
 						}
 					]
 				},
@@ -4266,6 +4272,12 @@
 							"_key": "team_title",
 							"style": "normal",
 							"children": [{ "_type": "span", "text": "The team" }]
+						},
+						{
+							"_type": "block",
+							"_key": "accessibility",
+							"style": "normal",
+							"children": [{ "_type": "span", "text": "Accessibility" }]
 						}
 					],
 					"type": "content"
@@ -18020,6 +18032,351 @@
 					"title": "References",
 					"excerpt": "The names we can write, and the work behind them.",
 					"content": []
+				}
+			},
+			{
+				"id": "page-accesibilidad",
+				"slug": "accesibilidad",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Accesibilidad",
+					"excerpt": "Cómo comunicarnos una barrera de accesibilidad de este sitio, cómo pedir un contenido en formato accesible y en qué plazo respondemos.",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Esta página es el canal de accesibilidad de este sitio. Sirve para tres cosas: avisarnos de que algo aquí no es accesible, pedirnos en un formato accesible un contenido que no lo sea, y reclamar si lo que respondemos no le sirve."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Por qué este sitio está obligado"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Server Startup, S.L. es una empresa privada, y el Real Decreto 1112/2018 regula la accesibilidad de los sitios del sector público. Alcanza a este por su disposición adicional primera, que extiende los criterios de accesibilidad a los sitios web «que reciban financiación pública para su diseño o mantenimiento». Este sitio la recibió, y el pie de página lo reconoce. La obligación es nuestra y la asumimos."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Comunicaciones sobre accesibilidad"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Si se encuentra una barrera —un texto que su lector de pantalla no anuncia, un contraste que no llega, algo que no puede usar solo con el teclado— díganoslo. También sirve para cualquier otra dificultad de acceso al contenido y para pedirnos información que esté excluida del cumplimiento. Es la modalidad del artículo 10.2 a)."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Correo electrónico: legal@serverstartup.io. Teléfono: +34 665 859 510. Por escrito: C/ Los Fueros 11, 48992 Getxo (Bizkaia). El artículo 11 pide un canal electrónico y, además, al menos un teléfono o una oficina física; los dos están ahí arriba."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Solicitudes de información accesible y quejas"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "La segunda modalidad, la del artículo 10.2 b), cubre dos cosas distintas: pedir en formato accesible un contenido que no lo sea, y presentar una queja sobre el cumplimiento del real decreto. Se dirigen a las mismas direcciones; basta con decir cuál de las dos es."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Aquí sí hay plazo, y lo asumimos tal cual: respondemos en veinte días hábiles (artículo 12.3). Si necesitamos que nos aclare algo para tramitarlo se lo pediremos, y el plazo queda suspendido hasta diez días hábiles mientras tanto (artículo 12.4). La respuesta dirá quién la emite, qué hemos decidido, la información accesible cuando proceda, el plazo y el responsable de corregir el incumplimiento si lo hay, y ante quién puede reclamar (artículo 12.5)."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Reclamación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Si desestimamos la solicitud o la queja, si no está de acuerdo con lo que decidamos, o si nuestra respuesta no reúne lo que exige el artículo 12.5, puede reclamar."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Conviene ser exactos sobre cómo funciona esto aquí, porque el real decreto está escrito para la Administración. El artículo 13 dirige la reclamación a «la Unidad responsable de accesibilidad de ese ámbito competencial». Esa figura es del sector público: una empresa privada como esta no tiene ninguna, y la norma no designa un órgano al que dirigirla en nuestro caso. Lo que sí podemos comprometer es lo nuestro. Escríbanos a la misma dirección diciendo que se trata de una reclamación y le responderemos por escrito en el plazo máximo de dos meses que fija el artículo 13.4. Queda abierta, en todo caso, la vía judicial."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Sus datos"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Lo que nos escriba se trata conforme a la ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"text": "política de privacidad",
+									"marks": [
+										"lnk_priv"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ".",
+									"marks": []
+								}
+							],
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "lnk_priv",
+									"href": "/politica-de-privacidad"
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "page-accesibilidad-en",
+				"slug": "accessibility",
+				"status": "published",
+				"locale": "en",
+				"translationOf": "page-accesibilidad",
+				"data": {
+					"title": "Accessibility",
+					"excerpt": "How to report an accessibility barrier on this site, how to ask for content in an accessible format, and how quickly we answer.",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "This page is the accessibility channel for this site. It does three things: it lets you tell us something here is not accessible, ask us for content in an accessible format, and escalate if what we answer does not help."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Why this site is covered"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Server Startup, S.L. is a private company, and Royal Decree 1112/2018 governs the accessibility of public-sector websites. It reaches this one through its first additional provision, which extends the accessibility criteria to websites «que reciban financiación pública para su diseño o mantenimiento» — that receive public funding for their design or maintenance. This site did, and the footer says so. The duty is ours and we accept it."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Accessibility communications"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "If you hit a barrier — text your screen reader does not announce, contrast that falls short, something you cannot operate with the keyboard alone — tell us. The same channel covers any other difficulty reaching the content, and requests for information that is exempt from compliance. This is the modality in article 10.2 a)."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Email: legal@serverstartup.io. Phone: +34 665 859 510. In writing: C/ Los Fueros 11, 48992 Getxo (Bizkaia), Spain. Article 11 asks for an electronic channel and, on top of it, at least a phone number or a physical office; both are above."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Requests for accessible information, and complaints"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The second modality, article 10.2 b), covers two different things: asking for content in an accessible format when it is not, and complaining about compliance with the royal decree. Both go to the addresses above; just say which one it is."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "This one carries a deadline, and we take it as written: we answer within twenty working days (article 12.3). If we need you to clarify something before we can handle it we will ask, and the clock stops for up to ten working days while we wait (article 12.4). Our answer will say who issues it, what we decided, the accessible information where that applies, the deadline and the party responsible for fixing any failure, and who you can escalate to (article 12.5)."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Escalation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "If we turn down your request or complaint, if you disagree with what we decide, or if our answer does not meet what article 12.5 requires, you can escalate."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "It is worth being exact about how that works here, because the royal decree is written for public administration. Article 13 directs the escalation to «la Unidad responsable de accesibilidad de ese ámbito competencial» — the accessibility unit for that area of competence. That is a public-sector role: a private company like this one has none, and the rule names no body to address it to in our case. What we can commit to is our own side. Write to the same address saying it is a reclamación and we will answer in writing within the maximum of two months set by article 13.4. The courts remain open to you in any event."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "h2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Your data"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Whatever you write to us is handled according to the ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"text": "privacy policy",
+									"marks": [
+										"lnk_priv"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ".",
+									"marks": []
+								}
+							],
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "lnk_priv",
+									"href": "/en/privacy-policy"
+								}
+							]
+						}
+					]
 				}
 			}
 		],

@@ -125,6 +125,23 @@
  *       the tree on the side of that answer: the drift ran doc-to-tree once
  *       and could as easily run the other way.
  *
+ *   G20 no body copy runs past MEASURE_MAX characters a line. Measured the way
+ *       `bench-visual.mjs` measures it — box width divided by the mean advance
+ *       of a-z in the element's OWN resolved font — because faces differ by
+ *       more than 10% in average advance and an em approximation compares the
+ *       CSS rather than the type.
+ *
+ *       Two things this deliberately does NOT do (#481). It does not cap a
+ *       line's width: `theme.css` says "there is no second measure… everything
+ *       inside it ends at the same edge" (#304), and a max-width on prose is
+ *       exactly the second edge that forbids. The lever is type size, which is
+ *       why the fix that ships with this assertion is 16px -> 18px and not a
+ *       narrower column. And it ignores anything under BODY_MIN_PX: at one
+ *       measure, smaller type buys more characters by arithmetic, every site
+ *       in the benchmark set does the same (Test Double 106, Simple Thread
+ *       194 in fine print), and an assertion that fired on a 13px disclaimer
+ *       would be asserting the column width under another name.
+ *
  *   G9  the footer paints no ground of its own — transparent, or at worst the
  *       body's own colour. Giving the footer its own band is what makes a footer
  *       read as bolt-on, and the rule that used to be here painted
@@ -186,6 +203,18 @@ const ROW_LISTS = [
 ];
 /** Pages whose whole copy must not repeat itself. */
 const PROSE_ROUTES = ["/", "/en"];
+/**
+ * G20. 75 is the top of the conventional 45-75 range and the value the tree
+ * actually holds across these routes; the home was the widest of the nine sites
+ * `bench-visual.mjs` measured, and the one block past the range was body copy,
+ * not fine print. Measured at 1440 only: the column is `clamp(880px, …, 1040px)`,
+ * so the widest viewport is where a line is longest, and every narrower one is
+ * covered by the same assertion passing here.
+ */
+const MEASURE_MAX = 75;
+const BODY_MIN_PX = 16;
+const MEASURE_CHARS = 60;
+const MEASURE_ROUTES = ["/", "/en", "/comercio-electronico", "/quienes-somos"];
 /** G19: the framed photographs, and the pages that render them. */
 const FRAME_ROUTES = ["/", "/en"];
 const FRAME_SELECTOR = ".s-team-strip__card img";
@@ -549,6 +578,33 @@ const MEASURE_FRAMES = (sel) =>
 		};
 	});
 
+/** G20: every block of body copy, in characters of its own type. */
+const MEASURE_COPY = ({ min, chars }) => {
+	const ctx = document.createElement("canvas").getContext("2d");
+	const out = [];
+	for (const el of document.querySelectorAll("main *")) {
+		const own = [...el.childNodes]
+			.filter((n) => n.nodeType === 3)
+			.map((n) => n.textContent.trim())
+			.join(" ");
+		if (own.length < chars) continue;
+		const r = el.getBoundingClientRect();
+		if (r.width < 60) continue;
+		const s = getComputedStyle(el);
+		if (parseFloat(s.fontSize) < min) continue;
+		ctx.font = `${s.fontStyle} ${s.fontWeight} ${s.fontSize} ${s.fontFamily}`;
+		const advance = ctx.measureText("abcdefghijklmnopqrstuvwxyz").width / 26;
+		if (!advance || !isFinite(advance)) continue;
+		out.push({
+			what: (el.className || el.tagName).toString().split(" ")[0].slice(0, 28),
+			size: s.fontSize,
+			width: Math.round(r.width),
+			ch: Math.round(r.width / advance),
+		});
+	}
+	return out;
+};
+
 /** Read one link's skin again, now that the pointer is on it. */
 const MEASURE_HOVER = (sel, i) =>
 	((el) => {
@@ -590,6 +646,25 @@ const PLANT = ({ item, claim }) => {
 	// D — row 3 gets an inline style that is not chrome. Nothing new may be
 	//     reported about it.
 	items[2].style.color = "#1E1E1E";
+	return { missing: null };
+};
+
+/**
+ * G20's plant. It widens one block far past anything the page contains, so the
+ * finding it produces cannot already be in the baseline — the same lesson G19's
+ * plant learned on its first revert. A second block gets a change that moves no
+ * width, and nothing new may be said about it.
+ */
+const PLANT_COPY = ({ min, chars }) => {
+	const wide = [...document.querySelectorAll("main *")].filter((el) => {
+		const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.trim()).join(" ");
+		const s = getComputedStyle(el);
+		return own.length >= chars && el.getBoundingClientRect().width >= 60 && parseFloat(s.fontSize) >= min;
+	});
+	if (wide.length < 2) return { missing: `only ${wide.length} block(s) of body copy, need 2 to plant` };
+	wide[0].style.width = "3000px";
+	wide[0].style.maxWidth = "none";
+	wide[1].style.fontStyle = "italic";
 	return { missing: null };
 };
 
@@ -717,6 +792,16 @@ const judgeProse = (runs, where) => {
 		.filter(([, n]) => n > 1)
 		.map(([t, n]) => ({ g: "G3", where, msg: `printed ${n}× — "${t.slice(0, 72)}…"` }));
 };
+
+/** G20. */
+const judgeCopy = (blocks, where) =>
+	blocks
+		.filter((b) => b.ch > MEASURE_MAX)
+		.map((b) => ({
+			g: "G20",
+			where,
+			msg: `\`${b.what}\` runs ${b.ch} characters a line — ${b.size} across ${b.width}px`,
+		}));
 
 /** G19. A frame is four equal edges of one colour, and nothing else. */
 const judgeFrames = (frames, where) => {
@@ -1170,6 +1255,46 @@ const hoverSkins = async (page, m) => {
 	await page.close();
 }
 
+// ── G20's own control: one gate id, one assertion shape, one plant.
+{
+	const spec = { min: BODY_MIN_PX, chars: MEASURE_CHARS };
+	const page = await open(MEASURE_ROUTES[0], 1440);
+	const key = (f) => `${f.g}|${f.msg}`;
+	const scan = async () => judgeCopy(await page.evaluate(MEASURE_COPY, spec), "control");
+
+	const first = await page.evaluate(MEASURE_COPY, spec);
+	if (first.length < 2) {
+		console.error(`✗ blind: ${MEASURE_ROUTES[0]} presents ${first.length} block(s) of body copy to measure, need 2.`);
+		console.error("  A page that stops carrying prose makes this gate report clean forever.");
+		await browser.close();
+		process.exit(3);
+	}
+
+	const before = new Set((await scan()).map(key));
+	const planted = await page.evaluate(PLANT_COPY, spec);
+	if (planted.missing) {
+		console.error(`✗ blind: cannot plant on ${MEASURE_ROUTES[0]} — ${planted.missing}.`);
+		await browser.close();
+		process.exit(3);
+	}
+	const fresh = (await scan()).filter((f) => !before.has(key(f)));
+
+	const problems = [];
+	if (!fresh.length) problems.push("a block widened to 3000px went unreported");
+	if (fresh.length > 1) problems.push(`the plant widened one block, but ${fresh.length} were reported`);
+	const groupsOf = (fs) => new Set([...fs].map((f) => (typeof f === "string" ? f.split("|")[0] : f.g)));
+	for (const g of groupsOf(before)) if (!groupsOf(await scan()).has(g)) problems.push(`a plant silenced ${g}`);
+
+	if (problems.length) {
+		console.error("✗ the measure control failed: the scan is not measuring what it claims.");
+		for (const p of problems) console.error(`    ${p}`);
+		await browser.close();
+		process.exit(3);
+	}
+	ok(`1 planted defect judged correctly — a block of body copy widened past the measure, and an italicised one it left alone`);
+	await page.close();
+}
+
 // ── G19's own control. A separate block because it is a separate assertion
 // shape: one gate id, one shape, one plant.
 {
@@ -1506,6 +1631,22 @@ for (const route of FRAME_ROUTES) {
 	}
 }
 
+let copyBlocks = 0;
+let widest = 0;
+for (const route of MEASURE_ROUTES) {
+	const page = await open(route, 1440);
+	const blocks = await page.evaluate(MEASURE_COPY, { min: BODY_MIN_PX, chars: MEASURE_CHARS });
+	await page.close();
+	if (!blocks.length) {
+		console.error(`✗ blind: ${route} @1440 presents no body copy to measure.`);
+		await browser.close();
+		process.exit(3);
+	}
+	copyBlocks += blocks.length;
+	widest = Math.max(widest, ...blocks.map((b) => b.ch));
+	findings.push(...judgeCopy(blocks, `${route} @1440`));
+}
+
 for (const route of PROSE_ROUTES) {
 	const page = await open(route, 1440);
 	const runs = await page.evaluate(MEASURE_PROSE, PROSE_MIN);
@@ -1744,6 +1885,15 @@ if (findings.length) {
 		console.error("  that says what we do; below the fold it is a picture and a heading and nothing else.");
 		for (const f of by("G18")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G20").length) {
+		fail(`${by("G20").length} block(s) of body copy run past ${MEASURE_MAX} characters a line.`);
+		console.error(`  45-75 is the conventional range; this site was the widest of the nine measured by`);
+		console.error("  `bench-visual.mjs`, and the one block past it was body copy, not fine print (#481).");
+		console.error("  The lever is TYPE SIZE, not width: theme.css says there is no second measure and");
+		console.error("  everything inside the column ends at the same edge (#304), so a max-width on prose");
+		console.error("  is the second edge that forbids. At one edge, smaller type buys more characters.");
+		for (const f of by("G20")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G19").length) {
 		fail(`${by("G19").length} framed photograph(s) paint more than a frame.`);
 		console.error("  A photograph is not a PANEL and not a container: a container holds content, and an");
@@ -1774,5 +1924,6 @@ ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`
 );
 ok(`${fundingRules} rule(s) select a funding mark and none of them modifies it — scaled only`);
+ok(`${copyBlocks} block(s) of body copy across ${MEASURE_ROUTES.length} routes: widest line ${widest} characters, at or under ${MEASURE_MAX}`);
 ok(`${framesSeen} framed photograph(s) × ${WIDTHS.length} widths: a frame and nothing else — no shadow, no accent edge`);
 process.exit(0);

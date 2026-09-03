@@ -164,6 +164,21 @@ the column alone would just lengthen the line. `--measure-statement` is an
 alias of it, not a second width — headings, paragraphs, boxes, panels and rows
 all end at the same right edge, which `ci-check-layout.mjs` asserts per block.
 
+**The consequence, and the only lever it leaves (#481).** At one edge, smaller
+type buys more characters per line by arithmetic. So when the benchmark found
+this site running the widest measure of the nine it compared — 75 characters
+dominant, and `.area-row__claim` at 82 — the fix could not be a cap on the line:
+a `max-width` on prose is exactly the second edge the paragraph above forbids.
+The lever is **type size**. The claim went 16px → 18px and landed at 73.
+
+`ci-check-layout.mjs` G20 holds it there: no block of body copy over 16px runs
+past 75 characters, measured as box width ÷ the mean advance of `a`–`z` in the
+element's own resolved font. Not `ch` — `1ch` is the advance of `0`, which in
+Alexandria is 1.23× that mean, so a `ch` cap sized by eye would have widened the
+column rather than narrowing it. Fine print is out of scope on purpose: at one
+measure a 13px disclaimer runs past 100 characters by arithmetic, and every site
+in the benchmark set does the same.
+
 Other layout tokens: `--radius: 4px` · `--radius-pill: 99px` ·
 `--shadow-card: 0 2px 10px rgba(0,0,0,.06)` · `--focus-ring` ·
 `--widget-spacing: 20px`.

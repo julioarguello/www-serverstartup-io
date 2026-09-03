@@ -743,7 +743,17 @@
 .area-row__claim {
 	grid-column: 2;
 	grid-row: 2;
-	font-size: 16px;
+	/* 18px, not 16 (#481). The column is the page's one measure and does not
+	   move — so at one edge, SMALLER type buys MORE characters per line, and
+	   this claim at 16px was running 82 of them: the widest running text on
+	   the site and the only body copy past the conventional 45-75. Type size
+	   is the only lever that shortens a line without inventing a second edge,
+	   which theme.css forbids in as many words (#304). 18px lands it at 73.
+	   It also finishes what the design review started: the claim used to be
+	   15px, smaller than the footer's own links, which is hierarchy upside
+	   down. The step to the 20px/600 title is now weight and ink, not size
+	   alone. */
+	font-size: 18px;
 	line-height: 1.45;
 	color: color-mix(in srgb, var(--color-primary) 72%, transparent);
 }
@@ -780,6 +790,11 @@
 	.area-row__title--short { display: inline; }
 	.area-row__link { column-gap: 14px; padding-left: 12px; }
 	.area-row__title { font-size: 18px; }
+	/* stays 15px below 700 (#481). The measure problem is a WIDE-viewport one —
+	   the column is 880-1040px there and the claim ran 82 characters. At 390
+	   the column is the phone, the claim already reads at 40-odd, and 16px
+	   wraps two of the six claims onto a second line, which un-equalises the
+	   rows and is the exact defect #453 removed. G1 caught it. */
 	.area-row__claim { font-size: 15px; }
 }
 

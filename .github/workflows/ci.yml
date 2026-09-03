@@ -29,7 +29,21 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Scope — does this change reach the rendered site?
+        id: scope
+        # Not "skip CI for docs". The three steps BELOW that read file content
+        # rather than a rendered page — gitleaks, citability and the CSS source
+        # budget — are deliberately NOT gated on this, because a document is a
+        # file: it can carry a secret, a client name, or the budget figure the
+        # budget gate exists to check (#475). A plain `paths-ignore: docs/**`
+        # would switch that last one off exactly when it matters (#497).
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: scripts/ci-scope.sh
+
       - name: Install
+        if: steps.scope.outputs.site == 'true'
         run: npm ci
 
       - name: Secret scan (gitleaks)
@@ -55,18 +69,22 @@ jobs:
         run: python3 scripts/ci-check-citability.py
 
       - name: Types (astro check)
+        if: steps.scope.outputs.site == 'true'
         run: |
           npx astro check 2>&1 | tee /tmp/astro-check.log
           grep -q "^- 0 errors" /tmp/astro-check.log
           grep -q "^- 0 warnings" /tmp/astro-check.log
 
       - name: Seed schema validation
+        if: steps.scope.outputs.site == 'true'
         run: npx emdash seed seed/seed.json --validate
 
       - name: CMS text integrity (labels resolve, no hardcoded copy)
+        if: steps.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-cms-text.py
 
       - name: Locale field parity (a field filled in one locale is filled in both)
+        if: steps.scope.outputs.site == 'true'
         # ci-check-cms-text.py above enforces key parity for ui_labels_*, which
         # is the UI chrome. This is the content entries: #468 added `url` to the
         # partners collection, filled it on ES, and left EN without it — the ES
@@ -75,24 +93,30 @@ jobs:
         run: python3 scripts/ci-check-locale-parity.py
 
       - name: Design tokens (colour, radius and shadow live in theme.css)
+        if: steps.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-design-tokens.py
 
       - name: CSS source budget (and the figure the doc prints beside it)
         run: python3 scripts/ci-check-css-budget.py
 
       - name: Cache hints (cache.set only where it reaches the headers)
+        if: steps.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-cache-hints.py
 
       - name: Unit tests (the silent-failure modules, and the repo's own invariants)
+        if: steps.scope.outputs.site == 'true'
         run: npm test
 
       - name: Build
+        if: steps.scope.outputs.site == 'true'
         run: npx astro build
 
       - name: Boot seeded local stack
+        if: steps.scope.outputs.site == 'true'
         run: scripts/ci-local-stack.sh 8787
 
       - name: HTML validation (rendered output, all templates)
+        if: steps.scope.outputs.site == 'true'
         run: |
           mkdir -p /tmp/html
           for r in /:home /en:home-en /quienes-somos:about /en/about-us:about-en \
@@ -116,6 +140,7 @@ jobs:
           echo "html-validate: 0 problems across $(ls /tmp/html | wc -l) templates"
 
       - name: Rendered copy matches the baseline
+        if: steps.scope.outputs.site == 'true'
         # F3 of #355: a permanent step, not a one-off. Reuses the puppeteer
         # the a11y step already installs — no second browser path. A diff here
         # is either a regression or an intentional copy change whose baseline
@@ -123,9 +148,11 @@ jobs:
         run: node scripts/copy-baseline.mjs verify --base-url http://localhost:8787
 
       - name: Security headers
+        if: steps.scope.outputs.site == 'true'
         run: scripts/ci-check-headers.sh http://localhost:8787
 
       - name: Image URLs (href is a path, transform names a quality)
+        if: steps.scope.outputs.site == 'true'
         # #412. The step above proves the transform ANSWERS; this one reads what
         # was asked for. An absolute /_image href sends the endpoint down its
         # remote branch, which on Workers is a fetch of our own hostname and
@@ -138,6 +165,7 @@ jobs:
         run: python3 scripts/ci-check-image-hrefs.py http://localhost:8787
 
       - name: Every var() resolves, and the template-fed ones carry a fallback
+        if: steps.scope.outputs.site == 'true'
         # #462. An unresolved `var()` with no fallback does not fall back: it
         # invalidates the whole declaration, and the element loses the property.
         # That is #450 (six mono declarations silently rendering sans) and #460
@@ -149,6 +177,7 @@ jobs:
         run: node scripts/ci-check-var-resolves.mjs http://localhost:8787
 
       - name: Rows stay equal, ROWs draw no box, no copy is printed twice, and the footer holds its line and its measure
+        if: steps.scope.outputs.site == 'true'
         # #453. The areas block was six white boxes carrying a full paragraph
         # each: 1695px on a 390px phone, row heights from 214 to 305, and the
         # e-commerce excerpt printed VERBATIM in the hero card and again in its
@@ -162,9 +191,11 @@ jobs:
         run: node scripts/ci-check-layout.mjs http://localhost:8787
 
       - name: Accessibility (axe + keyboard + shortcuts + reflow)
+        if: steps.scope.outputs.site == 'true'
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 
       - name: Lighthouse assertions (perf>=95, a11y/bp/seo=100)
+        if: steps.scope.outputs.site == 'true'
         id: lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
@@ -220,7 +251,26 @@ jobs:
             # prose for a reader: keep it descriptive, and do not transcribe a
             # count or a file list that something else derives — those rows go
             # stale silently, and two of them already had (#386).
+            #
+            # #497 gates thirteen of these sixteen on a pull request that
+            # cannot reach the rendered site. THE CLAIM SURVIVES BECAUSE PUSH
+            # TO MAIN IS NOT GATED: ci-scope.sh answers site=true for every
+            # event that is not a pull_request, so everything that lands on
+            # main has been through all sixteen. That is not caution, it is
+            # the condition that keeps a sentence on the public site true —
+            # do not "simplify" it by gating main too.
             echo "## Quality gates — 16 steps that can fail"
+            if [ "${{ steps.scope.outputs.site }}" != "true" ]; then
+              echo ""
+              echo "> ⏭️ **This pull request changes no file that reaches the"
+              echo "> rendered site**, so the steps that measure a rendered"
+              echo "> page were skipped (#497). The ones that read file"
+              echo "> content ran: gitleaks, citability, and the CSS source"
+              echo "> budget — which reads a document, and is the reason this"
+              echo "> is a scope check and not \`paths-ignore\`. Every step"
+              echo "> above runs on push to \`main\`, without exception."
+              echo ""
+            fi
             echo "| Gate | Target |"
             echo "|---|---|"
             echo "| gitleaks | no leaks |"

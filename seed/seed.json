@@ -18188,6 +18188,7 @@
 					"status": "published",
 					"data": {
 						"title": "Cloudflare",
+						"url": "https://www.cloudflare.com/partners/",
 						"featured_image": {
 							"src": "/assets/logo-cloudflare-partner.png",
 							"alt": "Cloudflare Partner Network"

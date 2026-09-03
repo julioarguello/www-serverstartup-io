@@ -368,8 +368,19 @@ def main() -> int:
     # One context inherits the mirror's shape without inheriting its
     # exemption: a pull request from a fork gets no repository secrets, so
     # `pattern` is empty and this returns 3 — "nobody can currently tell",
-    # which is not "clean". That is deliberately not softened into a pass;
-    # #434 decides what an outside contributor's PR should look like instead.
+    # which is not "clean".
+    #
+    # #434 decided not to soften that, and decided the policy behind it: fork
+    # pull requests are not accepted, and Actions requires approval for every
+    # external contributor, so this path is now reached by a run someone chose
+    # to start rather than by a stranger's first contribution going red.
+    #
+    # Forking itself cannot be switched off. GitHub answers 422 — "Allow forks
+    # setting can only be changed on org-owned private repositories" (measured
+    # 2026-09-03 against this repository, which is public and personally
+    # owned). So the policy lives in CONTRIBUTING.md and in the approval
+    # setting, and `tests/unit/fork-pr-policy.test.ts` asserts that this branch
+    # still refuses rather than passing.
     if not pattern:
         # The observed fact and where to look — never a guessed cause.
         print("citability: FORBIDDEN_NAMES is empty or unset "
@@ -377,9 +388,10 @@ def main() -> int:
         print("  Refusing to pass: an absent secret and a clean tree produce "
               "the same green, and only one of them is safe.", file=sys.stderr)
         print("  Check the repository secret FORBIDDEN_NAMES. On a pull "
-              "request from a fork the secret is unavailable by design — "
-              "re-run the gate from a branch in this repository (#434).",
-              file=sys.stderr)
+              "request from a fork the secret is unavailable by design, and "
+              "fork pull requests are not accepted (#434, CONTRIBUTING.md) — "
+              "the change comes in on a branch here, where the gate can see "
+              "it.", file=sys.stderr)
         return 3
 
     return (check_forbidden(pattern) | check_whitelist()

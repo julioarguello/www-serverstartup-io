@@ -66,6 +66,14 @@ jobs:
       - name: CMS text integrity (labels resolve, no hardcoded copy)
         run: python3 scripts/ci-check-cms-text.py
 
+      - name: Locale field parity (a field filled in one locale is filled in both)
+        # ci-check-cms-text.py above enforces key parity for ui_labels_*, which
+        # is the UI chrome. This is the content entries: #468 added `url` to the
+        # partners collection, filled it on ES, and left EN without it — the ES
+        # page linked the partner while the EN page rendered an em dash, and no
+        # gate here saw it for a month (#489).
+        run: python3 scripts/ci-check-locale-parity.py
+
       - name: Design tokens (colour, radius and shadow live in theme.css)
         run: python3 scripts/ci-check-design-tokens.py
 

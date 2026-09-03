@@ -29,7 +29,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Scope — does this change reach the rendered site?
+      - name: Scope — does this change reach the rendered site?  # not-a-gate: fails open, never refuses a change
         id: scope
         # Not "skip CI for docs". The three steps BELOW that read file content
         # rather than a rendered page — gitleaks, citability and the CSS source
@@ -42,7 +42,7 @@ jobs:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: scripts/ci-scope.sh
 
-      - name: Install
+      - name: Install  # not-a-gate: dependency install, not a check
         if: steps.scope.outputs.site == 'true'
         run: npm ci
 
@@ -219,7 +219,7 @@ jobs:
       # after the wrangler pin of #446, and neither was a performance finding.
       # This step adds information and nothing else: it runs only when Lighthouse
       # itself failed, and changes no exit code.
-      - name: Was the stack alive when Lighthouse failed?
+      - name: Was the stack alive when Lighthouse failed?  # not-a-gate: diagnosis, changes no exit code
         if: always() && steps.lighthouse.conclusion == 'failure'
         run: |
           node --input-type=module -e '
@@ -238,28 +238,39 @@ jobs:
             }
           '
 
-      - name: Summary
+      - name: Summary  # not-a-gate: writes the report the gates above produced
         if: always()
         run: |
           {
             # One row per failable step above, in order. The page at
-            # /deconstruyendo counts them ("dieciséis pasos que pueden fallar")
-            # and names them one by one in the review panel's chips, so
-            # this table is the artifact that claim is checked against — it
-            # listed eleven and said "8 routes" for a gate covering ten (#305).
-            # The STEP COUNT is the claim and must stay true. The row text is
-            # prose for a reader: keep it descriptive, and do not transcribe a
-            # count or a file list that something else derives — those rows go
-            # stale silently, and two of them already had (#386).
+            # /deconstruyendo counts these steps in its prose and names them
+            # one by one in the review panel's chips, so this table is the
+            # artifact that claim is checked against — it listed eleven and
+            # said "8 routes" for a gate covering ten (#305), and two rows had
+            # gone stale by #386.
             #
-            # #497 gates thirteen of these sixteen on a pull request that
-            # cannot reach the rendered site. THE CLAIM SURVIVES BECAUSE PUSH
+            # THE COUNT IS NO LONGER KEPT BY THIS COMMENT. #499 measured the
+            # drift this comment was supposed to prevent: four gates had been
+            # added since the last correction and the public page was wrong by
+            # four. tests/unit/gate-count.test.ts now derives the number from
+            # the steps in this file — every `- name:` that does not carry a
+            # `# not-a-gate:` marker — and fails when this heading, this
+            # table's length, or the seed disagrees. Add a gate and the test
+            # tells you every place the number lives.
+            #
+            # The row text is still prose for a reader: keep it descriptive,
+            # and do not transcribe a count or a file list that something else
+            # derives — that is how the two rows in #386 went stale, and the
+            # test above checks how many rows there are, not what they say.
+            #
+            # #497 skips the steps that measure a rendered page on a pull
+            # request that cannot reach one. THE CLAIM SURVIVES BECAUSE PUSH
             # TO MAIN IS NOT GATED: ci-scope.sh answers site=true for every
             # event that is not a pull_request, so everything that lands on
-            # main has been through all sixteen. That is not caution, it is
+            # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 16 steps that can fail"
+            echo "## Quality gates — 20 steps that can fail"
             if [ "${{ steps.scope.outputs.site }}" != "true" ]; then
               echo ""
               echo "> ⏭️ **This pull request changes no file that reaches the"
@@ -278,7 +289,9 @@ jobs:
             echo "| astro check | 0 errors, 0 warnings |"
             echo "| seed schema | seed.json validates |"
             echo "| cms-text | labels resolve ES+EN, 0 hardcoded copy |"
+            echo "| locale parity | a field filled in one locale is filled in the other |"
             echo "| design tokens | colour, radius, shadow and width from theme.css |"
+            echo "| CSS source budget | the stylesheets stay under budget, and the doc that prints the figure agrees |"
             echo "| cache hints | cache.set only where headers still open |"
             echo "| unit tests | every vitest suite in tests/unit |"
             echo "| build | astro build succeeds |"
@@ -287,6 +300,8 @@ jobs:
             echo "| rendered copy | every seed route matches its baseline · menu links match the seed |"
             echo "| security headers | full #164 suite |"
             echo "| image hrefs | every /_image href is a path, never a URL |"
+            echo "| var() resolution | every var() resolves, and the template-fed ones carry a fallback |"
+            echo "| layout invariants | rows stay equal, ROWs draw no box, no copy printed twice, the footer holds its line and its measure |"
             echo "| a11y | axe sample · keyboard traversal, every route · menu focus trap · WCAG 2.1.4 · reflow 320px · W3C Nu |"
             echo "| Lighthouse | perf >=95 · a11y 100 · bp 100 · seo 100 |"
           } >> "$GITHUB_STEP_SUMMARY"

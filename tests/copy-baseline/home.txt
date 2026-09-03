@@ -1,7 +1,8 @@
 Saltar al contenido
 ~Server Startup
 EN
-Ingeniería de software: arquitectura, integración y operación
+Ingeniería de software:
+arquitectura, integración y operación
 Más de veinte años de oficio en comercio electrónico, integración de sistemas y el dato. Partners oficiales de Cloudflare desde 2019.
 01 / 6
 especialidad

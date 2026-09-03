@@ -52,6 +52,17 @@ if (!entry) return Astro.rewrite("/404");
 
 const { title, content, excerpt } = entry.data;
 
+// The <h1> in two sizes, not two headings. It keeps every word — SEO and a
+// screen reader read one heading, unchanged — but the apposition after the
+// colon drops to the kicker's size instead of adding a third 56px line. The
+// split is the one index.astro already makes for the document title (#420);
+// a title with no colon renders whole, as before. The trailing space stays
+// on the head so the accessible text is still the sentence, letter for
+// letter, even though the tail is a block and the space collapses.
+const h1Cut = title.indexOf(":");
+const h1Head = h1Cut === -1 ? title : `${title.slice(0, h1Cut + 1)} `;
+const h1Tail = h1Cut === -1 ? "" : title.slice(h1Cut + 1).trim();
+
 // Fetch services collection for cards
 const { entries: serviceEntries } = await getEmDashCollection("services", {
 	orderBy: { created_at: "asc" },
@@ -205,7 +216,7 @@ const members = memberEntries ?? [];
 		    words. The heading and the sentence below it are the only copy that
 		    survives every frame; everything else in the band agrees with the
 		    plate. */}
-		<h1>{title}</h1>
+		<h1>{h1Head}{h1Tail && <span class="s-hero__h1-tail">{h1Tail}</span>}</h1>
 		{heroSection?.blocks.length > 0 && (
 			<div class="s-hero__kicker">
 				<PortableText value={[heroSection.blocks[0]]} components={ptComponents} />

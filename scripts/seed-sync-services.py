@@ -15,7 +15,8 @@ locale mix-ups reached the tree in one week. The fields written back are the
 ones the seed entry ALREADY declares, intersected with the table's real
 columns — no hardcoded field list to drift.
 
-Usage: run AFTER load-content.sh has pushed the latest markdown:
+Usage: run AFTER load-content.sh has pushed the latest markdown (see
+seed/content/README.md for the whole loop and the server it needs):
     python3 scripts/seed-sync-services.py [collection ...]   # default: services
 
 Requires: a seeded local D1 (dev server may be running; reads are safe).
@@ -34,7 +35,7 @@ def find_d1() -> str:
         capture_output=True, text=True,
     ).stdout.strip().split("\n")
     if not out or not out[0]:
-        sys.exit("No local D1 database found — run `npx emdash dev` first.")
+        sys.exit("No local D1 database found — run `npm run dev` first.")
     return out[0]
 
 

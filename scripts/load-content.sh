@@ -15,7 +15,8 @@
 # connection problem wearing a content problem's message.
 #
 # Prerequisites:
-#   - EmDash dev server running (npx emdash dev)
+#   - The ASTRO dev server running (npm run dev, port 4321) — not the built
+#     :8787 stack, whose dev bypass is off and answers 401 (#500)
 #   - Content files in seed/content/<collection>/<locale>/*.md
 #
 # References:
@@ -53,6 +54,28 @@ if [[ -z "$DRY_RUN" ]]; then
       echo "   Start it, or point this loader at the right stack:"
       echo "     scripts/load-content.sh $COLLECTION --port <PORT>"
       echo "   (parallel sessions use 8000 + issue number)"
+    } >&2
+    exit 1
+  fi
+
+  # A CMS that answers is not yet a CMS that will talk to the CLI (#500). The
+  # CLI's only non-interactive auth is the dev bypass, and EmDash gates that on
+  # `import.meta.env.DEV`: true under `astro dev`, false under `wrangler dev`
+  # over the BUILT output — which is the stack scripts/ci-local-stack.sh boots
+  # on :8787. Against that one every admin route answers 401 and the CLI says
+  # "Not authenticated", so a build-mode problem reads as a credentials problem
+  # and sends you looking for a login that does not exist. The bypass endpoint
+  # is the only one whose answer names the real cause, so ask it first.
+  BYPASS=$(curl -s -o /dev/null -w '%{http_code}' -m 10 -X POST "$BASE_URL/_emdash/api/auth/dev-bypass" || echo 000)
+  if [[ "$BYPASS" != "200" ]]; then
+    {
+      echo "❌ $BASE_URL answers, but has no dev session to give (dev-bypass → HTTP $BYPASS)."
+      echo "   This loader needs the Astro dev server, not the built Workers stack:"
+      echo "     npm run dev                                    # daemonised, port 4321"
+      echo "     scripts/load-content.sh $COLLECTION --url http://localhost:4321"
+      echo "   It binds IPv6 only: http://localhost:4321 works, http://127.0.0.1:4321 does not."
+      echo "   A 403 here means the target is a production build, where the bypass is off"
+      echo "   by design — that is the :8787 stack, and no login will change it."
     } >&2
     exit 1
   fi

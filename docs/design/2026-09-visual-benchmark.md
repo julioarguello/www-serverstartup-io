@@ -80,14 +80,16 @@ Sorted by container idioms — the number this benchmark exists to argue about.
 | MarsBased | 2 | 16px | 86px | 5.4× | 57 ch | 6 | 1 | 5394px | same as page |
 | thoughtbot | 3 | 20px | 50px | 2.5× | 62 ch | 6 | 1 | 7895px | same as page |
 | Basecamp | 1 | 19px | 42px | 2.2× | 67 ch | 8 | 5 | 4604px | same as page |
-| **serverstartup.io** | **2** | **20px** | **56px** | **2.8×** | **75 ch** | **8** | **1** | **3893px** | **same as page** |
+| **serverstartup.io** | **2** | **20px** | **56px** | **2.8×** | **75 ch** † | **8** | **1** | **3893px** | **same as page** |
 | iA | 2 | 21px | — | — | 24 ch\* | 10 | 1 | 4765px | same as page |
 | Test Double | 2 | 18px | 72px | 4.0× | 51 ch | 10 | 1 | 9359px | same as page |
 | Simple Thread | 2 | 16px | 65px | 4.1× | 43 ch | 14 | 0 | 8921px | same as page |
 | Rittman | 1 | 14px | 60px | 4.3× | 54 ch | 25 | 2 | 8423px | same as page |
 
 Faces = families carrying ≥3% of the page's characters. Body = the size carrying
-the most characters. \* = thin sample, see artifacts.
+the most characters. \* = thin sample, see artifacts. † = measured 2026-09-02,
+before #481; the dominant is still 75, but the widest single block went from 82
+to 73 — see below.
 
 **Not one of the nine gives its footer a background different from the page's.**
 That is the whole of rule 4, and it is unanimous.
@@ -199,16 +201,41 @@ reference range of 43 to 67:
     Simple Thread 43 · Test Double 51 · Rittman 54 · MarsBased 57
     thoughtbot 62 · Basecamp 67 · serverstartup.io 75
 
-The widest single element is `.area-row__claim` at **82 characters** — inside the
+The widest single element was `.area-row__claim` at **82 characters** — inside the
 block this plan rebuilt. The cause is structural rather than local: the one
-column is ~840px, running text fills it, and nothing in the token set caps a line
-of prose independently of the container that holds it. The classic range is
-45–75 characters; we are at the top of it and past it in places.
+column is ~840px and running text fills it. The classic range is 45–75
+characters; we sat at the top of it and past it in places.
 
 This is not something the visual review saw, because a too-wide line looks like
-nothing — it reads slightly worse and shows no symptom. Filed as **#481**, with
-the three candidate answers and no recommendation: narrowing the column changes
-every page's proportions, and that is a founder's call.
+nothing — it reads slightly worse and shows no symptom. Filed as **#481**.
+
+**How it was answered.** Not by capping the line. `theme.css` says, in as many
+words, that there is no second measure and everything inside the column ends at
+the same edge (#304) — so a `max-width` on prose is precisely the second edge
+that decision forbids, and the token this issue proposed would have installed it.
+It would also have been the wrong number: `1ch` in Alexandria is the advance of
+`0`, which is **1.23× the mean advance of a–z** this instrument measures, so a
+`68ch` cap would have produced ~83 measured characters — wider than the 75 it was
+meant to fix.
+
+At one edge the only lever left is **type size**, because smaller type buys more
+characters by arithmetic. `.area-row__claim` went 16px → 18px, which lands it at
+**73**, and every block of body copy on the site is now at or under 75. The
+column did not move, so no page's proportions changed, and the claim stopped
+being smaller than the footer's own links — the inverted hierarchy the review
+named and #453 only half fixed.
+
+The 15px override below 700px stayed: at 390 the column is the phone, the claim
+already reads at forty-odd characters, and 16px there wraps two of the six claims
+onto a second line, un-equalising the rows — the exact defect #453 removed. The
+layout gate caught that on the first build.
+
+What ships with it is `ci-check-layout.mjs` G20: no block of body copy over 16px
+runs past 75 characters, measured this file's way, on four routes at 1440. Fine
+print is excluded on purpose — at one measure a 13px disclaimer runs 116
+characters by arithmetic, every site here does the same (Test Double 106, Simple
+Thread 194), and asserting on it would be asserting the column width under
+another name.
 
 ### The fourth tuple, resolved
 

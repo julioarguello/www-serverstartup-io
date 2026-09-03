@@ -113,6 +113,18 @@
  *       empty `cssRules` and reads nothing, so it scores 222 of 222 visited and
  *       0 leaves. The leaf count is the one that tells them apart.
  *
+ *   G19 a framed photograph paints a frame and nothing else: four border edges
+ *       of one width and one colour, and no shadow. `docs/design-system.md`
+ *       used to list *photograph* among PANEL's surfaces, which would have
+ *       given the three faces on the home a 4px accent stripe and the site's
+ *       only shadow. The tree never did that, and the answer (#482) is that a
+ *       photograph is not a container at all — a container holds content, and
+ *       an image IS content. Its border is a frame on the picture, not chrome
+ *       around a box, which is why the benchmark's instrument counts it as a
+ *       tuple and the system does not name it. This assertion is what keeps
+ *       the tree on the side of that answer: the drift ran doc-to-tree once
+ *       and could as easily run the other way.
+ *
  *   G9  the footer paints no ground of its own — transparent, or at worst the
  *       body's own colour. Giving the footer its own band is what makes a footer
  *       read as bolt-on, and the rule that used to be here painted
@@ -174,6 +186,9 @@ const ROW_LISTS = [
 ];
 /** Pages whose whole copy must not repeat itself. */
 const PROSE_ROUTES = ["/", "/en"];
+/** G19: the framed photographs, and the pages that render them. */
+const FRAME_ROUTES = ["/", "/en"];
+const FRAME_SELECTOR = ".s-team-strip__card img";
 /** The footer is the same on every route; one per locale is the whole surface. */
 const FOOTER_ROUTES = ["/", "/en"];
 /**
@@ -520,6 +535,20 @@ const MEASURE_MENU = () => {
 	};
 };
 
+/** G19: what a framed photograph paints besides its frame. */
+const MEASURE_FRAMES = (sel) =>
+	[...document.querySelectorAll(sel)].map((el, i) => {
+		const c = getComputedStyle(el);
+		const side = (p) => ["Top", "Right", "Bottom", "Left"].map((s) => c[`border${s}${p}`]);
+		return {
+			i: i + 1,
+			alt: (el.getAttribute("alt") || "").trim().slice(0, 32),
+			widths: side("Width"),
+			colors: side("Color"),
+			shadow: c.boxShadow,
+		};
+	});
+
 /** Read one link's skin again, now that the pointer is on it. */
 const MEASURE_HOVER = (sel, i) =>
 	((el) => {
@@ -561,6 +590,31 @@ const PLANT = ({ item, claim }) => {
 	// D — row 3 gets an inline style that is not chrome. Nothing new may be
 	//     reported about it.
 	items[2].style.color = "#1E1E1E";
+	return { missing: null };
+};
+
+/**
+ * G19's plant. It makes a photograph into the PANEL the doc used to claim it
+ * was — the shadow and the 4px accent edge — because that is the exact drift
+ * this assertion exists to refuse, and the one a reader of the old doc would
+ * introduce in good faith.
+ */
+const PLANT_FRAMES = (sel) => {
+	const imgs = [...document.querySelectorAll(sel)];
+	if (imgs.length < 2) return { missing: `${sel} — only ${imgs.length} found, need 2 to plant` };
+	// A — photograph 1 becomes a PANEL. Both traits, both must be reported.
+	//     The VALUES are deliberately ones nothing in the tree uses. This control
+	//     judges by difference, so planting `--shadow-card` and a 4px edge would
+	//     add no new finding on the very day someone gives the photographs those
+	//     two traits for real — the control would fail as "blind" (exit 3) when
+	//     the truth is "the page is wrong" (exit 1). That is the trap this file
+	//     documents at the row control above, and it caught this plant on its
+	//     first revert too.
+	imgs[0].style.boxShadow = "0 0 0 7px rgb(255, 0, 255)";
+	imgs[0].style.borderTopWidth = "9px";
+	// B — photograph 2 gets a change that is not chrome. Nothing new may be
+	//     said about it.
+	imgs[1].style.objectFit = "contain";
 	return { missing: null };
 };
 
@@ -662,6 +716,29 @@ const judgeProse = (runs, where) => {
 	return [...count.entries()]
 		.filter(([, n]) => n > 1)
 		.map(([t, n]) => ({ g: "G3", where, msg: `printed ${n}× — "${t.slice(0, 72)}…"` }));
+};
+
+/** G19. A frame is four equal edges of one colour, and nothing else. */
+const judgeFrames = (frames, where) => {
+	const out = [];
+	for (const f of frames) {
+		const what = f.alt ? `“${f.alt}”` : `image ${f.i}`;
+		if (f.shadow && f.shadow !== "none")
+			out.push({ g: "G19", where, msg: `${what} carries a shadow — \`${f.shadow}\`` });
+		if (new Set(f.widths).size > 1)
+			out.push({
+				g: "G19",
+				where,
+				msg: `${what} draws an accent edge — borders are ${f.widths.join(" / ")} (top/right/bottom/left)`,
+			});
+		if (new Set(f.colors).size > 1)
+			out.push({
+				g: "G19",
+				where,
+				msg: `${what} paints its frame in more than one colour — ${[...new Set(f.colors)].join(" / ")}`,
+			});
+	}
+	return out;
 };
 
 const judgeFooter = (m, where, width) => {
@@ -1093,6 +1170,52 @@ const hoverSkins = async (page, m) => {
 	await page.close();
 }
 
+// ── G19's own control. A separate block because it is a separate assertion
+// shape: one gate id, one shape, one plant.
+{
+	const page = await open(FRAME_ROUTES[0], 1440);
+	const key = (f) => `${f.g}|${f.msg}`;
+	const scan = async () => judgeFrames(await page.evaluate(MEASURE_FRAMES, FRAME_SELECTOR), "control");
+
+	const first = await page.evaluate(MEASURE_FRAMES, FRAME_SELECTOR);
+	if (first.length < 2) {
+		console.error(`✗ blind: \`${FRAME_SELECTOR}\` matches ${first.length} image(s) on ${FRAME_ROUTES[0]}, need 2.`);
+		console.error("  A renamed class makes this gate report clean forever. Update the selector here in");
+		console.error("  the same commit that renames it.");
+		await browser.close();
+		process.exit(3);
+	}
+	const who = first[0].alt ? `“${first[0].alt}”` : "image 1";
+
+	const before = new Set((await scan()).map(key));
+	const planted = await page.evaluate(PLANT_FRAMES, FRAME_SELECTOR);
+	if (planted.missing) {
+		console.error(`✗ blind: cannot plant on ${FRAME_ROUTES[0]} — \`${planted.missing}\`.`);
+		await browser.close();
+		process.exit(3);
+	}
+	const fresh = (await scan()).filter((f) => !before.has(key(f)));
+
+	const problems = [];
+	if (!fresh.some((f) => /carries a shadow/.test(f.msg)))
+		problems.push("a planted shadow went unreported");
+	if (!fresh.some((f) => /draws an accent edge/.test(f.msg)))
+		problems.push("a planted 4px accent edge went unreported");
+	for (const f of fresh.filter((f) => !f.msg.startsWith(who)))
+		problems.push(`false positive — the plant touched ${who} only, but: ${f.msg}`);
+	const groupsOf = (fs) => new Set([...fs].map((f) => (typeof f === "string" ? f.split("|")[0] : f.g)));
+	for (const g of groupsOf(before)) if (!groupsOf(await scan()).has(g)) problems.push(`a plant silenced ${g}`);
+
+	if (problems.length) {
+		console.error("✗ the frame control failed: the scan is not measuring what it claims.");
+		for (const p of problems) console.error(`    ${p}`);
+		await browser.close();
+		process.exit(3);
+	}
+	ok(`2 planted defects judged correctly — a photograph given PANEL's shadow and PANEL's accent edge, and a second one it left alone`);
+	await page.close();
+}
+
 // ── and the same for the footer half, at 1440, where G4 has something to say.
 {
 	const page = await open(FOOTER_ROUTES[0], 1440);
@@ -1367,6 +1490,22 @@ for (const spec of ROW_LISTS) {
 	}
 }
 
+let framesSeen = 0;
+for (const route of FRAME_ROUTES) {
+	for (const width of WIDTHS) {
+		const page = await open(route, width);
+		const frames = await page.evaluate(MEASURE_FRAMES, FRAME_SELECTOR);
+		await page.close();
+		if (!frames.length) {
+			console.error(`✗ blind: \`${FRAME_SELECTOR}\` matches nothing on ${route} @${width}.`);
+			await browser.close();
+			process.exit(3);
+		}
+		framesSeen = Math.max(framesSeen, frames.length);
+		findings.push(...judgeFrames(frames, `${route} @${width}`));
+	}
+}
+
 for (const route of PROSE_ROUTES) {
 	const page = await open(route, 1440);
 	const runs = await page.evaluate(MEASURE_PROSE, PROSE_MIN);
@@ -1605,6 +1744,15 @@ if (findings.length) {
 		console.error("  that says what we do; below the fold it is a picture and a heading and nothing else.");
 		for (const f of by("G18")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G19").length) {
+		fail(`${by("G19").length} framed photograph(s) paint more than a frame.`);
+		console.error("  A photograph is not a PANEL and not a container: a container holds content, and an");
+		console.error("  image is content. Its border is a frame on the picture, not chrome around a box, so");
+		console.error("  it gets four equal edges of one colour and nothing else (#482). Radius, shadow and a");
+		console.error("  painted accent edge belong to PANEL, which is a machine surface — an instrument, a");
+		console.error("  console, a quoted foreign UI — and there is exactly one of those in the tree.");
+		for (const f of by("G19")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -1626,4 +1774,5 @@ ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`
 );
 ok(`${fundingRules} rule(s) select a funding mark and none of them modifies it — scaled only`);
+ok(`${framesSeen} framed photograph(s) × ${WIDTHS.length} widths: a frame and nothing else — no shadow, no accent edge`);
 process.exit(0);

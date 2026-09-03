@@ -122,12 +122,23 @@ absence of a criterion is what read as disharmony.
 | | What it means | Chrome |
 | - | - | - |
 | **BLOCK** | The house making a claim | `--block-rule: 3px` left rule + a tint of the same hue. No border, no radius, no shadow. |
-| **PANEL** | A machine surface: instrument, console, photograph, quoted foreign UI | `--panel-border: 1px` hairline, `--radius`, `--shadow-card`, a `--panel-edge: 4px` accent along the top. **The only thing on the site that gets a shadow.** |
+| **PANEL** | A machine surface: instrument, console, quoted foreign UI | `--panel-border: 1px` hairline, `--radius`, `--shadow-card`, a `--panel-edge: 4px` accent along the top. **The only thing on the site that gets a shadow.** |
 | **ROW** | One item in a list of links | `--row-rule: 1px` hairline above, `--row-accent: 4px` left rule that appears on hover / focus / current. Nothing else. |
 
 A row that draws a box is a card, and six of them are a grid pretending to be a
 list. `ci-check-layout.mjs` asserts rows carry no chrome at rest and that their
 heights agree within 8px.
+
+**A photograph is not one of these, and not a container at all (#482).** This
+table used to list *photograph* among PANEL's surfaces, which would have given
+the three faces on the home the site's only shadow and a 4px accent stripe over
+each head. The tree never drew them that way, and the doc was the half that was
+wrong: a container holds content, and an image *is* content. Its border is a
+frame on the picture, not chrome around a box — which is why the benchmark's
+instrument counts it as a tuple (`r4 · 1px all round`, three occurrences) while
+the system does not name it. A frame is four equal edges of one colour and
+nothing else, and `ci-check-layout.mjs` asserts it, so the drift cannot run back
+the other way.
 
 Where the rule comes from: [`design/2026-09-visual-benchmark.md`](design/2026-09-visual-benchmark.md),
 which measures eight comparable sites and this one on one run. The short version

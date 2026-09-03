@@ -172,7 +172,7 @@ Eight tuples, and they decompose into **three chromes a reader has to learn**:
 | `r0 · 1px top / 4px left · no ground` | 6 | `.area-row__link` | **ROW** |
 | `r0 · 3px left · orange tint 8%` | 1 | `.s-cf__card` | **BLOCK** |
 | `r0 · 3px left · ink tint 4%` | 1 | `.mantra` | **BLOCK** |
-| `r4 · 1px all round` | 3 | team photographs | see drift below |
+| `r4 · 1px all round` | 3 | team photographs | frame, not chrome — #482 |
 | `r0 · ground #1e1e1e` | 2 | `.s-hero`, `.s-cta` | dark plate, not chrome |
 | `rgba(0,0,0,.3)` / `.22` | 2 | menu backdrop, hero card | scrim, not chrome |
 | `r0 · ground #fff` | 1 | `.ref-banner` | white on white — no chrome at all |
@@ -210,14 +210,29 @@ nothing — it reads slightly worse and shows no symptom. Filed as **#481**, wit
 the three candidate answers and no recommendation: narrowing the column changes
 every page's proportions, and that is a founder's call.
 
-### Known drift
+### The fourth tuple, resolved
 
-`docs/design-system.md` lists **photograph** among PANEL's surfaces, but the three
-team photographs on the home are drawn as `1px border + --radius` only: no
-`--panel-edge`, no `--shadow-card`. PANEL as declared appears on the service
-pages' instrument (`service.css:330-344`) and nowhere else. Either the photographs
-are PANELs and are missing two of its four traits, or a bordered photograph is a
-fourth thing the system has not named. Filed as **#482**.
+`docs/design-system.md` used to list **photograph** among PANEL's surfaces, while
+the three team photographs on the home are drawn as `1px border + --radius` only:
+no `--panel-edge`, no `--shadow-card`. PANEL as declared appears on the service
+pages' instrument (`service.css:330-344`) and nowhere else.
+
+**The doc was the half that was wrong (#482).** A photograph is not a PANEL and
+not a container: a container holds content, and an image *is* content. Its border
+is a frame on the picture, not chrome around a box. So the instrument is right to
+count `r4 · 1px all round` as a tuple and the system is right not to name it as a
+chrome — they are counting different things, and the table above now says so.
+
+The alternative was to give the three faces PANEL's other two traits, which meant
+a 4px accent stripe above each head. That is a judgement about how the page looks,
+and it was made by looking rather than by counting — which is the distinction this
+whole file rests on.
+
+The tree already had it right, so nothing moved in CSS. What ships instead is the
+assertion that keeps it that way: `ci-check-layout.mjs` G19 measures every framed
+photograph at three widths and requires four equal edges of one colour and no
+shadow. Its plant gives one photograph a shadow and an accent edge and requires
+both to be named.
 
 ## The four rules, and what each now rests on
 

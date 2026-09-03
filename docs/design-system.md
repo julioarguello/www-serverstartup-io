@@ -18,11 +18,16 @@ the reason to read this file rather than grep for hex codes.
 | `ci-check-layout.mjs` | The composition itself: one right edge per block, one heading system, equal row heights, the footer's alignment and the funding marks' size. Geometry, not a screenshot diff. |
 | `ci-check-a11y.mjs` | Measured contrast of every text box in the open menu and over every hero plate, axe on 28 routes, keyboard traversal, reflow at 320px, W3C Nu. |
 | `copy-baseline.mjs` | The rendered words of 26 routes, frozen. A CSS change that moves text is visible here. |
+| `ci-check-css-budget.py` | The source budget in principle 1 — **and** that the figure printed beside it still matches the tree, to within 5 KB. The 2026-08-05 version of this file was four times out of date, which is exactly why nobody noticed the budget was 2.6x over. |
 
 ## Principles
 
 1. **No CSS frameworks.** Plain CSS with custom properties, 12 files under
-   `src/styles/`.
+   `src/styles/`. Total source budget **<= 150 KB**; measured **129 KB across 12
+   files** (`wc -c src/styles/*.css`). Both numbers are read out of this line by
+   `ci-check-css-budget.py`, so the doc is the source and cannot disagree with
+   the gate — see [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475)
+   for where the previous figure went and why the budget is where it is.
 2. **Mobile-first.** Base styles are mobile; enhancements at `min-width: 768px`
    (21 uses) and `min-width: 1025px` (2 uses).
 3. **Tokens over literals**, enforced in both directions — a literal outside
@@ -195,16 +200,38 @@ blindness (exit 3) rather than obeying it.
    CTA; the home's `.s-tech` was the last content band in black and it is gone
    (#457).
 
-## Known drift
+## Where the budget came from (#475)
 
-**The CSS source budget is broken and this file was hiding it.** The 2026-08-05
-version claimed "< 50 KB; current ~31 KB across 10 files". Measured today:
-**130 KB across 12 files** — four times the stated figure, and 2.6× the budget.
+The 2026-08-05 version of this file claimed "< 50 KB; current ~31 KB across 10
+files". Measured with the command it named: **129 KB across 12 files** — four
+times the figure it printed as current, and 2.6x the budget it declared. The
+stale figure is the more interesting half: a budget whose "current" is a fossil
+does not just fail to warn, it actively reports health.
 
-    28 KB homepage.css · 27 KB theme.css · 27 KB service.css · 13 KB
-    deconstruct.css · 11 KB post-detail.css · 24 KB the other seven
+    30 KB theme.css · 29 KB homepage.css · 26 KB service.css · 13 KB
+    deconstruct.css · 11 KB post-detail.css · 21 KB the other seven
 
-There is no single culprit, and two of the three biggest files are not the
-instruments. The budget is **not** silently rewritten here to fit the tree —
-that is how a budget stops meaning anything. Whether it should be raised,
-enforced or dropped is [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475).
+**The budget was raised to 150 KB rather than dropped, and here is the reason.**
+There is no single culprit — the growth is spread across the three biggest files,
+and two of the three are not instruments at all. Two things account for most of
+it, and both are deliberate:
+
+- `service.css` carries the imitations of foreign UI — the cart, the BigQuery
+  console, the GitHub pull request. **276 of the 295 muted declarations in the
+  whole tree are in it**, because a house token there would be a lie about
+  someone else's brand. That is the vertical pages' whole argument (#413), not
+  bloat.
+- Roughly half of `theme.css` is prose explaining why each rule exists. That is
+  the reason this repo is legible, and deleting it to meet a number would be
+  paying for a metric with the thing the metric exists to protect.
+
+A budget that a deliberate product decision breaks is the wrong budget. 150 KB
+leaves about 21 KB of headroom: enough that ordinary work never touches it, tight
+enough that the next 30 KB stylesheet has to be argued for.
+
+**What the budget is not.** It measures source, and source does not travel. The
+home actually ships **6 stylesheets, 58 KB raw and 12.9 KB gzipped**, plus 5.4 KB
+of inline `<style>` — which is why 129 KB of source has no visible cost and why
+Lighthouse stays at 100 with LCP under 1.6s. The source budget is a ratchet
+against unnoticed growth in a place humans read, not a proxy for what the browser
+downloads. If it is ever raised again, say which of those two things moved.

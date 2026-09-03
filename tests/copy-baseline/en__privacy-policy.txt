@@ -22,7 +22,7 @@ We keep correspondence for as long as it takes to deal with it and, where invoic
 Your rights
 You may exercise your rights of access, rectification, erasure, restriction of processing, portability and objection by writing to the address above. If you believe your request has not been handled properly, you may lodge a complaint with the Spanish Data Protection Agency (aepd.es).
 Cookies
-This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. The analytics we use work without cookies and without identifying you.
+This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. We run no analytics either, and the page loads nothing from third parties: everything your browser downloads when you visit comes from this domain.
 Changes to this policy
 If the way we process data changes, we will update this page. The published version is always the one in force.
 references

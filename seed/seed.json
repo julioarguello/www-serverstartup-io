@@ -14919,7 +14919,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. La analítica que empleamos funciona sin cookies y sin identificarte."
+									"text": "Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Tampoco empleamos ninguna herramienta de analítica, ni carga la página recursos de terceros: todo lo que descarga tu navegador al visitarla procede de este mismo dominio."
 								}
 							]
 						},
@@ -16056,7 +16056,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. The analytics we use work without cookies and without identifying you."
+									"text": "This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. We run no analytics either, and the page loads nothing from third parties: everything your browser downloads when you visit comes from this domain."
 								}
 							]
 						},

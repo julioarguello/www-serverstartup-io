@@ -30,8 +30,10 @@ import TeamPhoto from "./TeamPhoto.astro";
 import PtLink from "./PtLink.astro";
 import CtaGlobal from "./CtaGlobal.astro";
 import MantraCloser from "./MantraCloser.astro";
+import type { FaceKey } from "../utils/nav";
 import { FACE_BY_SLUG, sortByFace } from "../utils/nav";
 import CubeEmblem from "./CubeEmblem.astro";
+import HeroDie from "./HeroDie.astro";
 import { getUiLabels } from "../utils/ui-labels";
 import { excerptPlain } from "../utils/excerpt";
 import { HERO_ART, HERO_GROUND, type HeroGround } from "../utils/hero-art";
@@ -95,6 +97,8 @@ const heroSlides = sortByFace(services)
 			href: `${localePrefix}/${slug}`,
 			title: svc.data.title as string,
 			color: (svc.data.color as string) || "#1E1E1E",
+			// The die needs it too: it paints one face per vertical (#517).
+			face,
 			art: HERO_ART[face],
 			ground: HERO_GROUND[face],
 			// The picture used to change while the words underneath did not
@@ -106,7 +110,7 @@ const heroSlides = sortByFace(services)
 			pitch: excerptPlain((svc.data.excerpt as string) || ""),
 		};
 	})
-	.filter((s): s is { href: string; title: string; color: string; art: string; ground: HeroGround; pitch: string } => s !== null);
+	.filter((s): s is { href: string; title: string; color: string; face: FaceKey; art: string; ground: HeroGround; pitch: string } => s !== null);
 
 // Split PT content by h2 headings into named sections
 type Section = { heading: string; blocks: any[] };
@@ -206,6 +210,10 @@ const members = memberEntries ?? [];
 				/>
 			))}
 			<span class="s-hero__scrim"></span>
+			{/* Last, so the mark reads over the scrim that darkens the drawing
+			    under it — and still under .s-hero__inner, which is a sibling of
+			    the stage at a higher z-index, so it never crosses the words. */}
+			<HeroDie faces={heroSlides.map((s) => ({ face: s.face, color: s.color }))} />
 		</div>
 	)}
 	<div class="container s-hero__inner">

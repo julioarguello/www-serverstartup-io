@@ -154,6 +154,7 @@ jobs:
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 
       - name: Lighthouse assertions (perf>=95, a11y/bp/seo=100)
+        id: lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: lighthouserc.json
@@ -166,6 +167,34 @@ jobs:
           # the failing category in the log, and the record that survives is the
           # summary committed under docs/audits/ (#305).
           uploadArtifacts: false
+
+      # The four Node gates all call scripts/lib/stack-probe.mjs when they fail,
+      # so a stack that died mid-run says so instead of blaming the diff (#390).
+      # Lighthouse is a third-party action and cannot, so its version of that
+      # failure surfaces as `"score": null` and CHROME_INTERSTITIAL_ERROR — which
+      # reads as a performance regression. It happened twice on main on
+      # 2026-09-02 (08:21 and 08:53, /deconstruyendo-esta-web and /contacto), both
+      # after the wrangler pin of #446, and neither was a performance finding.
+      # This step adds information and nothing else: it runs only when Lighthouse
+      # itself failed, and changes no exit code.
+      - name: Was the stack alive when Lighthouse failed?
+        if: always() && steps.lighthouse.conclusion == 'failure'
+        run: |
+          node --input-type=module -e '
+            import { stackDiagnosis } from "./scripts/lib/stack-probe.mjs";
+            const base = "http://localhost:8787";
+            const dead = await stackDiagnosis(base);
+            if (dead) {
+              console.log(dead);
+              console.log("    Lighthouse reports this as CHROME_INTERSTITIAL_ERROR and a null");
+              console.log("    score, which is not a performance finding. Re-run before reading");
+              console.log("    the numbers.");
+            } else {
+              console.log(`  → ${base} answers NOW. That does not prove it answered during the`);
+              console.log("    run, but it makes a dead stack the less likely explanation — read");
+              console.log("    the assertion above as a real one.");
+            }
+          '
 
       - name: Summary
         if: always()

@@ -24,7 +24,7 @@ A model writing the first draft is neither impressive nor mysterious. What decid
 
 The agent proposes and cannot merge. The checks refuse and cannot write: their credential is read-only. The human can do both, which is why the human is the only one who can be wrong by name. The small print: the agent not merging is a written rule, not a lock on the server.
 
-Before a person is asked anything, the branch goes through sixteen steps that can fail. They refuse what a reading by eye does not catch:
+Before a person is asked anything, the branch goes through twenty steps that can fail. They refuse what a reading by eye does not catch:
 
 - **Non-citable names:** a client who must not appear in a public repository.
 - **Copy outside the CMS:** a label that exists in one locale only, or a sentence burnt into a template.

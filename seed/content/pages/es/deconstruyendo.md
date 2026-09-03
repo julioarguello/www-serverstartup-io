@@ -24,7 +24,7 @@ Que un modelo redacte el primer borrador no tiene mérito ni misterio. Lo que de
 
 El agente propone y no fusiona. Las comprobaciones rechazan y no escriben: su credencial es de solo lectura. La persona puede las dos cosas, y por eso es la única que puede equivocarse con nombre y apellidos. La letra pequeña: que el agente no fusione es una regla escrita, no un candado del servidor.
 
-Antes de preguntarle nada a una persona, la rama pasa por dieciséis pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:
+Antes de preguntarle nada a una persona, la rama pasa por veinte pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:
 
 - **Nombres no citables:** un cliente que no puede salir en un repositorio público.
 - **Textos fuera del CMS:** una etiqueta que solo existe en un idioma, o una frase escrita a fuego en la plantilla.

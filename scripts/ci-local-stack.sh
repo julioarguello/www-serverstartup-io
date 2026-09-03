@@ -12,6 +12,21 @@ set -euo pipefail
 PORT="${1:-8787}"
 LOG="${RUNNER_TEMP:-/tmp}/wrangler-ci.log"
 
+# $LOG is wrangler's stdout, and the crash in #390 does not print there — it
+# prints `✘ [ERROR]` with NO message, because wrangler's `castErrorCause` wraps
+# a plain object crossing the ProxyWorker boundary in a message-less `Error`.
+# The real cause, `Network connection lost.`, exists only in the DEBUG log,
+# which wrangler writes to ~/.wrangler/logs by default — a path that dies with
+# an ephemeral runner. Upstream (cloudflare/workers-sdk#15317, the same bug)
+# reports two weeks lost to exactly this, and names the same fix: point
+# WRANGLER_LOG_PATH somewhere the run can still reach afterwards.
+#
+# This changes no exit code and no timeout. It only puts the one artefact that
+# distinguishes "the stack died" from "the route is broken" where
+# scripts/lib/stack-probe.mjs can read it back.
+DEBUG_LOG="${RUNNER_TEMP:-/tmp}/wrangler-debug.log"
+export WRANGLER_LOG_PATH="$DEBUG_LOG"
+
 # Astro 7's `/_astro/status` was evaluated as a replacement for this polling
 # and rejected (#367). Two independent reasons, both measured 2026-08-25:
 # it is a Vite dev-server middleware, and this stack runs `wrangler dev` over

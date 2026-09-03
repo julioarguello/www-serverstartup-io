@@ -21,6 +21,12 @@
  * test loudly, while forgetting to update the number (the actual historical
  * failure) breaks it too. There is no way to add a gate quietly any more.
  *
+ * DISTINCT names, since #515. The workflow now runs on four runners, and
+ * `Build` and `Boot seeded local stack` happen on three of them. Counting
+ * occurrences would have made the site claim twenty-four gates the moment the
+ * split landed. Distinct is also what the sentence on the page means: a gate
+ * run on three runners is one gate, and it refuses the branch once.
+ *
  * A unit test and not a twenty-first CI step, for the reason
  * `agent-boundary.test.ts` gives and which is sharper here than anywhere: a
  * step that checks the step count would change the step count it checks.
@@ -47,8 +53,43 @@ const WORKFLOW = read(".github", "workflows", "ci.yml");
  */
 const STEP = /^ {6}- name: (.+)$/gm;
 
-const steps = [...WORKFLOW.matchAll(STEP)].map((m) => m[1].trim());
-const gates = steps.filter((name) => !name.includes("# not-a-gate:"));
+/** A job header: two spaces, a name, a colon, nothing else on the line. */
+const JOB = /^ {2}([a-z][a-z0-9_-]*):$/gm;
+
+/** Every `- name:` in the file, in order, whether or not it is a gate. */
+export function stepNames(workflow: string): string[] {
+	return [...workflow.matchAll(STEP)].map((m) => m[1].trim());
+}
+
+/** The subset that can refuse a branch: no `# not-a-gate:` marker. */
+export function gateNames(workflow: string): string[] {
+	return stepNames(workflow).filter((name) => !name.includes("# not-a-gate:"));
+}
+
+/** Gate names counted once, however many runners they happen on. */
+export function distinctGates(workflow: string): string[] {
+	return [...new Set(gateNames(workflow))];
+}
+
+/**
+ * Gate names grouped by the job they appear in, so a name repeated ACROSS jobs
+ * (deliberate: the same build on three runners) can be told apart from one
+ * repeated WITHIN a job (a copy-paste that runs a gate twice for no reason).
+ */
+export function jobBlocks(workflow: string): [string, string][] {
+	const bounds = [...workflow.matchAll(JOB)];
+	return bounds.map((m, i) => [
+		m[1],
+		workflow.slice(m.index!, bounds[i + 1]?.index ?? workflow.length),
+	]);
+}
+
+export function gatesByJob(workflow: string): Map<string, string[]> {
+	return new Map(jobBlocks(workflow).map(([job, body]) => [job, gateNames(body)]));
+}
+
+const steps = stepNames(WORKFLOW);
+const gates = distinctGates(WORKFLOW);
 
 /** Table rows, minus the header row — the gates as the report presents them. */
 const summaryRows = [...WORKFLOW.matchAll(/^ *echo "\| (.+?) \| (.+?) \|"$/gm)]
@@ -86,6 +127,103 @@ describe("the workflow is the source of the count", () => {
 
 	it("says the number in the Summary heading", () => {
 		expect(WORKFLOW).toContain(`## Quality gates — ${gates.length} steps that can fail`);
+	});
+});
+
+describe("the same gate on several runners is still one gate (#515)", () => {
+	const byJob = gatesByJob(WORKFLOW);
+
+	it("found the jobs", () => {
+		// Same vacuum guard as above: an indentation change that finds no job
+		// would make the two assertions below pass with nothing behind them.
+		expect([...byJob.keys()]).toEqual(
+			expect.arrayContaining(["scope", "static", "rendered", "a11y", "perf", "report"]),
+		);
+	});
+
+	it("counts a repeated gate once", () => {
+		// Not a tautology: `gateNames` is longer than `distinctGates` today,
+		// because build and boot happen on three runners. If that stops being
+		// true the dedup is dead code and this says so.
+		expect(gateNames(WORKFLOW).length).toBeGreaterThan(gates.length);
+	});
+
+	it("gates every stack-booting job on the scope decision (#497 must survive)", () => {
+		// The saving in #515 is concurrency; the saving in #497 was not running
+		// the rendered-output gates at all on a PR that cannot reach a page.
+		// Splitting one job into four is exactly how the second one gets lost:
+		// the per-step `if:` becomes a job-level `if:` and a job that forgets it
+		// boots a stack on a README edit. `static` is deliberately not in here —
+		// it runs always, and gates its own steps.
+		const ungated = jobBlocks(WORKFLOW)
+			.filter(([, body]) => body.includes("- name: Boot seeded local stack"))
+			.filter(([, body]) => !body.includes("if: needs.scope.outputs.site == 'true'"))
+			.map(([job]) => job);
+		expect(ungated).toEqual([]);
+	});
+
+	it("never runs the same gate twice inside one job", () => {
+		// Repetition across jobs is the design. Repetition within a job is a
+		// paste, and costs wall clock on the runner that can least afford it.
+		const doubled = [...byJob.entries()]
+			.filter(([, names]) => new Set(names).size !== names.length)
+			.map(([job]) => job);
+		expect(doubled).toEqual([]);
+	});
+});
+
+describe("controls — the count can be wrong", () => {
+	const FAKE = [
+		"jobs:",
+		"  one:",
+		"    steps:",
+		"      - name: Build",
+		"      - name: Install  # not-a-gate: dependency install, not a check",
+		"      - name: Accessibility",
+		"  two:",
+		"    steps:",
+		"      - name: Build",
+		"      - name: Lighthouse assertions",
+		"",
+	].join("\n");
+
+	it("ignores the steps marked not-a-gate", () => {
+		expect(stepNames(FAKE)).toHaveLength(5);
+		expect(gateNames(FAKE)).toEqual(["Build", "Accessibility", "Build", "Lighthouse assertions"]);
+	});
+
+	it("counts the build shared by two jobs once", () => {
+		expect(distinctGates(FAKE)).toEqual(["Build", "Accessibility", "Lighthouse assertions"]);
+	});
+
+	it("reports a stack-booting job that forgot the scope gate", () => {
+		const careless = [
+			"jobs:",
+			"  scope:",
+			"    steps:",
+			"      - name: Scope  # not-a-gate: fails open",
+			"  a11y:",
+			"    steps:",
+			"      - name: Boot seeded local stack",
+			"      - name: Accessibility",
+			"",
+		].join("\n");
+		const ungated = jobBlocks(careless)
+			.filter(([, body]) => body.includes("- name: Boot seeded local stack"))
+			.filter(([, body]) => !body.includes("if: needs.scope.outputs.site == 'true'"))
+			.map(([job]) => job);
+		expect(ungated).toEqual(["a11y"]);
+	});
+
+	it("reports a gate pasted twice into the same job", () => {
+		const pasted = FAKE.replace(
+			"      - name: Accessibility",
+			"      - name: Accessibility\n      - name: Accessibility",
+		);
+		const doubled = [...gatesByJob(pasted).entries()]
+			.filter(([, names]) => new Set(names).size !== names.length)
+			.map(([job]) => job);
+		expect(doubled).toEqual(["one"]);
 	});
 });
 

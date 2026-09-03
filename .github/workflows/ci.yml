@@ -2,6 +2,27 @@ name: quality-gates
 
 # The practices audited in phase 2 (issues #157/#158/#159/#164) plus the
 # citability policy, enforced on every PR and on main (issue #192).
+#
+# #515: the same gates, on four runners instead of one. Measured on two
+# ordinary PRs, a green run took ~670 s and two of the twenty-four steps were
+# 70 % of it — accessibility (262 s) and Lighthouse (202 s) — neither of which
+# needs the other to have finished. They need the same thing: a built site and
+# a booted stack, which together cost 20 s. So the saving is concurrency, not
+# exclusion; #497 had already taken the exclusion that was safe to take.
+#
+# The repository is public, so runners are free and four cost what one costs.
+# Each rendered-output job rebuilds and reboots rather than passing `dist/`
+# between jobs: the build is 20 s, an artifact round trip is not obviously
+# less, and #399 is what a full artifact quota does to an unrelated gate.
+#
+# Two things this split could quietly break, both guarded:
+#   * The gate count on /deconstruyendo. `Build` and `Boot seeded local stack`
+#     now appear on three runners. tests/unit/gate-count.test.ts counts
+#     DISTINCT gate names, which is also what the sentence on the page means:
+#     a gate run on three runners is one gate.
+#   * The stack probe (#390). Three jobs boot a stack, so all three keep the
+#     probe, and the Lighthouse liveness diagnostic follows Lighthouse into
+#     `perf` and runs per matrix shard.
 on:
   pull_request:
   push:
@@ -16,18 +37,19 @@ permissions:
   pull-requests: read # gitleaks-action lists the PR's commits
 
 jobs:
-  gates:
+  # The scope decision is its own job because four jobs need its answer and the
+  # issue's rule is that no worker waits for another worker. It is checkout plus
+  # one bash script — the cheapest thing that can hold an output.
+  scope:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 5
+    outputs:
+      site: ${{ steps.scope.outputs.site }}
+      lighthouse_urls: ${{ steps.lighthouse_urls.outputs.urls }}
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # gitleaks scans history of the push range
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
+          fetch-depth: 0 # ci-scope.sh diffs base...head
 
       - name: Scope — does this change reach the rendered site?  # not-a-gate: fails open, never refuses a change
         id: scope
@@ -42,8 +64,35 @@ jobs:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: scripts/ci-scope.sh
 
+      - name: Lighthouse URLs, read from lighthouserc.json  # not-a-gate: publishes the matrix, asserts nothing
+        id: lighthouse_urls
+        # The `perf` matrix shards over these, so the list stays in ONE place:
+        # the config that also holds the assertions. Hardcoding the five URLs
+        # in a matrix here is how a URL gets added to the config and measured
+        # by nothing.
+        run: |
+          urls=$(jq -c '.ci.collect.url' lighthouserc.json)
+          echo "$urls" | jq -e 'length > 0' > /dev/null
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
+          echo "  Lighthouse shards: $(echo "$urls" | jq -r 'length')"
+
+  # ── static: everything that reads files, never a rendered page ────────────
+  static:
+    needs: scope
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # gitleaks scans history of the push range
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
       - name: Install  # not-a-gate: dependency install, not a check
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: npm ci
 
       - name: Secret scan (gitleaks)
@@ -69,22 +118,22 @@ jobs:
         run: python3 scripts/ci-check-citability.py
 
       - name: Types (astro check)
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: |
           npx astro check 2>&1 | tee /tmp/astro-check.log
           grep -q "^- 0 errors" /tmp/astro-check.log
           grep -q "^- 0 warnings" /tmp/astro-check.log
 
       - name: Seed schema validation
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: npx emdash seed seed/seed.json --validate
 
       - name: CMS text integrity (labels resolve, no hardcoded copy)
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-cms-text.py
 
       - name: Locale field parity (a field filled in one locale is filled in both)
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         # ci-check-cms-text.py above enforces key parity for ui_labels_*, which
         # is the UI chrome. This is the content entries: #468 added `url` to the
         # partners collection, filled it on ES, and left EN without it — the ES
@@ -93,30 +142,47 @@ jobs:
         run: python3 scripts/ci-check-locale-parity.py
 
       - name: Design tokens (colour, radius and shadow live in theme.css)
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-design-tokens.py
 
       - name: CSS source budget (and the figure the doc prints beside it)
         run: python3 scripts/ci-check-css-budget.py
 
       - name: Cache hints (cache.set only where it reaches the headers)
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-cache-hints.py
 
       - name: Unit tests (the silent-failure modules, and the repo's own invariants)
-        if: steps.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true'
         run: npm test
 
+  # ── rendered: the gates that read a rendered page and are not the slow two ──
+  rendered:
+    needs: scope
+    if: needs.scope.outputs.site == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install  # not-a-gate: dependency install, not a check
+        # Also the browser: puppeteer is a devDependency, so the copy baseline,
+        # var() resolution and the layout invariants all share the one Chrome
+        # `npm ci` downloads here. No second browser path (#355).
+        run: npm ci
+
       - name: Build
-        if: steps.scope.outputs.site == 'true'
         run: npx astro build
 
       - name: Boot seeded local stack
-        if: steps.scope.outputs.site == 'true'
         run: scripts/ci-local-stack.sh 8787
 
       - name: HTML validation (rendered output, all templates)
-        if: steps.scope.outputs.site == 'true'
         run: |
           mkdir -p /tmp/html
           for r in /:home /en:home-en /quienes-somos:about /en/about-us:about-en \
@@ -140,19 +206,15 @@ jobs:
           echo "html-validate: 0 problems across $(ls /tmp/html | wc -l) templates"
 
       - name: Rendered copy matches the baseline
-        if: steps.scope.outputs.site == 'true'
-        # F3 of #355: a permanent step, not a one-off. Reuses the puppeteer
-        # the a11y step already installs — no second browser path. A diff here
-        # is either a regression or an intentional copy change whose baseline
-        # was not re-captured; scripts/copy-baseline.mjs documents which.
+        # F3 of #355: a permanent step, not a one-off. A diff here is either a
+        # regression or an intentional copy change whose baseline was not
+        # re-captured; scripts/copy-baseline.mjs documents which.
         run: node scripts/copy-baseline.mjs verify --base-url http://localhost:8787
 
       - name: Security headers
-        if: steps.scope.outputs.site == 'true'
         run: scripts/ci-check-headers.sh http://localhost:8787
 
       - name: Image URLs (href is a path, transform names a quality)
-        if: steps.scope.outputs.site == 'true'
         # #412. The step above proves the transform ANSWERS; this one reads what
         # was asked for. An absolute /_image href sends the endpoint down its
         # remote branch, which on Workers is a fetch of our own hostname and
@@ -165,7 +227,6 @@ jobs:
         run: python3 scripts/ci-check-image-hrefs.py http://localhost:8787
 
       - name: Every var() resolves, and the template-fed ones carry a fallback
-        if: steps.scope.outputs.site == 'true'
         # #462. An unresolved `var()` with no fallback does not fall back: it
         # invalidates the whole declaration, and the element loses the property.
         # That is #450 (six mono declarations silently rendering sans) and #460
@@ -177,7 +238,6 @@ jobs:
         run: node scripts/ci-check-var-resolves.mjs http://localhost:8787
 
       - name: Rows stay equal, ROWs draw no box, no copy is printed twice, and the footer holds its line and its measure
-        if: steps.scope.outputs.site == 'true'
         # #453. The areas block was six white boxes carrying a full paragraph
         # each: 1695px on a 390px phone, row heights from 214 to 305, and the
         # e-commerce excerpt printed VERBATIM in the hero card and again in its
@@ -190,35 +250,98 @@ jobs:
         # furniture.
         run: node scripts/ci-check-layout.mjs http://localhost:8787
 
+  # ── a11y: 40 % of the old wall clock, alone on a runner ───────────────────
+  #
+  # This is the new critical path. Sharding ci-check-a11y.mjs itself is the next
+  # step and is deliberately not this one: that is a change to the script, and
+  # mixing it in here would make a workflow refactor unreviewable.
+  a11y:
+    needs: scope
+    if: needs.scope.outputs.site == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install  # not-a-gate: dependency install, not a check
+        run: npm ci
+
+      - name: Build
+        run: npx astro build
+
+      - name: Boot seeded local stack
+        run: scripts/ci-local-stack.sh 8787
+
       - name: Accessibility (axe + keyboard + shortcuts + reflow)
-        if: steps.scope.outputs.site == 'true'
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 
+  # ── perf: one runner per URL, same three runs and same assertions ─────────
+  perf:
+    needs: scope
+    if: needs.scope.outputs.site == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      # One URL going red must not cancel the measurement of the other four:
+      # the useful output of this job is WHICH page regressed.
+      fail-fast: false
+      matrix:
+        url: ${{ fromJSON(needs.scope.outputs.lighthouse_urls) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install  # not-a-gate: dependency install, not a check
+        run: npm ci
+
+      - name: Build
+        run: npx astro build
+
+      - name: Boot seeded local stack
+        run: scripts/ci-local-stack.sh 8787
+
+      - name: Shard the Lighthouse config to this URL  # not-a-gate: writes a config, asserts nothing
+        # The assertions, the run count and the Chrome flags stay in
+        # lighthouserc.json — only `collect.url` narrows. A shard that invented
+        # its own thresholds would be a different gate wearing the same name.
+        run: |
+          jq --arg u "${{ matrix.url }}" '.ci.collect.url = [$u]' lighthouserc.json > lighthouserc.shard.json
+          cat lighthouserc.shard.json
+
       - name: Lighthouse assertions (perf>=95, a11y/bp/seo=100)
-        if: steps.scope.outputs.site == 'true'
         id: lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
-          configPath: lighthouserc.json
-          # Off deliberately (#399). The raw reports are ~8.5 MB per run (five
-          # URLs x three runs) and the action exposes no retention input, so 219
-          # of them filled the repo's artifact quota — and a full quota makes
-          # gitleaks-action die uploading its 7 KB SARIF *after* reporting "no
-          # leaks found", which reads as a failed secret scan on a clean tree.
-          # Nothing read these reports: the assertions gate the build and name
-          # the failing category in the log, and the record that survives is the
-          # summary committed under docs/audits/ (#305).
+          configPath: lighthouserc.shard.json
+          # Off deliberately (#399). The raw reports are ~8.5 MB per run and the
+          # action exposes no retention input, so 219 of them filled the repo's
+          # artifact quota — and a full quota makes gitleaks-action die
+          # uploading its 7 KB SARIF *after* reporting "no leaks found", which
+          # reads as a failed secret scan on a clean tree. Nothing read these
+          # reports: the assertions gate the build and name the failing category
+          # in the log, and the record that survives is the summary committed
+          # under docs/audits/ (#305).
           uploadArtifacts: false
 
-      # The four Node gates all call scripts/lib/stack-probe.mjs when they fail,
-      # so a stack that died mid-run says so instead of blaming the diff (#390).
+      # The Node gates all call scripts/lib/stack-probe.mjs when they fail, so a
+      # stack that died mid-run says so instead of blaming the diff (#390).
       # Lighthouse is a third-party action and cannot, so its version of that
       # failure surfaces as `"score": null` and CHROME_INTERSTITIAL_ERROR — which
       # reads as a performance regression. It happened twice on main on
       # 2026-09-02 (08:21 and 08:53, /deconstruyendo-esta-web and /contacto), both
       # after the wrangler pin of #446, and neither was a performance finding.
       # This step adds information and nothing else: it runs only when Lighthouse
-      # itself failed, and changes no exit code.
+      # itself failed, and changes no exit code. Per shard, because each shard
+      # boots its own stack and only that shard's stack can explain its score.
       - name: Was the stack alive when Lighthouse failed?  # not-a-gate: diagnosis, changes no exit code
         if: always() && steps.lighthouse.conclusion == 'failure'
         run: |
@@ -238,8 +361,18 @@ jobs:
             }
           '
 
+  # ── report: the Summary the four jobs above earned ────────────────────────
+  report:
+    needs: [scope, static, rendered, a11y, perf]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
       - name: Summary  # not-a-gate: writes the report the gates above produced
         if: always()
+        env:
+          SITE: ${{ needs.scope.outputs.site }}
+          RESULTS: static=${{ needs.static.result }} rendered=${{ needs.rendered.result }} a11y=${{ needs.a11y.result }} perf=${{ needs.perf.result }}
         run: |
           {
             # One row per failable step above, in order. The page at
@@ -254,9 +387,11 @@ jobs:
             # added since the last correction and the public page was wrong by
             # four. tests/unit/gate-count.test.ts now derives the number from
             # the steps in this file — every `- name:` that does not carry a
-            # `# not-a-gate:` marker — and fails when this heading, this
-            # table's length, or the seed disagrees. Add a gate and the test
-            # tells you every place the number lives.
+            # `# not-a-gate:` marker, counted once per DISTINCT name because
+            # #515 runs `Build` and `Boot seeded local stack` on three runners
+            # — and fails when this heading, this table's length, or the seed
+            # disagrees. Add a gate and the test tells you every place the
+            # number lives.
             #
             # The row text is still prose for a reader: keep it descriptive,
             # and do not transcribe a count or a file list that something else
@@ -271,7 +406,9 @@ jobs:
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
             echo "## Quality gates — 20 steps that can fail"
-            if [ "${{ steps.scope.outputs.site }}" != "true" ]; then
+            echo ""
+            echo "\`$RESULTS\`"
+            if [ "$SITE" != "true" ]; then
               echo ""
               echo "> ⏭️ **This pull request changes no file that reaches the"
               echo "> rendered site**, so the steps that measure a rendered"
@@ -303,5 +440,5 @@ jobs:
             echo "| var() resolution | every var() resolves, and the template-fed ones carry a fallback |"
             echo "| layout invariants | rows stay equal, ROWs draw no box, no copy printed twice, the footer holds its line and its measure |"
             echo "| a11y | axe sample · keyboard traversal, every route · menu focus trap · WCAG 2.1.4 · reflow 320px · W3C Nu |"
-            echo "| Lighthouse | perf >=95 · a11y 100 · bp 100 · seo 100 |"
+            echo "| Lighthouse | perf >=95 · a11y 100 · bp 100 · seo 100 · one runner per URL |"
           } >> "$GITHUB_STEP_SUMMARY"

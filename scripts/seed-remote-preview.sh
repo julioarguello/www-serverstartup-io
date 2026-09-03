@@ -33,6 +33,9 @@ D1_DB=$(find .wrangler -name "*.sqlite" -path "*/d1/*" -not -name "metadata.sqli
 
 SQL="$WORK/seed.sql"
 : > "$SQL"
+# $WORK survives between runs outside CI (/tmp/preview-seed), and a repair
+# from a previous run describes a remote that has since been repaired (#488).
+rm -f "$WORK/repair.sql"
 
 # FK-safe bulk replace. The 0.34 schema carries FOREIGN KEYs between system
 # tables, and this file's DELETE order comes from sqlite_master, not from the
@@ -199,7 +202,13 @@ PYEOF
 	if [ -n "$DRIFT" ]; then
 		echo "remote schema drift, repairing additively:"
 		echo "$DRIFT" | sed 's/^/  /'
-		printf '%s\n' "$DRIFT" >> "$SQL"
+		# NOT into $SQL (#488). That file is applied to four targets and only
+		# two of them are behind: both local rehearsals descend from the
+		# canonical and already carry every column this adds, so an ALTER in
+		# the shared file is invalid for the two targets that run FIRST. The
+		# deploy then dies in rehearsal on "duplicate column name", having
+		# diagnosed the remote perfectly and never reached it (run
+		# 33729263344). The repair is applied per target, by whoever is behind.
 		printf '%s\n' "$DRIFT" > "$WORK/repair.sql"
 	else
 		echo "remote schema matches seed.json — no repair needed"
@@ -284,6 +293,41 @@ sqlite3 "$WORK/rehearsal.sqlite" \
      WHERE type='table' AND name LIKE 'ec\_%' ESCAPE '\';" > "$WORK/drop.sql"
 sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" "$WORK/rehearsal.sqlite" < "$WORK/drop.sql"
 
+# 2b. THE REPAIR IS NOT PART OF THIS FILE (#488). Everything below applies
+#     $SQL to a database that descends from the canonical, so every column the
+#     repair adds is already there. An ALTER that leaked into the shared file
+#     is therefore invalid for exactly the targets that run first, and the run
+#     ends in rehearsal with a correct diagnosis it never got to act on.
+if grep -q '^ALTER TABLE' "$SQL"; then
+	echo "ERROR: a schema repair leaked into the shared SQL file." >&2
+	grep -n '^ALTER TABLE' "$SQL" | sed 's/^/    /' >&2
+	echo "  $SQL is applied to both local rehearsals as well as the remote, and" >&2
+	echo "  both of those already have the column. Keep the repair in" >&2
+	echo "  $WORK/repair.sql and apply it only to what is actually behind." >&2
+	exit 3
+fi
+# Positive control. The same file WITH a repair appended must break a copy of
+# the canonical, and break on the column the repair adds. If it applies clean,
+# the check above is guarding a condition that no longer bites — and a guard
+# that has stopped biting is worth more said out loud than left green. The
+# column is read from the canonical rather than named, so the plant cannot rot
+# when seed.json's fields change; and it builds its own copies, so it does not
+# need the thing it is checking.
+LEAK_COL=$(sqlite3 "$D1_DB" "SELECT name FROM pragma_table_info('ec_partners') ORDER BY cid DESC LIMIT 1;")
+sqlite3 "$D1_DB" ".backup '$WORK/plant-leak.sqlite'"
+cp "$SQL" "$WORK/plant-leak.sql"
+echo "ALTER TABLE \"ec_partners\" ADD COLUMN \"$LEAK_COL\" TEXT;" >> "$WORK/plant-leak.sql"
+if sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" -cmd "PRAGMA foreign_keys=ON;" \
+	"$WORK/plant-leak.sqlite" < "$WORK/plant-leak.sql" > "$WORK/plant-leak.log" 2>&1; then
+	echo "ERROR: plant unreported — a repair appended to the shared file applied" >&2
+	echo "  cleanly to a copy of the canonical, so the check above proves nothing." >&2
+	exit 3
+fi
+grep -q 'duplicate column name' "$WORK/plant-leak.log" || {
+	echo "ERROR: the planted leak failed, but not on the column it added:" >&2
+	tail -5 "$WORK/plant-leak.log" >&2; exit 3; }
+echo "repair containment: the file carries no ALTER, and a planted one was caught on \"$LEAK_COL\""
+
 # foreign_keys=ON: D1 enforces FKs, the sqlite3 CLI defaults them OFF — a
 # rehearsal without them waves through DELETE orders the remote will reject.
 sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" -cmd "PRAGMA foreign_keys=ON;" "$WORK/rehearsal.sqlite" < "$SQL"
@@ -314,6 +358,11 @@ echo "rehearsal rebuilt collections: ${MISSING:-NONE}"
 # migrations' job — and swaps in the remote's own collection tables, so the
 # generated file meets the shape it will really meet, repair included.
 if [ -n "$REMOTE_SHAPED" ]; then
+	# Repair first, file second — the same two moves, in the same order, that
+	# the remote apply below makes. That is what makes this a rehearsal of it.
+	if [ -f "$WORK/repair.sql" ]; then
+		sqlite3 -bail "$REMOTE_SHAPED" < "$WORK/repair.sql"
+	fi
 	if ! sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" -cmd "PRAGMA foreign_keys=ON;" \
 		"$REMOTE_SHAPED" < "$SQL" > "$WORK/rehearsal-remote.log" 2>&1; then
 		echo "ERROR: the file fails against the REMOTE's own schema." >&2
@@ -340,6 +389,22 @@ fi
 # from here. Say what was attempted and where to look — the failure that took
 # the preview down surfaced as a bare SQLITE_ERROR under 300 lines of Vite
 # noise, and was misread as a build error for a day (#326).
+if [ -f "$WORK/repair.sql" ]; then
+	if ! npx wrangler d1 execute "$D1_NAME" --remote --file "$WORK/repair.sql" -y \
+		> "$WORK/repair-apply.log" 2>&1; then
+		echo "ERROR: the additive schema repair failed against remote D1 '$D1_NAME'." >&2
+		echo "  It rehearsed clean against the remote's own schema, read moments ago," >&2
+		echo "  so the remote has changed underneath us or the read was of something" >&2
+		echo "  else. Nothing has been written: the content file has not run yet." >&2
+		echo "  --- attempted ---" >&2
+		sed 's/^/    /' "$WORK/repair.sql" >&2
+		echo "  --- wrangler said ---" >&2
+		tail -20 "$WORK/repair-apply.log" >&2
+		exit 1
+	fi
+	echo "remote schema repaired: $(grep -c . "$WORK/repair.sql") column(s) added"
+fi
+
 if ! npx wrangler d1 execute "$D1_NAME" --remote --file "$SQL" -y > "$WORK/apply.log" 2>&1; then
 	echo "ERROR: applying the refresh to remote D1 '$D1_NAME' failed." >&2
 	echo "  The SQL rehearsed clean against three copies — dropped, populated, and" >&2

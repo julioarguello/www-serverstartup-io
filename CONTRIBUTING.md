@@ -21,9 +21,18 @@ are reading is no longer a selection: it is the thing itself, conversations
 included.
 
 - **You are on the team**: branch here, open a PR here.
-- **You are an outside reader**: pull requests are welcome, and so are issues;
+- **You are an outside reader**: issues are welcome, and so is mail —
   [ventas@serverstartup.io](mailto:ventas@serverstartup.io) reaches the people
-  who wrote the code.
+  who wrote the code. **Pull requests from forks are not accepted** (#434), and
+  the reason belongs in the open like everything else here: one of the gates
+  checks every tracked file against a list of client names that must not appear
+  in public, and GitHub does not hand repository secrets to a workflow run
+  started from a fork. That gate would answer "nobody can currently tell" —
+  which is deliberately not "clean" — on a contribution nobody could scan. So
+  workflow runs on fork pull requests require approval and are not approved.
+  Fork the repository and read it, run it, take it apart; that is what a public
+  repository is for. Tell us what you would do differently by mail or in an
+  issue, and it gets implemented here, where the gate can see it.
 
 ## Local setup
 

@@ -179,10 +179,23 @@ jobs:
       - name: Build
         run: npx astro build
 
+      # This stack can die under the gates below, and when it does the failure
+      # names an innocent route. `wrangler dev` treats an error scoped to ONE
+      # in-flight request as fatal and exits, so everything after it fails on
+      # ERR_CONNECTION_REFUSED. Upstream and open:
+      # cloudflare/workers-sdk#15317, fix still in review as #15448 / #15207 and
+      # in neither 4.128.0 nor 4.129.0.
+      #
+      # The gate steps below therefore run through `scripts/ci-gate.mjs`, which
+      # reboots the stack ONCE PER JOB when — and only when — the stack has
+      # stopped answering AND wrangler's debug log names a ProxyController
+      # cause, and says so in the job summary. A second death in one job is
+      # red. Tracked here as #524.
       - name: Boot seeded local stack
         run: scripts/ci-local-stack.sh 8787
 
       - name: HTML validation (rendered output, all templates)
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: |
           mkdir -p /tmp/html
           for r in /:home /en:home-en /quienes-somos:about /en/about-us:about-en \
@@ -209,9 +222,11 @@ jobs:
         # F3 of #355: a permanent step, not a one-off. A diff here is either a
         # regression or an intentional copy change whose baseline was not
         # re-captured; scripts/copy-baseline.mjs documents which.
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: node scripts/copy-baseline.mjs verify --base-url http://localhost:8787
 
       - name: Security headers
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: scripts/ci-check-headers.sh http://localhost:8787
 
       - name: Image URLs (href is a path, transform names a quality)
@@ -224,6 +239,7 @@ jobs:
         # binding with no quality, and the binding then encodes near-losslessly
         # — four to five times the bytes, and again only in production, where
         # nobody is looking at the size of a 200.
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: python3 scripts/ci-check-image-hrefs.py http://localhost:8787
 
       - name: Every var() resolves, and the template-fed ones carry a fallback
@@ -235,6 +251,7 @@ jobs:
         # ci-check-design-tokens.py reads CSS as text and never starts a
         # browser, and axe is right that an absent background is not a contrast
         # failure. Runs against the same booted stack as the steps above.
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: node scripts/ci-check-var-resolves.mjs http://localhost:8787
 
       - name: Rows stay equal, ROWs draw no box, no copy is printed twice, and the footer holds its line and its measure
@@ -248,6 +265,7 @@ jobs:
         # not a screenshot diff: a pixel diff over 26 routes would go red on
         # every PR of this redesign, get re-baselined on sight, and become
         # furniture.
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: node scripts/ci-check-layout.mjs http://localhost:8787
 
   # ── a11y: 40 % of the old wall clock, alone on a runner ───────────────────
@@ -274,10 +292,23 @@ jobs:
       - name: Build
         run: npx astro build
 
+      # This stack can die under the gates below, and when it does the failure
+      # names an innocent route. `wrangler dev` treats an error scoped to ONE
+      # in-flight request as fatal and exits, so everything after it fails on
+      # ERR_CONNECTION_REFUSED. Upstream and open:
+      # cloudflare/workers-sdk#15317, fix still in review as #15448 / #15207 and
+      # in neither 4.128.0 nor 4.129.0.
+      #
+      # The gate steps below therefore run through `scripts/ci-gate.mjs`, which
+      # reboots the stack ONCE PER JOB when — and only when — the stack has
+      # stopped answering AND wrangler's debug log names a ProxyController
+      # cause, and says so in the job summary. A second death in one job is
+      # red. Tracked here as #524.
       - name: Boot seeded local stack
         run: scripts/ci-local-stack.sh 8787
 
       - name: Accessibility (axe + keyboard + shortcuts + reflow)
+        shell: node scripts/ci-gate.mjs bash -e {0}
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 
   # ── perf: one runner per URL, same three runs and same assertions ─────────
@@ -306,6 +337,21 @@ jobs:
       - name: Build
         run: npx astro build
 
+      # This stack can die under the gates below, and when it does the failure
+      # names an innocent route. `wrangler dev` treats an error scoped to ONE
+      # in-flight request as fatal and exits, so everything after it fails on
+      # ERR_CONNECTION_REFUSED. Upstream and open:
+      # cloudflare/workers-sdk#15317, fix still in review as #15448 / #15207 and
+      # in neither 4.128.0 nor 4.129.0.
+      #
+      # This job is the exception, and gets NO restart. The gate here is
+      # `treosh/lighthouse-ci-action`, a third-party action rather than a
+      # command, and `scripts/ci-gate.mjs` wraps commands — wrapping an action
+      # would mean reimplementing it. So a stack death during Lighthouse still
+      # goes red, and the step at the end of this job says which of the two it
+      # was: a null score from a dead stack reads as a performance regression
+      # and is not one (#486). `rendered` and `a11y` DO restart, once per job,
+      # through that wrapper. Tracked here as #524.
       - name: Boot seeded local stack
         run: scripts/ci-local-stack.sh 8787
 

@@ -135,10 +135,17 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
  * over 150 ms, theme.css). A CI runner has fewer cores than that laptop.
  *
  * So ask the animation, not the clock: the element is settled when nothing is
- * still running on it. The first shape of this fix compared the element's top
- * across two frames and was wrong in a way worth recording — two frames that
- * agree cannot tell "finished moving" from "has not started", and it passed
- * three routes it should have failed and failed them at pool 1.
+ * still running on it AND the frame that would have created the transition has
+ * gone by. Both halves were learned by measurement, and both are recorded here
+ * because each looked correct until it ran:
+ *
+ *   1. Comparing the element's top across two frames. Two frames that agree
+ *      cannot tell "finished moving" from "has not started". It turned three
+ *      good routes red at pool 1.
+ *   2. Asking `getAnimations()` on the first frame. rAF callbacks run BEFORE
+ *      style recalculation, so that frame sees no animation on an element that
+ *      is about to start one. It passed at pool 1 and let six routes measure a
+ *      skip link mid-slide on CI at pool 4.
  *
  * Note what this does NOT do: it never looks at where the element ended up,
  * only at whether it is still moving, so it cannot wait for the assertion to
@@ -154,9 +161,20 @@ const settled = async (page) => {
 				// processed it. Until focus has actually left the body this frame
 				// says nothing, and "nothing is animating" would be the wrong
 				// answer for the right reason.
-				if (!el || el === document.body) return false;
-				if (!el.getAnimations) return true;
-				return !el.getAnimations().some((a) => a.playState === "running");
+				if (!el || el === document.body) {
+					window.__a11yFrames = 0;
+					return false;
+				}
+				const frames = (window.__a11yFrames = (window.__a11yFrames || 0) + 1);
+				if (el.getAnimations && el.getAnimations().some((a) => a.playState === "running")) {
+					return false;
+				}
+				// "Nothing is running" only means something once the frame that
+				// would have CREATED the transition has gone by. requestAnimationFrame
+				// callbacks run BEFORE style recalculation, so the first frame after
+				// focus lands honestly reports no animation on an element that is
+				// about to start one.
+				return frames >= 3;
 			},
 			{ polling: "raf", timeout: 5000 },
 		)

@@ -86,6 +86,26 @@ async function answers(baseUrl) {
 }
 
 /**
+ * The same question `stackDiagnosis` answers in prose, answered as a value, so
+ * a caller can DECIDE on it rather than print it (#524).
+ *
+ * Deliberately two conditions, not one. "The stack is gone" alone is true of a
+ * stack that never booted, one killed by the job timeout, and one that exited
+ * on `Address already in use` — 62 of the 65 `emitErrorEvent` sessions measured
+ * for #390 were that last one. Only a dead stack whose debug log carries a
+ * ProxyController `cause` is the upstream crash this project is allowed to
+ * recover from (cloudflare/workers-sdk#15317).
+ *
+ * Returns the cause text, so the caller can print what it acted on; "" means
+ * "not this fault", and the caller must then fail exactly as it did before.
+ */
+export async function proxyCrashDeath(baseUrl) {
+	if (await answers(baseUrl)) return "";
+	if (!existsSync(DEBUG_LOG)) return "";
+	return proxyErrorCause(readFileSync(DEBUG_LOG, "utf8"));
+}
+
+/**
  * One line naming the fact, plus the stack's own last words when it is gone.
  * Returns "" when the stack is fine — the caller's message already stands, and
  * a second line saying "by the way, the server is up" is noise.

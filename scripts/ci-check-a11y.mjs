@@ -629,10 +629,17 @@ await inParallel(ROUTES, async (route, report) => {
 			href: el.getAttribute("href"),
 			onScreen: r.top >= 0 && r.height > 0,
 			text: el.textContent.trim(),
+			// TEMP DIAGNOSTIC (#522) — remove before merging
+			_d: `top=${Math.round(r.top)} h=${Math.round(r.height)} ` +
+				`tf=${getComputedStyle(el).transform} ` +
+				`focus=${el.matches(":focus")} winFocus=${document.hasFocus()} ` +
+				`vis=${document.visibilityState} ` +
+				`anims=${el.getAnimations().map((a) => a.playState).join("|") || "none"} ` +
+				`rm=${matchMedia("(prefers-reduced-motion: reduce)").matches}`,
 		};
 	});
 	if (!first.isSkip) report.fail(route, `first Tab stop is not the skip link (got "${first.text}")`);
-	else if (!first.onScreen) report.fail(route, "the skip link does not become visible when focused");
+	else if (!first.onScreen) report.fail(route, `the skip link does not become visible when focused [${first._d}]`);
 	else if (first.href !== "#content") report.fail(route, `skip link points at ${first.href}, not #content`);
 	else report.ok(`${route} — skip link first, visible, → #content`);
 

@@ -123,63 +123,6 @@ if (ROUTES.length < 24) {
 const SETTLE_MS = 400;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/**
- * Wait for the focused element to stop moving — in FRAMES, not milliseconds.
- *
- * #522. `sleep(SETTLE_MS)` was enough while one page had the machine to
- * itself. A CSS transition only advances in frames the renderer actually
- * draws, and a pool leaves the other lanes competing for them, so 400 ms of
- * wall clock stopped being 400 ms of transition. Measured at pool 4 on a
- * 16-core laptop: six of thirty-two routes reported a skip link that "never
- * became visible" while it was still mid-slide (`translateY(-200%)` to `0`
- * over 150 ms, theme.css). A CI runner has fewer cores than that laptop.
- *
- * So ask the animation, not the clock: the element is settled when nothing is
- * still running on it AND the frame that would have created the transition has
- * gone by. Both halves were learned by measurement, and both are recorded here
- * because each looked correct until it ran:
- *
- *   1. Comparing the element's top across two frames. Two frames that agree
- *      cannot tell "finished moving" from "has not started". It turned three
- *      good routes red at pool 1.
- *   2. Asking `getAnimations()` on the first frame. rAF callbacks run BEFORE
- *      style recalculation, so that frame sees no animation on an element that
- *      is about to start one. It passed at pool 1 and let six routes measure a
- *      skip link mid-slide on CI at pool 4.
- *
- * Note what this does NOT do: it never looks at where the element ended up,
- * only at whether it is still moving, so it cannot wait for the assertion to
- * come true. And it is bounded — an element that never arrives reaches the
- * check anyway and still fails it.
- */
-const settled = async (page) => {
-	await page
-		.waitForFunction(
-			() => {
-				const el = document.activeElement;
-				// The Tab keypress is acknowledged by CDP before the page has
-				// processed it. Until focus has actually left the body this frame
-				// says nothing, and "nothing is animating" would be the wrong
-				// answer for the right reason.
-				if (!el || el === document.body) {
-					window.__a11yFrames = 0;
-					return false;
-				}
-				const frames = (window.__a11yFrames = (window.__a11yFrames || 0) + 1);
-				if (el.getAnimations && el.getAnimations().some((a) => a.playState === "running")) {
-					return false;
-				}
-				// "Nothing is running" only means something once the frame that
-				// would have CREATED the transition has gone by. requestAnimationFrame
-				// callbacks run BEFORE style recalculation, so the first frame after
-				// focus lands honestly reports no animation on an element that is
-				// about to start one.
-				return frames >= 3;
-			},
-			{ polling: "raf", timeout: 5000 },
-		)
-		.catch(() => {});
-};
 
 /**
  * What the traversal asks about the focused element. A named function, not an
@@ -295,11 +238,11 @@ const inParallel = async (items, worker) => {
 	const results = new Array(items.length);
 	let next = 0;
 	await Promise.all(
-		Array.from({ length: Math.min(CONCURRENCY, items.length) }, async () => {
+		browsers.slice(0, Math.min(CONCURRENCY, items.length)).map(async (lane) => {
 			// `next++` between awaits is atomic here — one thread, one claim.
 			for (let i = next++; i < items.length; i = next++) {
 				const lines = buffered[i];
-				results[i] = await worker(items[i], {
+				results[i] = await worker(items[i], lane, {
 					ok: (msg) => lines.push({ msg }),
 					fail: (route, msg) => lines.push({ route, msg }),
 				});
@@ -315,26 +258,47 @@ const inParallel = async (items, worker) => {
 	return results;
 };
 
-const browser = await puppeteer.launch({
+/**
+ * ONE BROWSER PER LANE, not one page per lane (#522).
+ *
+ * Chrome shows one page of a browser at a time: every other page reports
+ * `document.visibilityState === "hidden"`, is given no animation frames, and
+ * therefore does not advance a CSS transition. Measured on CI at pool 4 — the
+ * skip link sat at `matrix(1, 0, 0, 1, 0, -96)`, the full `translateY(-200%)`,
+ * with `focus=true` and `anims=running`: focused, animating, and frozen on its
+ * first frame, so the gate reported a link that "never became visible" on four
+ * routes that are fine. Three attempts to wait more cleverly all failed for the
+ * same reason — no wait helps a clock that is not running, and `polling: "raf"`
+ * cannot poll a page that is given no frames.
+ *
+ * The three `--disable-*-backgrounding` flags are the obvious answer and were
+ * tried first; they do not help, because the page is not backgrounded, it is
+ * hidden — a different state, and not one a launch flag turns off. So they are
+ * not here.
+ *
+ * A browser with one page always shows it. Every lane then measures the page
+ * the sequential run measured, which is what makes the byte-for-byte identity
+ * at `A11Y_CONCURRENCY=1` worth anything at pool 4 as well. The cost is four
+ * Chromes instead of one: ~90 MB of RSS each on the runner, against a job that
+ * has 7 GB and was never near it.
+ */
+const LAUNCH = {
 	headless: "new",
 	args: [
 		"--no-sandbox",
 		"--disable-dev-shm-usage",
-		// Required by #522, not cosmetic. Chrome throttles timers, rAF and
-		// rendering in pages it treats as backgrounded, and with a pool of four
-		// only one page is ever the foreground one. Without these three, the
-		// other lanes measure a page whose reveal never finished — which is not
-		// a slower gate, it is a wrong one.
-		"--disable-background-timer-throttling",
-		"--disable-backgrounding-occluded-windows",
-		"--disable-renderer-backgrounding",
 	],
 	// Puppeteer 23.11.1 defaults this to 180 000 ms, and a loaded machine can
 	// spend all three minutes of it not answering one CDP call (#425). Raised,
 	// not removed: a browser that is genuinely hung still fails the run, and a
 	// retry — the other obvious move — is how a flake becomes invisible.
 	protocolTimeout: 300_000,
-});
+};
+const browsers = await Promise.all(
+	Array.from({ length: CONCURRENCY }, () => puppeteer.launch(LAUNCH)),
+);
+// The sequential phases and every positive control run on the first one.
+const browser = browsers[0];
 
 
 // ── Measuring ink against a ground no library can read ─────────────────────
@@ -561,8 +525,8 @@ body { margin: 0 }
 
 // ── 1. axe-core: the rules a machine can decide, on every audited route ─────
 console.log(`── axe-core (WCAG 2.0/2.1/2.2 A+AA, plus best practices) — ${AXE_ROUTES.length} routes`);
-await inParallel(AXE_ROUTES, async (route, report) => {
-	const page = await browser.newPage();
+await inParallel(AXE_ROUTES, async (route, lane, report) => {
+	const page = await lane.newPage();
 	await page.setViewport({ width: 1280, height: 900 });
 	await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 	await page.evaluate(axeSource);
@@ -595,8 +559,8 @@ await inParallel(AXE_ROUTES, async (route, report) => {
 // en las 12 rutas y los dos idiomas" — a traversal that visits three pages
 // says nothing about the twenty-three it skips.
 console.log(`── keyboard traversal (${ROUTES.length} routes)`);
-await inParallel(ROUTES, async (route, report) => {
-	const page = await browser.newPage();
+await inParallel(ROUTES, async (route, lane, report) => {
+	const page = await lane.newPage();
 	await page.setViewport({ width: 1280, height: 900 });
 	await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 
@@ -620,7 +584,7 @@ await inParallel(ROUTES, async (route, report) => {
 		document.body.removeAttribute("tabindex");
 	});
 	await page.keyboard.press("Tab");
-	await settled(page);
+	await sleep(SETTLE_MS);
 	const first = await page.evaluate(() => {
 		const el = document.activeElement;
 		const r = el.getBoundingClientRect();
@@ -629,17 +593,10 @@ await inParallel(ROUTES, async (route, report) => {
 			href: el.getAttribute("href"),
 			onScreen: r.top >= 0 && r.height > 0,
 			text: el.textContent.trim(),
-			// TEMP DIAGNOSTIC (#522) — remove before merging
-			_d: `top=${Math.round(r.top)} h=${Math.round(r.height)} ` +
-				`tf=${getComputedStyle(el).transform} ` +
-				`focus=${el.matches(":focus")} winFocus=${document.hasFocus()} ` +
-				`vis=${document.visibilityState} ` +
-				`anims=${el.getAnimations().map((a) => a.playState).join("|") || "none"} ` +
-				`rm=${matchMedia("(prefers-reduced-motion: reduce)").matches}`,
 		};
 	});
 	if (!first.isSkip) report.fail(route, `first Tab stop is not the skip link (got "${first.text}")`);
-	else if (!first.onScreen) report.fail(route, `the skip link does not become visible when focused [${first._d}]`);
+	else if (!first.onScreen) report.fail(route, "the skip link does not become visible when focused");
 	else if (first.href !== "#content") report.fail(route, `skip link points at ${first.href}, not #content`);
 	else report.ok(`${route} — skip link first, visible, → #content`);
 
@@ -884,10 +841,10 @@ console.log("── the open menu: contrast on the paper panel");
 	// A phone shows what a desktop does not: the console lives inside the menu
 	// only below 768px, and the short labels only below 701px.
 	const SIZES = [{ width: 1280, height: 900 }, { width: 390, height: 844 }];
-	const perRoute = await inParallel(menuRoutes, async (route, report) => {
+	const perRoute = await inParallel(menuRoutes, async (route, lane, report) => {
 		let axeSaw = 0, measured = 0, tightest = { ratio: Infinity };
 		for (const vp of SIZES) {
-			const page = await browser.newPage();
+			const page = await lane.newPage();
 			await page.setViewport({ ...vp, deviceScaleFactor: 1 });
 			await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 			await page.click("#menu-trigger");
@@ -1042,11 +999,11 @@ console.log("── the hero band: ink over the plates");
 	// 1440 is where the scrim runs sideways and 390 is where it runs down the
 	// picture — two different gradients, so two different verdicts.
 	const SIZES = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
-	const perRoute = await inParallel(heroRoutes, async (route, report) => {
+	const perRoute = await inParallel(heroRoutes, async (route, lane, report) => {
 		let measured = 0, frames = 0, tightest = { ratio: Infinity };
 		let worstHere = { ratio: Infinity };
 		for (const vp of SIZES) {
-			const page = await browser.newPage();
+			const page = await lane.newPage();
 			await page.setViewport({ ...vp, deviceScaleFactor: 1 });
 			await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 			const plates = await page.evaluate(freeze, 0);
@@ -1163,8 +1120,8 @@ console.log(`── image aspect ratio at 320px — ${ROUTES.length} routes`);
 	// One page per route now, where a single page used to be re-navigated 32
 	// times. A lane cannot share a page with another lane, and page creation
 	// is milliseconds against a navigation.
-	const perRoute = await inParallel(ROUTES, async (route, report) => {
-		const page = await browser.newPage();
+	const perRoute = await inParallel(ROUTES, async (route, lane, report) => {
+		const page = await lane.newPage();
 		await page.setViewport({ width: 320, height: 640, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 		await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 		const bad = await page.evaluate(RATIO_PROBE);
@@ -1213,7 +1170,7 @@ for (const route of ["/", "/en/e-commerce"]) {
 	}
 }
 
-await browser.close();
+await Promise.all(browsers.map((b) => b.close()));
 
 if (failures.length) {
 	console.error(`\n✗ ${failures.length} accessibility failure(s):`);

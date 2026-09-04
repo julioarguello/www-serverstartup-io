@@ -17,6 +17,7 @@
  */
 import puppeteer from "puppeteer";
 import { createRequire } from "node:module";
+import { availableParallelism } from "node:os";
 import { seedRoutes } from "./lib/seed-routes.mjs";
 import { cdpDiagnosis, stackDiagnosis } from "./lib/stack-probe.mjs";
 
@@ -123,6 +124,46 @@ const SETTLE_MS = 400;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
+ * Wait for the focused element to stop moving — in FRAMES, not milliseconds.
+ *
+ * #522. `sleep(SETTLE_MS)` was enough while one page had the machine to
+ * itself. A CSS transition only advances in frames the renderer actually
+ * draws, and a pool leaves the other lanes competing for them, so 400 ms of
+ * wall clock stopped being 400 ms of transition. Measured at pool 4 on a
+ * 16-core laptop: six of thirty-two routes reported a skip link that "never
+ * became visible" while it was still mid-slide (`translateY(-200%)` to `0`
+ * over 150 ms, theme.css). A CI runner has fewer cores than that laptop.
+ *
+ * So ask the animation, not the clock: the element is settled when nothing is
+ * still running on it. The first shape of this fix compared the element's top
+ * across two frames and was wrong in a way worth recording — two frames that
+ * agree cannot tell "finished moving" from "has not started", and it passed
+ * three routes it should have failed and failed them at pool 1.
+ *
+ * Note what this does NOT do: it never looks at where the element ended up,
+ * only at whether it is still moving, so it cannot wait for the assertion to
+ * come true. And it is bounded — an element that never arrives reaches the
+ * check anyway and still fails it.
+ */
+const settled = async (page) => {
+	await page
+		.waitForFunction(
+			() => {
+				const el = document.activeElement;
+				// The Tab keypress is acknowledged by CDP before the page has
+				// processed it. Until focus has actually left the body this frame
+				// says nothing, and "nothing is animating" would be the wrong
+				// answer for the right reason.
+				if (!el || el === document.body) return false;
+				if (!el.getAnimations) return true;
+				return !el.getAnimations().some((a) => a.playState === "running");
+			},
+			{ polling: "raf", timeout: 5000 },
+		)
+		.catch(() => {});
+};
+
+/**
  * What the traversal asks about the focused element. A named function, not an
  * inline arrow, so the positive control can run the SAME probe over a page it
  * builds itself — a control that reimplements the predicate agrees with its
@@ -193,9 +234,83 @@ const failures = [];
 const fail = (route, msg) => failures.push(`${route}: ${msg}`);
 const ok = (msg) => console.log(`  ok   ${msg}`);
 
+/**
+ * Bounded concurrency over a route list, with the output of a sequential run.
+ *
+ * #522. Five loops below were 222 s of this gate's 258 s and all five had one
+ * shape: open a page, visit one route, measure, close, next — one page in
+ * flight on a runner doing nothing else. #515 had just made this gate the only
+ * thing the whole run waits for, so that idleness became the critical path.
+ *
+ * Two properties are load-bearing and neither is a nicety:
+ *
+ * ORDER. A worker never calls `ok`/`fail`. It gets a `report` whose lines are
+ * buffered and replayed in INPUT order once every lane has finished, so the
+ * log and the failure list come out byte for byte as the sequential run wrote
+ * them. A CI log that reshuffles itself run to run cannot be diffed against
+ * the last green one, and that diff is how a reader separates a new failure
+ * from one that was already there.
+ *
+ * NO RETRY. A lane that throws takes the run down exactly as the `for` loop
+ * did: the rejection still reaches `explainStackDeath`, which still answers
+ * "was the stack alive?" before anyone blames the diff (#390). Catching here
+ * would turn the flake it exists to explain into a green.
+ *
+ * The pool size is the one number worth tuning. `A11Y_CONCURRENCY=1` restores
+ * the sequential run exactly, which is how this change was verified: same
+ * stack, same bytes.
+ *
+ * The default is derived rather than picked. Four lanes on a sixteen-core
+ * laptop and four lanes on a two-core runner are not the same request, and the
+ * far end of both is ONE `wrangler dev` — a single process rendering every
+ * route, which is as likely to be the ceiling here as the browser is. Cap at
+ * four: past that the lanes queue on the stack instead of on the CPU, and a
+ * navigation that waits long enough fails as a timeout rather than as a slow
+ * route.
+ */
+const CONCURRENCY = Math.max(
+	1,
+	Number(process.env.A11Y_CONCURRENCY) || Math.min(4, availableParallelism()),
+);
+const inParallel = async (items, worker) => {
+	const buffered = items.map(() => []);
+	const results = new Array(items.length);
+	let next = 0;
+	await Promise.all(
+		Array.from({ length: Math.min(CONCURRENCY, items.length) }, async () => {
+			// `next++` between awaits is atomic here — one thread, one claim.
+			for (let i = next++; i < items.length; i = next++) {
+				const lines = buffered[i];
+				results[i] = await worker(items[i], {
+					ok: (msg) => lines.push({ msg }),
+					fail: (route, msg) => lines.push({ route, msg }),
+				});
+			}
+		}),
+	);
+	for (const lines of buffered) {
+		for (const line of lines) {
+			if (line.route === undefined) ok(line.msg);
+			else fail(line.route, line.msg);
+		}
+	}
+	return results;
+};
+
 const browser = await puppeteer.launch({
 	headless: "new",
-	args: ["--no-sandbox", "--disable-dev-shm-usage"],
+	args: [
+		"--no-sandbox",
+		"--disable-dev-shm-usage",
+		// Required by #522, not cosmetic. Chrome throttles timers, rAF and
+		// rendering in pages it treats as backgrounded, and with a pool of four
+		// only one page is ever the foreground one. Without these three, the
+		// other lanes measure a page whose reveal never finished — which is not
+		// a slower gate, it is a wrong one.
+		"--disable-background-timer-throttling",
+		"--disable-backgrounding-occluded-windows",
+		"--disable-renderer-backgrounding",
+	],
 	// Puppeteer 23.11.1 defaults this to 180 000 ms, and a loaded machine can
 	// spend all three minutes of it not answering one CDP call (#425). Raised,
 	// not removed: a browser that is genuinely hung still fails the run, and a
@@ -428,7 +543,7 @@ body { margin: 0 }
 
 // ── 1. axe-core: the rules a machine can decide, on every audited route ─────
 console.log(`── axe-core (WCAG 2.0/2.1/2.2 A+AA, plus best practices) — ${AXE_ROUTES.length} routes`);
-for (const route of AXE_ROUTES) {
+await inParallel(AXE_ROUTES, async (route, report) => {
 	const page = await browser.newPage();
 	await page.setViewport({ width: 1280, height: 900 });
 	await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
@@ -443,18 +558,18 @@ for (const route of AXE_ROUTES) {
 	);
 	if (res.violations.length) {
 		for (const v of res.violations) {
-			fail(route, `${v.id} (${v.impact}) ×${v.nodes.length} — ${v.help}`);
+			report.fail(route, `${v.id} (${v.impact}) ×${v.nodes.length} — ${v.help}`);
 		}
 	} else {
-		ok(`${route} — 0 violations`);
+		report.ok(`${route} — 0 violations`);
 	}
 	// #416 rides along: the page is open, loaded and settled, and a stretched
 	// image costs one more evaluate rather than one more navigation.
 	for (const f of await page.evaluate(RATIO_PROBE)) {
-		fail(route, `image stretched ${f.pct}% at 1280px: ${f.nat} rendered ${f.box} — ${f.src}`);
+		report.fail(route, `image stretched ${f.pct}% at 1280px: ${f.nat} rendered ${f.box} — ${f.src}`);
 	}
 	await page.close();
-}
+});
 
 // ── 2. Keyboard traversal: reachable, visible, never obscured ───────────────
 // 2.1.1, 2.4.1, 2.4.3, 2.4.7, 2.4.11 — none of which axe decides.
@@ -462,7 +577,7 @@ for (const route of AXE_ROUTES) {
 // en las 12 rutas y los dos idiomas" — a traversal that visits three pages
 // says nothing about the twenty-three it skips.
 console.log(`── keyboard traversal (${ROUTES.length} routes)`);
-for (const route of ROUTES) {
+await inParallel(ROUTES, async (route, report) => {
 	const page = await browser.newPage();
 	await page.setViewport({ width: 1280, height: 900 });
 	await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
@@ -487,7 +602,7 @@ for (const route of ROUTES) {
 		document.body.removeAttribute("tabindex");
 	});
 	await page.keyboard.press("Tab");
-	await sleep(SETTLE_MS);
+	await settled(page);
 	const first = await page.evaluate(() => {
 		const el = document.activeElement;
 		const r = el.getBoundingClientRect();
@@ -498,10 +613,10 @@ for (const route of ROUTES) {
 			text: el.textContent.trim(),
 		};
 	});
-	if (!first.isSkip) fail(route, `first Tab stop is not the skip link (got "${first.text}")`);
-	else if (!first.onScreen) fail(route, "the skip link does not become visible when focused");
-	else if (first.href !== "#content") fail(route, `skip link points at ${first.href}, not #content`);
-	else ok(`${route} — skip link first, visible, → #content`);
+	if (!first.isSkip) report.fail(route, `first Tab stop is not the skip link (got "${first.text}")`);
+	else if (!first.onScreen) report.fail(route, "the skip link does not become visible when focused");
+	else if (first.href !== "#content") report.fail(route, `skip link points at ${first.href}, not #content`);
+	else report.ok(`${route} — skip link first, visible, → #content`);
 
 	// Every subsequent stop: visible focus indicator, not under the fixed header.
 	let stops = 0;
@@ -516,17 +631,17 @@ for (const route of ROUTES) {
 		const s = await page.evaluate(FOCUS_PROBE);
 		if (!s) { reachedEnd = true; break; }
 		stops++;
-		if (s.obscured) { obscured++; fail(route, `focused element hidden behind the fixed header: ${s.name}`); }
-		if (!s.ring && !s.offscreen) { ringless++; fail(route, `focused element has no visible focus indicator: ${s.name}`); }
+		if (s.obscured) { obscured++; report.fail(route, `focused element hidden behind the fixed header: ${s.name}`); }
+		if (!s.ring && !s.offscreen) { ringless++; report.fail(route, `focused element has no visible focus indicator: ${s.name}`); }
 	}
 	if (!reachedEnd) {
-		fail(route, `focus was still inside the document after 120 Tab presses ` +
+		report.fail(route, `focus was still inside the document after 120 Tab presses ` +
 			`(${stops} stops) — the traversal never reached the end`);
 	} else if (!obscured && !ringless) {
-		ok(`${route} — ${stops} stops to the end, none obscured, all with a focus ring`);
+		report.ok(`${route} — ${stops} stops to the end, none obscured, all with a focus ring`);
 	}
 	await page.close();
-}
+});
 
 // ── 3. The menu: opens from the keyboard, holds focus, gives the cube back ──
 // 2.1.1 (everything the cube does, the keyboard does), 2.1.2 (what you enter,
@@ -741,11 +856,11 @@ console.log("── the open menu: contrast on the paper panel");
 			`(tightest ${Math.min(...caught.map((r) => r.ratio))}:1)`);
 	}
 
-	let axeSaw = 0, measured = 0, tightest = { ratio: Infinity };
 	// A phone shows what a desktop does not: the console lives inside the menu
 	// only below 768px, and the short labels only below 701px.
 	const SIZES = [{ width: 1280, height: 900 }, { width: 390, height: 844 }];
-	for (const route of menuRoutes) {
+	const perRoute = await inParallel(menuRoutes, async (route, report) => {
+		let axeSaw = 0, measured = 0, tightest = { ratio: Infinity };
 		for (const vp of SIZES) {
 			const page = await browser.newPage();
 			await page.setViewport({ ...vp, deviceScaleFactor: 1 });
@@ -769,7 +884,7 @@ console.log("── the open menu: contrast on the paper panel");
 				axeSaw += cc ? cc.nodes.length : 0;
 			}
 			for (const v of res.violations) {
-				fail(route, `menu open @${vp.width}: ${v.id} (${v.impact}) ×${v.nodes.length} — ${v.help}`);
+				report.fail(route, `menu open @${vp.width}: ${v.id} (${v.impact}) ×${v.nodes.length} — ${v.help}`);
 			}
 
 			// then the pixels, which is the part axe could not decide
@@ -781,13 +896,23 @@ console.log("── the open menu: contrast on the paper panel");
 			for (const r of rows) {
 				if (r.ratio < tightest.ratio) tightest = { ...r, route, vp: vp.width };
 				if (r.ratio + 0.05 < r.need) {
-					fail(route, `menu open @${vp.width}: .${r.name} ("${r.text}") is ${r.ratio}:1 against ` +
+					report.fail(route, `menu open @${vp.width}: .${r.name} ("${r.text}") is ${r.ratio}:1 against ` +
 						`${r.hex} behind it — 1.4.3 asks ${r.need}:1`);
 				}
 			}
 			await page.close();
 		}
-		ok(`${route} — menu open at 1280 and 390, axe clean, ink measured against the ground`);
+		report.ok(`${route} — menu open at 1280 and 390, axe clean, ink measured against the ground`);
+		return { axeSaw, measured, tightest };
+	});
+
+	// Reduced in input order, so the tie-break that picks `tightest` is the
+	// one the sequential run made: strictly-less-than, first occurrence wins.
+	let axeSaw = 0, measured = 0, tightest = { ratio: Infinity };
+	for (const r of perRoute) {
+		axeSaw += r.axeSaw;
+		measured += r.measured;
+		if (r.tightest.ratio < tightest.ratio) tightest = r.tightest;
 	}
 
 	// Both halves report by NOT firing, and both have a silent way to look at
@@ -889,11 +1014,11 @@ console.log("── the hero band: ink over the plates");
 		ok(`control — the planted near-black pitch measured ${caught[0].ratio}:1 over the plate`);
 	}
 
-	let measured = 0, frames = 0, tightest = { ratio: Infinity };
 	// 1440 is where the scrim runs sideways and 390 is where it runs down the
 	// picture — two different gradients, so two different verdicts.
 	const SIZES = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
-	for (const route of heroRoutes) {
+	const perRoute = await inParallel(heroRoutes, async (route, report) => {
+		let measured = 0, frames = 0, tightest = { ratio: Infinity };
 		let worstHere = { ratio: Infinity };
 		for (const vp of SIZES) {
 			const page = await browser.newPage();
@@ -901,7 +1026,7 @@ console.log("── the hero band: ink over the plates");
 			await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 			const plates = await page.evaluate(freeze, 0);
 			if (!plates) {
-				fail(route, "no hero band found — the plate selector is stale");
+				report.fail(route, "no hero band found — the plate selector is stale");
 				await page.close();
 				continue;
 			}
@@ -923,22 +1048,30 @@ console.log("── the hero band: ink over the plates");
 				// vertical's own sentence ride along with the plate.
 				const floor = plates > 1 ? 4 : 2;
 				if (rows.length < floor) {
-					fail(route, `hero @${vp.width} plate ${k + 1}: ${rows.length} text box(es), under the ` +
+					report.fail(route, `hero @${vp.width} plate ${k + 1}: ${rows.length} text box(es), under the ` +
 						`${floor} this band has — the copy did not render, or the selector is stale`);
 				}
 				for (const r of rows) {
 					if (r.ratio < worstHere.ratio) worstHere = { ...r, vp: vp.width, plate: k + 1 };
 					if (r.ratio < tightest.ratio) tightest = { ...r, route, vp: vp.width, plate: k + 1 };
 					if (r.ratio + 0.05 < r.need) {
-						fail(route, `hero @${vp.width} plate ${k + 1}: .${r.name} ("${r.text}") is ` +
+						report.fail(route, `hero @${vp.width} plate ${k + 1}: .${r.name} ("${r.text}") is ` +
 							`${r.ratio}:1 against ${r.hex} behind it — 1.4.3 asks ${r.need}:1`);
 					}
 				}
 			}
 			await page.close();
 		}
-		ok(`${route} — hero measured at 1440 and 390; tightest ${worstHere.ratio}:1 ` +
+		report.ok(`${route} — hero measured at 1440 and 390; tightest ${worstHere.ratio}:1 ` +
 			`(.${worstHere.name}, plate ${worstHere.plate} @${worstHere.vp})`);
+		return { measured, frames, tightest };
+	});
+
+	let measured = 0, frames = 0, tightest = { ratio: Infinity };
+	for (const r of perRoute) {
+		measured += r.measured;
+		frames += r.frames;
+		if (r.tightest.ratio < tightest.ratio) tightest = r.tightest;
 	}
 
 	// A band that rendered nothing measures nothing and reports green. The
@@ -1002,18 +1135,22 @@ for (const route of ["/", "/cdn-waf-seguridad-edge-cloudflare", "/referencias", 
 // instead, comparing every rendered box against its own natural ratio.
 console.log(`── image aspect ratio at 320px — ${ROUTES.length} routes`);
 {
-	const page = await browser.newPage();
-	await page.setViewport({ width: 320, height: 640, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
-	let checked = 0;
-	for (const route of ROUTES) {
+	// One page per route now, where a single page used to be re-navigated 32
+	// times. A lane cannot share a page with another lane, and page creation
+	// is milliseconds against a navigation.
+	const perRoute = await inParallel(ROUTES, async (route, report) => {
+		const page = await browser.newPage();
+		await page.setViewport({ width: 320, height: 640, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 		await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
 		const bad = await page.evaluate(RATIO_PROBE);
 		for (const f of bad) {
-			fail(route, `image stretched ${f.pct}% at 320px: ${f.nat} rendered ${f.box} — ${f.src}`);
+			report.fail(route, `image stretched ${f.pct}% at 320px: ${f.nat} rendered ${f.box} — ${f.src}`);
 		}
-		checked += await page.evaluate(() => document.querySelectorAll("img").length);
-	}
-	await page.close();
+		const imgs = await page.evaluate(() => document.querySelectorAll("img").length);
+		await page.close();
+		return imgs;
+	});
+	const checked = perRoute.reduce((a, b) => a + b, 0);
 	ok(`${checked} images across ${ROUTES.length} routes keep their ratio`);
 }
 

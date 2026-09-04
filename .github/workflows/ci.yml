@@ -91,8 +91,33 @@ jobs:
           node-version: 22
           cache: npm
 
+      # `cache: npm` above caches ~/.npm — the tarballs npm DOWNLOADS. It does
+      # not cache node_modules, and `npm ci` deletes node_modules by design and
+      # rebuilds it: 823 packages extracted, linked, and their install scripts
+      # run. Measured 2026-09-04 on a cache that HIT — 257 MB restored at
+      # 74 MB/s, then `added 823 packages in 7m`. The cache removed the
+      # download and none of the work, in all eight jobs of the run.
+      #
+      # `~/.cache/puppeteer` rides along because it is the same function of the
+      # same lockfile: puppeteer carries `"hasInstallScript": true`, so the
+      # browser every browser-driven gate shares is fetched by `npm ci` — eight
+      # times a run since #515 split one job into eight.
+      #
+      # NO `restore-keys`, deliberately. A near-miss restore from a different
+      # lockfile is the hazard this whole step introduces: a node_modules that
+      # is present but wrong fails inside a gate, and reads like a code fault.
+      # Exact match or full install, nothing in between (#526).
+      - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
+        id: deps
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+            ~/.cache/puppeteer
+          key: deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
+
       - name: Install  # not-a-gate: dependency install, not a check
-        if: needs.scope.outputs.site == 'true'
+        if: needs.scope.outputs.site == 'true' && steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Secret scan (gitleaks)
@@ -170,10 +195,36 @@ jobs:
           node-version: 22
           cache: npm
 
+      # `cache: npm` above caches ~/.npm — the tarballs npm DOWNLOADS. It does
+      # not cache node_modules, and `npm ci` deletes node_modules by design and
+      # rebuilds it: 823 packages extracted, linked, and their install scripts
+      # run. Measured 2026-09-04 on a cache that HIT — 257 MB restored at
+      # 74 MB/s, then `added 823 packages in 7m`. The cache removed the
+      # download and none of the work, in all eight jobs of the run.
+      #
+      # `~/.cache/puppeteer` rides along because it is the same function of the
+      # same lockfile: puppeteer carries `"hasInstallScript": true`, so the
+      # browser every browser-driven gate shares is fetched by `npm ci` — eight
+      # times a run since #515 split one job into eight.
+      #
+      # NO `restore-keys`, deliberately. A near-miss restore from a different
+      # lockfile is the hazard this whole step introduces: a node_modules that
+      # is present but wrong fails inside a gate, and reads like a code fault.
+      # Exact match or full install, nothing in between (#526).
+      - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
+        id: deps
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+            ~/.cache/puppeteer
+          key: deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
+
       - name: Install  # not-a-gate: dependency install, not a check
         # Also the browser: puppeteer is a devDependency, so the copy baseline,
         # var() resolution and the layout invariants all share the one Chrome
         # `npm ci` downloads here. No second browser path (#355).
+        if: steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Build
@@ -215,7 +266,7 @@ jobs:
           # step; both locales, because the page renders its own language.
           curl -s "http://localhost:8787/esta-pagina-no-existe" -o /tmp/html/notfound.html
           curl -s "http://localhost:8787/en/this-page-does-not-exist" -o /tmp/html/notfound-en.html
-          npx --yes html-validate --config .htmlvalidate.json /tmp/html/*.html
+          npx html-validate --config .htmlvalidate.json /tmp/html/*.html
           echo "html-validate: 0 problems across $(ls /tmp/html | wc -l) templates"
 
       - name: Rendered copy matches the baseline
@@ -286,7 +337,33 @@ jobs:
           node-version: 22
           cache: npm
 
+      # `cache: npm` above caches ~/.npm — the tarballs npm DOWNLOADS. It does
+      # not cache node_modules, and `npm ci` deletes node_modules by design and
+      # rebuilds it: 823 packages extracted, linked, and their install scripts
+      # run. Measured 2026-09-04 on a cache that HIT — 257 MB restored at
+      # 74 MB/s, then `added 823 packages in 7m`. The cache removed the
+      # download and none of the work, in all eight jobs of the run.
+      #
+      # `~/.cache/puppeteer` rides along because it is the same function of the
+      # same lockfile: puppeteer carries `"hasInstallScript": true`, so the
+      # browser every browser-driven gate shares is fetched by `npm ci` — eight
+      # times a run since #515 split one job into eight.
+      #
+      # NO `restore-keys`, deliberately. A near-miss restore from a different
+      # lockfile is the hazard this whole step introduces: a node_modules that
+      # is present but wrong fails inside a gate, and reads like a code fault.
+      # Exact match or full install, nothing in between (#526).
+      - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
+        id: deps
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+            ~/.cache/puppeteer
+          key: deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
+
       - name: Install  # not-a-gate: dependency install, not a check
+        if: steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Build
@@ -331,7 +408,33 @@ jobs:
           node-version: 22
           cache: npm
 
+      # `cache: npm` above caches ~/.npm — the tarballs npm DOWNLOADS. It does
+      # not cache node_modules, and `npm ci` deletes node_modules by design and
+      # rebuilds it: 823 packages extracted, linked, and their install scripts
+      # run. Measured 2026-09-04 on a cache that HIT — 257 MB restored at
+      # 74 MB/s, then `added 823 packages in 7m`. The cache removed the
+      # download and none of the work, in all eight jobs of the run.
+      #
+      # `~/.cache/puppeteer` rides along because it is the same function of the
+      # same lockfile: puppeteer carries `"hasInstallScript": true`, so the
+      # browser every browser-driven gate shares is fetched by `npm ci` — eight
+      # times a run since #515 split one job into eight.
+      #
+      # NO `restore-keys`, deliberately. A near-miss restore from a different
+      # lockfile is the hazard this whole step introduces: a node_modules that
+      # is present but wrong fails inside a gate, and reads like a code fault.
+      # Exact match or full install, nothing in between (#526).
+      - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
+        id: deps
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+            ~/.cache/puppeteer
+          key: deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
+
       - name: Install  # not-a-gate: dependency install, not a check
+        if: steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Build

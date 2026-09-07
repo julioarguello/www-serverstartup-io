@@ -181,6 +181,13 @@
  *       thing in the hero band that says what we do; a phone that has to
  *       scroll to reach it is a phone that was shown a picture and a heading.
  *
+ *   G21 the hero's mark keeps DIE_CLEAR px between its silhouette and the copy,
+ *       the band's two edges and the header, at every width it is shown at and
+ *       through the whole tumble. Measured on the six FACES and across the
+ *       CYCLE, because a cube is widest between stations, not at one: the first
+ *       cut of #517 was sized on its resting width and crossed the card by 5px
+ *       mid-relay at 1280x800, where `overflow: clip` sliced it.
+ *
  * Deliberately NOT a screenshot diff. A pixel diff over 26 routes would go red
  * on every PR in this redesign by design, get re-baselined on sight, and become
  * furniture. Machines assert geometry; whether the composition is any good is a
@@ -326,6 +333,29 @@ const OPENING_WIDTHS = [390, 1440];
 const FOLD = { width: 390, height: 844 };
 /** Routes whose hero carries the card. */
 const CARD_ROUTES = ["/", "/en"];
+
+/** G21: the routes whose hero carries the tumbling mark (#517). */
+const DIE_ROUTES = ["/", "/en"];
+/**
+ * G21. The widest the band gets, the two design widths, and the two narrowest
+ * it is shown at — where `--die-l`'s clamp is what is doing the work and a
+ * regression would land first. Heights are part of it: the run is clamped by
+ * `svh` as well, and 800 is the shortest laptop band the mark has to fit in.
+ */
+const DIE_SIZES = [
+	[1920, 1080],
+	[1440, 900],
+	[1280, 800],
+	[1240, 800],
+];
+/**
+ * G21. The design leaves 24px; this is the floor a MEASUREMENT may not cross,
+ * set below it so a rounding difference between engines is not a red build.
+ * The bug it exists for was -5.
+ */
+const DIE_CLEAR = 16;
+/** G21. Poses sampled per cycle — a tumbling cube is widest BETWEEN stations. */
+const DIE_STEPS = 120;
 
 /** A hairline plus a rounding error. Not a design allowance. */
 const TOLERANCE = 8;
@@ -1110,6 +1140,97 @@ const judgeCard = (m, where) => {
 		: [{ g: "G18", where, msg: `\`.s-hero__card\` opens at ${Math.round(m.cardTop)}px in a ${m.vh}px viewport` }];
 };
 
+/**
+ * G21. The hero mark's extreme silhouette across a whole cycle, against the
+ * copy and the band. Three things this does that reading one rect cannot:
+ *
+ *   - it unions the SIX FACES. Each sits at `translateZ(--die-l / 2)`, so the
+ *     cube element's own rect is its flattened square and understates the
+ *     silhouette by half — 88px where the mark paints 210.
+ *   - it walks the CYCLE. At rest the die shows a hexagon sqrt(2) sides across;
+ *     turning, it passes through views of its own space diagonal at sqrt(3).
+ *   - it reads the copy's INK. `getClientRects()` on a range gives the rendered
+ *     runs; the elements are as wide as the column whatever they print.
+ *
+ * It reports what it found as well as what it measured, so a renamed class
+ * cannot make this gate quietly green — see the blind check at the call site.
+ */
+const MEASURE_DIE = ({ steps }) => {
+	const die = document.querySelector(".s-hero__die");
+	if (!die) return { found: false };
+	if (getComputedStyle(die).display === "none") return { found: true, shown: false };
+
+	const faces = [...document.querySelectorAll(".s-hero__die-face")];
+	const band = document.querySelector(".s-hero").getBoundingClientRect();
+	const header = document.querySelector("header").getBoundingClientRect();
+	const card = document.querySelector(".s-hero__card");
+	const ink = (sel) =>
+		[...document.querySelectorAll(sel)].flatMap((e) => {
+			const r = document.createRange();
+			r.selectNodeContents(e);
+			return [...r.getClientRects()].filter((x) => x.width > 1);
+		});
+	const copyRight = Math.max(
+		card ? card.getBoundingClientRect().right : 0,
+		...ink(".s-hero__inner h1").map((r) => r.right),
+		...ink(".s-hero__pitch-item").map((r) => r.right)
+	);
+
+	const running = document.getAnimations().filter((a) => String(a.animationName || "") === "s-hero-die");
+	let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+	const sweep = () => {
+		for (const f of faces) {
+			const r = f.getBoundingClientRect();
+			left = Math.min(left, r.left);
+			top = Math.min(top, r.top);
+			right = Math.max(right, r.right);
+			bottom = Math.max(bottom, r.bottom);
+		}
+	};
+	if (running.length === 1) {
+		const dur = running[0].effect.getTiming().duration;
+		running[0].pause();
+		for (let i = 0; i <= steps; i++) {
+			running[0].currentTime = (dur * i) / steps;
+			sweep();
+		}
+	} else {
+		sweep();
+	}
+
+	return {
+		found: true, shown: true, faces: faces.length, animations: running.length,
+		card: !!card, left, top, right, bottom, copyRight,
+		bandRight: band.right, bandBottom: band.bottom, headerBottom: header.bottom,
+	};
+};
+
+/**
+ * G21's plant: the bug this shape exists for, put back. The first cut of #517
+ * sized the die on its RESTING width and let it stand at 124 all the way down.
+ */
+const PLANT_DIE_UNCLAMPED = () => {
+	const d = document.querySelector(".s-hero__die");
+	if (!d) return { missing: ".s-hero__die" };
+	d.style.setProperty("--die-l", "124px");
+	return {};
+};
+
+/** G21. */
+const judgeDie = (m, where) => {
+	if (!m.shown) return [];
+	const out = [];
+	const gap = (what, px) => {
+		if (px >= DIE_CLEAR) return;
+		out.push({ g: "G21", where, msg: `${Math.round(px)}px between the mark and ${what}` });
+	};
+	gap("the copy", m.left - m.copyRight);
+	gap("the band's right edge", m.bandRight - m.right);
+	gap("the header", m.top - m.headerBottom);
+	gap("the band's floor", m.bandBottom - m.bottom);
+	return out;
+};
+
 const browser = await puppeteer.launch({
 	headless: "new",
 	args: ["--no-sandbox"],
@@ -1119,6 +1240,22 @@ const browser = await puppeteer.launch({
 const open = async (route, width, height = 900) => {
 	const page = await browser.newPage();
 	await page.setViewport({ width, height, isMobile: width < 768, hasTouch: width < 768 });
+	await page.goto(BASE + route, { waitUntil: "domcontentloaded", timeout: 60_000 });
+	await page.evaluate(() => document.fonts.ready);
+	return page;
+};
+
+/**
+ * `open`, with the motion asked for. Headless Chrome reports
+ * `prefers-reduced-motion: reduce` by default and the hero's mark then holds
+ * still at its first station — the one pose where it is NARROWEST. A gate for a
+ * moving object has to ask for the movement or it measures the single frame
+ * that cannot fail.
+ */
+const openMoving = async (route, width, height) => {
+	const page = await browser.newPage();
+	await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "no-preference" }]);
+	await page.setViewport({ width, height });
 	await page.goto(BASE + route, { waitUntil: "domcontentloaded", timeout: 60_000 });
 	await page.evaluate(() => document.fonts.ready);
 	return page;
@@ -1596,6 +1733,50 @@ const hoverSkins = async (page, m) => {
 	ok("4 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, a watermark fixed behind the page, and a hero card below the fold");
 }
 
+// ── and the mark that tumbles beside the plates (#517). One plant, and it is
+// the bug itself: the die standing at its full 124 where the clamp gives it
+// 99.3. At 1280x800 that put its mid-relay silhouette 5px inside the card.
+{
+	const page = await openMoving(DIE_ROUTES[0], 1280, 800);
+	const read = () => page.evaluate(MEASURE_DIE, { steps: DIE_STEPS });
+	const first = await read();
+	const blind =
+		!first.found ? "`.s-hero__die` is not on the page"
+		: !first.shown ? "the mark is `display: none` at 1280x800, where the clamp says it shows"
+		: first.faces !== 6 ? `\`.s-hero__die-face\` matches ${first.faces} elements, not 6`
+		: first.animations !== 1 ? `\`s-hero-die\` is not running (${first.animations} animations) — the sweep would read one pose`
+		: !first.card ? "`.s-hero__card` is not there to measure the copy's edge against"
+		: null;
+	if (blind) {
+		console.error(`✗ blind: ${blind}.`);
+		console.error("  A renamed class here makes G21 report clean forever. Update `MEASURE_DIE` in the");
+		console.error("  same commit that renames it, and regenerate the CSS with `dado.py`.");
+		await page.close();
+		await browser.close();
+		process.exit(3);
+	}
+	const before = judgeDie(first, "control");
+	if (before.length) {
+		console.error("✗ blind: the mark already fails G21 at 1280x800 before anything is planted —");
+		console.error("  a plant on top of it would prove nothing.");
+		for (const f of before) console.error(`    ${f.msg}`);
+		await page.close();
+		await browser.close();
+		process.exit(3);
+	}
+	await page.evaluate(PLANT_DIE_UNCLAMPED);
+	const after = judgeDie(await read(), "control");
+	await page.close();
+	if (!after.some((f) => /between the mark and the copy/.test(f.msg))) {
+		console.error("✗ the positive control failed: the mark unclamped to 124px at 1280x800 did not");
+		console.error("  report a crossing of the copy, which is the defect this shape exists for.");
+		for (const f of after) console.error(`    ${f.msg}`);
+		await browser.close();
+		process.exit(3);
+	}
+	ok(`control — the mark unclamped at 1280×800 was reported against the copy and the band (${after.length} finding(s))`);
+}
+
 // ── the real scan
 const findings = [];
 let rowsSeen = 0;
@@ -1752,6 +1933,24 @@ for (const route of CARD_ROUTES) {
 	findings.push(...judgeCard(m, `${route} @${FOLD.width}\u00d7${FOLD.height}`));
 }
 
+let dieSizes = 0;
+for (const route of DIE_ROUTES) {
+	for (const [w, h] of DIE_SIZES) {
+		const page = await openMoving(route, w, h);
+		const m = await page.evaluate(MEASURE_DIE, { steps: DIE_STEPS });
+		await page.close();
+		if (!m.found || !m.shown || m.faces !== 6 || m.animations !== 1) {
+			console.error(`✗ blind: the mark on ${route} @${w}×${h} is not what G21 measures —`);
+			console.error(`  found=${m.found} shown=${m.shown} faces=${m.faces} animations=${m.animations}.`);
+			console.error("  Every size in `DIE_SIZES` is one the mark is supposed to be shown at.");
+			await browser.close();
+			process.exit(3);
+		}
+		dieSizes++;
+		findings.push(...judgeDie(m, `${route} @${w}×${h}`));
+	}
+}
+
 await browser.close();
 
 if (findings.length) {
@@ -1903,6 +2102,15 @@ if (findings.length) {
 		console.error("  console, a quoted foreign UI — and there is exactly one of those in the tree.");
 		for (const f of by("G19")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G21").length) {
+		fail(`the hero's mark comes within ${DIE_CLEAR}px of the copy, the band or the header.`);
+		console.error("  A cube is widest BETWEEN stations, not at one: at rest it shows a hexagon √2 sides");
+		console.error("  across, and mid-relay it turns through views of its own space diagonal at √3. The");
+		console.error("  first cut of #517 sized the die on the resting width, so at 1280×800 it crossed the");
+		console.error("  card by 5px and `overflow: clip` sliced its corner. The lever is `--die-l` in");
+		console.error("  homepage.css, which dado.py derives — regenerate rather than nudging the number.");
+		for (const f of by("G21")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G9").length) {
 		fail(`the footer paints a ground of its own.`);
 		console.error("  One ground for the whole document, footer included: a separate band is what makes a");
@@ -1926,4 +2134,7 @@ ok(
 ok(`${fundingRules} rule(s) select a funding mark and none of them modifies it — scaled only`);
 ok(`${copyBlocks} block(s) of body copy across ${MEASURE_ROUTES.length} routes: widest line ${widest} characters, at or under ${MEASURE_MAX}`);
 ok(`${framesSeen} framed photograph(s) × ${WIDTHS.length} widths: a frame and nothing else — no shadow, no accent edge`);
+ok(
+	`the hero's mark at ${dieSizes} width×height(s): ${DIE_STEPS} poses each, six faces unioned, and never within ${DIE_CLEAR}px of the copy, the band's edges or the header`
+);
 process.exit(0);

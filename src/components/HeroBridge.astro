@@ -15,8 +15,8 @@
  *
  * - The drawing is generated, not traced: straight segments and true parabolas
  *   on points measured on the photograph (docs/design/hero-rotativo/bridge.py),
- *   inlined so each piece can be drawn by its dash offset and coloured by the
- *   section. It sits in front of the veil because it never crosses a letter:
+ *   inlined as five stacked layers so each piece is laid in turn and coloured
+ *   by the section. It sits in front of the veil because it never crosses a letter:
  *   the script reads the same segments back and places the scene so that no
  *   stroke touches any line of the copy (the cables included).
  * - The scene is turned 6° counter-clockwise about the Las Arenas tower's
@@ -44,6 +44,13 @@ const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props
 const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
 
 const plugs = L("bridge_plugs", "").split(",").map((p) => p.trim()).filter(Boolean);
+
+/* the drawing as five stacked layers (towers, girder, cables, hangers, stays), each its own <svg>:
+   laying the bridge is then an opacity change per layer, which the compositor does, instead of a dash
+   offset, which repaints the whole drawing every frame (measured: about 1.6 s of the mobile run's
+   blocking time, #531) */
+const svgAttrs = lines.match(/^<svg([^>]*)>/)?.[1] ?? "";
+const layers = [...lines.matchAll(/<g class="(b-[a-z]+)">([\s\S]*?)<\/g>/g)].map((m) => `<svg${svgAttrs} class="bridge__layer ${m[1]}">${m[2]}</svg>`).join("");
 const pauseLabel = L("bridge_pause", "Pausar la animación");
 const replayLabel = L("bridge_replay", "Repetir la animación");
 ---
@@ -53,7 +60,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
 	</div>
 	<Fragment slot="over">
-		<div class="bridge__box bridge__lines" set:html={lines} />
+		<div class="bridge__box bridge__lines" set:html={layers} />
 		<div class="bridge__bus" data-volatile></div>
 	</Fragment>
 </HeroScene>

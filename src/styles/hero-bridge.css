@@ -104,21 +104,21 @@
 	outline: 3px solid color-mix(in srgb, var(--bridge-c) 60%, transparent);
 }
 
-/* the sequence, where a script runs it: the banks alone 1.2 s, then the bridge laid piece by
-   piece by dash offset; the script then lights the connectors and runs the messages */
+/* the sequence, where a script runs it: the banks alone 1.2 s, then the bridge laid layer by layer
+   (opacity: the compositor's, never a repaint); the script then lights the connectors and runs the messages */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--bridge:not(.is-placed) .bridge__box { visibility: hidden; }
-	.s-hero--bridge:not(.is-done) .bridge__lines path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+	.s-hero--bridge:not(.is-done) .bridge__layer { opacity: 0; }
 	.s-hero--bridge:not(.is-done) .bridge__plug:not(.is-on) { opacity: 0; }
-	.s-hero--bridge.is-playing .bridge__lines path { animation: bridge-draw .9s ease-in-out forwards; }
-	.s-hero--bridge.is-playing .b-towers path { animation-delay: 1.2s; }
-	.s-hero--bridge.is-playing .b-girder path { animation-delay: 2s; }
-	.s-hero--bridge.is-playing .b-cables path { animation-delay: 2.8s; }
-	.s-hero--bridge.is-playing .b-hangers path { animation-delay: 3.4s; }
-	.s-hero--bridge.is-playing .b-stays path { animation-delay: 3.8s; }
-	.s-hero--bridge.is-paused .bridge__lines path { animation-play-state: paused; }
+	.s-hero--bridge.is-playing .bridge__layer { animation: bridge-lay .7s ease-out forwards; will-change: opacity; }
+	.s-hero--bridge.is-playing .b-towers { animation-delay: 1.2s; }
+	.s-hero--bridge.is-playing .b-girder { animation-delay: 1.9s; }
+	.s-hero--bridge.is-playing .b-cables { animation-delay: 2.6s; }
+	.s-hero--bridge.is-playing .b-hangers { animation-delay: 3.2s; }
+	.s-hero--bridge.is-playing .b-stays { animation-delay: 3.7s; }
+	.s-hero--bridge.is-paused .bridge__layer { animation-play-state: paused; }
 }
-@keyframes bridge-draw { to { stroke-dashoffset: 0; } }
+@keyframes bridge-lay { from { opacity: 0; } to { opacity: 1; } }
 
 /* phones: the scene is its own row, a little wider than the screen; names a size smaller */
 @media (max-width: 767px) {

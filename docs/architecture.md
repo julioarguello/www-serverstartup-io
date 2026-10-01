@@ -243,6 +243,15 @@ Decisions that are not obvious from the code, and the measurement behind each:
   two controls wait at 35 % until the band is hovered or one has focus; on touch devices, which
   cannot hover, they stay at full strength under the art. Under reduced motion the replay is
   hidden: nothing moves to replay.
+- **The copy is in front, the drawing stays behind it** (founder, 2026-10-01: "no que la imagen
+  desapareciera"). The veil under the column is the ground at 78 %, not solid: the rings and the
+  house's left half show through dimmed, and from 40 px before the column's right edge it is
+  gone. Measured at 78 % at 1024, 1440, 1865 and 2560, percentile 1: body 9.5–10.7:1 over the
+  drawing, 9.6–10.7 over the photograph; the epigraph 6.0–9.7. Lighter is not available: the
+  sweep's leading edge is the section colour at full strength, and under paper text at 65 % it
+  measures 3.6:1; the drawing *in front* of the veil, lines at full orange under the paragraph,
+  would be 1.7:1. Events spawn only within the rings' reach (the leftmost zones end at the
+  1260-unit ring), so none appears where there is no radar.
 - **The frame is sized by the band's height, never taller than it** (88 %, what 48 % of a
   1440 × 900 viewport gave), and placed by the column — its left edge 10 px past the column's
   right edge, pulled back by 58 % of its own width so the tower starts just past the copy. A

@@ -144,7 +144,7 @@ const RING_POS: [number, number][] = [
 		   echo or past the band's edge — because the frame sits differently at every viewport */
 		const ZONES: [number, number, number, number, boolean][] = narrow
 			? [[2, 6, 86, 92, false], [40, 50, 2, 8, false]]
-			: [[10, 60, -14, 12, false], [60, 86, -14, 12, true], [-40, 10, 14, 58, false], [78, 92, 14, 56, false], [-40, 12, 62, 90, false]];
+			: [[10, 60, -14, 12, false], [60, 86, -14, 12, true], [-28, 10, 14, 58, false], [78, 92, 14, 56, false], [-28, 12, 62, 90, false]];
 		/* the building, in % of the frame: the tower and the house */
 		const BUILDING: [number, number, number, number] = [18, 92, 20, 104];
 		const hud = hero.querySelector<HTMLElement>(".radar__hud")!;

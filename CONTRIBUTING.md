@@ -168,7 +168,7 @@ from a working tree; everything else runs here first.
 | Build | `npm run build` | completes |
 | Seeded boot | `scripts/ci-local-stack.sh 8787` | homepage 200 from seeds alone |
 | HTML | `html-validate` over the rendered routes | 0 problems |
-| Rendered copy | `node scripts/copy-baseline.mjs verify --base-url http://localhost:8787` | every seed route matches its baseline |
+| Rendered copy | `node scripts/copy-baseline.mjs verify --base-url http://localhost:8787` | every seed route matches its baseline; an element declaring `data-volatile` (the radar's visitor echo, its event feed) is dropped before the page is read, because copy that differs by visitor or by the clock is not copy |
 | Headers | `scripts/ci-check-headers.sh http://localhost:8787` | full suite present |
 | Image URLs | `python3 scripts/ci-check-image-hrefs.py http://localhost:8787` | every `/_image` href is a path — an absolute one cannot work on Workers (#407) — and every transform names a quality, or the binding encodes near-losslessly (#409) |
 | Accessibility | `node scripts/ci-check-a11y.mjs http://localhost:8787` | axe sample, keyboard traversal, focus trap, WCAG 2.1.4, reflow at 320px |

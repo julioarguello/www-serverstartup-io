@@ -222,16 +222,20 @@
 .s-hero__epigraph figcaption a:hover,
 .s-hero__epigraph figcaption a:focus-visible { text-decoration-style: solid; }
 
-/* the veil keeps the copy's side of the band at the ground's own grey: solid
-   under the column, out 70 px past its right edge. It sits inside the stage,
-   under the labels and the echo, so it veils only the rings, the sweep's
-   wedge and the photograph's left — the sweep passes under the copy on every
-   desktop width, and its bright tip under paper text fails 1.4.3 unveiled. */
+/* the veil: the copy in front, the drawing still there behind it (founder,
+   2026-10-01: "no que la imagen desapareciera"). Under the column the ground
+   covers the scene at 78 %, so the rings and the house's left half show
+   through dimmed, and from 40 px before the column's right edge it is gone.
+   It sits inside the stage, under the labels and the echo, so it dims only
+   the rings, the sweep's wedge and the photograph — the sweep passes under
+   the copy on every desktop width, and its bright tip under paper text fails
+   1.4.3 undimmed. Measured at 78 %: body ≥ 4.5:1 at percentile 1 over the
+   drawing and over the photograph, at 1024, 1440 and 1865. */
 .s-hero--radar .s-hero__scrim {
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
-	background-image: linear-gradient(90deg, var(--color-ground-dark) 0%, var(--color-ground-dark) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) 70%, transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
+	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) 0%, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) 55%, transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
 }
 
 /* the control: WCAG 2.2.2 — one checkbox stops everything that moves */

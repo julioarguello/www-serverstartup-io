@@ -1861,6 +1861,39 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "bridge_plugs",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pub/Sub,BigQuery,SAP Commerce,REST,SFTP,Cloud Storage,Cloud Run,Vertex AI,JDBC,OAuth 2,Ocado OSP,SOAP,Cloud Functions,JMS"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pausar la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Repetir la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4255,6 +4288,39 @@
 							"_type": "block",
 							"style": "normal",
 							"_key": "radar_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Replay the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_plugs",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pub/Sub,BigQuery,SAP Commerce,REST,SFTP,Cloud Storage,Cloud Run,Vertex AI,JDBC,OAuth 2,Ocado OSP,SOAP,Cloud Functions,JMS"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pause the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_replay",
 							"children": [
 								{
 									"_type": "span",
@@ -7390,6 +7456,32 @@
 					"excerpt": "No somos «arquitectos de PowerPoint»: lo que planificamos, lo ejecutamos. Sin exageraciones — lo objetivamente necesario y viable. Un guante, no un martillo, con homogeneidad, metodología, testabilidad y observabilidad absoluta.",
 					"cta_label": "Hablemos de integración",
 					"content": [
+						{
+							"_type": "block",
+							"style": "blockquote",
+							"_key": "kqb",
+							"markDefs": [
+								{
+									"_key": "kqbl",
+									"_type": "link",
+									"href": "https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "«Las aplicaciones interesantes rara vez viven aisladas.» "
+								},
+								{
+									"_type": "span",
+									"marks": [
+										"kqbl"
+									],
+									"text": "Gregor Hohpe y Bobby Woolf"
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "kc",
@@ -10917,6 +11009,32 @@
 					"excerpt": "We're not “PowerPoint architects”: what we plan is what we ship. No overpromising — the objectively necessary and viable. A glove, not a hammer, with homogeneity, methodology, testability and absolute observability.",
 					"cta_label": "Let's talk integration",
 					"content": [
+						{
+							"_type": "block",
+							"style": "blockquote",
+							"_key": "kqb",
+							"markDefs": [
+								{
+									"_key": "kqbl",
+									"_type": "link",
+									"href": "https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "«Interesting applications rarely live in isolation.» "
+								},
+								{
+									"_type": "span",
+									"marks": [
+										"kqbl"
+									],
+									"text": "Gregor Hohpe and Bobby Woolf"
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "kc",

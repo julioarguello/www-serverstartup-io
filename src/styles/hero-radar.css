@@ -32,11 +32,14 @@
 	z-index: 0;
 }
 
-/* the drawing's frame: past the column's right edge, bottom-anchored, so the
-   tower starts where the copy ends and the house sits on the band's floor */
+/* the drawing's frame: 48 % of the band wide, bottom-anchored, and placed by
+   the COLUMN, not the viewport — the tower's left edge (58 % of the frame)
+   lands 10 px past the column's right edge at every width, so no line of copy
+   touches it (right = 29.84vw − container/2 + 10px: 0 at 1440, −124 at 1024,
+   +103 at 1920). The house sits on the band's floor. */
 .radar__box {
 	position: absolute;
-	right: -5%;
+	right: calc(29.84vw - var(--container-max) / 2 + 10px);
 	bottom: -8%;
 	width: 48%;
 	aspect-ratio: 1760 / 2020;
@@ -215,13 +218,16 @@
 .s-hero__epigraph figcaption a:hover,
 .s-hero__epigraph figcaption a:focus-visible { text-decoration-style: solid; }
 
-/* the veil keeps the copy's side of the band at the ground's own grey */
+/* the veil keeps the copy's side of the band at the ground's own grey: solid
+   under the column, out 70 px past its right edge. It sits inside the stage,
+   under the labels and the echo, so it veils only the rings, the sweep's
+   wedge and the photograph's left — the sweep passes under the copy on every
+   desktop width, and its bright tip under paper text fails 1.4.3 unveiled. */
 .s-hero--radar .s-hero__scrim {
 	position: absolute;
 	inset: 0;
-	z-index: 1;
 	pointer-events: none;
-	background-image: linear-gradient(90deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 38%, color-mix(in srgb, var(--color-ground-dark) 70%, transparent) 56%, transparent 72%);
+	background-image: linear-gradient(90deg, var(--color-ground-dark) 0%, var(--color-ground-dark) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) 70%, transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
 }
 
 /* the control: WCAG 2.2.2 — one checkbox stops everything that moves */
@@ -280,9 +286,9 @@
 	.s-hero--radar .radar__sweep { transform: rotate(300deg); }
 }
 
-/* phones: one column — title, excerpt, CTA, the art at full width inside the first viewport, the epigraph after it;
+/* phones and small tablets, up to where the opening register begins (767): one column — title, excerpt, CTA, the art at full width inside the first viewport, the epigraph after it;
    the ground drifts downward instead, toward the art */
-@media (max-width: 700px) {
+@media (max-width: 767px) {
 	.s-hero--radar { display: flex; flex-direction: column; align-items: stretch; min-height: 0; padding-bottom: var(--space-4); background-image: linear-gradient(180deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 42%, color-mix(in srgb, var(--color-ground-haze) 45%, var(--color-ground-dark)) 100%); }
 	.s-hero--radar .s-hero__inner,
 	.s-hero--radar .s-hero__copy { display: contents; }

@@ -204,12 +204,23 @@ All routes exist in both ES and EN:
 ### 4.4 The radar hero of the edge-security vertical (#529)
 
 The CDN page opens with a scene instead of a held plate: a photograph of the Cabo Peñas
-lighthouse, soft-edged into a band tinted with the vertical's own colour, crossfades into a
-line drawing of the same building, and a radar screen settles behind it — range rings read
-from the origin outwards (ORIGIN · CDN · WAF · ACCESS · ZERO TRUST), a sweep at 12 rpm, a
-stream of edge events, and the visitor as one ink echo. The lighthouse stands at the edge
-and lights what approaches; it is the counter-image of the castle-and-moat perimeter, which is
-why the partner card under the title carries Cloudflare's own sentence about the castle.
+lighthouse, cut out to the building, on a dark band that is not black, crossfades into a line
+drawing of the same building, and a radar screen settles behind it — range rings read from the
+origin outwards (ORIGIN · CDN · WAF · ACCESS · ZERO TRUST), a sweep at 12 rpm, a stream of
+edge events, and the visitor as one echo. The lighthouse stands at the edge and lights what
+approaches; it is the counter-image of the castle-and-moat perimeter, which is why the epigraph
+under the CTA carries Cloudflare's own sentence about the castle, signed «— Cloudflare» with the
+source behind the name.
+
+The band (founder, 2026-10-01, after four rounds of static prototypes measured for contrast):
+`--color-ground-dark` (#232724, "un negro menos negro") drifting from the column's right edge
+toward `--color-ground-haze`, the tone the cutout's own edge pixels average to, so the photograph
+lands on a kindred colour instead of a halo; the logo cube as one large seal in the section's
+colour, leaving by the left margin; the copy in paper, at the column's full width and the
+register every hero shares. A light version (the band tinted with the vertical's colour) and a
+version with the cutout soft-edged were built and rejected: the soft edge kept real sky inside
+the mask, which on any dark ground lit up as a glow around the tower — no gradient could hide
+it, only the tight silhouette did.
 
 Decisions that are not obvious from the code, and the measurement behind each:
 
@@ -227,9 +238,15 @@ Decisions that are not obvious from the code, and the measurement behind each:
   events arriving: the component's script owns start/stop and also stops on `visibilitychange`
   and under `prefers-reduced-motion` (which renders the end state with one still event per
   zone).
-- **Nothing is written over the building.** Events spawn only in four open zones of the frame
-  (top strip, left sky, right sky, below the house), two on phones; labels are at most 24
-  characters so they never leave the band; no two live events sit within 6 % vertically.
+- **Nothing is written over the building, the copy or the band's edge.** Events pick a
+  candidate in one of five frame zones and then check it against the page — the copy's box, the
+  building's rectangle in frame coordinates, the ring labels, the visitor's echo and the band's
+  edges — because the frame sits differently at every viewport now that the copy spans the
+  column; a candidate that fails is redrawn, up to forty times. Two zones on phones; labels at
+  most 24 characters; no two live events within 6 % vertically.
+- **The title is one line on any desktop**, and so is every other hero's: one register in
+  `service.css`, sized by the longest title the CMS holds, guarded by the a11y gate at 768 and
+  1440 (`docs/design-system.md`, Typography).
 - **The visitor's echo is fetched by the browser** from `/api/whoami` (`no-store`,
   `cf-connecting-ip` + `cf.city`) and hidden unless the edge answers. Service pages are cached
   at the edge for an hour (§9): an address rendered into the HTML would be served to the next
@@ -244,8 +261,8 @@ Decisions that are not obvious from the code, and the measurement behind each:
   radar 0.8 s → one event every 0.52 s, each alive 2.4 s. The reveal only runs once per page
   load; this hero is not a carousel slide.
 - **Assets** live in `public/assets/hero/` like the plates (R2 is not seedable): the photograph
-  as WebP with alpha at 1320 px (289 KB) and the plan as lossless WebP (156 KB), each with a
-  phone variant (720 px, 106 KB; 660 px, 82 KB) picked by `srcset` with
+  as WebP with alpha at 1320 px (142 KB, the tight cutout) and the plan as lossless WebP
+  (156 KB), each with a phone variant (720 px, 48 KB; 660 px, 82 KB) picked by `srcset` with
   `sizes="(max-width: 700px) 78vw, 43.4vw"`. Credit and licence (CC BY-SA 4.0, derivative
   drawing included) in `docs/design/hero-rotativo/README.md`.
 - **What the gates demanded, measured on the first CI run** — the next vertical with a photo

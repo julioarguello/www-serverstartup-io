@@ -7,8 +7,8 @@ changes is what each trade does to it.
 | Face | Vertical | Colour | What happens to the cube |
 | --- | --- | --- | --- |
 | `ec` | Comercio electrónico | `#008FD3` | Repeated into a wall; one is lit — the order among a million |
-| `int` | Integración de sistemas | `#1D4E89` | Pierced — the tangle goes in, one clean path comes out |
-| `bd` | Big Data & Cloud Analytics | `#EA4335` | Drawn out of a point cloud; the crosshair marks the outlier |
+| `int` | Integración de sistemas | `#EA4335` | Pierced — the tangle goes in, one clean path comes out |
+| `bd` | Big Data & Cloud Analytics | `#1D4E89` | Drawn out of a point cloud; the crosshair marks the outlier |
 | `cdn` | CDN, WAF y seguridad edge | `#F38020` | Wrapped around the world; its six vertices are the nodes, the limb is the edge |
 | `gf` | Desarrollo greenfield | `#3E7D50` | Being built on an empty plane; exactly one voxel is placed |
 | `ia` | Inteligencia artificial | `#6B4FBB` | Lit from the inside, vertex to vertex |

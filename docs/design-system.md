@@ -104,16 +104,18 @@ weight 700 except h4. Body is fluid: `--text-body` runs 20px → 24px between
 1440px and 2400px, in step with the column, so the line keeps measuring ~80
 characters at every width.
 
-**The hero h1 is one line on any desktop (#529, founder 2026-10-01).** Every
-service and page hero shares one register for it, declared in `service.css`:
-`min(72px, 100cqi / 16.06 × 0.985)` against the column's inline size, where
-16.06 em is the width of the longest title the CMS holds («CDN, WAF y seguridad
-edge» in Alexandria Bold, 1028 px at 64 px, measured in Chrome). That is 52 px in
-the 840 px column, 62 px at the 1000 px one a 2400 px screen gets, 45 px on a
-768 px tablet; under 768 px the 48/42/40 register above applies and the title
-wraps. The a11y gate asserts every hero h1 is one line at 768 and 1440, so a
-longer title fails by name and the constant moves with it. The home keeps its
-own smaller register (#420): a sentence that wraps by design.
+**A page's opening h1 is one line on any desktop (#529, founder 2026-10-01).**
+Every opening shares one register for it — the service and page heroes and the
+document openings (deconstruyendo, contacto, the legal pages) — declared in
+`theme.css` next to the desktop register: `min(72px, 100cqi / 14.48 × 0.985)`
+against the column's inline size, where 14.48 em is the width of the longest
+title the CMS holds («Deconstructing this website» in Alexandria Bold, measured
+in Chrome with the loaded font). That is 57 px in the 840 px column, 68 px at the
+1000 px one a 2400 px screen gets, 50 px on a 768 px tablet; under 768 px the
+48/42/40 register above applies and the title wraps. The a11y gate asserts every
+opening h1 is one line at 768, 1024 and 1440, so a longer title fails by name and
+the constant moves with it. The home keeps its own smaller register (#420): a
+sentence that wraps by design. Blog posts are articles, not openings.
 
 Mono is **accents-only**: inline `code`, the console voice, the reference
 marks. Headings stay in Alexandria.

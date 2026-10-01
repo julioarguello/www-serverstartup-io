@@ -164,9 +164,13 @@ const RATIO_PROBE = () => {
 		// naturalWidth is 0 for an unloaded image and for an SVG with no
 		// intrinsic size: nothing to compare against, not a finding.
 		if (!img.naturalWidth || !img.naturalHeight) continue;
-		if (getComputedStyle(img).objectFit !== "fill") continue;
-		const r = img.getBoundingClientRect();
-		if (r.width < 1 || r.height < 1) continue;
+		const cs = getComputedStyle(img);
+		if (cs.objectFit !== "fill") continue;
+		// the layout box, not the bounding rect: a rotation (#531, the bridge is
+		// turned 6°) widens the bounding rect without squashing anything, and
+		// only the box the image is laid out into can distort it
+		const r = { width: parseFloat(cs.width), height: parseFloat(cs.height) };
+		if (!(r.width >= 1) || !(r.height >= 1)) continue;
 		const nat = img.naturalWidth / img.naturalHeight;
 		const skew = Math.abs(nat - r.width / r.height) / nat;
 		// 2%: below it lies subpixel layout, above it lies a visible squash
@@ -944,15 +948,15 @@ console.log("── the hero band: ink over the plates");
 	// Freeze the band on plate `k`. Returns how many plates the band has, so
 	// a home that lost five of them cannot pass as a home with one.
 	//
-	// The radar hero (#529) has no plate: its art is a photo that becomes a
-	// drawing beside the copy, and the copy sits on the band's tint over a
-	// drawn grid — a background axe still cannot read. It counts as one plate,
-	// frozen in its end state (drawing + rings), which is what the page shows
-	// for the whole visit after the first seconds.
+	// A scene hero (#529 radar, #531 bridge) has no plate: its art is a photo
+	// that becomes a drawing beside the copy, and the copy sits on the band's
+	// tint over drawn lines — a background axe still cannot read. It counts as
+	// one plate, frozen in its end state (the drawing and its live layer),
+	// which is what the page shows for the whole visit after the first seconds.
 	const freeze = (k) => {
 		const hero = document.querySelector(".s-hero");
 		if (!hero) return 0;
-		if (hero.classList.contains("s-hero--radar")) {
+		if (hero.classList.contains("s-hero--scene")) {
 			hero.classList.remove("is-playing");
 			hero.classList.add("is-done");
 			return 1;

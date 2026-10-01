@@ -17,10 +17,10 @@ const PAPER = "#FFFFFF";
 // The palette as the CMS actually holds it (seed.json services.color).
 const PALETTE = {
 	"e-commerce blue": "#008FD3",
-	"integration navy": "#1D4E89",
+	"big data navy": "#1D4E89",
 	"greenfield green": "#3E7D50",
 	"ai purple": "#6B4FBB",
-	"big data red": "#EA4335",
+	"integration red": "#EA4335",
 	"cdn/waf orange": "#F38020",
 };
 
@@ -48,14 +48,14 @@ describe("accentFill", () => {
 	it("keeps the section colour untouched when it can carry a label", () => {
 		// Five of six need no shift — the fill must stay exactly the CMS value,
 		// or the page stops looking like its own section.
-		for (const hex of [PALETTE["e-commerce blue"], PALETTE["integration navy"],
+		for (const hex of [PALETTE["e-commerce blue"], PALETTE["big data navy"],
 			PALETTE["greenfield green"], PALETTE["ai purple"], PALETTE["cdn/waf orange"]]) {
 			expect(accentFill(hex).fill).toBe(hex);
 		}
 	});
 
-	it("shifts only Big Data's red, and by the smallest step that clears AA", () => {
-		const red = PALETTE["big data red"];
+	it("shifts only Integration's red, and by the smallest step that clears AA", () => {
+		const red = PALETTE["integration red"];
 		// Raw: ink 4.25, paper 3.92 — neither clears 4.5, hence the shift.
 		expect(Math.max(contrast(red, INK), contrast(red, PAPER))).toBeLessThan(AA);
 		const { fill, ratio } = accentFill(red);

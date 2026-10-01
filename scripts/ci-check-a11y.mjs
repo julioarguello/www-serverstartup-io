@@ -1013,26 +1013,6 @@ console.log("── the hero band: ink over the plates");
 	const perRoute = await inParallel(heroRoutes, async (route, lane, report) => {
 		let measured = 0, frames = 0, tightest = { ratio: Infinity };
 		let worstHere = { ratio: Infinity };
-		// #529: the title is one line on any desktop. service.css sizes one
-		// register for every hero by the longest title the CMS holds; a longer
-		// title wraps here first, by name, before anyone sees it at 72 px.
-		if (route !== "/" && route !== "/en") {
-			for (const width of [768, 1440]) {
-				const page = await lane.newPage();
-				await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
-				await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
-				const h1 = await page.evaluate(() => {
-					const h = document.querySelector(".s-hero h1");
-					if (!h) return null;
-					const lh = parseFloat(getComputedStyle(h).lineHeight);
-					return { lines: Math.round(h.getBoundingClientRect().height / lh), text: h.textContent.trim() };
-				});
-				await page.close();
-				if (!h1) report.fail(route, `no hero h1 found @${width} — the selector is stale`);
-				else if (h1.lines > 1) report.fail(route, `the h1 wraps to ${h1.lines} lines @${width} — "${h1.text}"; ` +
-					"the hero register in service.css is sized by the longest title (#529)");
-			}
-		}
 		for (const vp of SIZES) {
 			const page = await lane.newPage();
 			await page.setViewport({ ...vp, deviceScaleFactor: 1 });
@@ -1100,6 +1080,46 @@ console.log("── the hero band: ink over the plates");
 
 // ── 6. WCAG 2.1.4 — a single-character shortcut must be scoped ──────────────
 // `/` may open the search only when focus is already inside the header.
+// ── 5b. The opening h1: one line on any desktop (#529) ─────────────────────
+// theme.css sizes one register for every page's opening h1 by the longest
+// title the CMS holds; a longer title wraps here first, by route and by name,
+// before anyone sees it. The home keeps its own register and is left out.
+console.log("── the opening h1: one line at 768, 1024 and 1440 (#529)");
+{
+	const OPENINGS = [
+		...heroRoutes.filter((r) => r !== "/" && r !== "/en"),
+		"/quienes-somos", "/en/about-us", "/referencias", "/en/references",
+		"/deconstruyendo", "/en/deconstructing", "/contacto", "/en/contact",
+		"/politica-de-privacidad", "/en/privacy-policy",
+	];
+	const rows = await inParallel(OPENINGS, async (route, lane, report) => {
+		let checked = 0;
+		for (const width of [768, 1024, 1440]) {
+			const page = await lane.newPage();
+			await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
+			await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
+			const h1 = await page.evaluate(() => {
+				const h = document.querySelector("main h1");
+				if (!h) return null;
+				const lh = parseFloat(getComputedStyle(h).lineHeight);
+				return { lines: Math.round(h.getBoundingClientRect().height / lh), text: h.textContent.trim(), over: h.scrollWidth > h.clientWidth + 1 };
+			});
+			await page.close();
+			if (!h1) { report.fail(route, `no opening h1 found @${width} — the selector is stale`); continue; }
+			checked += 1;
+			if (h1.lines > 1) report.fail(route, `the opening h1 wraps to ${h1.lines} lines @${width} — "${h1.text}"; the register in theme.css is sized by the longest title (#529)`);
+			if (h1.over) report.fail(route, `the opening h1 overflows its column @${width} — "${h1.text}"; the register's constant in theme.css is below this title's width`);
+		}
+		return checked;
+	});
+	const checked = rows.reduce((a, b) => a + b, 0);
+	if (checked < OPENINGS.length * 3) {
+		console.error(`✗ THIS GATE IS BLIND — ${checked} opening h1(s) read, below the ${OPENINGS.length * 3} this site has.`);
+		process.exit(3);
+	}
+	ok(`${OPENINGS.length} openings read at three widths — every h1 one line, none overflowing`);
+}
+
 console.log("── 2.1.4 character key shortcut");
 {
 	const page = await browser.newPage();

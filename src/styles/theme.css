@@ -429,6 +429,31 @@ ul, ol { list-style: none; }
 	h2 { font-size: 64px; line-height: 72px; }
 }
 
+/* #529 (founder, 2026-10-01): a page's opening h1 fits ONE line on any desktop,
+   and every opening shares one register for it — the service and page heroes,
+   the document openings (deconstruyendo, contacto, the legal pages). It is sized
+   by the longest title the CMS holds today, «Deconstructing this website»,
+   14.48 em in Alexandria Bold (measured in Chrome with the loaded font; the CDN
+   title is 14.28), against the column's inline size: 57 px in the 840 px column,
+   68 px at the 1000 px one a 2400 px screen gets, 50 px in the 728 px a 768 px
+   tablet has. Under 768 px the register above applies and the title wraps. The
+   a11y gate asserts every opening h1 is one line at 768, 1024 and 1440; a longer
+   title fails there, by name, and this constant moves with it. The home keeps
+   its own smaller register (#420): a sentence that wraps by design. Blog posts
+   are articles, not openings. */
+@media (min-width: 768px) {
+	.s-hero__inner, .s-doc__inner, .s-contact__inner, .legal-inner { container-type: inline-size; }
+	.s-hero:not(.s-hero--home) .s-hero__inner > h1,
+	.s-hero:not(.s-hero--home) .s-hero__copy > h1,
+	.s-doc__inner > h1,
+	.s-contact__inner > h1,
+	.legal-inner > h1 {
+		font-size: min(72px, calc(100cqi / 14.48 * 0.985));
+		line-height: 1.11;
+		white-space: nowrap;
+	}
+}
+
 /* ─────────────────────────────────────────
    Utility Classes
    ───────────────────────────────────────── */

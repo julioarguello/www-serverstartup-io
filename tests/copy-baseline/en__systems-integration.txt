@@ -5,6 +5,8 @@ ES
 Systems Integration
 We're not “PowerPoint architects”: what we plan is what we ship. No overpromising — the objectively necessary and viable. A glove, not a hammer, with homogeneity, methodology, testability and absolute observability.
 Let's talk integration
+«Interesting applications rarely live in isolation.»
+— Gregor Hohpe and Bobby Woolf
 Moving data from A to B is the easy part. The real engineering challenge is maintaining operational continuity in ecosystems where your ERP, SaaS platforms, and untouchable legacy systems coexist. We approach every flow with enterprise integration patterns (EIP) and one rule: absolute observability. If a flow fails, the trace reveals exactly where and why before it impacts the business.
 We also connect the operational systems with the analytical ones, closing the data loop.
 Connector ≠ Integrated system

@@ -1013,6 +1013,26 @@ console.log("── the hero band: ink over the plates");
 	const perRoute = await inParallel(heroRoutes, async (route, lane, report) => {
 		let measured = 0, frames = 0, tightest = { ratio: Infinity };
 		let worstHere = { ratio: Infinity };
+		// #529: the title is one line on any desktop. service.css sizes one
+		// register for every hero by the longest title the CMS holds; a longer
+		// title wraps here first, by name, before anyone sees it at 72 px.
+		if (route !== "/" && route !== "/en") {
+			for (const width of [768, 1440]) {
+				const page = await lane.newPage();
+				await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
+				await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
+				const h1 = await page.evaluate(() => {
+					const h = document.querySelector(".s-hero h1");
+					if (!h) return null;
+					const lh = parseFloat(getComputedStyle(h).lineHeight);
+					return { lines: Math.round(h.getBoundingClientRect().height / lh), text: h.textContent.trim() };
+				});
+				await page.close();
+				if (!h1) report.fail(route, `no hero h1 found @${width} — the selector is stale`);
+				else if (h1.lines > 1) report.fail(route, `the h1 wraps to ${h1.lines} lines @${width} — "${h1.text}"; ` +
+					"the hero register in service.css is sized by the longest title (#529)");
+			}
+		}
 		for (const vp of SIZES) {
 			const page = await lane.newPage();
 			await page.setViewport({ ...vp, deviceScaleFactor: 1 });

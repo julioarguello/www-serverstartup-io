@@ -23,7 +23,7 @@ the reason to read this file rather than grep for hex codes.
 ## Principles
 
 1. **No CSS frameworks.** Plain CSS with custom properties, 13 files under
-   `src/styles/`. Total source budget **<= 150 KB**; measured **141 KB across 13
+   `src/styles/`. Total source budget **<= 150 KB**; measured **143 KB across 13
    files** (`wc -c src/styles/*.css`). Both numbers are read out of this line by
    `ci-check-css-budget.py`, so the doc is the source and cannot disagree with
    the gate — see [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475)
@@ -103,6 +103,17 @@ everywhere: **h1 48/56 · h2 40/48 · h3 24/30 · h4 22/30 · h5 20/26 · h6 18/
 weight 700 except h4. Body is fluid: `--text-body` runs 20px → 24px between
 1440px and 2400px, in step with the column, so the line keeps measuring ~80
 characters at every width.
+
+**The hero h1 is one line on any desktop (#529, founder 2026-10-01).** Every
+service and page hero shares one register for it, declared in `service.css`:
+`min(72px, 100cqi / 16.06 × 0.985)` against the column's inline size, where
+16.06 em is the width of the longest title the CMS holds («CDN, WAF y seguridad
+edge» in Alexandria Bold, 1028 px at 64 px, measured in Chrome). That is 52 px in
+the 840 px column, 62 px at the 1000 px one a 2400 px screen gets, 45 px on a
+768 px tablet; under 768 px the 48/42/40 register above applies and the title
+wraps. The a11y gate asserts every hero h1 is one line at 768 and 1440, so a
+longer title fails by name and the constant moves with it. The home keeps its
+own smaller register (#420): a sentence that wraps by design.
 
 Mono is **accents-only**: inline `code`, the console voice, the reference
 marks. Headings stay in Alexandria.

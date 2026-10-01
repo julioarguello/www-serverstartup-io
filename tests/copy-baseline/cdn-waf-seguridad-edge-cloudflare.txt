@@ -8,7 +8,6 @@ WAF
 ACCESS
 ZERO TRUST
 35 nm · nominal range
-you · ::1 · Bilbao
 CDN, WAF y seguridad edge
 Partners oficiales de Cloudflare desde 2019. Auditoría, migración y operación de CDN, WAF y seguridad perimetral, sobre todo en comercio electrónico.
 Audita tu edge

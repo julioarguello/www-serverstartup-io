@@ -81,8 +81,8 @@ const RING_POS: [number, number][] = [
 				<span class={i === 0 ? "radar__origin" : "radar__lab"} style={`left:${RING_POS[i]?.[0] ?? 0}%;top:${RING_POS[i]?.[1] ?? 0}%`}>{r}</span>
 			))}
 			<span class="radar__range">{range}</span>
-			<span class="radar__you" hidden><b>{you}</b><span class="radar__ip"></span></span>
-			<div class="radar__feed"></div>
+			<span class="radar__you" data-volatile hidden><b>{you}</b><span class="radar__ip"></span></span>
+			<div class="radar__feed" data-volatile></div>
 		</div>
 	</div>
 	<span class="s-hero__scrim" aria-hidden="true"></span>

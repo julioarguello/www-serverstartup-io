@@ -3,6 +3,8 @@ cta_label: "Audita tu edge"
 excerpt: "*Partners* oficiales de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en [comercio electrónico](/comercio-electronico)."
 ---
 
+> «Imaginemos que la red de una organización es un castillo, y el perímetro de red un foso. Una vez que se baja el puente levadizo y alguien lo cruza, puede moverse con libertad por el interior del castillo.» [Cloudflare, ¿Qué es el modelo de seguridad de red perimetral?](https://www.cloudflare.com/es-es/learning/access-management/castle-and-moat-network-security/)
+
 Trabajamos con la plataforma de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuentas [Enterprise](https://www.cloudflare.com/es-es/plans/enterprise/) y [Business](https://www.cloudflare.com/es-es/plans/business/), sobre todo para *retail* y comercio electrónico.
 
 `Cloudflare` está configurado. ¿Seguro de que está bien configurado? En muchas organizaciones nadie se atreve a tocar las reglas del `WAF`. Bloquean algo, seguro. Nadie recuerda qué.

@@ -2,9 +2,18 @@ Saltar al contenido
 ~Server Startup
 /cdn-waf-seguridad-edge-cloudflare
 EN
+ORIGIN
+CDN
+WAF
+ACCESS
+ZERO TRUST
+35 nm · nominal range
+you · ::1 · Bilbao
 CDN, WAF y seguridad edge
 Partners oficiales de Cloudflare desde 2019. Auditoría, migración y operación de CDN, WAF y seguridad perimetral, sobre todo en comercio electrónico.
 Audita tu edge
+«Imaginemos que la red de una organización es un castillo, y el perímetro de red un foso. Una vez que se baja el puente levadizo y alguien lo cruza, puede moverse con libertad por el interior del castillo.»
+Cloudflare, ¿Qué es el modelo de seguridad de red perimetral?
 Trabajamos con la plataforma de Cloudflare desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuentas Enterprise y Business, sobre todo para retail y comercio electrónico.
 Cloudflare está configurado. ¿Seguro de que está bien configurado? En muchas organizaciones nadie se atreve a tocar las reglas del WAF. Bloquean algo, seguro. Nadie recuerda qué.
 Nosotros sabemos por qué está cada una, porque las escribimos, las versionamos con Terraform y las mantenemos en producción.

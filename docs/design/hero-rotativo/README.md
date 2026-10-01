@@ -75,7 +75,8 @@ for on every frame of the cross-fade, and the scrim over the copy was always doi
 **The edge-security page no longer uses its plate or its ground (#529).** It opens with a
 photograph of the Cabo Peñas lighthouse that turns into a line drawing and a radar screen
 (`src/components/HeroRadar.astro`, assets `public/assets/hero/cdn-faro.webp` and
-`cdn-faro-plan.webp`). The photograph is not NASA's and is not public domain:
+`cdn-faro-plan.webp`, plus the 720 px and 660 px variants `srcset` serves to the phone
+column, `cdn-faro-720.webp` and `cdn-faro-plan-660.webp`). The photograph is not NASA's and is not public domain:
 
 | Asset | Photograph | Credit | Licence |
 | --- | --- | --- | --- |

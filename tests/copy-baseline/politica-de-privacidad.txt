@@ -8,6 +8,7 @@ Responsable del tratamiento
 SERVER STARTUP, S.L. NIF B95944807. Domicilio: C/ Los Fueros 11 — 48992 Getxo (Bizkaia). Para cualquier asunto relacionado con tus datos, escríbenos a legal@serverstartup.io.
 Qué datos tratamos
 Los que nos envías tú al escribirnos por correo electrónico o WhatsApp: tu dirección, tu nombre si lo firmas y lo que nos cuentes. Esta web no tiene formularios, ni registro, ni cuentas de usuario.
+En la página de CDN, el radar del encabezado muestra al propio visitante la dirección IP desde la que llega y la ciudad que Cloudflare deduce de ella. Ese dato lo pide tu navegador en cada visita, no se guarda y nadie más lo ve.
 Con qué finalidad
 Para atender tu consulta y, si acabamos trabajando juntos, para gestionar la relación contractual. No usamos tus datos con fines publicitarios ni te incorporamos a listas de correo.
 Legitimación

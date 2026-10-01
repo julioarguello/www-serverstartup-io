@@ -2,9 +2,18 @@ Skip to content
 ~Server Startup
 /en/cdn-waf-edge-security-cloudflare
 ES
+ORIGIN
+CDN
+WAF
+ACCESS
+ZERO TRUST
+35 nm · nominal range
+you · ::1 · Bilbao
 CDN, WAF & Edge Security
 Official Cloudflare partners since 2019. We audit, migrate and run CDN, WAF and edge security, mostly for e-commerce.
 Audit your edge
+«Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.»
+Cloudflare, What is the castle-and-moat network security model?
 We've worked with the Cloudflare platform since 2017, two years before becoming an official partner. We audit, migrate and tune Enterprise and Business accounts, mostly for retail and e-commerce.
 Your Cloudflare is configured. Are you sure it's configured right? In many organizations nobody dares touch the WAF rules. They block something. Nobody remembers what.
 We know why each rule is there, because we wrote them, we version them with Terraform, and we keep them running in production.

@@ -12,7 +12,7 @@
  * So the pair is computed from the colour itself: take the label that
  * contrasts more, and if neither clears AA (4.5:1), darken or lighten the
  * fill by the smallest amount that gets there. Only one of the six needs it —
- * the Big Data red, where raw ink is 4.25 and raw white 3.92.
+ * the Integration red, where raw ink is 4.25 and raw white 3.92.
  *
  * Doing this in the template rather than in CSS is deliberate: CSS cannot
  * branch on luminance, and a new colour added in the CMS tomorrow must not

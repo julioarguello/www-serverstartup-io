@@ -3,6 +3,8 @@ cta_label: "Hablemos de integración"
 excerpt: "No somos «arquitectos de PowerPoint»: lo que planificamos, lo ejecutamos. Sin exageraciones — lo objetivamente necesario y viable. Un guante, no un martillo, con homogeneidad, metodología, testabilidad y observabilidad absoluta."
 ---
 
+> «Las aplicaciones interesantes rara vez viven aisladas.» [Gregor Hohpe y Bobby Woolf](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html)
+
 Mover datos de A a B es la parte fácil. El verdadero desafío de ingeniería es mantener la **continuidad operativa** en ecosistemas donde conviven tu `ERP`, plataformas `SaaS` y sistemas *legacy* intocables. Abordamos cada flujo con [patrones de integración empresarial](https://www.enterpriseintegrationpatterns.com/) (`EIP`) y con una regla: observabilidad absoluta. Si un flujo falla, la traza revela exactamente *dónde*, *cuándo* y *por qué*.
 
 Conectamos, además, los sistemas operacionales con [los analíticos](/big-data-cloud-analytics), cerrando el ciclo del dato.

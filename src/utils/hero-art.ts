@@ -86,15 +86,29 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
 }
 
 /**
- * The one vertical whose hero is a scene rather than a held plate (#529):
- * the Cabo Peñas lighthouse, photographed, then drawn as a plan, then read
- * as a radar screen. The lighthouse is the counter-image of the bouncy
- * castle — the perimeter that looks solid — which is why it belongs to the
- * edge-security page and to no other. Assets, like the plates, live in
- * `public/assets/` because R2 media is not seedable (project rules §7);
- * the photograph's credit is in `docs/design/hero-rotativo/README.md`.
+ * The verticals whose hero is a scene rather than a held plate. Each scene is
+ * a real place photographed, drawn, and then made into the vertical's own
+ * instrument, on the band every scene shares (HeroScene.astro):
+ *
+ * - `radar` (#529) — the Cabo Peñas lighthouse, photographed, drawn as a plan,
+ *   read as a radar screen: the counter-image of the castle-and-moat
+ *   perimeter, which is why it belongs to the edge-security page.
+ * - `bridge` (#531) — the Vizcaya Bridge between Portugalete and Las Arenas:
+ *   the two banks with no bridge, the bridge laid as a technical drawing, then
+ *   what plugs into it, because the bridge is the bus.
+ *
+ * Assets, like the plates, live in `public/assets/` because R2 media is not
+ * seedable (project rules §7); the photographs' credits are in
+ * `docs/design/hero-rotativo/README.md`.
  */
-export const HERO_RADAR_FACE: FaceKey = "cdn";
+export type HeroSceneKind = "radar" | "bridge";
+export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge" };
+
+/** The scene this slug (either locale) opens with, or `null` for a held plate or a plain page. */
+export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null {
+	const face = slug ? FACE_BY_SLUG[slug] : undefined;
+	return (face && HERO_SCENE[face]) || null;
+}
 
 export const HERO_RADAR = {
 	/** the building, soft-edged into the band: WebP with alpha, 1320×1515 */
@@ -115,7 +129,12 @@ export const HERO_RADAR = {
  */
 export const HERO_RADAR_SIZES = "(max-width: 700px) 78vw, 43.4vw";
 
-/** Whether this slug (either locale) renders the radar hero instead of a plate. */
-export function heroRadarForSlug(slug: string | undefined): boolean {
-	return !!slug && FACE_BY_SLUG[slug] === HERO_RADAR_FACE;
-}
+export const HERO_BRIDGE = {
+	/** the two banks without the bridge or the sky, cut off just under the tug: WebP with alpha, 1320×730 */
+	banks: "/assets/hero/int-puente.webp",
+	/** the same at 960 px for phones, where the frame is 125vw (a 412 px phone at 1.75 needs 900) */
+	banksSmall: "/assets/hero/int-puente-960.webp",
+};
+
+/** The frame is about 60 % of the viewport on desktops and 125 % of it on phones. */
+export const HERO_BRIDGE_SIZES = "(max-width: 767px) 125vw, 60vw";

@@ -15,8 +15,9 @@ import { serviceJsonLd, breadcrumbJsonLd } from "../../utils/jsonld";
 import { entryAlternatePath } from "../../utils/alternate";
 import { getUiLabels } from "../../utils/ui-labels";
 import { excerptHtml, excerptPlain } from "../../utils/excerpt";
-import { heroArtForSlug, heroGroundForSlug, heroRadarForSlug } from "../../utils/hero-art";
+import { heroArtForSlug, heroGroundForSlug, heroSceneForSlug } from "../../utils/hero-art";
 import HeroRadar from "../../components/HeroRadar.astro";
+import HeroBridge from "../../components/HeroBridge.astro";
 import type { CacheHint } from "emdash";
 import type { SiteSettings } from "../../types";
 
@@ -62,12 +63,12 @@ const labels = await getUiLabels(locale);
 // #413: the six verticals own a drawn plate — the same picture the home
 // rotates through, held still. Everything else (contacto, quiénes somos, a
 // blog page) returns null here and keeps the light hero it has always had.
-// #529: the edge-security vertical opens with the radar scene (see ../[slug].astro)
-const heroRadar = heroRadarForSlug(slug);
-const heroArt = heroRadar ? null : heroArtForSlug(slug);
-const heroGround = heroRadar ? null : heroGroundForSlug(slug);
+// #529/#531: edge security and integration open with a scene, the radar and the bridge (see ../[slug].astro)
+const heroScene = heroSceneForSlug(slug);
+const heroArt = heroScene ? null : heroArtForSlug(slug);
+const heroGround = heroScene ? null : heroGroundForSlug(slug);
 const blocks: any[] = Array.isArray(content) ? content : [];
-const heroQuote = heroRadar && blocks[0]?._type === "block" && blocks[0]?.style === "blockquote" ? [blocks[0]] : null;
+const heroQuote = heroScene && blocks[0]?._type === "block" && blocks[0]?.style === "blockquote" ? [blocks[0]] : null;
 const instrumentContent = heroQuote ? blocks.slice(1) : content;
 ---
 
@@ -91,8 +92,17 @@ const instrumentContent = heroQuote ? blocks.slice(1) : content;
 		trail: [{ name: title, path: `/en/${slug}` }],
 	}))} />
 	<!-- ══════ HERO — compact, solid cube glyph in the discipline color ══════ -->
-	{heroRadar ? (
+	{heroScene === "radar" ? (
 		<HeroRadar
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath="/en/contact"
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "bridge" ? (
+		<HeroBridge
 			title={title}
 			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
 			ctaLabel={ctaLabel}
@@ -174,5 +184,7 @@ const instrumentContent = heroQuote ? blocks.slice(1) : content;
 
 <style is:global define:vars={{ accentColor, accentFill, accentLabel }}>
 	@import "../../styles/service.css";
+	@import "../../styles/hero-scene.css";
 	@import "../../styles/hero-radar.css";
+	@import "../../styles/hero-bridge.css";
 </style>

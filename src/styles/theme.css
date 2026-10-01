@@ -206,6 +206,8 @@
 	   lighthouse cutout's edge pixels average to, which the band drifts toward */
 	--color-ground-dark: #232724;
 	--color-ground-haze: #A1ABAA;
+	/* the bridge hero's haze (#531): what the Las Arenas edge of the banks plate averages to */
+	--color-ground-haze-bridge: #817975;
 	/* The card the rotating half of the band lives in (founder's direction C,
 	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
 	   the panel reads as a pane laid on the picture rather than a box that

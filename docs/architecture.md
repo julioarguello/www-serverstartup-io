@@ -237,7 +237,17 @@ Decisions that are not obvious from the code, and the measurement behind each:
   `setInterval`, so the home's checkbox pattern alone would leave the sweep turning and the
   events arriving: the component's script owns start/stop and also stops on `visibilitychange`
   and under `prefers-reduced-motion` (which renders the end state with one still event per
-  zone).
+  zone). **Beside the pause, a replay** (founder, 2026-10-01): back to the photograph and through
+  the sequence again, the pause released and the feed cleared — the class is removed, a reflow
+  forced, the class re-added, or the CSS animations never restart. Where a pointer can hover the
+  two controls wait at 35 % until the band is hovered or one has focus; on touch devices, which
+  cannot hover, they stay at full strength under the art. Under reduced motion the replay is
+  hidden: nothing moves to replay.
+- **The frame is sized by the band's height, never taller than it** (88 %, what 48 % of a
+  1440 × 900 viewport gave), and placed by the column — its left edge 10 px past the column's
+  right edge, pulled back by 58 % of its own width so the tower starts just past the copy. A
+  width-sized frame overflowed the band on a wide, short screen (3318 × 783, the founder's) and
+  showed one fragment of the house, hugely enlarged, with the echo on the title.
 - **Nothing is written over the building, the copy or the band's edge.** Events pick a
   candidate in one of five frame zones and then check it against the page — the copy's box, the
   building's rectangle in frame coordinates, the ring labels, the visitor's echo and the band's

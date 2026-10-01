@@ -43,6 +43,7 @@ const range = L("radar_range", "35 nm · nominal range");
 const you = L("radar_you", "you");
 const events = L("radar_events", "").split(";").map((e) => e.trim()).filter(Boolean);
 const pauseLabel = L("radar_pause", "Pausar el radar");
+const replayLabel = L("radar_replay", "Repetir la animación");
 
 /* The epigraph: the quotation is the plain spans of the opening blockquote;
    the author is its one linked span, and the link is the source. */
@@ -120,8 +121,11 @@ const RING_POS: [number, number][] = [
 			)}
 		</div>
 	</div>
-	{/* WCAG 2.2.2: one control stops the sweep, the pulse and the event stream */}
+	{/* WCAG 2.2.2: one control stops the sweep, the pulse and the event stream; the other replays the
+	    sequence from the photograph. Faded on desktops until the band is hovered or a control has focus;
+	    always visible where there is no hover (founder, 2026-10-01: "piensa en el mobile") */}
 	<div class="radar__ctl">
+		<button type="button" class="radar__replay" aria-label={replayLabel}></button>
 		<input type="checkbox" id="radar-pause" class="radar__pause" aria-label={pauseLabel} />
 		<label for="radar-pause" class="radar__pause-btn" aria-hidden="true"></label>
 	</div>
@@ -217,18 +221,33 @@ const RING_POS: [number, number][] = [
 		pause.addEventListener("change", () => { hero.classList.toggle("is-paused", pause.checked); if (pause.checked) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
 
+		const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
+		const replay = hero.querySelector<HTMLButtonElement>(".radar__replay")!;
+		function play() {
+			plan.addEventListener("animationend", done, { once: true });
+			window.setTimeout(() => hero.classList.add("is-playing"), 300);
+		}
 		if (reduced) {
 			/* the resting state at once, with one still event per zone */
 			hero.classList.add("is-done");
 			ZONES.forEach((z, i) => { const x = (z[0] + z[1]) / 2, y = (z[2] + z[3]) / 2; if (EVENTS[i] && clear(x, y, z[4], EVENTS[i])) place(x, y, z[4], EVENTS[i]); });
 		} else {
-			const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
-			plan.addEventListener("animationend", done, { once: true });
 			const imgs = Array.from(hero.querySelectorAll<HTMLImageElement>(".radar__art img"));
 			let n = 0;
-			const ready = () => { if (++n === imgs.length) window.setTimeout(() => hero.classList.add("is-playing"), 300); };
+			const ready = () => { if (++n === imgs.length) play(); };
 			imgs.forEach((im) => (im.complete ? ready() : im.addEventListener("load", ready, { once: true })));
 		}
+		/* replay: back to the photograph and through the sequence again; the pause is released, the feed cleared */
+		replay.addEventListener("click", () => {
+			if (reduced) return;
+			stopFeed();
+			feed.replaceChildren();
+			live.length = 0;
+			pause.checked = false;
+			hero.classList.remove("is-paused", "is-done", "is-playing");
+			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */
+			play();
+		});
 
 		/* the visitor's echo: asked by the browser so the cached page never carries anyone's address; hidden unless the edge answers */
 		const ipEl = hero.querySelector<HTMLElement>(".radar__ip");

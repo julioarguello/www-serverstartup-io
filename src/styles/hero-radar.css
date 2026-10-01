@@ -32,16 +32,20 @@
 	z-index: 0;
 }
 
-/* the drawing's frame: 48 % of the band wide, bottom-anchored, and placed by
-   the COLUMN, not the viewport — the tower's left edge (58 % of the frame)
-   lands 10 px past the column's right edge at every width, so no line of copy
-   touches it (right = 29.84vw − container/2 + 10px: 0 at 1440, −124 at 1024,
-   +103 at 1920). The house sits on the band's floor. */
+/* the drawing's frame: sized by the BAND'S HEIGHT, never taller than it (88 %
+   of the band, which is what 48 % of a 1440 × 900 viewport gave — on a wide,
+   short screen a width-sized frame overflowed the band and only a fragment of
+   the house showed, hugely enlarged), bottom-anchored so the house sits on the
+   band's floor, and placed by the COLUMN, not the viewport: its left edge sits
+   10 px past the column's right edge, pulled back by 58 % of its own width, so
+   the tower starts just past the copy at every width and no line touches it. */
 .radar__box {
 	position: absolute;
-	right: calc(29.84vw - var(--container-max) / 2 + 10px);
+	left: calc(50% + var(--container-max) / 2 - 10px);
+	translate: -58% 0;
 	bottom: -8%;
-	width: 48%;
+	height: min(88%, calc(48vw * 2020 / 1760));
+	width: auto;
 	aspect-ratio: 1760 / 2020;
 }
 
@@ -231,22 +235,35 @@
 }
 
 /* the control: WCAG 2.2.2 — one checkbox stops everything that moves */
-.radar__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; }
+.radar__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
 .radar__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.radar__pause-btn {
+.radar__pause-btn,
+.radar__replay {
 	display: grid;
 	place-items: center;
 	width: 40px;
 	height: 40px;
+	margin: 0;
+	padding: 0;
 	border: 1px solid var(--color-secondary);
 	color: var(--color-secondary);
 	background: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
 	cursor: pointer;
+	font: inherit;
 	font-size: 14px;
 }
+.radar__replay { font-size: 20px; line-height: 1; }
+.radar__replay::before { content: "↻"; }
 .radar__pause-btn::before { content: "❚❚"; }
 .radar__pause:checked + .radar__pause-btn::before { content: "▶"; }
-.radar__pause:focus-visible + .radar__pause-btn { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
+.radar__pause:focus-visible + .radar__pause-btn,
+.radar__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
+/* where a pointer can hover, the controls wait at a quarter strength until the band is hovered or one of them has focus */
+@media (hover: hover) {
+	.radar__ctl { opacity: .35; transition: opacity .25s ease; }
+	.s-hero--radar:hover .radar__ctl,
+	.radar__ctl:focus-within { opacity: 1; }
+}
 
 /* the sequence: photo 1.2 s · crossfade 2 s · strokes alone 1 s · radar 0.8 s · then the events */
 .s-hero--radar.is-playing .radar__photo { animation: radar-photo var(--radar-t) ease-in-out forwards; }
@@ -284,6 +301,8 @@
 	.s-hero--radar .radar__blip { animation: none !important; }
 	.s-hero--radar .radar__blip { opacity: 1 !important; }
 	.s-hero--radar .radar__sweep { transform: rotate(300deg); }
+	/* nothing to replay when nothing moves */
+	.radar__replay { display: none; }
 }
 
 /* phones and small tablets, up to where the opening register begins (767): one column — title, excerpt, CTA, the art at full width inside the first viewport, the epigraph after it;
@@ -298,7 +317,7 @@
 	.s-hero--radar .s-hero__stage { order: 4; position: relative; height: calc(100vw * 2020 / 1760 * .78); margin-top: var(--space-2, 8px); overflow: hidden; }
 	.s-hero__epigraph { order: 5; margin: var(--space-4) 16px 0; }
 	.radar__ctl { order: 6; position: static; margin: var(--space-3, 16px) 16px 0; }
-	.radar__box { right: auto; left: 11vw; top: 0; bottom: auto; width: 78vw; aspect-ratio: auto; height: 100%; }
+	.radar__box { left: 11vw; translate: none; top: 0; bottom: auto; width: 78vw; aspect-ratio: auto; height: 100%; }
 	.radar__art img { object-fit: contain; object-position: 50% 0; }
 	.s-hero--radar .s-hero__scrim { display: none; }
 	.radar__seal { left: -140px; top: auto; bottom: -120px; width: 420px; }

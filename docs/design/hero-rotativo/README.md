@@ -72,6 +72,19 @@ for on every frame of the cross-fade, and the scrim over the copy was always doi
 | `gf` | The Earth's limb at orbital sunrise, ISS Expedition 23 | NASA |
 | `ia` | RS Puppis, a star lighting the cloud it sits in | NASA, ESA and the Hubble Heritage Team (STScI/AURA)-Hubble/Europe Collaboration |
 
+**The edge-security page no longer uses its plate or its ground (#529).** It opens with a
+photograph of the Cabo Peñas lighthouse that turns into a line drawing and a radar screen
+(`src/components/HeroRadar.astro`, assets `public/assets/hero/cdn-faro.webp` and
+`cdn-faro-plan.webp`). The photograph is not NASA's and is not public domain:
+
+| Asset | Photograph | Credit | Licence |
+| --- | --- | --- | --- |
+| `cdn-faro.webp` | Faro de Cabo Peñas, Gozón, Asturias (cropped, antenna mast painted out, soft-edged) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
+| `cdn-faro-plan.webp` | A line drawing generated from the photograph's cutout (Workers AI, FLUX.2 [dev]; the pipeline is in the design thread of #529) | derivative of the above | CC BY-SA 4.0 |
+
+CC BY-SA asks for attribution where the work is used and share-alike on derivatives. The
+drawing is a derivative; this table is the attribution until the site has a credits page.
+
 **Green is the one honest problem.** Deep sky has no green: the eye's response and the filters
 observatories map to RGB conspire against it, and there is not one green nebula in the archive.
 The only real green NASA photographs of space are auroras seen from the ISS, so `gf` is the

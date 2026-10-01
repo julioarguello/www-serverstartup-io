@@ -1,0 +1,189 @@
+---
+/**
+ * HeroRadar — the opening of the edge-security vertical (#529).
+ *
+ * A photograph of the Cabo Peñas lighthouse, soft-edged into the band, turns
+ * into a line drawing of the same building, and a radar screen settles behind
+ * it: range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
+ * ZERO TRUST), a sweep at 12 rpm, a stream of edge events, and the visitor as
+ * one ink echo. The lighthouse stands at the edge and lights what approaches —
+ * the counter-image of the castle-and-moat perimeter the quotation describes.
+ *
+ * Two rules the review fixed (2026-10-01): every piece of text is HTML at a
+ * fixed size positioned in percentages of the frame, never text inside the
+ * scaled SVG; and the sweep is a composited element (a rotated conic
+ * gradient), never a transform on an SVG group, which re-lays the whole
+ * drawing out on every frame. Nothing is ever written over the building.
+ *
+ * Copy is the service page's own: title, excerpt, CTA and the partner card,
+ * the card carrying the quotation (a blockquote the CMS content opens with).
+ * Chrome strings come from the `panel_labels` widget, English in both locales
+ * — a machine voice, like the PR card (founder, 2026-10-01).
+ */
+import { PortableText } from "emdash/ui";
+import TightMark from "./service/TightMark.astro";
+import { HERO_RADAR } from "../utils/hero-art";
+
+interface Props {
+	title: string;
+	excerptHtml: string;
+	ctaLabel: string;
+	contactPath: string;
+	quote: any[] | null;
+	labels: { get: (widget: string, key: string, fallback: string) => string };
+}
+const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props;
+const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
+
+const rings = L("radar_rings", "ORIGIN,CDN,WAF,ACCESS,ZERO TRUST").split(",");
+const range = L("radar_range", "35 nm · nominal range");
+const you = L("radar_you", "you");
+const events = L("radar_events", "").split(";").map((e) => e.trim()).filter(Boolean);
+const pauseLabel = L("radar_pause", "Pausar el radar");
+
+/* Where each ring label sits, in % of the 1205.5 × 1384 frame the drawing was
+   solved in: the origin at the tower base, the four rings where the 70°
+   bearing crosses them, in open sky left of the tower, nearest the copy. */
+const RING_POS: [number, number][] = [
+	[72.2, 91.2],
+	[41.97, 27.31],
+	[36.91, 15.1],
+	[31.77, 2.89],
+	[26.71, -9.32],
+];
+---
+
+<section class="s-hero s-hero--radar" aria-label={title} data-events={JSON.stringify(events)}>
+	<div class="s-hero__stage radar" aria-hidden="true">
+		<svg class="radar__grid"><defs><pattern id="radar-grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="currentColor" stroke-width=".8" /></pattern></defs><rect width="100%" height="100%" fill="url(#radar-grid)" /></svg>
+		<div class="radar__box radar__screen">
+			{/* rings every 180 units from the tower base at (777.5, 1063); the dashed one is the light's nominal range, 35 nautical miles (es.wikipedia, Faro de Cabo Peñas) */}
+			<svg viewBox="0 0 1205.5 1384" preserveAspectRatio="xMidYMid meet">
+				<g class="radar__rings" fill="none">
+					{[180, 360, 540, 720, 900, 1080, 1260, 1440].map((r) => <circle cx="777.5" cy="1063" r={r} />)}
+					<line x1="-1500" y1="1063" x2="3000" y2="1063" /><line x1="777.5" y1="-600" x2="777.5" y2="2700" />
+					<line x1="-355" y1="-70" x2="1910" y2="2196" /><line x1="1910" y1="-70" x2="-355" y2="2196" />
+				</g>
+				<circle class="radar__range-ring" cx="777.5" cy="1063" r="630" fill="none" stroke-dasharray="10 8" />
+				<g class="radar__scale" fill="none">
+					<line x1="777.5" y1="1063" x2="300" y2="-250" />
+					<line x1="520" y1="382" x2="542" y2="390" /><line x1="459" y1="213" x2="481" y2="221" /><line x1="397" y1="44" x2="419" y2="52" /><line x1="336" y1="-125" x2="358" y2="-117" />
+				</g>
+			</svg>
+			<div class="radar__sweep"></div>
+		</div>
+		<div class="radar__box radar__art">
+			<img class="radar__photo" src={HERO_RADAR.photo} width="1320" height="1515" alt="" fetchpriority="high" decoding="async" />
+			<img class="radar__plan" src={HERO_RADAR.plan} width="1210" height="1392" alt="" decoding="async" />
+		</div>
+		<div class="radar__box radar__hud">
+			{rings.map((r, i) => (
+				<span class={i === 0 ? "radar__origin" : "radar__lab"} style={`left:${RING_POS[i]?.[0] ?? 0}%;top:${RING_POS[i]?.[1] ?? 0}%`}>{r}</span>
+			))}
+			<span class="radar__range">{range}</span>
+			<span class="radar__you" hidden><b>{you}</b><span class="radar__ip"></span></span>
+			<div class="radar__feed"></div>
+		</div>
+	</div>
+	<span class="s-hero__scrim" aria-hidden="true"></span>
+	<div class="container s-hero__inner">
+		<div class="s-hero__copy">
+			<h1>{title}</h1>
+			{excerptHtml && (
+				<div class="s-hero__body">
+					<p class="text-body" set:html={excerptHtml} />
+				</div>
+			)}
+			<a href={contactPath} class="btn btn-dark">{ctaLabel}</a>
+			{quote && (
+				<div class="s-partner s-partner--hero">
+					<a class="s-partner__logo" href="https://www.cloudflare.com/partners/" target="_blank" rel="noopener noreferrer">
+						<img src="/assets/cf-partner-network-stacked.png" alt="Cloudflare Partner Network" width="516" height="234" loading="lazy" />
+					</a>
+					<div class="s-partner__copy"><PortableText value={quote} components={{ mark: TightMark }} /></div>
+				</div>
+			)}
+		</div>
+	</div>
+	{/* WCAG 2.2.2: one control stops the sweep, the pulse and the event stream */}
+	<div class="radar__ctl">
+		<input type="checkbox" id="radar-pause" class="radar__pause" aria-label={pauseLabel} />
+		<label for="radar-pause" class="radar__pause-btn" aria-hidden="true"></label>
+	</div>
+</section>
+
+<script>
+	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
+	if (hero) {
+		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const narrow = matchMedia("(max-width: 700px)").matches;
+		const feed = hero.querySelector<HTMLElement>(".radar__feed")!;
+		const pause = hero.querySelector<HTMLInputElement>(".radar__pause")!;
+		const EVENTS: string[] = JSON.parse(hero.dataset.events || "[]");
+		/* open zones in % of the frame — never over the building, the copy, the ring labels or the visitor's echo — and the side each label reads to */
+		const ZONES: [number, number, number, number, boolean][] = narrow
+			? [[2, 6, 86, 92, false], [40, 50, 2, 8, false]]
+			: [[46, 84, -14, 10, false], [44, 50, 19, 23, true], [77, 84, 12, 38, false], [73, 84, 94, 104, false]];
+		const live: [number, number][] = [];
+		let timer: number | null = null;
+		let k = 0;
+
+		function place(x: number, y: number, left: boolean, text: string) {
+			const d = document.createElement("span");
+			d.className = "radar__blip" + (left ? " radar__blip--l" : "");
+			d.style.left = `${x}%`;
+			d.style.top = `${y}%`;
+			d.textContent = text;
+			feed.appendChild(d);
+			return d;
+		}
+		function blip() {
+			let x = 0, y = 0, z = ZONES[0], tries = 0;
+			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
+			function near(q: [number, number]): boolean { return Math.abs(q[1] - y) < 6 && Math.abs(q[0] - x) < 34; }
+			do {
+				z = ZONES[Math.floor(Math.random() * ZONES.length)];
+				x = z[0] + Math.random() * (z[1] - z[0]);
+				y = z[2] + Math.random() * (z[3] - z[2]);
+			} while (++tries < 25 && live.some(near));
+			if (tries >= 25 || EVENTS.length === 0) return;
+			const me: [number, number] = [x, y];
+			live.push(me);
+			const d = place(x, y, z[4], EVENTS[k++ % EVENTS.length]);
+			setTimeout(() => { d.remove(); live.splice(live.indexOf(me), 1); }, 2400);
+		}
+		function startFeed() { if (timer !== null || reduced || pause.checked || document.hidden) return; timer = window.setInterval(blip, 520); blip(); }
+		function stopFeed() { if (timer !== null) { clearInterval(timer); timer = null; } }
+		function done() { hero.classList.add("is-done"); window.setTimeout(startFeed, 200); }
+
+		pause.addEventListener("change", () => { hero.classList.toggle("is-paused", pause.checked); if (pause.checked) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
+		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
+
+		if (reduced) {
+			/* the resting state at once, with one still event per zone */
+			hero.classList.add("is-done");
+			ZONES.forEach((z, i) => { if (EVENTS[i]) place((z[0] + z[1]) / 2, (z[2] + z[3]) / 2, z[4], EVENTS[i]); });
+		} else {
+			const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
+			plan.addEventListener("animationend", done, { once: true });
+			const imgs = Array.from(hero.querySelectorAll<HTMLImageElement>(".radar__art img"));
+			let n = 0;
+			const ready = () => { if (++n === imgs.length) window.setTimeout(() => hero.classList.add("is-playing"), 300); };
+			imgs.forEach((im) => (im.complete ? ready() : im.addEventListener("load", ready, { once: true })));
+		}
+
+		/* the visitor's echo: asked by the browser so the cached page never carries anyone's address; hidden unless the edge answers */
+		const youEl = hero.querySelector<HTMLElement>(".radar__you");
+		const ipEl = hero.querySelector<HTMLElement>(".radar__ip");
+		if (youEl && ipEl) {
+			fetch("/api/whoami", { cache: "no-store" })
+				.then((r) => (r.ok ? r.json() : null))
+				.then((d: { ip?: string; city?: string } | null) => {
+					if (!d || !d.ip) return;
+					ipEl.textContent = d.city ? ` · ${d.ip} · ${d.city}` : ` · ${d.ip}`;
+					youEl.hidden = false;
+				})
+				.catch(() => {});
+		}
+	}
+</script>

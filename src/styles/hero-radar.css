@@ -1,0 +1,282 @@
+/* ═══ HERO — the radar scene of the edge-security vertical (#529) ═══
+   Light, not ink: the band is the vertical's own colour at a tint over the
+   page's white, so the photograph and the drawing sit on paper the way the
+   plates never could ("lo oscuro transmite tristeza", founder 2026-09-30).
+   Three boxes share one geometry — the screen under, the art, the text
+   overlay over — so a label positioned in percentages lands on its ring.
+   Every colour is a token or a mix of tokens; the only orange is the one the
+   CMS gives this page as --accentColor. */
+.s-hero--radar {
+	--radar-c: var(--accentColor, var(--color-edge));
+	/* small orange text needs more than the brand orange gives on this band:
+	   mixed toward ink it clears 4.5:1 */
+	--radar-c-text: color-mix(in srgb, var(--radar-c) 70%, var(--color-primary));
+	--radar-t: 5s;
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	align-items: center;
+	min-height: 100svh;
+	padding: var(--open-pad-top) 0 var(--space-6);
+	background-color: color-mix(in srgb, var(--radar-c) 9%, var(--color-secondary));
+	overflow: clip;
+}
+
+.s-hero--radar .s-hero__stage {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.radar__grid {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.radar__box {
+	position: absolute;
+	right: 6%;
+	top: 52%;
+	translate: 0 -50%;
+	width: 43.4%;
+	aspect-ratio: 1760 / 2020;
+}
+
+.radar__screen { pointer-events: none; }
+.radar__screen svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+	opacity: 0;
+}
+.radar__rings { stroke: var(--radar-c); stroke-width: 1.5; stroke-opacity: .5; }
+.radar__range-ring { stroke: var(--radar-c); stroke-width: 1.8; stroke-opacity: .8; }
+.radar__scale { stroke: var(--color-primary); stroke-width: 1.2; stroke-opacity: .55; }
+
+/* the sweep: a disc of 3200 frame units centred on the tower base (777.5, 1063 of 1205.5 × 1384), turned on the compositor at 12 rpm */
+.radar__sweep {
+	position: absolute;
+	width: 265.4%;
+	aspect-ratio: 1;
+	left: 64.5%;
+	top: 76.8%;
+	translate: -50% -50%;
+	border-radius: 50%;
+	background: conic-gradient(from 90deg, transparent 0deg 292deg, color-mix(in srgb, var(--radar-c) 0%, transparent) 292deg, color-mix(in srgb, var(--radar-c) 34%, transparent) 358.5deg, var(--radar-c) 360deg);
+	will-change: transform;
+	opacity: 0;
+}
+
+.radar__art img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.radar__photo { opacity: 1; }
+.radar__plan { opacity: 0; }
+
+/* the text overlay: fixed sizes, positioned in percentages of the frame */
+.radar__hud {
+	pointer-events: none;
+	opacity: 0;
+	font-family: var(--font-family-mono);
+}
+.radar__hud > * { position: absolute; white-space: nowrap; }
+.radar__hud .radar__feed { inset: 0; }
+.radar__lab, .radar__origin {
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: .08em;
+	color: var(--color-primary);
+}
+.radar__lab { translate: calc(-100% - 10px) -50%; }
+.radar__lab::after {
+	content: "";
+	position: absolute;
+	left: calc(100% + 4px);
+	top: 50%;
+	width: 10px;
+	height: 1px;
+	background: var(--color-primary);
+	opacity: .6;
+}
+.radar__range {
+	font-size: 11px;
+	color: var(--color-text-muted);
+	right: 0;
+	top: 76.8%;
+	translate: 0 -120%;
+}
+.radar__you {
+	left: 34%;
+	top: 38.9%;
+	translate: -100% -50%;
+	font-size: 12.5px;
+	font-weight: 500;
+	color: var(--color-primary);
+	padding-right: 22px;
+}
+.radar__you b { font-weight: 500; }
+.radar__you::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	translate: 0 -50%;
+	border-radius: 50%;
+	background: var(--color-primary);
+}
+.radar__you::before {
+	content: "";
+	position: absolute;
+	right: -9px;
+	top: 50%;
+	width: 28px;
+	height: 28px;
+	translate: 0 -50%;
+	border-radius: 50%;
+	border: 1.5px solid var(--color-primary);
+	animation: radar-pulse 2.5s ease-out infinite;
+}
+.radar__blip {
+	position: absolute;
+	white-space: nowrap;
+	font-size: 12.5px;
+	color: var(--radar-c-text);
+	translate: 0 -50%;
+	padding-left: 22px;
+	animation: radar-blip 2.4s ease-out forwards;
+}
+.radar__blip--l { translate: -100% -50%; padding-left: 0; padding-right: 22px; }
+.radar__blip::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	translate: 0 -50%;
+	border-radius: 50%;
+	background: var(--radar-c);
+	box-shadow: none;
+	outline: 5px solid color-mix(in srgb, var(--radar-c) 35%, transparent);
+}
+.radar__blip--l::after { left: auto; right: 0; }
+
+/* copy: the service page's own pieces, the partner card carrying the quotation */
+.s-hero--radar .s-hero__inner { position: relative; z-index: 2; }
+.s-hero--radar .s-hero__copy { max-width: none; }
+/* the service hero paints its h1 white for the ink band; this band is paper */
+.s-hero.s-hero--radar h1 { max-width: 12ch; color: var(--color-primary); }
+.s-hero--radar .s-hero__body { max-width: 30ch; }
+.s-hero--radar .btn { margin-top: var(--space-4); }
+.s-partner--hero {
+	margin: var(--space-4) 0 0;
+	max-width: none;
+	width: min(100%, 530px);
+	gap: 22px;
+	padding: 18px 22px;
+	background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+}
+.s-partner--hero .s-partner__logo { width: 120px; }
+.s-partner--hero .s-partner__copy { font-size: 15.5px; line-height: 1.45; font-style: italic; }
+.s-partner--hero .s-partner__copy p { margin: 0; }
+.s-partner--hero .s-partner__copy a { font-family: var(--font-family-mono); font-size: 11.5px; font-style: normal; color: var(--color-primary); display: block; margin-top: 6px; }
+
+/* the scrim keeps the copy legible over the rings on the text side */
+.s-hero--radar .s-hero__scrim {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-secondary) 55%, transparent) 0%, color-mix(in srgb, var(--color-secondary) 45%, transparent) 34%, color-mix(in srgb, var(--color-secondary) 20%, transparent) 50%, transparent 64%);
+}
+
+/* the control: WCAG 2.2.2 — one checkbox stops everything that moves */
+.radar__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; }
+.radar__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.radar__pause-btn {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid var(--color-primary);
+	color: var(--color-primary);
+	background: color-mix(in srgb, var(--color-secondary) 80%, transparent);
+	cursor: pointer;
+	font-size: 14px;
+}
+.radar__pause-btn::before { content: "❚❚"; }
+.radar__pause:checked + .radar__pause-btn::before { content: "▶"; }
+.radar__pause:focus-visible + .radar__pause-btn { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+/* the sequence: photo 1.2 s · crossfade 2 s · strokes alone 1 s · radar 0.8 s · then the events */
+.s-hero--radar.is-playing .radar__photo { animation: radar-photo var(--radar-t) ease-in-out forwards; }
+.s-hero--radar.is-playing .radar__plan { animation: radar-plan var(--radar-t) ease-in-out forwards; }
+.s-hero--radar.is-playing .radar__screen svg,
+.s-hero--radar.is-playing .radar__hud { animation: radar-in var(--radar-t) ease-in-out forwards; }
+.s-hero--radar.is-playing .radar__sweep,
+.s-hero--radar.is-done .radar__sweep { animation: radar-sweep 5s linear infinite, radar-in var(--radar-t) ease-in-out forwards; }
+.s-hero--radar.is-done .radar__photo { opacity: 0; }
+.s-hero--radar.is-done .radar__plan,
+.s-hero--radar.is-done .radar__screen svg,
+.s-hero--radar.is-done .radar__hud { opacity: 1; }
+.s-hero--radar.is-paused .radar__sweep,
+.s-hero--radar.is-paused .radar__you::before,
+.s-hero--radar.is-paused .radar__blip,
+.s-hero--radar.is-paused .radar__photo,
+.s-hero--radar.is-paused .radar__plan,
+.s-hero--radar.is-paused .radar__screen svg,
+.s-hero--radar.is-paused .radar__hud { animation-play-state: paused; }
+
+@keyframes radar-photo { 0% { opacity: 1; } 24% { opacity: 1; } 64% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes radar-plan { 0% { opacity: 0; } 24% { opacity: 0; } 64% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes radar-in { 0% { opacity: 0; } 84% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes radar-sweep { to { transform: rotate(360deg); } }
+@keyframes radar-pulse { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes radar-blip { 0% { opacity: 0; } 6% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+	.s-hero--radar .radar__photo { opacity: 0 !important; animation: none !important; }
+	.s-hero--radar .radar__plan,
+	.s-hero--radar .radar__screen svg,
+	.s-hero--radar .radar__hud,
+	.s-hero--radar .radar__sweep { opacity: 1 !important; animation: none !important; }
+	.s-hero--radar .radar__you::before,
+	.s-hero--radar .radar__blip { animation: none !important; }
+	.s-hero--radar .radar__blip { opacity: 1 !important; }
+	.s-hero--radar .radar__sweep { transform: rotate(300deg); }
+}
+
+/* phones: one column — title, excerpt, CTA, the art at full width inside the first viewport, the card after it */
+@media (max-width: 700px) {
+	.s-hero--radar { display: flex; flex-direction: column; align-items: stretch; min-height: 0; padding-bottom: var(--space-4); }
+	.s-hero--radar .s-hero__inner,
+	.s-hero--radar .s-hero__copy { display: contents; }
+	.s-hero--radar h1 { order: 1; max-width: none; margin-inline: 16px; }
+	.s-hero--radar .s-hero__body { order: 2; max-width: none; margin-inline: 16px; }
+	.s-hero--radar .btn { order: 3; align-self: flex-start; margin: var(--space-3, 16px) 16px 0; }
+	.s-hero--radar .s-hero__stage { order: 4; position: relative; height: calc(100vw * 2020 / 1760 * .78); margin-top: var(--space-2, 8px); overflow: hidden; }
+	.s-partner--hero { order: 5; margin: var(--space-4) 16px 0; width: auto; grid-template-columns: 1fr; gap: 14px; padding: 16px 18px; }
+	.s-partner--hero .s-partner__logo { width: 110px; }
+	.radar__ctl { order: 6; position: static; margin: var(--space-3, 16px) 16px 0; }
+	.radar__box { right: auto; left: 11vw; top: 0; width: 78vw; translate: none; aspect-ratio: auto; height: 100%; }
+	.radar__art img { object-fit: contain; object-position: 50% 0; }
+	.s-hero--radar .s-hero__scrim { display: none; }
+	.radar__you { left: 2%; top: 97%; translate: 0 -50%; padding: 0 0 0 22px; }
+	.radar__you::after { left: 0; right: auto; }
+	.radar__you::before { left: -9px; right: auto; }
+	.radar__origin { left: 78%; }
+	.radar__lab, .radar__origin { font-size: 10.5px; }
+	.radar__blip, .radar__you { font-size: 11px; }
+	.radar__range { display: none; }
+}

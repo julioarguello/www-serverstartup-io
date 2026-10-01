@@ -15,7 +15,8 @@ import { serviceJsonLd, breadcrumbJsonLd } from "../../utils/jsonld";
 import { entryAlternatePath } from "../../utils/alternate";
 import { getUiLabels } from "../../utils/ui-labels";
 import { excerptHtml, excerptPlain } from "../../utils/excerpt";
-import { heroArtForSlug, heroGroundForSlug } from "../../utils/hero-art";
+import { heroArtForSlug, heroGroundForSlug, heroRadarForSlug } from "../../utils/hero-art";
+import HeroRadar from "../../components/HeroRadar.astro";
 import type { CacheHint } from "emdash";
 import type { SiteSettings } from "../../types";
 
@@ -61,8 +62,13 @@ const labels = await getUiLabels(locale);
 // #413: the six verticals own a drawn plate — the same picture the home
 // rotates through, held still. Everything else (contacto, quiénes somos, a
 // blog page) returns null here and keeps the light hero it has always had.
-const heroArt = heroArtForSlug(slug);
-const heroGround = heroGroundForSlug(slug);
+// #529: the edge-security vertical opens with the radar scene (see ../[slug].astro)
+const heroRadar = heroRadarForSlug(slug);
+const heroArt = heroRadar ? null : heroArtForSlug(slug);
+const heroGround = heroRadar ? null : heroGroundForSlug(slug);
+const blocks: any[] = Array.isArray(content) ? content : [];
+const heroQuote = heroRadar && blocks[0]?._type === "block" && blocks[0]?.style === "blockquote" ? [blocks[0]] : null;
+const instrumentContent = heroQuote ? blocks.slice(1) : content;
 ---
 
 <Base
@@ -85,6 +91,16 @@ const heroGround = heroGroundForSlug(slug);
 		trail: [{ name: title, path: `/en/${slug}` }],
 	}))} />
 	<!-- ══════ HERO — compact, solid cube glyph in the discipline color ══════ -->
+	{heroRadar ? (
+		<HeroRadar
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath="/en/contact"
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : (
 	<section class:list={["s-hero", heroArt && "s-hero--art"]} aria-label={title}>
 		{heroArt && (
 			<div class="s-hero__stage" aria-hidden="true">
@@ -134,12 +150,14 @@ const heroGround = heroGroundForSlug(slug);
 			</div>
 		</div>
 	</section>
+	)}
 
 	<!-- ══════ CONTENT — discipline instrument (or legacy fallback) ══════ -->
 	{content && (
 		<ServiceInstrument
 			slug={slug!}
-			content={content as any[]}
+			content={instrumentContent as any[]}
+			partnerInHero={heroQuote !== null}
 			ctaLabel={ctaLabel}
 			contactPath="/en/contact"
 			labels={labels}
@@ -157,4 +175,5 @@ const heroGround = heroGroundForSlug(slug);
 
 <style is:global define:vars={{ accentColor, accentFill, accentLabel }}>
 	@import "../../styles/service.css";
+	@import "../../styles/hero-radar.css";
 </style>

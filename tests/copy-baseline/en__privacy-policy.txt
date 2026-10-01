@@ -8,6 +8,7 @@ Data controller
 SERVER STARTUP, S.L. Tax ID B95944807. Address: C/ Los Fueros 11 — 48992 Getxo (Bizkaia). For anything concerning your data, write to legal@serverstartup.io.
 What we process
 Whatever you send us by email or WhatsApp: your address, your name if you sign it, and what you tell us. This site has no forms, no registration and no user accounts.
+On the CDN page, the radar in the header shows the visitor their own IP address and the city Cloudflare infers from it. Your browser requests it on each visit; it is not stored and nobody else sees it.
 Why we process it
 To answer your enquiry and, if we end up working together, to manage the contractual relationship. We do not use your data for advertising and we do not add you to mailing lists.
 Legal basis

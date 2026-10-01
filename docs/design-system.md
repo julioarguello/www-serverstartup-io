@@ -22,8 +22,8 @@ the reason to read this file rather than grep for hex codes.
 
 ## Principles
 
-1. **No CSS frameworks.** Plain CSS with custom properties, 12 files under
-   `src/styles/`. Total source budget **<= 150 KB**; measured **129 KB across 12
+1. **No CSS frameworks.** Plain CSS with custom properties, 13 files under
+   `src/styles/`. Total source budget **<= 150 KB**; measured **141 KB across 13
    files** (`wc -c src/styles/*.css`). Both numbers are read out of this line by
    `ci-check-css-budget.py`, so the doc is the source and cannot disagree with
    the gate — see [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475)

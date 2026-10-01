@@ -943,9 +943,20 @@ console.log("── the hero band: ink over the plates");
 
 	// Freeze the band on plate `k`. Returns how many plates the band has, so
 	// a home that lost five of them cannot pass as a home with one.
+	//
+	// The radar hero (#529) has no plate: its art is a photo that becomes a
+	// drawing beside the copy, and the copy sits on the band's tint over a
+	// drawn grid — a background axe still cannot read. It counts as one plate,
+	// frozen in its end state (drawing + rings), which is what the page shows
+	// for the whole visit after the first seconds.
 	const freeze = (k) => {
 		const hero = document.querySelector(".s-hero");
 		if (!hero) return 0;
+		if (hero.classList.contains("s-hero--radar")) {
+			hero.classList.remove("is-playing");
+			hero.classList.add("is-done");
+			return 1;
+		}
 		const plates = hero.querySelectorAll(".s-hero__plate").length;
 		if (plates > 1) {
 			hero.classList.add("is-manual");

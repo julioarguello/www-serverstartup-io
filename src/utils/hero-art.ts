@@ -99,9 +99,21 @@ export const HERO_RADAR_FACE: FaceKey = "cdn";
 export const HERO_RADAR = {
 	/** the building, soft-edged into the band: WebP with alpha, 1320×1515 */
 	photo: "/assets/hero/cdn-faro.webp",
+	/** the same photo at 720 px for the phone column (78vw): 106 KB instead of 288 */
+	photoSmall: "/assets/hero/cdn-faro-720.webp",
 	/** the same building as orange line work on alpha, lossless, 1210×1392 */
 	plan: "/assets/hero/cdn-faro-plan.webp",
+	/** the same drawing at 660 px, lossless, for the phone column */
+	planSmall: "/assets/hero/cdn-faro-plan-660.webp",
 };
+
+/**
+ * The art box is 78vw on phones and 43.4% of the stage above 700 px, so the
+ * browser can pick the small variant from the viewport alone. Lighthouse's
+ * mobile run (412 px, slow 4G) scored 0.85 with the full-size pair as the LCP:
+ * 434 KB where the column needs 190 (#529).
+ */
+export const HERO_RADAR_SIZES = "(max-width: 700px) 78vw, 43.4vw";
 
 /** Whether this slug (either locale) renders the radar hero instead of a plate. */
 export function heroRadarForSlug(slug: string | undefined): boolean {

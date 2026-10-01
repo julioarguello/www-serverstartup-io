@@ -358,10 +358,10 @@ def img_cdn():
 
 # 3 · BIG DATA — el cubo emerge de la nube de puntos
 def img_bd():
-    rng = random.Random(37); C = "#EA4335"
-    s = [sky("bd", 903, n=430, flares=9, hue=C),
+    rng = random.Random(37); CL = "#5B94DA"  # the navy's light tone: #1D4E89 itself sinks into the night ground (#532)
+    s = [sky("bd", 903, n=430, flares=9, hue=CL),
          bed("bd", 900, 470, 500, 400),
-         body("bd", 1400, 40, 215, C, lit=(30, 62), rings=4),
+         body("bd", 1400, 40, 215, CL, lit=(30, 62), rings=4),
          '<defs>%s%s</defs>' % (glow("gbd", 16), glow("gbd2", 52))]
     cx, cy, k = 900, 470, 3.15
     p = M(cx, cy, k)
@@ -389,18 +389,18 @@ def img_bd():
                        % (x, y, rng.uniform(0.6, 2.1), rng.uniform(0.42, 0.95)))
     s.append("".join(pts))
     hx, hy = 1300, 764
-    s.append('<path d="M1128 640 L%d %d" stroke="%s" stroke-opacity="0.26" stroke-width="1" stroke-dasharray="5 8"></path>' % (hx, hy, C))
-    s.append('<circle cx="%d" cy="%d" r="13" fill="%s" opacity="0.55" filter="url(#gbd2)"></circle>' % (hx, hy, C))
-    s.append('<circle cx="%d" cy="%d" r="5.5" fill="%s" filter="url(#gbd)"></circle>' % (hx, hy, C))
+    s.append('<path d="M1128 640 L%d %d" stroke="%s" stroke-opacity="0.26" stroke-width="1" stroke-dasharray="5 8"></path>' % (hx, hy, CL))
+    s.append('<circle cx="%d" cy="%d" r="13" fill="%s" opacity="0.55" filter="url(#gbd2)"></circle>' % (hx, hy, CL))
+    s.append('<circle cx="%d" cy="%d" r="5.5" fill="%s" filter="url(#gbd)"></circle>' % (hx, hy, CL))
     for rr, op in ((28, 0.9), (56, 0.45), (92, 0.2)):
-        s.append('<circle cx="%d" cy="%d" r="%d" fill="none" stroke="%s" stroke-opacity="%.2f" stroke-width="1"></circle>' % (hx, hy, rr, C, op))
+        s.append('<circle cx="%d" cy="%d" r="%d" fill="none" stroke="%s" stroke-opacity="%.2f" stroke-width="1"></circle>' % (hx, hy, rr, CL, op))
     s.append('<path d="M%d %d h-64 M%d %d h64 M%d %d v-64 M%d %d v64" stroke="%s" stroke-opacity="0.5" stroke-width="1"></path>'
-             % (hx - 104, hy, hx + 104, hy, hx, hy - 104, hx, hy + 104, C))
+             % (hx - 104, hy, hx + 104, hy, hx, hy - 104, hx, hy + 104, CL))
     return "".join(s)
 
 # 4 · INTEGRACIÓN — el cubo por el que pasa todo
 def img_int():
-    rng = random.Random(53); C, CL = "#1D4E89", "#5B94DA"
+    rng = random.Random(53); C = CL = "#EA4335"  # the red reads on the night ground as it is (#532)
     cx, cy, k = 760, 450, 2.35
     s = [sky("int", 904, n=720, flares=13, hue=CL),
          bed("int", 900, 470, 520, 410),
@@ -545,8 +545,8 @@ def img_ia():
 IMAGES = {
     "ec":  ("Comercio electrónico", "comercio-electronico", "#008FD3", "Un muro de cubos; uno es tu pedido", img_ec()),
     "cdn": ("CDN, WAF y seguridad edge", "cdn-waf-seguridad-edge-cloudflare", "#F38020", "El cubo envuelve el mundo; el limbo es el borde", img_cdn()),
-    "bd":  ("Big Data & Cloud Analytics", "big-data-cloud-analytics", "#EA4335", "El cubo emerge del dato; la mira, lo que se sale", img_bd()),
-    "int": ("Integración de sistemas", "integracion-de-sistemas", "#1D4E89", "Todo pasa por el cubo", img_int()),
+    "bd":  ("Big Data & Cloud Analytics", "big-data-cloud-analytics", "#1D4E89", "El cubo emerge del dato; la mira, lo que se sale", img_bd()),
+    "int": ("Integración de sistemas", "integracion-de-sistemas", "#EA4335", "Todo pasa por el cubo", img_int()),
     "gf":  ("Desarrollo greenfield", "desarrollo-greenfield", "#3E7D50", "El campo vacío y la primera pieza puesta", img_gf()),
     "ia":  ("Inteligencia artificial", "inteligencia-artificial", "#6B4FBB", "La ruta que se enciende dentro del cubo", img_ia()),
 }

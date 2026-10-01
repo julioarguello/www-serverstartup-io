@@ -244,8 +244,22 @@ Decisions that are not obvious from the code, and the measurement behind each:
   radar 0.8 s → one event every 0.52 s, each alive 2.4 s. The reveal only runs once per page
   load; this hero is not a carousel slide.
 - **Assets** live in `public/assets/hero/` like the plates (R2 is not seedable): the photograph
-  as WebP with alpha at 1320 px (289 KB) and the plan as lossless WebP (156 KB). Credit and
-  licence (CC BY-SA 4.0, derivative drawing included) in `docs/design/hero-rotativo/README.md`.
+  as WebP with alpha at 1320 px (289 KB) and the plan as lossless WebP (156 KB), each with a
+  phone variant (720 px, 106 KB; 660 px, 82 KB) picked by `srcset` with
+  `sizes="(max-width: 700px) 78vw, 43.4vw"`. Credit and licence (CC BY-SA 4.0, derivative
+  drawing included) in `docs/design/hero-rotativo/README.md`.
+- **What the gates demanded, measured on the first CI run** — the next vertical with a photo
+  hero meets the same three:
+  - *perf*: Lighthouse's mobile run (412 px, slow 4G) scored 0.85 with the full-size pair as the
+    LCP. The phone `srcset` is what fixed it (0.95, three runs, e-commerce control 0.96).
+    Fetching the plan from a `load` handler was tried and dropped: Lighthouse simulates the
+    throttled network from the observed request graph and cannot see a time dependency a
+    script introduces, so the deferral measured the same (0.93–0.96) while adding a code path.
+  - *rendered copy*: the visitor echo and the event feed declare `data-volatile`, which
+    `copy-baseline.mjs` drops before reading the page. Wrangler fills `request.cf` from the
+    machine's own address, so the echo said "Bilbao" on the laptop and "San Jose" on the runner.
+  - *a11y*: the hero-band pixel pass counts `.s-hero__plate` and finds none here; it treats a
+    `.s-hero--radar` as one plate frozen in its end state (tightest 15.2:1 on the h1).
 
 ## 5. SEO
 

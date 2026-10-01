@@ -1850,6 +1850,17 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "radar_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Repetir la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4237,6 +4248,17 @@
 								{
 									"_type": "span",
 									"text": "Resume the radar"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Replay the animation"
 								}
 							]
 						},

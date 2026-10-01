@@ -15,7 +15,7 @@ export const prerender = false;
 
 export const GET: APIRoute = ({ request }) => {
 	// Astro 6 moved the Cloudflare request properties onto the request itself
-	const cf = ((request as any).cf ?? {}) as Record<string, unknown>;
+	const cf = (request as Request & { cf?: Record<string, unknown> }).cf ?? {};
 	const body = JSON.stringify({
 		ip: request.headers.get("cf-connecting-ip") ?? "",
 		city: typeof cf.city === "string" ? cf.city : "",

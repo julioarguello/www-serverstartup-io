@@ -106,7 +106,15 @@ async function renderText(page, baseUrl, route) {
 		return all.length;
 	});
 	if (opened > 0) await new Promise((resolve) => setTimeout(resolve, 150));
-	const text = await page.evaluate(() => document.body.innerText);
+	// Copy that differs by visitor or by the clock is not copy: the radar hero
+	// echoes the visitor's own IP and city (#529), and the first baseline of it
+	// said "Bilbao" on the laptop and "San Jose" on the runner. An element that
+	// declares `data-volatile` is dropped before the text is read — by capture
+	// and verify alike, so neither can be the one that saw it.
+	const text = await page.evaluate(() => {
+		for (const el of document.querySelectorAll("[data-volatile]")) el.remove();
+		return document.body.innerText;
+	});
 	return (
 		text
 			.split("\n")

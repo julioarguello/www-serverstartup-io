@@ -21,6 +21,24 @@
 
 
 
+/* #529 (founder, 2026-10-01): the title fits one line on any desktop, and
+   every hero shares one register for it. It is sized by the longest title the
+   CMS holds today — «CDN, WAF y seguridad edge», 16.06 em in Alexandria Bold
+   (1028 px at 64 px, measured in Chrome) — against the column's inline size:
+   52 px in the 840 px column, 62 px at the 1000 px one a 2400 px screen gets,
+   45 px in the 728 px a 768 px tablet has. The a11y gate asserts every hero h1
+   is one line at 768 and 1440; a longer title fails there, and this constant
+   moves with it. The home keeps its own smaller register (#420): a sentence
+   that wraps by design. */
+@media (min-width: 768px) {
+	.s-hero__inner { container-type: inline-size; }
+	.s-hero h1 {
+		font-size: min(72px, calc(100cqi / 16.06 * 0.985));
+		line-height: 1.11;
+		white-space: nowrap;
+	}
+}
+
 .s-hero__body {
 	margin-top: 20px;
 }

@@ -9,10 +9,9 @@
  * one echo. The lighthouse stands at the edge and lights what approaches — the
  * counter-image of the castle-and-moat perimeter the quotation describes.
  *
- * The band is dark but not black (founder, 2026-10-01: "un negro menos negro"):
- * a warm grey that drifts toward the photograph's own tone as it nears it,
- * with the logo cube as a seal in the section's colour. The copy keeps the
- * column and the register of every other hero; the drawing sits past the
+ * The band, the copy, the epigraph, the seal, the veil and the controls are
+ * the scene every vertical shares (HeroScene.astro, hero-scene.css); this
+ * component brings the art and the live layer. The drawing sits past the
  * column's right edge so no line of text ever touches it, in either phase.
  *
  * Two rules the review fixed: every piece of text is HTML at a fixed size
@@ -20,12 +19,11 @@
  * and the sweep is a composited element (a rotated conic gradient), never a
  * transform on an SVG group, which re-lays the whole drawing out every frame.
  *
- * Copy is the service page's own: title, excerpt, CTA and the epigraph — the
- * blockquote the CMS content opens with, whose linked span names the author
- * and carries the source. Chrome strings come from the `panel_labels` widget,
- * English in both locales — a machine voice, like the PR card.
+ * Chrome strings come from the `panel_labels` widget, English in both
+ * locales — a machine voice, like the PR card.
  */
 import { HERO_RADAR, HERO_RADAR_SIZES } from "../utils/hero-art";
+import HeroScene from "./HeroScene.astro";
 
 interface Props {
 	title: string;
@@ -45,17 +43,6 @@ const events = L("radar_events", "").split(";").map((e) => e.trim()).filter(Bool
 const pauseLabel = L("radar_pause", "Pausar el radar");
 const replayLabel = L("radar_replay", "Repetir la animación");
 
-/* The epigraph: the quotation is the plain spans of the opening blockquote;
-   the author is its one linked span, and the link is the source. */
-interface Span { text: string; marks?: string[] }
-interface MarkDef { _key: string; href?: string }
-const block = quote?.[0] ?? null;
-const spans: Span[] = block?.children ?? [];
-const defs: MarkDef[] = block?.markDefs ?? [];
-const sourceOf = (s: Span): string => defs.find((d) => d.href && (s.marks ?? []).includes(d._key))?.href ?? "";
-const quoteText = spans.filter((s) => !sourceOf(s)).map((s) => s.text).join("").trim();
-const author = spans.find((s) => sourceOf(s)) ?? null;
-
 /* Where each ring label sits, in % of the 1205.5 × 1384 frame the drawing was
    solved in: the origin at the tower base, the four rings where the 70°
    bearing crosses them, in open sky left of the tower, nearest the copy. */
@@ -68,8 +55,8 @@ const RING_POS: [number, number][] = [
 ];
 ---
 
-<section class="s-hero s-hero--radar" aria-label={title} data-events={JSON.stringify(events)}>
-	<div class="s-hero__stage radar" aria-hidden="true">
+<HeroScene scene="radar" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ events: JSON.stringify(events) }}>
+	<Fragment slot="under">
 		<div class="radar__box radar__screen">
 			{/* rings every 180 units from the tower base at (777.5, 1063); the dashed one is the light's nominal range, 35 nautical miles (es.wikipedia, Faro de Cabo Peñas) */}
 			<svg viewBox="0 0 1205.5 1384" preserveAspectRatio="xMidYMid meet">
@@ -90,46 +77,16 @@ const RING_POS: [number, number][] = [
 			<img class="radar__photo" src={HERO_RADAR.photo} srcset={`${HERO_RADAR.photoSmall} 720w, ${HERO_RADAR.photo} 1320w`} sizes={HERO_RADAR_SIZES} width="1320" height="1515" alt="" fetchpriority="high" decoding="async" />
 			<img class="radar__plan" src={HERO_RADAR.plan} srcset={`${HERO_RADAR.planSmall} 660w, ${HERO_RADAR.plan} 1210w`} sizes={HERO_RADAR_SIZES} width="1210" height="1392" alt="" fetchpriority="low" decoding="async" />
 		</div>
-		<span class="s-hero__scrim"></span>
-		<div class="radar__box radar__hud">
-			{rings.map((r, i) => (
-				<span class={i === 0 ? "radar__origin" : "radar__lab"} style={`left:${RING_POS[i]?.[0] ?? 0}%;top:${RING_POS[i]?.[1] ?? 0}%`}>{r}</span>
-			))}
-			<span class="radar__range">{range}</span>
-			<span class="radar__you" data-volatile hidden><b>{you}</b><span class="radar__ip"></span></span>
-			<div class="radar__feed" data-volatile></div>
-		</div>
+	</Fragment>
+	<div slot="over" class="radar__box radar__hud">
+		{rings.map((r, i) => (
+			<span class={i === 0 ? "radar__origin" : "radar__lab"} style={`left:${RING_POS[i]?.[0] ?? 0}%;top:${RING_POS[i]?.[1] ?? 0}%`}>{r}</span>
+		))}
+		<span class="radar__range">{range}</span>
+		<span class="radar__you" data-volatile hidden><b>{you}</b><span class="radar__ip"></span></span>
+		<div class="radar__feed" data-volatile></div>
 	</div>
-	{/* the seal: the logo cube's outline and inner edges (CubeEmblem.astro draws the same path), one, large, in the section's colour */}
-	<svg class="radar__seal" viewBox="0 0 200 228" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214" /></svg>
-	<div class="container s-hero__inner">
-		<div class="s-hero__copy">
-			<h1>{title}</h1>
-			{excerptHtml && (
-				<div class="s-hero__body">
-					<p class="text-body" set:html={excerptHtml} />
-				</div>
-			)}
-			<a href={contactPath} class="btn btn-light">{ctaLabel}</a>
-			{quoteText && (
-				<figure class="s-hero__epigraph">
-					<blockquote><p>{quoteText}</p></blockquote>
-					{author && (
-						<figcaption>— <a href={sourceOf(author)} target="_blank" rel="noopener noreferrer">{author.text}</a></figcaption>
-					)}
-				</figure>
-			)}
-		</div>
-	</div>
-	{/* WCAG 2.2.2: one control stops the sweep, the pulse and the event stream; the other replays the
-	    sequence from the photograph. Faded on desktops until the band is hovered or a control has focus;
-	    always visible where there is no hover (founder, 2026-10-01: "piensa en el mobile") */}
-	<div class="radar__ctl">
-		<button type="button" class="radar__replay" aria-label={replayLabel}></button>
-		<input type="checkbox" id="radar-pause" class="radar__pause" aria-label={pauseLabel} />
-		<label for="radar-pause" class="radar__pause-btn" aria-hidden="true"></label>
-	</div>
-</section>
+</HeroScene>
 
 <script>
 	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
@@ -137,7 +94,7 @@ const RING_POS: [number, number][] = [
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 		const narrow = matchMedia("(max-width: 767px)").matches;
 		const feed = hero.querySelector<HTMLElement>(".radar__feed")!;
-		const pause = hero.querySelector<HTMLInputElement>(".radar__pause")!;
+		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
 		const EVENTS: string[] = JSON.parse(hero.dataset.events || "[]");
 		/* candidate zones in % of the frame, and the side each label reads to; a candidate is then
 		   checked against the page — never over the copy, the building, the ring labels, the visitor's
@@ -222,7 +179,7 @@ const RING_POS: [number, number][] = [
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
 
 		const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
-		const replay = hero.querySelector<HTMLButtonElement>(".radar__replay")!;
+		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
 		function play() {
 			plan.addEventListener("animationend", done, { once: true });
 			window.setTimeout(() => hero.classList.add("is-playing"), 300);

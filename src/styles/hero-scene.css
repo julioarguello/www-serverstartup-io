@@ -1,0 +1,138 @@
+/* ═══ HERO — the scene every vertical opens with (#529, #531) ═══
+   One structure for all (founder, 2026-10-01): the dark band drifting to the
+   art's tone, the copy at one reference height, the epigraph, the seal, the
+   veil, pause and replay. A vertical brings only its art (hero-radar.css,
+   hero-bridge.css). Colours are tokens; the section's is --accentColor. */
+.s-hero--scene {
+	--scene-c: var(--accentColor, var(--color-edge));
+	/* the h1 sits where a 320 px block centred in the band would put it, so it
+	   does not move with each excerpt's length (334 vs 225 px at 1440 before) */
+	--scene-copy-ref: 320px;
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	align-items: flex-start;
+	min-height: 100svh;
+	padding: var(--open-pad-top) 0 var(--space-6);
+	color: var(--color-secondary);
+	background-color: var(--color-ground-dark);
+	background-image: linear-gradient(90deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 34%, color-mix(in srgb, var(--color-ground-haze) 30%, var(--color-ground-dark)) 68%, color-mix(in srgb, var(--color-ground-haze) 55%, var(--color-ground-dark)) 100%);
+	overflow: clip;
+}
+
+.s-hero--scene .s-hero__stage {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+/* the seal: one logo cube, large, leaving by the left margin under the epigraph */
+.scene__seal {
+	position: absolute;
+	z-index: 1;
+	left: -200px;
+	top: 290px;
+	width: 760px;
+	height: auto;
+	color: var(--scene-c);
+	opacity: .16;
+	pointer-events: none;
+}
+
+/* copy: the service page's own pieces in paper, then the epigraph */
+.s-hero--scene .s-hero__inner {
+	position: relative;
+	z-index: 2;
+	margin-top: max(0px, calc((100svh - var(--open-pad-top) - var(--space-6) - var(--scene-copy-ref)) / 2));
+}
+.s-hero--scene .s-hero__copy { max-width: none; }
+.s-hero.s-hero--scene h1 { color: var(--color-secondary); }
+.s-hero--scene .s-hero__body { color: var(--color-hero-ink-soft); }
+.s-hero--scene .btn { margin-top: var(--space-4); }
+.s-hero__epigraph {
+	margin: var(--space-4) 0 0;
+	color: var(--color-hero-ink-soft);
+}
+.s-hero__epigraph blockquote { margin: 0; }
+.s-hero__epigraph p {
+	margin: 0;
+	font-size: 17px;
+	line-height: 1.5;
+	font-style: italic;
+}
+.s-hero__epigraph figcaption {
+	margin-top: 6px;
+	font-size: 16px;
+	color: var(--color-console-ink);
+}
+.s-hero__epigraph figcaption a {
+	color: var(--color-secondary);
+	text-decoration: underline;
+	text-decoration-style: dashed;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+	text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
+}
+.s-hero__epigraph figcaption a:hover,
+.s-hero__epigraph figcaption a:focus-visible { text-decoration-style: solid; }
+
+/* the veil: the ground at 78 % under the column, gone 70 px past its right
+   edge, so the art shows through dimmed (founder 2026-10-01; measured in
+   #529: body ≥ 4.5:1 at percentile 1; lighter is not available) */
+.s-hero--scene .s-hero__scrim {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) 0%, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) 55%, transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
+}
+
+/* the controls: WCAG 2.2.2 — one checkbox stops everything that moves, one button replays it */
+.scene__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
+.scene__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.scene__pause-btn,
+.scene__replay {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--color-secondary);
+	color: var(--color-secondary);
+	background: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
+	cursor: pointer;
+	font: inherit;
+	font-size: 14px;
+}
+.scene__replay { font-size: 20px; line-height: 1; }
+.scene__replay::before { content: "↻"; }
+.scene__pause-btn::before { content: "❚❚"; }
+.scene__pause:checked + .scene__pause-btn::before { content: "▶"; }
+.scene__pause:focus-visible + .scene__pause-btn,
+.scene__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
+/* where a pointer can hover, the controls wait at a third of their strength until the band is hovered or one of them has focus */
+@media (hover: hover) {
+	.scene__ctl { opacity: .35; transition: opacity .25s ease; }
+	.s-hero--scene:hover .scene__ctl,
+	.scene__ctl:focus-within { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	/* nothing to replay when nothing moves */
+	.scene__replay { display: none; }
+}
+
+/* up to 767: one column — title, excerpt, CTA, the art (each scene sets --scene-phone-h), the epigraph */
+@media (max-width: 767px) {
+	.s-hero--scene { display: flex; flex-direction: column; align-items: stretch; min-height: 0; padding-bottom: var(--space-4); background-image: linear-gradient(180deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 42%, color-mix(in srgb, var(--color-ground-haze) 45%, var(--color-ground-dark)) 100%); }
+	.s-hero--scene .s-hero__inner,
+	.s-hero--scene .s-hero__copy { display: contents; }
+	.s-hero--scene h1 { order: 1; max-width: none; margin-inline: 16px; }
+	.s-hero--scene .s-hero__body { order: 2; max-width: none; margin-inline: 16px; }
+	.s-hero--scene .btn { order: 3; align-self: flex-start; margin: var(--space-3, 16px) 16px 0; }
+	.s-hero--scene .s-hero__stage { order: 4; position: relative; height: var(--scene-phone-h); margin-top: var(--space-2, 8px); overflow: hidden; }
+	.s-hero__epigraph { order: 5; margin: var(--space-4) 16px 0; }
+	.scene__ctl { order: 6; position: static; margin: var(--space-3, 16px) 16px 0; }
+	.s-hero--scene .s-hero__scrim { display: none; }
+	.scene__seal { left: -140px; top: auto; bottom: -120px; width: 420px; }
+}

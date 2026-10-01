@@ -1,35 +1,16 @@
 /* ═══ HERO — the radar scene of the edge-security vertical (#529) ═══
-   A dark band that is not black (founder, 2026-10-01): the warm ground grey,
-   drifting toward the photograph's own tone from the column's right edge on,
-   so the cutout lands on a kindred colour instead of a halo. The copy keeps
-   the column and the register every hero shares; the drawing sits past the
-   column's right edge, so no line of text touches it in either phase
-   (measured: title 7.2:1, body 7.2:1 over the photo; 7.1 and 7.1 at rest).
-   Three boxes share one geometry — the screen under, the art, the text
-   overlay over — so a label positioned in percentages lands on its ring.
-   Every colour is a token or a mix of tokens; the only orange is the one the
-   CMS gives this page as --accentColor. */
+   The band, the copy, the epigraph, the seal, the veil and the controls are
+   the shared scene (hero-scene.css). What is the radar's own: three boxes
+   that share one geometry — the screen under, the art, the text overlay
+   over — so a label positioned in percentages lands on its ring; the
+   lighthouse photograph that becomes a drawing; the sweep, the events and
+   the visitor's echo. The only orange is the section's own (--scene-c). */
 .s-hero--radar {
-	--radar-c: var(--accentColor, var(--color-edge));
+	--radar-c: var(--scene-c);
 	/* small orange text on the dark ground: mixed toward paper it clears 4.5:1 */
 	--radar-c-text: color-mix(in srgb, var(--radar-c) 80%, var(--color-secondary));
 	--radar-t: 5s;
-	position: relative;
-	isolation: isolate;
-	display: flex;
-	align-items: center;
-	min-height: 100svh;
-	padding: var(--open-pad-top) 0 var(--space-6);
-	color: var(--color-secondary);
-	background-color: var(--color-ground-dark);
-	background-image: linear-gradient(90deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 34%, color-mix(in srgb, var(--color-ground-haze) 30%, var(--color-ground-dark)) 68%, color-mix(in srgb, var(--color-ground-haze) 55%, var(--color-ground-dark)) 100%);
-	overflow: clip;
-}
-
-.s-hero--radar .s-hero__stage {
-	position: absolute;
-	inset: 0;
-	z-index: 0;
+	--scene-phone-h: calc(100vw * 2020 / 1760 * .78);
 }
 
 /* the drawing's frame: sized by the BAND'S HEIGHT, never taller than it (88 %
@@ -176,99 +157,6 @@
 }
 .radar__blip--l::after { left: auto; right: 0; }
 
-/* the seal: one logo cube, large, leaving by the left margin under the epigraph */
-.radar__seal {
-	position: absolute;
-	z-index: 1;
-	left: -200px;
-	top: 290px;
-	width: 760px;
-	height: auto;
-	color: var(--radar-c);
-	opacity: .16;
-	pointer-events: none;
-}
-
-/* copy: the service page's own pieces in paper, then the epigraph */
-.s-hero--radar .s-hero__inner { position: relative; z-index: 2; }
-.s-hero--radar .s-hero__copy { max-width: none; }
-.s-hero.s-hero--radar h1 { color: var(--color-secondary); }
-.s-hero--radar .s-hero__body { color: var(--color-hero-ink-soft); }
-.s-hero--radar .btn { margin-top: var(--space-4); }
-.s-hero__epigraph {
-	margin: var(--space-4) 0 0;
-	color: var(--color-hero-ink-soft);
-}
-.s-hero__epigraph blockquote { margin: 0; }
-.s-hero__epigraph p {
-	margin: 0;
-	font-size: 17px;
-	line-height: 1.5;
-	font-style: italic;
-}
-.s-hero__epigraph figcaption {
-	margin-top: 6px;
-	font-size: 16px;
-	color: var(--color-console-ink);
-}
-.s-hero__epigraph figcaption a {
-	color: var(--color-secondary);
-	text-decoration: underline;
-	text-decoration-style: dashed;
-	text-decoration-thickness: 1px;
-	text-underline-offset: 4px;
-	text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
-}
-.s-hero__epigraph figcaption a:hover,
-.s-hero__epigraph figcaption a:focus-visible { text-decoration-style: solid; }
-
-/* the veil: the copy in front, the drawing still there behind it (founder,
-   2026-10-01: "no que la imagen desapareciera"). Under the column the ground
-   covers the scene at 78 %, so the rings and the house's left half show
-   through dimmed, and from 40 px before the column's right edge it is gone.
-   It sits inside the stage, under the labels and the echo, so it dims only
-   the rings, the sweep's wedge and the photograph — the sweep passes under
-   the copy on every desktop width, and its bright tip under paper text fails
-   1.4.3 undimmed. Measured at 78 %: body ≥ 4.5:1 at percentile 1 over the
-   drawing and over the photograph, at 1024, 1440 and 1865. */
-.s-hero--radar .s-hero__scrim {
-	position: absolute;
-	inset: 0;
-	pointer-events: none;
-	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) 0%, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) 55%, transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
-}
-
-/* the control: WCAG 2.2.2 — one checkbox stops everything that moves */
-.radar__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
-.radar__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.radar__pause-btn,
-.radar__replay {
-	display: grid;
-	place-items: center;
-	width: 40px;
-	height: 40px;
-	margin: 0;
-	padding: 0;
-	border: 1px solid var(--color-secondary);
-	color: var(--color-secondary);
-	background: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
-	cursor: pointer;
-	font: inherit;
-	font-size: 14px;
-}
-.radar__replay { font-size: 20px; line-height: 1; }
-.radar__replay::before { content: "↻"; }
-.radar__pause-btn::before { content: "❚❚"; }
-.radar__pause:checked + .radar__pause-btn::before { content: "▶"; }
-.radar__pause:focus-visible + .radar__pause-btn,
-.radar__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
-/* where a pointer can hover, the controls wait at a quarter strength until the band is hovered or one of them has focus */
-@media (hover: hover) {
-	.radar__ctl { opacity: .35; transition: opacity .25s ease; }
-	.s-hero--radar:hover .radar__ctl,
-	.radar__ctl:focus-within { opacity: 1; }
-}
-
 /* the sequence: photo 1.2 s · crossfade 2 s · strokes alone 1 s · radar 0.8 s · then the events */
 .s-hero--radar.is-playing .radar__photo { animation: radar-photo var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-playing .radar__plan { animation: radar-plan var(--radar-t) ease-in-out forwards; }
@@ -305,26 +193,12 @@
 	.s-hero--radar .radar__blip { animation: none !important; }
 	.s-hero--radar .radar__blip { opacity: 1 !important; }
 	.s-hero--radar .radar__sweep { transform: rotate(300deg); }
-	/* nothing to replay when nothing moves */
-	.radar__replay { display: none; }
 }
 
-/* phones and small tablets, up to where the opening register begins (767): one column — title, excerpt, CTA, the art at full width inside the first viewport, the epigraph after it;
-   the ground drifts downward instead, toward the art */
+/* phones: the shared scene stacks copy, art and epigraph; the radar's frame fills the art row */
 @media (max-width: 767px) {
-	.s-hero--radar { display: flex; flex-direction: column; align-items: stretch; min-height: 0; padding-bottom: var(--space-4); background-image: linear-gradient(180deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 42%, color-mix(in srgb, var(--color-ground-haze) 45%, var(--color-ground-dark)) 100%); }
-	.s-hero--radar .s-hero__inner,
-	.s-hero--radar .s-hero__copy { display: contents; }
-	.s-hero--radar h1 { order: 1; max-width: none; margin-inline: 16px; }
-	.s-hero--radar .s-hero__body { order: 2; max-width: none; margin-inline: 16px; }
-	.s-hero--radar .btn { order: 3; align-self: flex-start; margin: var(--space-3, 16px) 16px 0; }
-	.s-hero--radar .s-hero__stage { order: 4; position: relative; height: calc(100vw * 2020 / 1760 * .78); margin-top: var(--space-2, 8px); overflow: hidden; }
-	.s-hero__epigraph { order: 5; margin: var(--space-4) 16px 0; }
-	.radar__ctl { order: 6; position: static; margin: var(--space-3, 16px) 16px 0; }
 	.radar__box { left: 11vw; translate: none; top: 0; bottom: auto; width: 78vw; aspect-ratio: auto; height: 100%; }
 	.radar__art img { object-fit: contain; object-position: 50% 0; }
-	.s-hero--radar .s-hero__scrim { display: none; }
-	.radar__seal { left: -140px; top: auto; bottom: -120px; width: 420px; }
 	.radar__you { left: 2%; top: 97%; }
 	.radar__origin { left: 78%; }
 	.radar__lab, .radar__origin { font-size: 10.5px; }

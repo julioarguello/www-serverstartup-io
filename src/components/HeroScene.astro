@@ -1,0 +1,78 @@
+---
+/**
+ * HeroScene — the opening every vertical shares (#529, #531).
+ *
+ * One structure for all six (founder, 2026-10-01: "todas las páginas tienen
+ * que tener una estructura común… el cubo de una página con respecto al de
+ * otra tiene que estar en el mismo sitio, y la posición del H1 también"):
+ * the dark band, the copy in the column at one reference height, the
+ * epigraph, the seal cube, the veil and the two controls. A vertical brings
+ * only its art, through two slots — `under` the veil and `over` it — and its
+ * own script for what moves.
+ *
+ * Copy is the service page's own: title, excerpt, CTA and the epigraph — the
+ * blockquote the CMS content opens with, whose linked span names the author
+ * and carries the source.
+ */
+interface Props {
+	scene: string;
+	title: string;
+	excerptHtml: string;
+	ctaLabel: string;
+	contactPath: string;
+	quote: any[] | null;
+	pauseLabel: string;
+	replayLabel: string;
+	data?: Record<string, string>;
+}
+const { scene, title, excerptHtml, ctaLabel, contactPath, quote, pauseLabel, replayLabel, data = {} } = Astro.props;
+
+/* The epigraph: the quotation is the plain spans of the opening blockquote;
+   the author is its one linked span, and the link is the source. */
+interface Span { text: string; marks?: string[] }
+interface MarkDef { _key: string; href?: string }
+const block = quote?.[0] ?? null;
+const spans: Span[] = block?.children ?? [];
+const defs: MarkDef[] = block?.markDefs ?? [];
+const sourceOf = (s: Span): string => defs.find((d) => d.href && (s.marks ?? []).includes(d._key))?.href ?? "";
+const quoteText = spans.filter((s) => !sourceOf(s)).map((s) => s.text).join("").trim();
+const author = spans.find((s) => sourceOf(s)) ?? null;
+const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
+---
+
+<section class:list={["s-hero", "s-hero--scene", `s-hero--${scene}`]} aria-label={title} {...dataAttrs}>
+	<div class="s-hero__stage" aria-hidden="true">
+		<slot name="under" />
+		<span class="s-hero__scrim"></span>
+		<slot name="over" />
+	</div>
+	{/* the seal: the logo cube's outline and inner edges (CubeEmblem.astro draws the same path), one, large, in the section's colour */}
+	<svg class="scene__seal" viewBox="0 0 200 228" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214" /></svg>
+	<div class="container s-hero__inner">
+		<div class="s-hero__copy">
+			<h1>{title}</h1>
+			{excerptHtml && (
+				<div class="s-hero__body">
+					<p class="text-body" set:html={excerptHtml} />
+				</div>
+			)}
+			<a href={contactPath} class="btn btn-light">{ctaLabel}</a>
+			{quoteText && (
+				<figure class="s-hero__epigraph">
+					<blockquote><p>{quoteText}</p></blockquote>
+					{author && (
+						<figcaption>— <a href={sourceOf(author)} target="_blank" rel="noopener noreferrer">{author.text}</a></figcaption>
+					)}
+				</figure>
+			)}
+		</div>
+	</div>
+	{/* WCAG 2.2.2: one control stops everything that moves, the other replays the sequence from the start.
+	    Faded on desktops until the band is hovered or a control has focus; always visible where there is
+	    no hover (founder, 2026-10-01: "piensa en el mobile") */}
+	<div class="scene__ctl">
+		<button type="button" class="scene__replay" aria-label={replayLabel}></button>
+		<input type="checkbox" id={`${scene}-pause`} class="scene__pause" aria-label={pauseLabel} />
+		<label for={`${scene}-pause`} class="scene__pause-btn" aria-hidden="true"></label>
+	</div>
+</section>

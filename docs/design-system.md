@@ -62,8 +62,8 @@ about the same thing.
 The six verticals carry their own colour, stored in each service's `color`
 field in `seed/seed.json` and read at render:
 
-E-commerce `#008FD3` · Integration `#1D4E89` · Greenfield `#3E7D50` ·
-Big Data `#EA4335` · Cloudflare `#F38020` · AI `#6B4FBB`
+E-commerce `#008FD3` · Integration `#EA4335` · Greenfield `#3E7D50` ·
+Big Data `#1D4E89` · Cloudflare `#F38020` · AI `#6B4FBB`
 
 Two corrections to what this file used to say, both measured against
 `seed/seed.json` rather than remembered:

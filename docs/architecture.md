@@ -201,6 +201,52 @@ All routes exist in both ES and EN:
 | `styles/contact.css` | Contact page |
 | `styles/search.css` | Search page |
 
+### 4.4 The radar hero of the edge-security vertical (#529)
+
+The CDN page opens with a scene instead of a held plate: a photograph of the Cabo Peñas
+lighthouse, soft-edged into a band tinted with the vertical's own colour, crossfades into a
+line drawing of the same building, and a radar screen settles behind it — range rings read
+from the origin outwards (ORIGIN · CDN · WAF · ACCESS · ZERO TRUST), a sweep at 12 rpm, a
+stream of edge events, and the visitor as one ink echo. The lighthouse stands at the edge
+and lights what approaches; it is the counter-image of the castle-and-moat perimeter, which is
+why the partner card under the title carries Cloudflare's own sentence about the castle.
+
+Decisions that are not obvious from the code, and the measurement behind each:
+
+- **Every piece of text is HTML, positioned in percentages of the drawing's frame, never text
+  inside the SVG.** SVG text scales with the box: the ring labels rendered at 3.8 px on a
+  393 px phone and 8.8 px on a 1440 px laptop. The overlay (`.radar__hud`) shares the plate's
+  geometry, so a label at `left: 41.97%; top: 27.31%` lands on its ring at every size — on
+  phones the box must be exactly the contained image (`left: 11vw; width: 78vw`) or the
+  percentages drift off the rings.
+- **The sweep is a rotated `conic-gradient` div, not a transform on an SVG group.** A CSS
+  transform on an inline-SVG `<g>` re-runs style, layout and paint every frame (1 440 layouts
+  per 10 s measured in Chrome); the div composites on the GPU.
+- **Pause reaches everything.** `animation-play-state` is not inherited and never reaches a
+  `setInterval`, so the home's checkbox pattern alone would leave the sweep turning and the
+  events arriving: the component's script owns start/stop and also stops on `visibilitychange`
+  and under `prefers-reduced-motion` (which renders the end state with one still event per
+  zone).
+- **Nothing is written over the building.** Events spawn only in four open zones of the frame
+  (top strip, left sky, right sky, below the house), two on phones; labels are at most 24
+  characters so they never leave the band; no two live events sit within 6 % vertically.
+- **The visitor's echo is fetched by the browser** from `/api/whoami` (`no-store`,
+  `cf-connecting-ip` + `cf.city`) and hidden unless the edge answers. Service pages are cached
+  at the edge for an hour (§9): an address rendered into the HTML would be served to the next
+  visitor. The privacy policy names this processing in both locales.
+- **Chrome strings are CMS labels** (`panel_labels` → `radar_*`), English in both locales as a
+  machine voice, like the PR card. The quotation is CMS content: the service body opens with a
+  `blockquote`, which the page hands to the hero and withholds from the instrument
+  (`partnerInHero`), so the instrument's intro renders as plain paragraphs.
+- **Only the CDN face.** `heroRadarForSlug()` keys on the face like the plates do, so both
+  locale slugs render it and the other five verticals keep their plates untouched.
+- **Timing is the founder's ear, not a rule**: photo 1.2 s → crossfade 2 s → strokes alone 1 s →
+  radar 0.8 s → one event every 0.52 s, each alive 2.4 s. The reveal only runs once per page
+  load; this hero is not a carousel slide.
+- **Assets** live in `public/assets/hero/` like the plates (R2 is not seedable): the photograph
+  as WebP with alpha at 1320 px (289 KB) and the plan as lossless WebP (156 KB). Credit and
+  licence (CC BY-SA 4.0, derivative drawing included) in `docs/design/hero-rotativo/README.md`.
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

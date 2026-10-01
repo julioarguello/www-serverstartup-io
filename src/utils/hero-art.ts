@@ -84,3 +84,26 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
 	const face = slug ? FACE_BY_SLUG[slug] : undefined;
 	return face ? HERO_GROUND[face] : null;
 }
+
+/**
+ * The one vertical whose hero is a scene rather than a held plate (#529):
+ * the Cabo Peñas lighthouse, photographed, then drawn as a plan, then read
+ * as a radar screen. The lighthouse is the counter-image of the bouncy
+ * castle — the perimeter that looks solid — which is why it belongs to the
+ * edge-security page and to no other. Assets, like the plates, live in
+ * `public/assets/` because R2 media is not seedable (project rules §7);
+ * the photograph's credit is in `docs/design/hero-rotativo/README.md`.
+ */
+export const HERO_RADAR_FACE: FaceKey = "cdn";
+
+export const HERO_RADAR = {
+	/** the building, soft-edged into the band: WebP with alpha, 1320×1515 */
+	photo: "/assets/hero/cdn-faro.webp",
+	/** the same building as orange line work on alpha, lossless, 1210×1392 */
+	plan: "/assets/hero/cdn-faro-plan.webp",
+};
+
+/** Whether this slug (either locale) renders the radar hero instead of a plate. */
+export function heroRadarForSlug(slug: string | undefined): boolean {
+	return !!slug && FACE_BY_SLUG[slug] === HERO_RADAR_FACE;
+}

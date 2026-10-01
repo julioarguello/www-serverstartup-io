@@ -1784,6 +1784,72 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "radar_rings",
+							"children": [
+								{
+									"_type": "span",
+									"text": "ORIGIN,CDN,WAF,ACCESS,ZERO TRUST"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_range",
+							"children": [
+								{
+									"_type": "span",
+									"text": "35 nm · nominal range"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_you",
+							"children": [
+								{
+									"_type": "span",
+									"text": "you"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_events",
+							"children": [
+								{
+									"_type": "span",
+									"text": "GET /es/ · HIT · 7 ms;bot · blocked;/checkout · MISS · 180 ms;SQLi /search · blocked;/hero.avif · HIT · 9 ms;POST /login · verified;scan :22 · dropped;12k rps · mitigated;/api/stock · HIT · 11 ms;/wp-admin · 403;TLS 1.3 · ok;GET /en/ · HIT · 6 ms;bad UA · challenged;POST /cart · verified;/sitemap.xml · HIT;rate limit · 429"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pausar el radar"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_resume",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Reanudar el radar"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4111,6 +4177,72 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "radar_rings",
+							"children": [
+								{
+									"_type": "span",
+									"text": "ORIGIN,CDN,WAF,ACCESS,ZERO TRUST"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_range",
+							"children": [
+								{
+									"_type": "span",
+									"text": "35 nm · nominal range"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_you",
+							"children": [
+								{
+									"_type": "span",
+									"text": "you"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_events",
+							"children": [
+								{
+									"_type": "span",
+									"text": "GET /es/ · HIT · 7 ms;bot · blocked;/checkout · MISS · 180 ms;SQLi /search · blocked;/hero.avif · HIT · 9 ms;POST /login · verified;scan :22 · dropped;12k rps · mitigated;/api/stock · HIT · 11 ms;/wp-admin · 403;TLS 1.3 · ok;GET /en/ · HIT · 6 ms;bad UA · challenged;POST /cart · verified;/sitemap.xml · HIT;rate limit · 429"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pause the radar"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "radar_resume",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Resume the radar"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -5859,6 +5991,32 @@
 					"excerpt": "*Partners* oficiales de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en [comercio electrónico](/comercio-electronico).",
 					"cta_label": "Audita tu edge",
 					"content": [
+						{
+							"_type": "block",
+							"style": "blockquote",
+							"_key": "kqa",
+							"markDefs": [
+								{
+									"_key": "kqal",
+									"_type": "link",
+									"href": "https://www.cloudflare.com/es-es/learning/access-management/castle-and-moat-network-security/",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "«Imaginemos que la red de una organización es un castillo, y el perímetro de red un foso. Una vez que se baja el puente levadizo y alguien lo cruza, puede moverse con libertad por el interior del castillo.» "
+								},
+								{
+									"_type": "span",
+									"marks": [
+										"kqal"
+									],
+									"text": "Cloudflare, ¿Qué es el modelo de seguridad de red perimetral?"
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "ka",
@@ -9366,6 +9524,32 @@
 					"excerpt": "Official [`Cloudflare`](https://www.cloudflare.com/) partners since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce).",
 					"cta_label": "Audit your edge",
 					"content": [
+						{
+							"_type": "block",
+							"style": "blockquote",
+							"_key": "kqa",
+							"markDefs": [
+								{
+									"_key": "kqal",
+									"_type": "link",
+									"href": "https://www.cloudflare.com/learning/access-management/castle-and-moat-network-security/",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "«Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.» "
+								},
+								{
+									"_type": "span",
+									"marks": [
+										"kqal"
+									],
+									"text": "Cloudflare, What is the castle-and-moat network security model?"
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "ka",
@@ -14766,6 +14950,17 @@
 						},
 						{
 							"_type": "block",
+							"style": "normal",
+							"_key": "kpriv",
+							"children": [
+								{
+									"_type": "span",
+									"text": "En la página de CDN, el radar del encabezado muestra al propio visitante la dirección IP desde la que llega y la ciudad que Cloudflare deduce de ella. Ese dato lo pide tu navegador en cada visita, no se guarda y nadie más lo ve."
+								}
+							]
+						},
+						{
+							"_type": "block",
 							"style": "h2",
 							"children": [
 								{
@@ -15898,6 +16093,17 @@
 								{
 									"_type": "span",
 									"text": "Whatever you send us by email or WhatsApp: your address, your name if you sign it, and what you tell us. This site has no forms, no registration and no user accounts."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "kpriv",
+							"children": [
+								{
+									"_type": "span",
+									"text": "On the CDN page, the radar in the header shows the visitor their own IP address and the city Cloudflare infers from it. Your browser requests it on each visit; it is not stored and nobody else sees it."
 								}
 							]
 						},

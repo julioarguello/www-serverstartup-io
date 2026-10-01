@@ -2,26 +2,29 @@
 /**
  * HeroRadar — the opening of the edge-security vertical (#529).
  *
- * A photograph of the Cabo Peñas lighthouse, soft-edged into the band, turns
+ * A photograph of the Cabo Peñas lighthouse, cut out to the building, turns
  * into a line drawing of the same building, and a radar screen settles behind
  * it: range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
  * ZERO TRUST), a sweep at 12 rpm, a stream of edge events, and the visitor as
- * one ink echo. The lighthouse stands at the edge and lights what approaches —
- * the counter-image of the castle-and-moat perimeter the quotation describes.
+ * one echo. The lighthouse stands at the edge and lights what approaches — the
+ * counter-image of the castle-and-moat perimeter the quotation describes.
  *
- * Two rules the review fixed (2026-10-01): every piece of text is HTML at a
- * fixed size positioned in percentages of the frame, never text inside the
- * scaled SVG; and the sweep is a composited element (a rotated conic
- * gradient), never a transform on an SVG group, which re-lays the whole
- * drawing out on every frame. Nothing is ever written over the building.
+ * The band is dark but not black (founder, 2026-10-01: "un negro menos negro"):
+ * a warm grey that drifts toward the photograph's own tone as it nears it,
+ * with the logo cube as a seal in the section's colour. The copy keeps the
+ * column and the register of every other hero; the drawing sits past the
+ * column's right edge so no line of text ever touches it, in either phase.
  *
- * Copy is the service page's own: title, excerpt, CTA and the partner card,
- * the card carrying the quotation (a blockquote the CMS content opens with).
- * Chrome strings come from the `panel_labels` widget, English in both locales
- * — a machine voice, like the PR card (founder, 2026-10-01).
+ * Two rules the review fixed: every piece of text is HTML at a fixed size
+ * positioned in percentages of the frame, never text inside the scaled SVG;
+ * and the sweep is a composited element (a rotated conic gradient), never a
+ * transform on an SVG group, which re-lays the whole drawing out every frame.
+ *
+ * Copy is the service page's own: title, excerpt, CTA and the epigraph — the
+ * blockquote the CMS content opens with, whose linked span names the author
+ * and carries the source. Chrome strings come from the `panel_labels` widget,
+ * English in both locales — a machine voice, like the PR card.
  */
-import { PortableText } from "emdash/ui";
-import TightMark from "./service/TightMark.astro";
 import { HERO_RADAR, HERO_RADAR_SIZES } from "../utils/hero-art";
 
 interface Props {
@@ -41,6 +44,17 @@ const you = L("radar_you", "you");
 const events = L("radar_events", "").split(";").map((e) => e.trim()).filter(Boolean);
 const pauseLabel = L("radar_pause", "Pausar el radar");
 
+/* The epigraph: the quotation is the plain spans of the opening blockquote;
+   the author is its one linked span, and the link is the source. */
+interface Span { text: string; marks?: string[] }
+interface MarkDef { _key: string; href?: string }
+const block = quote?.[0] ?? null;
+const spans: Span[] = block?.children ?? [];
+const defs: MarkDef[] = block?.markDefs ?? [];
+const sourceOf = (s: Span): string => defs.find((d) => d.href && (s.marks ?? []).includes(d._key))?.href ?? "";
+const quoteText = spans.filter((s) => !sourceOf(s)).map((s) => s.text).join("").trim();
+const author = spans.find((s) => sourceOf(s)) ?? null;
+
 /* Where each ring label sits, in % of the 1205.5 × 1384 frame the drawing was
    solved in: the origin at the tower base, the four rings where the 70°
    bearing crosses them, in open sky left of the tower, nearest the copy. */
@@ -55,7 +69,6 @@ const RING_POS: [number, number][] = [
 
 <section class="s-hero s-hero--radar" aria-label={title} data-events={JSON.stringify(events)}>
 	<div class="s-hero__stage radar" aria-hidden="true">
-		<svg class="radar__grid"><defs><pattern id="radar-grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="currentColor" stroke-width=".8" /></pattern></defs><rect width="100%" height="100%" fill="url(#radar-grid)" /></svg>
 		<div class="radar__box radar__screen">
 			{/* rings every 180 units from the tower base at (777.5, 1063); the dashed one is the light's nominal range, 35 nautical miles (es.wikipedia, Faro de Cabo Peñas) */}
 			<svg viewBox="0 0 1205.5 1384" preserveAspectRatio="xMidYMid meet">
@@ -86,6 +99,8 @@ const RING_POS: [number, number][] = [
 		</div>
 	</div>
 	<span class="s-hero__scrim" aria-hidden="true"></span>
+	{/* the seal: the logo cube's outline and inner edges (CubeEmblem.astro draws the same path), one, large, in the section's colour */}
+	<svg class="radar__seal" viewBox="0 0 200 228" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214" /></svg>
 	<div class="container s-hero__inner">
 		<div class="s-hero__copy">
 			<h1>{title}</h1>
@@ -94,14 +109,14 @@ const RING_POS: [number, number][] = [
 					<p class="text-body" set:html={excerptHtml} />
 				</div>
 			)}
-			<a href={contactPath} class="btn btn-dark">{ctaLabel}</a>
-			{quote && (
-				<div class="s-partner s-partner--hero">
-					<a class="s-partner__logo" href="https://www.cloudflare.com/partners/" target="_blank" rel="noopener noreferrer">
-						<img src="/assets/cf-partner-network-stacked.png" alt="Cloudflare Partner Network" width="516" height="234" loading="lazy" />
-					</a>
-					<div class="s-partner__copy"><PortableText value={quote} components={{ mark: TightMark }} /></div>
-				</div>
+			<a href={contactPath} class="btn btn-light">{ctaLabel}</a>
+			{quoteText && (
+				<figure class="s-hero__epigraph">
+					<blockquote><p>{quoteText}</p></blockquote>
+					{author && (
+						<figcaption>— <a href={sourceOf(author)} target="_blank" rel="noopener noreferrer">{author.text}</a></figcaption>
+					)}
+				</figure>
 			)}
 		</div>
 	</div>
@@ -120,10 +135,36 @@ const RING_POS: [number, number][] = [
 		const feed = hero.querySelector<HTMLElement>(".radar__feed")!;
 		const pause = hero.querySelector<HTMLInputElement>(".radar__pause")!;
 		const EVENTS: string[] = JSON.parse(hero.dataset.events || "[]");
-		/* open zones in % of the frame — never over the building, the copy, the ring labels or the visitor's echo — and the side each label reads to */
+		/* candidate zones in % of the frame, and the side each label reads to; a candidate is then
+		   checked against the page — never over the copy, the building, the ring labels, the visitor's
+		   echo or past the band's edge — because the frame sits differently at every viewport */
 		const ZONES: [number, number, number, number, boolean][] = narrow
 			? [[2, 6, 86, 92, false], [40, 50, 2, 8, false]]
-			: [[46, 84, -14, 10, false], [44, 50, 19, 23, true], [77, 84, 12, 38, false], [73, 84, 94, 104, false]];
+			: [[10, 60, -14, 12, false], [60, 86, -14, 12, true], [-40, 10, 14, 58, false], [78, 92, 14, 56, false], [-40, 12, 62, 90, false]];
+		/* the building, in % of the frame: the tower and the house */
+		const BUILDING: [number, number, number, number] = [18, 92, 20, 104];
+		const hud = hero.querySelector<HTMLElement>(".radar__hud")!;
+		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
+		const youEl = hero.querySelector<HTMLElement>(".radar__you");
+		function clear(x: number, y: number, left: boolean, text: string): boolean {
+			const f = hud.getBoundingClientRect();
+			const band = hero.getBoundingClientRect();
+			const w = text.length * 7.6 + 22, h = 16;
+			const px = f.left + (x / 100) * f.width, py = f.top + (y / 100) * f.height;
+			const r = { left: left ? px - w : px, top: py - h / 2, right: left ? px : px + w, bottom: py + h / 2 };
+			/* one comparison per line: the cms-text lint reads `> … <` on one line as a text node */
+			const hits = (b: { left: number; top: number; right: number; bottom: number }, pad: number) =>
+				r.left < b.right + pad &&
+				b.left - pad < r.right &&
+				r.top < b.bottom + pad &&
+				b.top - pad < r.bottom;
+			if (r.left < band.left + 8 || r.right > band.right - 8 || r.top < band.top + 8 || r.bottom > band.bottom - 8) return false;
+			if (!narrow && hits(copy.getBoundingClientRect(), 14)) return false;
+			if (youEl && !youEl.hidden && hits(youEl.getBoundingClientRect(), 10)) return false;
+			if (BUILDING[0] < x && x < BUILDING[1] && BUILDING[2] < y && y < BUILDING[3]) return false;
+			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab, .radar__origin, .radar__range")) if (hits(el.getBoundingClientRect(), 8)) return false;
+			return true;
+		}
 		const live: [number, number][] = [];
 		let timer: number | null = null;
 		let k = 0;
@@ -141,15 +182,17 @@ const RING_POS: [number, number][] = [
 			let x = 0, y = 0, z = ZONES[0], tries = 0;
 			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
 			function near(q: [number, number]): boolean { return Math.abs(q[1] - y) < 6 && Math.abs(q[0] - x) < 34; }
+			const text = EVENTS[k % EVENTS.length];
 			do {
 				z = ZONES[Math.floor(Math.random() * ZONES.length)];
 				x = z[0] + Math.random() * (z[1] - z[0]);
 				y = z[2] + Math.random() * (z[3] - z[2]);
-			} while (++tries < 25 && live.some(near));
-			if (tries >= 25 || EVENTS.length === 0) return;
+			} while (++tries < 40 && (live.some(near) || !clear(x, y, z[4], text)));
+			if (tries >= 40 || EVENTS.length === 0) return;
+			k += 1;
 			const me: [number, number] = [x, y];
 			live.push(me);
-			const d = place(x, y, z[4], EVENTS[k++ % EVENTS.length]);
+			const d = place(x, y, z[4], text);
 			setTimeout(() => { d.remove(); live.splice(live.indexOf(me), 1); }, 2400);
 		}
 		function startFeed() { if (timer !== null || reduced || pause.checked || document.hidden) return; timer = window.setInterval(blip, 520); blip(); }
@@ -162,7 +205,7 @@ const RING_POS: [number, number][] = [
 		if (reduced) {
 			/* the resting state at once, with one still event per zone */
 			hero.classList.add("is-done");
-			ZONES.forEach((z, i) => { if (EVENTS[i]) place((z[0] + z[1]) / 2, (z[2] + z[3]) / 2, z[4], EVENTS[i]); });
+			ZONES.forEach((z, i) => { const x = (z[0] + z[1]) / 2, y = (z[2] + z[3]) / 2; if (EVENTS[i] && clear(x, y, z[4], EVENTS[i])) place(x, y, z[4], EVENTS[i]); });
 		} else {
 			const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
 			plan.addEventListener("animationend", done, { once: true });
@@ -173,7 +216,6 @@ const RING_POS: [number, number][] = [
 		}
 
 		/* the visitor's echo: asked by the browser so the cached page never carries anyone's address; hidden unless the edge answers */
-		const youEl = hero.querySelector<HTMLElement>(".radar__you");
 		const ipEl = hero.querySelector<HTMLElement>(".radar__ip");
 		if (youEl && ipEl) {
 			fetch("/api/whoami", { cache: "no-store" })

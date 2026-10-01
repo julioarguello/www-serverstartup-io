@@ -201,6 +201,11 @@
 	--color-hero-ink-soft: rgba(255, 255, 255, 0.82);
 	--color-hero-rule: rgba(255, 255, 255, 0.35);  /* the locale chip's box */
 	--color-hero-dot: rgba(255, 255, 255, 0.22);   /* a slide not showing */
+	/* the radar hero's band (#529, founder 2026-10-01: "un negro menos negro"): the
+	   warm dark grey the muted-dark ink was measured against, and the tone the
+	   lighthouse cutout's edge pixels average to, which the band drifts toward */
+	--color-ground-dark: #232724;
+	--color-ground-haze: #A1ABAA;
 	/* The card the rotating half of the band lives in (founder's direction C,
 	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
 	   the panel reads as a pane laid on the picture rather than a box that

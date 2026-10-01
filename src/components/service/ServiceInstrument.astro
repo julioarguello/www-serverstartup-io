@@ -24,10 +24,8 @@ interface Props {
 	ctaLabel: string;
 	contactPath: string;
 	labels: { get: (widget: string, key: string, fallback: string) => string };
-	/** #529: the radar hero already shows the partner card — the intro then renders as plain paragraphs */
-	partnerInHero?: boolean;
 }
-const { slug, content, ctaLabel, contactPath, labels, partnerInHero = false } = Astro.props;
+const { slug, content, ctaLabel, contactPath, labels } = Astro.props;
 
 const kind = INSTRUMENT_BY_SLUG[slug] ?? "legacy";
 const s = parsePanelSections(content);
@@ -76,7 +74,7 @@ const jdSig = L("jd_sig", "public Sistema construir(Pila pila, Contrato contrato
 {kind !== "legacy" ? (
 	<section class="s-inst" aria-label={s.heading}>
 		<div class="container s-inst__inner">
-			{kind === "dashboard" && !partnerInHero && s.intro.length > 0 ? (
+			{kind === "dashboard" && s.intro.length > 0 ? (
 				<div class="s-inst__intro">
 					<div class="s-partner">
 						<a

@@ -80,7 +80,7 @@ column, `cdn-faro-720.webp` and `cdn-faro-plan-660.webp`). The photograph is not
 
 | Asset | Photograph | Credit | Licence |
 | --- | --- | --- | --- |
-| `cdn-faro.webp` | Faro de Cabo Peñas, Gozón, Asturias (cropped, antenna mast painted out, soft-edged) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
+| `cdn-faro.webp` | Faro de Cabo Peñas, Gozón, Asturias (cropped, antenna mast painted out, cut out to the building for the dark band) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
 | `cdn-faro-plan.webp` | A line drawing generated from the photograph's cutout (Workers AI, FLUX.2 [dev]; the pipeline is in the design thread of #529) | derivative of the above | CC BY-SA 4.0 |
 
 CC BY-SA asks for attribution where the work is used and share-alike on derivatives. The

@@ -1086,8 +1086,20 @@ console.log("── the hero band: ink over the plates");
 // before anyone sees it. The home keeps its own register and is left out.
 console.log("── the opening h1: one line at 768, 1024 and 1440 (#529)");
 {
+	// the specialty routes, read from each home's menu the way the band pass does
+	const specialties = [];
+	for (const home of ["/", "/en"]) {
+		const page = await browser.newPage();
+		await page.goto(BASE + home, { waitUntil: "networkidle2", timeout: 60000 });
+		specialties.push(...(await page.evaluate(() => [...document.querySelectorAll(".spec-link")].map((a) => a.getAttribute("href")))));
+		await page.close();
+	}
+	if (specialties.length < 12) {
+		console.error(`✗ THIS GATE IS BLIND — ${specialties.length} specialty route(s) found, not 12.`);
+		process.exit(3);
+	}
 	const OPENINGS = [
-		...heroRoutes.filter((r) => r !== "/" && r !== "/en"),
+		...specialties,
 		"/quienes-somos", "/en/about-us", "/referencias", "/en/references",
 		"/deconstruyendo", "/en/deconstructing", "/contacto", "/en/contact",
 		"/politica-de-privacidad", "/en/privacy-policy",

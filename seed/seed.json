@@ -1938,6 +1938,17 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "vision_signed",
+							"children": [
+								{
+									"_type": "span",
+									"text": "signed"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "vision_pause",
 							"children": [
 								{
@@ -4435,6 +4446,17 @@
 								{
 									"_type": "span",
 									"text": "match"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_signed",
+							"children": [
+								{
+									"_type": "span",
+									"text": "signed"
 								}
 							]
 						},

@@ -45,6 +45,7 @@ const readout = split(L("vision_readout", ""), ";").map((g) => split(g, ",").map
 }));
 const code = split(L("vision_code", ""), ",");
 const match = L("vision_match", "match");
+const signed = L("vision_signed", "signed");
 const pauseLabel = L("vision_pause", "Pausar la animación");
 const replayLabel = L("vision_replay", "Repetir la animación");
 ---
@@ -55,7 +56,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		<span class="vision__tint"></span>
 		<span class="vision__scan"></span>
 	</div>
-	<div slot="over" class="vision__hud" data-volatile>
+	<div slot="over" class="vision__hud" data-volatile data-signed={signed}>
 		<svg class="vision__reticle vision__piece" viewBox="-120 -120 240 240" fill="none" stroke="currentColor"><circle r="92" stroke-width="3" /><circle r="45" stroke-width="2" opacity=".55" /><path d="M0,-118 V118 M-118,0 H118" stroke-width="2.5" /></svg>
 		<span class="vision__match vision__piece">{match} <i></i></span>
 		<svg class="vision__brackets vision__piece" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"><path d="M0,8 V0 H8 M92,0 H100 V8 M100,92 V100 H92 M8,100 H0 V92" vector-effect="non-scaling-stroke" /></svg>
@@ -91,7 +92,13 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		const brackets = hud.querySelector<SVGElement>(".vision__brackets")!;
 		const readout = hud.querySelector<HTMLElement>(".vision__readout")!;
 		const code = hud.querySelector<HTMLElement>(".vision__code")!;
-		const lines = [...code.querySelectorAll<HTMLElement>("li")];
+		/* the listing's lines and the readout's "write" value, as the page rendered them (the replay restores them) */
+		const CODE = [...code.querySelectorAll<HTMLElement>("li")].map((li) => li.textContent ?? "");
+		const SHOWN = CODE.length;
+		const writeKey = [...readout.querySelectorAll<HTMLElement>(".vision__line")].find((l) => l.firstElementChild?.textContent?.trim() === "write");
+		const writeEl = writeKey?.lastElementChild as HTMLElement | undefined;
+		const onReview = writeEl?.textContent ?? "";
+		const SIGNED = hud.dataset.signed ?? "";
 
 		/* landmarks on the photograph's frame (3100 × 2000 at 2×, photo_restore.py TUG_CROP), as fractions */
 		const ASPECT = 1.55;
@@ -219,14 +226,34 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			put(code, cx0, Math.min(ky, s.height - 12 - code.offsetHeight), null, null, s, stop);
 		}
 
-		/* the sequence: the photograph 1.2 s, the machine's eye (CSS, 1 s), the reading piece by piece (CSS
-		   delays), then the cursor walks the code until the pause */
-		let timer: number | null = null, walk: number | null = null, at = 0;
-		function step() {
-			lines.forEach((li, i) => li.classList.toggle("is-active", i === at));
-			at = (at + 1) % lines.length;
+		/* the sequence, as in the film: the photograph held 2.4 s, then ONE cut — the machine's colour and its
+		   whole reading at once (founder, 2026-10-02: "la imagen original ha de durar algo más y el cambio de
+		   color y texto suceder a la vez") — then the text keeps moving: the listing rolls on a line at a time,
+		   its numbers climbing, and the readout's "write" turns to "signed" each time sign() comes through */
+		let timer: number | null = null, walk: number | null = null, seq = SHOWN, num = 14;
+		function render(first: number, start: number) {
+			code.style.counterReset = `line ${start - 1}`;
+			code.replaceChildren(...Array.from({ length: SHOWN }, (_, i) => {
+				const li = document.createElement("li");
+				li.textContent = CODE[(first + i) % CODE.length];
+				return li;
+			}));
+			code.lastElementChild?.classList.add("is-active");
 		}
-		function startWalk() { if (walk !== null || reduced || pause.checked || document.hidden || !hero!.classList.contains("is-done")) return; walk = window.setInterval(step, 1200); step(); }
+		function step() {
+			num += 1;
+			render(seq - SHOWN + 1, num);
+			const last = seq % CODE.length;
+			if (writeEl) writeEl.textContent = last === CODE.length - 1 ? SIGNED : onReview;
+			seq += 1;
+		}
+		function reset() {
+			seq = SHOWN; num = 14;
+			render(0, 14);
+			code.lastElementChild?.classList.remove("is-active");
+			if (writeEl) writeEl.textContent = onReview;
+		}
+		function startWalk() { if (walk !== null || reduced || pause.checked || document.hidden || !hero!.classList.contains("is-done")) return; walk = window.setInterval(step, 1200); }
 		function stopWalk() { if (walk !== null) { clearInterval(walk); walk = null; } }
 		function finish() {
 			if (timer !== null) clearTimeout(timer);
@@ -237,7 +264,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		}
 		function play() {
 			hero!.classList.add("is-playing");
-			timer = window.setTimeout(finish, 4200);
+			timer = window.setTimeout(finish, 2800);
 		}
 
 		let settling: number | null = null;
@@ -264,8 +291,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			if (reduced) return;
 			stopWalk();
 			if (timer !== null) clearTimeout(timer);
-			lines.forEach((li) => li.classList.remove("is-active"));
-			at = 0;
+			reset();
 			pause.checked = false;
 			hero.classList.remove("is-paused", "is-done", "is-playing");
 			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */

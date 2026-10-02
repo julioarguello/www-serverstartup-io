@@ -80,6 +80,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 </HeroScene>
 
 <script>
+	import { SCENE_ROW } from "../utils/hero-art";
 	const hero = document.querySelector<HTMLElement>(".s-hero--vision");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -130,7 +131,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		/* every line of the copy, the button and the controls, padded, in the stage's pixels */
 		function blocked(s: DOMRect): Box[] {
 			const out: Box[] = [];
-			for (const el of copy.querySelectorAll<HTMLElement>("h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
+			for (const el of hero.querySelectorAll<HTMLElement>(".s-hero__copy h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
 				const r = document.createRange();
 				r.selectNodeContents(el);
 				for (const q of r.getClientRects()) if (q.width > 2) out.push(rel(q, s, 12));
@@ -159,9 +160,9 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			hero.style.setProperty("--vclip", `${Math.max(0, sealR - L)}px`);
 			return { L, T: s.height - H, W, H, colR };
 		}
-		/* phones: the scene is its own row under the copy, the tug by the right edge */
+		/* phones and tablets: the scene is its own row under the copy, contained in it, the tug by the right edge */
 		function fitNarrow(s: DOMRect): Geo {
-			const W = 0.98 * s.width, H = W / ASPECT;
+			const W = Math.min(0.98 * s.width, ASPECT * s.height), H = W / ASPECT;
 			hero.style.setProperty("--vclip", "0px");
 			return { L: s.width - 10 - TUG.r * W, T: (s.height - H) / 2, W, H, colR: 0 };
 		}
@@ -180,7 +181,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 
 		function layout() {
 			const s = stage.getBoundingClientRect();
-			const narrow = matchMedia("(max-width: 767px)").matches;
+			const narrow = matchMedia(SCENE_ROW).matches;
 			const g = narrow ? fitNarrow(s) : fitWide(s);
 			hero.style.setProperty("--vx", `${g.L}px`);
 			hero.style.setProperty("--vy", `${g.T}px`);

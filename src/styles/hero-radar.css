@@ -10,7 +10,6 @@
 	/* small orange text on the dark ground: mixed toward paper it clears 4.5:1 */
 	--radar-c-text: color-mix(in srgb, var(--radar-c) 80%, var(--color-secondary));
 	--radar-t: 5s;
-	--scene-phone-h: calc(100vw * 2020 / 1760 * .78);
 }
 
 /* the drawing's frame: sized by the BAND'S HEIGHT, never taller than it (88 %
@@ -195,10 +194,12 @@
 	.s-hero--radar .radar__sweep { transform: rotate(300deg); }
 }
 
-/* phones: the shared scene stacks copy, art and epigraph; the radar's frame fills the art row */
+/* phones and tablets: the art has its own row (hero-scene.css); the frame is contained in it — as tall as the
+   row allows, never wider than 78 % of it — centred, so the overlay box is still exactly the image */
+@media (max-width: 1100px) {
+	.radar__box { left: 50%; translate: -50% 0; top: 0; bottom: auto; height: min(100cqh, 78cqw * 2020 / 1760); width: auto; aspect-ratio: 1760 / 2020; }
+}
 @media (max-width: 767px) {
-	.radar__box { left: 11vw; translate: none; top: 0; bottom: auto; width: 78vw; aspect-ratio: auto; height: 100%; }
-	.radar__art img { object-fit: contain; object-position: 50% 0; }
 	.radar__you { left: 2%; top: 97%; }
 	.radar__origin { left: 78%; }
 	.radar__lab, .radar__origin { font-size: 10.5px; }

@@ -313,7 +313,10 @@ the edge (`BLEED`, 4 % of the frame); its photograph cannot grow, the crop alrea
 original does. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
 the copy, fades over 14 % of the frame instead of 60 px. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
-per-scene token (`--scene-veil`, 78 % by default). The epigraph is every blockquote the service body
+per-scene token (`--scene-veil`, 78 % by default). **On phones and tablets (≤ 1100 px) the first screen is the screen** (#543): one `100svh` box — title,
+excerpt, CTA, then the art in its own row taking what is left, the controls in its corner — and the
+epigraph follows it. The rule, the measurements behind it and the options the founder weighed are in
+`docs/design-system.md`, "The opening of a vertical". The epigraph is every blockquote the service body
 opens with; consecutive quotations by one author stand one after the other under a single attribution,
 linked to the first one's source (#537). They never take turns: the founder rejected a rotation
 ("el que baile no me gusta").

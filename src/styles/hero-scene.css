@@ -6,7 +6,7 @@
 	position: relative;
 	isolation: isolate;
 	display: flex;
-	align-items: flex-start;
+	flex-direction: column;
 	min-height: 100svh;
 	padding: var(--open-pad-top) 0 var(--space-6);
 	color: var(--color-secondary);
@@ -15,6 +15,7 @@
 	overflow: clip;
 }
 
+.s-hero__first { display: contents; }
 .s-hero--scene .s-hero__stage {
 	position: absolute;
 	inset: 0;
@@ -41,6 +42,7 @@
 	margin-top: max(0px, calc((100svh - var(--open-pad-top) - var(--space-6) - var(--scene-copy-ref)) / 2));
 }
 .s-hero--scene .s-hero__copy { max-width: none; }
+.s-hero--scene .s-hero__after { position: relative; z-index: 2; }
 .s-hero.s-hero--scene h1 { color: var(--color-secondary); }
 .s-hero--scene .s-hero__body { color: var(--color-hero-ink-soft); }
 .s-hero--scene .btn { margin-top: var(--space-4); }
@@ -117,17 +119,26 @@
 	.scene__replay { display: none; }
 }
 
-/* ≤ 767: one column; each scene sets --scene-phone-h */
-@media (max-width: 767px) {
-	.s-hero--scene { display: flex; flex-direction: column; align-items: stretch; min-height: 0; padding-bottom: var(--space-4); background-image: linear-gradient(180deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 42%, color-mix(in srgb, var(--color-ground-haze) 45%, var(--color-ground-dark)) 100%); }
-	.s-hero--scene .s-hero__inner,
-	.s-hero--scene .s-hero__copy { display: contents; }
-	.s-hero--scene h1 { order: 1; max-width: none; margin-inline: 16px; }
-	.s-hero--scene .s-hero__body { order: 2; max-width: none; margin-inline: 16px; }
-	.s-hero--scene .btn { order: 3; align-self: flex-start; margin: var(--space-3, 16px) 16px 0; }
-	.s-hero--scene .s-hero__stage { order: 4; position: relative; height: var(--scene-phone-h); margin-top: var(--space-2, 8px); overflow: hidden; }
-	.s-hero__epigraph { order: 5; margin: var(--space-4) 16px 0; }
-	.scene__ctl { order: 6; position: static; margin: var(--space-3, 16px) 16px 0; }
+/* ≤ 1100 (phones and tablets, the menu's own boundary): the first screen is the screen — title, excerpt,
+   CTA, then the art taking what is left of 100svh, the controls in its corner — and the epigraph follows
+   (founder, 2026-10-02, option B of #543). The art sizes itself to its row (container queries, `contain`
+   fits in the scenes' scripts); the seal hangs from the first screen's foot, so it sits alike on every page */
+@media (max-width: 1100px) {
+	.s-hero--scene { display: block; min-height: 0; padding: 0 0 var(--space-4); background-image: linear-gradient(180deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 42%, color-mix(in srgb, var(--color-ground-haze) 45%, var(--color-ground-dark)) 100%); }
+	/* a grid, not a flex column: the art's row must have a definite height for its container queries
+	   (in a flex column Chrome resolved 100cqh to 0 and the radar's frame collapsed) */
+	.s-hero__first { display: grid; grid-template-rows: auto minmax(24svh, 1fr); position: relative; min-height: 100svh; padding-top: var(--open-pad-top); }
+	.s-hero--scene .s-hero__inner { grid-row: 1; margin-top: 0; }
+	.s-hero--scene .s-hero__stage { grid-row: 2; position: relative; inset: auto; margin-top: var(--space-3, 16px); overflow: hidden; container-type: size; }
 	.s-hero--scene .s-hero__scrim { display: none; }
+	.scene__ctl { right: 12px; bottom: 12px; }
 	.scene__seal { left: -140px; top: auto; bottom: -120px; width: 420px; }
+}
+/* phones: the type follows the screen's height, so the first screen holds on every phone */
+@media (max-width: 767px) {
+	.s-hero.s-hero--scene h1 { font-size: clamp(28px, 4.8svh, 42px); line-height: 1.06; }
+	.s-hero--scene .s-hero__body p { font-size: clamp(15px, 2.3svh, 19px); line-height: 1.38; }
+	.s-hero--scene .btn { margin-top: var(--space-3, 16px); }
+	.s-hero__epigraph p { font-size: 15px; line-height: 1.4; }
+	.s-hero__epigraph figcaption { font-size: 14px; }
 }

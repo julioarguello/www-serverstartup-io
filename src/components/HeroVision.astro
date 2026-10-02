@@ -226,9 +226,8 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			put(code, cx0, Math.min(ky, s.height - 12 - code.offsetHeight), null, null, s, stop);
 		}
 
-		/* the sequence, as in the film: the photograph held 2.4 s, then ONE cut — the machine's colour and its
-		   whole reading at once (founder, 2026-10-02: "la imagen original ha de durar algo más y el cambio de
-		   color y texto suceder a la vez") — then the text keeps moving: the listing rolls on a line at a time,
+		/* the sequence in three beats (founder, 2026-10-02): the photograph held 2.4 s, the machine's focus and
+		   colour (CSS), then its whole reading in one cut at 3.3 s — then the text keeps moving: the listing rolls on a line at a time,
 		   its numbers climbing, and the readout's "write" turns to "signed" each time sign() comes through */
 		let timer: number | null = null, walk: number | null = null, seq = SHOWN, num = 14;
 		function render(first: number, start: number) {
@@ -264,7 +263,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		}
 		function play() {
 			hero!.classList.add("is-playing");
-			timer = window.setTimeout(finish, 2800);
+			timer = window.setTimeout(finish, 3700);
 		}
 
 		let settling: number | null = null;

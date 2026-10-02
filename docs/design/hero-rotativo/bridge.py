@@ -6,10 +6,10 @@ AI plate, so the drawing lands on the photograph; the lines themselves are
 straight segments and true parabolas, drawn here. The visible bridge is the
 architect's drawing (`public/assets/hero/int-puente-plan.webp`, FLUX.2 [dev]
 from the same photograph, on the same frame); this outline is what the hero
-reads at run time to keep every stroke of it off every letter of the copy.
-Groups: the structure (towers, girder, the car with its trolley, the
-plinths), which touches no letter, and the lines (main cables, hangers,
-back-stays), which may pass behind the quotation. Straight segments only (M/L).
+reads at run time: the structure (towers, girder, the car with its trolley,
+the plinths) keeps under the title and the excerpt and off every connector's
+name. The lines (main cables, hangers, back-stays) are kept for reference and
+not measured. Straight segments only (M/L).
 
     python3 docs/design/hero-rotativo/bridge.py
 

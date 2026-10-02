@@ -1,7 +1,7 @@
 /* ═══ HERO — the bridge scene of the systems-integration vertical (#531) ═══
-   One frame for two boxes — the banks under the veil, the drawing in front —
-   level, the Las Arenas tower past the column; the script places it from the
-   copy (--bx, --by, --bw), as high as the letters allow. */
+   One frame under the veil — the banks and the drawing — level, sized by the
+   band, the Las Arenas tower past the column; the script places it (--bx,
+   --by, --bw). The bus (connectors, messages) is in front. */
 .s-hero--bridge {
 	--bridge-c: var(--scene-c);
 	--color-ground-haze: var(--color-ground-haze-bridge);
@@ -36,8 +36,8 @@
 	mask-composite: intersect;
 }
 
-/* the drawing: in front of the veil, in the bridge's own red (baked into the raster: the
-   connectors keep the section's). The raster is only the band the ink occupies (rows 378–998 of
+/* the drawing: with the banks, under the veil like the lighthouse, in the bridge's own red (baked
+   into the raster: the connectors keep the section's). The raster is only the band the ink occupies (rows 378–998 of
    the frame's 1344): a full frame outsized the banks and became the page's largest paint when it
    faded in, at 2.7 s */
 .bridge__plan {
@@ -48,7 +48,9 @@
 	height: auto;
 }
 
-/* the bus layer: connectors and messages, in the stage's own pixels */
+/* the bus layer: connectors and messages, in the stage's own pixels; hidden while the window is being
+   resized, and placed again when it stops */
+.s-hero--bridge.is-resizing .bridge__bus { visibility: hidden; }
 .bridge__bus {
 	position: absolute;
 	inset: 0;

@@ -13,14 +13,15 @@
  * The band, the copy, the epigraph, the seal, the veil and the controls are the
  * scene every vertical shares (HeroScene.astro). What is the bridge's own:
  *
- * - The drawing is a raster on the photograph's frame (int-puente-plan.webp),
- *   in front of the veil because it never crosses a letter. What the script
- *   measures is its outline, built from geometry on the same frame
- *   (docs/design/hero-rotativo/bridge.py), shipped as path data, never drawn.
- * - The scene is level, the Las Arenas tower just past the column's right edge,
- *   and as high as the copy allows: the structure touches no letter; the thin
- *   lines (cables, hangers, stays) may pass behind the quotation and nothing
- *   else (founder, 2026-10-02).
+ * - The drawing is a raster on the photograph's frame (int-puente-plan.webp,
+ *   built by docs/design/hero-rotativo/bridge_plan.py), under the veil with the
+ *   banks, like the lighthouse: what passes behind the column is dimmed, what
+ *   stands past it is not. What the script measures is its outline, built from
+ *   geometry on the same frame (bridge.py), shipped as path data, never drawn.
+ * - The scene is sized by the band's height, like the lighthouse, level, the
+ *   Las Arenas tower just past the column's right edge, the banks resting on the
+ *   band's floor just under the tug — so it rises as it grows (founder,
+ *   2026-10-02: "súbela un cacho… el faro se ve como más grande").
  * - The connectors are the protocols (above the girder) and the platforms and
  *   Google Cloud services (below) the company has actually wired (evidence in
  *   the issue), from `panel_labels` → `bridge_plugs_up` / `bridge_plugs_down`;
@@ -45,11 +46,10 @@ const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props
 const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
 const list = (k: string) => L(k, "").split(",").map((p) => p.trim()).filter(Boolean).join("|");
 
-/* the outline's path data, by group: the structure, which touches no letter, and the lines, which may
-   pass behind the quotation */
+/* the outline's structure, as path data: the script keeps it under the title and the excerpt and off
+   every connector's name (the fine lines — cables, hangers, stays — are not measured) */
 const groups = Object.fromEntries([...outline.matchAll(/<g class="b-([a-z]+)">([\s\S]*?)<\/g>/g)].map((m) => [m[1], [...m[2].matchAll(/ d="([^"]+)"/g)].map((d) => d[1]).join(" ")]));
 const hard = ["towers", "girder", "car"].map((k) => groups[k] ?? "").join(" ");
-const soft = ["cables", "hangers", "stays"].map((k) => groups[k] ?? "").join(" ");
 
 /* the messages wear the six verticals' colours, from the CMS, in the cube's order */
 const { entries: serviceEntries } = await getEmDashCollection("services", { orderBy: { created_at: "asc" }, locale: Astro.currentLocale || "es" });
@@ -63,16 +63,12 @@ const pauseLabel = L("bridge_pause", "Pausar la animación");
 const replayLabel = L("bridge_replay", "Repetir la animación");
 ---
 
-<HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ up: list("bridge_plugs_up"), down: list("bridge_plugs_down"), colors, hard, soft }}>
+<HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ up: list("bridge_plugs_up"), down: list("bridge_plugs_down"), colors, hard }}>
 	<div slot="under" class="bridge__box bridge__art">
 		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
+		<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="406" alt="" decoding="async" />
 	</div>
-	<Fragment slot="over">
-		<div class="bridge__box bridge__lines">
-			<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="406" alt="" decoding="async" />
-		</div>
-		<div class="bridge__bus" data-volatile></div>
-	</Fragment>
+	<div slot="over" class="bridge__bus" data-volatile></div>
 </HeroScene>
 
 <script>
@@ -90,16 +86,16 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 
 		/* the drawing's frame and the landmarks bridge.py drew its outline on (2016 × 1344) */
 		const VB_W = 2016, VB_H = 1344;
-		const LEFT_OUT = 0.135, RIGHT_IN = 0.8185; /* Portugalete's outer leg, Las Arenas' inner leg */
-		const TOP_V = 0.29, CROP_V = 0.8;        /* the tower tops; the plate's crop under the tug */
+		const RIGHT_IN = 0.8185;                 /* the Las Arenas tower's inner leg */
+		const CROP_V = 0.8;                      /* the plate's crop, just under the tug */
+		const BAND_H = 0.9;                      /* the frame's height, of the band's: the lighthouse's is 0.88 */
 		const GX0 = 336, GX1 = 1692;
+		const SPAN0 = GX0 + 70, SPAN1 = GX1 - 70;
 		const chordTop = (x: number) => 545 - (x - 420) * 0.017;
 		const chordBot = (x: number) => 590 - (x - 420) * 0.016;
 
-		/* the outline, sampled once into points every 6 units of its own frame: the structure (towers,
-		   girder, car, plinths) apart from the lines (cables, hangers, stays), because only the lines may
-		   pass behind the quotation (founder, 2026-10-02: "aunque haya un pelín de solapamiento con la
-		   quote, no molesta") */
+		/* the outline's structure (towers, girder, car, plinths), sampled once into points every 6 units of
+		   its own frame: it keeps under the title and the excerpt, and no connector's name touches it */
 		const sample = (d = "") => {
 			const out: [number, number][] = [];
 			let cx = 0, cy = 0;
@@ -114,13 +110,11 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			return out;
 		};
 		const hardPts = sample(hero.dataset.hard);
-		const softPts = sample(hero.dataset.soft);
-		const pts = [...hardPts, ...softPts];
 
 		/* every coordinate below is in the stage's own pixels, measured in the same task as what it is
 		   compared with: a scroll between two tasks (a reload restores the scroll after the first layout)
 		   moves every viewport rectangle and left the connectors hanging off the girder (founder, 2026-10-02) */
-		type Box = { l: number; t: number; r: number; b: number; quote?: boolean };
+		type Box = { l: number; t: number; r: number; b: number; quote?: boolean; button?: boolean };
 		type Geo = { L: number; T: number; W: number; H: number };
 		type Plug = { el: HTMLElement; foot: [number, number]; mid: [number, number]; end: [number, number] };
 		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
@@ -136,7 +130,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			return a.b < room.b;
 		}
 		const overlap = (a: Box, b: Box, pad = 0) => a.l < b.r + pad && b.l - pad < a.r && a.t < b.b + pad && b.t - pad < a.b;
-		const placed = (g: Geo, from: [number, number][] = pts) => from.map(([x, y]) => toStage(x, y, g));
+		const placed = (g: Geo, from: [number, number][]) => from.map(([x, y]) => toStage(x, y, g));
 		/* does any stroke pass through one of these boxes? */
 		function strokesIn(boxes: Box[], onStage: [number, number][]): boolean {
 			for (const [x, y] of onStage) for (const q of boxes) if (inside(x, y, q)) return true;
@@ -163,7 +157,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		/* every line of the copy, padded, in the stage's pixels: nothing of the bridge may touch a letter */
 		function textBoxes(s: DOMRect): Box[] {
 			const out: Box[] = [];
-			const pad = (q: DOMRect, quote = false): Box => ({ l: q.left - s.left - 12, r: q.right - s.left + 12, t: q.top - s.top - 12, b: q.bottom - s.top + 14, quote });
+			const pad = (q: DOMRect, quote = false, button = false): Box => ({ l: q.left - s.left - 12, r: q.right - s.left + 12, t: q.top - s.top - 12, b: q.bottom - s.top + 14, quote, button });
 			for (const el of copy.querySelectorAll<HTMLElement>("h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
 				const r = document.createRange();
 				r.selectNodeContents(el);
@@ -171,7 +165,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 				for (const q of r.getClientRects()) if (q.width > 2) out.push(pad(q, quote));
 			}
 			const b = copy.querySelector<HTMLElement>(".btn")?.getBoundingClientRect();
-			if (b) out.push(pad(b));
+			if (b) out.push(pad(b, false, true));
 			return out;
 		}
 		function setGeo(g: Geo) {
@@ -181,28 +175,18 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			hero.style.setProperty("--bw", `${g.W}px`);
 		}
 
-		/* desktops: the Las Arenas tower just past the column, the scene two thirds of the
-		   column-and-margin it could span, as high as the letters allow, the tug inside the band */
+		/* desktops: sized by the band like the lighthouse, the Las Arenas tower just past the column, the
+		   banks resting on the band's floor; only the title and the excerpt keep it down — the rest of the
+		   copy stands in front of it, over the veil */
 		function fitWide() {
 			const s = stage.getBoundingClientRect();
-			const text = textBoxes(s);
 			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect();
-			const colL = ib.left - s.left + parseFloat(cs.paddingLeft), colR = ib.right - s.left - parseFloat(cs.paddingRight);
-			/* the bridge lives under the body text: it rises until it meets the quotation, never above */
-			const body = copy.querySelector(".s-hero__body") || copy.querySelector("h1");
-			const bodyBottom = body ? body.getBoundingClientRect().bottom - s.top : 0;
-			const others = text.filter((q) => !q.quote);
-			let W = (0.66 * (colR + 10 - (colL - 34))) / (RIGHT_IN - LEFT_OUT);
-			for (let tries = 0; tries < 12; tries++) {
-				const H = W / 1.5;
-				/* as high as it goes: the tower tops just under the body's last line, then the least drop that
-				   keeps the structure off every letter and the lines off every letter but the quotation's */
-				const g = { L: colR + 10 - RIGHT_IN * W, T: bodyBottom + 4 - TOP_V * H, W, H };
-				g.T += Math.ceil(leastDrop([[text, placed(g, hardPts)], [others, placed(g, softPts)]]));
-				setGeo(g);
-				if (g.T + CROP_V * H <= s.height - 4) return;
-				W *= 0.94;
-			}
+			const colR = ib.right - s.left - parseFloat(cs.paddingRight);
+			const H = BAND_H * s.height, W = 1.5 * H;
+			const g = { L: colR + 10 - RIGHT_IN * W, T: s.height - CROP_V * H, W, H };
+			const lead = textBoxes(s).filter((q) => !q.quote && !q.button);
+			g.T += Math.ceil(leastDrop([[lead, placed(g, hardPts)]]));
+			setGeo(g);
 		}
 		/* phones: the scene is its own row under the copy, a little wider than the screen */
 		function fitNarrow() {
@@ -225,7 +209,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			const size = narrow ? 11 : 12.5;
 			ruler.font = `500 ${size}px ${getComputedStyle(bus).fontFamily}`;
 			const taken: Box[] = [];
-			const drawn = placed(geo), structure = placed(geo, hardPts);
+			const structure = placed(geo, hardPts);
 			const out = document.createDocumentFragment();
 			for (const [up, names] of [[true, UP], [false, DOWN]] as [boolean, string[]][]) {
 				/* a phone shows at most four a side: the row is short and the names would crowd the drawing */
@@ -235,18 +219,23 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 				let i = 0;
 				for (let k = 0; k <= 40 && i < most; k++) {
 					if (narrow && k < Math.round(((i + (up ? 0 : 0.5)) * 40) / most)) continue;
-					const gx = GX0 + ((GX1 - GX0) * k) / 40;
+					/* the span between the towers, clear of their legs: a stem at either end stood on a tower,
+					   not on the bus (founder, 2026-10-02: "la de REST queda fuera del bus") */
+					/* those below stand between the marks of those above, so no stem seems to cross the girder */
+					const gx = SPAN0 + ((SPAN1 - SPAN0) * Math.min(40, k + (up ? 0 : 0.5))) / 40;
 					const [fx, fy] = toStage(gx, up ? chordTop(gx) : chordBot(gx), geo);
 					if (fx < room.l + 30 || fx > room.r - 30) continue;
 					const w = ruler.measureText(names[i]).width + 0.02 * size * names[i].length;
-					for (const h of i % 2 ? [92, 40] : [40, 92]) {
+					for (const h of i % 2 ? [92, 40, 118, 66, 30] : [40, 92, 66, 118, 30]) {
 						const nameTop = up ? fy - h - 18 - size : fy + h + 18;
 						const label: Box = { l: fx - w / 2 - 4, r: fx + w / 2 + 4, t: nameTop - 3, b: nameTop + size + 3 };
 						const stem: Box = { l: fx - 6, r: fx + 6, t: up ? fy - h - 12 : fy + 6, b: up ? fy - 6 : fy + h + 12 };
+						/* a name keeps off the copy and off the structure; the fine lines are under the veil and
+						   may run behind it */
 						const clear = within(label, room) &&
-							!text.some((q) => overlap(label, q, 26) || overlap(stem, q)) &&
+							!text.some((q) => overlap(label, q, 10) || overlap(stem, q)) &&
 							!taken.some((q) => overlap(label, q, 10) || overlap(stem, q, 4)) &&
-							!strokesIn([label], drawn) &&
+							!strokesIn([label], structure) &&
 							(up || !strokesIn([stem], structure));
 						if (!clear) continue;
 						const el = document.createElement("div");
@@ -284,7 +273,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		   others, in one of the six verticals' colours */
 		let feed: number | null = null;
 		function send() {
-			if (plugs.length < 2 || bus.querySelectorAll(".bridge__msg").length > 9) return;
+			if (plugs.length < 2 || bus.querySelectorAll(".bridge__msg").length > 6) return;
 			const from = plugs[Math.floor(Math.random() * plugs.length)];
 			const others = plugs.filter((p) => p !== from).sort(() => Math.random() - 0.5);
 			const fan = Math.random() < 0.3 ? Math.min(3, others.length) : 1;
@@ -299,7 +288,8 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 				ball.className = "bridge__msg";
 				ball.style.setProperty("--msg", color);
 				bus.appendChild(ball);
-				const run = ball.animate(frames, { duration: total / 0.24, easing: "linear" });
+				/* 110 px a second: at twice that the founder found it dizzying (2026-10-02) */
+				const run = ball.animate(frames, { duration: total / 0.11, easing: "linear" });
 				run.onfinish = () => {
 					ball.remove();
 					to.el.style.setProperty("--msg", color);
@@ -320,7 +310,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 				bus.appendChild(ball);
 			});
 		}
-		function startFeed() { if (feed !== null || reduced || pause.checked || document.hidden || !hero.classList.contains("is-done")) return; feed = window.setInterval(send, 700); send(); }
+		function startFeed() { if (feed !== null || reduced || pause.checked || document.hidden || !hero.classList.contains("is-done")) return; feed = window.setInterval(send, 1300); send(); }
 		function stopFeed() { if (feed !== null) { clearInterval(feed); feed = null; } }
 		function freezeFeed(on: boolean) { for (const a of bus.getAnimations({ subtree: true })) on ? a.pause() : a.play(); }
 
@@ -339,8 +329,18 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			timer = window.setTimeout(finish, 2500);
 		}
 
-		let settling: number | null = null;
-		window.addEventListener("resize", () => { if (settling !== null) clearTimeout(settling); settling = window.setTimeout(layout, 150); });
+		/* a resize refits the frame every frame, as the lighthouse follows the window; the connectors wait,
+		   hidden, until the window stops moving (founder, 2026-10-02: "en el puente le cuesta mucho más") */
+		let settling: number | null = null, frame = 0;
+		window.addEventListener("resize", () => {
+			hero.classList.add("is-resizing");
+			if (!frame) frame = requestAnimationFrame(() => {
+				frame = 0;
+				if (matchMedia("(max-width: 767px)").matches) fitNarrow(); else fitWide();
+			});
+			if (settling !== null) clearTimeout(settling);
+			settling = window.setTimeout(() => { layout(); hero.classList.remove("is-resizing"); }, 200);
+		});
 		/* once: after the faces are in, so the copy's lines and the names are measured as they render */
 		if (document.fonts.status === "loaded") layout(); else document.fonts.ready.then(layout);
 		if (reduced) {

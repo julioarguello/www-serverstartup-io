@@ -1,7 +1,7 @@
 /* ═══ HERO — the bridge scene of the systems-integration vertical (#531) ═══
-   One frame under the veil — the banks and the drawing — level, sized by the
-   band, the Las Arenas tower past the column; the script places it (--bx,
-   --by, --bw). The bus (connectors, messages) is in front. */
+   One frame in two boxes — the banks under the veil, the drawing and the bus
+   in front — level, sized by the band, the Las Arenas tower past the column;
+   the script places it (--bx, --by, --bw). */
 .s-hero--bridge {
 	--bridge-c: var(--scene-c);
 	--color-ground-haze: var(--color-ground-haze-bridge);
@@ -41,14 +41,17 @@
 	mask-composite: intersect;
 }
 
-/* the drawing (bridge_plan.py): only the band its ink occupies, rows 390–926 of 1344, so it never
-   outsizes the banks as the largest paint */
+/* the drawing (bridge_plan.py), in front of the veil: only the band its ink occupies, rows 390–926
+   of 1344, so it never outsizes the banks as the largest paint; at half strength by Portugalete
+   (13.5 % of the frame), full by Las Arenas (82 %) */
 .bridge__plan {
 	position: absolute;
 	left: 0;
 	top: calc(390 / 1344 * 100%);
 	width: 100%;
 	height: auto;
+	-webkit-mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 50%, transparent) 13.5%, var(--color-ground-dark) 82%);
+	mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 50%, transparent) 13.5%, var(--color-ground-dark) 82%);
 }
 
 /* the bus layer: connectors and messages, in the stage's own pixels; hidden while the window is being

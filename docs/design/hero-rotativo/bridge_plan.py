@@ -33,7 +33,7 @@ def main(src):
     band = Image.fromarray(rgba).crop((0, TOP, a.shape[1], BOTTOM))
     here = os.path.dirname(os.path.abspath(__file__))
     out = os.path.normpath(os.path.join(here, "..", "..", "..", "public", "assets", "hero"))
-    for width, name in ((1320, "int-puente-plan.webp"), (960, "int-puente-plan-960.webp")):
+    for width, name in ((1320, "int-puente-trazo.webp"), (960, "int-puente-trazo-960.webp")):
         img = band.resize((width, round(width * (BOTTOM - TOP) / a.shape[1])), Image.LANCZOS)
         img.save(os.path.join(out, name), "WEBP", quality=70, alpha_quality=70, method=6)
         print(name, img.size, os.path.getsize(os.path.join(out, name)), "bytes")

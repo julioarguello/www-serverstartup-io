@@ -67,7 +67,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 
 <HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ up: list("bridge_plugs_up"), down: list("bridge_plugs_down"), colors, hard }}>
 	<div slot="under" class="bridge__box bridge__art">
-		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
+		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w, ${HERO_BRIDGE.banksLarge} 2016w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
 	</div>
 	<Fragment slot="over">
 		<div class="bridge__box bridge__lines">

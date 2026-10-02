@@ -329,6 +329,25 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 				body.animate([{ transform: "scaleX(1)", offset: 0, easing: "steps(1, end)" }, { transform: "scaleX(-1)", offset: 0.5, easing: "steps(1, end)" }, { transform: "scaleX(-1)", offset: 1 }], { duration: dur, iterations: Infinity }),
 			];
 			if (pause.checked) runs.forEach((r) => r.pause());
+			startMunch();
+		}
+		/* it eats the ghosts it meets on the girder, as in the arcade: what is left are the eyes, and they
+		   still deliver the message (founder, 2026-10-02: "que se los coma, cerramos el círculo"). Inline,
+		   not a class rule: the CSS source is at its budget */
+		let munch: number | null = null;
+		function startMunch() {
+			if (munch !== null || reduced) return;
+			munch = window.setInterval(() => {
+				if (!pac || pause.checked || document.hidden) return;
+				const p = pac.getBoundingClientRect();
+				const px = p.left + p.width / 2, py = p.top + p.height / 2;
+				for (const g of bus.querySelectorAll<HTMLElement>(".bridge__msg:not(.is-eaten)")) {
+					const r = g.getBoundingClientRect();
+					if (Math.hypot(r.left + r.width / 2 - px, r.top + r.height / 2 - py) > 11) continue;
+					g.classList.add("is-eaten");
+					g.style.background = "transparent";
+				}
+			}, 80);
 		}
 
 		/* messages: a ghost from one connector to the girder's middle, along it and out to one or several

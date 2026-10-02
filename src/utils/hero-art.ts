@@ -131,9 +131,9 @@ export const HERO_RADAR_SIZES = "(max-width: 700px) 78vw, 43.4vw";
 
 export const HERO_BRIDGE = {
 	/** the two banks without the bridge or the sky, cut off just under the tug: WebP with alpha, 1320×730 */
-	banks: "/assets/hero/int-puente.webp",
+	banks: "/assets/hero/int-puente-orillas.webp",
 	/** the same at 960 px for phones, where the frame is 125vw (a 412 px phone at 1.75 needs 900) */
-	banksSmall: "/assets/hero/int-puente-960.webp",
+	banksSmall: "/assets/hero/int-puente-orillas-960.webp",
 	/** the bridge as an architect's drawing on the same frame, in the bridge's own red, cut to the band its ink occupies (rows 390–926 of 1344): WebP with alpha, 1320×351 */
 	plan: "/assets/hero/int-puente-trazo.webp",
 	planSmall: "/assets/hero/int-puente-trazo-960.webp",

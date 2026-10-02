@@ -6,6 +6,9 @@
 	--bridge-c: var(--scene-c);
 	--color-ground-haze: var(--color-ground-haze-bridge);
 	--scene-phone-h: 76vw;
+	/* lighter than the lighthouse's veil (founder, 2026-10-02); the excerpt still reads ≥ 8.4:1 */
+	--scene-veil: 60%;
+	--scene-veil-mid: 42%;
 }
 
 /* the frame: the photograph's 3:2. Without the script it falls back to the right of the
@@ -18,12 +21,14 @@
 	width: var(--bw, min(60vw, 900px));
 	aspect-ratio: 3 / 2;
 	pointer-events: none;
+	/* the frame starts where the seal ends: the script sets --bclip, and the scene fades in over 60 px */
+	-webkit-mask-image: linear-gradient(90deg, transparent var(--bclip, 0px), var(--color-ground-dark) calc(var(--bclip, 0px) + 60px));
+	mask-image: linear-gradient(90deg, transparent var(--bclip, 0px), var(--color-ground-dark) calc(var(--bclip, 0px) + 60px));
 }
 .s-hero--bridge:not(.is-placed) .bridge__box { top: auto; bottom: 0; }
 
-/* the banks: cut off just under the tug (83 % of the frame), fading into the veil on the
-   left, into the haze over Las Arenas and into the band at the bottom (a mask reads only
-   alpha: any opaque token draws it) */
+/* the banks: cut just under the tug (83 % of the frame), fading at the sides and the bottom (a
+   mask reads only alpha: any opaque token draws it) */
 .bridge__banks {
 	position: absolute;
 	left: 0;
@@ -36,10 +41,8 @@
 	mask-composite: intersect;
 }
 
-/* the drawing: with the banks, under the veil like the lighthouse, in the bridge's own red (baked
-   into the raster: the connectors keep the section's). The raster is only the band the ink occupies (rows 378–998 of
-   the frame's 1344): a full frame outsized the banks and became the page's largest paint when it
-   faded in, at 2.7 s */
+/* the drawing (bridge_plan.py): only the band its ink occupies, rows 378–998 of 1344, so it never
+   outsizes the banks as the largest paint */
 .bridge__plan {
 	position: absolute;
 	left: 0;
@@ -89,15 +92,16 @@
 	font-weight: 500;
 	line-height: 1;
 	letter-spacing: .02em;
-	color: var(--color-secondary);
-	/* a halo of the band under each name, so it reads where it crosses the photograph */
-	text-shadow: 0 0 3px var(--color-ground-dark), 0 0 6px var(--color-ground-dark);
+	/* a step under the excerpt's ink: the names must not outshine the copy (founder, 2026-10-02) */
+	color: var(--color-console-ink);
+	/* a plate, so it reads over the photograph (≥ 7.7:1; a halo gave 3.5) */
+	padding: 2px 5px;
+	background: color-mix(in srgb, var(--color-ground-dark) 90%, transparent);
 }
 .bridge__plug--up > span { bottom: calc(100% + 18px); }
 .bridge__plug--down > span { top: calc(100% + 18px); }
 
-/* a message: a ball on the bus, in one of the six verticals' colours (the script sets --msg from the
-   CMS), ringed in paper so the navy one reads on the dark band */
+/* a message, in one of the six verticals' colours (--msg, from the CMS), ringed in paper */
 .bridge__msg {
 	position: absolute;
 	left: -6px;
@@ -109,8 +113,8 @@
 	outline: 1.5px solid color-mix(in srgb, var(--color-secondary) 75%, transparent);
 }
 
-/* the sequence, where a script runs it: the banks alone 1.2 s, then the bridge whole (opacity: the
-   compositor's, never a repaint), then every connector at once; the script then runs the messages */
+/* the sequence: the banks alone 1.2 s, the bridge whole (opacity, never a repaint), the connectors
+   at once, then the messages (the script) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--bridge:not(.is-placed) .bridge__box { visibility: hidden; }
 	.s-hero--bridge:not(.is-done) .bridge__plan { opacity: 0; }

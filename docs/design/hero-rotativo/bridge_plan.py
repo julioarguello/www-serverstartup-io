@@ -8,9 +8,11 @@ issue). Steps:
 2. the Las Arenas tower is moved onto the photograph's: FLUX drew it about 10 px left at the top
    and 45 px narrower at the base than the tower it replaces (landmarks in bridge.py), so each row
    of it is stretched between the photograph's legs, fading back to the drawing 80 px either side;
-3. tinted the bridge's own red, deep and saturated (#A8352B) — darker than its lit side, which read
-   as salmon on the band (founder, 2026-10-02: "el puente más oscuro"); the stroke is the drawing's
-   own, fine like the lighthouse's: thickened, it read as a smudge;
+3. tinted a step under the section's red (#D8432F against #EA4335): the bridge and its connectors
+   read as one thing, and the drawing stands out on the band like the lighthouse (founder,
+   2026-10-02: "tiene que destacar… ambos colores bastante similares"; the deep #A8352B before it
+   barely showed through the veil). The stroke is the drawing's own, fine like the lighthouse's:
+   thickened, it read as a smudge;
 4. cut to the band the ink occupies (rows 378-998), so the drawing never outsizes the banks and
    never becomes the page's largest paint.
 
@@ -20,7 +22,7 @@ import os, sys
 import numpy as np
 from PIL import Image
 
-RED = (0xA8, 0x35, 0x2B)
+RED = (0xD8, 0x43, 0x2F)
 TOP, BOTTOM = 378, 998
 # the Las Arenas tower's outer legs: the drawing's, measured on its alpha, and the photograph's (bridge.py)
 DRAWN = ((405, 1685, 1725), (870, 1670, 1753))

@@ -36,14 +36,16 @@
 	mask-composite: intersect;
 }
 
-/* the drawing: in front of the veil, in the section's colour */
-.bridge__lines svg {
+/* the drawing: in front of the veil, in the bridge's own red (baked into the raster: the
+   connectors keep the section's). The raster is only the band the ink occupies (rows 378–998 of
+   the frame's 1344): a full frame outsized the banks and became the page's largest paint when it
+   faded in, at 2.7 s */
+.bridge__plan {
 	position: absolute;
-	inset: 0;
+	left: 0;
+	top: calc(378 / 1344 * 100%);
 	width: 100%;
-	height: 100%;
-	color: var(--bridge-c);
-	overflow: visible;
+	height: auto;
 }
 
 /* the bus layer: connectors and messages, in the stage's own pixels */
@@ -75,7 +77,7 @@
 }
 .bridge__plug--up::after { top: -11px; }
 .bridge__plug--down::after { bottom: -11px; }
-.bridge__plug.is-hit::after { background: var(--color-secondary); }
+.bridge__plug.is-hit::after { background: var(--msg, var(--color-secondary)); }
 .bridge__plug > span {
 	position: absolute;
 	left: 50%;
@@ -86,35 +88,33 @@
 	line-height: 1;
 	letter-spacing: .02em;
 	color: var(--color-secondary);
+	/* a halo of the band under each name, so it reads where it crosses the photograph */
+	text-shadow: 0 0 3px var(--color-ground-dark), 0 0 6px var(--color-ground-dark);
 }
 .bridge__plug--up > span { bottom: calc(100% + 18px); }
 .bridge__plug--down > span { top: calc(100% + 18px); }
 
-/* a message: a ball on the bus */
+/* a message: a ball on the bus, in one of the six verticals' colours (the script sets --msg from the
+   CMS), ringed in paper so the navy one reads on the dark band */
 .bridge__msg {
 	position: absolute;
-	left: -5px;
-	top: -5px;
-	width: 10px;
-	height: 10px;
+	left: -6px;
+	top: -6px;
+	width: 12px;
+	height: 12px;
 	border-radius: 50%;
-	background: var(--color-secondary);
-	outline: 3px solid color-mix(in srgb, var(--bridge-c) 60%, transparent);
+	background: var(--msg, var(--color-secondary));
+	outline: 1.5px solid color-mix(in srgb, var(--color-secondary) 75%, transparent);
 }
 
-/* the sequence, where a script runs it: the banks alone 1.2 s, then the bridge laid layer by layer
-   (opacity: the compositor's, never a repaint); the script then lights the connectors and runs the messages */
+/* the sequence, where a script runs it: the banks alone 1.2 s, then the bridge whole (opacity: the
+   compositor's, never a repaint), then every connector at once; the script then runs the messages */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--bridge:not(.is-placed) .bridge__box { visibility: hidden; }
-	.s-hero--bridge:not(.is-done) .bridge__layer { opacity: 0; }
-	.s-hero--bridge:not(.is-done) .bridge__plug:not(.is-on) { opacity: 0; }
-	.s-hero--bridge.is-playing .bridge__layer { animation: bridge-lay .7s ease-out forwards; will-change: opacity; }
-	.s-hero--bridge.is-playing .b-towers { animation-delay: 1.2s; }
-	.s-hero--bridge.is-playing .b-girder { animation-delay: 1.9s; }
-	.s-hero--bridge.is-playing .b-cables { animation-delay: 2.6s; }
-	.s-hero--bridge.is-playing .b-hangers { animation-delay: 3.2s; }
-	.s-hero--bridge.is-playing .b-stays { animation-delay: 3.7s; }
-	.s-hero--bridge.is-paused .bridge__layer { animation-play-state: paused; }
+	.s-hero--bridge:not(.is-done) .bridge__plan { opacity: 0; }
+	.s-hero--bridge:not(.is-done) .bridge__plug { opacity: 0; }
+	.s-hero--bridge.is-playing .bridge__plan { animation: bridge-lay .9s ease-out 1.2s forwards; will-change: opacity; }
+	.s-hero--bridge.is-paused .bridge__plan { animation-play-state: paused; }
 }
 @keyframes bridge-lay { from { opacity: 0; } to { opacity: 1; } }
 

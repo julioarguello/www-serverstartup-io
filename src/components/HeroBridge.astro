@@ -4,33 +4,34 @@
  *
  * The Vizcaya Bridge, between Portugalete and Las Arenas: first the two banks
  * with no bridge (the photograph with the bridge and the sky taken out), then
- * the bridge laid as a technical drawing, piece by piece, in the section's
- * colour, then what plugs into it — because the bridge IS the bus. Messages
- * then travel along the girder from one connector to one or several others.
- * The founder's brief (2026-10-01): "tejemos lazos, tejemos toda la red de
- * integración".
+ * the bridge, whole, as an architect's drawing in its own red, then what plugs
+ * into it — because the bridge IS the bus. Messages then travel along the
+ * girder from one connector to one or several others, each in one of the six
+ * verticals' colours. The founder's brief (2026-10-01): "tejemos lazos,
+ * tejemos toda la red de integración".
  *
  * The band, the copy, the epigraph, the seal, the veil and the controls are the
  * scene every vertical shares (HeroScene.astro). What is the bridge's own:
  *
- * - The drawing is generated, not traced: straight segments and true parabolas
- *   on points measured on the photograph (docs/design/hero-rotativo/bridge.py),
- *   inlined as five stacked layers so each piece is laid in turn and coloured
- *   by the section. It sits in front of the veil because it never crosses a letter:
- *   the script reads the same segments back to place the scene.
+ * - The drawing is a raster on the photograph's frame (int-puente-plan.webp),
+ *   in front of the veil because it never crosses a letter. What the script
+ *   measures is its outline, built from geometry on the same frame
+ *   (docs/design/hero-rotativo/bridge.py), shipped as path data, never drawn.
  * - The scene is level, the Las Arenas tower just past the column's right edge,
- *   and as high as the copy allows: the towers and the girder touch no letter;
- *   the thin lines (cables, hangers, stays) may pass behind the quotation and
- *   nothing else (founder, 2026-10-02).
- * - The connectors are the protocols, platforms and Google Cloud services the
- *   company has actually wired (evidence in the issue), from `panel_labels`
- *   → `bridge_plugs`; as many as fit, in that order, on two heights above and
- *   below the girder, each withheld where it would touch a letter, a stroke,
- *   another name or the band's edge.
+ *   and as high as the copy allows: the structure touches no letter; the thin
+ *   lines (cables, hangers, stays) may pass behind the quotation and nothing
+ *   else (founder, 2026-10-02).
+ * - The connectors are the protocols (above the girder) and the platforms and
+ *   Google Cloud services (below) the company has actually wired (evidence in
+ *   the issue), from `panel_labels` → `bridge_plugs_up` / `bridge_plugs_down`;
+ *   as many as fit, in that order, on two heights, each withheld where it would
+ *   touch a letter, a stroke, another name or the band's edge.
  */
+import { getEmDashCollection } from "emdash";
 import { HERO_BRIDGE, HERO_BRIDGE_SIZES } from "../utils/hero-art";
+import { FACE_BY_SLUG, FACE_ORDER } from "../utils/nav";
 import HeroScene from "./HeroScene.astro";
-import lines from "../assets/hero/int-puente.svg?raw";
+import outline from "../assets/hero/int-puente.svg?raw";
 
 interface Props {
 	title: string;
@@ -42,25 +43,34 @@ interface Props {
 }
 const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props;
 const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
+const list = (k: string) => L(k, "").split(",").map((p) => p.trim()).filter(Boolean).join("|");
 
-const plugs = L("bridge_plugs", "").split(",").map((p) => p.trim()).filter(Boolean);
+/* the outline's path data, by group: the structure, which touches no letter, and the lines, which may
+   pass behind the quotation */
+const groups = Object.fromEntries([...outline.matchAll(/<g class="b-([a-z]+)">([\s\S]*?)<\/g>/g)].map((m) => [m[1], [...m[2].matchAll(/ d="([^"]+)"/g)].map((d) => d[1]).join(" ")]));
+const hard = ["towers", "girder", "car"].map((k) => groups[k] ?? "").join(" ");
+const soft = ["cables", "hangers", "stays"].map((k) => groups[k] ?? "").join(" ");
 
-/* the drawing as five stacked layers (towers, girder, cables, hangers, stays), each its own <svg>:
-   laying the bridge is then an opacity change per layer, which the compositor does, instead of a dash
-   offset, which repaints the whole drawing every frame (measured: about 1.6 s of the mobile run's
-   blocking time, #531) */
-const svgAttrs = lines.match(/^<svg([^>]*)>/)?.[1] ?? "";
-const layers = [...lines.matchAll(/<g class="(b-[a-z]+)">([\s\S]*?)<\/g>/g)].map((m) => `<svg${svgAttrs} class="bridge__layer ${m[1]}">${m[2]}</svg>`).join("");
+/* the messages wear the six verticals' colours, from the CMS, in the cube's order */
+const { entries: serviceEntries } = await getEmDashCollection("services", { orderBy: { created_at: "asc" }, locale: Astro.currentLocale || "es" });
+const colors = (serviceEntries ?? [])
+	.map((e: any) => ({ key: FACE_BY_SLUG[e.slug ?? e.id], color: e.data.color as string | undefined }))
+	.filter((f) => f.key && f.color)
+	.sort((a, b) => FACE_ORDER.indexOf(a.key) - FACE_ORDER.indexOf(b.key))
+	.map((f) => f.color)
+	.join("|");
 const pauseLabel = L("bridge_pause", "Pausar la animación");
 const replayLabel = L("bridge_replay", "Repetir la animación");
 ---
 
-<HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ plugs: plugs.join("|") }}>
+<HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ up: list("bridge_plugs_up"), down: list("bridge_plugs_down"), colors, hard, soft }}>
 	<div slot="under" class="bridge__box bridge__art">
 		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
 	</div>
 	<Fragment slot="over">
-		<div class="bridge__box bridge__lines" set:html={layers} />
+		<div class="bridge__box bridge__lines">
+			<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="406" alt="" decoding="async" />
+		</div>
 		<div class="bridge__bus" data-volatile></div>
 	</Fragment>
 </HeroScene>
@@ -70,59 +80,53 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
-		const lines = hero.querySelector<HTMLElement>(".bridge__lines")!;
 		const bus = hero.querySelector<HTMLElement>(".bridge__bus")!;
 		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
 		const inner = hero.querySelector<HTMLElement>(".s-hero__inner")!;
 		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
 		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
-		const PLUGS = (hero.dataset.plugs || "").split("|").filter(Boolean);
+		const split = (v?: string) => (v || "").split("|").filter(Boolean);
+		const UP = split(hero.dataset.up), DOWN = split(hero.dataset.down), COLORS = split(hero.dataset.colors);
 
-		/* the drawing's frame and the landmarks bridge.py drew it on (2016 × 1344) */
+		/* the drawing's frame and the landmarks bridge.py drew its outline on (2016 × 1344) */
 		const VB_W = 2016, VB_H = 1344;
-		const ALPHA = 0;                         /* level (founder, 2026-10-02: "ponlo recto") */
-		const PIVOT_U = 0.85, PIVOT_V = 0.7;    /* the Las Arenas tower's base */
 		const LEFT_OUT = 0.135, RIGHT_IN = 0.8185; /* Portugalete's outer leg, Las Arenas' inner leg */
 		const TOP_V = 0.29, CROP_V = 0.8;        /* the tower tops; the plate's crop under the tug */
 		const GX0 = 336, GX1 = 1692;
 		const chordTop = (x: number) => 545 - (x - 420) * 0.017;
+		const chordBot = (x: number) => 590 - (x - 420) * 0.016;
 
-		/* the drawing as segments, read once from its own paths (M/L only) */
-		/* …sampled once into points, every 6 units of the drawing's own frame: the structure (towers,
-		   girder) apart from the lines (cables, hangers, stays), because only the lines may pass behind
-		   the quotation (founder, 2026-10-02: "aunque haya un pelín de solapamiento con la quote, no molesta") */
-		const sample = (sel: string) => {
+		/* the outline, sampled once into points every 6 units of its own frame: the structure (towers,
+		   girder, car, plinths) apart from the lines (cables, hangers, stays), because only the lines may
+		   pass behind the quotation (founder, 2026-10-02: "aunque haya un pelín de solapamiento con la
+		   quote, no molesta") */
+		const sample = (d = "") => {
 			const out: [number, number][] = [];
-			for (const p of lines.querySelectorAll(`${sel} path`)) {
-				let cx = 0, cy = 0;
-				for (const m of (p.getAttribute("d") || "").matchAll(/([ML])\s*(-?[\d.]+),(-?[\d.]+)/g)) {
-					const x = +m[2], y = +m[3];
-					if (m[1] === "L") {
-						const n = Math.max(1, Math.ceil(Math.hypot(x - cx, y - cy) / 6));
-						for (let i = 0; i <= n; i++) out.push([cx + ((x - cx) * i) / n, cy + ((y - cy) * i) / n]);
-					}
-					cx = x; cy = y;
+			let cx = 0, cy = 0;
+			for (const m of d.matchAll(/([ML])\s*(-?[\d.]+),(-?[\d.]+)/g)) {
+				const x = +m[2], y = +m[3];
+				if (m[1] === "L") {
+					const n = Math.max(1, Math.ceil(Math.hypot(x - cx, y - cy) / 6));
+					for (let i = 0; i <= n; i++) out.push([cx + ((x - cx) * i) / n, cy + ((y - cy) * i) / n]);
 				}
+				cx = x; cy = y;
 			}
 			return out;
 		};
-		const hardPts = sample(".b-towers, .b-girder");
-		const softPts = sample(".b-cables, .b-hangers, .b-stays");
+		const hardPts = sample(hero.dataset.hard);
+		const softPts = sample(hero.dataset.soft);
 		const pts = [...hardPts, ...softPts];
 
+		/* every coordinate below is in the stage's own pixels, measured in the same task as what it is
+		   compared with: a scroll between two tasks (a reload restores the scroll after the first layout)
+		   moves every viewport rectangle and left the connectors hanging off the girder (founder, 2026-10-02) */
 		type Box = { l: number; t: number; r: number; b: number; quote?: boolean };
 		type Geo = { L: number; T: number; W: number; H: number };
-		type Plug = { el: HTMLElement; foot: [number, number]; end: [number, number] };
+		type Plug = { el: HTMLElement; foot: [number, number]; mid: [number, number]; end: [number, number] };
 		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
 		let plugs: Plug[] = [];
 
-		/* a point of the drawing, on the page: scaled into the box, then turned about the pivot */
-		function toPage(x: number, y: number, g: Geo): [number, number] {
-			const px = g.L + (x / VB_W) * g.W, py = g.T + (y / VB_H) * g.H;
-			const cx = g.L + PIVOT_U * g.W, cy = g.T + PIVOT_V * g.H;
-			const dx = px - cx, dy = py - cy, c = Math.cos(ALPHA), s = Math.sin(ALPHA);
-			return [cx + dx * c - dy * s, cy + dx * s + dy * c];
-		}
+		const toStage = (x: number, y: number, g: Geo): [number, number] => [g.L + (x / VB_W) * g.W, g.T + (y / VB_H) * g.H];
 		const inside = (x: number, y: number, q: Box) => x > q.l && x < q.r && y > q.t && y < q.b;
 		/* one comparison per line: the cms-text lint reads `> … <` on one line as a text node */
 		function within(a: Box, room: Box): boolean {
@@ -132,18 +136,17 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			return a.b < room.b;
 		}
 		const overlap = (a: Box, b: Box, pad = 0) => a.l < b.r + pad && b.l - pad < a.r && a.t < b.b + pad && b.t - pad < a.b;
-		/* the drawing's points on the page for one geometry */
-		const placed = (g: Geo, from: [number, number][] = pts) => from.map(([x, y]) => toPage(x, y, g));
+		const placed = (g: Geo, from: [number, number][] = pts) => from.map(([x, y]) => toStage(x, y, g));
 		/* does any stroke pass through one of these boxes? */
-		function strokesIn(boxes: Box[], onPage: [number, number][]): boolean {
-			for (const [x, y] of onPage) for (const q of boxes) if (inside(x, y, q)) return true;
+		function strokesIn(boxes: Box[], onStage: [number, number][]): boolean {
+			for (const [x, y] of onStage) for (const q of boxes) if (inside(x, y, q)) return true;
 			return false;
 		}
 		/* the least drop that clears every box: moving the frame down only translates the points, so each
 		   point under a box forbids one interval of drops — sort them and take the first gap */
 		function leastDrop(pairs: [Box[], [number, number][]][]): number {
 			const bad: [number, number][] = [];
-			for (const [boxes, onPage] of pairs) for (const [x, y] of onPage) for (const q of boxes) {
+			for (const [boxes, onStage] of pairs) for (const [x, y] of onStage) for (const q of boxes) {
 				if (x <= q.l) continue;
 				if (x >= q.r) continue;
 				bad.push([q.t - y, q.b - y]);
@@ -157,36 +160,37 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			}
 			return d;
 		}
-		/* every line of the copy, padded: nothing of the bridge may touch a letter */
-		function textBoxes(): Box[] {
+		/* every line of the copy, padded, in the stage's pixels: nothing of the bridge may touch a letter */
+		function textBoxes(s: DOMRect): Box[] {
 			const out: Box[] = [];
+			const pad = (q: DOMRect, quote = false): Box => ({ l: q.left - s.left - 12, r: q.right - s.left + 12, t: q.top - s.top - 12, b: q.bottom - s.top + 14, quote });
 			for (const el of copy.querySelectorAll<HTMLElement>("h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
 				const r = document.createRange();
 				r.selectNodeContents(el);
 				const quote = !!el.closest(".s-hero__epigraph");
-				for (const q of r.getClientRects()) if (q.width > 2) out.push({ l: q.left - 12, r: q.right + 12, t: q.top - 12, b: q.bottom + 14, quote });
+				for (const q of r.getClientRects()) if (q.width > 2) out.push(pad(q, quote));
 			}
 			const b = copy.querySelector<HTMLElement>(".btn")?.getBoundingClientRect();
-			if (b) out.push({ l: b.left - 12, r: b.right + 12, t: b.top - 12, b: b.bottom + 14 });
+			if (b) out.push(pad(b));
 			return out;
 		}
 		function setGeo(g: Geo) {
-			const s = stage.getBoundingClientRect();
 			geo = g;
-			hero.style.setProperty("--bx", `${g.L - s.left}px`);
-			hero.style.setProperty("--by", `${g.T - s.top}px`);
+			hero.style.setProperty("--bx", `${g.L}px`);
+			hero.style.setProperty("--by", `${g.T}px`);
 			hero.style.setProperty("--bw", `${g.W}px`);
 		}
 
 		/* desktops: the Las Arenas tower just past the column, the scene two thirds of the
 		   column-and-margin it could span, as high as the letters allow, the tug inside the band */
-		function fitWide(text: Box[]) {
-			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect(), band = hero.getBoundingClientRect();
-			const colL = ib.left + parseFloat(cs.paddingLeft), colR = ib.right - parseFloat(cs.paddingRight);
-			/* one query per line: the cms-text lint reads `> … <` on one line as a text node */
+		function fitWide() {
+			const s = stage.getBoundingClientRect();
+			const text = textBoxes(s);
+			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect();
+			const colL = ib.left - s.left + parseFloat(cs.paddingLeft), colR = ib.right - s.left - parseFloat(cs.paddingRight);
 			/* the bridge lives under the body text: it rises until it meets the quotation, never above */
 			const body = copy.querySelector(".s-hero__body") || copy.querySelector("h1");
-			const bodyBottom = body ? body.getBoundingClientRect().bottom : band.top;
+			const bodyBottom = body ? body.getBoundingClientRect().bottom - s.top : 0;
 			const others = text.filter((q) => !q.quote);
 			let W = (0.66 * (colR + 10 - (colL - 34))) / (RIGHT_IN - LEFT_OUT);
 			for (let tries = 0; tries < 12; tries++) {
@@ -196,7 +200,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 				const g = { L: colR + 10 - RIGHT_IN * W, T: bodyBottom + 4 - TOP_V * H, W, H };
 				g.T += Math.ceil(leastDrop([[text, placed(g, hardPts)], [others, placed(g, softPts)]]));
 				setGeo(g);
-				if (g.T + CROP_V * H <= band.bottom - 4) return;
+				if (g.T + CROP_V * H <= s.height - 4) return;
 				W *= 0.94;
 			}
 		}
@@ -204,53 +208,62 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		function fitNarrow() {
 			const s = stage.getBoundingClientRect();
 			const W = s.width / 0.8, H = W / 1.5;
-			setGeo({ L: s.left - 0.1 * W, T: s.top + s.height * 0.5 - 0.41 * H, W, H });
+			setGeo({ L: -0.1 * W, T: s.height * 0.5 - 0.41 * H, W, H });
 		}
 
-		/* the connectors: a stem off the girder, a circle, a name — two heights on each side. Names are
-		   measured on a canvas in the bus's own font, so trying a place costs no layout; only the ones
-		   that fit are written into the page, in one pass */
+		/* the connectors: a stem off the girder, a circle, a name — the protocols above, the platforms and
+		   services below (founder, 2026-10-02: "protocolos arriba"), two heights each side, staggered so
+		   neighbours can stand closer. Names are measured on a canvas in the bus's own font, so trying a
+		   place costs no layout; only the ones that fit are written into the page, in one pass */
 		const ruler = document.createElement("canvas").getContext("2d")!;
-		function placePlugs(text: Box[], narrow: boolean) {
+		function placePlugs(narrow: boolean) {
 			bus.replaceChildren();
 			plugs = [];
-			const s = stage.getBoundingClientRect(), band = hero.getBoundingClientRect();
-			const room: Box = narrow ? { l: s.left + 4, t: s.top + 4, r: s.right - 4, b: s.bottom - 4 } : { l: band.left + 8, t: band.top + 84, r: band.right - 8, b: band.bottom - 10 };
+			const s = stage.getBoundingClientRect();
+			const text = narrow ? [] : textBoxes(s);
+			const room: Box = narrow ? { l: 4, t: 4, r: s.width - 4, b: s.height - 4 } : { l: 8, t: 84, r: s.width - 8, b: s.height - 10 };
 			const size = narrow ? 11 : 12.5;
 			ruler.font = `500 ${size}px ${getComputedStyle(bus).fontFamily}`;
 			const taken: Box[] = [];
-			const drawn = placed(geo);
+			const drawn = placed(geo), structure = placed(geo, hardPts);
 			const out = document.createDocumentFragment();
-			/* a phone shows at most eight: the row is short and the names would crowd the drawing */
-			const most = narrow ? Math.min(8, PLUGS.length) : PLUGS.length;
-			let i = 0;
-			for (let k = 0; k <= 40 && i < most; k += 2) {
-				const gx = GX0 + ((GX1 - GX0) * k) / 40;
-				const [fx, fy] = toPage(gx, chordTop(gx), geo);
-				if (fx < room.l + 30 || fx > room.r - 30) continue;
-				const w = ruler.measureText(PLUGS[i]).width + 0.02 * size * PLUGS[i].length;
-				for (const [up, h] of [[true, 40], [false, 40], [true, 92], [false, 92]] as [boolean, number][]) {
-					const nameTop = up ? fy - h - 18 - size : fy + h + 18;
-					const label: Box = { l: fx - w / 2 - 4, r: fx + w / 2 + 4, t: nameTop - 3, b: nameTop + size + 3 };
-					const stem: Box = { l: fx - 6, r: fx + 6, t: up ? fy - h - 12 : fy + 6, b: up ? fy - 6 : fy + h + 12 };
-					const clear = within(label, room) &&
-						!text.some((q) => overlap(label, q, 26) || overlap(stem, q)) &&
-						!taken.some((q) => overlap(label, q, 10) || overlap(stem, q, 4)) &&
-						!strokesIn([label], drawn);
-					if (!clear) continue;
-					const el = document.createElement("div");
-					el.className = `bridge__plug bridge__plug--${up ? "up" : "down"}`;
-					el.style.left = `${fx - s.left}px`;
-					el.style.top = `${(up ? fy - h : fy) - s.top}px`;
-					el.style.height = `${h}px`;
-					const name = document.createElement("span");
-					name.textContent = PLUGS[i];
-					el.appendChild(name);
-					out.appendChild(el);
-					taken.push(label, stem);
-					plugs.push({ el, foot: [fx - s.left, fy - s.top], end: [fx - s.left, (up ? fy - h - 6 : fy + h + 6) - s.top] });
-					i++;
-					break;
+			for (const [up, names] of [[true, UP], [false, DOWN]] as [boolean, string[]][]) {
+				/* a phone shows at most four a side: the row is short and the names would crowd the drawing */
+				const most = narrow ? Math.min(4, names.length) : names.length;
+				/* a phone spreads its few along the girder, those below between those above; a desktop packs
+				   them, because more fit */
+				let i = 0;
+				for (let k = 0; k <= 40 && i < most; k++) {
+					if (narrow && k < Math.round(((i + (up ? 0 : 0.5)) * 40) / most)) continue;
+					const gx = GX0 + ((GX1 - GX0) * k) / 40;
+					const [fx, fy] = toStage(gx, up ? chordTop(gx) : chordBot(gx), geo);
+					if (fx < room.l + 30 || fx > room.r - 30) continue;
+					const w = ruler.measureText(names[i]).width + 0.02 * size * names[i].length;
+					for (const h of i % 2 ? [92, 40] : [40, 92]) {
+						const nameTop = up ? fy - h - 18 - size : fy + h + 18;
+						const label: Box = { l: fx - w / 2 - 4, r: fx + w / 2 + 4, t: nameTop - 3, b: nameTop + size + 3 };
+						const stem: Box = { l: fx - 6, r: fx + 6, t: up ? fy - h - 12 : fy + 6, b: up ? fy - 6 : fy + h + 12 };
+						const clear = within(label, room) &&
+							!text.some((q) => overlap(label, q, 26) || overlap(stem, q)) &&
+							!taken.some((q) => overlap(label, q, 10) || overlap(stem, q, 4)) &&
+							!strokesIn([label], drawn) &&
+							(up || !strokesIn([stem], structure));
+						if (!clear) continue;
+						const el = document.createElement("div");
+						el.className = `bridge__plug bridge__plug--${up ? "up" : "down"}`;
+						el.style.left = `${fx}px`;
+						el.style.top = `${up ? fy - h : fy}px`;
+						el.style.height = `${h}px`;
+						const name = document.createElement("span");
+						name.textContent = names[i];
+						el.appendChild(name);
+						out.appendChild(el);
+						taken.push(label, stem);
+						const [, my] = toStage(gx, (chordTop(gx) + chordBot(gx)) / 2, geo);
+						plugs.push({ el, foot: [fx, fy], mid: [fx, my], end: [fx, up ? fy - h - 6 : fy + h + 6] });
+						i++;
+						break;
+					}
 				}
 			}
 			bus.appendChild(out);
@@ -259,35 +272,37 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		/* the frame first, so the banks can paint; the connectors in a task of their own */
 		function layout() {
 			const narrow = matchMedia("(max-width: 767px)").matches;
-			const text = textBoxes();
-			if (narrow) fitNarrow(); else fitWide(text);
+			if (narrow) fitNarrow(); else fitWide();
 			hero.classList.add("is-placed");
 			window.setTimeout(() => {
-				placePlugs(narrow ? [] : text, narrow);
-				if (hero.classList.contains("is-done") || reduced) plugs.forEach((p) => p.el.classList.add("is-on"));
+				placePlugs(narrow);
 				if (reduced) still();
 			}, 0);
 		}
 
-		/* messages: a ball from one connector down to the girder, along it and up to one or several others */
+		/* messages: a ball from one connector to the girder's middle, along it and out to one or several
+		   others, in one of the six verticals' colours */
 		let feed: number | null = null;
 		function send() {
 			if (plugs.length < 2 || bus.querySelectorAll(".bridge__msg").length > 9) return;
 			const from = plugs[Math.floor(Math.random() * plugs.length)];
 			const others = plugs.filter((p) => p !== from).sort(() => Math.random() - 0.5);
 			const fan = Math.random() < 0.3 ? Math.min(3, others.length) : 1;
+			const color = COLORS[Math.floor(Math.random() * COLORS.length)] ?? "";
 			for (const to of others.slice(0, fan)) {
-				const pts = [from.end, from.foot, to.foot, to.end];
-				const d = [0, ...pts.slice(1).map((p, k) => Math.hypot(p[0] - pts[k][0], p[1] - pts[k][1]))];
+				const route = [from.end, from.foot, from.mid, to.mid, to.foot, to.end];
+				const d = [0, ...route.slice(1).map((p, k) => Math.hypot(p[0] - route[k][0], p[1] - route[k][1]))];
 				const total = d.reduce((a, b) => a + b, 0) || 1;
 				let acc = 0;
-				const frames = pts.map((p, k) => { acc += d[k]; return { transform: `translate(${p[0]}px, ${p[1]}px)`, offset: acc / total }; });
+				const frames = route.map((p, k) => { acc += d[k]; return { transform: `translate(${p[0]}px, ${p[1]}px)`, offset: acc / total }; });
 				const ball = document.createElement("i");
 				ball.className = "bridge__msg";
+				ball.style.setProperty("--msg", color);
 				bus.appendChild(ball);
 				const run = ball.animate(frames, { duration: total / 0.24, easing: "linear" });
 				run.onfinish = () => {
 					ball.remove();
+					to.el.style.setProperty("--msg", color);
 					to.el.classList.add("is-hit");
 					window.setTimeout(() => to.el.classList.remove("is-hit"), 420);
 				};
@@ -295,35 +310,33 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		}
 		/* reduced motion: the same picture, held — three messages standing on the girder */
 		function still() {
-			for (const t of [0.25, 0.5, 0.75]) {
+			[0.25, 0.5, 0.75].forEach((t, k) => {
 				const x = GX0 + (GX1 - GX0) * t;
-				const [px, py] = toPage(x, chordTop(x), geo);
-				const s = stage.getBoundingClientRect();
+				const [px, py] = toStage(x, (chordTop(x) + chordBot(x)) / 2, geo);
 				const ball = document.createElement("i");
 				ball.className = "bridge__msg";
-				ball.style.transform = `translate(${px - s.left}px, ${py - s.top}px)`;
+				ball.style.setProperty("--msg", COLORS[(k * 2) % Math.max(1, COLORS.length)] ?? "");
+				ball.style.transform = `translate(${px}px, ${py}px)`;
 				bus.appendChild(ball);
-			}
+			});
 		}
 		function startFeed() { if (feed !== null || reduced || pause.checked || document.hidden || !hero.classList.contains("is-done")) return; feed = window.setInterval(send, 700); send(); }
 		function stopFeed() { if (feed !== null) { clearInterval(feed); feed = null; } }
 		function freezeFeed(on: boolean) { for (const a of bus.getAnimations({ subtree: true })) on ? a.pause() : a.play(); }
 
-		/* the sequence: the banks alone · the bridge laid (CSS, 1.2 s → 4.7 s) · the connectors one by one · the messages */
-		let timers: number[] = [];
+		/* the sequence: the banks alone · the bridge, whole (CSS, 1.2 s → 2.1 s) · every connector at once ·
+		   the messages (founder, 2026-10-02: "que el puente aparezca de una sola vez, y los conectores también") */
+		let timer: number | null = null;
 		function finish() {
-			timers.forEach(clearTimeout);
-			timers = [];
+			if (timer !== null) clearTimeout(timer);
+			timer = null;
 			hero.classList.remove("is-playing");
 			hero.classList.add("is-done");
-			plugs.forEach((p) => p.el.classList.add("is-on"));
 			startFeed();
 		}
 		function play() {
 			hero.classList.add("is-playing");
-			/* by index, looked up when it fires: a relayout (fonts, resize) may have replaced the elements */
-			PLUGS.forEach((_, k) => timers.push(window.setTimeout(() => plugs[k]?.el.classList.add("is-on"), 4800 + k * 150)));
-			timers.push(window.setTimeout(finish, 4800 + PLUGS.length * 150 + 300));
+			timer = window.setTimeout(finish, 2500);
 		}
 
 		let settling: number | null = null;
@@ -346,10 +359,9 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		replay.addEventListener("click", () => {
 			if (reduced) return;
 			stopFeed();
-			timers.forEach(clearTimeout);
-			timers = [];
+			if (timer !== null) clearTimeout(timer);
 			bus.querySelectorAll(".bridge__msg").forEach((b) => b.remove());
-			plugs.forEach((p) => p.el.classList.remove("is-on", "is-hit"));
+			plugs.forEach((p) => p.el.classList.remove("is-hit"));
 			pause.checked = false;
 			hero.classList.remove("is-paused", "is-done", "is-playing");
 			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */

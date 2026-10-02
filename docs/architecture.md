@@ -305,10 +305,9 @@ a 320 px reference block so the cube and the h1 sit in the same place on every p
 brings its art through two slots (`under` the veil, `over` it), its own script, and an entry in
 `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). The epigraph is every blockquote the service body
-opens with: one stands still; several take turns every 9 s in one grid cell, so the band never changes
-height, stopped by the pause and kept on the first under reduced motion (#537). The ones not showing are
-`aria-hidden` with their link out of the tab order, and stay in the DOM, so the copy baseline reads all
-of them.
+opens with; consecutive quotations by one author stand one after the other under a single attribution,
+linked to the first one's source (#537). They never take turns: the founder rejected a rotation
+("el que baile no me gusta").
 
 The integration page opens on the Vizcaya Bridge between Portugalete and Las Arenas. First the two
 banks, from a photograph with the bridge and the sky taken out. Then the bridge, whole, as a
@@ -364,6 +363,10 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   `grayscale` + the section colour laid over in `mix-blend-mode: color` at 78 % + monitor lines — so
   there is no second raster to download or to become the LCP. At full strength the violet saturated
   the highlights; the approved prototype was lighter and greyer.
+- **The tanker's stern carries our lettering** in both hero photographs — SERVER STARTUP, AVILÉS,
+  YULO 11062024, a homage of the founder's to his father (`stern_label.py`: the original letters
+  inpainted out, the new ones rendered at their cap height, centre, condensed width and light). Every
+  file carrying it has a new name (`ia-remolcador-aviles*`, `int-puente-aviles*`).
 - **The reading** (`HeroVision.astro`, `hero-vision.css`): a reticle on the tanker, the tug bracketed,
   MATCH, a readout whose mission is set by people (`mission: assist`, `replace: denied`,
   `override: bridge`), and the page's own flow as code (`await review(bridge)`). Strings are
@@ -372,17 +375,17 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **Placement in the stage's pixels, withheld rather than moved onto the copy.** The frame is sized by
   the band and rests on its floor, the tug's bow 50 px past the column. Where the band is too narrow
   for the tug beside the column the frame shrinks to fit, down to half its size; below that (tablets)
-  it keeps its size and the HUD pieces that would touch a letter are withheld. The reticle tries points
-  on the tanker's stern by the tug, never over the column: the ship's bridge was tried first and
-  always sat beside the title. Every epigraph counts as copy, since any of them may be showing.
-- **The epigraph** is three of Martin Fowler's, verified verbatim on martinfowler.com and translated by
-  us: organisations are responsible for everything their agents do (Fragments, 2026-09-08); the
-  acceptance criteria cannot be outsourced (2026-07-13); humans are still responsible for what the
-  software does (bliki *Agentic Programming*, 2026-05-21).
-- **Measured** (2026-10-02, local build): LCP is the photograph — `ia-remolcador-restaurado-2016.webp`
+  it keeps its size and the HUD pieces that would touch a letter are withheld. The reticle locks on the
+  tanker — the name on its stern first, then up the right of its superstructure — shrinking to 65 %
+  to fit the gap between the excerpt and the epigraph; MATCH sits on the ship's side of it, never by
+  the tug (founder: it read as a match on the tug). The ship's bridge always sat beside the title.
+- **The epigraph** is two of Martin Fowler's, one after the other, verified verbatim on
+  martinfowler.com and translated by us: organisations are responsible for everything their agents do
+  (Fragments, 2026-09-08); the acceptance criteria cannot be outsourced (2026-07-13).
+- **Measured** (2026-10-02, local build): LCP is the photograph — `ia-remolcador-aviles-2016.webp`
   at 1575 × 791 DPR 2, the 720 px file (87 KB) on a 412 px phone at 1.75; the a11y gate's tightest hero
-  contrast is 7.4:1 on the excerpt; the HUD is complete from 1280 px up and on phones, and withheld on
-  tablets.
+  contrast is 7.4:1 on the excerpt; reticle and MATCH show from 1024 px up and on phones, the whole
+  HUD from 1920; on tablets in portrait the HUD is withheld.
 
 ## 5. SEO
 

@@ -8,8 +8,6 @@ excerpt: "AI is a means, not an end. The machine writes the repetitive code; we 
 
 > «We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.» [Martin Fowler](https://martinfowler.com/fragments/2026-07-13.html)
 
-> «Humans are still responsible for what the software does and how it works, but use different skills to create their products.» [Martin Fowler](https://martinfowler.com/bliki/AgenticProgramming.html)
-
 We use AI in two ways. As a tool, to build with more quality and fewer hours what we already knew how to build. And as a system component, to solve what was not possible until recently. Either way it is a means, not an end.
 
 When code gets cheap to generate, far more software gets generated ([Jevons paradox](https://news.northeastern.edu/2025/02/07/jevons-paradox-ai-future/)). And all that new software must be [integrated](/en/systems-integration) and [secured](/en/cdn-waf-edge-security-cloudflare) inside systems that already exist. That is the most valuable part of the work, and the part we have done since 2019.

@@ -97,10 +97,11 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		const ASPECT = 1.55;
 		const BAND_H = 0.81;                     /* the frame's height, of the band's */
 		const TUG = { l: 0.643, t: 0.36, r: 0.934, b: 0.756 };   /* the tug, bow fender to stern */
-		/* where the reticle may lock on the tanker, best first: its stern's corner, between the copy and the tug
-		   it is escorted by, then along the hull. The first that touches no letter wins; the ship's bridge was
-		   tried first and always sat beside the title, which nothing may touch */
-		const AIM: [number, number][] = [[0.615, 0.49], [0.6, 0.52], [0.625, 0.56], [0.58, 0.55]];
+		/* where the reticle may lock on the tanker, best first: the name on its stern, then towards the stern's
+		   upper corner by the tug, then up the right of its superstructure. The first that touches no line of
+		   the copy wins — the stern sits between the excerpt and the epigraph on some screens, behind the
+		   epigraph on others; the ship's bridge always sat beside the title */
+		const AIM: [number, number][] = [[0.545, 0.527], [0.57, 0.5], [0.59, 0.47], [0.6, 0.52], [0.615, 0.49], [0.62, 0.43], [0.625, 0.37], [0.6, 0.33], [0.63, 0.3]];
 		const GAP = 50;                          /* the tug's bow, past the column's right edge */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
 
@@ -173,18 +174,21 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			hero.classList.add("is-placed");
 			const stop = blocked(s);
 			const at = (fx: number, fy: number): [number, number] => [g.L + fx * g.W, g.T + fy * g.H];
-			const r = Math.max(28, 0.045 * g.W);
+			const r0 = 0.035 * g.W;
 			const free = (el: Element) => !el.classList.contains("is-withheld");
 			let locked = false;
-			for (const [fx, fy] of AIM) {
-				const [ax, cy] = at(fx, fy);
-				/* never over the column: on the stern's corner, or as far onto the tug's bow as the copy needs */
-				const cx = Math.max(ax, g.colR + 14 + r * 1.3);
+			/* each point at full size, then smaller (to 65 %, never under 24 px): the stern may sit in a narrow gap
+			   between the excerpt and the epigraph */
+			const tries = AIM.flatMap(([fx, fy]) => [1, 0.8, 0.65].map((k): [number, number, number] => [fx, fy, Math.max(24, k * r0)]));
+			for (const [fx, fy, r] of tries) {
+				const [cx, cy] = at(fx, fy);
 				/* the box holds the cross's arms (±118 of a 240 frame, the circle 92): its true extent */
 				put(reticle, cx - r * 1.3, cy - r * 1.3, r * 2.6, r * 2.6, s, stop);
 				if (!free(reticle)) continue;
-				/* MATCH under the reticle, over it, or to its right: every epigraph counts, since any may be showing */
-				for (const [mx, my] of [[cx - r * 0.9, cy + r * 1.35], [cx - r * 0.9, cy - r * 1.35 - 22], [cx + r * 1.35, cy - 10]]) {
+				/* MATCH on the ship's side of the reticle — left of it, then under or over it from its left edge —
+				   never by the tug, where it read as a match on the tug (founder, 2026-10-02) */
+				const mw = matchEl.offsetWidth;
+				for (const [mx, my] of [[cx - r * 1.3 - mw - 6, cy - 10], [cx - r * 1.3, cy + r * 1.4], [cx - r * 1.3, cy - r * 1.4 - 22]]) {
 					put(matchEl, mx, my, null, null, s, stop);
 					if (free(matchEl)) { locked = true; break; }
 				}

@@ -1909,7 +1909,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "target: varkan marmara; mission: assist, replace: denied, override: bridge; scope: read, write: on review"
+									"text": "target: server startup; mission: assist, replace: denied, override: bridge; scope: read, write: on review"
 								}
 							]
 						},
@@ -4412,7 +4412,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "target: varkan marmara; mission: assist, replace: denied, override: bridge; scope: read, write: on review"
+									"text": "target: server startup; mission: assist, replace: denied, override: bridge; scope: read, write: on review"
 								}
 							]
 						},
@@ -12857,34 +12857,6 @@
 						},
 						{
 							"_type": "block",
-							"_key": "kb",
-							"style": "blockquote",
-							"markDefs": [
-								{
-									"_key": "k9",
-									"_type": "link",
-									"href": "https://martinfowler.com/bliki/AgenticProgramming.html"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k8",
-									"text": "«Los humanos siguen siendo responsables de lo que hace el software y de cómo funciona, pero emplean habilidades distintas para crear sus productos.» ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ka",
-									"text": "Martin Fowler",
-									"marks": [
-										"k9"
-									]
-								}
-							]
-						},
-						{
-							"_type": "block",
 							"_key": "k1",
 							"style": "normal",
 							"markDefs": [],
@@ -13533,34 +13505,6 @@
 									"text": "Martin Fowler",
 									"marks": [
 										"k5"
-									]
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "kb",
-							"style": "blockquote",
-							"markDefs": [
-								{
-									"_key": "k9",
-									"_type": "link",
-									"href": "https://martinfowler.com/bliki/AgenticProgramming.html"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k8",
-									"text": "«Humans are still responsible for what the software does and how it works, but use different skills to create their products.» ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ka",
-									"text": "Martin Fowler",
-									"marks": [
-										"k9"
 									]
 								}
 							]

@@ -136,12 +136,12 @@ export const HERO_RADAR = {
 export const HERO_RADAR_SIZES = "(max-width: 700px) 78vw, 43.4vw";
 
 export const HERO_BRIDGE = {
-	/** the two banks without the bridge or the sky, cut off just under the tug, restored (photo_restore.py: SeedVR2 + its own whites): WebP with alpha, 1320×730 */
-	banks: "/assets/hero/int-puente-restaurada.webp",
+	/** the two banks without the bridge or the sky, cut off just under the tug, restored (photo_restore.py: SeedVR2 + its own whites), our lettering on the tanker's stern (stern_label.py): WebP with alpha, 1320×730 */
+	banks: "/assets/hero/int-puente-aviles.webp",
 	/** the same at 960 px for phones, where the frame is 125vw (a 412 px phone at 1.75 needs 900) */
-	banksSmall: "/assets/hero/int-puente-restaurada-960.webp",
+	banksSmall: "/assets/hero/int-puente-aviles-960.webp",
 	/** the same at 2016 px, for double-density desktops: at 1320 a 1575 px screen stretched it to nearly twice its pixels */
-	banksLarge: "/assets/hero/int-puente-restaurada-2016.webp",
+	banksLarge: "/assets/hero/int-puente-aviles-2016.webp",
 	/** the bridge as an architect's drawing on the same frame, in the bridge's own red, cut to the band its ink occupies (rows 390–926 of 1344): WebP with alpha, 1320×351 */
 	plan: "/assets/hero/int-puente-trazo.webp",
 	planSmall: "/assets/hero/int-puente-trazo-960.webp",
@@ -151,12 +151,12 @@ export const HERO_BRIDGE = {
 export const HERO_BRIDGE_SIZES = "(max-width: 767px) 125vw, 75vw";
 
 export const HERO_VISION = {
-	/** the tanker's stern, the tug and the quay, cut from the bridge's Commons original and restored (photo_restore.py: SeedVR2 + its own whites, the lettering kept from the original): WebP, 1320×852 */
-	photo: "/assets/hero/ia-remolcador-restaurado.webp",
+	/** the tanker's stern, the tug and the quay, cut from the bridge's Commons original, restored (photo_restore.py: SeedVR2 + its own whites) and with our lettering on the stern (stern_label.py): WebP, 1320×852 */
+	photo: "/assets/hero/ia-remolcador-aviles.webp",
 	/** the same at 720 px for phones, where the frame is 98vw (a 412 px phone at 1.75 needs 707) */
-	photoSmall: "/assets/hero/ia-remolcador-restaurado-720.webp",
+	photoSmall: "/assets/hero/ia-remolcador-aviles-720.webp",
 	/** the same at 2016 px, for double-density desktops */
-	photoLarge: "/assets/hero/ia-remolcador-restaurado-2016.webp",
+	photoLarge: "/assets/hero/ia-remolcador-aviles-2016.webp",
 };
 
 /** The frame is 1.55 × 81 % of the band's height on desktops (about 63 % of a 1575 × 791 viewport) and 98 % of the width on phones. */

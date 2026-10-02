@@ -44,16 +44,13 @@
 .s-hero.s-hero--scene h1 { color: var(--color-secondary); }
 .s-hero--scene .s-hero__body { color: var(--color-hero-ink-soft); }
 .s-hero--scene .btn { margin-top: var(--space-4); }
-/* one epigraph, or several taking turns in the same cell (the tallest sets the height) */
-.s-hero__epigraphs { display: grid; margin: var(--space-4) 0 0; }
 .s-hero__epigraph {
-	grid-area: 1 / 1;
-	margin: 0;
+	margin: var(--space-4) 0 0;
 	color: var(--color-hero-ink-soft);
-	transition: opacity .8s ease;
 }
-.s-hero__epigraph:not(.is-shown) { opacity: 0; }
 .s-hero__epigraph blockquote { margin: 0; }
+/* quotations by one author, one after the other */
+.s-hero__epigraph p + p { margin-top: .4em; }
 .s-hero__epigraph p {
 	margin: 0;
 	font-size: 17px;
@@ -129,7 +126,7 @@
 	.s-hero--scene .s-hero__body { order: 2; max-width: none; margin-inline: 16px; }
 	.s-hero--scene .btn { order: 3; align-self: flex-start; margin: var(--space-3, 16px) 16px 0; }
 	.s-hero--scene .s-hero__stage { order: 4; position: relative; height: var(--scene-phone-h); margin-top: var(--space-2, 8px); overflow: hidden; }
-	.s-hero__epigraphs { order: 5; margin: var(--space-4) 16px 0; }
+	.s-hero__epigraph { order: 5; margin: var(--space-4) 16px 0; }
 	.scene__ctl { order: 6; position: static; margin: var(--space-3, 16px) 16px 0; }
 	.s-hero--scene .s-hero__scrim { display: none; }
 	.scene__seal { left: -140px; top: auto; bottom: -120px; width: 420px; }

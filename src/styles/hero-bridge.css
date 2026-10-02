@@ -1,18 +1,14 @@
-/* ═══ HERO — the bridge scene of the systems-integration vertical (#531) ═══
-   One frame in two boxes — the banks under the veil, the drawing and the bus
-   in front — level, sized by the band, the Las Arenas tower past the column;
-   the script places it (--bx, --by, --bw). */
+/* ═══ HERO — the bridge scene (#531): banks under the veil, drawing and bus in front. Why: docs/architecture.md §4.5 ═══ */
 .s-hero--bridge {
 	--bridge-c: var(--scene-c);
 	--color-ground-haze: var(--color-ground-haze-bridge);
 	--scene-phone-h: 76vw;
-	/* lighter than the lighthouse's veil (founder, 2026-10-02); the excerpt still reads ≥ 8.4:1 */
+	/* lighter veil than the lighthouse's; excerpt ≥ 8.4:1 */
 	--scene-veil: 60%;
 	--scene-veil-mid: 42%;
 }
 
-/* the frame: the photograph's 3:2. Without the script it falls back to the right of the
-   column, on the band's floor */
+/* the 3:2 frame; without the script, right of the column on the floor */
 .bridge__box {
 	position: absolute;
 	left: var(--bx, calc(50% + var(--container-max) / 2 + 10px - 0.8185 * min(60vw, 900px)));
@@ -21,14 +17,13 @@
 	width: var(--bw, min(60vw, 900px));
 	aspect-ratio: 3 / 2;
 	pointer-events: none;
-	/* the frame starts where the seal ends: the script sets --bclip, and the scene fades in over 60 px */
+	/* starts where the seal ends (--bclip) */
 	-webkit-mask-image: linear-gradient(90deg, transparent var(--bclip, 0px), var(--color-ground-dark) calc(var(--bclip, 0px) + 60px));
 	mask-image: linear-gradient(90deg, transparent var(--bclip, 0px), var(--color-ground-dark) calc(var(--bclip, 0px) + 60px));
 }
 .s-hero--bridge:not(.is-placed) .bridge__box { top: auto; bottom: 0; }
 
-/* the banks: cut just under the tug (83 % of the frame), fading at the sides and the bottom (a
-   mask reads only alpha: any opaque token draws it) */
+/* the banks, cut under the tug, faded at sides and bottom (masks read only alpha) */
 .bridge__banks {
 	position: absolute;
 	left: 0;
@@ -41,9 +36,7 @@
 	mask-composite: intersect;
 }
 
-/* the drawing (bridge_plan.py), in front of the veil: only the band its ink occupies, rows 390–926
-   of 1344, so it never outsizes the banks as the largest paint; growing from a third of its
-   strength by Portugalete (13.5 % of the frame), under the copy, to full by Las Arenas (82 %) */
+/* the drawing (bridge_plan.py): only its ink band, rows 390–926 of 1344, so never the LCP; 35 % → 100 % towards Las Arenas */
 .bridge__plan {
 	position: absolute;
 	left: 0;
@@ -54,8 +47,7 @@
 	mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 35%, transparent) 13.5%, var(--color-ground-dark) 82%);
 }
 
-/* the bus layer: connectors and messages, in the stage's own pixels; hidden while the window is being
-   resized, and placed again when it stops */
+/* connectors and messages, in stage pixels; hidden while resizing */
 .s-hero--bridge.is-resizing .bridge__bus { visibility: hidden; }
 .bridge__bus {
 	position: absolute;
@@ -95,27 +87,59 @@
 	font-weight: 500;
 	line-height: 1;
 	letter-spacing: .02em;
-	/* a light grey, between grey and white: read, never louder than the copy; no plate, no shadow
-	   (founder, 2026-10-02: "que se lea de forma sutil") */
+	/* light grey, never louder than the copy (founder, 2026-10-02) */
 	color: color-mix(in srgb, var(--color-secondary) 68%, var(--color-ground-dark));
 }
 .bridge__plug--up > span { bottom: calc(100% + 18px); }
 .bridge__plug--down > span { top: calc(100% + 18px); }
 
-/* a message, in one of the six verticals' colours (--msg, from the CMS), ringed in paper */
+/* a message is an arcade ghost in a vertical's colour (--msg); the script turns its pupils (b) */
+/* token-guard: off — arcade sprite */
 .bridge__msg {
 	position: absolute;
-	left: -6px;
-	top: -6px;
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
+	left: -7px;
+	top: -8px;
+	width: 14px;
+	height: 15px;
+	border-radius: 7px 7px 0 0;
 	background: var(--msg, var(--color-secondary));
-	outline: 1.5px solid color-mix(in srgb, var(--color-secondary) 75%, transparent);
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 83% 84%, 67% 100%, 50% 84%, 33% 100%, 17% 84%, 0 100%);
 }
+.bridge__msg::before,
+.bridge__msg::after {
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 2px;
+	width: 4px;
+	height: 5px;
+	border-radius: 50%;
+	background: var(--color-secondary);
+}
+.bridge__msg::after { left: 8px; }
+.bridge__msg > b {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: radial-gradient(circle at 4px 6px, var(--color-ground-dark) 0 1.2px, transparent 1.5px), radial-gradient(circle at 10px 6px, var(--color-ground-dark) 0 1.2px, transparent 1.5px);
+}
+/* token-guard: on */
+/* and one Pac-Man, chomping */
+.bridge__pac { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; }
+.bridge__pac > b {
+	display: block;
+	height: 100%;
+	border-radius: 50%;
+	background: var(--color-pacman);
+	animation: bridge-chomp .26s linear infinite alternate;
+}
+@keyframes bridge-chomp {
+	from { clip-path: polygon(50% 50%, 100% 20%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 80%); }
+	to { clip-path: polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 50%); }
+}
+@media (prefers-reduced-motion: reduce) { .bridge__pac > b { animation: none; clip-path: polygon(50% 50%, 100% 25%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 75%); } }
 
-/* the sequence: the banks alone 1.2 s, the bridge whole (opacity, never a repaint), the connectors
-   at once, then the messages (the script) */
+/* banks 1.2 s, bridge whole (opacity), connectors, then messages */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--bridge:not(.is-placed) .bridge__box { visibility: hidden; }
 	.s-hero--bridge:not(.is-done) .bridge__plan { opacity: 0; }
@@ -125,7 +149,7 @@
 }
 @keyframes bridge-lay { from { opacity: 0; } to { opacity: 1; } }
 
-/* phones: the scene is its own row, a little wider than the screen; names a size smaller */
+/* phones: names a size smaller */
 @media (max-width: 767px) {
 	.bridge__plug > span { font-size: 11px; }
 }

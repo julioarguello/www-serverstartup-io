@@ -41,12 +41,12 @@
 	mask-composite: intersect;
 }
 
-/* the drawing (bridge_plan.py): only the band its ink occupies, rows 378–998 of 1344, so it never
+/* the drawing (bridge_plan.py): only the band its ink occupies, rows 390–926 of 1344, so it never
    outsizes the banks as the largest paint */
 .bridge__plan {
 	position: absolute;
 	left: 0;
-	top: calc(378 / 1344 * 100%);
+	top: calc(390 / 1344 * 100%);
 	width: 100%;
 	height: auto;
 }
@@ -92,11 +92,9 @@
 	font-weight: 500;
 	line-height: 1;
 	letter-spacing: .02em;
-	/* a step under the excerpt's ink: the names must not outshine the copy (founder, 2026-10-02) */
-	color: var(--color-console-ink);
-	/* a plate, so it reads over the photograph (≥ 7.7:1; a halo gave 3.5) */
-	padding: 2px 5px;
-	background: color-mix(in srgb, var(--color-ground-dark) 90%, transparent);
+	/* a light grey, between grey and white: read, never louder than the copy; no plate, no shadow
+	   (founder, 2026-10-02: "que se lea de forma sutil") */
+	color: color-mix(in srgb, var(--color-secondary) 68%, var(--color-ground-dark));
 }
 .bridge__plug--up > span { bottom: calc(100% + 18px); }
 .bridge__plug--down > span { top: calc(100% + 18px); }

@@ -1861,11 +1861,22 @@
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "bridge_plugs",
+							"_key": "bridge_plugs_up",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Pub/Sub,BigQuery,SAP Commerce,REST,SFTP,Cloud Storage,Cloud Run,Vertex AI,JDBC,OAuth 2,Ocado OSP,SOAP,Cloud Functions,JMS"
+									"text": "REST,SFTP,JDBC,OAuth 2,SOAP,JMS,OIDC,FTP,Webhooks"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_plugs_down",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pub/Sub,BigQuery,SAP Commerce,Cloud Storage,Cloud Run,Vertex AI,Ocado OSP,Cloud Functions,ActiveMQ,PostgreSQL,Oracle"
 								}
 							]
 						},
@@ -4298,11 +4309,22 @@
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "bridge_plugs",
+							"_key": "bridge_plugs_up",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Pub/Sub,BigQuery,SAP Commerce,REST,SFTP,Cloud Storage,Cloud Run,Vertex AI,JDBC,OAuth 2,Ocado OSP,SOAP,Cloud Functions,JMS"
+									"text": "REST,SFTP,JDBC,OAuth 2,SOAP,JMS,OIDC,FTP,Webhooks"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bridge_plugs_down",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pub/Sub,BigQuery,SAP Commerce,Cloud Storage,Cloud Run,Vertex AI,Ocado OSP,Cloud Functions,ActiveMQ,PostgreSQL,Oracle"
 								}
 							]
 						},

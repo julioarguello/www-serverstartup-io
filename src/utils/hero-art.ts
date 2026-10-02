@@ -134,6 +134,9 @@ export const HERO_BRIDGE = {
 	banks: "/assets/hero/int-puente.webp",
 	/** the same at 960 px for phones, where the frame is 125vw (a 412 px phone at 1.75 needs 900) */
 	banksSmall: "/assets/hero/int-puente-960.webp",
+	/** the bridge as an architect's drawing on the same frame, in the bridge's own red, cut to the band its ink occupies (rows 378–998 of 1344): WebP with alpha, 1320×406 */
+	plan: "/assets/hero/int-puente-plan.webp",
+	planSmall: "/assets/hero/int-puente-plan-960.webp",
 };
 
 /** The frame is about 60 % of the viewport on desktops and 125 % of it on phones. */

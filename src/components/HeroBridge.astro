@@ -17,11 +17,11 @@
  *   on points measured on the photograph (docs/design/hero-rotativo/bridge.py),
  *   inlined as five stacked layers so each piece is laid in turn and coloured
  *   by the section. It sits in front of the veil because it never crosses a letter:
- *   the script reads the same segments back and places the scene so that no
- *   stroke touches any line of the copy (the cables included).
- * - The scene is turned 6° counter-clockwise about the Las Arenas tower's
- *   base, which stands just past the column's right edge, so the girder runs
- *   under the epigraph along the diagonal the paragraphs already make.
+ *   the script reads the same segments back to place the scene.
+ * - The scene is level, the Las Arenas tower just past the column's right edge,
+ *   and as high as the copy allows: the towers and the girder touch no letter;
+ *   the thin lines (cables, hangers, stays) may pass behind the quotation and
+ *   nothing else (founder, 2026-10-02).
  * - The connectors are the protocols, platforms and Google Cloud services the
  *   company has actually wired (evidence in the issue), from `panel_labels`
  *   → `bridge_plugs`; as many as fit, in that order, on two heights above and
@@ -80,7 +80,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 
 		/* the drawing's frame and the landmarks bridge.py drew it on (2016 × 1344) */
 		const VB_W = 2016, VB_H = 1344;
-		const ALPHA = (-6 * Math.PI) / 180;      /* 6° counter-clockwise */
+		const ALPHA = 0;                         /* level (founder, 2026-10-02: "ponlo recto") */
 		const PIVOT_U = 0.85, PIVOT_V = 0.7;    /* the Las Arenas tower's base */
 		const LEFT_OUT = 0.135, RIGHT_IN = 0.8185; /* Portugalete's outer leg, Las Arenas' inner leg */
 		const TOP_V = 0.29, CROP_V = 0.8;        /* the tower tops; the plate's crop under the tug */
@@ -88,24 +88,29 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		const chordTop = (x: number) => 545 - (x - 420) * 0.017;
 
 		/* the drawing as segments, read once from its own paths (M/L only) */
-		const segs: [number, number, number, number][] = [];
-		for (const p of lines.querySelectorAll("path")) {
-			let cx = 0, cy = 0;
-			for (const m of (p.getAttribute("d") || "").matchAll(/([ML])\s*(-?[\d.]+),(-?[\d.]+)/g)) {
-				const x = +m[2], y = +m[3];
-				if (m[1] === "L") segs.push([cx, cy, x, y]);
-				cx = x; cy = y;
+		/* …sampled once into points, every 6 units of the drawing's own frame: the structure (towers,
+		   girder) apart from the lines (cables, hangers, stays), because only the lines may pass behind
+		   the quotation (founder, 2026-10-02: "aunque haya un pelín de solapamiento con la quote, no molesta") */
+		const sample = (sel: string) => {
+			const out: [number, number][] = [];
+			for (const p of lines.querySelectorAll(`${sel} path`)) {
+				let cx = 0, cy = 0;
+				for (const m of (p.getAttribute("d") || "").matchAll(/([ML])\s*(-?[\d.]+),(-?[\d.]+)/g)) {
+					const x = +m[2], y = +m[3];
+					if (m[1] === "L") {
+						const n = Math.max(1, Math.ceil(Math.hypot(x - cx, y - cy) / 6));
+						for (let i = 0; i <= n; i++) out.push([cx + ((x - cx) * i) / n, cy + ((y - cy) * i) / n]);
+					}
+					cx = x; cy = y;
+				}
 			}
-		}
+			return out;
+		};
+		const hardPts = sample(".b-towers, .b-girder");
+		const softPts = sample(".b-cables, .b-hangers, .b-stays");
+		const pts = [...hardPts, ...softPts];
 
-		/* …and sampled once into points, every 6 units of the drawing's own frame */
-		const pts: [number, number][] = [];
-		for (const [x0, y0, x1, y1] of segs) {
-			const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 6));
-			for (let i = 0; i <= n; i++) pts.push([x0 + ((x1 - x0) * i) / n, y0 + ((y1 - y0) * i) / n]);
-		}
-
-		type Box = { l: number; t: number; r: number; b: number };
+		type Box = { l: number; t: number; r: number; b: number; quote?: boolean };
 		type Geo = { L: number; T: number; W: number; H: number };
 		type Plug = { el: HTMLElement; foot: [number, number]; end: [number, number] };
 		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
@@ -128,7 +133,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		}
 		const overlap = (a: Box, b: Box, pad = 0) => a.l < b.r + pad && b.l - pad < a.r && a.t < b.b + pad && b.t - pad < a.b;
 		/* the drawing's points on the page for one geometry */
-		const placed = (g: Geo) => pts.map(([x, y]) => toPage(x, y, g));
+		const placed = (g: Geo, from: [number, number][] = pts) => from.map(([x, y]) => toPage(x, y, g));
 		/* does any stroke pass through one of these boxes? */
 		function strokesIn(boxes: Box[], onPage: [number, number][]): boolean {
 			for (const [x, y] of onPage) for (const q of boxes) if (inside(x, y, q)) return true;
@@ -136,9 +141,9 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		}
 		/* the least drop that clears every box: moving the frame down only translates the points, so each
 		   point under a box forbids one interval of drops — sort them and take the first gap */
-		function leastDrop(boxes: Box[], onPage: [number, number][]): number {
+		function leastDrop(pairs: [Box[], [number, number][]][]): number {
 			const bad: [number, number][] = [];
-			for (const [x, y] of onPage) for (const q of boxes) {
+			for (const [boxes, onPage] of pairs) for (const [x, y] of onPage) for (const q of boxes) {
 				if (x <= q.l) continue;
 				if (x >= q.r) continue;
 				bad.push([q.t - y, q.b - y]);
@@ -158,7 +163,8 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			for (const el of copy.querySelectorAll<HTMLElement>("h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
 				const r = document.createRange();
 				r.selectNodeContents(el);
-				for (const q of r.getClientRects()) if (q.width > 2) out.push({ l: q.left - 12, r: q.right + 12, t: q.top - 12, b: q.bottom + 14 });
+				const quote = !!el.closest(".s-hero__epigraph");
+				for (const q of r.getClientRects()) if (q.width > 2) out.push({ l: q.left - 12, r: q.right + 12, t: q.top - 12, b: q.bottom + 14, quote });
 			}
 			const b = copy.querySelector<HTMLElement>(".btn")?.getBoundingClientRect();
 			if (b) out.push({ l: b.left - 12, r: b.right + 12, t: b.top - 12, b: b.bottom + 14 });
@@ -178,13 +184,17 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect(), band = hero.getBoundingClientRect();
 			const colL = ib.left + parseFloat(cs.paddingLeft), colR = ib.right - parseFloat(cs.paddingRight);
 			/* one query per line: the cms-text lint reads `> … <` on one line as a text node */
+			/* the bridge lives under the body text: it rises until it meets the quotation, never above */
 			const body = copy.querySelector(".s-hero__body") || copy.querySelector("h1");
-			const bodyBottom = body ? body.getBoundingClientRect().bottom : 0;
+			const bodyBottom = body ? body.getBoundingClientRect().bottom : band.top;
+			const others = text.filter((q) => !q.quote);
 			let W = (0.66 * (colR + 10 - (colL - 34))) / (RIGHT_IN - LEFT_OUT);
 			for (let tries = 0; tries < 12; tries++) {
 				const H = W / 1.5;
-				const g = { L: colR + 10 - RIGHT_IN * W, T: bodyBottom - TOP_V * H, W, H };
-				g.T += Math.ceil(leastDrop(text, placed(g)));
+				/* as high as it goes: the tower tops just under the body's last line, then the least drop that
+				   keeps the structure off every letter and the lines off every letter but the quotation's */
+				const g = { L: colR + 10 - RIGHT_IN * W, T: bodyBottom + 4 - TOP_V * H, W, H };
+				g.T += Math.ceil(leastDrop([[text, placed(g, hardPts)], [others, placed(g, softPts)]]));
 				setGeo(g);
 				if (g.T + CROP_V * H <= band.bottom - 4) return;
 				W *= 0.94;

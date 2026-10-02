@@ -1,15 +1,15 @@
 /* ═══ HERO — the bridge scene of the systems-integration vertical (#531) ═══
    One frame for two boxes — the banks under the veil, the drawing in front —
-   turned 6° about the Las Arenas tower's base; the script places it from the
-   copy (--bx, --by, --bw) so no stroke touches a letter. */
+   level, the Las Arenas tower past the column; the script places it from the
+   copy (--bx, --by, --bw), as high as the letters allow. */
 .s-hero--bridge {
 	--bridge-c: var(--scene-c);
 	--color-ground-haze: var(--color-ground-haze-bridge);
 	--scene-phone-h: 76vw;
 }
 
-/* the frame: the photograph's 3:2, turned about the Las Arenas tower's base. Without the
-   script it falls back to the right of the column, on the band's floor */
+/* the frame: the photograph's 3:2. Without the script it falls back to the right of the
+   column, on the band's floor */
 .bridge__box {
 	position: absolute;
 	left: var(--bx, calc(50% + var(--container-max) / 2 + 10px - 0.8185 * min(60vw, 900px)));
@@ -17,8 +17,6 @@
 	bottom: auto;
 	width: var(--bw, min(60vw, 900px));
 	aspect-ratio: 3 / 2;
-	rotate: -6deg;
-	transform-origin: 85% 70%;
 	pointer-events: none;
 }
 .s-hero--bridge:not(.is-placed) .bridge__box { top: auto; bottom: 0; }

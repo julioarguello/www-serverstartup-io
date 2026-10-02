@@ -1,9 +1,9 @@
-/* ═══ HERO — the bridge scene (#531): banks under the veil, drawing and bus in front. Why: docs/architecture.md §4.5 ═══ */
+/* ═══ HERO — the bridge scene (#531), docs/architecture.md §4.5 ═══ */
 .s-hero--bridge {
 	--bridge-c: var(--scene-c);
 	--color-ground-haze: var(--color-ground-haze-bridge);
 	--scene-phone-h: 76vw;
-	/* lighter veil than the lighthouse's; excerpt ≥ 8.4:1 */
+	/* lighter veil; excerpt ≥ 8.4:1 */
 	--scene-veil: 60%;
 	--scene-veil-mid: 42%;
 }
@@ -23,7 +23,7 @@
 }
 .s-hero--bridge:not(.is-placed) .bridge__box { top: auto; bottom: 0; }
 
-/* the banks, cut under the tug, faded at sides and bottom (masks read only alpha) */
+/* the banks, cut under the tug, faded (masks read alpha only) */
 .bridge__banks {
 	position: absolute;
 	left: 0;
@@ -36,7 +36,7 @@
 	mask-composite: intersect;
 }
 
-/* the drawing (bridge_plan.py): only its ink band, rows 390–926 of 1344, so never the LCP; 35 % → 100 % towards Las Arenas */
+/* the drawing: only its ink band (rows 390–926), never the LCP */
 .bridge__plan {
 	position: absolute;
 	left: 0;
@@ -93,7 +93,7 @@
 .bridge__plug--up > span { bottom: calc(100% + 18px); }
 .bridge__plug--down > span { top: calc(100% + 18px); }
 
-/* a message is an arcade ghost in a vertical's colour (--msg); the script turns its pupils (b) */
+/* a message: a ghost in a vertical's colour; the script turns its pupils */
 /* token-guard: off — arcade sprite */
 .bridge__msg {
 	position: absolute;
@@ -124,15 +124,14 @@
 	background: radial-gradient(circle at 4px 6px, var(--color-ground-dark) 0 1.2px, transparent 1.5px), radial-gradient(circle at 10px 6px, var(--color-ground-dark) 0 1.2px, transparent 1.5px);
 }
 /* token-guard: on */
-/* and one Pac-Man, chomping */
-.bridge__pac { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; }
-.bridge__pac > b {
-	display: block;
-	height: 100%;
-	border-radius: 50%;
-	background: var(--color-pacman);
-	animation: bridge-chomp .26s linear infinite alternate;
-}
+/* one Pac-Man: our cube in yellow */
+.bridge__pac { position: absolute; left: -9px; top: -10px; width: 18px; height: 20px; }
+.bridge__pac > b { display: block; height: 100%; animation: bridge-chomp .26s linear infinite alternate; }
+.bridge__pac svg { display: block; width: 100%; height: 100%; stroke: var(--color-ground-dark); stroke-width: 6; }
+.bridge__pac polygon { fill: var(--color-pacman); }
+.bridge__pac polygon + polygon { fill: color-mix(in srgb, var(--color-pacman) 82%, var(--color-ground-dark)); }
+.bridge__pac polygon + polygon + polygon { fill: color-mix(in srgb, var(--color-pacman) 66%, var(--color-ground-dark)); }
+.bridge__pac circle { fill: var(--color-ground-dark); stroke: none; }
 @keyframes bridge-chomp {
 	from { clip-path: polygon(50% 50%, 100% 20%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 80%); }
 	to { clip-path: polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 50%); }

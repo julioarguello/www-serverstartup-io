@@ -71,7 +71,7 @@
 .s-hero__epigraph figcaption a:hover,
 .s-hero__epigraph figcaption a:focus-visible { text-decoration-style: solid; }
 
-/* the veil: the ground at --scene-veil (78 %) under the column, gone 70 px past it; a scene may lighten it */
+/* the veil: --scene-veil (78 %) under the column, gone 70 px past it */
 .s-hero--scene .s-hero__scrim {
 	position: absolute;
 	inset: 0;
@@ -79,7 +79,7 @@
 	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) 0%, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) var(--scene-veil-mid, 55%), transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
 }
 
-/* the controls: WCAG 2.2.2 — one checkbox stops everything that moves, one button replays it */
+/* WCAG 2.2.2: pause stops all motion, replay restarts it */
 .scene__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
 .scene__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .scene__pause-btn,
@@ -115,7 +115,7 @@
 	.scene__replay { display: none; }
 }
 
-/* up to 767: one column — title, excerpt, CTA, the art (each scene sets --scene-phone-h), the epigraph */
+/* ≤ 767: one column; each scene sets --scene-phone-h */
 @media (max-width: 767px) {
 	.s-hero--scene { display: flex; flex-direction: column; align-items: stretch; min-height: 0; padding-bottom: var(--space-4); background-image: linear-gradient(180deg, var(--color-ground-dark) 0%, var(--color-ground-dark) 42%, color-mix(in srgb, var(--color-ground-haze) 45%, var(--color-ground-dark)) 100%); }
 	.s-hero--scene .s-hero__inner,

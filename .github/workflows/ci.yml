@@ -234,8 +234,8 @@ jobs:
       # names an innocent route. `wrangler dev` treats an error scoped to ONE
       # in-flight request as fatal and exits, so everything after it fails on
       # ERR_CONNECTION_REFUSED. Upstream and open:
-      # cloudflare/workers-sdk#15317, fix still in review as #15448 / #15207 and
-      # in neither 4.128.0 nor 4.129.0.
+      # cloudflare/workers-sdk#15317, fix still open as #15448 and in no release
+      # (latest 4.147.0, 2026-10-02); #15207, merged, only logs the cause.
       #
       # The gate steps below therefore run through `scripts/ci-gate.mjs`, which
       # reboots the stack ONCE PER JOB when — and only when — the stack has
@@ -373,8 +373,8 @@ jobs:
       # names an innocent route. `wrangler dev` treats an error scoped to ONE
       # in-flight request as fatal and exits, so everything after it fails on
       # ERR_CONNECTION_REFUSED. Upstream and open:
-      # cloudflare/workers-sdk#15317, fix still in review as #15448 / #15207 and
-      # in neither 4.128.0 nor 4.129.0.
+      # cloudflare/workers-sdk#15317, fix still open as #15448 and in no release
+      # (latest 4.147.0, 2026-10-02); #15207, merged, only logs the cause.
       #
       # The gate steps below therefore run through `scripts/ci-gate.mjs`, which
       # reboots the stack ONCE PER JOB when — and only when — the stack has
@@ -444,17 +444,14 @@ jobs:
       # names an innocent route. `wrangler dev` treats an error scoped to ONE
       # in-flight request as fatal and exits, so everything after it fails on
       # ERR_CONNECTION_REFUSED. Upstream and open:
-      # cloudflare/workers-sdk#15317, fix still in review as #15448 / #15207 and
-      # in neither 4.128.0 nor 4.129.0.
+      # cloudflare/workers-sdk#15317, fix still open as #15448 and in no release
+      # (latest 4.147.0, 2026-10-02); #15207, merged, only logs the cause.
       #
-      # This job is the exception, and gets NO restart. The gate here is
-      # `treosh/lighthouse-ci-action`, a third-party action rather than a
-      # command, and `scripts/ci-gate.mjs` wraps commands — wrapping an action
-      # would mean reimplementing it. So a stack death during Lighthouse still
-      # goes red, and the step at the end of this job says which of the two it
-      # was: a null score from a dead stack reads as a performance regression
-      # and is not one (#486). `rendered` and `a11y` DO restart, once per job,
-      # through that wrapper. Tracked here as #524.
+      # Lighthouse runs through `scripts/ci-gate.mjs` too, like the gates of
+      # `rendered` and `a11y`: one reboot per job, only for this fault, loudly
+      # (#524). Until #540 it was the exception, because the gate was
+      # `treosh/lighthouse-ci-action` and the wrapper wraps commands — and the
+      # two stack deaths measured after #524 were both here, on /contacto.
       - name: Boot seeded local stack
         run: scripts/ci-local-stack.sh 8787
 
@@ -468,29 +465,26 @@ jobs:
 
       - name: Lighthouse assertions (perf>=95, a11y/bp/seo=100)
         id: lighthouse
-        uses: treosh/lighthouse-ci-action@v12
-        with:
-          configPath: lighthouserc.shard.json
-          # Off deliberately (#399). The raw reports are ~8.5 MB per run and the
-          # action exposes no retention input, so 219 of them filled the repo's
-          # artifact quota — and a full quota makes gitleaks-action die
-          # uploading its 7 KB SARIF *after* reporting "no leaks found", which
-          # reads as a failed secret scan on a clean tree. Nothing read these
-          # reports: the assertions gate the build and name the failing category
-          # in the log, and the record that survives is the summary committed
-          # under docs/audits/ (#305).
-          uploadArtifacts: false
+        # The two commands treosh/lighthouse-ci-action@v12 ran inside, against
+        # the @lhci/cli it pinned (^0.15.1), so the measurement is the one it
+        # took: `collect` reads numberOfRuns from the config exactly as the
+        # action did. Scoped and pinned — the bare `lhci` on npm is a
+        # placeholder that exits 0 having measured nothing (#305). No report
+        # upload, as before (#399): the assertions gate the build and name the
+        # failing category in the log, and the record that survives is the
+        # summary committed under docs/audits/ (#305).
+        shell: node scripts/ci-gate.mjs bash -e {0}
+        run: |
+          npx -y @lhci/cli@0.15.1 collect --config=lighthouserc.shard.json
+          npx -y @lhci/cli@0.15.1 assert --config=lighthouserc.shard.json
 
-      # The Node gates all call scripts/lib/stack-probe.mjs when they fail, so a
-      # stack that died mid-run says so instead of blaming the diff (#390).
-      # Lighthouse is a third-party action and cannot, so its version of that
-      # failure surfaces as `"score": null` and CHROME_INTERSTITIAL_ERROR — which
-      # reads as a performance regression. It happened twice on main on
-      # 2026-09-02 (08:21 and 08:53, /deconstruyendo-esta-web and /contacto), both
-      # after the wrangler pin of #446, and neither was a performance finding.
-      # This step adds information and nothing else: it runs only when Lighthouse
-      # itself failed, and changes no exit code. Per shard, because each shard
-      # boots its own stack and only that shard's stack can explain its score.
+      # What a failure that survived the wrapper above was. A null score with
+      # CHROME_INTERSTITIAL_ERROR is a dead stack, not a performance finding
+      # (#390, #486); after #540 it means the stack died twice in this job, or
+      # would not come back. Adds information and nothing else: it runs only
+      # when Lighthouse failed, and changes no exit code. Per shard, because each
+      # shard boots its own stack and only that shard's stack can explain its
+      # score.
       - name: Was the stack alive when Lighthouse failed?  # not-a-gate: diagnosis, changes no exit code
         if: always() && steps.lighthouse.conclusion == 'failure'
         run: |

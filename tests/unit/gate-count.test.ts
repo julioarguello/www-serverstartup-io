@@ -88,6 +88,26 @@ export function gatesByJob(workflow: string): Map<string, string[]> {
 	return new Map(jobBlocks(workflow).map(([job, body]) => [job, gateNames(body)]));
 }
 
+/**
+ * Gates that run against a booted stack without `scripts/ci-gate.mjs`, as
+ * `job: step`. Such a gate goes red on the upstream wrangler crash and costs a
+ * manual re-run — the two deaths measured after #524 were both in the one
+ * gate left outside it (#540).
+ */
+export function unwrappedStackGates(workflow: string): string[] {
+	return jobBlocks(workflow).flatMap(([job, body]) => {
+		const boot = body.indexOf("- name: Boot seeded local stack");
+		if (boot < 0) return [];
+		return body
+			.slice(boot)
+			.split(/^(?= {6}- name: )/m)
+			.slice(1)
+			.filter((step) => !/^ {6}- name: .*# not-a-gate:/.test(step))
+			.filter((step) => !step.includes("shell: node scripts/ci-gate.mjs"))
+			.map((step) => `${job}: ${step.match(/^ {6}- name: (.+)$/m)![1].trim()}`);
+	});
+}
+
 const steps = stepNames(WORKFLOW);
 const gates = distinctGates(WORKFLOW);
 
@@ -162,6 +182,10 @@ describe("the same gate on several runners is still one gate (#515)", () => {
 		expect(ungated).toEqual([]);
 	});
 
+	it("runs every gate after a stack boot through ci-gate.mjs (#524, #540)", () => {
+		expect(unwrappedStackGates(WORKFLOW)).toEqual([]);
+	});
+
 	it("never runs the same gate twice inside one job", () => {
 		// Repetition across jobs is the design. Repetition within a job is a
 		// paste, and costs wall clock on the runner that can least afford it.
@@ -213,6 +237,24 @@ describe("controls — the count can be wrong", () => {
 			.filter(([, body]) => !body.includes("if: needs.scope.outputs.site == 'true'"))
 			.map(([job]) => job);
 		expect(ungated).toEqual(["a11y"]);
+	});
+
+	it("reports a gate after the stack boot that runs outside ci-gate.mjs", () => {
+		const bare = [
+			"jobs:",
+			"  perf:",
+			"    steps:",
+			"      - name: Build",
+			"      - name: Boot seeded local stack",
+			"        run: scripts/ci-local-stack.sh 8787",
+			"      - name: Shard  # not-a-gate: writes a config",
+			"      - name: Copy baseline",
+			"        shell: node scripts/ci-gate.mjs bash -e {0}",
+			"      - name: Lighthouse assertions",
+			"        uses: treosh/lighthouse-ci-action@v12",
+			"",
+		].join("\n");
+		expect(unwrappedStackGates(bare)).toEqual(["perf: Lighthouse assertions"]);
 	});
 
 	it("reports a gate pasted twice into the same job", () => {

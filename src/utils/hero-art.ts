@@ -139,5 +139,5 @@ export const HERO_BRIDGE = {
 	planSmall: "/assets/hero/int-puente-plan-960.webp",
 };
 
-/** The frame is about 60 % of the viewport on desktops and 125 % of it on phones. */
-export const HERO_BRIDGE_SIZES = "(max-width: 767px) 125vw, 60vw";
+/** The frame is about 75 % of a 1440 × 900 viewport on desktops (it is sized by the band) and 125 % of it on phones. */
+export const HERO_BRIDGE_SIZES = "(max-width: 767px) 125vw, 75vw";

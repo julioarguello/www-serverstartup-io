@@ -5,6 +5,12 @@ ES
 Artificial Intelligence
 AI is a means, not an end. The machine writes the repetitive code; we bring the architecture and the judgment, from development to operations — one integral approach, a DevOps profile. The agent proposes; the engineer disposes.
 Tell us your case
+«I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.»
+— Martin Fowler
+«We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.»
+— Martin Fowler
+«Humans are still responsible for what the software does and how it works, but use different skills to create their products.»
+— Martin Fowler
 We use AI in two ways. As a tool, to build with more quality and fewer hours what we already knew how to build. And as a system component, to solve what was not possible until recently. Either way it is a means, not an end.
 When code gets cheap to generate, far more software gets generated (Jevons paradox). And all that new software must be integrated and secured inside systems that already exist. That is the most valuable part of the work, and the part we have done since 2019.
 The repetitive code goes to the machine. Our time goes to judgment and accountability, and a small team now ships what used to take a large one.

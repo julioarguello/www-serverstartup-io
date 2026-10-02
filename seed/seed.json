@@ -1905,6 +1905,61 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "vision_readout",
+							"children": [
+								{
+									"_type": "span",
+									"text": "target: varkan marmara; mission: assist, replace: denied, override: bridge; scope: read, write: on review"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_code",
+							"children": [
+								{
+									"_type": "span",
+									"text": "order = sap.read(id), stock = bq.query(sku), await review(bridge), sign()"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_match",
+							"children": [
+								{
+									"_type": "span",
+									"text": "match"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pausar la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Repetir la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4343,6 +4398,61 @@
 							"_type": "block",
 							"style": "normal",
 							"_key": "bridge_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Replay the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_readout",
+							"children": [
+								{
+									"_type": "span",
+									"text": "target: varkan marmara; mission: assist, replace: denied, override: bridge; scope: read, write: on review"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_code",
+							"children": [
+								{
+									"_type": "span",
+									"text": "order = sap.read(id), stock = bq.query(sku), await review(bridge), sign()"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_match",
+							"children": [
+								{
+									"_type": "span",
+									"text": "match"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pause the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "vision_replay",
 							"children": [
 								{
 									"_type": "span",
@@ -12691,6 +12801,90 @@
 					"content": [
 						{
 							"_type": "block",
+							"_key": "k3",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "k1",
+									"_type": "link",
+									"href": "https://martinfowler.com/fragments/2026-09-08.html"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k0",
+									"text": "«Sostengo que las organizaciones que construyen y operan agentes son responsables de todo lo que esos agentes hacen, tanto si ese comportamiento es intencionado como si es emergente.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k2",
+									"text": "Martin Fowler",
+									"marks": [
+										"k1"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k7",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "k5",
+									"_type": "link",
+									"href": "https://martinfowler.com/fragments/2026-07-13.html"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k4",
+									"text": "«Podemos delegar muchas cosas, pero no los criterios de aceptación: en algún momento hay una petición humana y un juicio humano sobre si esa petición se ejecutó correctamente.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k6",
+									"text": "Martin Fowler",
+									"marks": [
+										"k5"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "kb",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "k9",
+									"_type": "link",
+									"href": "https://martinfowler.com/bliki/AgenticProgramming.html"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k8",
+									"text": "«Los humanos siguen siendo responsables de lo que hace el software y de cómo funciona, pero emplean habilidades distintas para crear sus productos.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "ka",
+									"text": "Martin Fowler",
+									"marks": [
+										"k9"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
 							"_key": "k1",
 							"style": "normal",
 							"markDefs": [],
@@ -13287,6 +13481,90 @@
 					"excerpt": "AI is a means, not an end. The machine writes the repetitive code; we bring the architecture and the judgment, from development to operations — one integral approach, a DevOps profile. The agent proposes; the engineer disposes.",
 					"cta_label": "Tell us your case",
 					"content": [
+						{
+							"_type": "block",
+							"_key": "k3",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "k1",
+									"_type": "link",
+									"href": "https://martinfowler.com/fragments/2026-09-08.html"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k0",
+									"text": "«I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k2",
+									"text": "Martin Fowler",
+									"marks": [
+										"k1"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k7",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "k5",
+									"_type": "link",
+									"href": "https://martinfowler.com/fragments/2026-07-13.html"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k4",
+									"text": "«We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k6",
+									"text": "Martin Fowler",
+									"marks": [
+										"k5"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "kb",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "k9",
+									"_type": "link",
+									"href": "https://martinfowler.com/bliki/AgenticProgramming.html"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k8",
+									"text": "«Humans are still responsible for what the software does and how it works, but use different skills to create their products.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "ka",
+									"text": "Martin Fowler",
+									"marks": [
+										"k9"
+									]
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "k1",

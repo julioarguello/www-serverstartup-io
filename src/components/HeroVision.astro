@@ -1,0 +1,264 @@
+---
+/**
+ * HeroVision — the opening of the artificial-intelligence vertical (#537).
+ *
+ * The tanker and the escort tug that pass under the Vizcaya Bridge in the
+ * integration hero, one level closer: the same river. The tanker sails on its
+ * own engine with its own crew; the tug follows astern and lends its force where
+ * the river is hard, when the bridge asks. That is the vertical's thesis — a
+ * complement, not a substitute (founder, 2026-10-02) — and the scene reads it
+ * three times:
+ *
+ * 1. the photograph, as a person sees it;
+ * 2. the same frame as a machine sees it: one colour, the section's violet, and
+ *    monitor lines (a homage to the Terminator's HUD, in this vertical's colour
+ *    rather than the film's red, which is the integration vertical's);
+ * 3. the machine's reading: a reticle on the tanker, the tug bracketed, MATCH,
+ *    and a readout whose mission is set by people — assist, replace denied,
+ *    override by the bridge — over the page's own flow as code.
+ *
+ * The band, the copy, the epigraphs, the seal, the veil and the controls are the
+ * scene every vertical shares (HeroScene.astro). Phase 2 is CSS on the one
+ * photograph, so there is no second raster to download or to become the LCP.
+ * Every HUD piece is placed in the stage's own pixels and withheld where it
+ * would touch the copy, the controls or the band's edge.
+ */
+import { HERO_VISION, HERO_VISION_SIZES } from "../utils/hero-art";
+import HeroScene from "./HeroScene.astro";
+
+interface Props {
+	title: string;
+	excerptHtml: string;
+	ctaLabel: string;
+	contactPath: string;
+	quote: any[] | null;
+	labels: { get: (widget: string, key: string, fallback: string) => string };
+}
+const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props;
+const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
+const split = (v: string, sep: string) => v.split(sep).map((p) => p.trim()).filter(Boolean);
+
+/* the readout: groups separated by ";", lines by ",", each line "key: value" */
+const readout = split(L("vision_readout", ""), ";").map((g) => split(g, ",").map((line) => {
+	const at = line.indexOf(": ");
+	return at === -1 ? { k: line, v: "" } : { k: line.slice(0, at), v: line.slice(at + 2) };
+}));
+const code = split(L("vision_code", ""), ",");
+const match = L("vision_match", "match");
+const pauseLabel = L("vision_pause", "Pausar la animación");
+const replayLabel = L("vision_replay", "Repetir la animación");
+---
+
+<HeroScene scene="vision" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
+	<div slot="under" class="vision__box">
+		<img class="vision__photo" src={HERO_VISION.photo} srcset={`${HERO_VISION.photoSmall} 720w, ${HERO_VISION.photo} 1320w, ${HERO_VISION.photoLarge} 2016w`} sizes={HERO_VISION_SIZES} width="1320" height="852" alt="" fetchpriority="high" decoding="async" />
+		<span class="vision__tint"></span>
+		<span class="vision__scan"></span>
+	</div>
+	<div slot="over" class="vision__hud" data-volatile>
+		<svg class="vision__reticle vision__piece" viewBox="-120 -120 240 240" fill="none" stroke="currentColor"><circle r="92" stroke-width="3" /><circle r="45" stroke-width="2" opacity=".55" /><path d="M0,-118 V118 M-118,0 H118" stroke-width="2.5" /></svg>
+		<span class="vision__match vision__piece">{match} <i></i></span>
+		<svg class="vision__brackets vision__piece" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke"><path d="M0,8 V0 H8 M92,0 H100 V8 M100,92 V100 H92 M8,100 H0 V92" vector-effect="non-scaling-stroke" /></svg>
+		<div class="vision__readout vision__piece">
+			{readout.map((group) => (
+				<div class="vision__group">
+					{group.map((line) => (
+						<div class="vision__line"><span>{line.k}</span><span>{line.v}</span></div>
+					))}
+				</div>
+			))}
+		</div>
+		<ol class="vision__code vision__piece">
+			{code.map((line) => <li>{line}</li>)}
+		</ol>
+	</div>
+</HeroScene>
+
+<script>
+	const hero = document.querySelector<HTMLElement>(".s-hero--vision");
+	if (hero) {
+		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
+		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
+		const inner = hero.querySelector<HTMLElement>(".s-hero__inner")!;
+		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
+		const ctl = hero.querySelector<HTMLElement>(".scene__ctl")!;
+		const hud = hero.querySelector<HTMLElement>(".vision__hud")!;
+		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
+		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
+		const reticle = hud.querySelector<SVGElement>(".vision__reticle")!;
+		const matchEl = hud.querySelector<HTMLElement>(".vision__match")!;
+		const brackets = hud.querySelector<SVGElement>(".vision__brackets")!;
+		const readout = hud.querySelector<HTMLElement>(".vision__readout")!;
+		const code = hud.querySelector<HTMLElement>(".vision__code")!;
+		const lines = [...code.querySelectorAll<HTMLElement>("li")];
+
+		/* landmarks on the photograph's frame (3100 × 2000 at 2×, photo_restore.py TUG_CROP), as fractions */
+		const ASPECT = 1.55;
+		const BAND_H = 0.81;                     /* the frame's height, of the band's */
+		const TUG = { l: 0.643, t: 0.36, r: 0.934, b: 0.756 };   /* the tug, bow fender to stern */
+		/* where the reticle may lock on the tanker, best first: its stern's corner, between the copy and the tug
+		   it is escorted by, then along the hull. The first that touches no letter wins; the ship's bridge was
+		   tried first and always sat beside the title, which nothing may touch */
+		const AIM: [number, number][] = [[0.615, 0.49], [0.6, 0.52], [0.625, 0.56], [0.58, 0.55]];
+		const GAP = 50;                          /* the tug's bow, past the column's right edge */
+		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
+
+		type Box = { l: number; t: number; r: number; b: number };
+		type Geo = { L: number; T: number; W: number; H: number; colR: number };
+		/* one comparison per line: the cms-text lint reads `> … <` on one line as a text node */
+		function overlap(a: Box, b: Box): boolean {
+			const across = a.l < b.r && b.l < a.r;
+			const down = a.t < b.b && b.t < a.b;
+			return across && down;
+		}
+		const rel = (q: DOMRect, s: DOMRect, pad: number): Box => ({ l: q.left - s.left - pad, r: q.right - s.left + pad, t: q.top - s.top - pad, b: q.bottom - s.top + pad });
+
+		/* every line of the copy, the button and the controls, padded, in the stage's pixels */
+		function blocked(s: DOMRect): Box[] {
+			const out: Box[] = [];
+			for (const el of copy.querySelectorAll<HTMLElement>("h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
+				const r = document.createRange();
+				r.selectNodeContents(el);
+				for (const q of r.getClientRects()) if (q.width > 2) out.push(rel(q, s, 12));
+			}
+			const b = copy.querySelector<HTMLElement>(".btn");
+			if (b) out.push(rel(b.getBoundingClientRect(), s, 12));
+			out.push(rel(ctl.getBoundingClientRect(), s, 12));
+			return out;
+		}
+
+		/* desktops: sized by the band like the lighthouse, resting on its floor, the tug just past the column.
+		   Where the band is too narrow for the tug beside the column, the frame shrinks until it fits — down to
+		   half its size; below that (tablets) it keeps its size and the tug goes under the copy, the HUD withheld
+		   where it would touch a letter. The frame starts after the seal */
+		function fitWide(s: DOMRect): Geo {
+			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect();
+			const colR = ib.right - s.left - parseFloat(cs.paddingRight);
+			const sr = seal.getBoundingClientRect();
+			const sealR = sr.left - s.left + SEAL_R * sr.width + 8;
+			const full = ASPECT * BAND_H * s.height;
+			const room = (s.width - 12 - colR - GAP) / (TUG.r - TUG.l);
+			const W = room >= full ? full : room >= full / 2 ? room : full, H = W / ASPECT;
+			const L = Math.min(colR + GAP - TUG.l * W, s.width - 12 - TUG.r * W);
+			hero.style.setProperty("--vclip", `${Math.max(0, sealR - L)}px`);
+			return { L, T: s.height - H, W, H, colR };
+		}
+		/* phones: the scene is its own row under the copy, the tug by the right edge */
+		function fitNarrow(s: DOMRect): Geo {
+			const W = 0.98 * s.width, H = W / ASPECT;
+			hero.style.setProperty("--vclip", "0px");
+			return { L: s.width - 10 - TUG.r * W, T: (s.height - H) / 2, W, H, colR: 0 };
+		}
+
+		/* a piece is placed by its box, then withheld if it touches a letter, the controls or the band's edge */
+		function put(el: Element, x: number, y: number, w: number | null, h: number | null, s: DOMRect, stop: Box[]) {
+			const st = (el as HTMLElement).style;
+			st.left = `${x}px`;
+			st.top = `${y}px`;
+			if (w !== null) st.width = `${w}px`;
+			if (h !== null) st.height = `${h}px`;
+			const b = rel(el.getBoundingClientRect(), s, 0);
+			const out = b.l < 4 || b.t < 4 || b.r > s.width - 4 || b.b > s.height - 4;
+			el.classList.toggle("is-withheld", out || stop.some((q) => overlap(b, q)));
+		}
+
+		function layout() {
+			const s = stage.getBoundingClientRect();
+			const narrow = matchMedia("(max-width: 767px)").matches;
+			const g = narrow ? fitNarrow(s) : fitWide(s);
+			hero.style.setProperty("--vx", `${g.L}px`);
+			hero.style.setProperty("--vy", `${g.T}px`);
+			hero.style.setProperty("--vw", `${g.W}px`);
+			hero.classList.add("is-placed");
+			const stop = blocked(s);
+			const at = (fx: number, fy: number): [number, number] => [g.L + fx * g.W, g.T + fy * g.H];
+			const r = Math.max(28, 0.045 * g.W);
+			const free = (el: Element) => !el.classList.contains("is-withheld");
+			let locked = false;
+			for (const [fx, fy] of AIM) {
+				const [ax, cy] = at(fx, fy);
+				/* never over the column: on the stern's corner, or as far onto the tug's bow as the copy needs */
+				const cx = Math.max(ax, g.colR + 14 + r * 1.3);
+				/* the box holds the cross's arms (±118 of a 240 frame, the circle 92): its true extent */
+				put(reticle, cx - r * 1.3, cy - r * 1.3, r * 2.6, r * 2.6, s, stop);
+				if (!free(reticle)) continue;
+				/* MATCH under the reticle, over it, or to its right: every epigraph counts, since any may be showing */
+				for (const [mx, my] of [[cx - r * 0.9, cy + r * 1.35], [cx - r * 0.9, cy - r * 1.35 - 22], [cx + r * 1.35, cy - 10]]) {
+					put(matchEl, mx, my, null, null, s, stop);
+					if (free(matchEl)) { locked = true; break; }
+				}
+				if (locked) break;
+			}
+			if (!locked) { reticle.classList.add("is-withheld"); matchEl.classList.add("is-withheld"); }
+			const [bl, bt] = at(TUG.l - 0.004, TUG.t - 0.006);
+			const [br, bb] = at(TUG.r + 0.008, TUG.b + 0.008);
+			put(brackets, bl, bt, br - bl, bb - bt, s, stop);
+			if (narrow) return;
+			/* the readout over the quay's upper corner — or above the frame when the frame is small — its right
+			   edge inside the band; never over the column (tablets) */
+			const [rx, ry] = at(0.742, 0.04);
+			const above = g.T - readout.offsetHeight - 12;
+			const rx0 = Math.min(rx, s.width - 20 - readout.offsetWidth);
+			put(readout, rx0, above >= 16 ? above : Math.max(16, ry), null, null, s, stop);
+			if (rx0 < g.colR + 12) readout.classList.add("is-withheld");
+			/* the code over the water under the tug, clear of the controls */
+			const [kx, ky] = at(0.6, 0.8);
+			const cx0 = Math.min(Math.max(kx, g.colR + 16), s.width - 20 - code.offsetWidth);
+			put(code, cx0, Math.min(ky, s.height - 12 - code.offsetHeight), null, null, s, stop);
+		}
+
+		/* the sequence: the photograph 1.2 s, the machine's eye (CSS, 1 s), the reading piece by piece (CSS
+		   delays), then the cursor walks the code until the pause */
+		let timer: number | null = null, walk: number | null = null, at = 0;
+		function step() {
+			lines.forEach((li, i) => li.classList.toggle("is-active", i === at));
+			at = (at + 1) % lines.length;
+		}
+		function startWalk() { if (walk !== null || reduced || pause.checked || document.hidden || !hero!.classList.contains("is-done")) return; walk = window.setInterval(step, 1200); step(); }
+		function stopWalk() { if (walk !== null) { clearInterval(walk); walk = null; } }
+		function finish() {
+			if (timer !== null) clearTimeout(timer);
+			timer = null;
+			hero!.classList.remove("is-playing");
+			hero!.classList.add("is-done");
+			startWalk();
+		}
+		function play() {
+			hero!.classList.add("is-playing");
+			timer = window.setTimeout(finish, 4200);
+		}
+
+		let settling: number | null = null;
+		window.addEventListener("resize", () => {
+			hero.classList.add("is-resizing");
+			if (settling !== null) clearTimeout(settling);
+			settling = window.setTimeout(() => { layout(); hero.classList.remove("is-resizing"); }, 120);
+		});
+		if (document.fonts.status === "loaded") layout(); else document.fonts.ready.then(layout);
+		if (reduced) {
+			hero.classList.add("is-done");
+		} else {
+			const img = hero.querySelector<HTMLImageElement>(".vision__photo")!;
+			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
+		}
+		/* pausing during the opening ends it at once: what stops is the motion, not the picture */
+		pause.addEventListener("change", () => {
+			hero.classList.toggle("is-paused", pause.checked);
+			if (pause.checked) { if (hero.classList.contains("is-playing")) finish(); stopWalk(); }
+			else startWalk();
+		});
+		document.addEventListener("visibilitychange", () => { if (document.hidden) stopWalk(); else startWalk(); });
+		replay.addEventListener("click", () => {
+			if (reduced) return;
+			stopWalk();
+			if (timer !== null) clearTimeout(timer);
+			lines.forEach((li) => li.classList.remove("is-active"));
+			at = 0;
+			pause.checked = false;
+			hero.classList.remove("is-paused", "is-done", "is-playing");
+			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */
+			play();
+		});
+	}
+</script>

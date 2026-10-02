@@ -96,13 +96,17 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
  * - `bridge` (#531) — the Vizcaya Bridge between Portugalete and Las Arenas:
  *   the two banks with no bridge, the bridge laid as a technical drawing, then
  *   what plugs into it, because the bridge is the bus.
+ * - `vision` (#537) — the tanker and the escort tug under that same bridge,
+ *   one level closer: photographed, then seen by a machine (one colour, monitor
+ *   lines), then read by it — a homage to the Terminator's HUD, whose mission
+ *   is set by people: assist, never replace.
  *
  * Assets, like the plates, live in `public/assets/` because R2 media is not
  * seedable (project rules §7); the photographs' credits are in
  * `docs/design/hero-rotativo/README.md`.
  */
-export type HeroSceneKind = "radar" | "bridge";
-export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge" };
+export type HeroSceneKind = "radar" | "bridge" | "vision";
+export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision" };
 
 /** The scene this slug (either locale) opens with, or `null` for a held plate or a plain page. */
 export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null {
@@ -145,3 +149,15 @@ export const HERO_BRIDGE = {
 
 /** The frame is about 75 % of a 1440 × 900 viewport on desktops (it is sized by the band) and 125 % of it on phones. */
 export const HERO_BRIDGE_SIZES = "(max-width: 767px) 125vw, 75vw";
+
+export const HERO_VISION = {
+	/** the tanker's stern, the tug and the quay, cut from the bridge's Commons original and restored (photo_restore.py: SeedVR2 + its own whites, the lettering kept from the original): WebP, 1320×852 */
+	photo: "/assets/hero/ia-remolcador-restaurado.webp",
+	/** the same at 720 px for phones, where the frame is 98vw (a 412 px phone at 1.75 needs 707) */
+	photoSmall: "/assets/hero/ia-remolcador-restaurado-720.webp",
+	/** the same at 2016 px, for double-density desktops */
+	photoLarge: "/assets/hero/ia-remolcador-restaurado-2016.webp",
+};
+
+/** The frame is 1.55 × 81 % of the band's height on desktops (about 63 % of a 1575 × 791 viewport) and 98 % of the width on phones. */
+export const HERO_VISION_SIZES = "(max-width: 767px) 98vw, 63vw";

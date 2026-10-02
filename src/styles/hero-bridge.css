@@ -42,16 +42,16 @@
 }
 
 /* the drawing (bridge_plan.py), in front of the veil: only the band its ink occupies, rows 390–926
-   of 1344, so it never outsizes the banks as the largest paint; at half strength by Portugalete
-   (13.5 % of the frame), full by Las Arenas (82 %) */
+   of 1344, so it never outsizes the banks as the largest paint; growing from a third of its
+   strength by Portugalete (13.5 % of the frame), under the copy, to full by Las Arenas (82 %) */
 .bridge__plan {
 	position: absolute;
 	left: 0;
 	top: calc(390 / 1344 * 100%);
 	width: 100%;
 	height: auto;
-	-webkit-mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 50%, transparent) 13.5%, var(--color-ground-dark) 82%);
-	mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 50%, transparent) 13.5%, var(--color-ground-dark) 82%);
+	-webkit-mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 35%, transparent) 13.5%, var(--color-ground-dark) 82%);
+	mask-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 35%, transparent) 13.5%, var(--color-ground-dark) 82%);
 }
 
 /* the bus layer: connectors and messages, in the stage's own pixels; hidden while the window is being

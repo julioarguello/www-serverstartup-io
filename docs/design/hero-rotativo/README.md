@@ -74,15 +74,15 @@ for on every frame of the cross-fade, and the scrim over the copy was always doi
 
 **The edge-security page no longer uses its plate or its ground (#529).** It opens with a
 photograph of the Cabo Peñas lighthouse that turns into a line drawing and a radar screen
-(`src/components/HeroRadar.astro`, assets `public/assets/hero/cdn-faro.webp` and
+(`src/components/HeroRadar.astro`, assets `public/assets/hero/cdn-faro-restaurado.webp` and
 `cdn-faro-plan.webp`, plus the 720 px and 660 px variants `srcset` serves to the phone
-column, `cdn-faro-720.webp` and `cdn-faro-plan-660.webp`). The photograph is not NASA's and is not public domain:
+column, `cdn-faro-restaurado-720.webp` and `cdn-faro-plan-660.webp`, and the 1760 px `cdn-faro-restaurado-1760.webp` for double-density desktops). The photograph is not NASA's and is not public domain:
 
 | Asset | Photograph | Credit | Licence |
 | --- | --- | --- | --- |
-| `cdn-faro.webp` | Faro de Cabo Peñas, Gozón, Asturias (cropped, antenna mast painted out, cut out to the building for the dark band) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
+| `cdn-faro-restaurado.webp` (and `-720`, `-1760`) | Faro de Cabo Peñas, Gozón, Asturias (cropped, antenna mast painted out, cut out to the building for the dark band; restored by `photo_restore.py`: SeedVR2 3B for the detail, its own whites for the colour) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
 | `cdn-faro-plan.webp` | A line drawing generated from the photograph's cutout (Workers AI, FLUX.2 [dev]; the pipeline is in the design thread of #529) | derivative of the above | CC BY-SA 4.0 |
-| `int-puente-orillas.webp`, `int-puente-orillas-960.webp` | The Vizcaya Bridge between Portugalete and Las Arenas, seen from Portugalete: the bridge and the sky taken out (Workers AI, FLUX.2 [dev] as a donor inside a mask cut from the difference; the original's own pixels everywhere else), cut off just under the tug; graded to the lighthouse's tone (half the saturation, gamma 0.8: mean luma 0.54 against its 0.50) | [Ebaki, Wikimedia Commons, "Bizkaia zubia - Puente Bizkaia.jpg"](https://commons.wikimedia.org/wiki/File:Bizkaia_zubia_-_Puente_Bizkaia.jpg) | CC BY-SA 4.0 |
+| `int-puente-restaurada.webp` (and `-960`, `-2016`) | The Vizcaya Bridge between Portugalete and Las Arenas, seen from Portugalete: the bridge and the sky taken out (Workers AI, FLUX.2 [dev] as a donor inside a mask cut from the difference; the original's own pixels everywhere else), cut off just under the tug; restored by `photo_restore.py` (SeedVR2 3B for the detail, its own whites for the colour, the tanker's name kept from the original) | [Ebaki, Wikimedia Commons, "Bizkaia zubia - Puente Bizkaia.jpg"](https://commons.wikimedia.org/wiki/File:Bizkaia_zubia_-_Puente_Bizkaia.jpg) | CC BY-SA 4.0 |
 | `int-puente-trazo.webp`, `int-puente-trazo-960.webp` | The bridge as an architect's elevation, on the same frame (Workers AI, FLUX.2 [dev] redrawing an edge sketch of the original photograph's bridge, seed 11, so it lands on the real bridge), ink to alpha close to the section's red (#EC4A3A), cut to the band the ink occupies — `bridge_plan.py` | derivative of the above | CC BY-SA 4.0 |
 | `src/assets/hero/int-puente.svg` | The bridge's outline, built by `bridge.py` from points measured on that photograph: never drawn, the hero measures it to keep the drawing off the copy | derivative of the above | CC BY-SA 4.0 |
 

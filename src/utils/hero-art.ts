@@ -111,10 +111,12 @@ export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null
 }
 
 export const HERO_RADAR = {
-	/** the building, soft-edged into the band: WebP with alpha, 1320×1515 */
-	photo: "/assets/hero/cdn-faro.webp",
-	/** the same photo at 720 px for the phone column (78vw): 106 KB instead of 288 */
-	photoSmall: "/assets/hero/cdn-faro-720.webp",
+	/** the building, soft-edged into the band, restored (photo_restore.py: SeedVR2 + its own whites): WebP with alpha, 1320×1515 */
+	photo: "/assets/hero/cdn-faro-restaurado.webp",
+	/** the same photo at 720 px for the phone column (78vw) */
+	photoSmall: "/assets/hero/cdn-faro-restaurado-720.webp",
+	/** the same at 1760 px, for double-density desktops (the column is about 650 px wide there) */
+	photoLarge: "/assets/hero/cdn-faro-restaurado-1760.webp",
 	/** the same building as orange line work on alpha, lossless, 1210×1392 */
 	plan: "/assets/hero/cdn-faro-plan.webp",
 	/** the same drawing at 660 px, lossless, for the phone column */
@@ -130,10 +132,12 @@ export const HERO_RADAR = {
 export const HERO_RADAR_SIZES = "(max-width: 700px) 78vw, 43.4vw";
 
 export const HERO_BRIDGE = {
-	/** the two banks without the bridge or the sky, cut off just under the tug: WebP with alpha, 1320×730 */
-	banks: "/assets/hero/int-puente-orillas.webp",
+	/** the two banks without the bridge or the sky, cut off just under the tug, restored (photo_restore.py: SeedVR2 + its own whites): WebP with alpha, 1320×730 */
+	banks: "/assets/hero/int-puente-restaurada.webp",
 	/** the same at 960 px for phones, where the frame is 125vw (a 412 px phone at 1.75 needs 900) */
-	banksSmall: "/assets/hero/int-puente-orillas-960.webp",
+	banksSmall: "/assets/hero/int-puente-restaurada-960.webp",
+	/** the same at 2016 px, for double-density desktops: at 1320 a 1575 px screen stretched it to nearly twice its pixels */
+	banksLarge: "/assets/hero/int-puente-restaurada-2016.webp",
 	/** the bridge as an architect's drawing on the same frame, in the bridge's own red, cut to the band its ink occupies (rows 390–926 of 1344): WebP with alpha, 1320×351 */
 	plan: "/assets/hero/int-puente-trazo.webp",
 	planSmall: "/assets/hero/int-puente-trazo-960.webp",

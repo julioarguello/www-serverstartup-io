@@ -367,9 +367,11 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   YULO 11062024, a homage of the founder's to his father (`stern_label.py`: the original letters
   inpainted out, the new ones rendered at their cap height, centre, condensed width and light). Every
   file carrying it has a new name (`ia-remolcador-aviles*`, `int-puente-aviles*`).
-- **The sequence follows the film** (founder, 2026-10-02: "la imagen original ha de durar algo más y el
-  cambio de color y texto suceder a la vez"): the photograph held 2.4 s, then one cut — the machine's
-  colour and its whole reading at once — and from then on the text moves, as the film's code listings
+- **The sequence is three beats** (founder, 2026-10-02: "imagen original · foco + color · letras"): the
+  photograph held 2.4 s; the machine focuses — a 5 px blur that clears while the frame tightens 3 % and
+  settles, 0.8 s — as its colour comes in; then its whole reading in one cut at 3.3 s (an earlier round
+  joined colour and text in one cut; piece-by-piece entry was rejected before that). From then on the
+  text moves, as the film's code listings
   scroll "all the while" (Hackaday, 2024: 6502 listings from *Nibble*, 1984). The listing rolls a line
   every 1.2 s, its numbers climbing, and the readout's `write` turns from "on review" to "signed"
   (`panel_labels` → `vision_signed`) each time `sign()` comes through. The pause stops it.

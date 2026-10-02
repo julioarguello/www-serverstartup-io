@@ -78,12 +78,13 @@
 
 /* the veil: the ground at 78 % under the column, gone 70 px past its right
    edge, so the art shows through dimmed (founder 2026-10-01; measured in
-   #529: body ≥ 4.5:1 at percentile 1; lighter is not available) */
+   #529: body ≥ 4.5:1 at percentile 1; lighter is not available for the
+   radar). A scene whose art allows it sets --scene-veil lighter (the bridge) */
 .s-hero--scene .s-hero__scrim {
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
-	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) 0%, color-mix(in srgb, var(--color-ground-dark) 78%, transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) 55%, transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
+	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) 0%, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) var(--scene-veil-mid, 55%), transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
 }
 
 /* the controls: WCAG 2.2.2 — one checkbox stops everything that moves, one button replays it */

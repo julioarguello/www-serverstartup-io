@@ -79,6 +79,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		const bus = hero.querySelector<HTMLElement>(".bridge__bus")!;
 		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
 		const inner = hero.querySelector<HTMLElement>(".s-hero__inner")!;
+		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
 		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
 		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
 		const split = (v?: string) => (v || "").split("|").filter(Boolean);
@@ -89,6 +90,13 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		const RIGHT_IN = 0.8185;                 /* the Las Arenas tower's inner leg */
 		const CROP_V = 0.8;                      /* the plate's crop, just under the tug */
 		const BAND_H = 0.9;                      /* the frame's height, of the band's: the lighthouse's is 0.88 */
+		const LEFT_OUT = 0.135;                  /* the Portugalete tower's outer leg */
+		const DECK_V = 0.39;                     /* the girder's top chord at its highest, by Las Arenas */
+		const RISE = 0.08;                       /* how far the banks may lift off the band's floor */
+		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
+		/* what a protocol needs between the excerpt's padded last line and the girder: 10 of margin, the
+		   name's plate (12.5 + 4, and 1 around it), 18 to the circle, the shortest stem (30) */
+		const UP_ROOM = 10 + 18.5 + 18 + 30 + 2;
 		const GX0 = 336, GX1 = 1692;
 		const SPAN0 = GX0 + 70, SPAN1 = GX1 - 70;
 		const chordTop = (x: number) => 545 - (x - 420) * 0.017;
@@ -175,24 +183,34 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			hero.style.setProperty("--bw", `${g.W}px`);
 		}
 
-		/* desktops: sized by the band like the lighthouse, the Las Arenas tower just past the column, the
-		   banks resting on the band's floor; only the title and the excerpt keep it down — the rest of the
-		   copy stands in front of it, over the veil */
+		/* desktops: sized by the band like the lighthouse, the Las Arenas tower just past the column. The
+		   frame starts where the seal ends (founder, 2026-10-02: "que empiece justo a continuación del
+		   cubo"): what lies left of it is cut, and the scene shrinks only if the Portugalete tower would be.
+		   It rises from the band's floor as far as a protocol still fits between the excerpt and the girder,
+		   by at most a fade's height (the banks then fade into the band before its floor); only the title
+		   and the excerpt hold it down */
 		function fitWide() {
 			const s = stage.getBoundingClientRect();
 			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect();
 			const colR = ib.right - s.left - parseFloat(cs.paddingRight);
-			const H = BAND_H * s.height, W = 1.5 * H;
-			const g = { L: colR + 10 - RIGHT_IN * W, T: s.height - CROP_V * H, W, H };
+			const sr = seal.getBoundingClientRect();
+			const sealR = sr.left - s.left + SEAL_R * sr.width + 8;
+			let H = BAND_H * s.height, W = 1.5 * H;
+			if (colR + 10 - (RIGHT_IN - LEFT_OUT) * W < sealR + 30) { W = (colR + 10 - sealR - 30) / (RIGHT_IN - LEFT_OUT); H = W / 1.5; }
 			const lead = textBoxes(s).filter((q) => !q.quote && !q.button);
+			const excerptBottom = Math.max(0, ...lead.map((q) => q.b));
+			const floor = s.height - CROP_V * H;
+			const g = { L: colR + 10 - RIGHT_IN * W, T: Math.max(excerptBottom + UP_ROOM - DECK_V * H, floor - RISE * H), W, H };
 			g.T += Math.ceil(leastDrop([[lead, placed(g, hardPts)]]));
 			setGeo(g);
+			hero.style.setProperty("--bclip", `${Math.max(0, sealR - g.L)}px`);
 		}
 		/* phones: the scene is its own row under the copy, a little wider than the screen */
 		function fitNarrow() {
 			const s = stage.getBoundingClientRect();
 			const W = s.width / 0.8, H = W / 1.5;
 			setGeo({ L: -0.1 * W, T: s.height * 0.5 - 0.41 * H, W, H });
+			hero.style.setProperty("--bclip", "0px");
 		}
 
 		/* the connectors: a stem off the girder, a circle, a name — the protocols above, the platforms and
@@ -227,14 +245,15 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 					if (fx < room.l + 30 || fx > room.r - 30) continue;
 					const w = ruler.measureText(names[i]).width + 0.02 * size * names[i].length;
 					for (const h of i % 2 ? [92, 40, 118, 66, 30] : [40, 92, 66, 118, 30]) {
-						const nameTop = up ? fy - h - 18 - size : fy + h + 18;
-						const label: Box = { l: fx - w / 2 - 4, r: fx + w / 2 + 4, t: nameTop - 3, b: nameTop + size + 3 };
+						/* the name's plate: the text plus 2 px above and below and 5 at each side */
+						const plateTop = up ? fy - h - 18 - (size + 4) : fy + h + 18;
+						const label: Box = { l: fx - w / 2 - 6, r: fx + w / 2 + 6, t: plateTop - 1, b: plateTop + size + 5 };
 						const stem: Box = { l: fx - 6, r: fx + 6, t: up ? fy - h - 12 : fy + 6, b: up ? fy - 6 : fy + h + 12 };
 						/* a name keeps off the copy and off the structure; the fine lines are under the veil and
 						   may run behind it */
 						const clear = within(label, room) &&
 							!text.some((q) => overlap(label, q, 10) || overlap(stem, q)) &&
-							!taken.some((q) => overlap(label, q, 10) || overlap(stem, q, 4)) &&
+							!taken.some((q) => overlap(label, q, 8) || overlap(stem, q, 4)) &&
 							!strokesIn([label], structure) &&
 							(up || !strokesIn([stem], structure));
 						if (!clear) continue;

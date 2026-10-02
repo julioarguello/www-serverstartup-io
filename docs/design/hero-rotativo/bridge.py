@@ -4,7 +4,7 @@ Every landmark below was measured on the photograph's own frame (2016 x 1344,
 `Bizkaia zubia - Puente Bizkaia.jpg`, Ebaki, CC BY-SA 4.0) through the aligned
 AI plate, so the drawing lands on the photograph; the lines themselves are
 straight segments and true parabolas, drawn here. The visible bridge is the
-architect's drawing (`public/assets/hero/int-puente-plan.webp`, FLUX.2 [dev]
+architect's drawing (`public/assets/hero/int-puente-trazo.webp`, FLUX.2 [dev]
 from the same photograph, on the same frame); this outline is what the hero
 reads at run time: the structure (towers, girder,
 the plinths) keeps under the title and the excerpt and off every connector's

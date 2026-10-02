@@ -13,10 +13,12 @@
  * The band, the copy, the epigraph, the seal, the veil and the controls are the
  * scene every vertical shares (HeroScene.astro). What is the bridge's own:
  *
- * - The drawing is a raster on the photograph's frame (int-puente-plan.webp,
- *   built by docs/design/hero-rotativo/bridge_plan.py), under the veil with the
- *   banks, like the lighthouse: what passes behind the column is dimmed, what
- *   stands past it is not. What the script measures is its outline, built from
+ * - The drawing is a raster on the photograph's frame (int-puente-trazo.webp,
+ *   built by docs/design/hero-rotativo/bridge_plan.py), traced from the
+ *   photograph's own edges as the lighthouse's was. The banks lie under the
+ *   veil; the drawing stands in front of it, in the section's red, gaining
+ *   strength towards Las Arenas, as the lighthouse does when it leaves the veil
+ *   (founder, 2026-10-02: "métele caña… que gane fuerza hacia la derecha"). What the script measures is its outline, built from
  *   geometry on the same frame (bridge.py), shipped as path data, never drawn.
  * - The scene is sized by the band's height, like the lighthouse, level, the
  *   Las Arenas tower just past the column's right edge, the banks resting on the
@@ -66,9 +68,13 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 <HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ up: list("bridge_plugs_up"), down: list("bridge_plugs_down"), colors, hard }}>
 	<div slot="under" class="bridge__box bridge__art">
 		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
-		<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="351" alt="" decoding="async" />
 	</div>
-	<div slot="over" class="bridge__bus" data-volatile></div>
+	<Fragment slot="over">
+		<div class="bridge__box bridge__lines">
+			<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="351" alt="" decoding="async" />
+		</div>
+		<div class="bridge__bus" data-volatile></div>
+	</Fragment>
 </HeroScene>
 
 <script>

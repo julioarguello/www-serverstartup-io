@@ -4,6 +4,12 @@ excerpt: "La IA es un medio, no un fin. La máquina hace el código repetitivo; 
 # evidence traceability in issue 270 and docs/company/04-services-business-model.md
 ---
 
+> «Sostengo que las organizaciones que construyen y operan agentes son responsables de todo lo que esos agentes hacen, tanto si ese comportamiento es intencionado como si es emergente.» [Martin Fowler](https://martinfowler.com/fragments/2026-09-08.html)
+
+> «Podemos delegar muchas cosas, pero no los criterios de aceptación: en algún momento hay una petición humana y un juicio humano sobre si esa petición se ejecutó correctamente.» [Martin Fowler](https://martinfowler.com/fragments/2026-07-13.html)
+
+> «Los humanos siguen siendo responsables de lo que hace el software y de cómo funciona, pero emplean habilidades distintas para crear sus productos.» [Martin Fowler](https://martinfowler.com/bliki/AgenticProgramming.html)
+
 Usamos la IA de dos maneras. Como herramienta, para construir con más calidad y menos horas lo que ya sabíamos construir. Y como pieza del sistema, para resolver lo que hace poco no era posible. En los dos casos es un medio, no un fin.
 
 Cuando generar código sale casi gratis, se genera muchísimo más software ([paradoja de Jevons](https://news.northeastern.edu/2025/02/07/jevons-paradox-ai-future/)). Y todo ese software nuevo hay que [integrarlo](/integracion-de-sistemas) y [asegurarlo](/cdn-waf-seguridad-edge-cloudflare) dentro de sistemas que ya existían. Es la parte de más valor del trabajo, y la que hacemos desde 2019.

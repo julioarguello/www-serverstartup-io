@@ -22,8 +22,8 @@ the reason to read this file rather than grep for hex codes.
 
 ## Principles
 
-1. **No CSS frameworks.** Plain CSS with custom properties, 15 files under
-   `src/styles/`. Total source budget **<= 150 KB**; measured **149 KB across 15
+1. **No CSS frameworks.** Plain CSS with custom properties, 16 files under
+   `src/styles/`. Total source budget **<= 175 KB**; measured **156 KB across 16
    files** (`wc -c src/styles/*.css`). Both numbers are read out of this line by
    `ci-check-css-budget.py`, so the doc is the source and cannot disagree with
    the gate — see [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475)
@@ -267,6 +267,14 @@ it, and both are deliberate:
 A budget that a deliberate product decision breaks is the wrong budget. 150 KB
 leaves about 21 KB of headroom: enough that ordinary work never touches it, tight
 enough that the next 30 KB stylesheet has to be argued for.
+
+**Raised to 175 KB with the vertical heroes (#537).** Each vertical that opens with a scene brings one
+stylesheet for its art, on top of the shared `hero-scene.css`: the radar 7 KB, the bridge 5 KB, the
+machine's eye of the AI vertical 6 KB, and three verticals still to come. The third one took the tree to
+156 KB, past 150; trimming its comments would have bought back 2 KB and the next vertical would have
+broken it again. 175 KB is the three remaining scenes at the size of the ones that exist, plus the
+headroom this section asked for. The same rule holds: the next stylesheet that is not a scene has to be
+argued for.
 
 **What the budget is not.** It measures source, and source does not travel. The
 home actually ships **6 stylesheets, 58 KB raw and 12.9 KB gzipped**, plus 5.4 KB

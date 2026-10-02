@@ -24,6 +24,7 @@ import { excerptHtml, excerptPlain } from "../utils/excerpt";
 import { heroArtForSlug, heroGroundForSlug, heroSceneForSlug } from "../utils/hero-art";
 import HeroRadar from "../components/HeroRadar.astro";
 import HeroBridge from "../components/HeroBridge.astro";
+import HeroVision from "../components/HeroVision.astro";
 import type { SiteSettings } from "../types";
 const t = Astro.locals.t;
 
@@ -76,16 +77,20 @@ const labels = await getUiLabels(locale);
 // #413: the six verticals own a drawn plate — the same picture the home
 // rotates through, held still. Everything else (contacto, quiénes somos, a
 // blog page) returns null here and keeps the light hero it has always had.
-// #529/#531: edge security and integration open with a scene instead (the
-// radar, the bridge) — the plate stays on the other four. Their content may
-// open with a blockquote (Cloudflare's castle-and-moat line, Hohpe & Woolf):
-// the hero's epigraph carries it, so the instrument below renders the rest.
+// #529/#531/#537: edge security, integration and AI open with a scene instead
+// (the radar, the bridge, the machine's eye) — the plate stays on the other
+// three. Their content may open with blockquotes (Cloudflare's castle-and-moat
+// line, Hohpe & Woolf, three of Fowler's): the hero's epigraph carries them,
+// so the instrument below renders the rest.
 const heroScene = heroSceneForSlug(slug);
 const heroArt = heroScene ? null : heroArtForSlug(slug);
 const heroGround = heroScene ? null : heroGroundForSlug(slug);
 const blocks: any[] = Array.isArray(content) ? content : [];
-const heroQuote = heroScene && blocks[0]?._type === "block" && blocks[0]?.style === "blockquote" ? [blocks[0]] : null;
-const instrumentContent = heroQuote ? blocks.slice(1) : content;
+/* every blockquote the content opens with is an epigraph: the scene shows them in turn (#537) */
+const isQuote = (b: any) => b?._type === "block" && b?.style === "blockquote";
+const leadQuotes = heroScene ? blocks.findIndex((b) => !isQuote(b)) : 0;
+const heroQuote = leadQuotes !== 0 ? blocks.slice(0, leadQuotes === -1 ? blocks.length : leadQuotes) : null;
+const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 ---
 
 <Base
@@ -119,6 +124,15 @@ const instrumentContent = heroQuote ? blocks.slice(1) : content;
 		/>
 	) : heroScene === "bridge" ? (
 		<HeroBridge
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "vision" ? (
+		<HeroVision
 			title={title}
 			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
 			ctaLabel={ctaLabel}
@@ -206,4 +220,5 @@ const instrumentContent = heroQuote ? blocks.slice(1) : content;
 	@import "../styles/hero-scene.css";
 	@import "../styles/hero-radar.css";
 	@import "../styles/hero-bridge.css";
+	@import "../styles/hero-vision.css";
 </style>

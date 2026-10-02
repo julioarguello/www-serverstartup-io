@@ -11,8 +11,10 @@
  * own script for what moves.
  *
  * Copy is the service page's own: title, excerpt, CTA and the epigraph — the
- * blockquote the CMS content opens with, whose linked span names the author
- * and carries the source.
+ * blockquotes the CMS content opens with, whose linked span names the author
+ * and carries the source. With more than one, they take turns in one place
+ * (#537: three of Martin Fowler's), stacked in one grid cell so the band never
+ * changes height; the pause stops them, and reduced motion keeps the first.
  */
 interface Props {
 	scene: string;
@@ -27,16 +29,18 @@ interface Props {
 }
 const { scene, title, excerptHtml, ctaLabel, contactPath, quote, pauseLabel, replayLabel, data = {} } = Astro.props;
 
-/* The epigraph: the quotation is the plain spans of the opening blockquote;
+/* Each epigraph: the quotation is the plain spans of an opening blockquote;
    the author is its one linked span, and the link is the source. */
 interface Span { text: string; marks?: string[] }
 interface MarkDef { _key: string; href?: string }
-const block = quote?.[0] ?? null;
-const spans: Span[] = block?.children ?? [];
-const defs: MarkDef[] = block?.markDefs ?? [];
-const sourceOf = (s: Span): string => defs.find((d) => d.href && (s.marks ?? []).includes(d._key))?.href ?? "";
-const quoteText = spans.filter((s) => !sourceOf(s)).map((s) => s.text).join("").trim();
-const author = spans.find((s) => sourceOf(s)) ?? null;
+interface Epigraph { text: string; author: string; href: string }
+const epigraphs: Epigraph[] = (quote ?? []).map((block) => {
+	const spans: Span[] = block?.children ?? [];
+	const defs: MarkDef[] = block?.markDefs ?? [];
+	const sourceOf = (s: Span): string => defs.find((d) => d.href && (s.marks ?? []).includes(d._key))?.href ?? "";
+	const author = spans.find((s) => sourceOf(s));
+	return { text: spans.filter((s) => !sourceOf(s)).map((s) => s.text).join("").trim(), author: author?.text ?? "", href: author ? sourceOf(author) : "" };
+}).filter((e) => e.text);
 const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
 ---
 
@@ -57,13 +61,20 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 				</div>
 			)}
 			<a href={contactPath} class="btn btn-light">{ctaLabel}</a>
-			{quoteText && (
-				<figure class="s-hero__epigraph">
-					<blockquote><p>{quoteText}</p></blockquote>
-					{author && (
-						<figcaption>— <a href={sourceOf(author)} target="_blank" rel="noopener noreferrer">{author.text}</a></figcaption>
-					)}
-				</figure>
+			{epigraphs.length > 0 && (
+				<div class="s-hero__epigraphs">
+					{epigraphs.map((e, i) => (
+						<figure
+							class:list={["s-hero__epigraph", i === 0 && "is-shown"]}
+							aria-hidden={i === 0 ? undefined : "true"}
+						>
+							<blockquote><p>{e.text}</p></blockquote>
+							{e.author && (
+								<figcaption>— <a href={e.href} target="_blank" rel="noopener noreferrer" tabindex={i === 0 ? undefined : -1}>{e.author}</a></figcaption>
+							)}
+						</figure>
+					))}
+				</div>
 			)}
 		</div>
 	</div>
@@ -76,3 +87,34 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 		<label for={`${scene}-pause`} class="scene__pause-btn" aria-hidden="true"></label>
 	</div>
 </section>
+
+<script>
+	/* the epigraphs take turns, one every 9 s, in every scene that has more than one; the pause and a
+	   hidden tab stop them, the replay starts them again from the first */
+	for (const hero of document.querySelectorAll<HTMLElement>(".s-hero--scene")) {
+		const figs = [...hero.querySelectorAll<HTMLElement>(".s-hero__epigraph")];
+		if (figs.length < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) continue;
+		const pause = hero.querySelector<HTMLInputElement>(".scene__pause");
+		let shown = 0;
+		let timer: number | null = null;
+		const show = (n: number) => {
+			shown = n;
+			figs.forEach((f, k) => {
+				f.classList.toggle("is-shown", k === n);
+				if (k === n) f.removeAttribute("aria-hidden"); else f.setAttribute("aria-hidden", "true");
+				const a = f.querySelector("a");
+				if (a && k === n) a.removeAttribute("tabindex"); else if (a) a.setAttribute("tabindex", "-1");
+			});
+		};
+		const stop = () => { if (timer !== null) { clearInterval(timer); timer = null; } };
+		const run = () => {
+			if (timer !== null || pause?.checked || document.hidden) return;
+			timer = window.setInterval(() => show((shown + 1) % figs.length), 9000);
+		};
+		pause?.addEventListener("change", () => (pause.checked ? stop() : run()));
+		document.addEventListener("visibilitychange", () => (document.hidden ? stop() : run()));
+		/* the replay releases the pause itself: the scene's own handler may run after this one */
+		hero.querySelector(".scene__replay")?.addEventListener("click", () => { stop(); if (pause) pause.checked = false; show(0); run(); });
+		run();
+	}
+</script>

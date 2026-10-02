@@ -304,7 +304,11 @@ the band, the haze, the veil, the seal cube, the epigraph, the controls and the 
 a 320 px reference block so the cube and the h1 sit in the same place on every page. A vertical
 brings its art through two slots (`under` the veil, `over` it), its own script, and an entry in
 `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
-per-scene token (`--scene-veil`, 78 % by default).
+per-scene token (`--scene-veil`, 78 % by default). The epigraph is every blockquote the service body
+opens with: one stands still; several take turns every 9 s in one grid cell, so the band never changes
+height, stopped by the pause and kept on the first under reduced motion (#537). The ones not showing are
+`aria-hidden` with their link out of the tab order, and stay in the DOM, so the copy baseline reads all
+of them.
 
 The integration page opens on the Vizcaya Bridge between Portugalete and Las Arenas. First the two
 banks, from a photograph with the bridge and the sky taken out. Then the bridge, whole, as a
@@ -334,7 +338,7 @@ How it is built (`HeroBridge.astro`, `hero-bridge.css`):
 
 ### 4.6 The hero photographs (#531)
 
-Both hero photographs are restored, not graded (`docs/design/hero-rotativo/photo_restore.py`):
+The hero photographs are restored, not graded (`docs/design/hero-rotativo/photo_restore.py`):
 
 - **Detail:** SeedVR2 3B, a faithful restorer, run locally at 2× with its colour lock on.
 - **Colour:** the cast measured on the scene's own whites is removed, and nothing else. The
@@ -346,6 +350,39 @@ Both hero photographs are restored, not graded (`docs/design/hero-rotativo/photo
 
 The founder rejected a grey grade, classic grades, AI relighting and the 7B model along the way;
 the reasons are in #531 and in the hero rule.
+
+### 4.7 The machine's eye of the artificial-intelligence vertical (#537)
+
+The AI page opens on the tanker and the escort tug that pass under the Vizcaya Bridge in the
+integration hero, cut from the same photograph, one level closer: the same river. The tanker sails on
+its own engine with its own crew; the tug follows astern and lends its force where the river is hard,
+when the ship's bridge asks — a complement, not a substitute, which is the page's thesis. The scene
+reads it three times: the photograph; the same frame as a machine sees it; the machine's reading.
+
+- **The machine's eye is a homage to the Terminator's HUD in the section's violet**, not the film's red,
+  which is the integration vertical's colour (founder, 2026-10-02). It is CSS on the one photograph —
+  `grayscale` + the section colour laid over in `mix-blend-mode: color` at 78 % + monitor lines — so
+  there is no second raster to download or to become the LCP. At full strength the violet saturated
+  the highlights; the approved prototype was lighter and greyer.
+- **The reading** (`HeroVision.astro`, `hero-vision.css`): a reticle on the tanker, the tug bracketed,
+  MATCH, a readout whose mission is set by people (`mission: assist`, `replace: denied`,
+  `override: bridge`), and the page's own flow as code (`await review(bridge)`). Strings are
+  `panel_labels` → `vision_*`, English in both locales as a machine voice; the layer is
+  `data-volatile`, since what fits depends on the viewport.
+- **Placement in the stage's pixels, withheld rather than moved onto the copy.** The frame is sized by
+  the band and rests on its floor, the tug's bow 50 px past the column. Where the band is too narrow
+  for the tug beside the column the frame shrinks to fit, down to half its size; below that (tablets)
+  it keeps its size and the HUD pieces that would touch a letter are withheld. The reticle tries points
+  on the tanker's stern by the tug, never over the column: the ship's bridge was tried first and
+  always sat beside the title. Every epigraph counts as copy, since any of them may be showing.
+- **The epigraph** is three of Martin Fowler's, verified verbatim on martinfowler.com and translated by
+  us: organisations are responsible for everything their agents do (Fragments, 2026-09-08); the
+  acceptance criteria cannot be outsourced (2026-07-13); humans are still responsible for what the
+  software does (bliki *Agentic Programming*, 2026-05-21).
+- **Measured** (2026-10-02, local build): LCP is the photograph — `ia-remolcador-restaurado-2016.webp`
+  at 1575 × 791 DPR 2, the 720 px file (87 KB) on a 412 px phone at 1.75; the a11y gate's tightest hero
+  contrast is 7.4:1 on the excerpt; the HUD is complete from 1280 px up and on phones, and withheld on
+  tablets.
 
 ## 5. SEO
 

@@ -6,10 +6,11 @@
  * `wrangler dev` treats an error scoped to a single in-flight request as fatal:
  * it kills the dev server and exits, so every check after that point fails on a
  * route that has nothing wrong with it. Upstream, open, not ours —
- * cloudflare/workers-sdk#15317, with the fix still in review as
- * cloudflare/workers-sdk#15448 and cloudflare/workers-sdk#15207. Neither
- * 4.128.0 nor 4.129.0 carries it, and dropping the pin to the 4.113.0 some
- * reporters run is fourteen minors backwards under Astro 7.
+ * cloudflare/workers-sdk#15317, with the fix still open as
+ * cloudflare/workers-sdk#15448 and in no release (latest 4.147.0 on
+ * 2026-10-02); cloudflare/workers-sdk#15207, merged, only logs the cause.
+ * Dropping the pin to the 4.113.0 some reporters run is fourteen minors
+ * backwards under Astro 7.
  *
  * #390 landed the half that makes the crash LEGIBLE and deliberately stopped
  * there: "This adds information and nothing else. It does not retry." This is

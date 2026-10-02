@@ -198,7 +198,14 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			const [bl, bt] = at(TUG.l - 0.004, TUG.t - 0.006);
 			const [br, bb] = at(TUG.r + 0.008, TUG.b + 0.008);
 			put(brackets, bl, bt, br - bl, bb - bt, s, stop);
-			if (narrow) return;
+			if (narrow) {
+				/* phones: the image is its own row, nothing of the copy over it — the readout in its upper right corner,
+				   above the tug's mast, the code in its lower left, over the water (founder, 2026-10-02: on mobile the
+				   machine's texts were missing, while the radar and the bridge show their live layers) */
+				put(readout, s.width - 8 - readout.offsetWidth, Math.max(4, Math.min(6, bt - 6 - readout.offsetHeight)), null, null, s, stop);
+				put(code, 8, s.height - 8 - code.offsetHeight, null, null, s, stop);
+				return;
+			}
 			/* the readout over the quay's upper corner — or above the frame when the frame is small — its right
 			   edge inside the band; never over the column (tablets) */
 			const [rx, ry] = at(0.742, 0.04);

@@ -89,9 +89,9 @@
 @keyframes vision-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes vision-blink { 50% { opacity: 0; } }
 
-/* phones: the scene is its own row; only the reticle, MATCH and the tug's brackets */
+/* phones: the scene is its own row; the whole reading, a size smaller */
 @media (max-width: 767px) {
-	.vision__readout,
-	.vision__code { display: none; }
 	.vision__match { font-size: 12px; }
+	.vision__readout { gap: .3em; font-size: 9px; line-height: 1.35; }
+	.vision__code { font-size: 9.5px; line-height: 1.45; }
 }

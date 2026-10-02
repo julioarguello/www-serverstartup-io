@@ -52,6 +52,10 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 ---
 
 <section class:list={["s-hero", "s-hero--scene", `s-hero--${scene}`]} aria-label={title} {...dataAttrs}>
+	{/* the first screen (#543): on phones and tablets it is exactly the screen's height — title, excerpt,
+	    CTA and the art, which takes what is left — and the epigraph follows it; on desktops this box
+	    takes no part in the layout (display: contents) and the band is laid out as before */}
+	<div class="s-hero__first">
 	<div class="s-hero__stage" aria-hidden="true">
 		<slot name="under" />
 		<span class="s-hero__scrim"></span>
@@ -68,14 +72,6 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 				</div>
 			)}
 			<a href={contactPath} class="btn btn-light">{ctaLabel}</a>
-			{epigraphs.map((e) => (
-				<figure class="s-hero__epigraph">
-					<blockquote>{e.texts.map((t) => <p>{t}</p>)}</blockquote>
-					{e.author && (
-						<figcaption>— <a href={e.href} target="_blank" rel="noopener noreferrer">{e.author}</a></figcaption>
-					)}
-				</figure>
-			))}
 		</div>
 	</div>
 	{/* WCAG 2.2.2: one control stops everything that moves, the other replays the sequence from the start.
@@ -86,5 +82,18 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 		<input type="checkbox" id={`${scene}-pause`} class="scene__pause" aria-label={pauseLabel} />
 		<label for={`${scene}-pause`} class="scene__pause-btn" aria-hidden="true"></label>
 	</div>
+	</div>
+	{epigraphs.length > 0 && (
+		<div class="container s-hero__after">
+			{epigraphs.map((e) => (
+				<figure class="s-hero__epigraph">
+					<blockquote>{e.texts.map((t) => <p>{t}</p>)}</blockquote>
+					{e.author && (
+						<figcaption>— <a href={e.href} target="_blank" rel="noopener noreferrer">{e.author}</a></figcaption>
+					)}
+				</figure>
+			))}
+		</div>
+	)}
 </section>
 

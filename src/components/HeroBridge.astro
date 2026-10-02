@@ -78,6 +78,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 </HeroScene>
 
 <script>
+	import { SCENE_ROW } from "../utils/hero-art";
 	const hero = document.querySelector<HTMLElement>(".s-hero--bridge");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -173,7 +174,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		function textBoxes(s: DOMRect): Box[] {
 			const out: Box[] = [];
 			const pad = (q: DOMRect, quote = false, button = false): Box => ({ l: q.left - s.left - 12, r: q.right - s.left + 12, t: q.top - s.top - 12, b: q.bottom - s.top + 14, quote, button });
-			for (const el of copy.querySelectorAll<HTMLElement>("h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
+			for (const el of hero.querySelectorAll<HTMLElement>(".s-hero__copy h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
 				const r = document.createRange();
 				r.selectNodeContents(el);
 				const quote = !!el.closest(".s-hero__epigraph");
@@ -217,11 +218,13 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			setGeo(g);
 			hero.style.setProperty("--bclip", `${Math.max(0, sealR - g.L)}px`);
 		}
-		/* phones: the scene is its own row under the copy, a little wider than the screen */
+		/* phones and tablets: the scene is its own row under the copy, a little wider than the row — or, where the
+		   row is short, as wide as keeps the frame within 1.6 times its height (#543: the row takes what the first
+		   screen leaves) */
 		function fitNarrow() {
 			const s = stage.getBoundingClientRect();
-			const W = s.width / 0.8, H = W / 1.5;
-			setGeo({ L: -0.1 * W, T: s.height * 0.5 - 0.41 * H, W, H });
+			const W = Math.min(s.width / 0.8, 1.5 * 1.6 * s.height), H = W / 1.5;
+			setGeo({ L: (s.width - W) / 2, T: s.height * 0.5 - 0.41 * H, W, H });
 			hero.style.setProperty("--bclip", "0px");
 		}
 
@@ -290,7 +293,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 
 		/* the frame first, so the banks can paint; the connectors in a task of their own */
 		function layout() {
-			const narrow = matchMedia("(max-width: 767px)").matches;
+			const narrow = matchMedia(SCENE_ROW).matches;
 			if (narrow) fitNarrow(); else fitWide();
 			hero.classList.add("is-placed");
 			window.setTimeout(() => {
@@ -424,7 +427,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			hero.classList.add("is-resizing");
 			if (!frame) frame = requestAnimationFrame(() => {
 				frame = 0;
-				if (matchMedia("(max-width: 767px)").matches) fitNarrow(); else fitWide();
+				if (matchMedia(SCENE_ROW).matches) fitNarrow(); else fitWide();
 			});
 			if (settling !== null) clearTimeout(settling);
 			settling = window.setTimeout(() => { layout(); hero.classList.remove("is-resizing"); }, 200);

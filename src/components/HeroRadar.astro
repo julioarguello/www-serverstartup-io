@@ -89,10 +89,11 @@ const RING_POS: [number, number][] = [
 </HeroScene>
 
 <script>
+	import { SCENE_ROW } from "../utils/hero-art";
 	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-		const narrow = matchMedia("(max-width: 767px)").matches;
+		const narrow = matchMedia(SCENE_ROW).matches;
 		const feed = hero.querySelector<HTMLElement>(".radar__feed")!;
 		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
 		const EVENTS: string[] = JSON.parse(hero.dataset.events || "[]");
@@ -106,6 +107,15 @@ const RING_POS: [number, number][] = [
 		const BUILDING: [number, number, number, number] = [18, 92, 20, 104];
 		const hud = hero.querySelector<HTMLElement>(".radar__hud")!;
 		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
+		const after = hero.querySelector<HTMLElement>(".s-hero__after");
+		/* the copy and the epigraph under it (#543 moved the epigraph out of the copy's box), as one rectangle */
+		function copyBox(): DOMRect {
+			const a = copy.getBoundingClientRect();
+			if (!after) return a;
+			const b = after.getBoundingClientRect();
+			const l = Math.min(a.left, b.left), t = Math.min(a.top, b.top);
+			return new DOMRect(l, t, Math.max(a.right, b.right) - l, Math.max(a.bottom, b.bottom) - t);
+		}
 		const youEl = hero.querySelector<HTMLElement>(".radar__you");
 		function clear(x: number, y: number, left: boolean, text: string): boolean {
 			const f = hud.getBoundingClientRect();
@@ -120,7 +130,7 @@ const RING_POS: [number, number][] = [
 				r.top < b.bottom + pad &&
 				b.top - pad < r.bottom;
 			if (r.left < band.left + 8 || r.right > band.right - 8 || r.top < band.top + 8 || r.bottom > band.bottom - 8) return false;
-			if (!narrow && hits(copy.getBoundingClientRect(), 14)) return false;
+			if (!narrow && hits(copyBox(), 14)) return false;
 			if (youEl && !youEl.hidden && hits(youEl.getBoundingClientRect(), 10)) return false;
 			if (BUILDING[0] < x && x < BUILDING[1] && BUILDING[2] < y && y < BUILDING[3]) return false;
 			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab, .radar__origin, .radar__range")) if (hits(el.getBoundingClientRect(), 8)) return false;
@@ -154,18 +164,40 @@ const RING_POS: [number, number][] = [
 			const me: [number, number] = [x, y];
 			live.push(me);
 			const d = place(x, y, z[4], text);
-			setTimeout(() => { d.remove(); live.splice(live.indexOf(me), 1); }, 2400);
+			expire(d, me, 2400);
+		}
+		/* each event leaves after 2.4 s; the pause freezes it in place — the timer stops and resumes with what it
+		   had left (before #543 the events on screen still vanished while paused) */
+		type Pending = { me: [number, number]; left: number; at: number; t: number | null };
+		const pending = new Map<HTMLElement, Pending>();
+		function expire(d: HTMLElement, me: [number, number], ms: number) {
+			const rec: Pending = { me, left: ms, at: Date.now(), t: null };
+			rec.t = window.setTimeout(() => { d.remove(); live.splice(live.indexOf(me), 1); pending.delete(d); }, ms);
+			pending.set(d, rec);
+		}
+		function freezeEvents() {
+			for (const r of pending.values()) if (r.t !== null) { clearTimeout(r.t); r.t = null; r.left -= Date.now() - r.at; }
+		}
+		function thawEvents() {
+			for (const [d, r] of pending) if (r.t === null) expire(d, r.me, Math.max(0, r.left));
 		}
 		/* a ring label that lands on the copy is withheld: the frame is placed by the column, but at
 		   narrower desktops the rings' upper labels still reach into it */
+		/* …and so is one under the pause and replay controls, at every width (#543: on phones the controls sit in
+		   the art row's corner, over the origin ring's label) */
+		const ctl = hero.querySelector<HTMLElement>(".scene__ctl");
+		function apartFrom(r: DOMRect, c: DOMRect): boolean {
+			const across = r.right < c.left - 10 || c.right + 10 < r.left;
+			const down = r.bottom < c.top - 10 || c.bottom + 10 < r.top;
+			return across || down;
+		}
 		function settleLabels() {
-			if (narrow) return;
-			const c = copy.getBoundingClientRect();
+			const c = copyBox();
+			const k = ctl?.getBoundingClientRect();
 			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab, .radar__origin, .radar__range")) {
 				el.style.visibility = "";
 				const r = el.getBoundingClientRect();
-				const apart = r.right < c.left - 10 || c.right + 10 < r.left || r.bottom < c.top - 10 || c.bottom + 10 < r.top;
-				if (!apart) el.style.visibility = "hidden";
+				if ((!narrow && !apartFrom(r, c)) || (k && !apartFrom(r, k))) el.style.visibility = "hidden";
 			}
 		}
 		settleLabels();
@@ -175,7 +207,10 @@ const RING_POS: [number, number][] = [
 		function stopFeed() { if (timer !== null) { clearInterval(timer); timer = null; } }
 		function done() { hero.classList.add("is-done"); window.setTimeout(startFeed, 200); }
 
-		pause.addEventListener("change", () => { hero.classList.toggle("is-paused", pause.checked); if (pause.checked) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
+		pause.addEventListener("change", () => {
+			hero.classList.toggle("is-paused", pause.checked);
+			if (pause.checked) { stopFeed(); freezeEvents(); } else { thawEvents(); if (hero.classList.contains("is-done")) startFeed(); }
+		});
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
 
 		const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
@@ -198,6 +233,8 @@ const RING_POS: [number, number][] = [
 		replay.addEventListener("click", () => {
 			if (reduced) return;
 			stopFeed();
+			for (const r of pending.values()) if (r.t !== null) clearTimeout(r.t);
+			pending.clear();
 			feed.replaceChildren();
 			live.length = 0;
 			pause.checked = false;

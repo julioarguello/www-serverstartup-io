@@ -2,9 +2,6 @@
    One frame under the veil — the tanker's stern, the tug, the quay — sized by the band, the tug just past
    the column; the script places it (--vx, --vy, --vw) and the HUD over it. The end state is the default
    (no script, reduced motion): the frame as the machine sees it, and its reading. */
-.s-hero--vision {
-	--scene-phone-h: 64vw;
-}
 
 /* the frame: the photograph's 1.55. Without the script it rests on the band's floor, the tug past the column */
 .vision__box {

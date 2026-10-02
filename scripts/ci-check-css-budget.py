@@ -18,6 +18,13 @@ So this gate makes two assertions, and each carries its own plant:
 Both numbers live in the doc, in one line this file parses, so the doc is the
 single source and cannot disagree with the check that enforces it.
 
+The budget measures CSS, not prose (#543, founder 2026-10-02): comments are
+left out of the count. About 60 of 156 KB were comments explaining why a rule
+exists — the house's way of keeping the reasons where the rules are — and a
+source budget that counted them made every explanation compete with the CSS it
+explains. Strings are skipped while stripping, so a `/*` inside `content: "…"`
+is CSS, not a comment; the plants prove both halves.
+
 Exit 0 clean, 1 on a finding, 3 when the gate cannot see (the line is gone,
 renamed, or no stylesheet matched).
 """
@@ -43,9 +50,22 @@ LINE = re.compile(
 )
 
 
+# a quoted string (kept whole) or a comment (dropped): one pass, so a comment marker inside a string is CSS
+TOKEN = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|/\*.*?\*/', re.S)
+
+
+def strip_comments(css):
+    """The stylesheet without its comments. Pure, so a plant can feed it."""
+    return TOKEN.sub(lambda m: "" if m.group(0).startswith("/*") else m.group(0), css)
+
+
 def measure(paths):
-    """Bytes and file count for a list of paths. Pure, so a plant can feed it."""
-    return sum(os.path.getsize(p) for p in paths), len(paths)
+    """Bytes of CSS (comments left out) and file count for a list of paths."""
+    total = 0
+    for p in paths:
+        with open(p, encoding="utf-8") as f:
+            total += len(strip_comments(f.read()).encode("utf-8"))
+    return total, len(paths)
 
 
 def judge(budget_kb, stated_kb, real_kb, stated_files, real_files):
@@ -89,6 +109,15 @@ def plants():
         problems.append("B2 did not fire on a doc four times out of date")
     if any(g == "B1" for g, _ in found):
         problems.append("false positive — B1 fired on a tree inside its budget")
+
+    # Comments are left out of the count, and only comments: a comment marker
+    # inside a string is CSS and stays.
+    css = 'a { content: "/* not a comment */"; } /* a comment */ b { c: d; }'
+    kept = strip_comments(css)
+    if "a comment */ b" in kept or "/* a comment" in kept:
+        problems.append("a comment was counted as CSS")
+    if '"/* not a comment */"' not in kept:
+        problems.append("a string that looks like a comment was stripped")
 
     # And the state that must produce nothing at all.
     found = judge(budget_kb=150, stated_kb=129, real_kb=130, stated_files=12, real_files=12)
@@ -139,7 +168,7 @@ def main():
             print(f"    {g}  {msg}", file=sys.stderr)
         print("", file=sys.stderr)
         for p in paths:
-            print(f"      {round(os.path.getsize(p) / 1024):>4} KB  {os.path.relpath(p, ROOT)}", file=sys.stderr)
+            print(f"      {round(measure([p])[0] / 1024):>4} KB  {os.path.relpath(p, ROOT)}", file=sys.stderr)
         print("", file=sys.stderr)
         print("  Both numbers live in one line of docs/design-system.md. Raising the budget is a", file=sys.stderr)
         print("  decision with a reason attached (#475); re-measuring is just arithmetic. Do not", file=sys.stderr)

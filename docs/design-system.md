@@ -23,8 +23,8 @@ the reason to read this file rather than grep for hex codes.
 ## Principles
 
 1. **No CSS frameworks.** Plain CSS with custom properties, 16 files under
-   `src/styles/`. Total source budget **<= 175 KB**; measured **156 KB across 16
-   files** (`wc -c src/styles/*.css`). Both numbers are read out of this line by
+   `src/styles/`. Total source budget **<= 150 KB**; measured **94 KB across 16
+   files**, comments left out (`ci-check-css-budget.py` strips them; strings stay). Both numbers are read out of this line by
    `ci-check-css-budget.py`, so the doc is the source and cannot disagree with
    the gate — see [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475)
    for where the previous figure went and why the budget is where it is.
@@ -196,6 +196,35 @@ Other layout tokens: `--radius: 4px` · `--radius-pill: 99px` ·
 `--shadow-card: 0 2px 10px rgba(0,0,0,.06)` · `--focus-ring` ·
 `--widget-spacing: 20px`.
 
+## The opening of a vertical (#529, #531, #537, #543)
+
+Every vertical that opens with a scene uses one structure, `HeroScene.astro` +
+`hero-scene.css`. A vertical brings only its art, its live layer and its script.
+Text, colours, images and animations change per page; the layout does not.
+
+| Width | The opening |
+| --- | --- |
+| > 1100 px | One dark band of `100svh`. The copy sits in the column at one reference height (the h1 at the same y on every vertical). The art lies behind the copy, under the veil, past the column. The epigraph follows the CTA. The controls sit in the band's corner. |
+| ≤ 1100 px (phones and tablets, the menu's boundary) | **The first screen is the screen.** It is one box of `100svh`: title, excerpt, CTA, then the art in its own row, which takes what is left (at least 24svh), with the controls in its corner. The epigraph follows, just below the first screen. The art fits its row: container units for CSS geometry, `contain` fits in the scripts. |
+| ≤ 767 px | As above, with the type sized by the screen's height: h1 `clamp(28px, 4.8svh, 42px)`, excerpt `clamp(15px, 2.3svh, 19px)`, epigraph 15 px. |
+
+- **What gives way on a phone is the epigraph's place, never the art** (founder, 2026-10-02, option B of
+  #543). Measured at the heights Safari leaves (360 × 700, 390 × 664, 428 × 746), the copy alone took
+  669–937 px before this rule. Option A shrank the art to a strip and still overflowed on the AI page.
+  Option C, art behind the copy, put the copy over the live layers.
+- **The seal hangs from the first screen's foot** on phones and tablets, so it sits alike on every page.
+  Anchored to a band of varying height, it looked bigger on one page than another.
+- **The first screen is a grid, not a flex column.** The art's row needs a definite height for its
+  container queries: in a flex column Chrome resolved `100cqh` to 0.
+- **Every live layer reads the copy where it is**: the epigraph is outside `.s-hero__copy` (it lives in
+  `.s-hero__after`), so a script that keeps its art off the text measures both.
+- **The pause freezes everything that moves**, timers included. An event that disappears while paused is
+  motion.
+- **The header does not hide** (#543). It stays fixed, transparent over the opening and solid on scroll.
+  The pattern of a header hidden on load and shown on scroll would save 69 px against 231–448 px of
+  overflow. None of six production sites observed uses it. It risks WCAG 2.4.7: focus would land on
+  controls that cannot be seen.
+
 ## The two escape hatches
 
 Both are comment fences, both are visible in a diff, and both are deliberately
@@ -238,6 +267,10 @@ blindness (exit 3) rather than obeying it.
 6. **No dark content bands** (#304). Black is the machine voice and the closing
    CTA; the home's `.s-tech` was the last content band in black and it is gone
    (#457).
+7. **The opening fits the first screen on every device** (#543). On phones and tablets the epigraph
+   follows the first screen. See "The opening of a vertical".
+8. **The header stays fixed** (#543). It is transparent over the opening and solid on scroll, never
+   hidden on load, and it has no hide-on-scroll.
 
 ## Where the budget came from (#475)
 
@@ -268,13 +301,14 @@ A budget that a deliberate product decision breaks is the wrong budget. 150 KB
 leaves about 21 KB of headroom: enough that ordinary work never touches it, tight
 enough that the next 30 KB stylesheet has to be argued for.
 
-**Raised to 175 KB with the vertical heroes (#537).** Each vertical that opens with a scene brings one
-stylesheet for its art, on top of the shared `hero-scene.css`: the radar 7 KB, the bridge 5 KB, the
-machine's eye of the AI vertical 6 KB, and three verticals still to come. The third one took the tree to
-156 KB, past 150; trimming its comments would have bought back 2 KB and the next vertical would have
-broken it again. 175 KB is the three remaining scenes at the size of the ones that exist, plus the
-headroom this section asked for. The same rule holds: the next stylesheet that is not a scene has to be
-argued for.
+**The budget counts CSS, not comments (#543, founder 2026-10-02).** The AI vertical's scene took the
+tree to 156 KB, past 150. Measured that day, there was nothing to cut: about 250 bytes repeated across
+the scene stylesheets, about 70 bytes of dead rules, and about 60 KB of comments — two thirds of
+`theme.css` — explaining why each rule exists. Three ways were offered: raise the budget to 175, move the
+long comments into these docs, or stop counting comments. The founder chose the last: the reasons stay
+next to the rules they explain, and the budget watches what the browser actually parses. Measured that
+way the tree is 94 KB, so 150 now leaves 56 KB of headroom where it used to leave 21; the ratchet is
+looser, by choice, and a tighter figure is one number in the line above.
 
 **What the budget is not.** It measures source, and source does not travel. The
 home actually ships **6 stylesheets, 58 KB raw and 12.9 KB gzipped**, plus 5.4 KB

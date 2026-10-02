@@ -1,7 +1,6 @@
 /* ═══ HERO — the bridge scene (#531), docs/architecture.md §4.5 ═══ */
 .s-hero--bridge {
 	--bridge-c: var(--scene-c);
-	--scene-phone-h: 76vw;
 	/* lighter veil; excerpt ≥ 8.4:1 */
 	--scene-veil: 60%;
 	--scene-veil-mid: 42%;

@@ -105,6 +105,13 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
  * seedable (project rules §7); the photographs' credits are in
  * `docs/design/hero-rotativo/README.md`.
  */
+/**
+ * Where a scene stops laying its art behind the copy and gives it its own row under the first screen's copy
+ * (#543): phones and tablets, the same boundary the menu uses. hero-scene.css states it as a media query;
+ * the scenes' scripts read it from here.
+ */
+export const SCENE_ROW = "(max-width: 1100px)";
+
 export type HeroSceneKind = "radar" | "bridge" | "vision";
 export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision" };
 

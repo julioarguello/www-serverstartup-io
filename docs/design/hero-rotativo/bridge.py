@@ -6,7 +6,7 @@ AI plate, so the drawing lands on the photograph; the lines themselves are
 straight segments and true parabolas, drawn here. The visible bridge is the
 architect's drawing (`public/assets/hero/int-puente-plan.webp`, FLUX.2 [dev]
 from the same photograph, on the same frame); this outline is what the hero
-reads at run time: the structure (towers, girder, the car with its trolley,
+reads at run time: the structure (towers, girder,
 the plinths) keeps under the title and the excerpt and off every connector's
 name. The lines (main cables, hangers, back-stays) are kept for reference and
 not measured. Straight segments only (M/L).
@@ -32,9 +32,8 @@ RC = [(1713, 398), (1580, 453), (1500, 481), (1420, 503), (1340, 522), (1296, ch
 # back-stays: doubled, from the tower tops out to the frame's edges
 LB = [((316, 404), (0, 607)), ((300, 588), (0, 716))]
 RB = [((1720, 404), (W, 590)), ((1738, 430), (W, 606)), ((1740, 584), (W, 676))]
-# what only the drawing has, measured on its alpha: the car and its trolley, the two plinths
-CAR = [(1528, 596, 1630, 690), (1380, 586, 1690, 598)]
-PLINTHS = [(260, 880, 372, 990), (1657, 905, 1771, 990)]
+# what only the drawing has, measured on its alpha: the two plinths
+PLINTHS = [(268, 880, 373, 919), (1656, 895, 1778, 919)]
 
 
 def lerp(a, b, t): return a + (b - a) * t
@@ -112,12 +111,12 @@ def main(out):
     back = " ".join(f'M{p[0]},{p[1]} L{q[0]},{q[1]}' for p, q in LB + RB)
     heavy = 'stroke-width="3.2"'
     light = 'stroke-width="1.7"'
-    car = " ".join(f'M{l},{t} L{r},{t} L{r},{b} L{l},{b} L{l},{t} L{r},{b} M{r},{t} L{l},{b}' for l, t, r, b in CAR + PLINTHS)
+    plinths = " ".join(f'M{l},{t} L{r},{t} L{r},{b} L{l},{b} L{l},{t} L{r},{b} M{r},{t} L{l},{b}' for l, t, r, b in PLINTHS)
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="none" stroke="currentColor" '
            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
            f'<g class="b-towers"><path {heavy} d="{tower(LT)}"/><path {heavy} d="{tower(RT)}"/></g>'
            f'<g class="b-girder"><path {heavy} d="{girder()}"/></g>'
-           f'<g class="b-car"><path {heavy} d="{car}"/></g>'
+           f'<g class="b-plinths"><path {heavy} d="{plinths}"/></g>'
            f'<g class="b-cables"><path {heavy} d="{lc}"/><path {heavy} d="{rc}"/></g>'
            f'<g class="b-hangers"><path {light} d="{lh} {rh}"/></g>'
            f'<g class="b-stays"><path {light} d="{back}"/></g>'

@@ -49,7 +49,7 @@ const list = (k: string) => L(k, "").split(",").map((p) => p.trim()).filter(Bool
 /* the outline's structure, as path data: the script keeps it under the title and the excerpt and off
    every connector's name (the fine lines — cables, hangers, stays — are not measured) */
 const groups = Object.fromEntries([...outline.matchAll(/<g class="b-([a-z]+)">([\s\S]*?)<\/g>/g)].map((m) => [m[1], [...m[2].matchAll(/ d="([^"]+)"/g)].map((d) => d[1]).join(" ")]));
-const hard = ["towers", "girder", "car"].map((k) => groups[k] ?? "").join(" ");
+const hard = ["towers", "girder", "plinths"].map((k) => groups[k] ?? "").join(" ");
 
 /* the messages wear the six verticals' colours, from the CMS, in the cube's order */
 const { entries: serviceEntries } = await getEmDashCollection("services", { orderBy: { created_at: "asc" }, locale: Astro.currentLocale || "es" });
@@ -66,7 +66,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 <HeroScene scene="bridge" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ up: list("bridge_plugs_up"), down: list("bridge_plugs_down"), colors, hard }}>
 	<div slot="under" class="bridge__box bridge__art">
 		<img class="bridge__banks" src={HERO_BRIDGE.banks} srcset={`${HERO_BRIDGE.banksSmall} 960w, ${HERO_BRIDGE.banks} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="730" alt="" fetchpriority="high" decoding="async" />
-		<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="406" alt="" decoding="async" />
+		<img class="bridge__plan" src={HERO_BRIDGE.plan} srcset={`${HERO_BRIDGE.planSmall} 960w, ${HERO_BRIDGE.plan} 1320w`} sizes={HERO_BRIDGE_SIZES} width="1320" height="351" alt="" decoding="async" />
 	</div>
 	<div slot="over" class="bridge__bus" data-volatile></div>
 </HeroScene>
@@ -95,14 +95,14 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		const RISE = 0.08;                       /* how far the banks may lift off the band's floor */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
 		/* what a protocol needs between the excerpt's padded last line and the girder: 10 of margin, the
-		   name's plate (12.5 + 4, and 1 around it), 18 to the circle, the shortest stem (30) */
-		const UP_ROOM = 10 + 18.5 + 18 + 30 + 2;
+		   name (12.5, and 3 around it), 18 to the circle, the shortest stem (30), 2 to spare */
+		const UP_ROOM = 10 + 15.5 + 18 + 30 + 2;
 		const GX0 = 336, GX1 = 1692;
 		const SPAN0 = GX0 + 70, SPAN1 = GX1 - 70;
 		const chordTop = (x: number) => 545 - (x - 420) * 0.017;
 		const chordBot = (x: number) => 590 - (x - 420) * 0.016;
 
-		/* the outline's structure (towers, girder, car, plinths), sampled once into points every 6 units of
+		/* the outline's structure (towers, girder, plinths), sampled once into points every 6 units of
 		   its own frame: it keeps under the title and the excerpt, and no connector's name touches it */
 		const sample = (d = "") => {
 			const out: [number, number][] = [];
@@ -245,9 +245,8 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 					if (fx < room.l + 30 || fx > room.r - 30) continue;
 					const w = ruler.measureText(names[i]).width + 0.02 * size * names[i].length;
 					for (const h of i % 2 ? [92, 40, 118, 66, 30] : [40, 92, 66, 118, 30]) {
-						/* the name's plate: the text plus 2 px above and below and 5 at each side */
-						const plateTop = up ? fy - h - 18 - (size + 4) : fy + h + 18;
-						const label: Box = { l: fx - w / 2 - 6, r: fx + w / 2 + 6, t: plateTop - 1, b: plateTop + size + 5 };
+						const nameTop = up ? fy - h - 18 - size : fy + h + 18;
+						const label: Box = { l: fx - w / 2 - 4, r: fx + w / 2 + 4, t: nameTop - 3, b: nameTop + size + 3 };
 						const stem: Box = { l: fx - 6, r: fx + 6, t: up ? fy - h - 12 : fy + 6, b: up ? fy - 6 : fy + h + 12 };
 						/* a name keeps off the copy and off the structure; the fine lines are under the veil and
 						   may run behind it */

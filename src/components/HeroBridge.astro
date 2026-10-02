@@ -307,7 +307,8 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			const dx = b[0] - a[0], dy = b[1] - a[1];
 			return Math.abs(dx) > Math.abs(dy) ? `translate(${Math.sign(dx) * 1.5}px, 0)` : `translate(0, ${Math.sign(dy) * 1.5}px)`;
 		};
-		/* and one Pac-Man patrols the girder end to end, chomping, facing the way it goes */
+		/* and one Pac-Man patrols the girder end to end, chomping, facing the way it goes: our own cube, in
+		   yellow, with an eye on its top face (founder, 2026-10-02: "el Pac-Man con nuestro logo") */
 		let pac: HTMLElement | null = null;
 		function startPacman() {
 			pac?.remove();
@@ -317,6 +318,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			const el = document.createElement("i");
 			el.className = "bridge__pac";
 			const body = document.createElement("b");
+			body.innerHTML = `<svg viewBox="0 0 200 228"><polygon points="100,14 186,64 100,114 14,64"/><polygon points="14,64 100,114 100,214 14,164"/><polygon points="100,114 186,64 186,164 100,214"/><circle cx="122" cy="58" r="14"/></svg>`;
 			el.appendChild(body);
 			bus.appendChild(el);
 			pac = el;

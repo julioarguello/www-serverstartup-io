@@ -297,6 +297,56 @@ Decisions that are not obvious from the code, and the measurement behind each:
   - *a11y*: the hero-band pixel pass counts `.s-hero__plate` and finds none here; it treats a
     `.s-hero--radar` as one plate frozen in its end state (tightest 15.2:1 on the h1).
 
+### 4.5 The shared scene and the bridge hero of the integration vertical (#531)
+
+Since #531 every vertical opening is one structure. `HeroScene.astro` and `hero-scene.css` carry
+the band, the haze, the veil, the seal cube, the epigraph, the controls and the copy, anchored to
+a 320 px reference block so the cube and the h1 sit in the same place on every page. A vertical
+brings its art through two slots (`under` the veil, `over` it), its own script, and an entry in
+`HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
+per-scene token (`--scene-veil`, 78 % by default).
+
+The integration page opens on the Vizcaya Bridge between Portugalete and Las Arenas. First the two
+banks, from a photograph with the bridge and the sky taken out. Then the bridge, whole, as a
+drawing. Then what plugs into it, because the bridge is the bus:
+
+- Protocols stand above the girder (`panel_labels` → `bridge_plugs_up`). Platforms and Google Cloud
+  services stand below (`bridge_plugs_down`). Each one has evidence in the company's own code.
+- Messages travel along the girder in the six verticals' colours, read from the CMS in cube order.
+- The epigraph is Hohpe & Woolf: «Interesting applications rarely live in isolation.»
+
+How it is built (`HeroBridge.astro`, `hero-bridge.css`):
+
+- **The drawing** (`int-puente-trazo*.webp`, `docs/design/hero-rotativo/bridge_plan.py`) is FLUX.2
+  redrawing an edge sketch of the original photograph's bridge, so it lands on the real one. It
+  sits in front of the veil in a red beside the section's, ramped from 35 % at Portugalete to
+  full at Las Arenas, and is cut to the band its ink occupies, so it is never the LCP.
+- **The outline** (`bridge.py` → `src/assets/hero/int-puente.svg`) is never drawn. Its structure
+  ships as path data, and the script keeps it under the title and the excerpt and off every
+  connector's name.
+- **Placement** runs in the stage's own pixels, measured in the same task as what it is compared
+  with; a reload restores the scroll between tasks. The frame is sized by the band, starts after
+  the seal, and rises from the band's floor as far as one protocol still fits under the excerpt.
+- **Resizing** refits the frame on every animation frame. The connectors hide and are placed again
+  when the window stops.
+- **Connectors** stand only between the towers' inner legs, on five staggered stem heights. Their
+  names are a light grey, never louder than the copy. Messages move at 110 px/s.
+
+### 4.6 The hero photographs (#531)
+
+Both hero photographs are restored, not graded (`docs/design/hero-rotativo/photo_restore.py`):
+
+- **Detail:** SeedVR2 3B, a faithful restorer, run locally at 2× with its colour lock on.
+- **Colour:** the cast measured on the scene's own whites is removed, and nothing else. The
+  bridge's whites were yellowed (b = +8.6 in Lab).
+- **Invented text:** where the restorer invents text (the tanker's name), the original's pixels
+  stay.
+- **Serving:** each `srcset` gains a large candidate for double-density screens, and every
+  replaced file gets a new name so no browser keeps the old one.
+
+The founder rejected a grey grade, classic grades, AI relighting and the 7B model along the way;
+the reasons are in #531 and in the hero rule.
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

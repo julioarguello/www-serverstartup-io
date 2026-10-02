@@ -68,21 +68,17 @@
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 
-/* the sequence: the photograph 1.2 s, the machine's eye over 1 s, then the reading piece by piece; MATCH's
-   square blinks until the pause */
+/* the sequence, as in the film: the photograph held 2.4 s, then one cut — the machine's colour and its whole
+   reading at once; after it the text moves (the script) and MATCH's square blinks, until the pause */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--vision:not(.is-placed) .vision__box { visibility: hidden; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__photo { filter: none; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__tint,
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__scan { opacity: 0; }
 	.s-hero--vision:not(.is-done) .vision__piece { opacity: 0; }
-	.s-hero--vision.is-playing .vision__photo { transition: filter 1s ease 1.2s; }
-	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { transition: opacity 1s ease 1.2s; }
-	.s-hero--vision.is-playing .vision__piece { animation: vision-in .3s steps(3, end) forwards; animation-delay: var(--in, 2.4s); }
-	.s-hero--vision.is-playing .vision__brackets { --in: 2.7s; }
-	.s-hero--vision.is-playing .vision__match { --in: 3s; }
-	.s-hero--vision.is-playing .vision__readout { --in: 3.2s; }
-	.s-hero--vision.is-playing .vision__code { --in: 3.6s; }
+	.s-hero--vision.is-playing .vision__photo { transition: filter .24s steps(2, end) 2.4s; }
+	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { transition: opacity .24s steps(2, end) 2.4s; }
+	.s-hero--vision.is-playing .vision__piece { animation: vision-in .24s steps(2, end) 2.4s forwards; }
 	.s-hero--vision.is-done .vision__match i { animation: vision-blink 1s steps(1, end) infinite; }
 	.s-hero--vision.is-paused :is(.vision__piece, .vision__match i) { animation-play-state: paused; }
 }

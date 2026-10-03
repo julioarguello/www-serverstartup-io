@@ -200,7 +200,7 @@ Other layout tokens: `--radius: 4px` · `--radius-pill: 99px` ·
 
 Every vertical that opens with a scene uses one structure, `HeroScene.astro` +
 `hero-scene.css`. A vertical brings only its art, its live layer and its script.
-Text, colours, images and animations change per page; the layout does not.
+Text, colours, images and animations change per page; the layout and the band do not.
 
 | Width | The opening |
 | --- | --- |
@@ -212,6 +212,9 @@ Text, colours, images and animations change per page; the layout does not.
   #543). Measured at the heights Safari leaves (360 × 700, 390 × 664, 428 × 746), the copy alone took
   669–937 px before this rule. Option A shrank the art to a strip and still overflowed on the AI page.
   Option C, art behind the copy, put the copy over the live layers.
+- **The band is one ground for every vertical, haze included** (founder, 2026-10-03, non-negotiable:
+  "todos los verticales mismo fondo y layout"). No scene sets `--color-ground-haze`; a vertical's colour
+  lives in its art (the AI scene's violet-to-red tint, the bridge drawing), never in the ground.
 - **The seal hangs from the first screen's foot** on phones and tablets, so it sits alike on every page.
   Anchored to a band of varying height, it looked bigger on one page than another.
 - **The first screen is a grid, not a flex column.** The art's row needs a definite height for its

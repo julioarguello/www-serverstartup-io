@@ -16,10 +16,12 @@
 	aspect-ratio: 1.55;
 	isolation: isolate;
 	pointer-events: none;
-	/* it starts where the seal ends (--vclip, 60 px fade) and fades in from its own top edge (a mask reads only alpha) */
-	-webkit-mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px)), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%);
+	/* it starts where the seal ends (--vclip, 60 px fade), fades in from its own top edge and, where it ends
+	   before the band does, fades out into it (--vfade): never a cut between photograph and ground, the
+	   lighthouse's lesson (founder, 2026-10-03). A mask reads only alpha */
+	-webkit-mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px), var(--color-ground-dark) calc(100% - var(--vfade, 0px)), transparent 100%), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%);
 	-webkit-mask-composite: source-in;
-	mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px)), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%);
+	mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px), var(--color-ground-dark) calc(100% - var(--vfade, 0px)), transparent 100%), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%);
 	mask-composite: intersect;
 }
 .s-hero--vision:not(.is-placed) .vision__box { top: auto; bottom: 0; }
@@ -68,28 +70,22 @@
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 
-/* the sequence in three beats (founder, 2026-10-02: "imagen original · foco + color · letras"): the photograph
-   held 2.4 s; the machine focuses — a light blur that clears while the frame tightens and settles — as its
-   colour comes in; then its whole reading in one cut. After it the text moves (the script) and MATCH's
-   square blinks, until the pause */
+/* the sequence in three beats, as in the film (founder, 2026-10-03): the photograph held 2.4 s; a cut to the
+   machine's colour, no optical effect (the focus pull tried on 2026-10-02 was rejected); then its whole
+   reading in one cut at 3.3 s. After it the text moves (the script) and MATCH's square blinks, until the pause */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--vision:not(.is-placed) .vision__box { visibility: hidden; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__photo { filter: none; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__tint,
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__scan { opacity: 0; }
 	.s-hero--vision:not(.is-done) .vision__piece { opacity: 0; }
-	.s-hero--vision.is-playing .vision__photo { animation: vision-focus .8s ease-out 2.4s both; }
-	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { transition: opacity .4s ease 2.6s; }
+	.s-hero--vision.is-playing .vision__photo { transition: filter 0s 2.4s; }
+	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { transition: opacity 0s 2.4s; }
 	.s-hero--vision.is-playing .vision__piece { animation: vision-in .24s steps(2, end) 3.3s forwards; }
 	.s-hero--vision.is-done .vision__match i { animation: vision-blink 1s steps(1, end) infinite; }
 	.s-hero--vision.is-paused :is(.vision__piece, .vision__match i) { animation-play-state: paused; }
 }
 @keyframes vision-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes vision-focus {
-	from { filter: none; scale: 1; }
-	40% { filter: grayscale(1) contrast(1.08) brightness(.9) blur(5px); scale: 1.03; }
-	to { filter: grayscale(1) contrast(1.08) brightness(.9) blur(0); scale: 1; }
-}
 @keyframes vision-blink { 50% { opacity: 0; } }
 
 /* phones: the scene is its own row; the whole reading, a size smaller */

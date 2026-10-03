@@ -178,6 +178,8 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			hero.style.setProperty("--vx", `${g.L}px`);
 			hero.style.setProperty("--vy", `${g.T}px`);
 			hero.style.setProperty("--vw", `${g.W}px`);
+			/* a frame that ends before the band does fades into it */
+			hero.style.setProperty("--vfade", s.width - (g.L + g.W) > 1 ? `${Math.round(0.14 * g.W)}px` : "0px");
 			hero.classList.add("is-placed");
 			const stop = blocked(s);
 			const at = (fx: number, fy: number): [number, number] => [g.L + fx * g.W, g.T + fy * g.H];
@@ -228,9 +230,10 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			put(code, cx0, Math.min(ky, s.height - 12 - code.offsetHeight), null, null, s, stop);
 		}
 
-		/* the sequence in three beats (founder, 2026-10-02): the photograph held 2.4 s, the machine's focus and
-		   colour (CSS), then its whole reading in one cut at 3.3 s — then the text keeps moving: the listing rolls on a line at a time,
-		   its numbers climbing, and the readout's "write" turns to "signed" each time sign() comes through */
+		/* the sequence in three beats (founder, 2026-10-02): the photograph held 2.4 s, a cut to the machine's
+		   colour (CSS), then its whole reading in one cut at 3.3 s — then the text keeps moving: the listing
+		   rolls on a line at a time, its numbers climbing, and the readout's "write" turns to "signed" each
+		   time sign() comes through */
 		let timer: number | null = null, walk: number | null = null, seq = SHOWN, num = 14;
 		function render(first: number, start: number) {
 			code.style.counterReset = `line ${start - 1}`;

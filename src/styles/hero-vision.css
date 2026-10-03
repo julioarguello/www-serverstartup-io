@@ -17,11 +17,11 @@
 	isolation: isolate;
 	pointer-events: none;
 	/* it starts where the seal ends (--vclip, 60 px fade), fades in from its own top edge and, where it ends
-	   before the band does, fades out into it (--vfade): never a cut between photograph and ground, the
-	   lighthouse's lesson (founder, 2026-10-03). A mask reads only alpha */
-	-webkit-mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px), var(--color-ground-dark) calc(100% - var(--vfade, 0px)), transparent 100%), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%);
+	   before the band does, fades out into it (--vfade; --vfade-b when the scene is its own row): never a
+	   cut between photograph and ground, the lighthouse's lesson (founder, 2026-10-03). A mask reads only alpha */
+	-webkit-mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px), var(--color-ground-dark) calc(100% - var(--vfade, 0px)), transparent 100%), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%, var(--color-ground-dark) calc(100% - var(--vfade-b, 0px)), transparent 100%);
 	-webkit-mask-composite: source-in;
-	mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px), var(--color-ground-dark) calc(100% - var(--vfade, 0px)), transparent 100%), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%);
+	mask-image: linear-gradient(90deg, transparent var(--vclip, 0px), var(--color-ground-dark) calc(var(--vclip, 0px) + 60px), var(--color-ground-dark) calc(100% - var(--vfade, 0px)), transparent 100%), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 18%, var(--color-ground-dark) calc(100% - var(--vfade-b, 0px)), transparent 100%);
 	mask-composite: intersect;
 }
 .s-hero--vision:not(.is-placed) .vision__box { top: auto; bottom: 0; }

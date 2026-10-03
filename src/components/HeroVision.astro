@@ -180,6 +180,8 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			hero.style.setProperty("--vw", `${g.W}px`);
 			/* a frame that ends before the band does fades into it */
 			hero.style.setProperty("--vfade", s.width - (g.L + g.W) > 1 ? `${Math.round(0.14 * g.W)}px` : "0px");
+			/* where the scene is its own row, the copy's band carries on below it: its foot fades too */
+			hero.style.setProperty("--vfade-b", narrow ? `${Math.round(0.14 * g.H)}px` : "0px");
 			hero.classList.add("is-placed");
 			const stop = blocked(s);
 			const at = (fx: number, fy: number): [number, number] => [g.L + fx * g.W, g.T + fy * g.H];

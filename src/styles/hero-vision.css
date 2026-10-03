@@ -27,11 +27,12 @@
 .s-hero--vision:not(.is-placed) .vision__box { top: auto; bottom: 0; }
 .vision__photo { display: block; width: 100%; height: 100%; }
 
-/* the machine's eye: the one photograph in grey, colour laid over it (luminance stays the photograph's)
+/* the machine's eye: a layer over the photograph — the same file in grey, colour laid over it (luminance stays the photograph's)
    that starts in the section's violet under the copy and is the Terminator's red, whole, from the ship's
    stern on — reticle, tug, reading (founder, 2026-10-03) — and monitor lines. The band is every
    vertical's band: no haze of its own (founder: "todos los verticales mismo fondo") */
-.vision__photo { filter: grayscale(1) contrast(1.08) brightness(.9); }
+.vision__eye .vision__photo { filter: grayscale(1) contrast(1.08) brightness(.9); }
+.vision__eye,
 .vision__tint,
 .vision__scan { position: absolute; inset: 0; }
 /* at full strength the violet saturates the highlights; the approved prototype (round 2) is lighter, greyer */
@@ -70,22 +71,27 @@
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 
-/* the sequence in three beats, as in the film (founder, 2026-10-03): the photograph held 2.4 s; a cut to the
-   machine's colour, no optical effect (the focus pull tried on 2026-10-02 was rejected); then its whole
-   reading in one cut at 3.3 s. After it the text moves (the script) and MATCH's square blinks, until the pause */
+/* the sequence in three beats (founder, 2026-10-03): the photograph held 2.4 s; the machine's view drawn in
+   over it through blinds — 12 px slats opening in six steps, 0.5 s, a screen coming on line by line, the
+   same lines as its monitor (the films document no transition; a plain cut read as a jump, a focus pull
+   was rejected); then its whole reading in one cut at 3.3 s. After it the text moves (the script) and
+   MATCH's square blinks, until the pause */
+@property --vision-slat { syntax: "<length>"; inherits: false; initial-value: 12px; }
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--vision:not(.is-placed) .vision__box { visibility: hidden; }
-	.s-hero--vision:not(.is-playing):not(.is-done) .vision__photo { filter: none; }
-	.s-hero--vision:not(.is-playing):not(.is-done) .vision__tint,
-	.s-hero--vision:not(.is-playing):not(.is-done) .vision__scan { opacity: 0; }
+	.s-hero--vision:not(.is-playing):not(.is-done) .vision__eye { visibility: hidden; }
 	.s-hero--vision:not(.is-done) .vision__piece { opacity: 0; }
-	.s-hero--vision.is-playing .vision__photo { transition: filter 0s 2.4s; }
-	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { transition: opacity 0s 2.4s; }
+	.s-hero--vision.is-playing .vision__eye {
+		-webkit-mask-image: repeating-linear-gradient(180deg, var(--color-ground-dark) 0 var(--vision-slat), transparent var(--vision-slat) 12px);
+		mask-image: repeating-linear-gradient(180deg, var(--color-ground-dark) 0 var(--vision-slat), transparent var(--vision-slat) 12px);
+		animation: vision-blinds .5s steps(6, end) 2.4s both;
+	}
 	.s-hero--vision.is-playing .vision__piece { animation: vision-in .24s steps(2, end) 3.3s forwards; }
 	.s-hero--vision.is-done .vision__match i { animation: vision-blink 1s steps(1, end) infinite; }
 	.s-hero--vision.is-paused :is(.vision__piece, .vision__match i) { animation-play-state: paused; }
 }
 @keyframes vision-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vision-blinds { from { --vision-slat: 0px; } to { --vision-slat: 12px; } }
 @keyframes vision-blink { 50% { opacity: 0; } }
 
 /* phones: the scene is its own row; the whole reading, a size smaller */

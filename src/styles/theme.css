@@ -23,6 +23,27 @@
 	font-display: swap;
 }
 
+/* The AI scene's machine reading, in the faces of the film it quotes (#537; fontsinuse.com, The
+   Terminator, 1984): its captions were Bessellen, a 1973 square face with no free cut (the one
+   recreation, Modern Vision, is non-commercial), so Saira at 112.5 % width stands in; its listings were
+   Apple II code printed in Letter Gothic, for which Inconsolata, drawn after it, stands in. Both OFL,
+   subset by the Google Fonts API to what the reading prints: 6 KB and 19 KB, loaded only by that page. */
+@font-face {
+	font-family: "Saira HUD";
+	src: url("/fonts/saira-hud.woff2") format("woff2");
+	font-weight: 500;
+	font-stretch: 112.5%;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Inconsolata Listing";
+	src: url("/fonts/inconsolata-listing.woff2") format("woff2");
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
+}
+
 /* The three symbols the brand's own devices print, cut from the real faces.
    Google's `latin` subset — which is what the fonts API downloads — carries
    neither U+2260 nor the two arrows, so with #450 shipping Alexandria and
@@ -97,6 +118,8 @@
 	   (#450). */
 	--font-family: "Alexandria Symbols", var(--font-sans, "Alexandria", sans-serif);
 	--font-family-mono: "JetBrains Mono Symbols", var(--font-mono, "JetBrains Mono", monospace);
+	--font-family-hud: "Saira HUD", var(--font-family-mono);
+	--font-family-listing: "Inconsolata Listing", var(--font-family-mono);
 
 	/* Layout */
 	/* THE column, and the only width on a page. Everything ends at its right

@@ -378,7 +378,7 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   tug and the whole reading are red, as the founder marked on a capture. In
   OKLCH so the passage goes through magenta rather than mud. A full palette change (AI red, integration
   in the bridge's RAL 3005 wine) was mocked on the real pages and set aside. It is CSS on the one
-  photograph — four tones (`#vision-tones`) + the gradient laid over in `mix-blend-mode: color` + monitor lines — so
+  photograph — the film's hard tones (`#vision-tones`) + the gradient laid over in `mix-blend-mode: color` — so
   there is no second raster to download or to become the LCP. At full strength the violet saturated
   the highlights; the approved prototype was lighter and greyer.
 - **The tanker's stern carries our lettering** in both hero photographs — SERVER STARTUP, AVILÉS,
@@ -396,9 +396,15 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   image would swell or shrink slightly … a combination of black, red and white tonal areas for the
   background, over which we burned in — on a separate exposure — the animated computer readout
   graphics." So the view is a layer (`.vision__eye`, the same file: no second download) under two SVG
-  filters: `#vision-hicon` (two tones) for one pass, slightly swollen, then `#vision-tones` (four tones:
-  black, two middles, a white held at 86 % so the paper readout still reads) with the violet-to-red
-  gradient laid over as colour; three steps in 0.36 s. A focus pull, a plain cut and blinds were tried
+  filters: `#vision-hicon` (two tones) for one pass, slightly swollen, then `#vision-tones`, a steep curve
+  (deep black, near-white highlights) with the violet-to-red gradient laid over as colour; three steps in
+  0.36 s. No monitor lines: a still of the film (Hackaday, 2024) shows none. The reading follows the film
+  too: white, burned in with a slight glow, no plate, typing itself character by character from 3.3 s
+  (the characters keep their room, so nothing moves); in the film's faces as far as a free licence allows
+  (fontsinuse.com): Bessellen for the captions, whose one free recreation is non-commercial, so Saira at
+  112.5 % width; Letter Gothic for the listings (Apple II code printed on a daisy wheel), so Inconsolata,
+  drawn after it — both OFL, self-hosted, subset to 6 and 19 KB. Four flat tones were tried and lost the
+  picture. A focus pull, a plain cut and blinds were tried
   and rejected on the way;
   then its whole reading in one cut at 3.3 s (an earlier round joined colour and text in one cut;
   piece-by-piece entry was rejected before that). From then on the

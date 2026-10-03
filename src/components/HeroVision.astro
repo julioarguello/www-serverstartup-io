@@ -54,7 +54,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 	<div slot="under" class="vision__box">
 		<img class="vision__photo" src={HERO_VISION.photo} srcset={`${HERO_VISION.photoSmall} 720w, ${HERO_VISION.photo} 1320w, ${HERO_VISION.photoLarge} 2016w`} sizes={HERO_VISION_SIZES} width="1320" height="852" alt="" fetchpriority="high" decoding="async" />
 		{/* the machine's view, made as the film's "Termovision" was (Cinefex 21, 1985): the same file (one download)
-		    taken to high-contrast black and white, then separated into black, coloured and white tones */}
+		    taken to high-contrast black and white, then to its hard red, black and white */}
 		<svg class="vision__filters" width="0" height="0" aria-hidden="true" focusable="false">
 			<filter id="vision-hicon" color-interpolation-filters="sRGB">
 				<feColorMatrix type="saturate" values="0" />
@@ -62,7 +62,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			</filter>
 			<filter id="vision-tones" color-interpolation-filters="sRGB">
 				<feColorMatrix type="saturate" values="0" />
-				<feComponentTransfer><feFuncR type="discrete" tableValues="0 .32 .55 .86" /><feFuncG type="discrete" tableValues="0 .32 .55 .86" /><feFuncB type="discrete" tableValues="0 .32 .55 .86" /></feComponentTransfer>
+				<feComponentTransfer><feFuncR type="table" tableValues="0 0 .14 .52 .86 .94" /><feFuncG type="table" tableValues="0 0 .14 .52 .86 .94" /><feFuncB type="table" tableValues="0 0 .14 .52 .86 .94" /></feComponentTransfer>
 			</filter>
 		</svg>
 		<span class="vision__eye">
@@ -271,8 +271,39 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			num += 1;
 			render(seq - SHOWN + 1, num);
 			const last = seq % CODE.length;
-			if (writeEl) writeEl.textContent = last === CODE.length - 1 ? SIGNED : onReview;
+			if (writeEl && typing === null && typeAt === null) writeEl.textContent = last === CODE.length - 1 ? SIGNED : onReview;
 			seq += 1;
+		}
+		/* the readout types itself, as the film's did: each character a span, revealed one by one once the
+		   reading arrives (they keep their room, so the placement does not move); pause shows them all */
+		const chars: HTMLElement[] = [];
+		let typing: number | null = null, typeAt: number | null = null, typed = 0;
+		function wrapReadout() {
+			chars.length = 0;
+			readout.querySelectorAll<HTMLElement>(".vision__line > *").forEach((el) => {
+				const t = el.textContent ?? "";
+				el.textContent = "";
+				for (const c of t) {
+					const s = document.createElement("span");
+					s.className = "vision__ch";
+					s.textContent = c;
+					el.append(s);
+					chars.push(s);
+				}
+			});
+		}
+		function stopTyping() {
+			if (typeAt !== null) { clearTimeout(typeAt); typeAt = null; }
+			if (typing !== null) { clearInterval(typing); typing = null; }
+			chars.forEach((c) => c.classList.add("is-on"));
+		}
+		function startTyping() {
+			typeAt = null;
+			typed = 0;
+			typing = window.setInterval(() => {
+				if (typed >= chars.length) { stopTyping(); return; }
+				chars[typed++].classList.add("is-on");
+			}, 16);
 		}
 		function reset() {
 			seq = SHOWN; num = 14;
@@ -290,8 +321,10 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			startWalk();
 		}
 		function play() {
+			wrapReadout();
 			hero!.classList.add("is-playing");
-			timer = window.setTimeout(finish, 3700);
+			timer = window.setTimeout(finish, 5000);
+			typeAt = window.setTimeout(startTyping, 3300);
 		}
 
 		let settling: number | null = null;
@@ -310,13 +343,14 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		/* pausing during the opening ends it at once: what stops is the motion, not the picture */
 		pause.addEventListener("change", () => {
 			hero.classList.toggle("is-paused", pause.checked);
-			if (pause.checked) { if (hero.classList.contains("is-playing")) finish(); stopWalk(); }
+			if (pause.checked) { if (hero.classList.contains("is-playing")) finish(); stopWalk(); stopTyping(); }
 			else startWalk();
 		});
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopWalk(); else startWalk(); });
 		replay.addEventListener("click", () => {
 			if (reduced) return;
 			stopWalk();
+			stopTyping();
 			if (timer !== null) clearTimeout(timer);
 			reset();
 			pause.checked = false;

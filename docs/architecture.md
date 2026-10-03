@@ -376,10 +376,15 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   YULO 11062024, a homage of the founder's to his father (`stern_label.py`: the original letters
   inpainted out, the new ones rendered at their cap height, centre, condensed width and light). Every
   file carrying it has a new name (`ia-remolcador-aviles*`, `int-puente-aviles*`).
+- **No seam between the frame and the band** (founder, 2026-10-03, the lighthouse's lesson): wherever
+  the frame ends before the band does, its edge fades into it — the right edge on wide screens (2560,
+  3440: `--vfade`, 14 % of the frame's width), the foot where the scene is its own row (`--vfade-b`, 14 %
+  of its height); the left edge already fades from the seal and the top from its own 18 %.
 - **The sequence is three beats** (founder, 2026-10-02: "imagen original · foco + color · letras"): the
-  photograph held 2.4 s; the machine focuses — a 5 px blur that clears while the frame tightens 3 % and
-  settles, 0.8 s — as its colour comes in; then its whole reading in one cut at 3.3 s (an earlier round
-  joined colour and text in one cut; piece-by-piece entry was rejected before that). From then on the
+  photograph held 2.4 s; a cut to the machine's colour, as the film enters its red view, with no optical
+  effect (a focus pull — blur clearing while the frame tightened — was tried and rejected on 2026-10-03);
+  then its whole reading in one cut at 3.3 s (an earlier round joined colour and text in one cut;
+  piece-by-piece entry was rejected before that). From then on the
   text moves, as the film's code listings
   scroll "all the while" (Hackaday, 2024: 6502 listings from *Nibble*, 1984). The listing rolls a line
   every 1.2 s, its numbers climbing, and the readout's `write` turns from "on review" to "signed"

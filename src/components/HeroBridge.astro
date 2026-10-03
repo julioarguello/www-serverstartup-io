@@ -100,6 +100,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		const DECK_V = 0.39;                     /* the girder's top chord at its highest, by Las Arenas */
 		const RISE = 0.08;                       /* how far the banks may lift off the band's floor */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
+		const BLEED = 0.04;                      /* how far past the band's edge the frame runs: half the banks' fade */
 		/* what a protocol needs between the excerpt's padded last line and the girder: 10 of margin, the
 		   name (12.5, and 3 around it), 18 to the circle, the shortest stem (30), 2 to spare */
 		const UP_ROOM = 10 + 15.5 + 18 + 30 + 2;
@@ -206,7 +207,12 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			const lead = textBoxes(s).filter((q) => !q.quote && !q.button);
 			const excerptBottom = Math.max(0, ...lead.map((q) => q.b));
 			const floor = s.height - CROP_V * H;
-			const g = { L: colR + 10 - RIGHT_IN * W, T: Math.max(excerptBottom + UP_ROOM - DECK_V * H, floor - RISE * H), W, H };
+			/* the Las Arenas tower just past the column — unless that leaves band to its right: then the scene
+			   moves right until the banks' own fade straddles the band's edge, so the art bleeds off it like
+			   every other vertical's (founder, 2026-10-03) */
+			const L0 = colR + 10 - RIGHT_IN * W;
+			const L = L0 + Math.max(0, s.width + BLEED * W - (L0 + W));
+			const g = { L, T: Math.max(excerptBottom + UP_ROOM - DECK_V * H, floor - RISE * H), W, H };
 			g.T += Math.ceil(leastDrop([[lead, placed(g, hardPts)]]));
 			setGeo(g);
 			hero.style.setProperty("--bclip", `${Math.max(0, sealR - g.L)}px`);

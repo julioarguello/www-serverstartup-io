@@ -381,8 +381,11 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   3440: `--vfade`, 14 % of the frame's width), the foot where the scene is its own row (`--vfade-b`, 14 %
   of its height); the left edge already fades from the seal and the top from its own 18 %.
 - **The sequence is three beats** (founder, 2026-10-02: "imagen original · foco + color · letras"): the
-  photograph held 2.4 s; a cut to the machine's colour, as the film enters its red view, with no optical
-  effect (a focus pull — blur clearing while the frame tightened — was tried and rejected on 2026-10-03);
+  photograph held 2.4 s; the machine's view drawn in over it through blinds — 12 px slats opening in six
+  steps over 0.5 s, a screen coming on line by line (founder's idea, 2026-10-03). The films document no
+  transition into the red view; a plain cut read as a jump and a focus pull (blur clearing while the
+  frame tightened) was rejected. The view is a layer (`.vision__eye`) holding the same file, so it costs
+  no second download;
   then its whole reading in one cut at 3.3 s (an earlier round joined colour and text in one cut;
   piece-by-piece entry was rejected before that). From then on the
   text moves, as the film's code listings

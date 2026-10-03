@@ -53,7 +53,18 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 <HeroScene scene="vision" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
 	<div slot="under" class="vision__box">
 		<img class="vision__photo" src={HERO_VISION.photo} srcset={`${HERO_VISION.photoSmall} 720w, ${HERO_VISION.photo} 1320w, ${HERO_VISION.photoLarge} 2016w`} sizes={HERO_VISION_SIZES} width="1320" height="852" alt="" fetchpriority="high" decoding="async" />
-		{/* the machine's view: the same file (one download), in its colour, over the photograph */}
+		{/* the machine's view, made as the film's "Termovision" was (Cinefex 21, 1985): the same file (one download)
+		    taken to high-contrast black and white, then separated into black, coloured and white tones */}
+		<svg class="vision__filters" width="0" height="0" aria-hidden="true" focusable="false">
+			<filter id="vision-hicon" color-interpolation-filters="sRGB">
+				<feColorMatrix type="saturate" values="0" />
+				<feComponentTransfer><feFuncR type="discrete" tableValues="0 1" /><feFuncG type="discrete" tableValues="0 1" /><feFuncB type="discrete" tableValues="0 1" /></feComponentTransfer>
+			</filter>
+			<filter id="vision-tones" color-interpolation-filters="sRGB">
+				<feColorMatrix type="saturate" values="0" />
+				<feComponentTransfer><feFuncR type="discrete" tableValues="0 .32 .55 .86" /><feFuncG type="discrete" tableValues="0 .32 .55 .86" /><feFuncB type="discrete" tableValues="0 .32 .55 .86" /></feComponentTransfer>
+			</filter>
+		</svg>
 		<span class="vision__eye">
 			<img class="vision__photo" src={HERO_VISION.photo} srcset={`${HERO_VISION.photoSmall} 720w, ${HERO_VISION.photo} 1320w, ${HERO_VISION.photoLarge} 2016w`} sizes={HERO_VISION_SIZES} width="1320" height="852" alt="" decoding="async" />
 			<span class="vision__tint"></span>
@@ -243,7 +254,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		}
 
 		/* the sequence in three beats (founder, 2026-10-02): the photograph held 2.4 s, the machine's view
-		   drawn in over it through blinds (CSS), then its whole reading in one cut at 3.3 s — then the text keeps moving: the listing
+		   built as the film's was printed (CSS), then its whole reading in one cut at 3.3 s — then the text keeps moving: the listing
 		   rolls on a line at a time, its numbers climbing, and the readout's "write" turns to "signed" each
 		   time sign() comes through */
 		let timer: number | null = null, walk: number | null = null, seq = SHOWN, num = 14;

@@ -378,7 +378,7 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   tug and the whole reading are red, as the founder marked on a capture. In
   OKLCH so the passage goes through magenta rather than mud. A full palette change (AI red, integration
   in the bridge's RAL 3005 wine) was mocked on the real pages and set aside. It is CSS on the one
-  photograph — `grayscale` + the gradient laid over in `mix-blend-mode: color` at 78 % + monitor lines — so
+  photograph — four tones (`#vision-tones`) + the gradient laid over in `mix-blend-mode: color` + monitor lines — so
   there is no second raster to download or to become the LCP. At full strength the violet saturated
   the highlights; the approved prototype was lighter and greyer.
 - **The tanker's stern carries our lettering** in both hero photographs — SERVER STARTUP, AVILÉS,
@@ -390,11 +390,16 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   3440: `--vfade`, 14 % of the frame's width), the foot where the scene is its own row (`--vfade-b`, 14 %
   of its height); the left edge already fades from the seal and the top from its own 18 %.
 - **The sequence is three beats** (founder, 2026-10-02: "imagen original · foco + color · letras"): the
-  photograph held 2.4 s; the machine's view drawn in over it through blinds — 12 px slats opening in six
-  steps over 0.5 s, a screen coming on line by line (founder's idea, 2026-10-03). The films document no
-  transition into the red view; a plain cut read as a jump and a focus pull (blur clearing while the
-  frame tightened) was rejected. The view is a layer (`.vision__eye`) holding the same file, so it costs
-  no second download;
+  photograph held 2.4 s; then the machine's view, built the way the film's "Termovision" was printed.
+  Ernie Farino, Cinefex 21 (April 1985): "a solarization type effect … extrapolate that into
+  high-contrast black-and-white images. By making negatives and positives at different exposures, the
+  image would swell or shrink slightly … a combination of black, red and white tonal areas for the
+  background, over which we burned in — on a separate exposure — the animated computer readout
+  graphics." So the view is a layer (`.vision__eye`, the same file: no second download) under two SVG
+  filters: `#vision-hicon` (two tones) for one pass, slightly swollen, then `#vision-tones` (four tones:
+  black, two middles, a white held at 86 % so the paper readout still reads) with the violet-to-red
+  gradient laid over as colour; three steps in 0.36 s. A focus pull, a plain cut and blinds were tried
+  and rejected on the way;
   then its whole reading in one cut at 3.3 s (an earlier round joined colour and text in one cut;
   piece-by-piece entry was rejected before that). From then on the
   text moves, as the film's code listings

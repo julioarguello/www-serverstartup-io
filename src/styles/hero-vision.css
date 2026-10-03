@@ -4,8 +4,8 @@
    (no script, reduced motion): the frame as the machine sees it, and its reading. */
 .s-hero--vision {
 	--scene-phone-h: 64vw;
-	/* the band drifts toward the machine's violet, the tone the frame turns to */
-	--color-ground-haze: color-mix(in srgb, var(--scene-c) 24%, var(--color-ground-dark));
+	/* the band drifts toward the machine's red, the tone the frame ends in */
+	--color-ground-haze: color-mix(in srgb, var(--color-machine-red) 24%, var(--color-ground-dark));
 }
 
 /* the frame: the photograph's 1.55. Without the script it rests on the band's floor, the tug past the column */
@@ -27,13 +27,14 @@
 .s-hero--vision:not(.is-placed) .vision__box { top: auto; bottom: 0; }
 .vision__photo { display: block; width: 100%; height: 100%; }
 
-/* the machine's eye: the one photograph in grey, the section's violet laid over it as colour (luminance
-   stays the photograph's), and monitor lines */
+/* the machine's eye: the one photograph in grey, colour laid over it (luminance stays the photograph's)
+   that starts in the section's violet where the frame shows and turns to the Terminator's red to the right
+   (founder, 2026-10-03: "empieza en violeta a la izquierda y se va haciendo rojo"), and monitor lines */
 .vision__photo { filter: grayscale(1) contrast(1.08) brightness(.9); }
 .vision__tint,
 .vision__scan { position: absolute; inset: 0; }
 /* at full strength the violet saturates the highlights; the approved prototype (round 2) is lighter, greyer */
-.vision__tint { background: var(--scene-c); mix-blend-mode: color; opacity: .78; }
+.vision__tint { background: linear-gradient(90deg in oklch, var(--scene-c) max(var(--vclip, 0px), 40%), var(--color-machine-red) 72%); mix-blend-mode: color; opacity: .78; }
 /* the monitor lines, and the quay's bright upper corner dimmed, where the readout sits */
 .vision__scan {
 	background:

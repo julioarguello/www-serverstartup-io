@@ -358,9 +358,14 @@ its own engine with its own crew; the tug follows astern and lends its force whe
 when the ship's bridge asks — a complement, not a substitute, which is the page's thesis. The scene
 reads it three times: the photograph; the same frame as a machine sees it; the machine's reading.
 
-- **The machine's eye is a homage to the Terminator's HUD in the section's violet**, not the film's red,
-  which is the integration vertical's colour (founder, 2026-10-02). It is CSS on the one photograph —
-  `grayscale` + the section colour laid over in `mix-blend-mode: color` at 78 % + monitor lines — so
+- **The machine's eye is a homage to the Terminator's HUD that starts in the section's violet and ends in
+  the film's red** (founder, 2026-10-03: "no quiero perder el violeta … se va haciendo rojo cuanto más a
+  la derecha"). The CMS palette is untouched: the cube, menu and accents keep the violet, and the red
+  (`--color-machine-red`, #E0141E) lives only in the frame's tint and the band's haze. The gradient holds
+  violet over the ship (to 40 % of the frame, behind the veil) and is full red by the tug (72 %), in
+  OKLCH so the passage goes through magenta rather than mud. A full palette change (AI red, integration
+  in the bridge's RAL 3005 wine) was mocked on the real pages and set aside. It is CSS on the one
+  photograph — `grayscale` + the gradient laid over in `mix-blend-mode: color` at 78 % + monitor lines — so
   there is no second raster to download or to become the LCP. At full strength the violet saturated
   the highlights; the approved prototype was lighter and greyer.
 - **The tanker's stern carries our lettering** in both hero photographs — SERVER STARTUP, AVILÉS,

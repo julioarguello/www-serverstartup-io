@@ -218,7 +218,9 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			const [rx, ry] = at(0.742, 0.04);
 			const above = g.T - readout.offsetHeight - 12;
 			const rx0 = Math.min(rx, s.width - 20 - readout.offsetWidth);
-			put(readout, rx0, above >= 16 ? above : Math.max(16, ry), null, null, s, stop);
+			/* never under the header, which lies over the band: no higher than the band's own top padding */
+			const top = parseFloat(getComputedStyle(hero).paddingTop) || 16;
+			put(readout, rx0, above >= top ? above : Math.max(top, ry), null, null, s, stop);
 			if (rx0 < g.colR + 12) readout.classList.add("is-withheld");
 			/* the code over the water under the tug, clear of the controls */
 			const [kx, ky] = at(0.6, 0.8);

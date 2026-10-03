@@ -301,9 +301,12 @@ Decisions that are not obvious from the code, and the measurement behind each:
 
 Since #531 every vertical opening is one structure. `HeroScene.astro` and `hero-scene.css` carry
 the band, the haze, the veil, the seal cube, the epigraph, the controls and the copy, anchored to
-a 320 px reference block so the cube and the h1 sit in the same place on every page. A vertical
-brings its art through two slots (`under` the veil, `over` it), its own script, and an entry in
-`HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
+a 320 px reference block so the cube and the h1 sit in the same place on every page. **The band is
+the same on every vertical, haze included** (founder, 2026-10-03: "todos los verticales mismo fondo y
+layout", non-negotiable): no scene sets `--color-ground-haze` of its own. The bridge carried a warm
+grey from its banks plate (#817975) and the AI scene drifted toward its colour until that day; both
+went back to the one haze. A vertical brings its art through two slots (`under` the veil, `over`
+it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). The epigraph is every blockquote the service body
 opens with; consecutive quotations by one author stand one after the other under a single attribution,
 linked to the first one's source (#537). They never take turns: the founder rejected a rotation
@@ -361,8 +364,9 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **The machine's eye is a homage to the Terminator's HUD that starts in the section's violet and ends in
   the film's red** (founder, 2026-10-03: "no quiero perder el violeta … se va haciendo rojo cuanto más a
   la derecha"). The CMS palette is untouched: the cube, menu and accents keep the violet, and the red
-  (`--color-machine-red`, #E0141E) lives only in the frame's tint and the band's haze. The gradient holds
-  violet over the ship (to 40 % of the frame, behind the veil) and is full red by the tug (72 %), in
+  (`--color-machine-red`, #E0141E) lives only in the frame's tint. The gradient holds violet under the
+  copy (to 18 % of the frame) and is the red, whole, from the ship's stern on (48 %): the reticle, the
+  tug and the whole reading are red, as the founder marked on a capture. In
   OKLCH so the passage goes through magenta rather than mud. A full palette change (AI red, integration
   in the bridge's RAL 3005 wine) was mocked on the real pages and set aside. It is CSS on the one
   photograph — `grayscale` + the gradient laid over in `mix-blend-mode: color` at 78 % + monitor lines — so

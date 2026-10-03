@@ -206,8 +206,6 @@
 	   lighthouse cutout's edge pixels average to, which the band drifts toward */
 	--color-ground-dark: #232724;
 	--color-ground-haze: #A1ABAA;
-	/* the bridge hero's haze (#531): what the Las Arenas edge of the banks plate averages to */
-	--color-ground-haze-bridge: #817975;
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
 	--color-machine-red: #E0141E;     /* the Terminator's eye, where the AI scene's violet ends (#537) */
 	/* The card the rotating half of the band lives in (founder's direction C,

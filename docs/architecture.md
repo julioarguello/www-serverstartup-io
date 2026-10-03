@@ -305,7 +305,12 @@ a 320 px reference block so the cube and the h1 sit in the same place on every p
 the same on every vertical, haze included** (founder, 2026-10-03: "todos los verticales mismo fondo y
 layout", non-negotiable): no scene sets `--color-ground-haze` of its own. The bridge carried a warm
 grey from its banks plate (#817975) and the AI scene drifted toward its colour until that day; both
-went back to the one haze. A vertical brings its art through two slots (`under` the veil, `over`
+went back to the one haze. **And the art always reaches the band's right edge** (founder, 2026-10-03:
+"no hay margen a la derecha en el faro y en el puente colgante sí"): the radar's rings and the AI frame
+already ran off it; the bridge, anchored by its Las Arenas tower just past the column, left 71–451 px of
+empty band (1280–2560). It now moves right by whatever band is left, until the banks' own fade straddles
+the edge (`BLEED`, 4 % of the frame); its photograph cannot grow, the crop already ends where the Commons
+original does. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). The epigraph is every blockquote the service body
 opens with; consecutive quotations by one author stand one after the other under a single attribution,

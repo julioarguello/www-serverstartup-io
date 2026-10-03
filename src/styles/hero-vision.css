@@ -24,16 +24,19 @@
 .s-hero--vision:not(.is-placed) .vision__box { top: auto; bottom: 0; }
 .vision__photo { display: block; width: 100%; height: 100%; }
 
-/* the machine's eye: a layer over the photograph — the same file in grey, colour laid over it (luminance stays the photograph's)
+/* the machine's eye: a layer over the photograph — the same file separated into four tones (black, two middles, white)
+   (#vision-tones), as the film's effect was: "a combination of black, red and white tonal areas" (Ernie Farino,
+   Cinefex 21, 1985) — the white held at 86 % so the paper readout still reads on it; colour laid over the middle tones
    that starts in the section's violet under the copy and is the Terminator's red, whole, from the ship's
    stern on — reticle, tug, reading (founder, 2026-10-03) — and monitor lines. The band is every
    vertical's band: no haze of its own (founder: "todos los verticales mismo fondo") */
-.vision__eye .vision__photo { filter: grayscale(1) contrast(1.08) brightness(.9); }
+.vision__filters { position: absolute; width: 0; height: 0; }
+.vision__eye .vision__photo { filter: url(#vision-tones); }
 .vision__eye,
 .vision__tint,
 .vision__scan { position: absolute; inset: 0; }
-/* at full strength the violet saturates the highlights; the approved prototype (round 2) is lighter, greyer */
-.vision__tint { background: linear-gradient(90deg in oklch, var(--scene-c) max(var(--vclip, 0px), 18%), var(--color-machine-red) 48%); mix-blend-mode: color; opacity: .78; }
+/* colour blends only where there is a middle tone: black stays black, the white stays white */
+.vision__tint { background: linear-gradient(90deg in oklch, var(--scene-c) max(var(--vclip, 0px), 18%), var(--color-machine-red) 48%); mix-blend-mode: color; }
 /* the monitor lines, and the quay's bright upper corner dimmed, where the readout sits */
 .vision__scan {
 	background:
@@ -68,27 +71,30 @@
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 
-/* the sequence in three beats (founder, 2026-10-03): the photograph held 2.4 s; the machine's view drawn in
-   over it through blinds — 12 px slats opening in six steps, 0.5 s, a screen coming on line by line, the
-   same lines as its monitor (the films document no transition; a plain cut read as a jump, a focus pull
-   was rejected); then its whole reading in one cut at 3.3 s. After it the text moves (the script) and
-   MATCH's square blinks, until the pause */
-@property --vision-slat { syntax: "<length>"; inherits: false; initial-value: 12px; }
+/* the sequence in three beats (founder, 2026-10-03): the photograph held 2.4 s; then the machine's view
+   builds as the film's was printed (Cinefex 21): first the high-contrast black and white, the image swelling
+   slightly as the exposures did, then the tones separated and coloured — three passes, 0.36 s; then its whole
+   reading burned in at 3.3 s. After it the text moves (the script) and MATCH's square blinks, until the
+   pause. Rejected on the way: a focus pull, a plain cut (a jump), blinds */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--vision:not(.is-placed) .vision__box { visibility: hidden; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__eye { visibility: hidden; }
 	.s-hero--vision:not(.is-done) .vision__piece { opacity: 0; }
-	.s-hero--vision.is-playing .vision__eye {
-		-webkit-mask-image: repeating-linear-gradient(180deg, var(--color-ground-dark) 0 var(--vision-slat), transparent var(--vision-slat) 12px);
-		mask-image: repeating-linear-gradient(180deg, var(--color-ground-dark) 0 var(--vision-slat), transparent var(--vision-slat) 12px);
-		animation: vision-blinds .5s steps(6, end) 2.4s both;
-	}
+	.s-hero--vision.is-playing .vision__eye { animation: vision-show 0s 2.4s both; }
+	.s-hero--vision.is-playing .vision__eye .vision__photo { animation: vision-expose .36s step-end 2.4s both; }
+	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { animation: vision-separate .36s step-end 2.4s both; }
 	.s-hero--vision.is-playing .vision__piece { animation: vision-in .24s steps(2, end) 3.3s forwards; }
 	.s-hero--vision.is-done .vision__match i { animation: vision-blink 1s steps(1, end) infinite; }
 	.s-hero--vision.is-paused :is(.vision__piece, .vision__match i) { animation-play-state: paused; }
 }
 @keyframes vision-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes vision-blinds { from { --vision-slat: 0px; } to { --vision-slat: 12px; } }
+@keyframes vision-expose {
+	0% { filter: url(#vision-hicon); scale: 1.012; }
+	34% { filter: url(#vision-tones); scale: .996; }
+	67%, 100% { filter: url(#vision-tones); scale: 1; }
+}
+@keyframes vision-show { from { visibility: hidden; } to { visibility: visible; } }
+@keyframes vision-separate { 0% { opacity: 0; } 34%, 100% { opacity: 1; } }
 @keyframes vision-blink { 50% { opacity: 0; } }
 
 /* phones: the scene is its own row; the whole reading, a size smaller */

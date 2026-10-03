@@ -24,12 +24,11 @@
 .s-hero--vision:not(.is-placed) .vision__box { top: auto; bottom: 0; }
 .vision__photo { display: block; width: 100%; height: 100%; }
 
-/* the machine's eye: a layer over the photograph — the same file separated into four tones (black, two middles, white)
-   (#vision-tones), as the film's effect was: "a combination of black, red and white tonal areas" (Ernie Farino,
-   Cinefex 21, 1985) — the white held at 86 % so the paper readout still reads on it; colour laid over the middle tones
-   that starts in the section's violet under the copy and is the Terminator's red, whole, from the ship's
-   stern on — reticle, tug, reading (founder, 2026-10-03) — and monitor lines. The band is every
-   vertical's band: no haze of its own (founder: "todos los verticales mismo fondo") */
+/* the machine's eye: a layer over the photograph — the same file taken to the film's hard tones (#vision-tones,
+   a steep curve: deep black, a near-white highlight), as its effect was: "a combination of black, red and white
+   tonal areas" (Ernie Farino, Cinefex 21, 1985); the colour laid over it starts in the section's violet under
+   the copy and is the Terminator's red, whole, from the ship's stern on (founder, 2026-10-03). No monitor
+   lines: the film has none. The band is every vertical's band: no haze of its own */
 .vision__filters { position: absolute; width: 0; height: 0; }
 .vision__eye .vision__photo { filter: url(#vision-tones); }
 .vision__eye,
@@ -37,23 +36,23 @@
 .vision__scan { position: absolute; inset: 0; }
 /* colour blends only where there is a middle tone: black stays black, the white stays white */
 .vision__tint { background: linear-gradient(90deg in oklch, var(--scene-c) max(var(--vclip, 0px), 18%), var(--color-machine-red) 48%); mix-blend-mode: color; }
-/* the monitor lines, and the quay's bright upper corner dimmed, where the readout sits */
-.vision__scan {
-	background:
-		repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, var(--color-ground-dark) 22%, transparent) 3px 4px),
-		linear-gradient(200deg, color-mix(in srgb, var(--color-ground-dark) 55%, transparent) 0, transparent 42%);
-}
+/* the quay's bright upper corner dimmed, where the readout sits */
+.vision__scan { background: linear-gradient(200deg, color-mix(in srgb, var(--color-ground-dark) 70%, transparent) 0, transparent 48%); }
 
-/* the reading: the machine's voice, in paper, no plate; every piece placed by the script in the stage's
-   pixels and withheld where it would touch a letter, the controls or the band's edge */
+/* the reading: the machine's voice, burned into the picture as the film's was — white, no plate, its light
+   bleeding a little into the red — in the film's faces (theme.css); every piece placed by the script in the
+   stage's pixels and withheld where it would touch a letter, the controls or the band's edge */
 .vision__hud {
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
 	color: var(--color-secondary);
-	font-family: var(--font-family-mono);
+	font-family: var(--font-family-hud);
+	font-stretch: 112.5%;
+	font-weight: 500;
 	text-transform: uppercase;
-	letter-spacing: .04em;
+	letter-spacing: .02em;
+	text-shadow: 0 0 6px color-mix(in srgb, var(--color-secondary) 45%, transparent);
 }
 .s-hero--vision:not(.is-placed) .vision__hud,
 .s-hero--vision.is-resizing .vision__hud,
@@ -61,21 +60,23 @@
 .vision__piece { position: absolute; }
 .vision__reticle,
 .vision__brackets { overflow: visible; }
-.vision__match { font-size: 15px; font-weight: 600; white-space: nowrap; }
+.vision__match { font-size: 18px; white-space: nowrap; }
 .vision__match i { display: inline-block; width: .5em; height: .5em; margin-left: .25em; background: currentColor; vertical-align: .1em; }
-.vision__readout { display: grid; gap: .8em; font-size: 12.5px; line-height: 1.75; white-space: nowrap; }
-.vision__line { display: grid; grid-template-columns: 9.5ch auto; }
+.vision__readout { display: grid; gap: .7em; font-size: 15px; line-height: 1.45; white-space: nowrap; }
+.vision__line { display: grid; grid-template-columns: 6.2em auto; }
+/* while the reading types itself (script), a character not yet typed keeps its room */
+.s-hero--vision.is-playing .vision__ch:not(.is-on) { visibility: hidden; }
 /* numbered from 14, as a listing seen mid-scroll (the film's was 6502 assembly); a counter, since lists lose their markers sitewide */
-.vision__code { margin: 0; padding: 0; list-style: none; counter-reset: line 13; font-size: 12px; line-height: 1.7; white-space: nowrap; text-transform: none; letter-spacing: 0; }
+.vision__code { margin: 0; padding: 0; list-style: none; counter-reset: line 13; font-family: var(--font-family-listing); font-stretch: normal; font-weight: 400; font-size: 14px; line-height: 1.5; white-space: nowrap; text-transform: none; letter-spacing: 0; }
 .vision__code li::before { counter-increment: line; content: counter(line) "  "; color: color-mix(in srgb, var(--color-secondary) 60%, transparent); }
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 
 /* the sequence in three beats (founder, 2026-10-03): the photograph held 2.4 s; then the machine's view
    builds as the film's was printed (Cinefex 21): first the high-contrast black and white, the image swelling
-   slightly as the exposures did, then the tones separated and coloured — three passes, 0.36 s; then its whole
-   reading burned in at 3.3 s. After it the text moves (the script) and MATCH's square blinks, until the
-   pause. Rejected on the way: a focus pull, a plain cut (a jump), blinds */
+   slightly as the exposures did, then its hard red — three passes, 0.36 s; then the reading at 3.3 s, typing
+   itself (script) as the film's did. After it the listing moves and MATCH's square blinks, until the pause.
+   Rejected on the way: a focus pull, a plain cut (a jump), blinds, four flat tones (lost the picture) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--vision:not(.is-placed) .vision__box { visibility: hidden; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__eye { visibility: hidden; }
@@ -99,7 +100,7 @@
 
 /* phones: the scene is its own row; the whole reading, a size smaller */
 @media (max-width: 767px) {
-	.vision__match { font-size: 12px; }
-	.vision__readout { gap: .3em; font-size: 9px; line-height: 1.35; }
-	.vision__code { font-size: 9.5px; line-height: 1.45; }
+	.vision__match { font-size: 13px; }
+	.vision__readout { gap: .3em; font-size: 10px; line-height: 1.3; }
+	.vision__code { font-size: 10.5px; line-height: 1.35; }
 }

@@ -310,7 +310,8 @@ went back to the one haze. **And the art always reaches the band's right edge** 
 already ran off it; the bridge, anchored by its Las Arenas tower just past the column, left 71–451 px of
 empty band (1280–2560). It now moves right by whatever band is left, until the banks' own fade straddles
 the edge (`BLEED`, 4 % of the frame); its photograph cannot grow, the crop already ends where the Commons
-original does. A vertical brings its art through two slots (`under` the veil, `over`
+original does. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
+the copy, fades over 14 % of the frame instead of 60 px. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). The epigraph is every blockquote the service body
 opens with; consecutive quotations by one author stand one after the other under a single attribution,

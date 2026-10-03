@@ -114,6 +114,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		   epigraph on others; the ship's bridge always sat beside the title */
 		const AIM: [number, number][] = [[0.545, 0.527], [0.57, 0.5], [0.59, 0.47], [0.6, 0.52], [0.615, 0.49], [0.62, 0.43], [0.625, 0.37], [0.6, 0.33], [0.63, 0.3]];
 		const GAP = 50;                          /* the tug's bow, past the column's right edge */
+		const BLEED = 0.02;                      /* how far past the band's edge the frame runs */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
 
 		type Box = { l: number; t: number; r: number; b: number };
@@ -152,7 +153,9 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			const full = ASPECT * BAND_H * s.height;
 			const room = (s.width - 12 - colR - GAP) / (TUG.r - TUG.l);
 			const W = room >= full ? full : room >= full / 2 ? room : full, H = W / ASPECT;
-			const L = Math.min(colR + GAP - TUG.l * W, s.width - 12 - TUG.r * W);
+			const L0 = Math.min(colR + GAP - TUG.l * W, s.width - 12 - TUG.r * W);
+			/* band left over on the right: the frame moves into it until it runs off the edge, like every scene */
+			const L = L0 + Math.max(0, s.width + BLEED * W - (L0 + W));
 			hero.style.setProperty("--vclip", `${Math.max(0, sealR - L)}px`);
 			return { L, T: s.height - H, W, H, colR };
 		}
@@ -182,7 +185,9 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			hero.style.setProperty("--vx", `${g.L}px`);
 			hero.style.setProperty("--vy", `${g.T}px`);
 			hero.style.setProperty("--vw", `${g.W}px`);
-			/* a frame that ends before the band does fades into it */
+			/* a frame that ends before the band does fades into it; its left edge always fades in, widely
+			   on desktops, where it lies under the copy */
+			hero.style.setProperty("--vfade-l", narrow ? "60px" : `${Math.round(0.14 * g.W)}px`);
 			hero.style.setProperty("--vfade", s.width - (g.L + g.W) > 1 ? `${Math.round(0.14 * g.W)}px` : "0px");
 			/* where the scene is its own row, the copy's band carries on below it: its foot fades too */
 			hero.style.setProperty("--vfade-b", narrow ? `${Math.round(0.14 * g.H)}px` : "0px");

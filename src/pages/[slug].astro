@@ -24,6 +24,7 @@ import { excerptHtml, excerptPlain } from "../utils/excerpt";
 import { heroArtForSlug, heroGroundForSlug, heroSceneForSlug } from "../utils/hero-art";
 import HeroRadar from "../components/HeroRadar.astro";
 import HeroBridge from "../components/HeroBridge.astro";
+import HeroElevation from "../components/HeroElevation.astro";
 import HeroVision from "../components/HeroVision.astro";
 import type { SiteSettings } from "../types";
 const t = Astro.locals.t;
@@ -131,6 +132,15 @@ const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 			quote={heroQuote}
 			labels={labels}
 		/>
+	) : heroScene === "elevation" ? (
+		<HeroElevation
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
 	) : heroScene === "vision" ? (
 		<HeroVision
 			title={title}
@@ -221,4 +231,5 @@ const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 	@import "../styles/hero-radar.css";
 	@import "../styles/hero-bridge.css";
 	@import "../styles/hero-vision.css";
+	@import "../styles/hero-elevation.css";
 </style>

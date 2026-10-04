@@ -1971,6 +1971,94 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "elev_level0",
+							"children": [
+								{
+									"_type": "span",
+									"text": "±0,00"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_level_top",
+							"children": [
+								{
+									"_type": "span",
+									"text": "+50,00"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_height",
+							"children": [
+								{
+									"_type": "span",
+									"text": "50,00"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_horizon",
+							"children": [
+								{
+									"_type": "span",
+									"text": "L.H."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_vp1",
+							"children": [
+								{
+									"_type": "span",
+									"text": "PF1 ←"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_vp2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "→ PF2"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pausar la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Repetir la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4475,6 +4563,94 @@
 							"_type": "block",
 							"style": "normal",
 							"_key": "vision_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Replay the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_level0",
+							"children": [
+								{
+									"_type": "span",
+									"text": "±0.00"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_level_top",
+							"children": [
+								{
+									"_type": "span",
+									"text": "+50.00"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_height",
+							"children": [
+								{
+									"_type": "span",
+									"text": "50.00"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_horizon",
+							"children": [
+								{
+									"_type": "span",
+									"text": "H.L."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_vp1",
+							"children": [
+								{
+									"_type": "span",
+									"text": "VP1 ←"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_vp2",
+							"children": [
+								{
+									"_type": "span",
+									"text": "→ VP2"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pause the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "elev_replay",
 							"children": [
 								{
 									"_type": "span",

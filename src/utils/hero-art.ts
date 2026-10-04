@@ -112,8 +112,8 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
  */
 export const SCENE_ROW = "(max-width: 1100px)";
 
-export type HeroSceneKind = "radar" | "bridge" | "vision";
-export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision" };
+export type HeroSceneKind = "radar" | "bridge" | "vision" | "elevation";
+export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision", gf: "elevation" };
 
 /** The scene this slug (either locale) opens with, or `null` for a held plate or a plain page. */
 export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null {
@@ -168,3 +168,17 @@ export const HERO_VISION = {
 
 /** The frame is 1.55 × 81 % of the band's height on desktops (about 63 % of a 1575 × 791 viewport) and 98 % of the width on phones. */
 export const HERO_VISION_SIZES = "(max-width: 767px) 98vw, 63vw";
+
+export const HERO_ELEVATION = {
+	/** the riverside with the museum taken out (FLUX, blended inside its silhouette only), in black and white: WebP, 1320×645 */
+	plot: "/assets/hero/gf-solar-bn.webp",
+	plotSmall: "/assets/hero/gf-solar-bn-720.webp",
+	plotLarge: "/assets/hero/gf-solar-bn-2016.webp",
+	/** the Guggenheim from across the river (Sergio S.C, CC BY-SA 2.0), the photographer's mark painted out: WebP, 1320×645 */
+	photo: "/assets/hero/gf-guggenheim.webp",
+	photoSmall: "/assets/hero/gf-guggenheim-720.webp",
+	photoLarge: "/assets/hero/gf-guggenheim-2016.webp",
+};
+
+/** The frame is 2.05 × 86 % of the band's height on desktops (about 88 % of a 1575 × 791 viewport) and up to 125 % of the width below 1100 px; phones ask for 98vw so a 412 px phone at 1.75 (707 px) takes the 720 file (Lighthouse's mobile run scored 0.92 with the 1320). The photograph waits at low priority: it is not seen before 3.8 s and competed with the plot, the LCP. */
+export const HERO_ELEVATION_SIZES = "(max-width: 767px) 98vw, (max-width: 1100px) 125vw, 88vw";

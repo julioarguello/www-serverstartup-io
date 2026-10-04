@@ -230,7 +230,8 @@
 	--color-ground-dark: #232724;
 	--color-ground-haze: #A1ABAA;
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
-	--color-machine-red: #E0141E;     /* the Terminator's eye, where the AI scene's violet ends (#537) */
+	--color-machine-red: #E0141E;
+	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */     /* the Terminator's eye, where the AI scene's violet ends (#537) */
 	/* The card the rotating half of the band lives in (founder's direction C,
 	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
 	   the panel reads as a pane laid on the picture rather than a box that

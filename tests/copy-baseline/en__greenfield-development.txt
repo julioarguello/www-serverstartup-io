@@ -2,6 +2,20 @@ Skip to content
 ~Server Startup
 /en/greenfield-development
 ES
+A
+B
+C
+D
+E
+F
+G
+H
+±0.00
++50.00
+50.00
+H.L.
+VP1 ←
+→ VP2
 Greenfield development
 The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full SDLC, from specification to observability. We work contract first, focused on stability, security and governance.
 Let's talk about your project

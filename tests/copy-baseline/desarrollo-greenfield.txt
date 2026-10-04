@@ -2,6 +2,20 @@ Saltar al contenido
 ~Server Startup
 /desarrollo-greenfield
 EN
+A
+B
+C
+D
+E
+F
+G
+H
+±0,00
++50,00
+50,00
+L.H.
+PF1 ←
+→ PF2
 Desarrollo greenfield
 El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. SDLC completo, de la especificación a la observabilidad. Trabajamos contract first, con foco en estabilidad, seguridad y gobernanza.
 Hablemos de tu proyecto

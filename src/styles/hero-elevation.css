@@ -1,0 +1,70 @@
+/* ═══ HERO — the Guggenheim's elevation, the greenfield vertical (#547), docs/architecture.md §4.8 ═══
+   One frame under the veil — the plot, the drawing, the museum — sized by the band and running off its right
+   edge; the script places it (--ex, --ey, --ew). The end state is the default (no script, reduced motion):
+   the museum, no drawing. */
+
+.elev__box {
+	position: absolute;
+	left: var(--ex, auto);
+	right: var(--ex-r, auto);
+	top: var(--ey, auto);
+	bottom: auto;
+	width: var(--ew, min(86vw, calc(var(--band-h, 100svh) * 1.76)));
+	aspect-ratio: 6000 / 2932;
+	isolation: isolate;
+	pointer-events: none;
+	/* starts where the seal ends and fades in from the left, where it lies under the copy, and from its own top
+	   edge; where the scene is its own row its foot fades into the band too: never a seam between photograph
+	   and ground */
+	-webkit-mask-image: linear-gradient(90deg, transparent var(--eclip, 0px), var(--color-ground-dark) calc(var(--eclip, 0px) + var(--efade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%, var(--color-ground-dark) calc(100% - var(--efade-b, 0px)), transparent 100%);
+	-webkit-mask-composite: source-in;
+	mask-image: linear-gradient(90deg, transparent var(--eclip, 0px), var(--color-ground-dark) calc(var(--eclip, 0px) + var(--efade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%, var(--color-ground-dark) calc(100% - var(--efade-b, 0px)), transparent 100%);
+	mask-composite: intersect;
+}
+.s-hero--elevation:not(.is-placed) .elev__box { --ex-r: -2%; bottom: 0; }
+.elev__plot,
+.elev__photo,
+.elev__drawing,
+.elev__drawing svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+/* the drawing: a technical elevation, line weights by hierarchy (archimash, portico): the ground line and the
+   building's profile heaviest, inner edges fine, construction lines, rays and dimensions finest; auxiliary
+   lines in paper, the building in the section's green, lightened to read on the band */
+.elev__drawing path { fill: none; stroke-linecap: butt; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.elev__aux { stroke: color-mix(in srgb, var(--color-secondary) 60%, transparent); stroke-width: .6px; }
+.elev__ray { stroke: color-mix(in srgb, var(--color-secondary) 50%, transparent); stroke-width: .5px; }
+.elev__axis { stroke: color-mix(in srgb, var(--color-secondary) 80%, transparent); stroke-width: .7px; stroke-dasharray: 24 5 3 5; }
+.elev__ground { stroke: var(--color-secondary); stroke-width: 3.5px; }
+.elev__profile { stroke: var(--color-elev-line); stroke-width: 2.6px; }
+.elev__edge { stroke: color-mix(in srgb, var(--color-elev-line) 85%, transparent); stroke-width: .9px; }
+.elev__dim { stroke: color-mix(in srgb, var(--color-secondary) 85%, transparent); stroke-width: .7px; }
+.elev__tick { stroke: var(--color-secondary); stroke-width: 1.6px; }
+.elev__mark { stroke: var(--color-secondary); stroke-width: .9px; }
+.elev__bub circle { fill: none; stroke: color-mix(in srgb, var(--color-secondary) 85%, transparent); stroke-width: .9px; vector-effect: non-scaling-stroke; }
+.elev__drawing text { fill: var(--color-secondary); font: 400 17px/1 var(--font-family-hud); font-stretch: 100%; letter-spacing: .06em; }
+.elev__bub text { text-anchor: middle; font-size: 16px; }
+.elev__drawing .elev__end { text-anchor: end; }
+.elev__drawing .elev__v { text-anchor: middle; }
+
+/* the default and the end: the museum alone */
+.elev__plot,
+.elev__drawing { opacity: 0; }
+
+/* the sequence, 5 s (the script's timer): the plot held 1.4 s and dimmed like tracing paper; every line drawn
+   from its own --d after that; the photograph from 3.8 s, the drawing gone by 5 s */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+	.s-hero--elevation:not(.is-placed) .elev__box { visibility: hidden; }
+	.s-hero--elevation.is-playing .elev__plot { animation: elev-plot 1.2s ease-in-out both; }
+	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .7s ease-in-out 3.8s both; }
+	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .6s ease-in-out 4.4s both; }
+	.s-hero--elevation.is-playing .elev__drawing [pathLength] { stroke-dasharray: 1; animation: elev-draw .32s ease-out calc(1.4s + var(--d, 0ms)) both; }
+	.s-hero--elevation.is-playing .elev__profile { animation-duration: .85s; }
+	.s-hero--elevation.is-playing .elev__ground { animation-duration: .35s; }
+	.s-hero--elevation.is-playing :is(.elev__bub, .elev__text) { animation: elev-show .25s ease-out calc(1.4s + var(--d, 0ms)) both; }
+	.s-hero--elevation.is-paused * { animation-play-state: paused; }
+}
+@keyframes elev-plot { 0%, 83% { opacity: 1; } 100% { opacity: .42; } }
+@keyframes elev-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes elev-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes elev-show { from { opacity: 0; } to { opacity: 1; } }
+@keyframes elev-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }

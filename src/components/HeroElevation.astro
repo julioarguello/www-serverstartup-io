@@ -1,0 +1,143 @@
+---
+/**
+ * HeroElevation — the opening of the greenfield vertical (#547).
+ *
+ * The Guggenheim Bilbao, seen from across the river, told in three beats (founder, 2026-10-03):
+ *
+ * 1. the plot without the museum, in black and white — the riverside before the building;
+ * 2. the museum drawn over it as an architect's elevation: the horizon and the two vanishing points
+ *    with their rays, construction lines, the axes, the ground line, the building's profile (its own
+ *    outline, so the drawing lands on it exactly), the inner edges, and the dimensions;
+ * 3. the photograph, and the drawing goes.
+ *
+ * The band, the copy, the epigraphs, the seal, the veil and the controls are the scene every vertical
+ * shares (HeroScene.astro). The drawing is vectors (`gf-alzado.svg`, guggenheim.py): every line carries
+ * `pathLength="1"` and its start as `--d`, so the CSS draws it; its words come from the CMS.
+ */
+import { HERO_ELEVATION, HERO_ELEVATION_SIZES } from "../utils/hero-art";
+import HeroScene from "./HeroScene.astro";
+import drawing from "../assets/hero/gf-alzado.svg?raw";
+
+interface Props {
+	title: string;
+	excerptHtml: string;
+	ctaLabel: string;
+	contactPath: string;
+	quote: any[] | null;
+	labels: { get: (widget: string, key: string, fallback: string) => string };
+}
+const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props;
+const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
+const words: Record<string, string> = {
+	level0: L("elev_level0", "±0,00"),
+	levelTop: L("elev_level_top", "+50,00"),
+	height: L("elev_height", "50,00"),
+	horizon: L("elev_horizon", "L.H."),
+	vp1: L("elev_vp1", "PF1"),
+	vp2: L("elev_vp2", "PF2"),
+};
+const escape = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const svg = drawing.replace(/\{\{(\w+)\}\}/g, (_, k: string) => escape(words[k] ?? ""));
+const pauseLabel = L("elev_pause", "Pausar la animación");
+const replayLabel = L("elev_replay", "Repetir la animación");
+---
+
+<HeroScene scene="elevation" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
+	<div slot="under" class="elev__box">
+		<img class="elev__plot" src={HERO_ELEVATION.plot} srcset={`${HERO_ELEVATION.plotSmall} 720w, ${HERO_ELEVATION.plot} 1320w, ${HERO_ELEVATION.plotLarge} 2016w`} sizes={HERO_ELEVATION_SIZES} width="1320" height="645" alt="" fetchpriority="high" decoding="async" />
+		<img class="elev__photo" src={HERO_ELEVATION.photo} srcset={`${HERO_ELEVATION.photoSmall} 720w, ${HERO_ELEVATION.photo} 1320w, ${HERO_ELEVATION.photoLarge} 2016w`} sizes={HERO_ELEVATION_SIZES} width="1320" height="645" alt="" fetchpriority="low" decoding="async" />
+		<div class="elev__drawing" aria-hidden="true" set:html={svg} />
+	</div>
+</HeroScene>
+
+<script>
+	import { SCENE_ROW } from "../utils/hero-art";
+	const hero = document.querySelector<HTMLElement>(".s-hero--elevation");
+	if (hero) {
+		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
+		const inner = hero.querySelector<HTMLElement>(".s-hero__inner")!;
+		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
+		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
+		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
+
+		const ASPECT = 6000 / 2932;              /* the photograph's frame */
+		const BAND_H = 0.86;                     /* the frame's height, of the band's */
+		const TOWER = 0.68;                      /* the atrium's tower, of the frame's width: it stays past the column */
+		const BLEED = 0.02;                      /* how far past the band's edge the frame runs */
+		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
+		type Geo = { L: number; T: number; W: number; H: number };
+
+		/* desktops: sized by the band, resting on its floor, running off its right edge like every scene; when the
+		   band is narrow the frame shrinks (to half) so the tower stays past the column */
+		function fitWide(s: DOMRect): Geo {
+			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect();
+			const colR = ib.right - s.left - parseFloat(cs.paddingRight);
+			const sr = seal.getBoundingClientRect();
+			const sealR = sr.left - s.left + SEAL_R * sr.width + 8;
+			const full = ASPECT * BAND_H * s.height;
+			const room = (s.width * (1 + BLEED) - colR) / (1 - TOWER);
+			const W = Math.max(full / 2, Math.min(full, room)), H = W / ASPECT;
+			const L = s.width + BLEED * W - W;
+			hero.style.setProperty("--eclip", `${Math.max(0, sealR - L)}px`);
+			return { L, T: s.height - H, W, H };
+		}
+		/* phones and tablets: the scene is its own row under the copy, contained in it, flush right */
+		function fitNarrow(s: DOMRect): Geo {
+			const W = Math.min(1.25 * s.width, ASPECT * s.height), H = W / ASPECT;
+			hero.style.setProperty("--eclip", "0px");
+			return { L: s.width - W * (1 - BLEED), T: (s.height - H) / 2, W, H };
+		}
+		function layout() {
+			const s = stage.getBoundingClientRect();
+			const narrow = matchMedia(SCENE_ROW).matches;
+			const g = narrow ? fitNarrow(s) : fitWide(s);
+			hero.style.setProperty("--ex", `${g.L}px`);
+			hero.style.setProperty("--ey", `${g.T}px`);
+			hero.style.setProperty("--ew", `${g.W}px`);
+			hero.style.setProperty("--efade-l", `${Math.round(0.14 * g.W)}px`);
+			hero.style.setProperty("--efade-b", narrow ? `${Math.round(0.12 * g.H)}px` : "0px");
+			hero.classList.add("is-placed");
+		}
+
+		/* 5 s, like the lighthouse and the machine's eye: the plot held 1.4 s, the elevation drawn in 2.2 s (CSS,
+		   from each line's --d), then the photograph comes in and the drawing goes */
+		let timer: number | null = null;
+		function finish() {
+			if (timer !== null) clearTimeout(timer);
+			timer = null;
+			hero!.classList.remove("is-playing");
+			hero!.classList.add("is-done");
+		}
+		function play() {
+			hero!.classList.add("is-playing");
+			timer = window.setTimeout(finish, 5000);
+		}
+
+		let settling: number | null = null;
+		window.addEventListener("resize", () => {
+			if (settling !== null) clearTimeout(settling);
+			settling = window.setTimeout(layout, 120);
+		});
+		layout();
+		if (reduced) {
+			hero.classList.add("is-done");
+		} else {
+			const img = hero.querySelector<HTMLImageElement>(".elev__plot")!;
+			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
+		}
+		/* pausing during the opening ends it at once: what stops is the motion, not the picture */
+		pause.addEventListener("change", () => {
+			hero.classList.toggle("is-paused", pause.checked);
+			if (pause.checked && hero.classList.contains("is-playing")) finish();
+		});
+		replay.addEventListener("click", () => {
+			if (reduced) return;
+			if (timer !== null) clearTimeout(timer);
+			pause.checked = false;
+			hero.classList.remove("is-paused", "is-done", "is-playing");
+			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */
+			play();
+		});
+	}
+</script>

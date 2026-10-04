@@ -3,9 +3,7 @@ cta_label: "Hablemos de tu proyecto"
 excerpt: "El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. `SDLC` completo, de la especificación a la observabilidad. Trabajamos *contract first*, con foco en estabilidad, seguridad y gobernanza."
 ---
 
-> «Su software nos permite desmitificar el edificio ante el constructor, con una precisión de siete decimales.» [Frank Gehry](https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview)
-
-> «Gracias a esta tecnología informática podemos ser muy precisos con los materiales y las formas. Así podemos prever su coste antes de meternos en problemas.» [Frank Gehry](https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview)
+> «[Permite] a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.» [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
 
 Hay necesidades que ningún producto comercial cubre. Un motor de precios que solo existe en tu negocio, una web que no cabe en ninguna plantilla (esta misma, sin ir más lejos). Para eso siempre ha existido el desarrollo *greenfield*.
 

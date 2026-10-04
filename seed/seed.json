@@ -8764,50 +8764,22 @@
 								{
 									"_key": "gql0",
 									"_type": "link",
-									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
+									"href": "https://karpathy.bearblog.dev/year-in-review-2025/"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
 									"_key": "gqa0",
-									"text": "«Su software nos permite desmitificar el edificio ante el constructor, con una precisión de siete decimales.» ",
+									"text": "«[Permite] a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.» ",
 									"marks": []
 								},
 								{
 									"_type": "span",
 									"_key": "gqb0",
-									"text": "Frank Gehry",
+									"text": "Andrej Karpathy",
 									"marks": [
 										"gql0"
-									]
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "gq1",
-							"style": "blockquote",
-							"markDefs": [
-								{
-									"_key": "gql1",
-									"_type": "link",
-									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "gqa1",
-									"text": "«Gracias a esta tecnología informática podemos ser muy precisos con los materiales y las formas. Así podemos prever su coste antes de meternos en problemas.» ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "gqb1",
-									"text": "Frank Gehry",
-									"marks": [
-										"gql1"
 									]
 								}
 							]
@@ -12374,50 +12346,22 @@
 								{
 									"_key": "gql0",
 									"_type": "link",
-									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
+									"href": "https://karpathy.bearblog.dev/year-in-review-2025/"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
 									"_key": "gqa0",
-									"text": "«Their software allows us to demystify the building to a builder, down to seven decimal points of accuracy.» ",
+									"text": "«[It] empowers trained professionals to write a lot more … software that would otherwise never be written.» ",
 									"marks": []
 								},
 								{
 									"_type": "span",
 									"_key": "gqb0",
-									"text": "Frank Gehry",
+									"text": "Andrej Karpathy",
 									"marks": [
 										"gql0"
-									]
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "gq1",
-							"style": "blockquote",
-							"markDefs": [
-								{
-									"_key": "gql1",
-									"_type": "link",
-									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "gqa1",
-									"text": "«By the use of this computer technology we are able to be very specific about materials and shapes. Therefore we're able to predetermine the cost of such things before we get ourselves in trouble.» ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "gqb1",
-									"text": "Frank Gehry",
-									"marks": [
-										"gql1"
 									]
 								}
 							]

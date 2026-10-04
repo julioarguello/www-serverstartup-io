@@ -92,6 +92,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 
 <script>
 	import { SCENE_ROW } from "../utils/hero-art";
+	import { SceneClock } from "../utils/scene-clock";
 	const hero = document.querySelector<HTMLElement>(".s-hero--vision");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -253,11 +254,12 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			put(code, cx0, Math.min(ky, s.height - 12 - code.offsetHeight), null, null, s, stop);
 		}
 
-		/* the sequence in three beats (founder, 2026-10-02): the photograph held 2.4 s, the machine's view
-		   built as the film's was printed (CSS), then its whole reading in one cut at 3.3 s — then the text keeps moving: the listing
+		/* the sequence in three beats, 8 s (founder, 2026-10-02/04): the photograph held 3.8 s, the machine's view
+		   built as the film's was printed (CSS), then its whole reading in one cut at 5.2 s — then the text keeps moving: the listing
 		   rolls on a line at a time, its numbers climbing, and the readout's "write" turns to "signed" each
 		   time sign() comes through */
-		let timer: number | null = null, walk: number | null = null, seq = SHOWN, num = 14;
+		let walk: number | null = null, seq = SHOWN, num = 14;
+		const clock = new SceneClock();
 		function render(first: number, start: number) {
 			code.style.counterReset = `line ${start - 1}`;
 			code.replaceChildren(...Array.from({ length: SHOWN }, (_, i) => {
@@ -271,13 +273,13 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			num += 1;
 			render(seq - SHOWN + 1, num);
 			const last = seq % CODE.length;
-			if (writeEl && typing === null && typeAt === null) writeEl.textContent = last === CODE.length - 1 ? SIGNED : onReview;
+			if (writeEl && typing === null && !clock.running) writeEl.textContent = last === CODE.length - 1 ? SIGNED : onReview;
 			seq += 1;
 		}
 		/* the readout types itself, as the film's did: each character a span, revealed one by one once the
 		   reading arrives (they keep their room, so the placement does not move); pause shows them all */
 		const chars: HTMLElement[] = [];
-		let typing: number | null = null, typeAt: number | null = null, typed = 0;
+		let typing: number | null = null, typed = 0;
 		function wrapReadout() {
 			chars.length = 0;
 			readout.querySelectorAll<HTMLElement>(".vision__line > *").forEach((el) => {
@@ -293,18 +295,20 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			});
 		}
 		function stopTyping() {
-			if (typeAt !== null) { clearTimeout(typeAt); typeAt = null; }
+			clock.cancel("type");
 			if (typing !== null) { clearInterval(typing); typing = null; }
 			chars.forEach((c) => c.classList.add("is-on"));
 		}
-		function startTyping() {
-			typeAt = null;
-			typed = 0;
+		/* typing goes on from the character it had reached: a pause freezes it mid-word */
+		function typeOn() {
+			if (typing !== null) return;
 			typing = window.setInterval(() => {
 				if (typed >= chars.length) { stopTyping(); return; }
 				chars[typed++].classList.add("is-on");
 			}, 16);
 		}
+		function holdTyping() { if (typing !== null) { clearInterval(typing); typing = null; } }
+		function startTyping() { typed = 0; typeOn(); }
 		function reset() {
 			seq = SHOWN; num = 14;
 			render(0, 14);
@@ -314,8 +318,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		function startWalk() { if (walk !== null || reduced || pause.checked || document.hidden || !hero!.classList.contains("is-done")) return; walk = window.setInterval(step, 1200); }
 		function stopWalk() { if (walk !== null) { clearInterval(walk); walk = null; } }
 		function finish() {
-			if (timer !== null) clearTimeout(timer);
-			timer = null;
+			clock.cancel("end");
 			hero!.classList.remove("is-playing");
 			hero!.classList.add("is-done");
 			startWalk();
@@ -323,8 +326,8 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		function play() {
 			wrapReadout();
 			hero!.classList.add("is-playing");
-			timer = window.setTimeout(finish, 5000);
-			typeAt = window.setTimeout(startTyping, 3300);
+			clock.at("end", 8000, finish);
+			clock.at("type", 5200, startTyping);
 		}
 
 		let settling: number | null = null;
@@ -340,18 +343,18 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 			const img = hero.querySelector<HTMLImageElement>(".vision__photo")!;
 			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
 		}
-		/* pausing during the opening ends it at once: what stops is the motion, not the picture */
+		/* pause freezes the frame where it is — the opening, its clock, the typing, the listing — and play goes on */
 		pause.addEventListener("change", () => {
 			hero.classList.toggle("is-paused", pause.checked);
-			if (pause.checked) { if (hero.classList.contains("is-playing")) finish(); stopWalk(); stopTyping(); }
-			else startWalk();
+			if (pause.checked) { clock.hold(); holdTyping(); stopWalk(); }
+			else { clock.resume(); if (typed && typed < chars.length) typeOn(); startWalk(); }
 		});
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopWalk(); else startWalk(); });
 		replay.addEventListener("click", () => {
 			if (reduced) return;
 			stopWalk();
 			stopTyping();
-			if (timer !== null) clearTimeout(timer);
+			clock.clear();
 			reset();
 			pause.checked = false;
 			hero.classList.remove("is-paused", "is-done", "is-playing");

@@ -7,22 +7,24 @@ on the building; then the photograph, and the drawing goes.
 
 Inputs, all on the photograph's own frame:
 
-- the photograph;
-- the plot without the museum: FLUX.2 [dev] (Workers AI) asked for the riverside with the building gone,
-  blended back by Poisson cloning inside the building's silhouette only, so the river, the quay and the
-  sky stay the photograph's own pixels;
+- the photograph, restored as every hero photograph is (photo_restore.py's recipe): SeedVR2 3B at 2x on
+  the 2016 px frame (`--resolution 1970`), then the white balance measured on the scene's own whites and
+  removed (`neutral_whites`, step D1);
+- the plot without the museum: FLUX.2 [dev] (Workers AI) asked for the riverside with the building gone
+  (seed 17), blended here by Poisson cloning inside the building's silhouette only, onto the restored
+  photograph, so the river, the quay and the sky are the photograph's own pixels and share its colour;
 - the building's silhouette (GrabCut, then the smooth sky regions subtracted);
 - the inner drawing: FLUX.2 [dev] redrawing an edge sketch of the building as an elevation (seed 11),
   then warped onto the real roofline — the two roof profiles matched by dynamic time warping, the
   correspondences fed to a thin-plate spline — which took the roof from a median 6 px off (90 % within
   13 px) to 0 px (90 % within 2 px). Dense optical flow was tried first and bent the lines.
 
-    python3 docs/design/hero-rotativo/guggenheim.py <photo.jpg> <plot.jpg> <silhouette.png> <drawing.png>
+    python3 docs/design/hero-rotativo/guggenheim.py <seedvr2-2x.png> <flux-empty.jpg> <silhouette.png> <drawing.png>
 
 writes, under new names so no browser keeps an older cut:
 
 - public/assets/hero/gf-solar-bn{-720,,-2016}.webp      the plot, in black and white
-- public/assets/hero/gf-guggenheim{-720,,-2016}.webp    the museum
+- public/assets/hero/gf-guggenheim-restaurado{-720,,-2016}.webp    the museum
 - src/assets/hero/gf-alzado.svg                          the elevation, in vectors
 - public/assets/hero/gf-alzado-tinta{,-800}.webp         the inner drawing's ink, as the lighthouse's plan
 
@@ -40,6 +42,8 @@ from scipy.ndimage import median_filter, gaussian_filter1d
 from skimage.morphology import skeletonize
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from photo_restore import neutral_whites  # noqa: E402  the one white balance every hero photograph gets
 ROOT = os.path.normpath(os.path.join(HERE, "..", "..", ".."))
 PUB = os.path.join(ROOT, "public", "assets", "hero")
 SVG = os.path.join(ROOT, "src", "assets", "hero", "gf-alzado.svg")
@@ -53,11 +57,24 @@ T = dict(persp=0, rays=120, cons=250, axes=400, ground=450, profile=650, detail=
 
 
 def unmark(img):
-    """paint out the photographer's mark in the lower right corner: it lies on the river, so the strip of
-    water just left of it is cloned over it, feathered (inpainting smeared it into a blot)"""
+    """paint out the photographer's mark in the lower right corner, on the river. Its light comes from the water
+    around it, inpainted at an eighth of the size (at full size inpainting smeared it into a blot); its ripples
+    from the strip just left of it, scaled to that light (copied as they were, they left a darker, flat patch:
+    the strip lies nearer the shore's shadow, and the mark sits on the sparkle)"""
     h, w = img.shape[:2]; k = w / 1500
     x0, x1, y0, y1 = int(1275 * k), int(1498 * k), int(686 * k), int(730 * k)
+    wx, wy = max(0, x0 - int(160 * k)), max(0, y0 - int(40 * k))
+    win = img[wy:, wx:].astype(np.float32)
+    hole = np.zeros(win.shape[:2], np.uint8); hole[y0 - wy:y1 - wy, x0 - wx:x1 - wx] = 255
+    small = (win.shape[1] // 8, win.shape[0] // 8)
+    light = cv2.inpaint(cv2.resize(win, small, interpolation=cv2.INTER_AREA).clip(0, 255).astype(np.uint8),
+                        (cv2.resize(hole, small) > 0).astype(np.uint8) * 255, 3, cv2.INPAINT_TELEA)
+    s = 6 * k
+    light = cv2.GaussianBlur(cv2.resize(light.astype(np.float32), win.shape[1::-1], interpolation=cv2.INTER_CUBIC), (0, 0), s)
+    light = light[y0 - wy:y1 - wy, x0 - wx:x1 - wx]
     src = img[y0:y1, x0 - (x1 - x0):x0].astype(np.float32)
+    base = cv2.GaussianBlur(src, (0, 0), s)
+    src = light + (src - base) * (light.mean() / max(1.0, base.mean()))
     a = np.zeros((y1 - y0, x1 - x0), np.float32); f = max(2, int(6 * k))
     a[f:-f, f:-f] = 1; a = cv2.GaussianBlur(a, (0, 0), f / 2)[..., None]
     out = img.copy().astype(np.float32)
@@ -65,12 +82,20 @@ def unmark(img):
     return np.clip(out, 0, 255).astype(np.uint8)
 
 
-def photos(photo, plot):
-    real = unmark(cv2.imread(photo))
-    empty = unmark(cv2.resize(cv2.imread(plot), (real.shape[1], real.shape[0]), interpolation=cv2.INTER_CUBIC))
+def photos(restored, flux, mask_png):
+    big = cv2.imread(restored)
+    rgb = cv2.cvtColor(big, cv2.COLOR_BGR2RGB).astype(np.float32) / 255
+    rgb = neutral_whites(rgb, np.ones(rgb.shape[:2], np.float32))
+    real = unmark(cv2.cvtColor((rgb * 255 + .5).clip(0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR))
+    h, w = real.shape[:2]
+    m = cv2.resize(cv2.imread(mask_png, 0), (w, h)) > 127
+    m = cv2.dilate(m.astype(np.uint8) * 255, np.ones((int(.008 * w) | 1,) * 2, np.uint8))
+    m[:6] = 0; m[-6:] = 0; m[:, :6] = 0; m[:, -6:] = 0
+    x, y, bw, bh = cv2.boundingRect(m)
+    empty = cv2.seamlessClone(cv2.resize(cv2.imread(flux), (w, h), interpolation=cv2.INTER_CUBIC), real, m, (x + bw // 2, y + bh // 2), cv2.NORMAL_CLONE)
     g = cv2.cvtColor(empty, cv2.COLOR_BGR2GRAY).astype(np.float32)
     g = np.clip((g - g.mean()) * 1.12 + g.mean(), 0, 255).astype(np.uint8)
-    for img, name, mode in ((real, "gf-guggenheim", "RGB"), (g, "gf-solar-bn", "L")):
+    for img, name, mode in ((real, "gf-guggenheim-restaurado", "RGB"), (g, "gf-solar-bn", "L")):
         im = Image.fromarray(img if mode == "L" else cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         for w, suf in SIZES:
             out = im.resize((w, round(w * im.height / im.width)), Image.LANCZOS)
@@ -212,6 +237,6 @@ def elevation(mask_png, drawing):
 
 
 if __name__ == "__main__":
-    photo, plot, mask_png, drawing = sys.argv[1:5]
-    photos(photo, plot)
+    restored, flux, mask_png, drawing = sys.argv[1:5]
+    photos(restored, flux, mask_png)
     elevation(mask_png, drawing)

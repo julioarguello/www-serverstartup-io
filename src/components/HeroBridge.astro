@@ -79,6 +79,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 
 <script>
 	import { SCENE_ROW } from "../utils/hero-art";
+	import { SceneClock } from "../utils/scene-clock";
 	const hero = document.querySelector<HTMLElement>(".s-hero--bridge");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -404,12 +405,12 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		function stopFeed() { if (feed !== null) { clearInterval(feed); feed = null; } }
 		function freezeFeed(on: boolean) { for (const a of bus.getAnimations({ subtree: true })) on ? a.pause() : a.play(); }
 
-		/* the sequence: the banks alone · the bridge, whole (CSS, 1.2 s → 2.1 s) · every connector at once ·
-		   the messages (founder, 2026-10-02: "que el puente aparezca de una sola vez, y los conectores también") */
-		let timer: number | null = null;
+		/* the sequence, 8 s like every opening (founder, 2026-10-04): the banks alone · the bridge, whole (CSS,
+		   3.2 s → 6.4 s) · every connector at once · the messages (founder, 2026-10-02: "que el puente aparezca
+		   de una sola vez, y los conectores también"). Pause freezes it where it is (SceneClock) */
+		const clock = new SceneClock();
 		function finish() {
-			if (timer !== null) clearTimeout(timer);
-			timer = null;
+			clock.clear();
 			hero.classList.remove("is-playing");
 			hero.classList.add("is-done");
 			startFeed();
@@ -417,7 +418,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		}
 		function play() {
 			hero.classList.add("is-playing");
-			timer = window.setTimeout(finish, 2500);
+			clock.at("end", 8000, finish);
 		}
 
 		/* a resize refits the frame every frame, as the lighthouse follows the window; the connectors wait,
@@ -440,17 +441,17 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			const img = hero.querySelector<HTMLImageElement>(".bridge__banks")!;
 			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
 		}
-		/* pausing during the opening ends it at once: what stops is the motion, not the picture */
+		/* pause freezes the frame where it is — the opening and its clock, or the feed — and play goes on */
 		pause.addEventListener("change", () => {
 			hero.classList.toggle("is-paused", pause.checked);
-			if (pause.checked) { if (hero.classList.contains("is-playing")) finish(); stopFeed(); freezeFeed(true); }
-			else { freezeFeed(false); startFeed(); }
+			if (pause.checked) { clock.hold(); stopFeed(); freezeFeed(true); }
+			else { clock.resume(); freezeFeed(false); startFeed(); }
 		});
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else startFeed(); });
 		replay.addEventListener("click", () => {
 			if (reduced) return;
 			stopFeed();
-			if (timer !== null) clearTimeout(timer);
+			clock.clear();
 			bus.querySelectorAll(".bridge__msg, .bridge__pac").forEach((b) => b.remove());
 			pac = null;
 			plugs.forEach((p) => p.el.classList.remove("is-hit"));

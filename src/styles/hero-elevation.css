@@ -53,21 +53,22 @@
 .elev__plot,
 .elev__drawing { opacity: 0; }
 
-/* the sequence, 5 s (the script's timer): the plot held 1.4 s, then knocked back under the drawing; every line drawn
-   from its own --d after that; the drawing held whole from 3.6 s, the photograph from 4 s, the drawing gone by 5 s */
+/* the sequence, 8 s like every opening (the script's clock): the plot held 2 s, then knocked back under the
+   drawing; every line drawn from its own --d, stretched to about 4 s; the drawing held whole from 6 s, the
+   photograph from 6.4 s, the drawing gone by 7.8 s. Pause freezes all of it (SceneClock holds the timer) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--elevation:not(.is-placed) .elev__box { visibility: hidden; }
-	.s-hero--elevation.is-playing .elev__plot { animation: elev-plot 1.2s ease-in-out both; }
-	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .6s ease-in-out 4s both; }
-	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .5s ease-in-out 4.5s both; }
-	.s-hero--elevation.is-playing .elev__drawing [pathLength] { stroke-dasharray: 1; animation: elev-draw .32s ease-out calc(1.4s + var(--d, 0ms)) both; }
-	.s-hero--elevation.is-playing .elev__profile { animation-duration: .85s; }
-	.s-hero--elevation.is-playing .elev__ground { animation-duration: .35s; }
-	.s-hero--elevation.is-playing :is(.elev__bub, .elev__text) { animation: elev-show .25s ease-out calc(1.4s + var(--d, 0ms)) both; }
-	.s-hero--elevation.is-paused * { animation-play-state: paused; }
+	.s-hero--elevation.is-playing .elev__plot { animation: elev-plot 2.4s ease-in-out both; }
+	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .8s ease-in-out 6.4s both; }
+	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .7s ease-in-out 7.1s both; }
+	.s-hero--elevation.is-playing .elev__drawing [pathLength] { stroke-dasharray: 1; animation: elev-draw .5s ease-out calc(2s + var(--d, 0ms) * 1.8) both; }
+	.s-hero--elevation.is-playing .elev__profile { animation-duration: 1.5s; }
+	.s-hero--elevation.is-playing .elev__ground { animation-duration: .6s; }
+	.s-hero--elevation.is-playing :is(.elev__bub, .elev__text) { animation: elev-show .4s ease-out calc(2s + var(--d, 0ms) * 1.8) both; }
+	/* as specific as the line rules above, and after them: their `animation` shorthand resets the play state */
+	.s-hero.s-hero--elevation.is-playing.is-paused * { animation-play-state: paused; }
 }
-/* the plot recedes under the drawing, as a board's photograph does: blurred, at a quarter */
-@keyframes elev-plot { 0%, 83% { opacity: 1; filter: none; } 100% { opacity: .25; filter: blur(2px); } }
+@keyframes elev-plot { 0%, 80% { opacity: 1; filter: none; } 100% { opacity: .25; filter: blur(2px); } }
 @keyframes elev-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes elev-out { from { opacity: 1; } to { opacity: 0; } }
 @keyframes elev-show { from { opacity: 0; } to { opacity: 1; } }

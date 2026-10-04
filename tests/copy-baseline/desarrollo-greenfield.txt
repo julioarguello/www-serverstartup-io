@@ -19,6 +19,9 @@ PF1 ←
 Desarrollo greenfield
 El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. SDLC completo, de la especificación a la observabilidad. Trabajamos contract first, con foco en estabilidad, seguridad y gobernanza.
 Hablemos de tu proyecto
+«Su software nos permite desmitificar el edificio ante el constructor, con una precisión de siete decimales.»
+«Gracias a esta tecnología informática podemos ser muy precisos con los materiales y las formas. Así podemos prever su coste antes de meternos en problemas.»
+— Frank Gehry
 Hay necesidades que ningún producto comercial cubre. Un motor de precios que solo existe en tu negocio, una web que no cabe en ninguna plantilla (esta misma, sin ir más lejos). Para eso siempre ha existido el desarrollo greenfield.
 Y hoy pesa otro motivo. Con las capacidades que trae la IA, construir a medida sale a cuenta en casos donde antes se compraba por defecto.
 La advertencia, por delante. Si un SaaS te lo resuelve, te lo decimos y no lo construimos. Preferimos perder un proyecto antes que mantener uno que sobra.

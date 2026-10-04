@@ -109,7 +109,15 @@ const replayLabel = L("elev_replay", "Repetir la animación");
 			hero!.classList.remove("is-playing");
 			hero!.classList.add("is-done");
 		}
+		/* the inner drawing's ink is not seen before 2.3 s: fetched when the opening starts, never with the plot,
+		   the page's largest paint — 800 px on phones and tablets, 1600 on desktops */
+		const ink = hero.querySelector<SVGImageElement>(".elev__ink");
+		function loadInk() {
+			if (!ink || ink.getAttribute("href")) return;
+			ink.setAttribute("href", `${ink.dataset.src}${matchMedia(SCENE_ROW).matches ? "-800" : ""}.webp`);
+		}
 		function play() {
+			loadInk();
 			hero!.classList.add("is-playing");
 			timer = window.setTimeout(finish, 5000);
 		}

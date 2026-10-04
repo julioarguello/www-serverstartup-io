@@ -27,20 +27,23 @@
 .elev__drawing,
 .elev__drawing svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 
-/* the drawing: a technical elevation, line weights by hierarchy (archimash, portico): the ground line and the
-   building's profile heaviest, inner edges fine, construction lines, rays and dimensions finest; auxiliary
-   lines in paper, the building in the section's green, lightened to read on the band */
+/* the drawing: a technical elevation, read the way a presentation board reads one — the photograph knocked
+   back, the line work on top in one colour, four weights (3 / 2 / 1 / 1 at half strength: Go Media's
+   architectural illustration; archimash, portico): the ground line and the building's profile heaviest, the
+   building's own ink (the lighthouse's plan technique) next, construction lines, rays, axes and dimensions
+   finest. The founder compared it with the lighthouse: "casi no se ven" */
 .elev__drawing path { fill: none; stroke-linecap: butt; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.elev__aux { stroke: color-mix(in srgb, var(--color-secondary) 60%, transparent); stroke-width: .6px; }
-.elev__ray { stroke: color-mix(in srgb, var(--color-secondary) 50%, transparent); stroke-width: .5px; }
-.elev__axis { stroke: color-mix(in srgb, var(--color-secondary) 80%, transparent); stroke-width: .7px; stroke-dasharray: 24 5 3 5; }
-.elev__ground { stroke: var(--color-secondary); stroke-width: 3.5px; }
-.elev__profile { stroke: var(--color-elev-line); stroke-width: 2.6px; }
-.elev__edge { stroke: color-mix(in srgb, var(--color-elev-line) 85%, transparent); stroke-width: .9px; }
-.elev__dim { stroke: color-mix(in srgb, var(--color-secondary) 85%, transparent); stroke-width: .7px; }
-.elev__tick { stroke: var(--color-secondary); stroke-width: 1.6px; }
-.elev__mark { stroke: var(--color-secondary); stroke-width: .9px; }
-.elev__bub circle { fill: none; stroke: color-mix(in srgb, var(--color-secondary) 85%, transparent); stroke-width: .9px; vector-effect: non-scaling-stroke; }
+.elev__aux { stroke: color-mix(in srgb, var(--color-secondary) 55%, transparent); stroke-width: 1px; }
+.elev__ray { stroke: color-mix(in srgb, var(--color-secondary) 45%, transparent); stroke-width: 1px; }
+.elev__axis { stroke: color-mix(in srgb, var(--color-secondary) 75%, transparent); stroke-width: 1px; stroke-dasharray: 24 5 3 5; }
+.elev__ground { stroke: var(--color-secondary); stroke-width: 3px; }
+.elev__profile { stroke: var(--color-elev-line); stroke-width: 3px; }
+.elev__reveal { stroke: var(--color-secondary); stroke-width: 14px; stroke-linecap: round; vector-effect: none; }
+.elev__inkfill { fill: var(--color-elev-line); }
+.elev__dim { stroke: color-mix(in srgb, var(--color-secondary) 90%, transparent); stroke-width: 1px; }
+.elev__tick { stroke: var(--color-secondary); stroke-width: 2px; }
+.elev__mark { stroke: var(--color-secondary); stroke-width: 1px; }
+.elev__bub circle { fill: none; stroke: color-mix(in srgb, var(--color-secondary) 85%, transparent); stroke-width: 1px; vector-effect: non-scaling-stroke; }
 .elev__drawing text { fill: var(--color-secondary); font: 400 17px/1 var(--font-family-hud); font-stretch: 100%; letter-spacing: .06em; }
 .elev__bub text { text-anchor: middle; font-size: 16px; }
 .elev__drawing .elev__end { text-anchor: end; }
@@ -50,20 +53,21 @@
 .elev__plot,
 .elev__drawing { opacity: 0; }
 
-/* the sequence, 5 s (the script's timer): the plot held 1.4 s and dimmed like tracing paper; every line drawn
-   from its own --d after that; the photograph from 3.8 s, the drawing gone by 5 s */
+/* the sequence, 5 s (the script's timer): the plot held 1.4 s, then knocked back under the drawing; every line drawn
+   from its own --d after that; the drawing held whole from 3.6 s, the photograph from 4 s, the drawing gone by 5 s */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--elevation:not(.is-placed) .elev__box { visibility: hidden; }
 	.s-hero--elevation.is-playing .elev__plot { animation: elev-plot 1.2s ease-in-out both; }
-	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .7s ease-in-out 3.8s both; }
-	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .6s ease-in-out 4.4s both; }
+	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .6s ease-in-out 4s both; }
+	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .5s ease-in-out 4.5s both; }
 	.s-hero--elevation.is-playing .elev__drawing [pathLength] { stroke-dasharray: 1; animation: elev-draw .32s ease-out calc(1.4s + var(--d, 0ms)) both; }
 	.s-hero--elevation.is-playing .elev__profile { animation-duration: .85s; }
 	.s-hero--elevation.is-playing .elev__ground { animation-duration: .35s; }
 	.s-hero--elevation.is-playing :is(.elev__bub, .elev__text) { animation: elev-show .25s ease-out calc(1.4s + var(--d, 0ms)) both; }
 	.s-hero--elevation.is-paused * { animation-play-state: paused; }
 }
-@keyframes elev-plot { 0%, 83% { opacity: 1; } 100% { opacity: .42; } }
+/* the plot recedes under the drawing, as a board's photograph does: blurred, at a quarter */
+@keyframes elev-plot { 0%, 83% { opacity: 1; filter: none; } 100% { opacity: .25; filter: blur(2px); } }
 @keyframes elev-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes elev-out { from { opacity: 1; } to { opacity: 0; } }
 @keyframes elev-show { from { opacity: 0; } to { opacity: 1; } }

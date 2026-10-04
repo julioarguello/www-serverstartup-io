@@ -24,10 +24,11 @@ writes, under new names so no browser keeps an older cut:
 - public/assets/hero/gf-solar-bn{-720,,-2016}.webp      the plot, in black and white
 - public/assets/hero/gf-guggenheim{-720,,-2016}.webp    the museum
 - src/assets/hero/gf-alzado.svg                          the elevation, in vectors
+- public/assets/hero/gf-alzado-tinta{,-800}.webp         the inner drawing's ink, as the lighthouse's plan
 
 The elevation is drawn as one: construction lines and perspective rays first (the horizon and the two
 vanishing points), the axes with their bubbles, the ground line, the building's profile (its own outline,
-so it is exact), the inner edges (the drawing's skeleton, smoothed into polylines), and last the
+so it is exact), the inner edges (the drawing's own ink, revealed stroke by stroke along its skeleton), and last the
 dimensions — the height to the highest point ("más de 50 metros": WikiArquitectura; Bilbao Metrópoli)
 and the chain between the axes. Every line carries `pathLength="1"` and its start time as `--d`, so the
 CSS draws it without measuring anything; the words are placeholders the component fills from the CMS.
@@ -125,6 +126,21 @@ def strokes(drawing, mask):
     return out
 
 
+def ink(drawing, mask):
+    """the inner drawing as the lighthouse's plan is: the drawing's own ink, to alpha, in one colour (the CSS
+    tints it), kept to the building; its line weights are the drawing's, not a trace's"""
+    g = cv2.imread(drawing, 0).astype(np.float32) / 255
+    a = np.clip((0.86 - g) / 0.40, 0, 1)
+    a *= cv2.dilate(mask.astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
+    rgba = np.dstack([np.full(a.shape, 255, np.uint8)] * 3 + [(a * 255).astype(np.uint8)])
+    im = Image.fromarray(rgba, "RGBA")
+    for w, suf in ((1600, ""), (800, "-800")):
+        out = im.resize((w, round(w * im.height / im.width)), Image.LANCZOS)
+        path = os.path.join(PUB, f"gf-alzado-tinta{suf}.webp")
+        out.save(path, "WEBP", quality=80, alpha_quality=80, method=6)
+        print(os.path.basename(path), out.size, os.path.getsize(path) // 1024, "KB")
+
+
 def d(p):
     return "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in p)
 
@@ -165,8 +181,13 @@ def elevation(mask_png, drawing):
     parts.append(line("elev__profile", d(prof), T["profile"]))
     det = strokes(drawing, mask)
     mx = np.array([s[:, 0].mean() for s in det]); order = np.argsort(mx)       # left to right, as a hand lays it
-    for j, i in enumerate(order):
-        parts.append(line("elev__edge", d(det[i]), T["detail"] + j * 1000 / len(det)))
+    reveal = "".join(line("elev__reveal", d(det[i]), T["detail"] + j * 1000 / len(det)) for j, i in enumerate(order))
+    ink(drawing, mask)
+    # the ink is white on alpha: a mask over a rect filled with the theme's colour, revealed stroke by stroke
+    box = f'maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}"'
+    parts.append(f'<mask id="elev-reveal" {box}>{reveal}</mask>'
+                 f'<mask id="elev-ink" {box}><image class="elev__ink" data-src="/assets/hero/gf-alzado-tinta" width="{W}" height="{H}" mask="url(#elev-reveal)"/></mask>'
+                 f'<rect class="elev__inkfill" width="{W}" height="{H}" mask="url(#elev-ink)"/>')
     dx, cy = x1 + 30, base + 44
     dims = [f"M{topx + 6:.1f},{topy:.1f} H{dx + 8}", f"M{x1 + 6},{base} H{dx + 8}", f"M{dx},{topy:.1f} V{base}",
             f"M{AXES[0]},{cy} H{AXES[-1]}"] + [f"M{x},{base + 6} V{cy + 8}" for x in AXES]

@@ -443,7 +443,7 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   whole; the photograph from 6.4 s, and the drawing goes. The same time as the others ("misma o similar
   duración en todos"); a 5 s round read "muy rápido", and every opening moved to 8 s with it.
 - **Karpathy's epigraph** (founder's choice, 2026-10-04, after rejecting Gehry, Brooks, Brand and Gall
-  for something recent on why custom pays off against a SaaS): "[It] empowers trained professionals to
+  for something recent on why custom pays off against a SaaS): "[AI] empowers trained professionals to
   write a lot more … software that would otherwise never be written" — Andrej Karpathy, *2025 LLM Year
   in Review* (2025-12-19), verified against the post. The subject in the original is vibe coding and
   the elided words are "(vibe coded)": the page argues for discipline, so neither is quoted. The ES is a

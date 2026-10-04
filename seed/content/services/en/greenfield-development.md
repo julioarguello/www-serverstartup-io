@@ -3,6 +3,10 @@ cta_label: "Let's talk about your project"
 excerpt: "The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full `SDLC`, from specification to observability. We work contract first, focused on stability, security and governance."
 ---
 
+> «Their software allows us to demystify the building to a builder, down to seven decimal points of accuracy.» [Frank Gehry](https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview)
+
+> «By the use of this computer technology we are able to be very specific about materials and shapes. Therefore we're able to predetermine the cost of such things before we get ourselves in trouble.» [Frank Gehry](https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview)
+
 Some needs no commercial product covers. A pricing engine that only exists in your business, a website no template fits (this one, for instance). That's what *greenfield* development has always been for.
 
 And there's a newer reason. With the capabilities [AI](/en/artificial-intelligence) brings, building custom now pays off in cases where buying used to be the default.

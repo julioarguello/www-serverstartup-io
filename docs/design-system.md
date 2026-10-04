@@ -221,8 +221,9 @@ Text, colours, images and animations change per page; the layout and the band do
   container queries: in a flex column Chrome resolved `100cqh` to 0.
 - **Every live layer reads the copy where it is**: the epigraph is outside `.s-hero__copy` (it lives in
   `.s-hero__after`), so a script that keeps its art off the text measures both.
-- **The pause freezes everything that moves**, timers included. An event that disappears while paused is
-  motion.
+- **The pause freezes everything that moves**, timers included, and play goes on from the same frame —
+  never a jump to the end. An event that disappears while paused is motion.
+- **Every opening lasts about 8 s** (founder, 2026-10-04).
 - **The header does not hide** (#543). It stays fixed, transparent over the opening and solid on scroll.
   The pattern of a header hidden on load and shown on scroll would save 69 px against 231–448 px of
   overflow. None of six production sites observed uses it. It risks WCAG 2.4.7: focus would land on

@@ -242,7 +242,11 @@ Decisions that are not obvious from the code, and the measurement behind each:
   forced, the class re-added, or the CSS animations never restart. Where a pointer can hover the
   two controls wait at 35 % until the band is hovered or one has focus; on touch devices, which
   cannot hover, they stay at full strength under the art. Under reduced motion the replay is
-  hidden: nothing moves to replay.
+  hidden: nothing moves to replay. **Pause freezes the frame
+  where it is, and play goes on from there** (founder, 2026-10-04: pausing used to jump to the end of
+  the opening): the CSS stops on `animation-play-state`, and the timeouts that end the opening or start
+  its text run on `SceneClock` (`src/utils/scene-clock.ts`), which keeps what each has left. A pause rule
+  must out-rank every rule that sets the `animation` shorthand, which resets the play state.
 - **The copy is in front, the drawing stays behind it** (founder, 2026-10-01: "no que la imagen
   desapareciera"). The veil under the column is the ground at 78 %, not solid: the rings and the
   house's left half show through dimmed, and from 40 px before the column's right edge it is
@@ -276,8 +280,8 @@ Decisions that are not obvious from the code, and the measurement behind each:
   (`partnerInHero`), so the instrument's intro renders as plain paragraphs.
 - **Only the CDN face.** `heroRadarForSlug()` keys on the face like the plates do, so both
   locale slugs render it and the other five verticals keep their plates untouched.
-- **Timing is the founder's ear, not a rule**: photo 1.2 s → crossfade 2 s → strokes alone 1 s →
-  radar 0.8 s → one event every 0.52 s, each alive 2.4 s. The reveal only runs once per page
+- **Timing is the founder's ear, not a rule**: the reveal takes `--radar-t`, 8 s like every opening
+  (founder, 2026-10-04: "muy rápido"; it was 5 s); then one event every 0.52 s, each alive 2.4 s. The reveal only runs once per page
   load; this hero is not a carousel slide.
 - **Assets** live in `public/assets/hero/` like the plates (R2 is not seedable): the photograph
   as WebP with alpha at 1320 px (142 KB, the tight cutout) and the plan as lossless WebP
@@ -390,7 +394,7 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   3440: `--vfade`, 14 % of the frame's width), the foot where the scene is its own row (`--vfade-b`, 14 %
   of its height); the left edge already fades from the seal and the top from its own 18 %.
 - **The sequence is three beats** (founder, 2026-10-02: "imagen original · foco + color · letras"): the
-  photograph held 2.4 s; then the machine's view, built the way the film's "Termovision" was printed.
+  photograph held 3.8 s (8 s in all, like every opening); then the machine's view, built the way the film's "Termovision" was printed.
   Ernie Farino, Cinefex 21 (April 1985): "a solarization type effect … extrapolate that into
   high-contrast black-and-white images. By making negatives and positives at different exposures, the
   image would swell or shrink slightly … a combination of black, red and white tonal areas for the
@@ -399,19 +403,19 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   filters: `#vision-hicon` (two tones) for one pass, slightly swollen, then `#vision-tones`, a steep curve
   (deep black, near-white highlights) with the violet-to-red gradient laid over as colour; three steps in
   0.36 s. No monitor lines: a still of the film (Hackaday, 2024) shows none. The reading follows the film
-  too: white, burned in with a slight glow, no plate, typing itself character by character from 3.3 s
+  too: white, burned in with a slight glow, no plate, typing itself character by character from 5.2 s
   (the characters keep their room, so nothing moves); in the film's faces as far as a free licence allows
   (fontsinuse.com): Bessellen for the captions, whose one free recreation is non-commercial, so Saira at
   112.5 % width; Letter Gothic for the listings (Apple II code printed on a daisy wheel), so Inconsolata,
   drawn after it — both OFL, self-hosted, subset to 6 and 19 KB. Four flat tones were tried and lost the
   picture. A focus pull, a plain cut and blinds were tried
   and rejected on the way;
-  then its whole reading in one cut at 3.3 s (an earlier round joined colour and text in one cut;
+  then its whole reading in one cut at 5.2 s (an earlier round joined colour and text in one cut;
   piece-by-piece entry was rejected before that). From then on the
   text moves, as the film's code listings
   scroll "all the while" (Hackaday, 2024: 6502 listings from *Nibble*, 1984). The listing rolls a line
   every 1.2 s, its numbers climbing, and the readout's `write` turns from "on review" to "signed"
-  (`panel_labels` → `vision_signed`) each time `sign()` comes through. The pause stops it.
+  (`panel_labels` → `vision_signed`) each time `sign()` comes through. The pause freezes it, typing included.
 - **The reading** (`HeroVision.astro`, `hero-vision.css`): a reticle on the tanker, the tug bracketed,
   MATCH, a readout whose mission is set by people (`mission: assist`, `replace: denied`,
   `override: bridge`), and the page's own flow as code (`await review(bridge)`). Strings are
@@ -434,10 +438,14 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 
 ### 4.8 The Guggenheim's elevation, the greenfield vertical (#547)
 
-- **Three beats in 5 s, like the lighthouse and the machine's eye** (founder, 2026-10-03/04): the plot
-  without the museum in black and white, held 1.4 s; the museum drawn as an architect's elevation over it
-  in 2.2 s; the photograph, and the drawing goes. Faster and in the same time as the others ("aburre,
-  misma o similar duración en todos").
+- **Three beats in 8 s, like every opening** (founder, 2026-10-03/04): the plot without the museum in
+  black and white, held 2 s; the museum drawn as an architect's elevation over it in about 4 s, held
+  whole; the photograph from 6.4 s, and the drawing goes. The same time as the others ("misma o similar
+  duración en todos"); a 5 s round read "muy rápido", and every opening moved to 8 s with it.
+- **Gehry's epigraph** (founder's choice, 2026-10-04): the computer let the studio be exact before
+  building — "down to seven decimal points of accuracy", "predetermine the cost … before we get
+  ourselves in trouble". Source: the 1998 interview in *The Planning Report*, verified verbatim; the ES
+  is a translation. A Spanish original in *El Correo* was looked for and not found.
 - **The plot is a reconstruction, said so in the credits.** No free-licence photograph of Abandoibarra
   before 1997 from this side was found (Commons categories, geoEuskadi orthophotos are aerial); the
   founder chose this frame with the museum removed (FLUX inside the silhouette only).
@@ -459,8 +467,11 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   (`gf-alzado-tinta.webp`, white on alpha, tinted by `--color-elev-line` through a mask and revealed stroke
   by stroke along its skeleton) — the vectorised skeleton drawn as lines read as a noisy trace. The ink is
   fetched when the opening starts (800 px below 1100), never alongside the plot, the LCP.
-- **Open**: the left half of the drawing under the copy's veil, and a darker patch of water where the
-  photographer's mark was.
+- **The photograph is restored** like the others (§4.6): SeedVR2 3B at 2×, the whites' cast removed
+  (a −0.3, b +2.1); the plot is built on the restored frame. The photographer's mark is painted out with
+  the surrounding water's light (inpainted at an eighth of the size) and the ripples of the strip beside
+  it: copied as they were, they left a darker patch.
+- **Open**: the left half of the drawing under the copy's veil.
 
 ## 5. SEO
 

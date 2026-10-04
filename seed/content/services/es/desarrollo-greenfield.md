@@ -3,6 +3,10 @@ cta_label: "Hablemos de tu proyecto"
 excerpt: "El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. `SDLC` completo, de la especificación a la observabilidad. Trabajamos *contract first*, con foco en estabilidad, seguridad y gobernanza."
 ---
 
+> «Su software nos permite desmitificar el edificio ante el constructor, con una precisión de siete decimales.» [Frank Gehry](https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview)
+
+> «Gracias a esta tecnología informática podemos ser muy precisos con los materiales y las formas. Así podemos prever su coste antes de meternos en problemas.» [Frank Gehry](https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview)
+
 Hay necesidades que ningún producto comercial cubre. Un motor de precios que solo existe en tu negocio, una web que no cabe en ninguna plantilla (esta misma, sin ir más lejos). Para eso siempre ha existido el desarrollo *greenfield*.
 
 Y hoy pesa otro motivo. Con las capacidades que trae la [IA](/inteligencia-artificial), construir a medida sale a cuenta en casos donde antes se compraba por defecto.

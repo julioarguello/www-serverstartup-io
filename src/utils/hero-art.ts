@@ -175,9 +175,9 @@ export const HERO_ELEVATION = {
 	plotSmall: "/assets/hero/gf-solar-bn-720.webp",
 	plotLarge: "/assets/hero/gf-solar-bn-2016.webp",
 	/** the Guggenheim from across the river (Sergio S.C, CC BY-SA 2.0), the photographer's mark painted out: WebP, 1320×645 */
-	photo: "/assets/hero/gf-guggenheim.webp",
-	photoSmall: "/assets/hero/gf-guggenheim-720.webp",
-	photoLarge: "/assets/hero/gf-guggenheim-2016.webp",
+	photo: "/assets/hero/gf-guggenheim-restaurado.webp",
+	photoSmall: "/assets/hero/gf-guggenheim-restaurado-720.webp",
+	photoLarge: "/assets/hero/gf-guggenheim-restaurado-2016.webp",
 };
 
 /** The frame is 2.05 × 86 % of the band's height on desktops (about 88 % of a 1575 × 791 viewport) and up to 125 % of the width below 1100 px; phones ask for 98vw so a 412 px phone at 1.75 (707 px) takes the 720 file (Lighthouse's mobile run scored 0.92 with the 1320). The photograph waits at low priority: it is not seen before 3.8 s and competed with the plot, the LCP. */

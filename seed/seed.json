@@ -8758,6 +8758,62 @@
 					"content": [
 						{
 							"_type": "block",
+							"_key": "gq0",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "gql0",
+									"_type": "link",
+									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "gqa0",
+									"text": "«Su software nos permite desmitificar el edificio ante el constructor, con una precisión de siete decimales.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "gqb0",
+									"text": "Frank Gehry",
+									"marks": [
+										"gql0"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "gq1",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "gql1",
+									"_type": "link",
+									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "gqa1",
+									"text": "«Gracias a esta tecnología informática podemos ser muy precisos con los materiales y las formas. Así podemos prever su coste antes de meternos en problemas.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "gqb1",
+									"text": "Frank Gehry",
+									"marks": [
+										"gql1"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
 							"_key": "k1",
 							"style": "normal",
 							"markDefs": [],
@@ -12310,6 +12366,62 @@
 					"excerpt": "The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full `SDLC`, from specification to observability. We work contract first, focused on stability, security and governance.",
 					"cta_label": "Let's talk about your project",
 					"content": [
+						{
+							"_type": "block",
+							"_key": "gq0",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "gql0",
+									"_type": "link",
+									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "gqa0",
+									"text": "«Their software allows us to demystify the building to a builder, down to seven decimal points of accuracy.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "gqb0",
+									"text": "Frank Gehry",
+									"marks": [
+										"gql0"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "gq1",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "gql1",
+									"_type": "link",
+									"href": "https://www.planningreport.com/1998/08/30/bilbao-spain-frank-gehry-tpr-exclusive-interview"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "gqa1",
+									"text": "«By the use of this computer technology we are able to be very specific about materials and shapes. Therefore we're able to predetermine the cost of such things before we get ourselves in trouble.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "gqb1",
+									"text": "Frank Gehry",
+									"marks": [
+										"gql1"
+									]
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "k1",

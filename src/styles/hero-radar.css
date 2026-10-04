@@ -9,7 +9,7 @@
 	--radar-c: var(--scene-c);
 	/* small orange text on the dark ground: mixed toward paper it clears 4.5:1 */
 	--radar-c-text: color-mix(in srgb, var(--radar-c) 80%, var(--color-secondary));
-	--radar-t: 5s;
+	--radar-t: 8s;                    /* every opening lasts about 8 s (founder, 2026-10-04) */
 }
 
 /* the drawing's frame: sized by the BAND'S HEIGHT, never taller than it (88 %

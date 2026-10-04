@@ -452,8 +452,15 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   gives every line `pathLength="1"` and its start as `--d`; `hero-elevation.css` draws them. Rejected on
   the way: the aerial orthophoto story (1989 → 2023), a tape collage (the founder's reference, then "no me
   gusta nada"), a hand-drawn pencil look, and a 12–19 s sequence.
-- **Open** (refinement in the real page): the line finish ("no le veo el acabado profesional"), the left
-  half of the drawing under the copy's veil, and a darker patch of water where the photographer's mark was.
+- **Read like the lighthouse, not like a trace** (founder, 2026-10-04, comparing them: "casi no se ven"):
+  the plot is knocked back under the drawing (a quarter, blurred 2 px), as presentation boards knock the
+  photograph back; the line work takes four weights (3 / 2 / 1 / 1 at half: Go Media's architectural
+  illustration); the inner drawing is the redrawing's own ink, as the lighthouse's plan is
+  (`gf-alzado-tinta.webp`, white on alpha, tinted by `--color-elev-line` through a mask and revealed stroke
+  by stroke along its skeleton) — the vectorised skeleton drawn as lines read as a noisy trace. The ink is
+  fetched when the opening starts (800 px below 1100), never alongside the plot, the LCP.
+- **Open**: the left half of the drawing under the copy's veil, and a darker patch of water where the
+  photographer's mark was.
 
 ## 5. SEO
 

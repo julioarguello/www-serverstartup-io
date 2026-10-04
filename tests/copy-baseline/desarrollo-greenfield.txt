@@ -19,7 +19,7 @@ PF1 ←
 Desarrollo greenfield
 El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. SDLC completo, de la especificación a la observabilidad. Trabajamos contract first, con foco en estabilidad, seguridad y gobernanza.
 Hablemos de tu proyecto
-«[Permite] a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.»
+«[La IA] permite a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.»
 — Andrej Karpathy
 Hay necesidades que ningún producto comercial cubre. Un motor de precios que solo existe en tu negocio, una web que no cabe en ninguna plantilla (esta misma, sin ir más lejos). Para eso siempre ha existido el desarrollo greenfield.
 Y hoy pesa otro motivo. Con las capacidades que trae la IA, construir a medida sale a cuenta en casos donde antes se compraba por defecto.

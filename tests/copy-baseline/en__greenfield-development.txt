@@ -19,7 +19,7 @@ VP1 ←
 Greenfield development
 The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full SDLC, from specification to observability. We work contract first, focused on stability, security and governance.
 Let's talk about your project
-«[It] empowers trained professionals to write a lot more … software that would otherwise never be written.»
+«[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.»
 — Andrej Karpathy
 Some needs no commercial product covers. A pricing engine that only exists in your business, a website no template fits (this one, for instance). That's what greenfield development has always been for.
 And there's a newer reason. With the capabilities AI brings, building custom now pays off in cases where buying used to be the default.

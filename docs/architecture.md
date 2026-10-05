@@ -545,6 +545,12 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   in the sky over it — bronze, silver, gold, one after the other, each dome sending a soft beam up to its own;
   then the payoff, thick dots running along the links; at rest by 8 s, the finished sky staying. Each layer is
   named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`).
+- **Joe Reis's epigraph** (founder's choice, 2026-10-05): «Data models tend to evolve more slowly than code,
+  and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take
+  the time to do things right. Move slowly to move faster and safer over the long haul.» — *Practical Data
+  Modeling*, May 2025, verified against the post; the ES is a translation. Chosen over his own line on AI
+  generating "a working pipeline" over garbage semantics, which on its own says how it goes wrong and never
+  how to do it right ("nosotros lo hacemos bien").
 - **Consolidation, not a neural network** (the founder asked whether the comparison held; it does not: a
   network mixes everything and learns weights — that is the AI vertical — while the medallion refines): ten
   raw stars, bronze; four clean ones, silver, each gathering its own group of bronze; two that matter, gold,

@@ -217,13 +217,23 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 					const b = nearest(a, layers[k]);
 					const dx = b.x - a.x, dy = b.y - a.y, bow = (rnd() - 0.5) * 0.25;
 					const packets = Array.from({ length: 1 + Math.floor(rnd() * 3) }, () => ({ phase: rnd(), period: 1200 + 900 * rnd(), r: 2.4 + 1.2 * rnd() }));
-					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.32 + 0.3 * rnd(), width: 0.9 + 0.6 * rnd(), packets });
+					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.32 + 0.3 * rnd(), width: 0.5 + 0.4 * rnd(), packets });
 				}
 				/* a star of the layer that nobody feeds would be a star without data: it takes the nearest one */
 				for (const b of layers[k]) if (!links[k - 1].some((l) => l.b === b)) {
 					const a = nearest(b, layers[k - 1]);
-					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, alpha: 0.4, width: 1, packets: [{ phase: rnd(), period: 1500, r: 3 }] });
+					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, alpha: 0.4, width: 0.7, packets: [{ phase: rnd(), period: 1500, r: 3 }] });
 				}
+			}
+			/* and silver reads from silver too, as clean tables are joined with each other (founder: "que algún
+			   silver lea también de otro silver"): each of the two closest pairs, the left one feeding the right */
+			const pairs: [Star, Star][] = [];
+			const sv = layers[1];
+			for (let i = 0; i < sv.length; i++) for (let j = i + 1; j < sv.length; j++) pairs.push([sv[i], sv[j]]);
+			pairs.sort((p, q) => Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y) - Math.hypot(q[0].x - q[1].x, q[0].y - q[1].y));
+			for (const [a, b] of pairs.slice(0, Math.min(2, pairs.length))) {
+				const dx = b.x - a.x, dy = b.y - a.y, bow = 0.22;
+				links[0].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.45, width: 0.6, packets: [{ phase: rnd(), period: 1300, r: 2.6 }, { phase: rnd(), period: 1700, r: 2.6 }] });
 			}
 			/* each layer's name under its lowest star, or over its highest where that would touch the copy */
 			ctx.font = FONT;

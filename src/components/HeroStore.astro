@@ -136,7 +136,8 @@ const replayLabel = L("store_replay", "Repetir la animación");
 		const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
 		/* the timeline, in ms from the start: the CSS plays the photograph, the lids and the seal; this plays the cube */
-		const CUBE_AT = 4200, FLY_AT = 6100, FLY_MS = 700;
+		/* on the openings' one grammar (#558): the cube rises as the payoff begins, flies by 7 s */
+		const CUBE_AT = SCENE_BEATS.drawn, FLY_AT = 6300, FLY_MS = 700;
 		const N = cube.frames.length, FRAME_MS = 1000 / cube.fps;
 		let t = 0;
 		function draw(ms: number) {

@@ -129,7 +129,8 @@
 	translate: 0 -50%;
 	border-radius: 50%;
 	border: 1.5px solid var(--color-secondary);
-	animation: radar-pulse 2.5s ease-out infinite;
+	/* three echoes, then still (#558: nothing loops past the end) */
+	animation: radar-pulse 2.5s ease-out 3;
 }
 .radar__blip {
 	position: absolute;
@@ -141,6 +142,8 @@
 	animation: radar-blip 2.4s ease-out forwards;
 }
 .radar__blip--l { translate: -100% -50%; padding-left: 0; padding-right: 22px; }
+/* the events held at the end, one per zone (#558) */
+.radar__blip.is-still { animation: none; opacity: 1; }
 .radar__blip::after {
 	content: "";
 	position: absolute;
@@ -156,13 +159,15 @@
 }
 .radar__blip--l::after { left: auto; right: 0; }
 
-/* the sequence: photo 1.2 s · crossfade 2 s · strokes alone 1 s · radar 0.8 s · then the events */
+/* the sequence, on the openings' one grammar (#558): the photograph alone to 2 s (25 %) · crossfade to the
+   drawing by 4.5 s (56 %) · the radar in by 5.3 s (66 %), its sweep turning once to 300° and the events (script)
+   until 7.4 s · at rest by 8 s: the sweep still, the events held, as reduced motion shows it */
 .s-hero--radar.is-playing .radar__photo { animation: radar-photo var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-playing .radar__plan { animation: radar-plan var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-playing .radar__screen svg,
 .s-hero--radar.is-playing .radar__hud { animation: radar-in var(--radar-t) ease-in-out forwards; }
-.s-hero--radar.is-playing .radar__sweep,
-.s-hero--radar.is-done .radar__sweep { animation: radar-sweep 5s linear infinite, radar-in var(--radar-t) ease-in-out forwards; }
+.s-hero--radar.is-playing .radar__sweep { animation: radar-sweep var(--radar-t) linear forwards, radar-in var(--radar-t) ease-in-out forwards; }
+.s-hero--radar.is-done .radar__sweep { opacity: 1; transform: rotate(300deg); }
 .s-hero--radar.is-done .radar__photo { opacity: 0; }
 .s-hero--radar.is-done .radar__plan,
 .s-hero--radar.is-done .radar__screen svg,
@@ -175,10 +180,10 @@
 .s-hero--radar.is-paused .radar__screen svg,
 .s-hero--radar.is-paused .radar__hud { animation-play-state: paused; }
 
-@keyframes radar-photo { 0% { opacity: 1; } 24% { opacity: 1; } 64% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes radar-plan { 0% { opacity: 0; } 24% { opacity: 0; } 64% { opacity: 1; } 100% { opacity: 1; } }
-@keyframes radar-in { 0% { opacity: 0; } 84% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes radar-sweep { to { transform: rotate(360deg); } }
+@keyframes radar-photo { 0% { opacity: 1; } 25% { opacity: 1; } 56% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes radar-plan { 0% { opacity: 0; } 25% { opacity: 0; } 56% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes radar-in { 0% { opacity: 0; } 56% { opacity: 0; } 66% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes radar-sweep { 0%, 56% { transform: rotate(0deg); } 100% { transform: rotate(300deg); } }
 @keyframes radar-pulse { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
 @keyframes radar-blip { 0% { opacity: 0; } 6% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 

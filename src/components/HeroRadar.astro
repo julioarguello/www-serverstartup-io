@@ -89,7 +89,8 @@ const RING_POS: [number, number][] = [
 </HeroScene>
 
 <script>
-	import { SCENE_ROW } from "../utils/hero-art";
+	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
+	import { SceneClock } from "../utils/scene-clock";
 	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -203,26 +204,48 @@ const RING_POS: [number, number][] = [
 		settleLabels();
 		let settling: number | null = null;
 		window.addEventListener("resize", () => { if (settling !== null) clearTimeout(settling); settling = window.setTimeout(settleLabels, 150); });
-		function startFeed() { if (timer !== null || reduced || pause.checked || document.hidden) return; timer = window.setInterval(blip, 520); blip(); }
+		/* the events run inside the opening's payoff, never past its end (#558): from the radar's arrival to
+		   7.4 s; at the end the feed clears and one still event per zone holds, as reduced motion shows it */
+		const FEED_AT = SCENE_BEATS.drawn + 800, FEED_END = SCENE_BEATS.end - 600;
+		const clock = new SceneClock();
+		let feeding = false;
+		function startFeed() { if (timer !== null || !feeding || reduced || pause.checked || document.hidden) return; timer = window.setInterval(blip, 520); blip(); }
 		function stopFeed() { if (timer !== null) { clearInterval(timer); timer = null; } }
-		function done() { hero.classList.add("is-done"); window.setTimeout(startFeed, 200); }
+		function feedOn() { feeding = true; startFeed(); }
+		function feedOff() { feeding = false; stopFeed(); }
+		function settle() {
+			ZONES.forEach((z, i) => { const x = (z[0] + z[1]) / 2, y = (z[2] + z[3]) / 2; if (EVENTS[i] && clear(x, y, z[4], EVENTS[i])) place(x, y, z[4], EVENTS[i]).classList.add("is-still"); });
+		}
+		function done() {
+			clock.clear();
+			feedOff();
+			for (const r of pending.values()) if (r.t !== null) clearTimeout(r.t);
+			pending.clear();
+			feed.replaceChildren();
+			live.length = 0;
+			hero.classList.remove("is-playing");
+			hero.classList.add("is-done");
+			settle();
+		}
 
 		pause.addEventListener("change", () => {
 			hero.classList.toggle("is-paused", pause.checked);
-			if (pause.checked) { stopFeed(); freezeEvents(); } else { thawEvents(); if (hero.classList.contains("is-done")) startFeed(); }
+			if (pause.checked) { clock.hold(); stopFeed(); freezeEvents(); } else { clock.resume(); thawEvents(); startFeed(); }
 		});
-		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else if (hero.classList.contains("is-done")) startFeed(); });
+		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else startFeed(); });
 
 		const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
 		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
 		function play() {
 			plan.addEventListener("animationend", done, { once: true });
-			window.setTimeout(() => hero.classList.add("is-playing"), 300);
+			hero.classList.add("is-playing");
+			clock.at("feed", FEED_AT, feedOn);
+			clock.at("feed-end", FEED_END, feedOff);
 		}
 		if (reduced) {
 			/* the resting state at once, with one still event per zone */
 			hero.classList.add("is-done");
-			ZONES.forEach((z, i) => { const x = (z[0] + z[1]) / 2, y = (z[2] + z[3]) / 2; if (EVENTS[i] && clear(x, y, z[4], EVENTS[i])) place(x, y, z[4], EVENTS[i]); });
+			settle();
 		} else {
 			const imgs = Array.from(hero.querySelectorAll<HTMLImageElement>(".radar__art img"));
 			let n = 0;
@@ -232,7 +255,8 @@ const RING_POS: [number, number][] = [
 		/* replay: back to the photograph and through the sequence again; the pause is released, the feed cleared */
 		replay.addEventListener("click", () => {
 			if (reduced) return;
-			stopFeed();
+			feedOff();
+			clock.clear();
 			for (const r of pending.values()) if (r.t !== null) clearTimeout(r.t);
 			pending.clear();
 			feed.replaceChildren();

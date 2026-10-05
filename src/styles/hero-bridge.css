@@ -134,6 +134,8 @@
 	from { clip-path: polygon(50% 50%, 100% 20%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 80%); }
 	to { clip-path: polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 50%); }
 }
+/* still at rest and under reduced motion: its mouth half open (#558: nothing loops past the end) */
+.s-hero--bridge.is-done .bridge__pac > b { animation: none; clip-path: polygon(50% 50%, 100% 25%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 75%); }
 @media (prefers-reduced-motion: reduce) { .bridge__pac > b { animation: none; clip-path: polygon(50% 50%, 100% 25%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 75%); } }
 
 /* on the openings' clock (#553): the banks alone until --beat-draw, the bridge whole by --beat-drawn (opacity),

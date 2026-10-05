@@ -5919,6 +5919,34 @@
 					"content": [
 						{
 							"_type": "block",
+							"_key": "eq0",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "eql0",
+									"_type": "link",
+									"href": "https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "eqa0",
+									"text": "«…servir las compras de los clientes donde, cuando y como quieran ser servidos.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "eqb0",
+									"text": "Ken Murphy",
+									"marks": [
+										"eql0"
+									]
+								}
+							]
+						},
+						{
+							"_type": "block",
 							"_key": "k1",
 							"style": "normal",
 							"markDefs": [],
@@ -9517,6 +9545,34 @@
 					"excerpt": "Over twenty years inside [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.",
 					"cta_label": "Audit your e-commerce",
 					"content": [
+						{
+							"_type": "block",
+							"_key": "eq0",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "eql0",
+									"_type": "link",
+									"href": "https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "eqa0",
+									"text": "«…serve customers' food missions wherever, whenever, and however they want to be served.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "eqb0",
+									"text": "Ken Murphy",
+									"marks": [
+										"eql0"
+									]
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "k1",

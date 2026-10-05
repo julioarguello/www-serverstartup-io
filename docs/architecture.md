@@ -487,6 +487,11 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   the whole logo in place (plates and all) was rejected the same day. Rejected on the way: the Encants plan view, the port of Avilés (no free
   photo of containers there), container ships (neutral ones and our own tanker loaded by FLUX), the arcades
   of calle Galiana, a six-colour puzzle cube, and a high-angle AutoStore grid (sharper but not the look).
+- **Ken Murphy's epigraph** (founder's choice, 2026-10-05, after rejecting a dozen on speed, clean core and
+  Amazon): the customer is served "wherever, whenever, and however they want to be served" — Tesco's chief
+  executive on the 2025/26 results call (April 2026), verified against the transcript; the ES is a
+  translation, both trimmed with an ellipsis. Chosen as the twin of a client's own line (Alcampo's director
+  general, June 2026), which the founder wanted said by someone who is not a client.
 - **Measured on the photograph, never placed by eye** (`docs/design/hero-rotativo/ocado.py`): the rails'
   vanishing point (1416.9, 588.4) by least squares over Hough segments; no roll (the slats are level); the
   focal length, 5,700 px, from the 70 mm on the sensor scaled to the file (the columns lean too little to

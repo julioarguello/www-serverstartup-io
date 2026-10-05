@@ -53,15 +53,18 @@
 .s-hero__epigraph blockquote { margin: 0; }
 /* quotations by one author, one after the other */
 .s-hero__epigraph p + p { margin-top: .4em; }
+/* set as fine print (under the layout gate's 16 px body floor): at 17 px across the one column a quotation
+   ran 89 characters a line, past the 75 the body copy keeps (G20, #481); the lever is type size, never a
+   narrower box (#304) — and an epigraph sits below the copy it heads, not beside it (#551) */
 .s-hero__epigraph p {
 	margin: 0;
-	font-size: 17px;
+	font-size: 15px;
 	line-height: 1.5;
 	font-style: italic;
 }
 .s-hero__epigraph figcaption {
 	margin-top: 6px;
-	font-size: 16px;
+	font-size: 14px;
 	color: var(--color-console-ink);
 }
 .s-hero__epigraph figcaption a {

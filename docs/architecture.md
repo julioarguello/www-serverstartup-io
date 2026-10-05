@@ -534,6 +534,44 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   on a label bound to a control, and it only came to light here because `/en/e-commerce` is one of the two
   pages the a11y gate sends to Nu. The input's `aria-label` names the control.
 
+### 4.10 The sky over the Teide Observatory, the Big Data vertical (#556)
+
+- **Four beats in 8 s, like every opening** (founder, 2026-10-05, story R): three robotic-telescope domes at
+  Izaña, the sea and an island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel, CC BY-SA 4.0), by
+  day; night falls, when telescopes work, and the domes are drawn in line, a telescope's graticule one degree
+  apart is drawn over the sky and thousands of raw detections fill it, in bronze; a test pass sweeps the sky,
+  the noise (false detections, three satellite trails) is flagged in red and dropped, and what passes turns
+  gold — the catalogue; day comes back and the drawing goes. The page's thesis: the data that fails its tests
+  never reaches *gold*. Rejected on the way: El Molinón with match statistics (a TV graphic laid on the
+  photo, not a drawing of the place, and a derby), the El Musel bulk terminal, El Molinón's stand as a table.
+  No free photograph shows the observatory, the Teide and the sea together (about 170 checked on Commons and
+  Openverse; the IAC's gallery is non-commercial only).
+- **Measured on the photograph, never placed by eye** (`docs/design/hero-rotativo/teide.py`): the focal
+  length, 8,795 px, from the EXIF's 39 mm over the file's focal-plane resolution; no roll (the doors' edges
+  are vertical); the pitch, 5.3° down, from the sea horizon at row 1130, which from Izaña's 2,390 m lies
+  1.43° under the true horizon (dip with refraction). The graticule is projected through that camera:
+  altitude circles from −1° to 8.5°, the true horizon heaviest, and vertical circles one degree apart, which
+  a pinhole draws straight. The domes are their own outlines: what is neither the sky's and sea's blue, nor
+  scrub, nor shadow (a white threshold loses their shaded sides, bluish but paler than the sea), cleaned by
+  their convex hull.
+- **The band is the sky at night**, so the drawing is one canvas over the veil, the whole stage, climbing above
+  the photograph to about the band's top: under the veil the sky in the frame was a strip behind the title.
+  It leaves a hole for every line of the copy, the CTA and the controls, measured on the page and erased
+  after drawing (not clipped: the padded lines overlap, and an even-odd clip paints the overlaps back), and
+  fades in past the seal. Phones play the same canvas on the scene's own row.
+- **Computed, then played**: `bd-cielo.json` holds the lines (each with its start), 2,600 detections (a fifth
+  of them noise, many faint, a few bright, a third denser along a band like the Milky Way's) and the trails,
+  in the frame's pixels. A rAF loop runs only while the opening plays and stops at its end; pause holds it
+  with the CSS night (SceneClock for the timer). The colours are tokens (`--color-sky-line`, the section's
+  navy lightened to read at night; `--color-sky-raw`, bronze; `--color-sky-gold`), read by the canvas through
+  hidden inks.
+- **The photograph is restored** like the others (§4.6): SeedVR2 3B at 2× on the frame scaled to 2304 px; the
+  whites measured on the domes only — the haze over the sea passed for white and taking it out (b −10.6)
+  greyed the sky; on the domes it is a +0.6, b +3.3. The operator's logo is painted out of two doors. The
+  foreground is cropped: the frame is 2.06 wide, like the elevation's.
+- **No service page opens with a plate any more**: the layout gate's plate example (Big Data since #551) is
+  gone; its photographic routes are the two homes.
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

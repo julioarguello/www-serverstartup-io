@@ -2081,6 +2081,28 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "sky_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pausar la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Repetir la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4695,6 +4717,28 @@
 							"_type": "block",
 							"style": "normal",
 							"_key": "store_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Replay the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pause the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_replay",
 							"children": [
 								{
 									"_type": "span",

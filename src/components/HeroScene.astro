@@ -80,7 +80,9 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 	<div class="scene__ctl">
 		<button type="button" class="scene__replay" aria-label={replayLabel}></button>
 		<input type="checkbox" id={`${scene}-pause`} class="scene__pause" aria-label={pauseLabel} />
-		<label for={`${scene}-pause`} class="scene__pause-btn" aria-hidden="true"></label>
+		{/* the input's aria-label names the control; the label is only its face. Never `aria-hidden` on a label
+		    bound to a control: W3C Nu rejects it (ci-check-a11y.mjs §9), and every scene carried it until #551 */}
+		<label for={`${scene}-pause`} class="scene__pause-btn"></label>
 	</div>
 	</div>
 	{epigraphs.length > 0 && (

@@ -197,3 +197,36 @@ export const HERO_STORE = {
 
 /** The same frame rules as the elevation's: 1.85 × 86 % of the band on desktops, up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. Here the photograph IS the first paint. */
 export const HERO_STORE_SIZES = HERO_ELEVATION_SIZES;
+
+/**
+ * The home's voyage (#560, founder 2026-10-05: "From the coast to the stars"). The home stopped
+ * showing the drawn plates: it shows the six verticals' PHOTOGRAPHS, never their animations (those
+ * belong to each page), in an order that tells one story — the coast, the bridge over the ría,
+ * the tug under that same bridge, up the river to the museum, the warehouse, night over the Teide.
+ * It is deliberately not FACE_ORDER: the menu, the footer and the area rows keep theirs.
+ */
+export const HOME_VOYAGE: FaceKey[] = ["cdn", "int", "ia", "gf", "ec", "bd"];
+
+/** The voyage's order for any list keyed by slug; unmapped entries drop out. */
+export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T[]): T[] {
+	const rank = (e: T) => HOME_VOYAGE.indexOf(FACE_BY_SLUG[e.slug ?? e.id]);
+	return entries.filter((e) => rank(e) !== -1).sort((a, b) => rank(a) - rank(b));
+}
+
+/**
+ * Each slide's photograph, written at 720, 1320 and 2016 px as `<stem>-720.webp`, `<stem>.webp` and
+ * `<stem>-2016.webp`. Three are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
+ * the lighthouse as a whole photograph, and the bridge and the tug MIRRORED so the tanker sails on,
+ * towards the next stop (founder: "el barco tendría que ir en sentido opuesto" — on the home only).
+ * `focus` is the object-position that keeps the subject right of the copy.
+ */
+export type HomePhoto = { stem: string; width: number; height: number; focus: string };
+export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
+	cdn: { stem: "/assets/hero/home-faro", width: 1320, height: 707, focus: "70% 50%" },
+	int: { stem: "/assets/hero/home-puente", width: 1320, height: 880, focus: "50% 45%" },
+	ia: { stem: "/assets/hero/home-remolcador", width: 1320, height: 710, focus: "70% 50%" },
+	gf: { stem: "/assets/hero/gf-guggenheim-restaurado", width: 1320, height: 645, focus: "62% 50%" },
+	ec: { stem: "/assets/hero/ec-almacen-restaurado", width: 1320, height: 714, focus: "60% 50%" },
+	bd: { stem: "/assets/hero/bd-observatorio-entero", width: 1320, height: 880, focus: "50% 60%" },
+};
+export const HOME_PHOTO_SIZES = "100vw";

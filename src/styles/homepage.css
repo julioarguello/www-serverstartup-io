@@ -1,8 +1,7 @@
-/* ═══ HERO — six plates, one object (#413), mobile-first ═══
-   The band used to be `cubo-home.svg` at 60% grey behind a headline: correct
-   with the rest of the site, and inert — nothing said what we do before the
-   first scroll. Now the mark is the SUBJECT of six drawn plates, one per
-   vertical, and the picture rotates while the heading does not.
+/* ═══ HERO — six photographs, one voyage (#413, #560), mobile-first ═══
+   The band rotates through the six verticals' photographs in the voyage's
+   order (from the coast to the stars) while the heading holds still. The
+   photographs only — never the openings, which belong to each vertical's page.
 
    Everything dark here is `--color-primary`, the brand ink (founder,
    2026-08-27: "suave, tinta de marca"). It is deliberately NOT the console's
@@ -18,12 +17,15 @@
 	justify-content: center;
 	align-items: flex-start;
 	min-height: 100svh;
+	/* the phone's photo strip: the header and two fifths of the screen */
+	--hero-strip: calc(var(--header-h) + 42svh);
 	/* #456 — the same inset as every other opening, but spelled from
 	   `--header-h` instead of the literal `80px` this used to guess with.
 	   The band stays centred: the six plates' cubes are registered to a
 	   centred column at build time, and top-aligning the copy ran the
 	   kicker straight through the drawing. */
-	padding: var(--open-pad-top) 0 var(--space-6);
+	padding: calc(var(--hero-strip) + var(--space-3)) 0 var(--space-6);
+	justify-content: flex-start;
 	/* the ground the plates are drawn on, and what shows while they load */
 	background-color: var(--color-primary);
 	/* the plates are cropped to the band; `clip` and not `hidden` so this
@@ -33,106 +35,59 @@
 
 .s-hero__stage {
 	position: absolute;
-	inset: 0;
+	inset: 0 0 auto;
+	height: var(--hero-strip);
 	z-index: 0;
 }
 
-/* Six plates stacked in one box, cross-fading. Only one is `eager` — the
-   other five are 1–23 KB gzipped each (46 KB for all six, less than a single
-   stock photograph), so the rotation costs less than the picture it replaces. */
-/* The six slide colours and the row colours arrive as `--cc` on an inline
-   `style=` from `HomepageContent.astro`, and the stagger index as `--i`. No
-   stylesheet declares either, so a template that stops emitting one does not
-   make the colour wrong — it makes the whole declaration invalid at
-   computed-value time and the element loses the property (#462). That is how
-   the vertical's accent died on twelve routes (#460) and how six mono
-   declarations silently became sans (#450). Every reference below carries a
-   fallback for that reason: the worst this degrades to is ink and no stagger,
-   never a missing left rule on a link nobody can tell is a link. */
-.s-hero__plate {
+/* Six photographs stacked in one box, cross-fading, each pushing in slowly
+   while it shows (4.5 % over its six seconds: movement a reader feels rather
+   than watches). The slide colours arrive as `--cc` and the stagger as `--i`
+   on an inline `style=`; no stylesheet declares either, so every reference
+   carries a fallback (#462): the worst this degrades to is ink and no
+   stagger. `--focus` keeps each subject right of the copy. */
+.s-hero__photo {
 	position: absolute;
 	inset: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	/* the drawings put their subject right of centre and the scrim darkens
-	   the left, so the crop keeps the cube out from under the text */
-	object-position: 72% 50%;
+	object-position: var(--focus, 62% 50%);
 	opacity: 0;
-	animation: s-hero-plate var(--hero-cycle) linear infinite;
+	animation: s-hero-photo var(--hero-cycle) linear infinite;
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-/* The first plate is on screen at load, not fading in: it is the LCP element
-   and an opacity ramp would cost the measurement half a second. */
-.s-hero__plate:first-of-type {
+/* The first photograph is on screen at load, not fading in: it is the LCP
+   element and an opacity ramp would cost the measurement half a second. */
+.s-hero__photo:first-of-type {
 	opacity: 1;
-	animation-name: s-hero-plate-lead;
+	animation-name: s-hero-photo-lead;
 }
 
+/* The bridge does not fade: it walks into itself, towards the tug the next
+   slide was cut from (home_voyage.py's TUG), and the tug fades in over it.
+   The origin and the shift are the crop's centre in this box at the band's
+   16 : 8.6 — at other proportions the cross-fade covers the difference. */
+.s-hero__photo--into {
+	transform-origin: 42.2% 73.6%;
+	animation-name: s-hero-photo-into;
+}
+
+/* Phones and tablets: the photograph is its own strip under the header and the copy
+   stands below it on ink, as the vertical pages' scenes do (#560). Over the
+   whole band the copy covered the picture entirely — a slideshow nobody
+   could see. The strip fades into the ink at its foot. */
 .s-hero__scrim {
 	position: absolute;
 	inset: 0;
-	background-image: var(--hero-scrim-portrait);
+	background-image: var(--hero-scrim-strip);
 }
 
 .s-hero__inner {
 	position: relative;
 	z-index: 1;
 }
-
-/* ── the ground: a real photograph, matched to the drawing on it ──
-   Under every drawing there is a NASA frame instead of a sky this repo
-   invented (founder, 2026-08-29: "usemos las fotos como background,
-   sustituye al fondo negro con estrellas ficticias de antes… pero tendrás
-   que quitarles peso").
-
-   All of the pushing back happens at BUILD time, in
-   `docs/design/hero-rotativo/grounds.py`: darkened, desaturated and cropped so
-   the photograph's own subject lands under the drawing's before it is ever
-   encoded. Nothing is done here — no `filter` on a full-bleed element, which
-   is a composite the GPU would pay for on every frame of the cross-fade, and
-   no overlay div either.
-
-   The drawing keeps its own bed: each plate lays a soft ellipse of brand ink
-   under its cube, in the SVG, so line art still reads over a nebula. Between
-   that and the scrim, nothing needed to be darkened twice. */
-.s-hero__grounds {
-	position: absolute;
-	inset: 0;
-}
-
-/* The animated layer is the <picture>, not the <img> inside it, for two
-   reasons: the six <picture> elements are still six children of
-   .s-hero__grounds, so the nth-child rules further down keep counting slides
-   rather than always matching the only <img> in a wrapper; and the opacity
-   ramp stays on one box per slide instead of one per format candidate.
-
-   Same box, same crop and the SAME animation as the plate above it, keyed off
-   the same `--i`: ground and drawing are one slide in two files and must turn
-   together. */
-.s-hero__ground {
-	display: block;
-	position: absolute;
-	inset: 0;
-	opacity: 0;
-	animation: s-hero-plate var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
-}
-
-.s-hero__ground img {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	object-position: 72% 50%;
-}
-
-.s-hero__ground:first-child {
-	opacity: 1;
-	animation-name: s-hero-plate-lead;
-}
-
 
 /* ── the card: everything that rotates, in one piece (founder's direction C)
       The band used to put the vertical's name in 12px mono above a 72px
@@ -142,41 +97,21 @@
       Everything that changes now lives inside this panel, at the size the
       picture's subject deserves. */
 .s-hero__card {
-	position: relative;
-	margin-top: var(--space-4);
-	/* #304 — one measure. The card ends where the kicker and the heading end,
-	   not on a second, wider edge of its own. */
-	max-width: var(--measure-statement);
-	/* Tight on a phone on purpose: the band already runs past a 844px screen
-	   with the heading and the kicker alone, and every millimetre the panel
-	   spends on air is a millimetre of the ticker below the fold. */
-	padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
-	background-color: var(--color-hero-card);
-}
-
-/* The rule down the card's left edge, in the showing vertical's colour. Six
-   stacked bars and not a `border-left`, because `--cc` arrives per slide from
-   the CMS and a keyframe cannot be handed a value it has never seen. */
-.s-hero__rules {
+	/* Phones and tablets: the caption stands on the photograph's foot, just
+	   above the heading — under it, it fell below the fold of a phone, and
+	   the picture rotated without saying whose it was. Anchored to the top of
+	   the copy and lifted by its own height, so it never needs to know how
+	   tall it is. */
 	position: absolute;
-	left: 0;
+	inset-inline: 0;
 	top: 0;
-	bottom: 0;
-	width: var(--block-rule);
-}
-
-.s-hero__rule {
-	position: absolute;
-	inset: 0;
-	background-color: var(--cc, var(--color-primary));
-	opacity: 0;
-	animation: s-hero-item var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
-}
-
-.s-hero__rule:first-child {
-	opacity: 1;
-	animation-name: s-hero-item-lead;
+	translate: 0 -100%;
+	padding-inline: inherit;
+	padding-bottom: var(--space-3);
+	/* #304 — one measure. The caption ends where the kicker and the heading
+	   end, not on a second, wider edge of its own. No pane since #560: the
+	   veil carries it, as on the vertical pages. */
+	max-width: var(--measure-statement);
 }
 
 /* ── the rotating half: index line, name, and the vertical's own words ── */
@@ -316,19 +251,42 @@
 
 .s-hero__dots {
 	display: flex;
-	gap: 6px;
+	flex: 1;
+	gap: 8px;
+	min-width: 0;
 }
 
+.s-hero__stop {
+	display: grid;
+	flex: 1;
+	gap: 6px;
+	min-width: 0;
+}
+
+/* The bar fills in the vertical's colour while its photograph shows. */
 .s-hero__dot {
-	width: 26px;
 	height: 3px;
 	background-color: var(--color-hero-dot);
-	animation: s-hero-dot var(--hero-cycle) steps(1, end) infinite;
+	background-image: linear-gradient(var(--cc, var(--color-primary)), var(--cc, var(--color-primary)));
+	background-repeat: no-repeat;
+	background-size: 0% 100%;
+	animation: s-hero-fill var(--hero-cycle) linear infinite;
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-.s-hero__dot:first-child {
-	background-color: var(--cc, var(--color-primary));
+/* named from tablets up; on a phone six names in 300 px read as six ellipses */
+.s-hero__stop-name {
+	display: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-family: var(--font-family-mono);
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: lowercase;
+	color: var(--color-hero-ink-soft);
+	animation: s-hero-name var(--hero-cycle) steps(1, end) infinite;
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 /* Invisible but REAL, exactly like the search toggle: Tab reaches it, Space
@@ -372,33 +330,25 @@
    to stop and steps aside — and the six states are spelled out rather than
    computed, because a `calc()` comparison between two custom properties would
    fail CLOSED on an engine that cannot do it: a hero with no picture at all. */
-.s-hero.is-manual .s-hero__ground,
-.s-hero.is-manual .s-hero__plate,
+.s-hero.is-manual .s-hero__photo,
 .s-hero.is-manual .s-hero__item,
-.s-hero.is-manual .s-hero__rule,
-.s-hero.is-manual .s-hero__dot {
+.s-hero.is-manual .s-hero__dot,
+.s-hero.is-manual .s-hero__stop-name {
 	animation: none;
 }
 
-.s-hero.is-manual .s-hero__ground,
-.s-hero.is-manual .s-hero__plate { opacity: 0; }
+.s-hero.is-manual .s-hero__photo { opacity: 0; transform: none; }
 .s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
-.s-hero.is-manual .s-hero__rule { opacity: 0; }
-.s-hero.is-manual .s-hero__dot { background-color: var(--color-hero-dot); }
+.s-hero.is-manual .s-hero__dot { background-size: 0% 100%; }
+.s-hero.is-manual .s-hero__stop-name { color: var(--color-hero-ink-soft); }
 .s-hero.is-manual .s-hero__pause-btn { display: none; }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__ground:nth-child(1),
-.s-hero.is-manual[data-slide="0"] .s-hero__plate:nth-of-type(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__ground:nth-child(2),
-.s-hero.is-manual[data-slide="1"] .s-hero__plate:nth-of-type(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__ground:nth-child(3),
-.s-hero.is-manual[data-slide="2"] .s-hero__plate:nth-of-type(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__ground:nth-child(4),
-.s-hero.is-manual[data-slide="3"] .s-hero__plate:nth-of-type(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__ground:nth-child(5),
-.s-hero.is-manual[data-slide="4"] .s-hero__plate:nth-of-type(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__ground:nth-child(6),
-.s-hero.is-manual[data-slide="5"] .s-hero__plate:nth-of-type(6) {
+.s-hero.is-manual[data-slide="0"] .s-hero__photo:nth-of-type(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__photo:nth-of-type(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__photo:nth-of-type(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__photo:nth-of-type(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__photo:nth-of-type(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__photo:nth-of-type(6) {
 	opacity: 1;
 }
 
@@ -407,50 +357,61 @@
 .s-hero.is-manual[data-slide="2"] .s-hero__item:nth-child(3),
 .s-hero.is-manual[data-slide="3"] .s-hero__item:nth-child(4),
 .s-hero.is-manual[data-slide="4"] .s-hero__item:nth-child(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__item:nth-child(6),
-.s-hero.is-manual[data-slide="0"] .s-hero__rule:nth-child(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__rule:nth-child(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__rule:nth-child(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__rule:nth-child(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__rule:nth-child(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__rule:nth-child(6) {
+.s-hero.is-manual[data-slide="5"] .s-hero__item:nth-child(6) {
 	opacity: 1;
 	visibility: visible;
 }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__dot:nth-child(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__dot:nth-child(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__dot:nth-child(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__dot:nth-child(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__dot:nth-child(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__dot:nth-child(6) {
-	background-color: var(--cc, var(--color-primary));
+.s-hero.is-manual[data-slide="0"] .s-hero__stop:nth-child(1) .s-hero__dot,
+.s-hero.is-manual[data-slide="1"] .s-hero__stop:nth-child(2) .s-hero__dot,
+.s-hero.is-manual[data-slide="2"] .s-hero__stop:nth-child(3) .s-hero__dot,
+.s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__dot,
+.s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__dot,
+.s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__dot {
+	background-size: 100% 100%;
+}
+
+.s-hero.is-manual[data-slide="0"] .s-hero__stop:nth-child(1) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="1"] .s-hero__stop:nth-child(2) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="2"] .s-hero__stop:nth-child(3) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__stop-name {
+	color: var(--color-secondary);
 }
 
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
    lands on the index link must not have it slide out from under them. */
-.s-hero:has(.s-hero__pause:checked) .s-hero__ground,
-.s-hero:has(.s-hero__pause:checked) .s-hero__plate,
-.s-hero:has(.s-hero__pause:checked) .s-hero__item,
-.s-hero:has(.s-hero__pause:checked) .s-hero__rule,
-.s-hero:has(.s-hero__pause:checked) .s-hero__dot,
-.s-hero:focus-within .s-hero__ground,
-.s-hero:focus-within .s-hero__plate,
-.s-hero:focus-within .s-hero__item,
-.s-hero:focus-within .s-hero__rule,
-.s-hero:focus-within .s-hero__dot {
+.s-hero:has(.s-hero__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name),
+.s-hero:focus-within :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name) {
 	animation-play-state: paused;
 }
 
-@keyframes s-hero-plate {
-	0%, 100% { opacity: 0; }
+/* One slide is 16.6667 % of the 36 s cycle; the next fades in over the
+   following 2.7778 % (one second). */
+@keyframes s-hero-photo {
+	0% { opacity: 0; transform: scale(1); }
 	2.7778%, 16.6667% { opacity: 1; }
-	19.4444% { opacity: 0; }
+	19.4444% { opacity: 0; transform: scale(1.045); }
+	100% { opacity: 0; transform: scale(1.045); }
 }
 
-@keyframes s-hero-plate-lead {
-	0%, 16.6667% { opacity: 1; }
-	19.4444%, 100% { opacity: 0; }
+@keyframes s-hero-photo-lead {
+	0% { opacity: 1; transform: scale(1); }
+	16.6667% { opacity: 1; }
+	19.4444% { opacity: 0; transform: scale(1.045); }
+	100% { opacity: 0; transform: scale(1.045); }
+}
+
+/* the push to 5 s, then two seconds walking in: the crop's centre comes to
+   the box's centre at the tug's own scale (5333 / 2930), while the tug's
+   photograph fades in over it from 6 s */
+@keyframes s-hero-photo-into {
+	0% { opacity: 0; transform: scale(1); }
+	2.7778% { opacity: 1; }
+	13.8889% { opacity: 1; transform: scale(1.0375); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
+	19.4444% { opacity: 1; transform: translate(7.8%, -23.6%) scale(1.82); }
+	19.4445%, 100% { opacity: 0; transform: scale(1); }
 }
 
 @keyframes s-hero-item {
@@ -468,28 +429,32 @@
 	100% { opacity: 0; visibility: hidden; }
 }
 
-@keyframes s-hero-dot {
-	0% { background-color: var(--cc, var(--color-primary)); }
-	16.6667% { background-color: var(--color-hero-dot); }
-	100% { background-color: var(--color-hero-dot); }
+@keyframes s-hero-fill {
+	0% { background-size: 0% 100%; }
+	16.6667% { background-size: 100% 100%; }
+	16.6668%, 100% { background-size: 0% 100%; }
+}
+
+@keyframes s-hero-name {
+	0% { color: var(--color-secondary); }
+	16.6667%, 100% { color: var(--color-hero-ink-soft); }
 }
 
 /* #315's rule, applied to the loudest motion on the site: someone who asked
-   the system for less does not get a slideshow. The first plate stays, the
-   other five never appear, and the ticker goes with them — dots that never
-   advance and a stop button for something that is not moving are furniture. */
+   the system for less does not get a slideshow. The first photograph stays,
+   still, and the other five never appear. */
 @media (prefers-reduced-motion: reduce) {
-	.s-hero__ground,
-	.s-hero__plate,
+	.s-hero__photo,
 	.s-hero__item,
-	.s-hero__rule,
-	.s-hero__dot {
+	.s-hero__dot,
+	.s-hero__stop-name {
 		animation: none;
 	}
-	/* The ticker used to disappear whole here, which was right when the arrows
-	   did not exist. Nothing moves, so the STOP has nothing to stop and goes —
-	   but the arrows are now the only way to reach the other five plates, and
-	   the dots are the only thing saying which one you are on. They stay. */
+	.s-hero__stop:first-child .s-hero__dot { background-size: 100% 100%; }
+	.s-hero__stop:first-child .s-hero__stop-name { color: var(--color-secondary); }
+	/* Nothing moves, so the STOP has nothing to stop and goes — but the
+	   arrows are the only way to reach the other five, and the named bars the
+	   only thing saying which one you are on. They stay. */
 	.s-hero__pause,
 	.s-hero__pause-btn {
 		display: none;
@@ -497,15 +462,8 @@
 }
 
 @media (min-width: 768px) {
-	.s-hero {
-		padding: calc(var(--header-h) + var(--space-8)) 0 var(--space-8);
-	}
-	.s-hero__scrim {
-		background-image: var(--hero-scrim);
-	}
-	.s-hero__card {
-		margin-top: var(--space-5);
-		padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+	.s-hero__stop-name {
+		display: block;
 	}
 	.s-hero__pitch-item {
 		margin-top: 12px;
@@ -530,6 +488,26 @@
 }
 
 @media (min-width: 1025px) {
+	/* desktops: the whole band is the photograph, the copy on its veil, the
+	   caption back in the copy's flow */
+	.s-hero__card {
+		position: relative;
+		inset-inline: auto;
+		translate: none;
+		padding: 0;
+		margin-top: var(--space-6);
+	}
+	.s-hero {
+		padding: calc(var(--header-h) + var(--space-8)) 0 var(--space-8);
+		justify-content: center;
+	}
+	.s-hero__stage {
+		inset: 0;
+		height: auto;
+	}
+	.s-hero__scrim {
+		background-image: var(--hero-scrim-photo-foot), var(--hero-scrim-photo);
+	}
 	.s-hero h1 {
 		font-size: 56px;
 		line-height: 64px;

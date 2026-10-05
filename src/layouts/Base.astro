@@ -14,7 +14,8 @@ import { accentFill, accentInk } from "../utils/accent";
 import { resolveBlogSiteIdentity } from "../utils/site-identity";
 import { getUiLabels } from "../utils/ui-labels";
 import { routeAlternatePath } from "../utils/alternate";
-import { sortByFace, FACE_BY_SLUG } from "../utils/nav";
+import { sortByFace } from "../utils/nav";
+import { sortByVoyage } from "../utils/hero-art";
 import type { SiteSettings } from "../types";
 
 import SiteHeader from "../components/SiteHeader.astro";
@@ -155,11 +156,11 @@ const { color: accentInkColor } = accentInk(headerAccent);
 // keep the same clock as the picture (#413). Same list, same order, one
 // fetch: the bar cannot drift from the plate it is sitting on. Only the home
 // rotates — a vertical page has one colour and it is already the accent.
+// The home tells its six in the voyage's order (#560), not the menu's: sortByVoyage is the list the
+// hero itself is built from.
 const heroSlideColors: string[] =
 	heroOverlay && !activeService
-		? services
-				.filter((svc: any) => FACE_BY_SLUG[svc.slug ?? svc.id])
-				.map((svc: any) => svc.data?.color || "#1E1E1E")
+		? sortByVoyage(services).map((svc: any) => svc.data?.color || "#1E1E1E")
 		: [];
 
 // Contact info from site settings

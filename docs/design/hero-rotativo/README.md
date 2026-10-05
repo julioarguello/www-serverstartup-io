@@ -1,5 +1,10 @@
 # The rotating hero — the six plates
 
+> **The home no longer shows the plates (#560).** It shows the six verticals' photographs, in
+> the voyage's order (`HOME_VOYAGE` in `src/utils/hero-art.ts`); three of them are the home's
+> own files — see the credits table below and `faro.py`, `home_voyage.py`. A vertical page
+> without a scene still holds its plate, and this document still describes those.
+
 Six drawn images, one per vertical, behind the home's headline and at the top of each
 vertical's own page (#413). They are the **same object** in all six: the brand cube. What
 changes is what each trade does to it.
@@ -93,6 +98,10 @@ column, `cdn-faro-restaurado-720.webp` and `cdn-faro-plan-660.webp`, and the 176
 | `ec-almacen-restaurado.webp` (and `-720`, `-2016`) | An automated warehouse, robots on the rails of its grid; restored (SeedVR2 3B at 2×, its own whites), the Ocado mark painted out of the robots, the ceiling cropped (`ocado.py`); the e-commerce hero (#551) | [Techwords, Wikimedia Commons, "Ocado warehouse bots.jpg"](https://commons.wikimedia.org/wiki/File:Ocado_warehouse_bots.jpg) | CC BY-SA 4.0 |
 | `src/assets/hero/ec-almacen.svg` | The lids of the floor's cells, projected through a camera fitted to the photograph's rails (`ocado.py`) | derivative of the above | CC BY-SA 4.0 |
 | `src/assets/hero/ec-pedido.json` | The order's cube, rising out of its cell and turning to the logo's view, projected frame by frame through the same camera (`ocado.py`) | derivative of the above | CC BY-SA 4.0 |
+| `bd-observatorio-entero.webp` (and `-720`, `-2016`) | Three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon, the whole photograph; restored (SeedVR2 3B at 2×, the whites measured on the domes), the operator's logo painted out of two doors (`teide.py`); the Big Data hero (#556) | [Mike Peel, Wikimedia Commons, "Teide Observatory 2018 077.jpg"](https://commons.wikimedia.org/wiki/File:Teide_Observatory_2018_077.jpg) | CC BY-SA 4.0 |
+| `home-faro.webp` (and `-720`, `-2016`) | The Cabo Peñas lighthouse as a whole photograph, for the home (#560): the lattice mast, antennas, guy wires and weather tower painted out (Workers AI, FLUX.2 [dev] as a donor inside each mast's box only), extended 2003 px to the left — heath, gorse and the coast are FLUX.2's continuation, not the photograph — and restored with SeedVR2 3B (`faro.py`) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
+| `home-puente.webp` (and `-720`, `-2016`) | The Vizcaya Bridge, whole and with its bridge, restored with SeedVR2 3B, MIRRORED so the tanker sails on towards the next slide (founder, home only), the stern relettered after the mirror (`home_voyage.py`, with `stern_label.py`'s letters) | [Ebaki, Wikimedia Commons, "Bizkaia zubia - Puente Bizkaia.jpg"](https://commons.wikimedia.org/wiki/File:Bizkaia_zubia_-_Puente_Bizkaia.jpg) | CC BY-SA 4.0 |
+| `home-remolcador.webp` (and `-720`, `-2016`) | The tanker and the tug cut from that same mirrored photograph, at the band's 16 : 8.6, so the home's step from the bridge to the tug is a zoom into one frame (`home_voyage.py`'s `TUG`) | derivative of the above | CC BY-SA 4.0 |
 
 CC BY-SA asks for attribution where the work is used and share-alike on derivatives. The
 drawing is a derivative; this table is the attribution until the site has a credits page.

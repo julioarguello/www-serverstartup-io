@@ -1064,7 +1064,9 @@ const PLANT_FIXED_LAYER = () => {
 const PLANT_CARD_BELOW_FOLD = () => {
 	if (!document.querySelector(".s-hero__card")) return { missing: ".s-hero__card" };
 	const st = document.createElement("style");
-	st.textContent = ".s-hero__kicker { margin-top: 900px !important; }";
+	// the card itself: since #560 it stands on the photograph's foot ABOVE the heading on a phone, so
+	// pushing the copy under it (the kicker, as this did) no longer moves it at all
+	st.textContent = ".s-hero__card { translate: 0 900px !important; }";
 	document.head.append(st);
 	return {};
 };

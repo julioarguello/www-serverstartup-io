@@ -942,7 +942,7 @@ console.log("── the hero band: ink over the plates");
 
 	const TEXT_SELECTOR = [
 		"h1", ".s-hero__kicker p", ".s-hero__pitch-item",
-		".s-hero__name", ".s-hero__n", ".s-hero__tag", ".s-hero__body",
+		".s-hero__name", ".s-hero__n", ".s-hero__tag", ".s-hero__body", ".s-hero__stop-name",
 	].map((c) => `.s-hero ${c}`).join(", ");
 
 	// Freeze the band on plate `k`. Returns how many plates the band has, so
@@ -961,7 +961,9 @@ console.log("── the hero band: ink over the plates");
 			hero.classList.add("is-done");
 			return 1;
 		}
-		const plates = hero.querySelectorAll(".s-hero__plate").length;
+		// the home's slides are photographs since #560 (`.s-hero__photo`); a vertical page without a
+		// scene still holds one drawn plate
+		const plates = hero.querySelectorAll(".s-hero__photo, .s-hero__plate").length;
 		if (plates > 1) {
 			hero.classList.add("is-manual");
 			hero.dataset.slide = String(k);

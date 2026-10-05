@@ -534,6 +534,35 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   on a label bound to a control, and it only came to light here because `/en/e-commerce` is one of the two
   pages the a11y gate sends to Nu. The input's `aria-label` names the control.
 
+### 4.11 The home's voyage (#560)
+
+The home's band rotates through the six verticals' **photographs**, never their openings: the
+animations belong to each vertical's page and would spoil it (founder, 2026-10-05). The order
+tells one story, *from the coast to the stars* — the Cabo Peñas lighthouse, the Vizcaya Bridge,
+the tug under that same bridge, up the river to the Guggenheim, the warehouse, night over the
+Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the menu, the footer
+and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
+rotating edge (Base.astro), so the two cannot drift.
+
+- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only, with
+  the stop checkbox, the courtesy freeze on `:focus-within` and the arrows' manual mode intact.
+  Each photograph pushes in 4.5 % while it shows; the bridge's walks into the tug's frame instead
+  of fading, because the tug's photograph was cut from it (`home_voyage.py`, `TUG`).
+- **What changes in front**: the place (`hero_place`), the vertical's name and one line
+  (`hero_line`), both CMS keys by face — deliberately not `areas_claim`, which the rows further
+  down already say. The bars under them carry `menu_short` and fill in the vertical's colour.
+- **The home's own photographs**: the lighthouse as a whole photograph (masts painted out,
+  extended to the left: `faro.py`), the bridge with its bridge, and both the bridge and the tug
+  MIRRORED so the tanker sails on (the founder's, home only; the stern relettered after the
+  mirror).
+- **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
+  caption stands on its foot, above the heading — over the whole band the copy hid the picture,
+  and under the heading the caption fell below a phone's fold (the layout gate's G18).
+- **Weight**: only the first photograph loads with the page; the other five carry their sources
+  as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
+  slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
+  grounds).
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

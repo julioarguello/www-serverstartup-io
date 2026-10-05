@@ -749,6 +749,150 @@
 				},
 				{
 					"type": "content",
+					"title": "hero_place",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Faro de Cabo Peñas · Gozón"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Puente de Vizcaya · Portugalete"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Bajo el mismo puente"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Museo Guggenheim · Bilbao"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Un almacén automático"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Observatorio del Teide · Izaña"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
+					"title": "hero_line",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Lo primero que ve quien llega: el borde, defendido."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Dos orillas, un solo bus. Lo que planificamos, lo ejecutamos."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "La máquina asiste; el ingeniero dispone."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "La obra, donde no había nada, en producción años después."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Más de veinte años dentro de SAP Commerce Cloud."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Del dato en bruto al oro, capa a capa."
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
 					"title": "mantra",
 					"content": [
 						{
@@ -3366,6 +3510,150 @@
 								{
 									"_type": "span",
 									"text": "The agent proposes, the engineer disposes. AI is a means."
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
+					"title": "hero_place",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cape Peñas lighthouse · Gozón"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Vizcaya Bridge · Portugalete"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Under the same bridge"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Guggenheim Museum · Bilbao"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "An automated warehouse"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Teide Observatory · Izaña"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
+					"title": "hero_line",
+					"content": [
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cdn",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The first thing anyone arriving sees: the edge, defended."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "int",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Two banks, one bus. What we plan is what we run."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ia",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The machine assists; the engineer decides."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "gf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Built where there was nothing, still running years later."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "ec",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Over twenty years inside SAP Commerce Cloud."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "bd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "From raw data to gold, layer by layer."
 								}
 							]
 						}

@@ -5,6 +5,8 @@ ES
 Big Data & Cloud Analytics
 A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources is another story. Medallion architecture, and tests that number in the thousands.
 Let's talk data
+«Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.»
+— Joe Reis
 Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.
 We build them the way serious software gets built. Every transformation versioned in git, every dataset tested, every flow wired to an alert.
 The essence is analytical, and the synergies with the operational side multiply it. We run dbt on both sides of the warehouse.

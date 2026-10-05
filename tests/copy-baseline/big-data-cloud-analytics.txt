@@ -5,6 +5,8 @@ EN
 Big Data & Cloud Analytics
 Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema, picos de campaña y fuentes de datos variables es otra historia. Arquitectura medallion y tests que se cuentan por miles.
 Hablemos de tus datos
+«Los modelos de datos evolucionan más despacio que el código, y el daño de un mal modelo es sigiloso. No sabrás que estás en peligro hasta que sea demasiado tarde. Así que tómate el tiempo de hacer las cosas bien. Ve despacio para ir más rápido y más seguro a largo plazo.»
+— Joe Reis
 Cualquiera monta un pipeline en una tarde. Una plataforma que aguante años de negocio, cambios de esquema y picos de campaña es otra historia.
 Nosotros la construimos como se construye el software serio. Cada transformación versionada en git, cada dato con su test, cada flujo con su alerta.
 La esencia es analítica, y las sinergias con lo operacional la multiplican. Usamos dbt a los dos lados del warehouse.

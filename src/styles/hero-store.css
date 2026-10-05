@@ -33,53 +33,44 @@
 .store__drawing .store__lid--far { stroke-width: 1px; opacity: .6; }
 .store__drawing .store__cell { stroke: var(--color-secondary); stroke-width: 2px; opacity: 0; }
 
-/* the order: three faces the script draws on the stage, over the frame; then the logo it becomes, in place */
+/* the order: three faces the script draws on the stage, over the frame and, on desktops, across to the seal */
 .store__order { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; visibility: hidden; }
 .store__order.is-on { visibility: visible; }
 .store__face {
-	/* white edges on the warehouse; as the cube settles into the mark (--mark 0 to 1) they take the mark's ink
-	   and every face the front plate's colour, so the logo's lines land on a cube that already wears it */
-	fill: var(--scene-c);
-	stroke: color-mix(in srgb, var(--color-secondary) calc((1 - var(--mark, 0)) * 100%), var(--color-primary));
-	stroke-width: 2px;
+	fill: color-mix(in srgb, var(--scene-c) calc(var(--fill, 1) * 100%), transparent);
+	/* white on the warehouse; on the way to the seal it takes the seal's colour, so it lands as the seal */
+	stroke: color-mix(in srgb, var(--color-secondary) calc((1 - var(--fly, 0)) * 100%), var(--scene-c));
+	stroke-width: var(--line, 2px);
 	stroke-linejoin: round;
 }
-.store__face.is-top { fill: color-mix(in srgb, var(--scene-c) calc(38% + var(--mark, 0) * 62%), var(--color-secondary)); }
-.store__logo { opacity: 0; }
-/* the mark as logo.svg draws it: the dark plate turned behind, the light plate (here the section's colour),
-   the cube's edges in ink, its faces split 2 x 2 */
-.store__plate--back { fill: var(--color-primary); }
-.store__plate--front { fill: var(--scene-c); }
-.store__plate { transform-box: fill-box; transform-origin: center; }
-.store__edge { fill: none; stroke: var(--color-primary); stroke-linejoin: round; stroke-linecap: round; }
-/* token-guard: off — stroke widths in the mark's own 200×228 user space, as SiteMark draws them */
-.store__edge { stroke-width: 13; }
-.store__edge--grid { stroke-width: 11; }
-/* token-guard: on */
+.store__face.is-top { fill: color-mix(in srgb, color-mix(in srgb, var(--scene-c) 62%, var(--color-secondary)) calc(var(--fill, 1) * 100%), transparent); }
+/* the logo's 2 x 2 split: the section's blue, lightened — soft on the faces, never ink (founder: "no las pongas
+   en negro, destacan mucho"); it fades as the cube reaches the seal, which carries none */
+.store__grid {
+	fill: none;
+	stroke: color-mix(in srgb, var(--scene-c) 45%, var(--color-secondary));
+	stroke-width: 1.5px;
+	stroke-linecap: round;
+	opacity: calc(1 - var(--fly, 0));
+}
 
 /* the sequence, 8 s like every opening: the warehouse 2 s; the photograph dims and the lids light up in a wave
-   from the order's cell (each from its --d); the cube's frames from 4.2 s and its settling into the mark at
-   6.0 s (the script); the logo's plates and grid from 6.3 s; held; the drawing and the logo go from 7.5 s and
-   the photograph comes back. Pause freezes all of it (SceneClock holds the timer, the script holds the cube) */
+   from the order's cell (each from its --d); the cube's frames from 4.2 s (the script); its flight from 6.1 s;
+   the seal lights up as it lands at 6.8 s; the drawing goes and the photograph comes back. Pause freezes all
+   of it (SceneClock holds the timer, the script holds the cube) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--store:not(.is-placed) .store__box { visibility: hidden; }
-	.s-hero--store.is-playing .store__photo { animation: store-dim 6s ease-in-out 2s both; }
-	.s-hero--store.is-playing .store__drawing { animation: store-drawing 6s ease-in-out 2s both; }
+	.s-hero--store.is-playing .store__photo { animation: store-dim 5.6s ease-in-out 2s both; }
+	.s-hero--store.is-playing .store__drawing { animation: store-drawing 5.6s ease-in-out 2s both; }
 	.s-hero--store.is-playing .store__drawing [pathLength] { stroke-dasharray: 1; animation: store-draw .5s ease-out calc(2.2s + var(--d, 0ms)) both; }
 	.s-hero--store.is-playing .store__drawing .store__cell { animation: store-draw .4s ease-out 4.2s both, store-show .4s ease-out 4.2s both; }
-	.s-hero--store.is-playing .store__logo { animation: store-show .2s linear 6.3s both, store-hide .5s ease-in 7.5s forwards; }
-	.s-hero--store.is-playing .store__plate--front { animation: store-plate .5s ease-out 6.3s both; }
-	.s-hero--store.is-playing .store__plate--back { animation: store-plate-back .6s ease-out 6.4s both; }
-	.s-hero--store.is-playing .store__edge { stroke-dasharray: 1; animation: store-draw .45s ease-out 6.35s both; }
-	.s-hero--store.is-playing .store__edge--grid { animation-delay: 6.55s; }
-	.s-hero--store.is-playing .store__face { animation: store-hide .3s ease-in 6.6s forwards; }
+	.s-hero--store.is-playing .store__grid { animation: store-show .5s ease-out 4.5s both; }
+	.s-hero--store.is-playing .scene__seal { animation: store-seal 1.2s ease-out 6.8s both; }
 	/* as specific as the rules above, and after them: their `animation` shorthand resets the play state */
 	.s-hero.s-hero--store.is-playing.is-paused * { animation-play-state: paused; }
 }
-@keyframes store-dim { 0%, 100% { filter: none; } 10%, 90% { filter: brightness(.55); } }
-@keyframes store-drawing { 0% { opacity: 0; } 4%, 92% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes store-dim { 0%, 100% { filter: none; } 10%, 85% { filter: brightness(.55); } }
+@keyframes store-drawing { 0% { opacity: 0; } 4%, 85% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes store-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes store-show { from { opacity: 0; } to { opacity: 1; } }
-@keyframes store-hide { from { opacity: 1; } to { opacity: 0; } }
-@keyframes store-plate { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
-@keyframes store-plate-back { from { opacity: 0; transform: rotate(-10deg) scale(.8); } to { opacity: 1; transform: none; } }
+@keyframes store-seal { 0% { opacity: .16; } 25% { opacity: .7; } 100% { opacity: .16; } }

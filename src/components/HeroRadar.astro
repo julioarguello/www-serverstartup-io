@@ -195,10 +195,14 @@ const RING_POS: [number, number][] = [
 		function settleLabels() {
 			const c = copyBox();
 			const k = ctl?.getBoundingClientRect();
+			const st = hero!.querySelector<HTMLElement>(".s-hero__stage")?.getBoundingClientRect();
 			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab, .radar__origin, .radar__range")) {
 				el.style.visibility = "";
 				const r = el.getBoundingClientRect();
-				if ((!narrow && !apartFrom(r, c)) || (k && !apartFrom(r, k))) el.style.visibility = "hidden";
+				/* …and, where the scene is its own row and the stage clips, one cut by its edge: on phones the upper
+				   rings' labels ran off its top (#558). On desktops the stage does not clip */
+				const off = narrow && !!st && (st.top > r.top || r.bottom > st.bottom || st.left > r.left || r.right > st.right);
+				if ((!narrow && !apartFrom(r, c)) || (k && !apartFrom(r, k)) || off) el.style.visibility = "hidden";
 			}
 		}
 		settleLabels();

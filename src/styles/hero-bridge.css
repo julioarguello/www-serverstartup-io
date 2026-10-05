@@ -150,7 +150,12 @@
 }
 @keyframes bridge-lay { from { opacity: 0; } to { opacity: 1; } }
 
-/* phones: names a size smaller */
+/* phones and tablets: names a size smaller on phones; and below the girder they stand on the photograph itself,
+   not on the band, so they carry the band's own dark as a halo to read over the buildings (#558: "SAP Commerce"
+   was lost against the town) */
 @media (max-width: 767px) {
 	.bridge__plug > span { font-size: 11px; }
+}
+@media (max-width: 1100px) {
+	.bridge__plug--down > span { color: var(--color-secondary); text-shadow: 0 0 3px var(--color-ground-dark), 0 0 6px var(--color-ground-dark); }
 }

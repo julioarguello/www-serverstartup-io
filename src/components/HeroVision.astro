@@ -174,7 +174,10 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		}
 		/* phones and tablets: the scene is its own row under the copy, contained in it, the tug by the right edge */
 		function fitNarrow(s: DOMRect): Geo {
-			const W = Math.min(0.98 * s.width, ASPECT * s.height), H = W / ASPECT;
+			/* wider than the row, the ship's bow cropped on the left as the other scenes crop, so the readout and the
+			   code fit inside the photograph (#558): at 98 % of a 360 px row its sky over the tug was 67 px, the
+			   readout 84 */
+			const W = Math.min(1.2 * s.width, ASPECT * s.height), H = W / ASPECT;
 			hero.style.setProperty("--vclip", "0px");
 			return { L: s.width - 10 - TUG.r * W, T: (s.height - H) / 2, W, H, colR: 0 };
 		}
@@ -235,8 +238,13 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 				/* phones: the image is its own row, nothing of the copy over it — the readout in its upper right corner,
 				   above the tug's mast, the code in its lower left, over the water (founder, 2026-10-02: on mobile the
 				   machine's texts were missing, while the radar and the bridge show their live layers) */
-				put(readout, s.width - 8 - readout.offsetWidth, Math.max(4, Math.min(6, bt - 6 - readout.offsetHeight)), null, null, s, stop);
-				put(code, 8, s.height - 8 - code.offsetHeight, null, null, s, stop);
+				/* inside the photograph, never on the band around it (founder, 2026-10-05: "parte de las letras salen
+				   fuera de la imagen"): the readout in its upper right corner, over the quay above the tug's mast; the
+				   code in its lower left, over the water, above the faded foot */
+				const pr = Math.min(s.width - 8, g.L + g.W - 8), pt = Math.max(4, g.T + 8);
+				put(readout, pr - readout.offsetWidth, Math.min(pt, bt - 6 - readout.offsetHeight), null, null, s, stop);
+				const foot = g.T + g.H * 0.86;
+				put(code, Math.max(8, g.L + 8), Math.min(s.height - 8, foot) - code.offsetHeight, null, null, s, stop);
 				return;
 			}
 			/* the readout over the quay's upper corner — or above the frame when the frame is small — its right

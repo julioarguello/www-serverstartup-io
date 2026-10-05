@@ -336,7 +336,14 @@ motion picture); the bridge's connectors come at 4.6 s, its messages and Pac-Man
 after 7 s, and at 8 s three ghosts stand on the girder with the Pac-Man still; the eye builds at 2 s, the
 reading types at 4.5 s, the listing walks to 7.4 s and MATCH blinks three times; the cube rises at 4.5 s and
 lands on the seal at 7 s. The epigraph stops short of the column (`--measure-epigraph`, 620 px): at the
-column's width it ran under the art, into the lighthouse's labels. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
+column's width it ran under the art, into the lighthouse's labels. **On phones and tablets nothing written spills off the
+photograph or under the controls** (#558, founder: "parte de las letras salen fuera de la imagen"), measured
+on all six at 360, 390, 430 and 768 px with device emulation: the machine's readout and listing sit inside its
+photograph (the frame is 120 % of the row, the ship's bow cropped, as the other scenes crop — at 98 % the sky
+over the tug was 67 px for an 84 px readout); the lighthouse withholds a ring label the stage's edge would cut
+(only where the stage clips: on desktops it does not); the bridge's names keep off the controls on phones too
+("Cloud Storage" stood behind the replay button), and those under the girder, which stand on the photograph,
+carry the band's dark as a halo. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
 the copy, fades over 14 % of the frame instead of 60 px. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). **On phones and tablets (≤ 1100 px) the first screen is the screen** (#543): one `100svh` box — title,

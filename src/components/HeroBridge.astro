@@ -201,6 +201,10 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			plugs = [];
 			const s = stage.getBoundingClientRect();
 			const text = narrow ? [] : textBoxes(s);
+			/* the pause and replay controls, on phones too: there they sit in the art row's corner, and a name
+			   under them read "Cloud" behind the replay button (#558) */
+			const c = hero.querySelector<HTMLElement>(".scene__ctl")?.getBoundingClientRect();
+			if (c) text.push({ l: c.left - s.left - 8, r: c.right - s.left + 8, t: c.top - s.top - 8, b: c.bottom - s.top + 8 });
 			const room: Box = narrow ? { l: 4, t: 4, r: s.width - 4, b: s.height - 4 } : { l: 8, t: 84, r: s.width - 8, b: s.height - 10 };
 			const size = narrow ? 11 : 12.5;
 			ruler.font = `500 ${size}px ${getComputedStyle(bus).fontFamily}`;

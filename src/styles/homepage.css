@@ -172,19 +172,23 @@
 	color: var(--color-hero-ink-soft);
 }
 
+/* inline, not a flex row: as a flex item the arrow wrapped onto a line of
+   its own whenever the name took two */
 .s-hero__link {
-	display: inline-flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 4px 12px;
+	display: inline;
 	color: var(--color-secondary);
+}
+
+.s-hero__link .s-hero__arrow {
+	margin-left: .3em;
+	white-space: nowrap;
 }
 
 .s-hero__name {
 	font-family: var(--font-family);
-	font-size: 24px;
-	font-weight: 650;
-	line-height: 30px;
+	font-size: 32px;
+	font-weight: 800;
+	line-height: 1.08;
 	text-wrap: balance;
 }
 
@@ -200,25 +204,33 @@
 }
 
 /* ── the copy, in paper ── */
+/* The company's line is a LABEL since #560 (founder, 2026-10-05: "una
+   mezcla entre lo que tenemos y la propuesta de labels"): the fixed half of
+   the band was the heaviest thing on it and the half that changes went
+   unnoticed. It stays the page's <h1> — what SEO and a screen reader read —
+   set small, in the terminal's mono; the vertical's name is the headline. */
 .s-hero h1 {
+	/* paper, not paper at 82 %: at 15 px it is owed 4.5:1, and the
+	   Guggenheim's clouds held the softer ink to 3.9:1 */
 	color: var(--color-secondary);
-	/* Smaller than the page's h1 at every width (#420, direction C): the band
-	   now carries a second heading-sized thing — the vertical's name inside
-	   the card — and two 72px objects in one screen is not a hierarchy. */
-	font-size: 40px;
-	line-height: 48px;
-	text-wrap: pretty;
+	font-family: var(--font-family-mono);
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.5;
+	letter-spacing: .02em;
+	text-wrap: balance;
 }
 
 .s-hero__kicker {
 	margin-top: var(--widget-spacing);
 }
 
+/* …and the kicker under it, a second label: small, in paper at reduced weight */
 .s-hero__kicker p {
-	color: var(--color-secondary);
-	font-size: var(--text-sub-size, 26px);
-	font-weight: var(--text-sub-weight, 500);
-	line-height: var(--text-sub-lh, 30px);
+	color: var(--color-hero-ink-soft);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.5;
 	text-wrap: pretty;
 }
 
@@ -309,40 +321,6 @@
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-/* Invisible but REAL, exactly like the search toggle: Tab reaches it, Space
-   stops the rotation, and a screen reader announces it from its aria-label.
-   Sized 1px rather than display:none, which would take it out of tab order. */
-.s-hero__pause {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	opacity: 0;
-	pointer-events: none;
-}
-
-.s-hero__pause-btn {
-	display: grid;
-	place-items: center;
-	width: 26px;
-	height: 26px;
-	border-radius: var(--radius);
-	color: var(--color-hero-ink-soft);
-	cursor: pointer;
-}
-
-.s-hero__pause-btn:hover {
-	color: var(--color-secondary);
-	background-color: var(--color-hero-dot);
-}
-
-.s-hero:has(.s-hero__pause:focus-visible) .s-hero__pause-btn {
-	outline: 2px solid var(--color-secondary);
-	outline-offset: 2px;
-}
-
-.s-hero__glyph--go { display: none; }
-.s-hero__pause:checked ~ .s-hero__pause-btn .s-hero__glyph--stop { display: none; }
-.s-hero__pause:checked ~ .s-hero__pause-btn .s-hero__glyph--go { display: block; }
 
 /* ── manual mode: the visitor took the wheel ──
    The script adds `.is-manual` and `data-slide` the first time an arrow is
@@ -362,7 +340,6 @@
 .s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
 .s-hero.is-manual .s-hero__dot { background-size: 0% 100%; }
 .s-hero.is-manual .s-hero__stop-name { color: var(--color-hero-ink-soft); }
-.s-hero.is-manual .s-hero__pause-btn { display: none; }
 
 .s-hero.is-manual[data-slide="0"] .s-hero__photo:nth-of-type(1),
 .s-hero.is-manual[data-slide="1"] .s-hero__photo:nth-of-type(2),
@@ -409,9 +386,11 @@
 .s-hero.is-manual[data-slide="5"] .s-hero__seal { color: var(--c6, var(--color-secondary)); }
 
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
-   lands on the index link must not have it slide out from under them. */
-.s-hero:has(.s-hero__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal),
-.s-hero:focus-within :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal) {
+   lands on the vertical's link must not have it slide out from under them.
+   Only the link: focus on an arrow froze the whole band, so advancing looked
+   like stopping (founder, 2026-10-05). */
+.s-hero:has(.scene__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal),
+.s-hero:has(.s-hero__link:focus-visible) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal) {
 	animation-play-state: paused;
 }
 
@@ -431,14 +410,15 @@
 	100% { opacity: 0; transform: scale(1.045); }
 }
 
-/* the push to 5 s, then two seconds walking in: the crop's centre comes to
-   the box's centre at the tug's own scale (5333 / 2930), while the tug's
-   photograph fades in over it from 6 s */
+/* the push to 4 s, then two seconds walking in, done at 6 s — where the
+   slide's six seconds end — and held: the tug's photograph fades in over the
+   finished frame from 6 to 7 s, the very same picture (founder, 2026-10-05:
+   while the walk still ran under the fade, two framings showed at once) */
 @keyframes s-hero-photo-into {
 	0% { opacity: 0; transform: scale(1); }
 	2.7778% { opacity: 1; }
-	13.8889% { opacity: 1; transform: scale(1.0375); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
-	19.4444% { opacity: 1; transform: translate(var(--zx, 7.8%), var(--zy, -23.6%)) scale(var(--zs, 1.82)); }
+	11.1111% { opacity: 1; transform: scale(1.03); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
+	16.6667%, 19.4444% { opacity: 1; transform: translate(var(--zx, 7.8%), var(--zy, -23.6%)) scale(var(--zs, 1.82)); }
 	19.4445%, 100% { opacity: 0; transform: scale(1); }
 }
 
@@ -502,8 +482,7 @@
 	/* Nothing moves, so the STOP has nothing to stop and goes — but the
 	   arrows are the only way to reach the other five, and the named bars the
 	   only thing saying which one you are on. They stay. */
-	.s-hero__pause,
-	.s-hero__pause-btn {
+	.s-hero--home .scene__ctl {
 		display: none;
 	}
 }
@@ -524,13 +503,16 @@
 	/* The heading gives back what the card takes. At the page's 64px the
 	   fixed half would still outweigh the moving half by two to one; at 48
 	   against the card's 30 they read as heading and subject. */
-	.s-hero h1 {
-		font-size: 48px;
-		line-height: 56px;
+	/* the column is one measure (#304): across it, the kicker reads at the
+	   body's size or it runs past 75 characters a line (layout gate) */
+	.s-hero__kicker p {
+		font-size: var(--text-body);
 	}
 	.s-hero__name {
-		font-size: 30px;
-		line-height: 38px;
+		font-size: 44px;
+	}
+	.s-hero__pitch-item {
+		font-size: 20px;
 	}
 }
 
@@ -563,12 +545,14 @@
 		width: 760px;
 	}
 	.s-hero h1 {
-		font-size: 56px;
-		line-height: 64px;
+		font-size: 15px;
 	}
 	.s-hero__name {
-		font-size: 34px;
-		line-height: 42px;
+		font-size: clamp(48px, 4.2vw, 64px);
+		line-height: 1.04;
+	}
+	.s-hero__pitch-item {
+		font-size: clamp(20px, 1.6vw, 24px);
 	}
 	.s-hero__arrow {
 		font-size: 26px;

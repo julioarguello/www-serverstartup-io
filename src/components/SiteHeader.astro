@@ -222,8 +222,8 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 
 	/* …and it stops when the hero stops, or the two drift apart within one
 	   cycle and the bar starts announcing a slide that is not on screen. */
-	body:has(.s-hero__pause:checked) .site-header,
-	body:has(.s-hero:focus-within) .site-header {
+	body:has(.s-hero .scene__pause:checked) .site-header,
+	body:has(.s-hero .s-hero__link:focus-visible) .site-header {
 		animation-play-state: paused;
 	}
 

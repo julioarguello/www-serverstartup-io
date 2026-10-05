@@ -544,8 +544,14 @@ Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the
 and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
 rotating edge (Base.astro), so the two cannot drift.
 
-- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only, with
-  the stop checkbox, the courtesy freeze on `:focus-within` and the arrows' manual mode intact.
+- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only. The pause
+  is the verticals' own control (`scene-ctl.css`, shared since #560), in the band's corner. The
+  arrows **seek** the clock — every animation on it, the header's edge included, is set to the
+  chosen slide's time — and the rotation goes on (founder: "si le doy a avanzar que no se desactive
+  el play"); the courtesy freeze holds only while the vertical's link has keyboard focus.
+- **Type**: the company's line is a label — still the `<h1>`, 15 px mono — and the kicker reads at
+  body size under it; the vertical's name is the headline (64 px on desktops). The fixed half used
+  to be the heaviest thing on the band and the half that changes went unnoticed.
   Each photograph pushes in 4.5 % while it shows; the bridge's walks into the tug's frame instead
   of fading, because the tug's photograph was cut from it (`home_voyage.py`, `TUG`).
 - **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
@@ -553,7 +559,8 @@ rotating edge (Base.astro), so the two cannot drift.
   place: the founder struck it. The bars under them carry `menu_short` and fill in the vertical's
   colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
   margin — takes the colour of the vertical showing, on the same clock.
-- **The bridge's walk into the tug** lands exactly on the next slide: the script measures both
+- **The bridge's walk into the tug** ends at 6 s and holds while the tug fades in over it — the
+  same picture, so no two framings ever show at once — and lands exactly on the next slide: the script measures both
   `object-fit: cover` boxes and hands the end of the walk to the keyframe as `--zx`, `--zy`, `--zs`,
   from the rectangle `home_voyage.py` cut the tug out of (`src/assets/hero/home-into.json`). A fixed
   percentage matched one band proportion only, and the tug jumped.

@@ -261,29 +261,21 @@ const members = memberEntries ?? [];
 							<path d="M6 2.5 11.5 8 6 13.5"></path>
 						</svg>
 					</button>
-					{/* WCAG 2.2.2 made real: rotation that lasts more than five
-					    seconds needs a way to stop it, and a system-level motion
-					    preference is not a control the visitor can reach here. A
-					    checkbox drives it in pure CSS (`animation-play-state`), the
-					    same mechanism the search toggle uses — invisible but REAL:
-					    Tab reaches it, Space stops the hero, and it is announced
-					    from its own aria-label. The hero also freezes on
-					    `:focus-within`, so a keyboard user never chases a link. */}
-					<input type="checkbox" id="hero-pause" class="s-hero__pause" aria-label={t("hero_pause")} />
-					<label for="hero-pause" class="s-hero__pause-btn">
-						<svg class="s-hero__glyph s-hero__glyph--stop" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-							<rect x="3.5" y="2.5" width="3" height="11"></rect>
-							<rect x="9.5" y="2.5" width="3" height="11"></rect>
-						</svg>
-						<svg class="s-hero__glyph s-hero__glyph--go" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-							<path d="M4 2.5l9 5.5-9 5.5z"></path>
-						</svg>
-					</label>
 				</div>
 			)}
 			</div>
 		)}
 	</div>
+	{/* WCAG 2.2.2: rotation that lasts more than five seconds needs a way to stop it. The verticals'
+	    own control (scene-ctl.css), in the band's corner — a checkbox, so it stops the CSS clock with no
+	    script: Tab reaches it, Space stops the band, its aria-label names it. No replay: a carousel
+	    has nothing to start over. */}
+	{heroSlides.length > 1 && (
+		<div class="scene__ctl">
+			<input type="checkbox" id="hero-pause" class="scene__pause" aria-label={t("hero_pause")} />
+			<label for="hero-pause" class="scene__pause-btn"></label>
+		</div>
+	)}
 </section>
 
 <!-- ══════ CLOUDFLARE PARTNER (CMS-driven) ══════
@@ -474,48 +466,44 @@ const members = memberEntries ?? [];
 	if (into) new ResizeObserver(aim).observe(into);
 
 	const navs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-hero-nav]"));
-	const dots = Array.from(document.querySelectorAll<HTMLElement>(".s-hero__dot"));
+	const n = document.querySelectorAll(".s-hero__photo").length;
 
-	if (hero && navs.length && dots.length > 1) {
-		const n = dots.length;
-		const colors = dots.map((d) => getComputedStyle(d).getPropertyValue("--cc").trim());
-
-		// The clock is the stylesheet's, read back rather than restated here —
-		// two copies of "36s" is one too many.
+	/**
+	 * The arrows (founder, 2026-08-27: "moverme yo entre las opciones, con las
+	 * flechas") JUMP the band's clock to the chosen slide and the rotation goes
+	 * on from there (2026-10-05: "si le doy a avanzar que no se desactive el
+	 * play"). Every animation on the clock — the photographs, the captions,
+	 * the bars, the seal and the header's edge — started together, so setting
+	 * one time on all of them moves the whole band at once, paused or not.
+	 */
+	if (hero && navs.length && n > 1) {
 		const secs = (name: string, fallback: number) => {
 			const raw = getComputedStyle(hero).getPropertyValue(name).trim();
 			const v = parseFloat(raw);
 			if (!Number.isFinite(v)) return fallback;
 			return raw.endsWith("ms") ? v / 1000 : v;
 		};
-		const cycle = secs("--hero-cycle", 36);
-		const step = secs("--hero-step", 6);
-		// the plates run at `animation-delay: calc(--i * --step - 0.5s)`, so the
-		// document timeline is half a second ahead of slide 0's start
-		const LEAD = 0.5;
-
-		/** Which plate the CSS animation is showing right now. */
-		const playing = () => {
-			const t = ((document.timeline.currentTime as number) ?? 0) / 1000 + LEAD;
-			return Math.floor((((t % cycle) + cycle) % cycle) / step) % n;
-		};
-
-		const current = () => (hero.dataset.slide ? Number(hero.dataset.slide) : playing());
-
+		// the clock is the stylesheet's, read back rather than restated here
+		const cycle = secs("--hero-cycle", 36) * 1000;
+		const step = secs("--hero-step", 6) * 1000;
+		// every slide's animation is delayed by `--i * step - 0.5 s`; one second in, the slide is whole
+		const LEAD = 500, IN = 1000;
+		const clocked = () => [
+			...hero.getAnimations({ subtree: true }),
+			...(document.querySelector(".site-header")?.getAnimations() ?? []),
+		];
+		const now = () => Number(hero.querySelector(".s-hero__photo")?.getAnimations()[0]?.currentTime ?? 0);
+		const current = () => Math.floor(((((now() + LEAD) % cycle) + cycle) % cycle) / step) % n;
 		const show = (i: number) => {
 			const k = ((i % n) + n) % n;
-			hero.classList.add("is-manual");
-			hero.dataset.slide = String(k);
-			// the header's bottom edge is outside this component, so the colour
-			// travels the only way it can: a custom property on the root
-			document.documentElement.style.setProperty("--hero-now", colors[k]);
+			const round = Math.floor((now() + LEAD) / cycle) + 1;
+			const at = round * cycle + k * step - LEAD + IN;
+			for (const a of clocked()) a.currentTime = at;
 		};
-
 		for (const btn of navs) {
 			btn.hidden = false;
 			btn.addEventListener("click", () => show(current() + Number(btn.dataset.heroNav)));
 		}
-
 		// Arrow keys, but only while focus is inside the band — never a global
 		// shortcut (WCAG 2.1.4, the same reason `/` is scoped to the header).
 		hero.addEventListener("keydown", (e) => {

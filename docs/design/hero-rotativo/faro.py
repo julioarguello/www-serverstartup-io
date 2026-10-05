@@ -121,7 +121,9 @@ def prepare(original, donor_masts, donor_sheds, donor_left, out):
 
 def finish(restored):
     img = Image.open(restored).convert("RGB")
-    for w, name in ((2016, "home-faro-2016.webp"), (1320, "home-faro.webp"), (720, "home-faro-720.webp")):
+    # a new name for every cut, so no browser keeps an older one (the sheds outlived their removal in a
+    # cache under the old name, 2026-10-05)
+    for w, name in ((2016, "home-faro-limpio-2016.webp"), (1320, "home-faro-limpio.webp"), (720, "home-faro-limpio-720.webp")):
         path = os.path.join(OUT, name)
         img.resize((w, round(img.height * w / img.width)), Image.LANCZOS).save(path, "WEBP", quality=84, method=6)
         print(name, os.path.getsize(path) // 1024, "KB")

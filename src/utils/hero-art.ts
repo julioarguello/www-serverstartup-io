@@ -224,7 +224,7 @@ export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T
  */
 export type HomePhoto = { stem: string; width: number; height: number; focus: string };
 export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
-	cdn: { stem: "/assets/hero/home-faro", width: 1320, height: 707, focus: "70% 50%" },
+	cdn: { stem: "/assets/hero/home-faro-limpio", width: 1320, height: 707, focus: "70% 50%" },
 	int: { stem: "/assets/hero/home-puente", width: 1320, height: 880, focus: "50% 45%" },
 	ia: { stem: "/assets/hero/home-remolcador", width: 1320, height: 710, focus: "70% 50%" },
 	gf: { stem: "/assets/hero/gf-guggenheim-restaurado", width: 1320, height: 645, focus: "62% 50%" },

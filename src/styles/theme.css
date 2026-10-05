@@ -235,14 +235,16 @@
 	/* The home's veil since its slides became photographs (#560): brighter
 	   than the drawn plates, so the plateau runs further right — the caption
 	   and the heading end at the column's measure, about 72 % of a 1440 px
-	   band, and stand on it whole. The pane the plates' caption needed went
+	   band, and stand on it whole. Since the heading became a 15 px label on
+	   one line (owed 4.5:1, not the 3:1 of large type) it runs to 58 %, and
+	   the plateau with it. The pane the plates' caption needed went
 	   with them; this carries the copy instead. */
 	--hero-scrim-photo: linear-gradient(
 		101deg,
 		rgba(30, 30, 30, 0.94) 0%,
-		rgba(30, 30, 30, 0.88) 50%,
-		rgba(30, 30, 30, 0.62) 68%,
-		rgba(30, 30, 30, 0) 90%
+		rgba(30, 30, 30, 0.9) 58%,
+		rgba(30, 30, 30, 0.62) 72%,
+		rgba(30, 30, 30, 0) 92%
 	);
 	/* …and its foot, where the caption and the named bars stand on whatever
 	   the photograph has there — the warehouse's white robots measured the

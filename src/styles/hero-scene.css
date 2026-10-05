@@ -92,41 +92,7 @@
 	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) 0%, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) var(--scene-veil-mid, 55%), transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
 }
 
-/* WCAG 2.2.2: pause stops all motion, replay restarts it */
-.scene__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
-.scene__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.scene__pause-btn,
-.scene__replay {
-	display: grid;
-	place-items: center;
-	width: 40px;
-	height: 40px;
-	margin: 0;
-	padding: 0;
-	border: 1px solid var(--color-secondary);
-	color: var(--color-secondary);
-	background: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
-	cursor: pointer;
-	font: inherit;
-	font-size: 14px;
-}
-.scene__replay { font-size: 20px; line-height: 1; }
-.scene__replay::before { content: "↻"; }
-.scene__pause-btn::before { content: "❚❚"; }
-.scene__pause:checked + .scene__pause-btn::before { content: "▶"; }
-.scene__pause:focus-visible + .scene__pause-btn,
-.scene__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
-/* on hover devices the controls wait at 35 % until hovered or focused */
-@media (hover: hover) {
-	.scene__ctl { opacity: .35; transition: opacity .25s ease; }
-	.s-hero--scene:hover .scene__ctl,
-	.scene__ctl:focus-within { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-	/* nothing to replay when nothing moves */
-	.scene__replay { display: none; }
-}
+/* the pause and replay controls: scene-ctl.css, shared with the home's band (#560) */
 
 /* ≤ 1100 (phones and tablets, the menu's own boundary): the first screen is the screen — title, excerpt,
    CTA, then the art taking what is left of 100svh, the controls in its corner — and the epigraph follows

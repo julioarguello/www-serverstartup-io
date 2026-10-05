@@ -9,8 +9,10 @@
  *    cell holds a stack of bins;
  * 3. your order: one bin rises out of its cell as a perfect cube and turns until it is seen exactly as
  *    the logo draws it, the hexagon and the Y;
- * 4. it becomes the logo: on desktops it flies to the band's seal, which lights up; where the scene is
- *    its own row it stays and draws itself as the seal does. The drawing goes, the photograph stays.
+ * 4. it becomes the logo, where it stands (founder, 2026-10-05: "mi logo no solo es un cubo"): the cube
+ *    takes the house mark's exact geometry (SiteMark's, 200 x 228), its faces split 2 x 2, and the two
+ *    plates of logo.svg come in behind it — the light one in the section's colour, the dark one turned.
+ *    The logo was born of these hives (reference/legacy/docs/logo.md). The drawing goes, the photograph stays.
  *
  * The band, the copy, the epigraphs, the seal, the veil and the controls are the scene every vertical
  * shares (HeroScene.astro). Everything is measured on the photograph (`ocado.py`): the lids are the floor's
@@ -41,6 +43,18 @@ const replayLabel = L("store_replay", "Repetir la animación");
 		<div class="store__drawing" aria-hidden="true" set:html={drawing} />
 	</div>
 	<svg slot="under" class="store__order" aria-hidden="true">
+		{/* the logo, placed by the script where the cube turns: in the mark's own 200 x 228 space; the plates are
+		    logo.svg's (its 68 x 68 frame mapped so its cube lands on this one) */}
+		<g class="store__logo">
+			<g transform="matrix(3.78,0,0,3.78,-27.9,-13.1)">
+				<path class="store__plate store__plate--back" d="M17.7764 3.94218C33.9811 6.8248 50.1858 9.70743 59.1352 11.2994C62.8739 11.9645 64.4148 14.1728 63.758 17.9244C62.0299 27.7959 60.3028 37.6615 56.4924 59.4268C55.8357 63.1785 53.638 64.7217 49.8993 64.0567C35.821 61.5523 21.7484 59.049 8.5405 56.6994C4.80185 56.0344 3.26091 53.826 3.91769 50.0744C5.57605 40.6015 7.23544 31.1228 11.1833 8.57203C11.8401 4.8204 14.0378 3.27712 17.7764 3.94218Z" />
+				<path class="store__plate store__plate--front" d="M12.8495 7.19339C28.6413 7.19339 44.4332 7.19339 54.8188 7.19339C58.6127 7.19339 60.5096 9.09949 60.5096 12.9117C60.5096 21.8048 60.5096 30.6979 60.5096 55.0841C60.5096 58.8963 58.6127 60.8024 54.8188 60.8024C45.1445 60.8024 35.4702 60.8024 12.8495 60.8024C9.05561 60.8024 7.15869 58.8963 7.15869 55.0841C7.15869 42.7659 7.15869 30.4478 7.15869 12.9117C7.15869 9.09949 9.05561 7.19339 12.8495 7.19339Z" />
+			</g>
+			<path class="store__edge" pathLength="1" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z" />
+			<path class="store__edge" pathLength="1" d="M14,64 100,114 186,64 M100,114 100,214" />
+			<path class="store__edge store__edge--grid" pathLength="1" d="M57,39 143,89 M143,39 57,89" />
+			<path class="store__edge store__edge--grid" pathLength="1" d="M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114" />
+		</g>
 		<path class="store__face store__face--a" />
 		<path class="store__face store__face--b" />
 		<path class="store__face store__face--c" />
@@ -69,8 +83,9 @@ const replayLabel = L("store_replay", "Repetir la animación");
 		const ORDER = 0.69;                      /* where the order's cube starts, of the frame's width: past the column */
 		const BLEED = 0.02;                      /* how far past the band's edge the frame runs */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
-		/* the seal's own points (its viewBox, 200 x 228): T, UR, LR, B, LL, UL and the centre of the Y */
-		const SEAL = [100, 14, 186, 64, 186, 164, 100, 214, 14, 164, 14, 64, 100, 114];
+		/* the house mark's cube (SiteMark, the seal; 200 x 228): T, UR, LR, B, LL, UL and the centre of the Y */
+		const MARK = [100, 14, 186, 64, 186, 164, 100, 214, 14, 164, 14, 64, 100, 114];
+		const logo = hero.querySelector<SVGGElement>(".store__logo")!;
 		type Geo = { L: number; T: number; W: number; H: number };
 		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
 
@@ -119,37 +134,34 @@ const replayLabel = L("store_replay", "Repetir la animación");
 		const TOPF = [0, 1, 6, 5], LEFTF = [5, 6, 3, 4], RIGHTF = [6, 1, 2, 3];
 		const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
-		/* the timeline, in ms from the start: the CSS plays the photograph, the lids and the seal; this plays the cube */
-		const CUBE_AT = 4200, FLY_AT = 6100, FLY_MS = 700;
-		const N = cube.frames.length, FRAME_MS = 1000 / cube.fps;
+		/* the timeline, in ms from the start: the CSS plays the photograph, the lids and the logo's entrance; this
+		   plays the cube's frames, then eases its seven points onto the mark's and places the logo there */
+		const CUBE_AT = 4200, N = cube.frames.length, FRAME_MS = 1000 / cube.fps;
+		const MARK_AT = CUBE_AT + N * FRAME_MS, MARK_MS = 400;
 		let t = 0;
 		function draw(ms: number) {
 			if (ms < CUBE_AT) { order.classList.remove("is-on"); return; }
 			order.classList.add("is-on");
 			const k = Math.floor((ms - CUBE_AT) / FRAME_MS);
-			if (k < N && ms < FLY_AT) {
+			if (k < N) {
 				const fr = cube.frames[k];
 				faces.forEach((f, i) => {
 					const face = fr[i];
 					f.setAttribute("d", face ? poly(face.p) : "");
 					f.classList.toggle("is-top", face?.k === "top");
 				});
-				order.style.setProperty("--fill", "1");
-				order.style.setProperty("--fly", "0");
+				order.style.setProperty("--mark", "0");
 				return;
 			}
-			/* the turned cube, the seal's seven points, and the way between them */
+			/* the turned cube and the mark's cube, same centre and width: the turn ends at the mark's own elevation
+			   (isometric), so the last stretch only corrects what the photograph's perspective bends */
 			const from: number[] = [];
 			for (let i = 0; i < 14; i += 2) from.push(...at(cube.hexagon[i], cube.hexagon[i + 1]));
-			let to = from, line = 2;
-			const narrow = matchMedia(SCENE_ROW).matches;
-			if (!narrow) {
-				const s = stage.getBoundingClientRect(), r = seal.getBoundingClientRect();
-				to = SEAL.map((v, i) => (i % 2 ? r.top - s.top + (v / 228) * r.height : r.left - s.left + (v / 200) * r.width));
-				line = (4 * r.width) / 200; /* the seal's own stroke, 4 in its 200-wide drawing */
-			}
-			const u = ease(Math.min(1, Math.max(0, (ms - FLY_AT) / FLY_MS)));
-			order.style.setProperty("--line", `${2 + (line - 2) * u}px`);
+			const cx = (from[0] + from[6]) / 2, cy = (from[1] + from[7]) / 2;
+			const scale = (from[2] - from[10]) / 172;
+			const to = MARK.map((v, i) => (i % 2 ? cy + (v - 114) * scale : cx + (v - 100) * scale));
+			logo.setAttribute("transform", `translate(${(cx - 100 * scale).toFixed(1)},${(cy - 114 * scale).toFixed(1)}) scale(${scale.toFixed(4)})`);
+			const u = ease(Math.min(1, Math.max(0, (ms - MARK_AT) / MARK_MS)));
 			const q = from.map((v, i) => v + (to[i] - v) * u);
 			faces[0].setAttribute("d", quad(q, TOPF));
 			faces[1].setAttribute("d", quad(q, LEFTF));
@@ -157,9 +169,7 @@ const replayLabel = L("store_replay", "Repetir la animación");
 			faces[0].classList.add("is-top");
 			faces[1].classList.remove("is-top");
 			faces[2].classList.remove("is-top");
-			order.style.setProperty("--fill", String(1 - u));
-			order.style.setProperty("--fly", String(u));
-			if (u >= 1) order.classList.remove("is-on");
+			order.style.setProperty("--mark", String(u));
 		}
 
 		const clock = new SceneClock();
@@ -168,7 +178,7 @@ const replayLabel = L("store_replay", "Repetir la animación");
 			t += now - last;
 			last = now;
 			draw(t);
-			raf = t < FLY_AT + FLY_MS ? requestAnimationFrame(tick) : 0;
+			raf = t < MARK_AT + MARK_MS ? requestAnimationFrame(tick) : 0;
 		}
 		function run() {
 			if (raf) return;

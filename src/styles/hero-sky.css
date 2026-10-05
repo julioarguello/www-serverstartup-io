@@ -1,8 +1,8 @@
 /* ═══ HERO — night over the Teide Observatory, the Big Data vertical (#556), docs/architecture.md §4.10 ═══
    One frame under the veil — the observatory — sized by the band and running off its right edge; the script
    places it (--sx, --sy, --sw), moves the night across it (--night-x, --night-a) and plays the drawing on a
-   canvas over the veil. The end state is the default (no script, reduced motion): the observatory by day, no
-   drawing. */
+   canvas over the veil. Without the script the photograph shows by day; the finished opening, and reduced motion
+   at once, is the night with the network drawn. */
 
 .sky__box {
 	position: absolute;

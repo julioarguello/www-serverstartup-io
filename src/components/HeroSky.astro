@@ -2,21 +2,18 @@
 /**
  * HeroSky — the opening of the Big Data vertical (#556).
  *
- * Three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon, told in four
- * beats (founder, 2026-10-05, story R):
- *
- * 1. the observatory by day;
- * 2. night falls, when telescopes work: the domes are drawn in line, a telescope's graticule (one degree
- *    apart) is drawn over the sky, and thousands of raw detections fill it — bronze;
- * 3. a test pass sweeps the sky: the noise (false detections, satellite trails) is flagged and dropped, and
- *    what passes is the catalogue — gold. The page's thesis: the data that fails its tests never reaches gold;
- * 4. day comes back; the drawing goes, the photograph stays.
+ * Three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon. The founder's
+ * story (2026-10-05, second round): night falls from left to right, a sweep across the sky; over the first
+ * dome it picks stars — the first layer, bronze; reaching the second dome a second layer is composed that
+ * reads from the first — silver; then the third — gold. What stays in the sky is the classic drawing of a
+ * neural network, left to right: the medallion's layers, each reading from the one before. One star of the
+ * first layer fails and is never read: the data that fails its tests never reaches gold. Then day comes back.
  *
  * The band, the copy, the epigraphs, the seal, the veil and the controls are the scene every vertical
- * shares (HeroScene.astro). Everything is measured on the photograph (`teide.py`): the graticule is projected
- * through the camera fitted to the sea horizon, the domes are their own outlines, the detections are placed in
- * the same frame; the browser only plays them. At night the band IS the sky, so the drawing is played over the
- * veil on the whole stage, climbing above the photograph, and leaves a hole wherever the copy has a letter.
+ * shares (HeroScene.astro). The domes and the stars are measured on the photograph (`teide.py`); each layer's
+ * column stands over its own dome. The night is a front the script moves across the photograph (under the
+ * veil); the drawing is one canvas over the veil, the whole stage — at night the band IS the sky — with a hole
+ * for every line of the copy.
  */
 import { HERO_SKY, HERO_SKY_SIZES } from "../utils/hero-art";
 import HeroScene from "./HeroScene.astro";
@@ -37,13 +34,15 @@ const replayLabel = L("sky_replay", "Repetir la animación");
 
 <HeroScene scene="sky" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
 	<div slot="under" class="sky__box">
-		<img class="sky__photo" src={HERO_SKY.photo} srcset={`${HERO_SKY.photoSmall} 720w, ${HERO_SKY.photo} 1320w, ${HERO_SKY.photoLarge} 2016w`} sizes={HERO_SKY_SIZES} width="1320" height="642" alt="" fetchpriority="high" decoding="async" />
+		<img class="sky__photo" src={HERO_SKY.photo} srcset={`${HERO_SKY.photoSmall} 720w, ${HERO_SKY.photo} 1320w, ${HERO_SKY.photoLarge} 2016w`} sizes={HERO_SKY_SIZES} width="1320" height="880" alt="" fetchpriority="high" decoding="async" />
+		<span class="sky__night" aria-hidden="true"></span>
 	</div>
 	<canvas slot="over" class="sky__data" aria-hidden="true"></canvas>
 	<i slot="over" class="sky__ink sky__ink--line" aria-hidden="true"></i>
-	<i slot="over" class="sky__ink sky__ink--raw" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--bronze" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--silver" aria-hidden="true"></i>
 	<i slot="over" class="sky__ink sky__ink--gold" aria-hidden="true"></i>
-	<i slot="over" class="sky__ink sky__ink--noise" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--fail" aria-hidden="true"></i>
 </HeroScene>
 
 <script>
@@ -61,37 +60,50 @@ const replayLabel = L("sky_replay", "Repetir la animación");
 		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
 
 		const [FW, FH] = sky.frame;
-		const ASPECT = FW / FH;                  /* the photograph's frame, its foreground cropped */
+		const ASPECT = FW / FH;                  /* the whole photograph */
 		const BAND_H = 0.86;                     /* the frame's height, of the band's */
 		const BLEED = 0.02;                      /* how far past the band's edge the frame runs */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
+		const FROM_FADE = 140;                   /* px over which the drawing fades in past the seal */
 		const SEA = sky.sea;                     /* the sea horizon's row: the sky ends there */
+		/* the left dome's left edge, of the frame's width: the frame shrinks before it goes under the seal */
+		const DOME_L = Math.min(...sky.domes[0].p.filter((_, i) => i % 2 === 0)) / FW;
+		/* the network: nodes per layer, bronze to gold, and the one bronze node that fails its tests */
+		const LAYERS = [6, 4, 2];
+		const FAILS = 4;
+
 		type Geo = { L: number; T: number; W: number; H: number };
 		type Box = { l: number; t: number; r: number; b: number };
+		type Node = { x: number; y: number };
 		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
 		let holes: Box[] = [];
+		let nodes: Node[][] = [];
 		let from = 0;                            /* where the drawing may start: past the seal on desktops */
 		let dpr = 1;
 
-		/* the colours are the stylesheet's (tokens), resolved through four hidden inks */
+		/* the colours are the stylesheet's (tokens), resolved through hidden inks */
 		function ink(k: string) {
 			const el = hero!.querySelector(`.sky__ink--${k}`) as HTMLElement;
 			return getComputedStyle(el).color;
 		}
-		let LINE = "", RAW = "", GOLD = "", NOISE = "";
+		let LINE = "", TIERS: string[] = [], FAIL = "";
 
-		/* desktops: sized by the band, resting on its floor, running off its right edge like every scene */
+		/* desktops: sized by the band, resting on its floor, running off its right edge like every scene; where
+		   the band is narrow the frame shrinks so the left dome clears the seal */
 		function fitWide(s: DOMRect): Geo {
 			const sr = seal.getBoundingClientRect();
 			from = sr.left - s.left + SEAL_R * sr.width + 8;
-			const H = BAND_H * s.height, W = ASPECT * H;
+			const full = ASPECT * BAND_H * s.height;
+			const room = (s.width - from - FROM_FADE) / (1 - BLEED - DOME_L);
+			const W = Math.max(0.6 * full, Math.min(full, room)), H = W / ASPECT;
 			const L = s.width + BLEED * W - W;
 			hero!.style.setProperty("--sclip", `${Math.max(0, from - L)}px`);
 			return { L, T: s.height - H, W, H };
 		}
-		/* phones and tablets: the scene is its own row under the copy, contained in it, flush right */
+		/* phones and tablets: the scene is its own row under the copy, contained in it, flush right, as wide as
+		   keeps the left dome in */
 		function fitNarrow(s: DOMRect): Geo {
-			const W = Math.min(1.25 * s.width, ASPECT * s.height), H = W / ASPECT;
+			const W = Math.min(1.25 * s.width, ASPECT * s.height, (s.width - 8) / (1 - BLEED - DOME_L)), H = W / ASPECT;
 			from = 0;
 			hero!.style.setProperty("--sclip", "0px");
 			return { L: s.width - W * (1 - BLEED), T: (s.height - H) / 2, W, H };
@@ -105,11 +117,28 @@ const replayLabel = L("sky_replay", "Repetir la animación");
 				r.selectNodeContents(el);
 				for (const q of r.getClientRects()) if (q.width > 2) out.push(pad(q));
 			}
-			const b = hero!.querySelector<HTMLElement>(".s-hero__copy .btn")?.getBoundingClientRect();
-			if (b) out.push(pad(b));
-			const c = hero!.querySelector<HTMLElement>(".scene__ctl")?.getBoundingClientRect();
-			if (c) out.push(pad(c));
+			for (const sel of [".s-hero__copy .btn", ".scene__ctl"]) {
+				const b = hero!.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
+				if (b) out.push(pad(b));
+			}
 			return out;
+		}
+		/* the frame's pixels on the stage */
+		const sx = (x: number) => geo.L + (x * geo.W) / FW;
+		const sy = (y: number) => geo.T + (y * geo.H) / FH;
+		/* the network's columns stand over the domes, in the sky between the band's visible top and whichever
+		   comes first, the copy or the sea horizon; each layer is centred on the same line */
+		function network(s: DOMRect, narrow: boolean) {
+			const head = document.querySelector("header")?.getBoundingClientRect();
+			const top = Math.max(12, (head ? head.bottom - s.top : 0) + 20);
+			const h1 = hero!.querySelector(".s-hero__copy h1")?.getBoundingClientRect();
+			const bottom = Math.min(sy(SEA) - 16, !narrow && h1 ? h1.top - s.top - 24 : Infinity);
+			const mid = (top + bottom) / 2, span = Math.max(40, bottom - top);
+			nodes = LAYERS.map((n, k) => {
+				const x = sx(sky.domes[k].c[0]);
+				const gap = Math.min(40, span / n);
+				return Array.from({ length: n }, (_, i) => ({ x, y: mid + (i - (n - 1) / 2) * gap }));
+			});
 		}
 		function layout() {
 			const s = stage.getBoundingClientRect();
@@ -124,135 +153,153 @@ const replayLabel = L("sky_replay", "Repetir la animación");
 			dpr = Math.min(2, window.devicePixelRatio || 1);
 			canvas.width = Math.round(s.width * dpr);
 			canvas.height = Math.round(s.height * dpr);
-			LINE = ink("line"); RAW = ink("raw"); GOLD = ink("gold"); NOISE = ink("noise");
+			network(s, narrow);
+			LINE = ink("line"); TIERS = [ink("bronze"), ink("silver"), ink("gold")]; FAIL = ink("fail");
 			hero!.classList.add("is-placed");
 			draw(t);
 		}
 
-		/* the timeline, in ms from the start (SCENE_BEATS): the CSS plays night and day; this plays the drawing —
-		   the lines from --beat-draw, the detections filling the sky until --beat-drawn, the test pass after it,
-		   and everything goes as day comes back */
-		const LINES_AT = SCENE_BEATS.draw + 200, LINE_MS = 700;
-		const FILL_AT = SCENE_BEATS.draw + 600, FILL_MS = SCENE_BEATS.drawn - FILL_AT;
-		const TRAILS_AT = FILL_AT + 900;
-		const SWEEP_AT = SCENE_BEATS.drawn, SWEEP_MS = 1800;
-		const FADE_AT = SWEEP_AT + SWEEP_MS + 200, FADE_MS = 1000;
-		const FLAG_MS = 220, DROP_MS = 320, TURN_MS = 260;
-		const FROM_FADE = 140;                  /* px over which the drawing fades in past the seal */
-		const P = sky.pts, N = P.length / 4, TR = sky.trails;
+		/* the timeline, in ms from the start (SCENE_BEATS). The night's front crosses the stage between --beat-draw
+		   and --beat-drawn, from the seal to past the band's right edge; a layer forms when the front reaches its
+		   dome. After it, the forward pass: pulses run along the links, bronze to gold. Day comes back from 6.5 s */
+		const NIGHT_AT = SCENE_BEATS.draw, NIGHT_MS = SCENE_BEATS.drawn - NIGHT_AT;
+		const SOFT = 160;                        /* the front's soft edge, px */
+		const LINK_MS = 450, NODE_MS = 300, BEAM_MS = 400;
+		const PULSE_AT = SCENE_BEATS.drawn + 200, PULSE_MS = 900, PULSES = 2;
+		const DAY_AT = 6500, DAY_MS = 1100;
 		const clamp = (x: number) => Math.min(1, Math.max(0, x));
-		/* when the sweep reaches column x, in ms from the start */
-		const swept = (x: number) => SWEEP_AT + (SWEEP_MS * x) / FW;
-		/* each line's cumulative length, so it can be drawn part of the way */
-		const LENS = sky.lines.map((l) => {
-			const c = [0];
-			for (let i = 2; i < l.p.length; i += 2) c.push(c[c.length - 1] + Math.hypot(l.p[i] - l.p[i - 2], l.p[i + 1] - l.p[i - 1]));
-			return c;
-		});
+		const ease = (x: number) => x * x * (3 - 2 * x);
+		/* the front's position on the stage, and when it reaches stage column x */
+		const runway = () => canvas.width / dpr - from + SOFT;
+		const frontX = (ms: number) => from + runway() * clamp((ms - NIGHT_AT) / NIGHT_MS);
+		const reached = (x: number) => NIGHT_AT + (NIGHT_MS * (x - from)) / runway();
+		const STARS = sky.stars;
 
-		function strokePart(p: number[], c: number[], u: number) {
-			const end = u * c[c.length - 1];
-			ctx.beginPath();
-			ctx.moveTo(p[0], p[1]);
-			for (let i = 1; i < c.length; i++) {
-				if (c[i] <= end) { ctx.lineTo(p[2 * i], p[2 * i + 1]); continue; }
-				const f = (end - c[i - 1]) / (c[i] - c[i - 1]);
-				ctx.lineTo(p[2 * i - 2] + f * (p[2 * i] - p[2 * i - 2]), p[2 * i - 1] + f * (p[2 * i + 1] - p[2 * i - 1]));
-				break;
-			}
-			ctx.stroke();
+		/* the night under the veil: a front with a soft edge, moved across the photograph; day lifts it */
+		function night(ms: number) {
+			const u = (ms - NIGHT_AT) / (DAY_AT + DAY_MS - NIGHT_AT), on = u === clamp(u);
+			hero!.style.setProperty("--night-x", `${(frontX(ms) - geo.L).toFixed(1)}px`);
+			hero!.style.setProperty("--night-a", on ? (1 - ease(clamp((ms - DAY_AT) / DAY_MS))).toFixed(3) : "0");
 		}
 
 		let t = 0;
 		function draw(ms: number) {
+			night(ms);
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			if (ms < LINES_AT || ms >= FADE_AT + FADE_MS) return;
-			ctx.save();
-			/* the photograph's frame */
-			const k = geo.W / FW;
-			ctx.setTransform(dpr * k, 0, 0, dpr * k, dpr * geo.L, dpr * geo.T);
-			const px = 1 / k;                    /* one CSS pixel, in frame units */
-			const fade = 1 - clamp((ms - FADE_AT) / FADE_MS);
-			ctx.lineJoin = "round";
+			if (ms < NIGHT_AT || ms >= DAY_AT + DAY_MS) return;
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			const fade = 1 - ease(clamp((ms - DAY_AT) / DAY_MS));
+			const fx = frontX(ms);
 
-			/* the graticule and the domes */
-			ctx.strokeStyle = LINE;
-			sky.lines.forEach((l, i) => {
-				const u = clamp((ms - LINES_AT - l.d) / LINE_MS);
+			/* the stars the night reveals as it passes */
+			const size = Math.max(0.8, Math.min(1.3, (4 * geo.W) / FW));
+			ctx.fillStyle = LINE;
+			for (let i = 0; i < STARS.length; i += 3) {
+				const x = sx(STARS[i]);
+				const a = clamp((fx - SOFT / 2 - x) / SOFT);
+				if (a <= 0) continue;
+				const r = [0.7, 1.1, 1.7][STARS[i + 2]] * size;
+				ctx.globalAlpha = fade * a * [0.35, 0.55, 0.85][STARS[i + 2]];
+				ctx.fillRect(x - r, sy(STARS[i + 1]) - r, 2 * r, 2 * r);
+			}
+
+			/* the domes light up in their layer's colour as their layer forms */
+			ctx.lineWidth = 1.75;
+			ctx.lineJoin = "round";
+			sky.domes.forEach((d, n) => {
+				const u = clamp((ms - reached(sx(d.c[0]))) / NODE_MS);
 				if (u <= 0) return;
-				ctx.globalAlpha = fade * (l.k === "alt" || l.k === "az" ? 0.4 : 0.85);
-				ctx.lineWidth = (l.k === "alt" || l.k === "az" ? 1 : 1.75) * px;
-				strokePart(l.p, LENS[i], u);
+				ctx.globalAlpha = fade * u * 0.9;
+				ctx.strokeStyle = TIERS[n];
+				ctx.beginPath();
+				for (let i = 0; i < d.p.length; i += 2) {
+					if (i) ctx.lineTo(sx(d.p[i]), sy(d.p[i + 1]));
+					else ctx.moveTo(sx(d.p[i]), sy(d.p[i + 1]));
+				}
+				ctx.stroke();
 			});
 
-			/* the detections: raw until the sweep reaches them; then the noise is flagged and dropped, and what
-			   passes turns gold, a little larger */
-			const R = [0.9 * px, 1.5 * px, 2.4 * px];
-			for (let i = 0; i < N; i++) {
-				const x = P[4 * i], y = P[4 * i + 1], r = R[P[4 * i + 2]], noise = P[4 * i + 3];
-				const a = clamp((ms - FILL_AT - (FILL_MS * i) / N) / 200);
-				if (a <= 0) continue;
-				const since = ms - swept(x);
-				if (since < 0) {
-					ctx.globalAlpha = fade * a * 0.85;
-					ctx.fillStyle = RAW;
-					ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
-				} else if (noise) {
-					const out = clamp((since - FLAG_MS) / DROP_MS);
-					if (out >= 1) continue;
-					ctx.globalAlpha = fade * (1 - out);
-					ctx.strokeStyle = NOISE;
-					ctx.lineWidth = 1.2 * px;
-					ctx.beginPath();
-					ctx.arc(x, y, r + 4 * px, 0, 2 * Math.PI);
-					ctx.stroke();
-				} else {
-					const g = clamp(since / TURN_MS);
-					if (g < 1) {
-						ctx.globalAlpha = fade * 0.85 * (1 - g);
-						ctx.fillStyle = RAW;
-						ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
-					}
-					ctx.globalAlpha = fade * g;
-					ctx.fillStyle = GOLD;
-					ctx.beginPath();
-					ctx.arc(x, y, r * (1 + 0.35 * g), 0, 2 * Math.PI);
-					ctx.fill();
-				}
-			}
-			/* the satellite trails: raw streaks, flagged and dropped when the sweep reaches their middle */
-			ctx.lineWidth = 1.4 * px;
-			for (let i = 0; i < TR.length; i += 4) {
-				const a = clamp((ms - TRAILS_AT - 150 * i) / 300);
-				if (a <= 0) continue;
-				const since = ms - swept((TR[i] + TR[i + 2]) / 2);
-				const out = since < 0 ? 0 : clamp((since - FLAG_MS) / DROP_MS);
-				if (out >= 1) continue;
-				ctx.globalAlpha = fade * a * (1 - out);
-				ctx.strokeStyle = since < 0 ? RAW : NOISE;
+			/* each telescope's beam: from its dome up to the layer it composes, in that layer's colour */
+			ctx.lineWidth = 1.5;
+			sky.domes.forEach((d, n) => {
+				const u = ease(clamp((ms - reached(sx(d.c[0]))) / BEAM_MS));
+				if (u <= 0) return;
+				const x = sx(d.c[0]), y0 = sy(d.c[1]) - 6, col = nodes[n], y1 = col[col.length - 1].y + 12;
+				const y = y0 + (y1 - y0) * u;
+				const g = ctx.createLinearGradient(0, y0, 0, y1);
+				g.addColorStop(0, TIERS[n]);
+				g.addColorStop(1, "rgba(0, 0, 0, 0)");
+				ctx.strokeStyle = g;
+				ctx.globalAlpha = fade * 0.75;
 				ctx.beginPath();
-				ctx.moveTo(TR[i], TR[i + 1]);
-				ctx.lineTo(TR[i + 2], TR[i + 3]);
+				ctx.moveTo(x, y0);
+				ctx.lineTo(x, y);
 				ctx.stroke();
+			});
+
+			/* the links: each layer reads from the one before, drawn out of it as the front reaches the new
+			   layer; the failed node is never read */
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = LINE;
+			for (let n = 1; n < nodes.length; n++) {
+				const u = ease(clamp((ms - reached(nodes[n][0].x) + LINK_MS * 0.6) / LINK_MS));
+				if (u <= 0) continue;
+				ctx.globalAlpha = fade * 0.55;
+				nodes[n - 1].forEach((a, i) => {
+					if (n === 1 && i === FAILS) return;
+					for (const b of nodes[n]) {
+						ctx.beginPath();
+						ctx.moveTo(a.x, a.y);
+						ctx.lineTo(a.x + (b.x - a.x) * u, a.y + (b.y - a.y) * u);
+						ctx.stroke();
+					}
+				});
 			}
-			/* the test pass: a scan line across the sky, from the band's top to the sea horizon */
-			if (Math.floor((ms - SWEEP_AT) / SWEEP_MS) === 0) {
-				const x = (FW * (ms - SWEEP_AT)) / SWEEP_MS, top = -geo.T / k, band = 120 * px;
-				const g = ctx.createLinearGradient(x - band, 0, x, 0);
-				g.addColorStop(0, "rgba(0, 0, 0, 0)");
-				g.addColorStop(1, LINE);
-				ctx.globalAlpha = 0.3;
-				ctx.fillStyle = g;
-				ctx.fillRect(x - band, top, band, SEA - top);
-				ctx.globalAlpha = 1;
-				ctx.fillStyle = LINE;
-				ctx.fillRect(x - px, top, 2 * px, SEA - top);
+
+			/* the forward pass: pulses run from bronze to gold along the links */
+			for (let p = 0; p < PULSES; p++) {
+				const v = (ms - PULSE_AT - p * PULSE_MS * 0.6) / PULSE_MS;
+				if (v !== clamp(v)) continue;
+				const seg = v * (nodes.length - 1), n = Math.min(nodes.length - 2, Math.floor(seg)), f = seg - n;
+				ctx.fillStyle = TIERS[n + 1];
+				ctx.globalAlpha = fade * Math.sin(Math.PI * f) * 0.9;
+				nodes[n].forEach((a, i) => {
+					if (n === 0 && i === FAILS) return;
+					for (const b of nodes[n + 1]) {
+						ctx.beginPath();
+						ctx.arc(a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f, 1.8, 0, 2 * Math.PI);
+						ctx.fill();
+					}
+				});
 			}
-			ctx.restore();
-			/* then, on the stage: a hole for every line of the copy (erased, not clipped — the padded lines
-			   overlap, and an even-odd clip paints their overlaps back), and a fade in from the seal */
-			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+			/* the nodes: a ring closes on a star as the front picks it, then it fills in its layer's colour; the
+			   failing one turns red and dims as the next layer forms without it */
+			nodes.forEach((layer, n) => {
+				layer.forEach((a, i) => {
+					const u = clamp((ms - reached(a.x) - i * 40) / NODE_MS);
+					if (u <= 0) return;
+					const fail = n === 0 && i === FAILS ? clamp((ms - reached(nodes[1][0].x) + LINK_MS) / NODE_MS) : 0;
+					const glow = n === nodes.length - 1 ? clamp((ms - PULSE_AT - PULSE_MS) / 400) : 0;
+					const r = (n === nodes.length - 1 ? 6.5 : 5) + glow * 2;
+					const c = fail > 0.5 ? FAIL : TIERS[n];
+					ctx.globalAlpha = fade * (1 - 0.6 * fail);
+					ctx.strokeStyle = c;
+					ctx.lineWidth = 1.5;
+					ctx.beginPath();
+					ctx.arc(a.x, a.y, r + 10 * (1 - ease(u)), 0, 2 * Math.PI);
+					ctx.stroke();
+					ctx.fillStyle = c;
+					ctx.globalAlpha = fade * ease(u) * (1 - 0.6 * fail);
+					ctx.beginPath();
+					ctx.arc(a.x, a.y, r - 1.5, 0, 2 * Math.PI);
+					ctx.fill();
+				});
+			});
+
+			/* a hole for every line of the copy (erased, not clipped — the padded lines overlap, and an even-odd
+			   clip paints their overlaps back), and a fade in from the seal */
 			ctx.globalCompositeOperation = "destination-out";
 			ctx.globalAlpha = 1;
 			ctx.fillStyle = "#000";               /* what is erased is the alpha: any opaque colour */
@@ -265,6 +312,7 @@ const replayLabel = L("sky_replay", "Repetir la animación");
 				ctx.fillRect(0, 0, from + FROM_FADE, canvas.height / dpr);
 			}
 			ctx.globalCompositeOperation = "source-over";
+			ctx.globalAlpha = 1;
 		}
 
 		const clock = new SceneClock();
@@ -273,7 +321,7 @@ const replayLabel = L("sky_replay", "Repetir la animación");
 			t += now - last;
 			last = now;
 			draw(t);
-			raf = t < FADE_AT + FADE_MS ? requestAnimationFrame(tick) : 0;
+			raf = t < DAY_AT + DAY_MS ? requestAnimationFrame(tick) : 0;
 		}
 		function run() {
 			if (raf) return;

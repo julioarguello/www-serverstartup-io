@@ -232,9 +232,10 @@
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
 	--color-machine-red: #E0141E;     /* the Terminator's eye, where the AI scene's violet ends (#537) */
 	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */
-	--color-sky-line: #8DB3E2;        /* the Big Data sky's graticule: the section's navy, lightened to read on a night sky (#556) */
-	--color-sky-raw: #C0875A;         /* raw detections: bronze, the first of the medallion's layers (#556) */
-	--color-sky-gold: #F2C14E;        /* the catalogue: gold, what passed its tests (#556) */
+	--color-sky-line: #8DB3E2;        /* the Big Data sky's stars and links: the section's navy, lightened to read at night (#556) */
+	--color-sky-bronze: #C0875A;      /* the medallion's layers, one per telescope (#556): bronze, */
+	--color-sky-silver: #C9D4DF;      /* silver, */
+	--color-sky-gold: #F2C14E;        /* and gold */
 	/* The card the rotating half of the band lives in (founder's direction C,
 	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
 	   the panel reads as a pane laid on the picture rather than a box that

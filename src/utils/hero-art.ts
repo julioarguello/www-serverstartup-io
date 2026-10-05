@@ -199,11 +199,11 @@ export const HERO_STORE = {
 export const HERO_STORE_SIZES = HERO_ELEVATION_SIZES;
 
 export const HERO_SKY = {
-	/** three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon (Mike Peel, CC BY-SA 4.0), restored, the operator's logo painted out of the doors: WebP, 1320×642 */
-	photo: "/assets/hero/bd-observatorio-restaurado.webp",
-	photoSmall: "/assets/hero/bd-observatorio-restaurado-720.webp",
-	photoLarge: "/assets/hero/bd-observatorio-restaurado-2016.webp",
+	/** three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon (Mike Peel, CC BY-SA 4.0), whole, restored, the operator's logo painted out of the doors: WebP, 1320×880 */
+	photo: "/assets/hero/bd-observatorio-entero.webp",
+	photoSmall: "/assets/hero/bd-observatorio-entero-720.webp",
+	photoLarge: "/assets/hero/bd-observatorio-entero-2016.webp",
 };
 
-/** The same frame rules as the elevation's: 2.06 × 86 % of the band on desktops, up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. The photograph is the first paint. */
+/** The elevation's sizes: the frame is 1.5 × 86 % of the band on desktops (less where the band is narrow, so the left dome clears the seal), up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. The photograph is the first paint. */
 export const HERO_SKY_SIZES = HERO_ELEVATION_SIZES;

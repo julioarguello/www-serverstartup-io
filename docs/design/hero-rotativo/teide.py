@@ -1,39 +1,35 @@
-"""The Big Data hero (#556): the sky over the Teide Observatory fills with data, and only what passes its tests
-reaches the catalogue.
+"""The Big Data hero (#556): night falls over the Teide Observatory from left to right, and each telescope
+composes a layer that reads from the one before — bronze, silver, gold — drawn in the sky as a neural
+network is drawn.
 
 The photograph is "Teide Observatory 2018 077.jpg" (Mike Peel, Wikimedia Commons, CC BY-SA 4.0), 5184 x 3456,
 a Canon EOS 60D at 39 mm: three robotic-telescope domes at Izana, the sea and an island on the horizon. The
-founder's story (2026-10-05, option R): the photograph by day; night falls, the domes are drawn in line, an
-alt-azimuth graticule is drawn over the sky and thousands of raw detections fill it; a test pass sweeps the
-sky, the noise goes and what passes is the catalogue.
+founder's story (2026-10-05, second round): a sweep from left to right, as if night were falling; over the
+first dome it picks stars, the first layer; reaching the second dome a second layer is composed that reads
+from the first, and so on with the third. What stays in the sky is the classic drawing of a neural network,
+left to right. A first round (a graticule, thousands of detections, a test pass) was "la imagen bien, la
+animacion mal".
 
-The drawing is measured on the photograph, never placed by eye. The camera:
+What the hero needs from the photograph is measured on it, never placed by eye:
 
-- the focal length, 8,796 px: 39 mm over the file's own focal-plane resolution (5,728 px per inch);
-- no roll: the doors' edges are vertical, and the sea horizon is level across the right half, where nothing
-  stands on it (the island hides it on the left);
-- the pitch, 5.3 degrees down: the sea horizon, at row 1130, lies 1.43 degrees under the true horizon from
-  Izana's 2,390 m (dip = 1.76' x sqrt(h), refraction included), so altitude 0 is 220 px above it.
-
-The sky in the frame then spans 0 to 5.8 degrees of altitude, and from the mountain down to -1.43 at the sea
-horizon, across 33 degrees of azimuth: the graticule is a telescope's, one degree apart.
+- the camera, to place the stars and the sea horizon: the focal length, 8,795 px, is 39 mm over the file's
+  own focal-plane resolution (5,728 px per inch); no roll (the doors' edges are vertical); the pitch, 5.3
+  degrees down, puts the sea horizon at row 1130, which lies 1.43 degrees under the true horizon from
+  Izana's 2,390 m (dip = 1.76' x sqrt(h), refraction included);
+- the domes: their outlines (each layer's dome lights up with it) and their centres (each layer's column of
+  nodes stands over its dome).
 
     python3 docs/design/hero-rotativo/teide.py <original.jpg> <seedvr2-2x.png>
 
 writes, under new names so no browser keeps an older cut:
 
-- public/assets/hero/bd-observatorio-restaurado{-720,,-2016}.webp   the photograph, restored, the operator's
-                                                                     logo painted out of the two doors
-- src/assets/hero/bd-cielo.json      what the component plays on its canvas: the graticule and the domes'
-                                     outlines (each line with its start), the raw detections and the
-                                     satellite trails
+- public/assets/hero/bd-observatorio-entero{-720,,-2016}.webp   the photograph, whole, restored, the
+                                                                 operator's logo painted out of two doors
+- src/assets/hero/bd-cielo.json      what the component plays: the sea horizon's row, the domes (outline,
+                                     centre, top) and the stars the night reveals
 
-The sky goes on above the frame: at night the band IS the sky, so the graticule and the detections climb to
-8.5 degrees, about the band's top on desktops, and the component draws them over the veil, around the copy.
-
-SeedVR2 is fed rows 0-2804 scaled to 2304 px (`--resolution 2492`, twice its height), and the frame is cut
-from the top of its output: at 2x the original's 5184 px would not fit the restorer, and the hero never shows
-more than 2016.
+The whole frame is shown (1.5 wide), so the left dome clears the seal on desktops; SeedVR2 is fed it at 2304
+px (`--resolution 3072`, twice its height).
 """
 import os, sys, json
 import numpy as np, cv2
@@ -48,8 +44,8 @@ DATA = os.path.join(ROOT, "src", "assets", "hero", "bd-cielo.json")
 SIZES = [(2016, "-2016"), (1320, ""), (720, "-720")]
 
 W0, H0 = 5184, 3456                      # the photograph; everything below is in its pixels
-FW, FH = W0, 2520                        # the frame the hero shows: the foreground goes, 2.06 wide like the elevation's
-SV_IN = (0, 0, W0, 2804), (2304, 1246)   # what SeedVR2 is fed: a taller cut, scaled; the frame is its top
+FW, FH = W0, H0                          # the frame the hero shows: the whole photograph, so the left dome clears the seal
+SV_IN = (2304, 1536)                     # what SeedVR2 is fed
 
 # the camera (see the docstring): x right, y up, z ahead and level; it looks PITCH down
 F = 39 / (25.4 / 5728.176795580111)
@@ -84,7 +80,7 @@ def unproj(x, y):
 
 ALT_TOP = unproj(CX, 0)[0]
 ALT_SEA = -np.degrees(DIP)               # from the mountain the sky reaches down to the sea horizon
-ALT_MAX = 8.5                            # above the frame, up to about the band's top on desktops
+ALT_MAX = 9.5                            # above the frame, up to the band's top on desktops
 AZ_L, AZ_R = unproj(0, CY)[1] - 1, unproj(W0, CY)[1] + 1
 
 
@@ -109,7 +105,7 @@ def photo(original, restored):
     im = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     for w, suf in SIZES:
         out = im.resize((w, round(w * FH / FW)), Image.LANCZOS)
-        p = os.path.join(PUB, f"bd-observatorio-restaurado{suf}.webp")
+        p = os.path.join(PUB, f"bd-observatorio-entero{suf}.webp")
         out.save(p, "WEBP", quality=80, method=6)
         print(os.path.relpath(p, ROOT), out.size, f"{os.path.getsize(p) // 1024} KB")
 
@@ -134,57 +130,34 @@ def domes(original):
     return out
 
 
-def drawing(original):
-    """the graticule (1 degree apart, the true horizon heaviest) and the domes; each line carries its start in
-    ms after the drawing begins: the altitude circles from the horizon up, the azimuth lines from the frame's
-    middle outward, the domes first"""
-    lines = []
-    for c in domes(original):
-        lines.append({"k": "dome", "d": 0, "p": flat(np.vstack([c, c[:1]]))})
-    for i, alt in enumerate(np.arange(-1, ALT_MAX + .01, 1.0)):
-        p = proj(np.full(32, alt), np.linspace(AZ_L, AZ_R, 32))
-        lines.append({"k": "zero" if alt == 0 else "alt", "d": 100 * i, "p": flat(p)})
-    for az in np.arange(np.ceil(AZ_L), AZ_R, 1.0):
-        # a vertical circle is a straight line through a pinhole: its two ends are enough
-        p = proj(np.array([ALT_SEA, ALT_MAX]), np.full(2, az))
-        if p[:, 0].max() < 0 or p[:, 0].min() > FW:
-            continue
-        lines.append({"k": "az", "d": int(250 + 40 * abs(az)), "p": flat(p)})
-    return lines
-
-
-def detections(seed=556):
-    """raw detections over the sky: many faint, few bright, denser along a band; a fifth of them noise,
-    and three satellite trails. Points are in a random order, the order they light up in"""
+def stars(seed=556):
+    """the sky the night reveals: many faint, few bright, a third denser along a band like the Milky Way's,
+    from the sea horizon up to the band's top"""
     rng = np.random.default_rng(seed)
-    pts = []
-    while len(pts) < 2600:
+    out = []
+    while len(out) < 1400:
         alt, az = rng.uniform(ALT_SEA + .12, ALT_MAX), rng.uniform(AZ_L, AZ_R)
-        # a band across the sky, like the Milky Way's, a third denser
         band = np.exp(-((alt - (1.5 + .2 * (az - AZ_L))) ** 2) / 3)
         if rng.random() > .55 + .45 * band:
             continue
         x, y = proj(np.array(alt), np.array(az))
         if not (8 < x < FW - 8):
             continue
-        mag = 2 if rng.random() < .06 else 1 if rng.random() < .25 else 0
-        noise = int(rng.random() < .2)
-        pts += [[int(x), int(y), mag, noise]]
-    trails = []
-    for _ in range(3):
-        a0, z0 = rng.uniform(1, ALT_MAX - 1), rng.uniform(AZ_L + 3, AZ_R - 8)
-        p = proj(np.array([a0, a0 + rng.uniform(-1.2, 1.2)]), np.array([z0, z0 + rng.uniform(4, 7)]))
-        trails += [int(v) for v in p.ravel()]
-    return pts, trails
+        out.append([int(x), int(y), 2 if rng.random() < .05 else 1 if rng.random() < .22 else 0])
+    return out
 
 
 def write(original):
-    lines = drawing(original)
-    pts, trails = detections()
-    data = {"frame": [FW, FH], "sea": int(SEA), "lines": lines, "pts": [v for p in pts for v in p], "trails": trails}
+    ds = []
+    for c in domes(original):
+        x0, y0 = c.min(0)
+        x1, y1 = c.max(0)
+        ds.append({"c": [int((x0 + x1) / 2), int(y0), int(y1)], "p": flat(np.vstack([c, c[:1]]))})
+    st = stars()
+    data = {"frame": [FW, FH], "sea": int(SEA), "domes": ds, "stars": [v for p in st for v in p]}
     json.dump(data, open(DATA, "w"), separators=(",", ":"))
-    print(os.path.relpath(DATA, ROOT), len(lines), "lines,", len(pts), "detections,", sum(p[3] for p in pts),
-          "noise,", f"{os.path.getsize(DATA) // 1024} KB")
+    print(os.path.relpath(DATA, ROOT), len(ds), "domes at", [d["c"][0] for d in ds], ",", len(st), "stars,",
+          f"{os.path.getsize(DATA) // 1024} KB")
 
 
 if __name__ == "__main__":

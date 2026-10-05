@@ -536,39 +536,37 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 
 ### 4.10 Night over the Teide Observatory, the Big Data vertical (#556)
 
-- **Everything follows the night** (founder, 2026-10-05, fifth round: "las capas, con sus puntos y
-  conexiones, van apareciendo a medida que se hace la noche, de izquierda a derecha"): three robotic-telescope
-  domes at Izaña, the sea and an island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel,
-  CC BY-SA 4.0), by day until `--beat-draw`; then one front crosses the photograph, slowly, to 7.2 s. As it
-  passes, the stars come out, each dome is drawn as its elevation in its layer's colour and sends a beam up,
-  its layer's stars are picked — bronze, silver, gold, each over its own dome, left to right — and the links
-  grow behind the front out of the layer before. One bronze star flashes red as silver is read without it.
-  Each layer is named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`). From the moment a link is
-  complete, two to four thick dots run along it; they calm down at 8 s, and **the finished network stays** —
-  night and network are the end state; reduced motion shows it at once; without the script, the photograph.
-  Frozen from outside (the a11y gate sets `is-done`), the scene jumps to that end state: before, it kept
-  animating under the gate, which measured the excerpt over half a day at 4.5:1; at the end state it is 8.9:1.
-- **All the network's stars are in the sky, and few** (5, 3, 2): in the photograph's sky, under its faded top
-  and over the sea horizon, never on a line of the copy, each star reading from two or three of the nearest of
-  the layer before along slightly bowed links of uneven strength (a seeded generator: the same sky every visit).
-  Where the copy covers all of a band's sky (a lower frame, as at 1440 × 900), that layer climbs into the night
-  above the photograph, under the header.
-- **The domes are drawn as an elevation, not traced** ("los perfiles están horribles… exactos y
-  profesionales"): the silhouette is GrabCut on the photograph, cut at the plinth's foot, the walkway's rail cut
-  off, the shell's shaded side filled by its hull above the equator, smoothed; the inner lines are the
-  photograph's own edges picked by hand (one edge of each groove, never both), each fitted with a smooth cubic
-  along its main axis, or a straight line for the boxes; the door is measured.
-- **Five rounds**, each rejected for its execution, never for the message: a graticule with thousands of
+- **Dusk falls, and the medallion is born in the sky** (founder, 2026-10-05, sixth round): three
+  robotic-telescope domes at Izaña, the sea and an island on the horizon ("Teide Observatory 2018 077.jpg",
+  Mike Peel, CC BY-SA 4.0). On the openings' one clock: the photograph alone until `--beat-draw`; then dusk,
+  from left to right at an even pace, a front whose soft edge is a third of the photograph wide (so the dusk
+  is seen to fall, not wiped in), complete just past `--beat-drawn`; the domes keep their light (the night is a
+  canvas under the veil with their silhouettes cut out); as the dusk reaches each dome a layer of stars is born
+  in the sky over it — bronze, silver, gold, one after the other, each dome sending a soft beam up to its own;
+  then the payoff, thick dots running along the links; at rest by 8 s, the finished sky staying. Each layer is
+  named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`).
+- **Consolidation, not a neural network** (the founder asked whether the comparison held; it does not: a
+  network mixes everything and learns weights — that is the AI vertical — while the medallion refines): ten
+  raw stars, bronze; four clean ones, silver, each gathering its own group of bronze; two that matter, gold,
+  each gathering its own group of silver. Every star reads from its own group (each star feeds its nearest in
+  the next layer), never all to all. The stars are round, with a soft halo. All of them are in the photograph's
+  sky, never on the copy; where the copy covers all of a band's sky (a lower frame, as at 1440 × 900), that
+  layer climbs into the night above the photograph, under the header. Frozen from outside (the a11y gate sets
+  `is-done`), the scene jumps to its end state (the excerpt then measures 8.9:1).
+- **Six rounds**, each rejected for its execution, never for the message: a graticule with thousands of
   detections and a test sweep; regular columns over the domes, all three layers in 2.5 s ("va mega rápido…
   una horizontal muy estrecha… la perfección no existe"); scattered stars above the title and down the right of
   the copy, partly off the photograph and read top-down; the three layers in the band under the copy, over the
-  ground. Hence a network in the sky, left to right, born with the night.
+  ground; a network born behind a narrow front, with the domes drawn as elevations and a failing red star
+  ("se quedan un rato enorme esperando y luego va a toda hostia"; the profiles dropped; "la estrella roja, no sé
+  qué coño es"; "¿estrellas cuadradas?").
 - **Rejected for Big Data**: El Molinón with match statistics (data laid on the photo is a TV graphic, not a
   drawing of the place, and a derby), the El Musel bulk terminal, El Molinón's stand as a table. No free
   photograph shows the observatory, the Teide and the sea together (about 170 checked on Commons and
   Openverse; the IAC's gallery is non-commercial only).
-- **Measured on the photograph** (`docs/design/hero-rotativo/teide.py`): the domes' elevations (above) and
-  their extents, which set each layer's band. The stars go through the camera fitted to the photograph: the focal length, 8,795 px, from the EXIF's 39 mm over
+- **Measured on the photograph** (`docs/design/hero-rotativo/teide.py`): the domes' silhouettes — GrabCut cut at
+  the plinth, the walkway's rail removed, the shaded shell filled by its hull, smoothed — which keep their light
+  in the dusk and set each layer's band. The stars go through the camera fitted to the photograph: the focal length, 8,795 px, from the EXIF's 39 mm over
   the file's focal-plane resolution; no roll (the doors' edges are vertical); the pitch, 5.3° down, from the
   sea horizon at row 1130, 1.43° under the true horizon from 2,390 m.
 - **The band is the sky at night**: the night is a layer under the veil the script moves (`--night-x`,

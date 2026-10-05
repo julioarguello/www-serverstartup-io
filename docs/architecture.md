@@ -322,13 +322,21 @@ museum and the warehouse, its connectors still keep off the text (they are place
 measured lines), and the Pac-Man and the reduced-motion ghosts run between the outer connectors rather
 than tower to tower, since the girder's left end now passes under the copy. The lighthouse is the one
 cut-out: its radar's rings and plan are what fill its band.
-**One clock for every opening** (#553): the photograph alone until `--beat-draw` (2 s), the drawing or
-the machine's layer complete by `--beat-drawn` (4.5 s), the payoff after it, everything at rest by 8 s —
-declared once in `hero-scene.css` and mirrored by `SCENE_BEATS` in `hero-art.ts` for the scripts. The
-lighthouse keeps them as fractions of its `--radar-t` (24 %, 64 %); the machine's eye keeps its own three
-beats (photograph to 3.8 s, the reading at 5.2 s), approved as they are. The bridge used to wait to 3.2 s
-and take 3.2 s more ("tarda mucho"): it is now whole by 4.5 s, its connectors come at 5 s and the messages
-at 6 s. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
+**One clock and one grammar for every opening** (#553, #558): 0–2 s the photograph alone (`--beat-draw`);
+2–4.5 s the transformation (the drawing, the machine's view, the night), complete by `--beat-drawn`; 4.5–7 s
+the payoff (the radar and its events, the connectors and their messages, the reading, the order's cube);
+**at rest by 8 s — nothing loops past the end** (founder, 2026-10-05: "que se paren todas"); replay is the
+way to see it again. Declared once in `hero-scene.css` and mirrored by `SCENE_BEATS` in `hero-art.ts`. Until
+#558 three openings never stopped — the lighthouse's sweep turned forever and its events began only after
+the end, the bridge's messages and Pac-Man ran forever, the machine's listing walked and MATCH blinked
+forever — and two kept beats of their own (the eye at 3.8 s and 5.2 s, the cube at 4.2 s). Now: the
+lighthouse crosses to the drawing by 4.5 s (25 %/56 % of `--radar-t`), the radar is in by 5.3 s, its sweep
+turns once to 300° and its events run from 5.3 s to 7.4 s, then one still event per zone holds (the reduced-
+motion picture); the bridge's connectors come at 4.6 s, its messages and Pac-Man at 5 s, no new message
+after 7 s, and at 8 s three ghosts stand on the girder with the Pac-Man still; the eye builds at 2 s, the
+reading types at 4.5 s, the listing walks to 7.4 s and MATCH blinks three times; the cube rises at 4.5 s and
+lands on the seal at 7 s. The epigraph stops short of the column (`--measure-epigraph`, 620 px): at the
+column's width it ran under the art, into the lighthouse's labels. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
 the copy, fades over 14 % of the frame instead of 60 px. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). **On phones and tablets (≤ 1100 px) the first screen is the screen** (#543): one `100svh` box — title,

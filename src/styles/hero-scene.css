@@ -53,6 +53,7 @@
 .s-hero--scene .s-hero__body { color: var(--color-hero-ink-soft); }
 .s-hero--scene .btn { margin-top: var(--space-4); }
 .s-hero__epigraph {
+	max-width: var(--measure-epigraph);
 	margin: var(--space-4) 0 0;
 	color: var(--color-hero-ink-soft);
 }
@@ -60,8 +61,10 @@
 /* quotations by one author, one after the other */
 .s-hero__epigraph p + p { margin-top: .4em; }
 /* set as fine print (under the layout gate's 16 px body floor): at 17 px across the one column a quotation
-   ran 89 characters a line, past the 75 the body copy keeps (G20, #481); the lever is type size, never a
-   narrower box (#304) — and an epigraph sits below the copy it heads, not beside it (#551) */
+   ran 89 characters a line, past the 75 the body copy keeps (G20, #481), and the lever was type size, never a
+   narrower box (#304). Since #558 it also stops well short of the column (--measure-epigraph): at the column's
+   width it ran under the art, into the lighthouse's labels (founder: "no lo veo"). An epigraph sits below the
+   copy it heads, not beside it (#551) */
 .s-hero__epigraph p {
 	margin: 0;
 	font-size: 15px;

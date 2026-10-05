@@ -74,20 +74,22 @@
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 
-/* the sequence in three beats, 8 s like every opening (founder, 2026-10-03/04): the photograph held 3.8 s; then the machine's view
-   builds as the film's was printed (Cinefex 21): first the high-contrast black and white, the image swelling
-   slightly as the exposures did, then its hard red — three passes, 0.36 s; then the reading at 5.2 s, typing
-   itself (script) as the film's did. After it the listing moves and MATCH's square blinks, until the pause.
+/* the sequence on the openings' one grammar (#558; the founder had approved 3.8 s and 5.2 s, then asked for
+   every opening on one timing): the photograph alone to --beat-draw; then the machine's view builds as the
+   film's was printed (Cinefex 21): first the high-contrast black and white, the image swelling slightly as the
+   exposures did, then its hard red — three passes, 0.36 s; then the reading at --beat-drawn, typing itself
+   (script) as the film's did; the listing moves and MATCH's square blinks during the payoff; at rest by 8 s.
    Rejected on the way: a focus pull, a plain cut (a jump), blinds, four flat tones (lost the picture) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--vision:not(.is-placed) .vision__box { visibility: hidden; }
 	.s-hero--vision:not(.is-playing):not(.is-done) .vision__eye { visibility: hidden; }
 	.s-hero--vision:not(.is-done) .vision__piece { opacity: 0; }
-	.s-hero--vision.is-playing .vision__eye { animation: vision-show 0s 3.8s both; }
-	.s-hero--vision.is-playing .vision__eye .vision__photo { animation: vision-expose .36s step-end 3.8s both; }
-	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { animation: vision-separate .36s step-end 3.8s both; }
-	.s-hero--vision.is-playing .vision__piece { animation: vision-in .24s steps(2, end) 5.2s forwards; }
-	.s-hero--vision.is-done .vision__match i { animation: vision-blink 1s steps(1, end) infinite; }
+	.s-hero--vision.is-playing .vision__eye { animation: vision-show 0s var(--beat-draw) both; }
+	.s-hero--vision.is-playing .vision__eye .vision__photo { animation: vision-expose .36s step-end var(--beat-draw) both; }
+	.s-hero--vision.is-playing :is(.vision__tint, .vision__scan) { animation: vision-separate .36s step-end var(--beat-draw) both; }
+	.s-hero--vision.is-playing .vision__piece { animation: vision-in .24s steps(2, end) var(--beat-drawn) forwards; }
+	/* three blinks in the payoff, then steady: nothing loops past the end */
+	.s-hero--vision.is-playing .vision__match i { animation: vision-blink 1s steps(1, end) calc(var(--beat-drawn) + .6s) 3; }
 	.s-hero--vision.is-paused :is(.vision__piece, .vision__match i) { animation-play-state: paused; }
 }
 @keyframes vision-in { from { opacity: 0; } to { opacity: 1; } }

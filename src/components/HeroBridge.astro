@@ -261,7 +261,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			hero.classList.add("is-placed");
 			window.setTimeout(() => {
 				placePlugs(narrow);
-				if (reduced) still(); else startPacman();
+				if (reduced || resting) still(); else startPacman();
 			}, 0);
 		}
 
@@ -282,6 +282,8 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		/* and one Pac-Man patrols the girder end to end, chomping, facing the way it goes: our own cube, in
 		   yellow, with an eye on its top face (founder, 2026-10-02: "el Pac-Man con nuestro logo") */
 		let pac: HTMLElement | null = null;
+		/* at rest (#558: nothing loops past the end): the picture reduced motion shows, held */
+		let resting = false;
 		function startPacman() {
 			pac?.remove();
 			pac = null;
@@ -297,7 +299,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			el.appendChild(body);
 			bus.appendChild(el);
 			pac = el;
-			if (reduced) { el.style.transform = `translate(${a[0]}px, ${a[1]}px)`; return; }
+			if (reduced || resting) { el.style.transform = `translate(${a[0]}px, ${a[1]}px)`; return; }
 			const dur = (2 * Math.hypot(b[0] - a[0], b[1] - a[1])) / 0.08;
 			const runs = [
 				el.animate([{ transform: `translate(${a[0]}px, ${a[1]}px)` }, { transform: `translate(${b[0]}px, ${b[1]}px)`, offset: 0.5 }, { transform: `translate(${a[0]}px, ${a[1]}px)` }], { duration: dur, iterations: Infinity }),
@@ -311,7 +313,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		   not a class rule: the CSS source is at its budget */
 		let munch: number | null = null;
 		function startMunch() {
-			if (munch !== null || reduced) return;
+			if (munch !== null || reduced || resting) return;
 			munch = window.setInterval(() => {
 				if (!pac || pause.checked || document.hidden) return;
 				const p = pac.getBoundingClientRect();
@@ -369,31 +371,41 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			});
 			startPacman();
 		}
-		function startFeed() { if (feed !== null || reduced || pause.checked || document.hidden || !hero.classList.contains("is-fed")) return; feed = window.setInterval(send, 1300); send(); }
+		let feeding = false;
+		function startFeed() { if (feed !== null || !feeding || reduced || pause.checked || document.hidden || !hero.classList.contains("is-fed")) return; feed = window.setInterval(send, 1300); send(); }
 		function stopFeed() { if (feed !== null) { clearInterval(feed); feed = null; } }
 		function freezeFeed(on: boolean) { for (const a of bus.getAnimations({ subtree: true })) on ? a.pause() : a.play(); }
 
-		/* the sequence, on the openings' clock (SCENE_BEATS, #553): the banks alone · the bridge, whole (CSS, by
-		   the drawn beat) · every connector at once, half a second later · the messages a second after that
-		   (founder, 2026-10-02: "que el puente aparezca de una sola vez, y los conectores también"). Pause
-		   freezes it where it is (SceneClock) */
+		/* the sequence, on the openings' one grammar (SCENE_BEATS, #553, #558): the banks alone · the bridge,
+		   whole (CSS, by the drawn beat) · every connector at once, just after · the messages and the Pac-Man from
+		   half a second later, new messages until 7 s · at rest by the end: the picture reduced motion shows,
+		   three ghosts on the girder and the Pac-Man still — nothing loops past the end (founder, 2026-10-05:
+		   "que se paren todas"). Pause freezes it where it is (SceneClock) */
 		const clock = new SceneClock();
 		function wire() { hero.classList.add("is-wired"); }
 		function feedOn() {
 			hero.classList.add("is-wired", "is-fed");
+			feeding = true;
 			startFeed();
 			startPacman();
 		}
+		function feedOff() { feeding = false; stopFeed(); }
 		function finish() {
 			clock.clear();
+			feedOff();
+			resting = true;
+			if (munch !== null) { clearInterval(munch); munch = null; }
+			for (const a of bus.getAnimations({ subtree: true })) a.cancel();
+			bus.querySelectorAll(".bridge__msg").forEach((g) => g.remove());
 			hero.classList.remove("is-playing");
-			hero.classList.add("is-done");
-			feedOn();
+			hero.classList.add("is-done", "is-wired", "is-fed");
+			still();
 		}
 		function play() {
 			hero.classList.add("is-playing");
-			clock.at("wire", SCENE_BEATS.drawn + 500, wire);
-			clock.at("feed", SCENE_BEATS.drawn + 1500, feedOn);
+			clock.at("wire", SCENE_BEATS.drawn + 100, wire);
+			clock.at("feed", SCENE_BEATS.drawn + 500, feedOn);
+			clock.at("feed-end", SCENE_BEATS.end - 1000, feedOff);
 			clock.at("end", SCENE_BEATS.end, finish);
 		}
 
@@ -426,7 +438,8 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else startFeed(); });
 		replay.addEventListener("click", () => {
 			if (reduced) return;
-			stopFeed();
+			feedOff();
+			resting = false;
 			clock.clear();
 			bus.querySelectorAll(".bridge__msg, .bridge__pac").forEach((b) => b.remove());
 			pac = null;

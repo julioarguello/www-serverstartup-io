@@ -317,6 +317,10 @@
 	   page, which is exactly what reads as "no criterion" (founder, #304).
 	   The column is therefore sized by the TEXT, not by the screen. */
 	--measure-statement: var(--container-max);
+	/* The one exception, and only for fine print: an opening's epigraph stops well short of the column
+	   (founder, 2026-10-05, #558: "que la quote … vaya tan a la derecha no lo veo") — at the column's width
+	   it ran under the art, into the lighthouse's labels. About 55 characters a line at its 15 px. */
+	--measure-epigraph: min(var(--container-max), 620px);
 
 	--radius-pill: 99px;              /* pills and toggles only */
 	--focus-ring: 0 0 0 3px rgba(30, 30, 30, 0.2);

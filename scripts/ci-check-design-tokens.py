@@ -171,8 +171,9 @@ def unconsumed(theme_text: str, files) -> list[tuple[int, str]]:
 RADIUS_ATOM = r"(0|0px|\d+%|var\(--[\w-]+\)|inherit|initial|unset)"
 RADIUS_OK = re.compile(rf"^{RADIUS_ATOM}(\s*/?\s*{RADIUS_ATOM})*$")
 SHADOW_OK = re.compile(r"^(none|var\(--[\w-]+\)|inherit|initial|unset)$")
-# the column, or "as wide as whatever contains me" — nothing else
-WIDTH_OK = re.compile(r"^(100%|none|var\(--container-max\)|var\(--measure-statement\)"
+# the column, or "as wide as whatever contains me" — nothing else; and the openings' epigraph, the one fine-print
+# exception (#558)
+WIDTH_OK = re.compile(r"^(100%|none|var\(--container-max\)|var\(--measure-statement\)|var\(--measure-epigraph\)"
                       r"|100vw|fit-content|max-content|min-content|inherit|initial|unset)$")
 
 

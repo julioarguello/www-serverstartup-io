@@ -110,7 +110,8 @@ def d_of(P):
 
 
 def lids():
-    """one lid per visible cell, near ones heavier; each starts by its distance from the order's cell"""
+    """one lid per visible cell, near ones heavier; each starts by its distance from the order's cell, the whole
+    wave in 0.7 s (it took 1.6 s and the founder found it dragged: "se me hace un poco bola")"""
     ox, oz = ORDER[0] + .5, ORDER[1] + .5
     out = []
     for X in range(-10, 10):
@@ -125,7 +126,7 @@ def lids():
                 continue
             dist = np.hypot(X + .5 - ox, Z + .5 - oz)
             cls = "store__lid" + (" store__lid--near" if w > 300 else " store__lid--far" if w < 60 else "")
-            out.append((dist, f'<path class="{cls}" pathLength="1" style="--d:{int(min(1600, dist * 90))}ms" d="{d_of(P)}"/>'))
+            out.append((dist, f'<path class="{cls}" pathLength="1" style="--d:{int(min(700, dist * 40))}ms" d="{d_of(P)}"/>'))
     out.sort()
     cell = f'<path class="store__cell" pathLength="1" d="{d_of(lid(*ORDER))}"/>'
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {FW} {FH}" preserveAspectRatio="xMidYMid slice">'

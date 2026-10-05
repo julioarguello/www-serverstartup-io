@@ -153,6 +153,8 @@ const replayLabel = L("store_replay", "Repetir la animación");
 				});
 				order.style.setProperty("--fill", "1");
 				order.style.setProperty("--fly", "0");
+				order.style.setProperty("--split", "1");
+				order.style.setProperty("--split-blur", "0px");
 				return;
 			}
 			/* the turned cube, the seal's seven points, and the way between them */
@@ -177,6 +179,10 @@ const replayLabel = L("store_replay", "Repetir la animación");
 			faces[2].classList.remove("is-top");
 			order.style.setProperty("--fill", String(1 - u));
 			order.style.setProperty("--fly", String(u));
+			/* the split goes first: blurred and faded over the first 70 % of the flight, so the landing is clean */
+			const g = Math.min(1, u / 0.7), gs = g * g * (3 - 2 * g);
+			order.style.setProperty("--split", String(1 - gs));
+			order.style.setProperty("--split-blur", `${(3 * gs).toFixed(2)}px`);
 			if (u >= 1) order.classList.remove("is-on");
 		}
 

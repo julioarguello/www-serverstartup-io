@@ -216,13 +216,15 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 				for (const a of layers[k - 1]) {
 					const b = nearest(a, layers[k]);
 					const dx = b.x - a.x, dy = b.y - a.y, bow = (rnd() - 0.5) * 0.25;
-					const packets = Array.from({ length: 1 + Math.floor(rnd() * 3) }, () => ({ phase: rnd(), period: 1200 + 900 * rnd(), r: 2.4 + 1.2 * rnd() }));
+					/* the data: small dots, few and slow, so they live in the sky without pulling at the eye (founder:
+					   "puntitos más pequeños y quizás menos movimiento para no molestar") */
+					const packets = Array.from({ length: rnd() < 0.6 ? 1 : 0 }, () => ({ phase: rnd(), period: 2600 + 1600 * rnd(), r: 1.3 + 0.5 * rnd() }));
 					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.32 + 0.3 * rnd(), width: 0.5 + 0.4 * rnd(), packets });
 				}
 				/* a star of the layer that nobody feeds would be a star without data: it takes the nearest one */
 				for (const b of layers[k]) if (!links[k - 1].some((l) => l.b === b)) {
 					const a = nearest(b, layers[k - 1]);
-					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, alpha: 0.4, width: 0.7, packets: [{ phase: rnd(), period: 1500, r: 3 }] });
+					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, alpha: 0.4, width: 0.7, packets: [{ phase: rnd(), period: 3000, r: 1.5 }] });
 				}
 			}
 			/* and silver reads from silver too, as clean tables are joined with each other (founder: "que algún
@@ -233,7 +235,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			pairs.sort((p, q) => Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y) - Math.hypot(q[0].x - q[1].x, q[0].y - q[1].y));
 			for (const [a, b] of pairs.slice(0, Math.min(2, pairs.length))) {
 				const dx = b.x - a.x, dy = b.y - a.y, bow = 0.22;
-				links[0].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.45, width: 0.6, packets: [{ phase: rnd(), period: 1300, r: 2.6 }, { phase: rnd(), period: 1700, r: 2.6 }] });
+				links[0].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.45, width: 0.6, packets: [{ phase: rnd(), period: 3200, r: 1.4 }] });
 			}
 			/* each layer's name under its lowest star, or over its highest where that would touch the copy */
 			ctx.font = FONT;
@@ -375,7 +377,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 				ctx.stroke();
 			}
 
-			/* the data: thick dots running along every complete link, towards the layer that reads it; they calm
+			/* the data: small dots running along the complete links, towards the layer that reads it; they calm
 			   down in the last moments, and the finished network stays */
 			const calm = 1 - ease(clamp((ms - END + CALM_MS) / CALM_MS));
 			links.forEach((set, k) => {
@@ -385,7 +387,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 					for (const p of l.packets) {
 						const f = (since / p.period + p.phase) % 1;
 						const [x, y] = bez(l, f);
-						ctx.globalAlpha = calm * clamp(since / 300) * (0.55 + 0.45 * Math.sin(Math.PI * f));
+						ctx.globalAlpha = calm * clamp(since / 300) * (0.35 + 0.45 * Math.sin(Math.PI * f));
 						ctx.fillStyle = TIERS[k + 1];
 						ctx.beginPath();
 						ctx.arc(x, y, p.r, 0, 2 * Math.PI);

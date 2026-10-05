@@ -112,6 +112,11 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
  */
 export const SCENE_ROW = "(max-width: 1100px)";
 
+/** One clock for every opening (#553), in ms; hero-scene.css declares the same two beats for the CSS
+ *  (--beat-draw, --beat-drawn). The photograph alone until `draw`, the drawing complete by `drawn`, the
+ *  payoff after it, everything at rest by `end`. */
+export const SCENE_BEATS = { draw: 2000, drawn: 4500, end: 8000 } as const;
+
 export type HeroSceneKind = "radar" | "bridge" | "vision" | "elevation" | "store";
 export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision", gf: "elevation", ec: "store" };
 

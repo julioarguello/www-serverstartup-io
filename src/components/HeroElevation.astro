@@ -51,7 +51,7 @@ const replayLabel = L("elev_replay", "Repetir la animación");
 </HeroScene>
 
 <script>
-	import { SCENE_ROW } from "../utils/hero-art";
+	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
 	const hero = document.querySelector<HTMLElement>(".s-hero--elevation");
 	if (hero) {
@@ -101,8 +101,8 @@ const replayLabel = L("elev_replay", "Repetir la animación");
 			hero.classList.add("is-placed");
 		}
 
-		/* 8 s, like every opening (founder, 2026-10-04): the plot held 2 s, the elevation drawn in about 4 s (CSS,
-		   from each line's --d), held whole, then the photograph comes in and the drawing goes */
+		/* on the openings' clock (SCENE_BEATS, #553): the plot held to the draw beat, the elevation complete by the
+		   drawn beat (CSS, from each line's --d), held whole, then the photograph comes in and the drawing goes */
 		const clock = new SceneClock();
 		function finish() {
 			clock.clear();
@@ -119,7 +119,7 @@ const replayLabel = L("elev_replay", "Repetir la animación");
 		function play() {
 			loadInk();
 			hero!.classList.add("is-playing");
-			clock.at("end", 8000, finish);
+			clock.at("end", SCENE_BEATS.end, finish);
 		}
 
 		let settling: number | null = null;

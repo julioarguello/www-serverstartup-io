@@ -53,18 +53,19 @@
 .elev__plot,
 .elev__drawing { opacity: 0; }
 
-/* the sequence, 8 s like every opening (the script's clock): the plot held 2 s, then knocked back under the
-   drawing; every line drawn from its own --d, stretched to about 4 s; the drawing held whole from 6 s, the
-   photograph from 6.4 s, the drawing gone by 7.8 s. Pause freezes all of it (SceneClock holds the timer) */
+/* the sequence, on the openings' clock (#553): the plot held until --beat-draw, then knocked back under the
+   drawing; every line drawn from its own --d, the drawing complete by about --beat-drawn (it used to be
+   stretched to about 6 s: out of step with the others, founder 2026-10-05); held whole; the photograph from
+   5.6 s, the drawing gone by 7 s, the museum at rest. Pause freezes all of it (SceneClock holds the timer) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--elevation:not(.is-placed) .elev__box { visibility: hidden; }
 	.s-hero--elevation.is-playing .elev__plot { animation: elev-plot 2.4s ease-in-out both; }
-	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .8s ease-in-out 6.4s both; }
-	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .7s ease-in-out 7.1s both; }
-	.s-hero--elevation.is-playing .elev__drawing [pathLength] { stroke-dasharray: 1; animation: elev-draw .5s ease-out calc(2s + var(--d, 0ms) * 1.8) both; }
+	.s-hero--elevation.is-playing .elev__photo { animation: elev-in .8s ease-in-out 5.6s both; }
+	.s-hero--elevation.is-playing .elev__drawing { animation: elev-out .7s ease-in-out 6.3s both; }
+	.s-hero--elevation.is-playing .elev__drawing [pathLength] { stroke-dasharray: 1; animation: elev-draw .5s ease-out calc(var(--beat-draw) + var(--d, 0ms)) both; }
 	.s-hero--elevation.is-playing .elev__profile { animation-duration: 1.5s; }
 	.s-hero--elevation.is-playing .elev__ground { animation-duration: .6s; }
-	.s-hero--elevation.is-playing :is(.elev__bub, .elev__text) { animation: elev-show .4s ease-out calc(2s + var(--d, 0ms) * 1.8) both; }
+	.s-hero--elevation.is-playing :is(.elev__bub, .elev__text) { animation: elev-show .4s ease-out calc(var(--beat-draw) + var(--d, 0ms)) both; }
 	/* as specific as the line rules above, and after them: their `animation` shorthand resets the play state */
 	.s-hero.s-hero--elevation.is-playing.is-paused * { animation-play-state: paused; }
 }

@@ -223,7 +223,12 @@ Text, colours, images and animations change per page; the layout and the band do
   `.s-hero__after`), so a script that keeps its art off the text measures both.
 - **The pause freezes everything that moves**, timers included, and play goes on from the same frame —
   never a jump to the end. An event that disappears while paused is motion.
-- **Every opening lasts about 8 s** (founder, 2026-10-04).
+- **Every opening lasts about 8 s** (founder, 2026-10-04), **on one clock** (#553): the photograph alone
+  until 2 s, the drawing or the machine's layer complete by 4.5 s, the payoff after it, at rest by 8 s —
+  `--beat-draw` and `--beat-drawn` in `hero-scene.css`, `SCENE_BEATS` in `hero-art.ts`.
+- **Every photograph fills the band the same way** (#553): what shows of its frame is 86 % of the band's
+  height (81 % for the machine's eye, whose brackets need the room), on the band's floor, running off its right edge, under the copy's veil where it reaches it. The
+  lighthouse is a cut-out; its radar fills its band.
 - **The header does not hide** (#543). It stays fixed, transparent over the opening and solid on scroll.
   The pattern of a header hidden on load and shown on scroll would save 69 px against 231–448 px of
   overflow. None of six production sites observed uses it. It risks WCAG 2.4.7: focus would land on

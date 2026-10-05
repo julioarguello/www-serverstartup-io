@@ -136,12 +136,14 @@
 }
 @media (prefers-reduced-motion: reduce) { .bridge__pac > b { animation: none; clip-path: polygon(50% 50%, 100% 25%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 75%); } }
 
-/* 8 s like every opening: banks 3.2 s, bridge whole (opacity, 3.2 s), held, connectors, then messages */
+/* on the openings' clock (#553): the banks alone until --beat-draw, the bridge whole by --beat-drawn (opacity),
+   the connectors at once, then the messages (the script). It used to wait to 3.2 s and take 3.2 s more: "el
+   puente tarda mucho" (founder, 2026-10-05) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--bridge:not(.is-placed) .bridge__box { visibility: hidden; }
 	.s-hero--bridge:not(.is-done) .bridge__plan { opacity: 0; }
-	.s-hero--bridge:not(.is-done) .bridge__plug { opacity: 0; }
-	.s-hero--bridge.is-playing .bridge__plan { animation: bridge-lay 3.2s ease-in-out 3.2s forwards; will-change: opacity; }
+	.s-hero--bridge:not(.is-done):not(.is-wired) .bridge__plug { opacity: 0; }
+	.s-hero--bridge.is-playing .bridge__plan { animation: bridge-lay calc(var(--beat-drawn) - var(--beat-draw)) ease-in-out var(--beat-draw) forwards; will-change: opacity; }
 	.s-hero--bridge.is-paused .bridge__plan { animation-play-state: paused; }
 }
 @keyframes bridge-lay { from { opacity: 0; } to { opacity: 1; } }

@@ -62,9 +62,9 @@
    of it (SceneClock holds the timer, the script holds the cube) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--store:not(.is-placed) .store__box { visibility: hidden; }
-	.s-hero--store.is-playing .store__photo { animation: store-dim 5.6s ease-in-out 2s both; }
-	.s-hero--store.is-playing .store__drawing { animation: store-drawing 5.6s ease-in-out 2s both; }
-	.s-hero--store.is-playing .store__drawing [pathLength] { stroke-dasharray: 1; animation: store-draw .3s ease-out calc(2.2s + var(--d, 0ms)) both; }
+	.s-hero--store.is-playing .store__photo { animation: store-dim 5.6s ease-in-out var(--beat-draw) both; }
+	.s-hero--store.is-playing .store__drawing { animation: store-drawing 5.6s ease-in-out var(--beat-draw) both; }
+	.s-hero--store.is-playing .store__drawing [pathLength] { stroke-dasharray: 1; animation: store-draw .3s ease-out calc(var(--beat-draw) + .2s + var(--d, 0ms)) both; }
 	.s-hero--store.is-playing .store__drawing .store__cell { animation: store-draw .4s ease-out 4.2s both, store-show .4s ease-out 4.2s both; }
 	.s-hero--store.is-playing .store__grid { animation: store-show .5s ease-out 4.5s both; }
 	.s-hero--store.is-playing .scene__seal { animation: store-seal 1.2s ease-out 6.8s both; }

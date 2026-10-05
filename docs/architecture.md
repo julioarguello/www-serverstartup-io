@@ -536,26 +536,29 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 
 ### 4.10 Night over the Teide Observatory, the Big Data vertical (#556)
 
-- **Each telescope is a layer** (founder, 2026-10-05): three robotic-telescope domes at Izaña, the sea and an
-  island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel, CC BY-SA 4.0), by day. Night falls from
-  left to right, one front with a soft edge crossing the band from just before `--beat-draw` to just before
+- **Each telescope is a layer, left to right** (founder, 2026-10-05): three robotic-telescope domes at Izaña,
+  the sea and an island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel, CC BY-SA 4.0), by day.
+  Night falls from left to right, one front crossing the band from just before `--beat-draw` to
   `--beat-drawn`, revealing stars and picking the first layer's as it reaches them — bronze. Then one act per
-  layer, 1.6 s each: the second dome lights up and sends its beam, links grow out of bronze and the stars they
-  reach become silver; then the third — gold. One bronze star fails: it flashes red the moment silver is read
-  without it. Each layer is named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`, the medallion's
-  own words in both locales). A spark runs along every link, bronze to gold, and day comes back by 8 s.
-- **Three rounds**: a graticule with thousands of detections and a test sweep ("la imagen bien, la animación
-  mal"); then three regular columns over the domes, fully connected, all three layers inside 2.5 s ("va mega
-  rápido… concentrados en una horizontal muy estrecha… la perfección no existe"). Hence: one layer per act;
-  layers are scattered stars, not columns; each star reads from two or three of the layer before along a
-  slightly bowed link of uneven strength (a seeded generator: the same sky on every visit); and the network is
-  laid where the page's sky is actually free, measured at run time — above the title and down the right of the
-  copy (336 × 343 px at 1575 × 791, 280 × 481 at 1440 × 900): bronze high on the left, silver across the upper
-  right, gold low on the right towards its dome. The columns over the domes had only the 150 px between the
-  header and the title, because the title stands where domes 1 and 2 are.
-- **The clock**: the photograph alone until `--beat-draw`; the night complete at about `--beat-drawn`; the
-  layers' acts run to 6.8 s, past `--beat-drawn` — a measured exception like the machine's eye's, because three
-  acts inside 2.5 s read as one blur.
+  layer, 2 s each, to the end of the opening: the dome lights up and sends its beam, links grow out of the
+  layer before and the stars they reach become silver, then gold. One bronze star flashes red the moment
+  silver is read without it. Each layer is named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`,
+  the medallion's own words in both locales). From the moment a link is complete, thick dots run along it,
+  several per link; they calm down at the end, and **the finished network stays** — the end state is the
+  night and the network, not the photograph by day (founder: "me quedaría con la animación finalizada").
+  Reduced motion shows that end state at once; without the script, the photograph.
+- **Four rounds**, each rejected for its execution, never for the message: a graticule with thousands of
+  detections and a test sweep ("la animación mal"); regular columns over the domes, all three layers in
+  2.5 s ("va mega rápido… concentrados en una horizontal muy estrecha… la perfección no existe"); scattered
+  stars laid above the title and down the right of the copy (part of the diagram fell off the photograph,
+  over the band, and "las capas con top-down y sería left-right"). Hence: the layers are scattered stars in
+  three bands left to right, each over its own dome, **inside the photograph as it shows on the page**; on
+  desktops the copy lies across the photograph's sky, so the three share the band under the copy, where the
+  domes stand (about 260 px at 1575 × 791); on phones, where nothing covers the photograph, they are in its
+  sky. Each star reads from two or three of the nearest stars of the layer before (few crossings, never all
+  to all), along slightly bowed links of uneven strength, from a seeded generator: the same sky every visit.
+- **The clock**: 8 s like every opening, the photograph alone until `--beat-draw` and the night complete at
+  `--beat-drawn`; the layers' acts run on to 8 s — a measured exception like the machine's eye's.
 - **Rejected for Big Data**: El Molinón with match statistics (data laid on the photo is a TV graphic, not a
   drawing of the place, and a derby), the El Musel bulk terminal, El Molinón's stand as a table. No free
   photograph shows the observatory, the Teide and the sea together (about 170 checked on Commons and
@@ -573,8 +576,8 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   even-odd clip paints the overlaps back), and a fade in past the seal. Stars and names never land in a hole.
 - **The whole photograph** (1.5 wide) is shown, so the left dome clears the seal; where the band is narrow the
   frame shrinks before the dome goes under it, and on phones it is no wider than keeps the dome in.
-- **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end; pause
-  holds it (SceneClock for the timer). The colours are tokens (`--color-sky-line`, the section's navy lightened
+- **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end, the
+  finished network drawn once more as it rests; pause holds it (SceneClock for the timer). The colours are tokens (`--color-sky-line`, the section's navy lightened
   to read at night; `--color-sky-bronze`, `-silver`, `-gold`), read by the canvas through hidden inks.
 - **The photograph is restored** like the others (§4.6): SeedVR2 3B at 2× on the photograph scaled to 2304 px;
   the whites measured on the domes only — the haze over the sea passed for white and taking it out (b −10.6)

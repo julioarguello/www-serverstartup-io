@@ -536,44 +536,46 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 
 ### 4.10 Night over the Teide Observatory, the Big Data vertical (#556)
 
-- **Each telescope is a layer, left to right** (founder, 2026-10-05): three robotic-telescope domes at Izaña,
-  the sea and an island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel, CC BY-SA 4.0), by day.
-  Night falls from left to right, one front crossing the band from just before `--beat-draw` to
-  `--beat-drawn`, revealing stars and picking the first layer's as it reaches them — bronze. Then one act per
-  layer, 2 s each, to the end of the opening: the dome lights up and sends its beam, links grow out of the
-  layer before and the stars they reach become silver, then gold. One bronze star flashes red the moment
-  silver is read without it. Each layer is named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`,
-  the medallion's own words in both locales). From the moment a link is complete, thick dots run along it,
-  several per link; they calm down at the end, and **the finished network stays** — the end state is the
-  night and the network, not the photograph by day (founder: "me quedaría con la animación finalizada").
-  Reduced motion shows that end state at once; without the script, the photograph.
-- **Four rounds**, each rejected for its execution, never for the message: a graticule with thousands of
-  detections and a test sweep ("la animación mal"); regular columns over the domes, all three layers in
-  2.5 s ("va mega rápido… concentrados en una horizontal muy estrecha… la perfección no existe"); scattered
-  stars laid above the title and down the right of the copy (part of the diagram fell off the photograph,
-  over the band, and "las capas con top-down y sería left-right"). Hence: the layers are scattered stars in
-  three bands left to right, each over its own dome, **inside the photograph as it shows on the page**; on
-  desktops the copy lies across the photograph's sky, so the three share the band under the copy, where the
-  domes stand (about 260 px at 1575 × 791); on phones, where nothing covers the photograph, they are in its
-  sky. Each star reads from two or three of the nearest stars of the layer before (few crossings, never all
-  to all), along slightly bowed links of uneven strength, from a seeded generator: the same sky every visit.
-- **The clock**: 8 s like every opening, the photograph alone until `--beat-draw` and the night complete at
-  `--beat-drawn`; the layers' acts run on to 8 s — a measured exception like the machine's eye's.
+- **Everything follows the night** (founder, 2026-10-05, fifth round: "las capas, con sus puntos y
+  conexiones, van apareciendo a medida que se hace la noche, de izquierda a derecha"): three robotic-telescope
+  domes at Izaña, the sea and an island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel,
+  CC BY-SA 4.0), by day until `--beat-draw`; then one front crosses the photograph, slowly, to 7.2 s. As it
+  passes, the stars come out, each dome is drawn as its elevation in its layer's colour and sends a beam up,
+  its layer's stars are picked — bronze, silver, gold, each over its own dome, left to right — and the links
+  grow behind the front out of the layer before. One bronze star flashes red as silver is read without it.
+  Each layer is named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`). From the moment a link is
+  complete, two to four thick dots run along it; they calm down at 8 s, and **the finished network stays** —
+  night and network are the end state; reduced motion shows it at once; without the script, the photograph.
+  Frozen from outside (the a11y gate sets `is-done`), the scene jumps to that end state: before, it kept
+  animating under the gate, which measured the excerpt over half a day at 4.5:1; at the end state it is 8.9:1.
+- **All the network's stars are in the sky, and few** (5, 3, 2): in the photograph's sky, under its faded top
+  and over the sea horizon, never on a line of the copy, each star reading from two or three of the nearest of
+  the layer before along slightly bowed links of uneven strength (a seeded generator: the same sky every visit).
+  Where the copy covers all of a band's sky (a lower frame, as at 1440 × 900), that layer climbs into the night
+  above the photograph, under the header.
+- **The domes are drawn as an elevation, not traced** ("los perfiles están horribles… exactos y
+  profesionales"): the silhouette is GrabCut on the photograph, cut at the plinth's foot, the walkway's rail cut
+  off, the shell's shaded side filled by its hull above the equator, smoothed; the inner lines are the
+  photograph's own edges picked by hand (one edge of each groove, never both), each fitted with a smooth cubic
+  along its main axis, or a straight line for the boxes; the door is measured.
+- **Five rounds**, each rejected for its execution, never for the message: a graticule with thousands of
+  detections and a test sweep; regular columns over the domes, all three layers in 2.5 s ("va mega rápido…
+  una horizontal muy estrecha… la perfección no existe"); scattered stars above the title and down the right of
+  the copy, partly off the photograph and read top-down; the three layers in the band under the copy, over the
+  ground. Hence a network in the sky, left to right, born with the night.
 - **Rejected for Big Data**: El Molinón with match statistics (data laid on the photo is a TV graphic, not a
   drawing of the place, and a derby), the El Musel bulk terminal, El Molinón's stand as a table. No free
   photograph shows the observatory, the Teide and the sea together (about 170 checked on Commons and
   Openverse; the IAC's gallery is non-commercial only).
-- **Measured on the photograph** (`docs/design/hero-rotativo/teide.py`): the domes' outlines — what is neither
-  the sky's and sea's blue, nor scrub, nor shadow (a white threshold loses their shaded sides, bluish but paler
-  than the sea), cleaned by their convex hull — and their centres, over which each layer's column stands. The
-  stars go through the camera fitted to the photograph: the focal length, 8,795 px, from the EXIF's 39 mm over
+- **Measured on the photograph** (`docs/design/hero-rotativo/teide.py`): the domes' elevations (above) and
+  their extents, which set each layer's band. The stars go through the camera fitted to the photograph: the focal length, 8,795 px, from the EXIF's 39 mm over
   the file's focal-plane resolution; no roll (the doors' edges are vertical); the pitch, 5.3° down, from the
   sea horizon at row 1130, 1.43° under the true horizon from 2,390 m.
 - **The band is the sky at night**: the night is a layer under the veil the script moves (`--night-x`,
   `--night-a`); the drawing is one canvas over the veil, the whole stage, with a hole for every line of the
-  copy, the CTA and the controls, measured on the page and erased to a quarter after drawing (links and beams
-  pass behind the copy dimmed, never at full strength; erased, not clipped — the padded lines overlap, and an
-  even-odd clip paints the overlaps back), and a fade in past the seal. Stars and names never land in a hole.
+  copy, the CTA and the controls, measured on the page and erased whole after drawing — nothing behind a
+  letter, not even dimmed (erased, not clipped: the padded lines overlap, and an even-odd clip paints the
+  overlaps back) — and a fade in past the seal.
 - **The whole photograph** (1.5 wide) is shown, so the left dome clears the seal; where the band is narrow the
   frame shrinks before the dome goes under it, and on phones it is no wider than keeps the dome in.
 - **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end, the

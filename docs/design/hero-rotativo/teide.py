@@ -56,8 +56,20 @@ PITCH = np.arctan((CY - SEA) / F) + DIP
 
 # the operator's logo on the two doors (the third door carries only a warning sign)
 MARKS = [(1036, 1948, 1116, 2030), (2614, 1942, 2684, 2014)]
-# the domes, each in its box and cut at the foot of its plinth: their outlines are what the drawing traces
-DOMES = [(690, 1590, 1190, 2050), (2360, 1680, 2700, 2016), (4520, 1830, 4990, 2244)]
+# the domes, drawn as an elevation measured on the photograph: each in its box (x0, y0, x1, y1), cut at the
+# foot of its plinth (crop row); its edges, picked by hand among the photograph's own (Canny components,
+# sigma 1.6, 18/45: one edge of each groove, never both), each fitted with a smooth curve along its main axis
+# or a straight line; the door, measured; and where the silhouette needs help: the walkway's rail beside the
+# third dome cut off, the shell's shaded side (bluish, it reads as sky) filled by its hull above the equator,
+# the first dome taken whole as its hull (the scrub notches its foot)
+DOMES = [(680, 1580, 1200, 2060), (2350, 1670, 2710, 2025), (4510, 1820, 5000, 2255)]
+FOOT = [468, 330, 414]
+EQUATOR = [300, 212, 250]
+EDGES = [[8, 1, 15, 12, 19, 28, 27], [8, 2, 17, 23, 21], [6, 11, 4]]
+STRAIGHT = {(0, 27), (1, 21)}
+DOOR = {2: (247, 242, 344, 414)}
+RAIL = {2: 452}
+WHOLE_HULL = {0}
 
 
 def proj(alt, az):
@@ -80,7 +92,6 @@ def unproj(x, y):
 
 ALT_TOP = unproj(CX, 0)[0]
 ALT_SEA = -np.degrees(DIP)               # from the mountain the sky reaches down to the sea horizon
-ALT_MAX = 9.5                            # above the frame, up to the band's top on desktops
 AZ_L, AZ_R = unproj(0, CY)[1] - 1, unproj(W0, CY)[1] + 1
 
 
@@ -95,7 +106,9 @@ def photo(original, restored):
     k = rgb.shape[1] / FW
     rgb = rgb[:round(FH * k)]
     shells = np.zeros(rgb.shape[:2], np.uint8)
-    cv2.fillPoly(shells, [np.round(c * k).astype(np.int32) for c in domes(original)], 1)
+    img0 = cv2.imread(original)
+    hsv0 = cv2.cvtColor(img0, cv2.COLOR_BGR2HSV).astype(int)
+    cv2.fillPoly(shells, [np.round(silhouette(img0, hsv0, n) * k).astype(np.int32) for n in range(len(DOMES))], 1)
     rgb = neutral_whites(rgb, shells.astype(np.float32))
     img = cv2.cvtColor((rgb * 255 + .5).clip(0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
     hole = np.zeros(img.shape[:2], np.uint8)
@@ -110,33 +123,82 @@ def photo(original, restored):
         print(os.path.relpath(p, ROOT), out.size, f"{os.path.getsize(p) // 1024} KB")
 
 
-def domes(original):
-    """each dome's outline: what is neither the blue of sky and sea, nor scrub, nor shadow — the shaded side
-    of a dome is bluish but paler than the sea (saturation 120 against 155), so a plain white threshold
-    loses it. The domes are convex, so their hull cleans the edge the scrub frays."""
-    hsv = cv2.cvtColor(cv2.imread(original), cv2.COLOR_BGR2HSV).astype(int)
+def silhouette(img, hsv, n):
+    """what is neither the blue of sky and sea, nor scrub, nor shadow, refined by GrabCut, cut at the plinth's
+    foot, smoothed: the dome's outline"""
+    x0, y0, x1, y1 = DOMES[n]
+    sub = img[y0:y1, x0:x1]
+    H, S, V = (hsv[y0:y1, x0:x1, i] for i in range(3))
+    bg = ((H >= 95) & (H <= 118) & (S > 135)) | ((H < 45) & (S > 45)) | (V < 75)
+    m = (~bg).astype(np.uint8) * 255
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((15, 15), np.uint8))
+    m = largest(m)
+    gc = np.full(m.shape, cv2.GC_PR_BGD, np.uint8)
+    gc[cv2.dilate(m, np.ones((9, 9), np.uint8)) > 0] = cv2.GC_PR_FGD
+    gc[cv2.erode(m, np.ones((21, 21), np.uint8)) > 0] = cv2.GC_FGD
+    gc[cv2.dilate(m, np.ones((31, 31), np.uint8)) == 0] = cv2.GC_BGD
+    cv2.grabCut(sub, gc, None, np.zeros((1, 65)), np.zeros((1, 65)), 5, cv2.GC_INIT_WITH_MASK)
+    m = (((gc == 1) | (gc == 3)) * 255).astype(np.uint8)
+    m[FOOT[n]:] = 0
+    m = largest(m)
+    if n in RAIL:
+        m[:, RAIL[n]:] = 0
+    top = m[:EQUATOR[n]].copy()
+    ys, xs = np.nonzero(top)
+    cv2.fillPoly(top, [cv2.convexHull(np.stack([xs, ys], 1).astype(np.int32))], 255)
+    m[:EQUATOR[n]] = top
+    if n in WHOLE_HULL:
+        ys, xs = np.nonzero(m)
+        cv2.fillPoly(m, [cv2.convexHull(np.stack([xs, ys], 1).astype(np.int32))], 255)
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((9, 9), np.uint8))
+    m = (cv2.GaussianBlur(m, (0, 0), 3) > 127).astype(np.uint8) * 255
+    c = max(cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[0], key=cv2.contourArea)[:, 0, :].astype(float)
+    k = 6
+    w = np.exp(-np.arange(-3 * k, 3 * k + 1) ** 2 / (2 * k * k))
+    w /= w.sum()
+    c = np.stack([np.convolve(np.r_[c[-3 * k:, i], c[:, i], c[:3 * k, i]], w, "valid") for i in range(2)], 1)
+    c = cv2.approxPolyDP(c.astype(np.float32).reshape(-1, 1, 2), 0.8, True)[:, 0, :]
+    return np.vstack([c, c[:1]]) + [x0, y0]
+
+
+def largest(m):
+    n, lab, st, _ = cv2.connectedComponentsWithStats(m)
+    return ((lab == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))) * 255).astype(np.uint8)
+
+
+def edges(img, n):
+    """the dome's inner lines: the picked edges, each a smooth curve fitted to its own pixels along its main
+    axis (cubic; a straight line for the boxes), and the door"""
+    x0, y0, x1, y1 = DOMES[n]
+    g = cv2.GaussianBlur(cv2.cvtColor(img[y0:y1, x0:x1], cv2.COLOR_BGR2GRAY), (0, 0), 1.6)
+    _, lab, _, _ = cv2.connectedComponentsWithStats(cv2.Canny(g, 18, 45), connectivity=8)
     out = []
-    for x0, y0, x1, y1 in DOMES:
-        H, S, V = (hsv[y0:y1, x0:x1, i] for i in range(3))
-        bg = ((H >= 95) & (H <= 118) & (S > 135)) | ((H < 45) & (S > 45)) | (V < 75)
-        m = (~bg).astype(np.uint8) * 255
-        m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
-        m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((11, 11), np.uint8))
-        n, lab, st, _ = cv2.connectedComponentsWithStats(m)
-        big = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
-        ys, xs = np.nonzero(lab == big)
-        hull = cv2.convexHull(np.stack([xs, ys], 1).astype(np.int32))[:, 0, :]
-        out.append(cv2.approxPolyDP(hull, 2.0, True)[:, 0, :] + [x0, y0])
+    for i in EDGES[n]:
+        ys, xs = np.nonzero(lab == i)
+        P = np.stack([xs, ys], 1).astype(float)
+        mu = P.mean(0)
+        R = np.linalg.svd(P - mu, full_matrices=False)[2]
+        Q = (P - mu) @ R.T
+        cf = np.polyfit(Q[:, 0], Q[:, 1], 1 if (n, i) in STRAIGHT else 3)
+        t = np.linspace(Q[:, 0].min(), Q[:, 0].max(), 40)
+        p = np.stack([t, np.polyval(cf, t)], 1) @ R + mu
+        p = p[p[:, 1] < FOOT[n]]
+        if len(p) > 1:
+            out.append(p + [x0, y0])
+    if n in DOOR:
+        l, t, r, b = DOOR[n]
+        out.append(np.array([[l, b], [l, t], [r, t], [r, b]], float) + [x0, y0])
     return out
 
 
 def stars(seed=556):
-    """the sky the night reveals: many faint, few bright, a third denser along a band like the Milky Way's,
-    from the sea horizon up to the band's top"""
+    """the sky the night reveals, in the photograph's own sky: many faint, few bright, a third denser along a
+    band like the Milky Way's, from the sea horizon to the frame's top"""
     rng = np.random.default_rng(seed)
     out = []
-    while len(out) < 1400:
-        alt, az = rng.uniform(ALT_SEA + .12, ALT_MAX), rng.uniform(AZ_L, AZ_R)
+    while len(out) < 700:
+        alt, az = rng.uniform(ALT_SEA + .12, ALT_TOP), rng.uniform(AZ_L, AZ_R)
         band = np.exp(-((alt - (1.5 + .2 * (az - AZ_L))) ** 2) / 3)
         if rng.random() > .55 + .45 * band:
             continue
@@ -148,11 +210,13 @@ def stars(seed=556):
 
 
 def write(original):
+    img = cv2.imread(original)
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(int)
     ds = []
-    for c in domes(original):
-        x0, y0 = c.min(0)
-        x1, y1 = c.max(0)
-        ds.append({"c": [int((x0 + x1) / 2), int(y0), int(y1)], "p": flat(np.vstack([c, c[:1]]))})
+    for n in range(len(DOMES)):
+        sil = silhouette(img, hsv, n)
+        (x0, y0), (x1, y1) = sil.min(0), sil.max(0)
+        ds.append({"c": [int((x0 + x1) / 2), int(y0), int(y1)], "p": flat(sil), "l": [flat(p) for p in edges(img, n)]})
     st = stars()
     data = {"frame": [FW, FH], "sea": int(SEA), "domes": ds, "stars": [v for p in st for v in p]}
     json.dump(data, open(DATA, "w"), separators=(",", ":"))

@@ -479,7 +479,8 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 
 - **Four beats in 8 s, like every opening** (founder, 2026-10-04/05): an automated warehouse, robots on the
   rails of its grid ("Ocado warehouse bots.jpg", Techwords, CC BY-SA 4.0); a lid lights up on every cell, in
-  a wave from the order's cell (the stock: under the rails every cell holds a stack of bins); one bin rises
+  a wave from the order's cell, the whole wave in 0.7 s (the stock: under the rails every cell holds a stack of
+  bins; a 1.6 s wave "se me hace un poco bola"); one bin rises
   out of its cell as a **perfect cube**, the logo's 2 × 2 split showing on its faces as it leaves (in the
   section's blue lightened: the founder, 2026-10-05, "no las pongas en negro, destacan mucho"), turns until it
   is seen exactly as the logo draws it, and flies to the band's seal, which lights up. A round that composed

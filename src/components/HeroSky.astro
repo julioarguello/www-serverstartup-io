@@ -74,14 +74,13 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		const BLEED = 0.02;                      /* how far past the band's edge the frame runs */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
 		const FROM_FADE = 140;                   /* px over which the drawing fades in past the seal */
-		const SEA = sky.sea;                     /* the sea horizon's row: the sky ends there */
 		/* the left dome's left edge, of the frame's width: the frame shrinks before it goes under the seal */
 		const DOME_L = Math.min(...sky.domes[0].p.filter((_, i) => i % 2 === 0)) / FW;
 
 		type Geo = { L: number; T: number; W: number; H: number };
 		type Box = { l: number; t: number; r: number; b: number };
 		type Star = { x: number; y: number; r: number; at: number; fail?: boolean };
-		type Link = { a: Star; b: Star; cx: number; cy: number; alpha: number; width: number; at: number };
+		type Link = { a: Star; b: Star; cx: number; cy: number; alpha: number; width: number; at: number; packets: { phase: number; period: number; r: number }[] };
 		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
 		let holes: Box[] = [];
 		let layers: Star[][] = [];
@@ -146,18 +145,17 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		}
 
 		/* the timeline, in ms from the start (SCENE_BEATS): the photograph alone until --beat-draw; then one act
-		   per layer, 1.6 s each, the night's front arriving at each layer as its act begins; a forward pass once
-		   gold is complete; day by --end */
-		const ACT = [SCENE_BEATS.draw, SCENE_BEATS.draw + 1600, SCENE_BEATS.draw + 3200];
-		const PASS_AT = SCENE_BEATS.draw + 4800, PASS_MS = 500;
-		const DAY_AT = PASS_AT + PASS_MS, DAY_MS = SCENE_BEATS.end - DAY_AT;
+		   per layer, 2 s each, to the end of the opening; the night crosses the band once, by --beat-drawn. From
+		   the moment a link is complete, data runs along it; it stops at the end, and the finished network stays */
+		const ACT = [SCENE_BEATS.draw, SCENE_BEATS.draw + 2000, SCENE_BEATS.draw + 4000];
+		const END = SCENE_BEATS.end;
 		const SOFT = 180;                        /* the front's soft edge, px */
-		const NIGHT_END = SCENE_BEATS.drawn - 100;  /* night has crossed the whole band */
-		const PICK_MS = 380, GROW_MS = 650, GLOW_MS = 400, BEAM_MS = 600, TAG_MS = 350;
+		const NIGHT_END = SCENE_BEATS.drawn;     /* night has crossed the whole band */
+		const PICK_MS = 420, GROW_MS = 800, GLOW_MS = 450, BEAM_MS = 700, TAG_MS = 400, CALM_MS = 600;
 		const COUNT = [9, 5, 3], COUNT_NARROW = [7, 4, 2];
 		const clamp = (x: number) => Math.min(1, Math.max(0, x));
 		const ease = (x: number) => x * x * (3 - 2 * x);
-		/* the front: from the seal to each layer's first star as its act begins, then off the band's right edge */
+		/* the front: once across the band */
 		let knots: [number, number][] = [];
 		/* when the front's middle reaches stage column x */
 		function reached(x: number) {
@@ -176,50 +174,48 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			return knots[knots.length - 1][1];
 		}
 
-		/* the sky that is free on the page: on desktops above the title, and down the right of the copy towards
-		   the third dome; on phones, over each dome. Each layer takes its own stretch, left to right */
 		function nearest(a: Star, list: Star[]) {
 			let best = list[0];
 			for (const b of list) if (Math.hypot(b.x - a.x, b.y - a.y) < Math.hypot(best.x - a.x, best.y - a.y)) best = b;
 			return best;
 		}
+		/* where the network may go: over the photograph as it shows on the page — past its faded left edge and
+		   the seal, under its faded top, above the controls — and never on a line of the copy or on a dome. Each
+		   layer takes its own stretch of the photograph's width, left to right, over its own dome */
 		function compose(s: DOMRect, narrow: boolean) {
 			const rnd = seeded(556);
 			const counts = narrow ? COUNT_NARROW : COUNT;
-			const head = document.querySelector("header")?.getBoundingClientRect();
-			const top = Math.max(16, (head ? head.bottom - s.top : 0) + 24);
-			const h1 = hero!.querySelector(".s-hero__copy h1")?.getBoundingClientRect();
-			const titleTop = h1 && !narrow ? h1.top - s.top - 28 : Infinity;
-			const copyR = narrow ? 0 : Math.max(0, ...holes.filter((h) => h.t < s.height - 80).map((h) => h.r)) + 16;
-			const dome3 = sy(sky.domes[2].c[1]) - 40;
-			const floor = Math.min(dome3, sy(SEA) - (narrow ? 12 : -60));
-			const x0 = narrow ? 14 : from + FROM_FADE, x1 = s.width - (narrow ? 14 : 24);
+			const x0 = narrow ? Math.max(14, geo.L + 14) : Math.max(geo.L + 0.09 * geo.W, from + FROM_FADE);
+			const x1 = Math.min(s.width, geo.L + geo.W) - (narrow ? 14 : 28);
+			/* on desktops the copy lies across the photograph's sky, so the three layers share the band below it,
+			   where the domes stand: each layer around its own telescope */
+			const copyB = Math.max(0, ...holes.filter((h) => h.r > x0 && h.b < s.height - 90).map((h) => h.b));
+			const y0 = narrow ? Math.max(12, geo.T + 0.04 * geo.H) : Math.max(geo.T + 0.13 * geo.H, copyB + 14);
+			const y1 = Math.min(s.height, geo.T + geo.H) - (narrow ? 0.16 * geo.H : 64);
 			const span = x1 - x0;
-			/* bronze high on the left, silver across the middle and down the right of the copy, gold low on the
-			   right towards its dome: the network runs diagonally */
-			const bands = narrow ? [[0, 0.34], [0.34, 0.66], [0.66, 1]] : [[0, 0.42], [0.4, 1], [0.6, 1]];
-			const free = (x: number, y: number, k: number) => {
-				if (y < top || y > floor) return false;
-				if (!narrow && titleTop < y && copyR > x) return false;
-				/* silver takes the upper right, gold the lower right, towards its dome */
-				if (!narrow && k === 1 && top + 0.55 * (floor - top) < y) return false;
-				if (!narrow && k === 2 && top + 0.55 * (floor - top) > y) return false;
-				return !holes.some((h) => x > h.l - 12 && x < h.r + 12 && y > h.t - 12 && y < h.b + 12);
-			};
+			/* left to right, never top-down (founder: "las capas con top-down y sería left-right"): three bands
+			   apart from each other, each scattered over the whole height that is free */
+			const bands = [[0, 0.28], [0.37, 0.63], [0.72, 1]];
+			const domes = sky.domes.map((d) => {
+				const xs = d.p.filter((_, i) => i % 2 === 0), ys = d.p.filter((_, i) => i % 2 === 1);
+				return { l: sx(Math.min(...xs)) - 14, r: sx(Math.max(...xs)) + 14, t: sy(Math.min(...ys)) - 18, b: sy(Math.max(...ys)) + 8 };
+			});
+			const blocked = (x: number, y: number) => [...holes, ...domes].some((h) => h.l - 12 < x && x < h.r + 12 && h.t - 12 < y && y < h.b + 12);
+			const free = (x: number, y: number) => y0 <= y && y <= y1 && !blocked(x, y);
 			layers = counts.map((n, k) => {
 				const [a, b] = bands[k], out: Star[] = [];
-				let minD = narrow ? 30 : 46;
+				let minD = narrow ? 30 : 40;
 				for (let tries = 0; out.length < n && tries < 4000; tries++) {
 					if (tries % 800 === 799) minD *= 0.8;
-					const x = x0 + span * (a + (b - a) * rnd()), y = top + (floor - top) * rnd();
-					if (!free(x, y, k) || out.some((p) => Math.hypot(p.x - x, p.y - y) < minD)) continue;
+					const x = x0 + span * (a + (b - a) * rnd()), y = y0 + (y1 - y0) * rnd();
+					if (!free(x, y) || out.some((p) => Math.hypot(p.x - x, p.y - y) < minD)) continue;
 					out.push({ x, y, r: k === 2 ? 5.5 : 4.5, at: 0 });
 				}
 				return out.sort((p, q) => p.x - q.x);
 			});
 			if (layers.some((l) => !l.length)) { layers = []; links = []; tags = []; return; }
-			/* the night crosses the stage once, from just before --beat-draw, and is complete before gold */
-			knots = [[ACT[0] - 300, x0 - SOFT], [NIGHT_END, s.width + SOFT]];
+			/* the night crosses the stage once, from just before --beat-draw */
+			knots = [[ACT[0] - 300, (narrow ? 0 : from) - SOFT], [NIGHT_END, s.width + SOFT]];
 			/* bronze: the front picks its stars as it reaches them; one fails */
 			layers[0].forEach((p) => (p.at = reached(p.x) + 120));
 			layers[0][Math.min(2, layers[0].length - 1)].fail = true;
@@ -230,10 +226,13 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 				const src = layers[k - 1].filter((p) => !p.fail);
 				const add = (a: Star, b: Star) => {
 					const dx = b.x - a.x, dy = b.y - a.y, bow = (rnd() - 0.5) * 0.36;
-					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.28 + 0.34 * rnd(), width: 0.8 + 0.7 * rnd(), at: ACT[k] + 120 + 520 * rnd() });
+					const packets = Array.from({ length: 2 + Math.floor(rnd() * 3) }, () => ({ phase: rnd(), period: 1100 + 900 * rnd(), r: 2.4 + 1.2 * rnd() }));
+					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.28 + 0.34 * rnd(), width: 0.8 + 0.7 * rnd(), at: ACT[k] + 150 + 650 * rnd(), packets });
 				};
+				/* each star reads from the nearest of the layer before, give or take: few crossings, as a network is
+				   drawn, never all to all */
 				for (const b of layers[k]) {
-					const pool = [...src].sort(() => rnd() - 0.5).slice(0, 2 + Math.floor(rnd() * 2));
+					const pool = [...src].sort((p, q) => Math.abs(p.y - b.y) * (0.7 + 0.6 * rnd()) - Math.abs(q.y - b.y) * (0.7 + 0.6 * rnd())).slice(0, 2 + Math.floor(rnd() * 2));
 					for (const a of pool) add(a, b);
 				}
 				for (const a of src) if (!links[k - 1].some((l) => l.a === a)) add(a, nearest(a, layers[k]));
@@ -246,8 +245,8 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 				const cx = l.reduce((m, p) => m + p.x, 0) / l.length;
 				const low = Math.max(...l.map((p) => p.y)) + 22, high = Math.min(...l.map((p) => p.y)) - 14;
 				const w = ctx.measureText(NAMES[k] || "").width / 2 + 6;
-				const hit = (y: number) => holes.some((h) => cx + w > h.l && cx - w < h.r && y + 4 > h.t && y - 14 < h.b) || y > s.height - 8;
-				return { x: Math.min(Math.max(cx, x0 + w), x1 - w), y: hit(low) ? high : low, at: Math.max(...l.map((p) => p.at)) + 150 };
+				const hit = (y: number) => holes.some((h) => h.l < cx + w && cx - w < h.r && h.t < y + 4 && y - 14 < h.b) || y1 + 20 < y || y0 - 6 > y;
+				return { x: Math.min(Math.max(cx, x0 + w), x1 - w), y: hit(low) ? high : low, at: Math.max(...l.map((p) => p.at)) + 200 };
 			});
 		}
 
@@ -272,11 +271,11 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			draw(t);
 		}
 
-		/* the night under the veil: a front with a soft edge, moved across the photograph; day lifts it */
+		/* the night under the veil: a front with a soft edge, moved across the photograph; it stays */
 		function night(ms: number) {
-			const u = (ms - ACT[0] + 300) / (SCENE_BEATS.end - ACT[0] + 300), on = u === clamp(u) && knots.length > 0;
+			const on = knots.length > 0 && ms >= ACT[0] - 300;
 			hero!.style.setProperty("--night-x", `${((on ? frontX(ms) : 0) - geo.L).toFixed(1)}px`);
-			hero!.style.setProperty("--night-a", on ? (1 - ease(clamp((ms - DAY_AT) / DAY_MS))).toFixed(3) : "0");
+			hero!.style.setProperty("--night-a", on ? "1" : "0");
 		}
 
 		function star(p: Star, c: string, u: number, fade: number) {
@@ -299,9 +298,10 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			night(ms);
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			if (!knots.length || ms < ACT[0] - 300 || ms >= SCENE_BEATS.end) return;
+			if (!knots.length || ms < ACT[0] - 300) return;
+			ms = Math.min(ms, END);
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-			const fade = 1 - ease(clamp((ms - DAY_AT) / DAY_MS));
+			const fade = 1;
 			const fx = frontX(ms);
 			const shown = (x: number) => clamp((fx - SOFT / 3 - x) / SOFT);
 
@@ -369,20 +369,25 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 				ctx.stroke();
 			}
 
-			/* the forward pass, once gold is complete: a spark along every link, bronze to gold */
-			const v = (ms - PASS_AT) / PASS_MS;
-			if (v === clamp(v)) {
-				const k = v < 0.5 ? 0 : 1, f = ease(clamp(v * 2 - k));
+			/* the data: thick dots running along every link from the moment it is complete, towards the layer that
+			   reads it; they calm down and go in the last moments, and the finished network stays */
+			const calm = 1 - ease(clamp((ms - END + CALM_MS) / CALM_MS));
+			links.forEach((set, k) => {
 				ctx.fillStyle = TIERS[k + 1];
-				ctx.globalAlpha = fade * Math.sin(Math.PI * f);
-				for (const l of links[k]) {
-					const x = (1 - f) * (1 - f) * l.a.x + 2 * (1 - f) * f * l.cx + f * f * l.b.x;
-					const y = (1 - f) * (1 - f) * l.a.y + 2 * (1 - f) * f * l.cy + f * f * l.b.y;
-					ctx.beginPath();
-					ctx.arc(x, y, 1.8, 0, 2 * Math.PI);
-					ctx.fill();
+				for (const l of set) {
+					const since = ms - l.at - GROW_MS;
+					if (since <= 0) continue;
+					for (const p of l.packets) {
+						const f = (since / p.period + p.phase) % 1;
+						const x = (1 - f) * (1 - f) * l.a.x + 2 * (1 - f) * f * l.cx + f * f * l.b.x;
+						const y = (1 - f) * (1 - f) * l.a.y + 2 * (1 - f) * f * l.cy + f * f * l.b.y;
+						ctx.globalAlpha = calm * clamp(since / 250) * (0.55 + 0.45 * Math.sin(Math.PI * f));
+						ctx.beginPath();
+						ctx.arc(x, y, p.r, 0, 2 * Math.PI);
+						ctx.fill();
+					}
 				}
-			}
+			});
 
 			/* the stars of each layer; the failed one flashes red as silver is read without it, and stays dim */
 			layers.forEach((l, k) => l.forEach((p) => {
@@ -437,7 +442,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			t += now - last;
 			last = now;
 			draw(t);
-			raf = t < SCENE_BEATS.end ? requestAnimationFrame(tick) : 0;
+			raf = t < END ? requestAnimationFrame(tick) : 0;
 		}
 		function run() {
 			if (raf) return;
@@ -451,7 +456,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		function finish() {
 			stop();
 			clock.clear();
-			t = SCENE_BEATS.end;
+			t = END;
 			draw(t);
 			hero!.classList.remove("is-playing");
 			hero!.classList.add("is-done");
@@ -472,6 +477,9 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		/* the copy's webfonts move its lines: measure again once they are in */
 		document.fonts?.ready.then(layout);
 		if (reduced) {
+			/* no motion: the finished network, at once */
+			t = END;
+			draw(t);
 			hero.classList.add("is-done");
 		} else {
 			const img = hero.querySelector<HTMLImageElement>(".sky__photo")!;

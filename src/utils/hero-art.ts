@@ -24,6 +24,7 @@
  * upload.
  */
 import { FACE_BY_SLUG, FACE_ORDER, type FaceKey } from "./nav";
+import homeInto from "../assets/hero/home-into.json";
 
 /** face → the plate that vertical wears. */
 export const HERO_ART: Record<FaceKey, string> = {
@@ -215,9 +216,10 @@ export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T
 
 /**
  * Each slide's photograph, written at 720, 1320 and 2016 px as `<stem>-720.webp`, `<stem>.webp` and
- * `<stem>-2016.webp`. Three are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
- * the lighthouse as a whole photograph, and the bridge and the tug MIRRORED so the tanker sails on,
- * towards the next stop (founder: "el barco tendría que ir en sentido opuesto" — on the home only).
+ * `<stem>-2016.webp`. Four are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
+ * the lighthouse as a whole photograph without its masts or sheds, the bridge and the tug MIRRORED so
+ * the tanker sails on, towards the next stop (founder: "el barco tendría que ir en sentido opuesto" —
+ * on the home only), and the warehouse further away ("haces demasiado zoom").
  * `focus` is the object-position that keeps the subject right of the copy.
  */
 export type HomePhoto = { stem: string; width: number; height: number; focus: string };
@@ -226,7 +228,26 @@ export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
 	int: { stem: "/assets/hero/home-puente", width: 1320, height: 880, focus: "50% 45%" },
 	ia: { stem: "/assets/hero/home-remolcador", width: 1320, height: 710, focus: "70% 50%" },
 	gf: { stem: "/assets/hero/gf-guggenheim-restaurado", width: 1320, height: 645, focus: "62% 50%" },
-	ec: { stem: "/assets/hero/ec-almacen-restaurado", width: 1320, height: 714, focus: "60% 50%" },
+	ec: { stem: "/assets/hero/home-almacen", width: 1320, height: 707, focus: "62% 55%" },
 	bd: { stem: "/assets/hero/bd-observatorio-entero", width: 1320, height: 880, focus: "50% 60%" },
 };
 export const HOME_PHOTO_SIZES = "100vw";
+
+/** A home photograph's 1320 px file and its srcset — one spelling for the slide and the head's preload. */
+export function homePhotoSources(photo: HomePhoto): { src: string; srcset: string } {
+	const src = `${photo.stem}.webp`;
+	return { src, srcset: `${photo.stem}-720.webp 720w, ${src} 1320w, ${photo.stem}-2016.webp 2016w` };
+}
+
+/** The photograph a home slide shows for a service entry, or null for one not on the voyage. */
+export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | null {
+	const face = FACE_BY_SLUG[entry.slug ?? entry.id];
+	return face ? HOME_PHOTO[face] : null;
+}
+
+/**
+ * The tug's photograph inside the bridge's, as fractions of its width and height (left, top, right,
+ * bottom). Written by home_voyage.py, which cuts the one out of the other, so the home's zoom from the
+ * bridge lands exactly on the next slide at any band proportion.
+ */
+export const HOME_INTO = homeInto.into as [number, number, number, number];

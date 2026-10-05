@@ -15,7 +15,7 @@ import { resolveBlogSiteIdentity } from "../utils/site-identity";
 import { getUiLabels } from "../utils/ui-labels";
 import { routeAlternatePath } from "../utils/alternate";
 import { sortByFace } from "../utils/nav";
-import { sortByVoyage } from "../utils/hero-art";
+import { HOME_PHOTO_SIZES, homePhotoFor, homePhotoSources, sortByVoyage } from "../utils/hero-art";
 import type { SiteSettings } from "../types";
 
 import SiteHeader from "../components/SiteHeader.astro";
@@ -163,6 +163,11 @@ const heroSlideColors: string[] =
 		? sortByVoyage(services).map((svc: any) => svc.data?.color || "#1E1E1E")
 		: [];
 
+// …and its first photograph, preloaded: it is the home's LCP on a phone, and found only once the
+// stylesheets have been read it waited 0.4–0.7 s on Lighthouse's slow 4G before its fetch began (#560).
+const voyageFirst = heroSlideColors.length ? sortByVoyage(services).map(homePhotoFor).find(Boolean) : null;
+const voyagePreload = voyageFirst ? homePhotoSources(voyageFirst) : null;
+
 // Contact info from site settings
 const s = settings as SiteSettings;
 const phoneDisplay = s.phoneDisplay || "";
@@ -278,6 +283,7 @@ const resolvedOgType = ogType || "website";
 	     carry the size-adjust / ascent-override that hold CLS at zero while the
 	     real face arrives, and CLS is 0.000 on all five URLs because of them. */}
 	<Font cssVariable="--font-sans" preload={[{ weight: 300, subset: "latin" }, { weight: 700, subset: "latin" }]} />
+	{voyagePreload && <link rel="preload" as="image" href={voyagePreload.src} imagesrcset={voyagePreload.srcset} imagesizes={HOME_PHOTO_SIZES} fetchpriority="high" />}
 	<Font cssVariable="--font-mono" />
 	<title>{pageTitle}</title>
 	<meta name="description" content={pageDescription} />

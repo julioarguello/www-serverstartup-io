@@ -548,20 +548,27 @@ rotating edge (Base.astro), so the two cannot drift.
   the stop checkbox, the courtesy freeze on `:focus-within` and the arrows' manual mode intact.
   Each photograph pushes in 4.5 % while it shows; the bridge's walks into the tug's frame instead
   of fading, because the tug's photograph was cut from it (`home_voyage.py`, `TUG`).
-- **What changes in front**: the place (`hero_place`), the vertical's name and one line
-  (`hero_line`), both CMS keys by face — deliberately not `areas_claim`, which the rows further
-  down already say. The bars under them carry `menu_short` and fill in the vertical's colour.
-- **The home's own photographs**: the lighthouse as a whole photograph (masts painted out,
-  extended to the left: `faro.py`), the bridge with its bridge, and both the bridge and the tug
+- **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
+  deliberately not `areas_claim`, which the rows further down already say). No caption naming the
+  place: the founder struck it. The bars under them carry `menu_short` and fill in the vertical's
+  colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
+  margin — takes the colour of the vertical showing, on the same clock.
+- **The bridge's walk into the tug** lands exactly on the next slide: the script measures both
+  `object-fit: cover` boxes and hands the end of the walk to the keyframe as `--zx`, `--zy`, `--zs`,
+  from the rectangle `home_voyage.py` cut the tug out of (`src/assets/hero/home-into.json`). A fixed
+  percentage matched one band proportion only, and the tug jumped.
+- **The home's own photographs**: the lighthouse as a whole photograph (masts and sheds painted
+  out, extended to the left: `faro.py`), the bridge with its bridge, both the bridge and the tug
   MIRRORED so the tanker sails on (the founder's, home only; the stern relettered after the
-  mirror).
+  mirror), and the warehouse further away — the whole photograph extended to the left.
 - **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
   caption stands on its foot, above the heading — over the whole band the copy hid the picture,
   and under the heading the caption fell below a phone's fold (the layout gate's G18).
 - **Weight**: only the first photograph loads with the page; the other five carry their sources
   as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
-  grounds).
+  grounds). On phones the first photograph is the LCP (its strip is the largest element), so Base
+  preloads it in the `<head>` (`homePhotoSources`, the same srcset the slide uses).
 
 ## 5. SEO
 

@@ -66,12 +66,16 @@
 }
 
 /* The bridge does not fade: it walks into itself, towards the tug the next
-   slide was cut from (home_voyage.py's TUG), and the tug fades in over it.
-   The origin and the shift are the crop's centre in this box at the band's
-   16 : 8.6 — at other proportions the cross-fade covers the difference. */
+   slide was cut from (home_voyage.py's TUG), and the tug fades in over it at
+   the very same place. The script measures both boxes and hands the end of
+   the walk over as --zx, --zy, --zs; the fallbacks are the 16 : 8.6 band's. */
 .s-hero__photo--into {
-	transform-origin: 42.2% 73.6%;
 	animation-name: s-hero-photo-into;
+}
+
+/* …and the tug holds still while it fades in, so it is where the walk ended */
+.s-hero__photo--from {
+	animation-name: s-hero-photo-from;
 }
 
 /* Phones and tablets: the photograph is its own strip under the header and the copy
@@ -87,6 +91,22 @@
 .s-hero__inner {
 	position: relative;
 	z-index: 1;
+}
+
+/* The seal (#560): the vertical pages' cube, faint, in the showing vertical's
+   colour. Phones and tablets hang it from the band's foot, as the scenes do. */
+.s-hero__seal {
+	position: absolute;
+	z-index: 0;
+	left: -140px;
+	bottom: -120px;
+	width: 420px;
+	height: auto;
+	color: var(--c1, var(--color-secondary));
+	opacity: .16;
+	pointer-events: none;
+	animation: s-hero-seal var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
 }
 
 /* ── the card: everything that rotates, in one piece (founder's direction C)
@@ -330,6 +350,7 @@
    to stop and steps aside — and the six states are spelled out rather than
    computed, because a `calc()` comparison between two custom properties would
    fail CLOSED on an engine that cannot do it: a hero with no picture at all. */
+.s-hero.is-manual .s-hero__seal,
 .s-hero.is-manual .s-hero__photo,
 .s-hero.is-manual .s-hero__item,
 .s-hero.is-manual .s-hero__dot,
@@ -380,10 +401,17 @@
 	color: var(--color-secondary);
 }
 
+.s-hero.is-manual[data-slide="0"] .s-hero__seal { color: var(--c1, var(--color-secondary)); }
+.s-hero.is-manual[data-slide="1"] .s-hero__seal { color: var(--c2, var(--color-secondary)); }
+.s-hero.is-manual[data-slide="2"] .s-hero__seal { color: var(--c3, var(--color-secondary)); }
+.s-hero.is-manual[data-slide="3"] .s-hero__seal { color: var(--c4, var(--color-secondary)); }
+.s-hero.is-manual[data-slide="4"] .s-hero__seal { color: var(--c5, var(--color-secondary)); }
+.s-hero.is-manual[data-slide="5"] .s-hero__seal { color: var(--c6, var(--color-secondary)); }
+
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
    lands on the index link must not have it slide out from under them. */
-.s-hero:has(.s-hero__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name),
-.s-hero:focus-within :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name) {
+.s-hero:has(.s-hero__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal),
+.s-hero:focus-within :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal) {
 	animation-play-state: paused;
 }
 
@@ -410,8 +438,26 @@
 	0% { opacity: 0; transform: scale(1); }
 	2.7778% { opacity: 1; }
 	13.8889% { opacity: 1; transform: scale(1.0375); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
-	19.4444% { opacity: 1; transform: translate(7.8%, -23.6%) scale(1.82); }
+	19.4444% { opacity: 1; transform: translate(var(--zx, 7.8%), var(--zy, -23.6%)) scale(var(--zs, 1.82)); }
 	19.4445%, 100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes s-hero-photo-from {
+	0% { opacity: 0; transform: scale(1); }
+	2.7778% { opacity: 1; transform: scale(1); }
+	16.6667% { opacity: 1; }
+	19.4444% { opacity: 0; transform: scale(1.04); }
+	100% { opacity: 0; transform: scale(1.04); }
+}
+
+/* each colour held while its photograph shows, turning during the cross-fade */
+@keyframes s-hero-seal {
+	0%, 16.6667% { color: var(--c1, var(--color-secondary)); }
+	19.4444%, 33.3333% { color: var(--c2, var(--color-secondary)); }
+	36.1111%, 50% { color: var(--c3, var(--color-secondary)); }
+	52.7778%, 66.6667% { color: var(--c4, var(--color-secondary)); }
+	69.4444%, 83.3333% { color: var(--c5, var(--color-secondary)); }
+	86.1111%, 100% { color: var(--c6, var(--color-secondary)); }
 }
 
 @keyframes s-hero-item {
@@ -444,6 +490,7 @@
    the system for less does not get a slideshow. The first photograph stays,
    still, and the other five never appear. */
 @media (prefers-reduced-motion: reduce) {
+	.s-hero__seal,
 	.s-hero__photo,
 	.s-hero__item,
 	.s-hero__dot,
@@ -507,6 +554,13 @@
 	}
 	.s-hero__scrim {
 		background-image: var(--hero-scrim-photo-foot), var(--hero-scrim-photo);
+	}
+	/* desktops: under the copy, leaving by the left margin, as on the vertical pages */
+	.s-hero__seal {
+		left: -200px;
+		top: 290px;
+		bottom: auto;
+		width: 760px;
 	}
 	.s-hero h1 {
 		font-size: 56px;

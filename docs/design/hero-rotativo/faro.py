@@ -13,14 +13,19 @@ From the Commons original (Einaz80, "Cape Penas Lighthouse.jpg", CC BY-SA 4.0, 4
    and the whole box above the horizon, so the wires go too — toned to the original around it. The
    lighthouse and its house are never touched. The tower's stub above the right roof is filled with
    the sky beside it.
-2. extension: the frame is widened to the band's 16 : 8.6 by adding 2003 px on the left. A FLUX.2 edit
+2. sheds: the low sheds right of the house, their wire fence and the instrument box go too (founder,
+   2026-10-05: "la cuadra esa que está a la derecha, más fea que la leche"). A FLUX.2 [dev] edit of
+   step 1's result without them (1344 x 1008, seed 12) is the donor inside one box from the house's
+   right wall to the frame's edge, between the sky and the near grass, toned to the original and
+   feathered into it.
+3. extension: the frame is widened to the band's 16 : 8.6 by adding 2003 px on the left. A FLUX.2 edit
    of the photograph padded with grey on the left (1344 x 720, seed 9) continues the heath, the gorse
    and the coast; the original's pixels are kept from its left edge on, blended over 60 px on the
    ground and 290 px on the horizon, where the donor's headland has to die out.
-3. the composite, 2304 px wide, goes through SeedVR2 3B like the others (photo_restore.py's settings),
+4. the composite, 2304 px wide, goes through SeedVR2 3B like the others (photo_restore.py's settings),
    and `finish` writes the sizes the home serves.
 
-    python3 faro.py prepare <original> <donor, masts> <donor, left> <out.png>
+    python3 faro.py prepare <original> <donor, masts> <donor, sheds> <donor, left> <out.png>
     python3 faro.py finish <seedvr2 output>
 """
 import os, sys
@@ -36,6 +41,7 @@ MASTS = [((140, 25, 249, 485), 432), ((92, 380, 135, 448), 400), ((478, 160, 542
          ((592, 235, 768, 428), 412), ((688, 420, 716, 478), 0), ((882, 375, 900, 470), 400)]
 LIGHTHOUSE = (383, 140, 478, 462)
 HOUSE = (250, 295, 555, 462)
+SHEDS = (556, 392, 900, 494)  # right of the house's wall, sky to near grass
 LEFT = 477  # the original's left edge inside the 1344 x 720 extension
 
 
@@ -72,6 +78,21 @@ def masts(o, donor):
     return np.clip(c, 0, 255)
 
 
+def sheds(o, donor):
+    H, W = o.shape[:2]
+    k = W / 900
+    d = cv2.resize(donor, (W, H), interpolation=cv2.INTER_CUBIC).astype(np.float32)
+    X0, Y0, X1, Y1 = [int(v * k) for v in SHEDS]
+    m = np.zeros((H, W), np.float32)
+    m[Y0:Y1, X0:X1] = 1
+    # the donor's tone, measured on the grass just under the box, where both show the same field
+    ring = (slice(Y1 + 10, min(H, Y1 + 120)), slice(X0, X1))
+    d += o[ring].reshape(-1, 3).mean(0) - d[ring].reshape(-1, 3).mean(0)
+    a = cv2.GaussianBlur(m, (0, 0), 14)[..., None]
+    a[:, :X0 + 8] = np.minimum(a[:, :X0 + 8], m[:, :X0 + 8, None])  # hard at the house's wall
+    return np.clip(o * (1 - a) + d * a, 0, 255)
+
+
 def extend(o, donor):
     H, W = o.shape[:2]
     k = H / 720
@@ -89,9 +110,9 @@ def extend(o, donor):
     return np.clip(c, 0, 255).astype(np.uint8)
 
 
-def prepare(original, donor_masts, donor_left, out):
+def prepare(original, donor_masts, donor_sheds, donor_left, out):
     o = cv2.imread(original).astype(np.float32)
-    clean = masts(o, cv2.imread(donor_masts))
+    clean = sheds(masts(o, cv2.imread(donor_masts)), cv2.imread(donor_sheds))
     wide = extend(clean, cv2.imread(donor_left))
     h = int(round(2304 * wide.shape[0] / wide.shape[1] / 2)) * 2
     cv2.imwrite(out, cv2.resize(wide, (2304, h), interpolation=cv2.INTER_AREA))

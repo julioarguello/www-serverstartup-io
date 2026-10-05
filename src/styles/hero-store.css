@@ -1,0 +1,66 @@
+/* ═══ HERO — the warehouse's stock and your order, the e-commerce vertical (#551), docs/architecture.md §4.9 ═══
+   One frame under the veil — the warehouse, its lids, the order's cell — sized by the band and running off its
+   right edge; the script places it (--sx, --sy, --sw) and plays the cube on the stage (.store__order). The end
+   state is the default (no script, reduced motion): the warehouse, no drawing. */
+
+.store__box {
+	position: absolute;
+	left: var(--sx, auto);
+	right: var(--sx-r, auto);
+	top: var(--sy, auto);
+	bottom: auto;
+	width: var(--sw, min(86vw, calc(var(--band-h, 100svh) * 1.59)));
+	aspect-ratio: 2853 / 1543;
+	isolation: isolate;
+	pointer-events: none;
+	/* starts where the seal ends and fades in from the left, where it lies under the copy, and from its own top
+	   edge; where the scene is its own row its foot fades into the band too: never a seam between photograph
+	   and ground */
+	-webkit-mask-image: linear-gradient(90deg, transparent var(--sclip, 0px), var(--color-ground-dark) calc(var(--sclip, 0px) + var(--sfade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%, var(--color-ground-dark) calc(100% - var(--sfade-b, 0px)), transparent 100%);
+	-webkit-mask-composite: source-in;
+	mask-image: linear-gradient(90deg, transparent var(--sclip, 0px), var(--color-ground-dark) calc(var(--sclip, 0px) + var(--sfade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%, var(--color-ground-dark) calc(100% - var(--sfade-b, 0px)), transparent 100%);
+	mask-composite: intersect;
+}
+.s-hero--store:not(.is-placed) .store__box { --sx-r: -2%; bottom: 0; }
+.store__photo,
+.store__drawing,
+.store__drawing svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+/* the lids: the section's blue, lightened to read on the band; near ones heavier, far ones fainter */
+.store__drawing { --lid: color-mix(in srgb, var(--scene-c) 78%, var(--color-secondary)); opacity: 0; }
+.store__drawing path { fill: none; stroke: var(--lid); stroke-width: 1.5px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.store__drawing .store__lid--near { stroke-width: 2.5px; }
+.store__drawing .store__lid--far { stroke-width: 1px; opacity: .6; }
+.store__drawing .store__cell { stroke: var(--color-secondary); stroke-width: 2px; opacity: 0; }
+
+/* the order: three faces the script draws on the stage, over the frame and, on desktops, across to the seal */
+.store__order { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; visibility: hidden; }
+.store__order.is-on { visibility: visible; }
+.store__face {
+	fill: color-mix(in srgb, var(--scene-c) calc(var(--fill, 1) * 100%), transparent);
+	/* white on the warehouse; on the way to the seal it takes the seal's colour, so it lands as the seal */
+	stroke: color-mix(in srgb, var(--color-secondary) calc((1 - var(--fly, 0)) * 100%), var(--scene-c));
+	stroke-width: var(--line, 2px);
+	stroke-linejoin: round;
+}
+.store__face.is-top { fill: color-mix(in srgb, color-mix(in srgb, var(--scene-c) 62%, var(--color-secondary)) calc(var(--fill, 1) * 100%), transparent); }
+
+/* the sequence, 8 s like every opening: the warehouse 2 s; the photograph dims and the lids light up in a wave
+   from the order's cell (each from its --d); the cube's frames from 4.2 s (the script); its flight from 6.1 s;
+   the seal lights up as it lands at 6.8 s; the drawing goes and the photograph comes back. Pause freezes all
+   of it (SceneClock holds the timer, the script holds the cube) */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+	.s-hero--store:not(.is-placed) .store__box { visibility: hidden; }
+	.s-hero--store.is-playing .store__photo { animation: store-dim 5.6s ease-in-out 2s both; }
+	.s-hero--store.is-playing .store__drawing { animation: store-drawing 5.6s ease-in-out 2s both; }
+	.s-hero--store.is-playing .store__drawing [pathLength] { stroke-dasharray: 1; animation: store-draw .5s ease-out calc(2.2s + var(--d, 0ms)) both; }
+	.s-hero--store.is-playing .store__drawing .store__cell { animation: store-draw .4s ease-out 4.2s both, store-show .4s ease-out 4.2s both; }
+	.s-hero--store.is-playing .scene__seal { animation: store-seal 1.2s ease-out 6.8s both; }
+	/* as specific as the rules above, and after them: their `animation` shorthand resets the play state */
+	.s-hero.s-hero--store.is-playing.is-paused * { animation-play-state: paused; }
+}
+@keyframes store-dim { 0%, 100% { filter: none; } 10%, 85% { filter: brightness(.55); } }
+@keyframes store-drawing { 0% { opacity: 0; } 4%, 85% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes store-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes store-show { from { opacity: 0; } to { opacity: 1; } }
+@keyframes store-seal { 0% { opacity: .16; } 25% { opacity: .7; } 100% { opacity: .16; } }

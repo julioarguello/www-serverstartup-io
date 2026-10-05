@@ -25,6 +25,7 @@ import { heroArtForSlug, heroGroundForSlug, heroSceneForSlug } from "../utils/he
 import HeroRadar from "../components/HeroRadar.astro";
 import HeroBridge from "../components/HeroBridge.astro";
 import HeroElevation from "../components/HeroElevation.astro";
+import HeroStore from "../components/HeroStore.astro";
 import HeroVision from "../components/HeroVision.astro";
 import type { SiteSettings } from "../types";
 const t = Astro.locals.t;
@@ -141,6 +142,15 @@ const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 			quote={heroQuote}
 			labels={labels}
 		/>
+	) : heroScene === "store" ? (
+		<HeroStore
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
 	) : heroScene === "vision" ? (
 		<HeroVision
 			title={title}
@@ -232,4 +242,5 @@ const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 	@import "../styles/hero-bridge.css";
 	@import "../styles/hero-vision.css";
 	@import "../styles/hero-elevation.css";
+	@import "../styles/hero-store.css";
 </style>

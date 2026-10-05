@@ -306,14 +306,15 @@ const FOOTER_WIDTHS = [390, 768, 1024, 1440];
  */
 const OPENING_ROUTES = [
 	{ route: "/", opening: ".s-hero", photographic: true },
-	{ route: "/comercio-electronico", opening: ".s-hero--art", photographic: true },
+	// the service page that still opens with a plate; e-commerce opens with a scene since #551
+	{ route: "/big-data-cloud-analytics", opening: ".s-hero--art", photographic: true },
 	{ route: "/quienes-somos", opening: ".s-hero" },
 	{ route: "/contacto", opening: ".s-contact" },
 	{ route: "/deconstruyendo", opening: ".s-doc" },
 	{ route: "/referencias", opening: ".s-hero" },
 	{ route: "/politica-de-privacidad", opening: ".legal" },
 	{ route: "/en", opening: ".s-hero", photographic: true },
-	{ route: "/en/e-commerce", opening: ".s-hero--art", photographic: true },
+	{ route: "/en/big-data-cloud-analytics", opening: ".s-hero--art", photographic: true },
 	{ route: "/en/about-us", opening: ".s-hero" },
 	{ route: "/en/contact", opening: ".s-contact" },
 	{ route: "/en/deconstructing", opening: ".s-doc" },

@@ -112,8 +112,8 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
  */
 export const SCENE_ROW = "(max-width: 1100px)";
 
-export type HeroSceneKind = "radar" | "bridge" | "vision" | "elevation";
-export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision", gf: "elevation" };
+export type HeroSceneKind = "radar" | "bridge" | "vision" | "elevation" | "store";
+export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision", gf: "elevation", ec: "store" };
 
 /** The scene this slug (either locale) opens with, or `null` for a held plate or a plain page. */
 export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null {
@@ -182,3 +182,13 @@ export const HERO_ELEVATION = {
 
 /** The frame is 2.05 × 86 % of the band's height on desktops (about 88 % of a 1575 × 791 viewport) and up to 125 % of the width below 1100 px; phones ask for 98vw so a 412 px phone at 1.75 (707 px) takes the 720 file (Lighthouse's mobile run scored 0.92 with the 1320). The photograph waits at low priority: it is not seen before 3.8 s and competed with the plot, the LCP. */
 export const HERO_ELEVATION_SIZES = "(max-width: 767px) 98vw, (max-width: 1100px) 125vw, 88vw";
+
+export const HERO_STORE = {
+	/** the grid of an automated warehouse, robots on its rails (Techwords, CC BY-SA 4.0), restored, the brand painted out: WebP, 1320×714 */
+	photo: "/assets/hero/ec-almacen-restaurado.webp",
+	photoSmall: "/assets/hero/ec-almacen-restaurado-720.webp",
+	photoLarge: "/assets/hero/ec-almacen-restaurado-2016.webp",
+};
+
+/** The same frame rules as the elevation's: 1.85 × 86 % of the band on desktops, up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. Here the photograph IS the first paint. */
+export const HERO_STORE_SIZES = HERO_ELEVATION_SIZES;

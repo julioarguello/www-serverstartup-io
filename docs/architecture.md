@@ -475,6 +475,38 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   it: copied as they were, they left a darker patch.
 - **Open**: the left half of the drawing under the copy's veil.
 
+### 4.9 The warehouse's stock and your order, the e-commerce vertical (#551)
+
+- **Four beats in 8 s, like every opening** (founder, 2026-10-04/05): an automated warehouse, robots on the
+  rails of its grid ("Ocado warehouse bots.jpg", Techwords, CC BY-SA 4.0); a lid lights up on every cell, in
+  a wave from the order's cell (the stock: under the rails every cell holds a stack of bins); one bin rises
+  out of its cell as a **perfect cube** and turns until it is seen exactly as the logo draws it; it flies to
+  the band's seal, which lights up. Rejected on the way: the Encants plan view, the port of Avilés (no free
+  photo of containers there), container ships (neutral ones and our own tanker loaded by FLUX), the arcades
+  of calle Galiana, a six-colour puzzle cube, and a high-angle AutoStore grid (sharper but not the look).
+- **Measured on the photograph, never placed by eye** (`docs/design/hero-rotativo/ocado.py`): the rails'
+  vanishing point (1416.9, 588.4) by least squares over Hough segments; no roll (the slats are level); the
+  focal length, 5,700 px, from the 70 mm on the sensor scaled to the file (the columns lean too little to
+  measure it); the camera's height, 1.40 cell widths, fitted to the rail spacing, which the model then
+  predicts within 3 % at two depths (979 vs 958 px, 597 vs 611 px). Lids too flat to read (under 4 px deep)
+  are left out: towards the horizon they merged into solid wedges.
+- **The cube is computed, the browser plays it**: `ec-pedido.json` holds 91 frames projected through the
+  same camera (rising out of its cell, clipped at the floor; then turning 45° and tilting to 35.26°, the
+  isometric elevation), and the turned cube's seven points in the seal's order (T, UR, LR, B, LL, UL, the
+  centre of the Y). The script interpolates those seven to the seal's own on desktops, its stroke moving
+  from white to the seal's colour and width so it lands as the seal; where the scene is its own row the
+  stage clips, so the cube stays and draws itself as the seal does. The loop runs on rAF only while the
+  opening plays and stops at its end: pause holds it with the CSS (SceneClock for the timer).
+- **Where the cube rises**: cell (1, 9), in front of the second robot, so it falls at 69–93 % of the frame,
+  past the copy's column (the frame's `ORDER` fraction plays the elevation's `TOWER`), and the nearest
+  robot stays visible.
+- **The photograph is restored** like the others (§4.6): SeedVR2 3B at 2×, the whites' cast removed
+  (a +1.2, b −0.5); the Ocado mark painted out of the three robots where it reads (inpainting on their flat
+  panels). The ceiling is cropped: the frame is 1.85 wide.
+- **The pause control's label is no longer `aria-hidden`** (all four scenes): W3C Nu rejects `aria-hidden`
+  on a label bound to a control, and it only came to light here because `/en/e-commerce` is one of the two
+  pages the a11y gate sends to Nu. The input's `aria-label` names the control.
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

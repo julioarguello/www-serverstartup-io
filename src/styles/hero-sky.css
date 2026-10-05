@@ -1,7 +1,7 @@
 /* ═══ HERO — night over the Teide Observatory, the Big Data vertical (#556), docs/architecture.md §4.10 ═══
    One frame under the veil — the observatory — sized by the band and running off its right edge; the script
-   places it (--sx, --sy, --sw), moves the night across it (--night-x, --night-a) and plays the drawing on a
-   canvas over the veil. Without the script the photograph shows by day; the finished opening, and reduced motion
+   places it (--sx, --sy, --sw), paints the dusk on it (a canvas under the veil) and plays the stars on a canvas
+   over the veil. Without the script the photograph shows by day; the finished opening, and reduced motion
    at once, is the night with the network drawn. */
 
 .sky__box {
@@ -26,26 +26,22 @@
 .sky__photo,
 .sky__night { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 
-/* the night: the band's own dark over the photograph, up to the front the script moves (--night-x, with a soft
-   edge) and as strong as --night-a, which day takes back to nothing */
-.sky__night {
-	--night: color-mix(in srgb, var(--color-ground-dark) 78%, transparent);
-	background: linear-gradient(90deg, var(--night) 0, var(--night) calc(var(--night-x, -200px) - 160px), transparent var(--night-x, -200px));
-	opacity: var(--night-a, 0);
-}
+/* the night: a canvas under the veil the script paints — the band's dark up to the dusk's front, the domes
+   keeping their light */
+.sky__night { pointer-events: none; }
 
 /* the drawing — stars, domes, the network — is one canvas over the veil, the whole stage: at night the band
    is the sky. The script leaves a hole for every line of the copy */
 .sky__data { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 
 /* the inks the canvas reads: the links and the stars in the section's navy, lightened to read at night; one
-   colour per layer, bronze, silver, gold; the failed star in the machine's red */
+   colour per layer, bronze, silver, gold; the night, the band's own dark */
 .sky__ink { position: absolute; visibility: hidden; }
 .sky__ink--line { color: var(--color-sky-line); }
 .sky__ink--bronze { color: var(--color-sky-bronze); }
 .sky__ink--silver { color: var(--color-sky-silver); }
 .sky__ink--gold { color: var(--color-sky-gold); }
-.sky__ink--fail { color: var(--color-machine-red); }
+.sky__ink--night { color: color-mix(in srgb, var(--color-ground-dark) 80%, transparent); }
 /* the layers' names: the bridge's connectors' face */
 .sky__ink--label { font: 500 12.5px var(--font-family-mono); }
 

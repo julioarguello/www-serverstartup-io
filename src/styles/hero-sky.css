@@ -39,13 +39,15 @@
 .sky__data { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 
 /* the inks the canvas reads: the links and the stars in the section's navy, lightened to read at night; one
-   colour per layer, bronze, silver, gold; the failed node in the machine's red */
+   colour per layer, bronze, silver, gold; the failed star in the machine's red */
 .sky__ink { position: absolute; visibility: hidden; }
 .sky__ink--line { color: var(--color-sky-line); }
 .sky__ink--bronze { color: var(--color-sky-bronze); }
 .sky__ink--silver { color: var(--color-sky-silver); }
 .sky__ink--gold { color: var(--color-sky-gold); }
 .sky__ink--fail { color: var(--color-machine-red); }
+/* the layers' names: the bridge's connectors' face */
+.sky__ink--label { font: 500 12.5px var(--font-family-mono); }
 
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--sky:not(.is-placed) .sky__box { visibility: hidden; }

@@ -536,16 +536,26 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 
 ### 4.10 Night over the Teide Observatory, the Big Data vertical (#556)
 
-- **Each telescope is a layer** (founder, 2026-10-05, second round): three robotic-telescope domes at Izaña,
-  the sea and an island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel, CC BY-SA 4.0), by day;
-  night falls from left to right, a front with a soft edge crossing the stage between `--beat-draw` and
-  `--beat-drawn`, revealing stars. As it reaches each dome, the dome lights up in its layer's colour and sends
-  a beam up to its layer: over the first, stars are picked — bronze; over the second a layer is composed that
-  reads from the first (the links are drawn out of it) — silver; then the third — gold. What stays in the sky
-  is the classic drawing of a neural network, left to right; pulses run along it, bronze to gold, as a forward
-  pass. One bronze node fails, turns red and is never read: the data that fails its tests never reaches gold.
-  Day comes back from 6.5 s. The first round — a graticule over the sky, thousands of detections, a test
-  sweep — was "la imagen bien, la animación mal".
+- **Each telescope is a layer** (founder, 2026-10-05): three robotic-telescope domes at Izaña, the sea and an
+  island on the horizon ("Teide Observatory 2018 077.jpg", Mike Peel, CC BY-SA 4.0), by day. Night falls from
+  left to right, one front with a soft edge crossing the band from just before `--beat-draw` to just before
+  `--beat-drawn`, revealing stars and picking the first layer's as it reaches them — bronze. Then one act per
+  layer, 1.6 s each: the second dome lights up and sends its beam, links grow out of bronze and the stars they
+  reach become silver; then the third — gold. One bronze star fails: it flashes red the moment silver is read
+  without it. Each layer is named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`, the medallion's
+  own words in both locales). A spark runs along every link, bronze to gold, and day comes back by 8 s.
+- **Three rounds**: a graticule with thousands of detections and a test sweep ("la imagen bien, la animación
+  mal"); then three regular columns over the domes, fully connected, all three layers inside 2.5 s ("va mega
+  rápido… concentrados en una horizontal muy estrecha… la perfección no existe"). Hence: one layer per act;
+  layers are scattered stars, not columns; each star reads from two or three of the layer before along a
+  slightly bowed link of uneven strength (a seeded generator: the same sky on every visit); and the network is
+  laid where the page's sky is actually free, measured at run time — above the title and down the right of the
+  copy (336 × 343 px at 1575 × 791, 280 × 481 at 1440 × 900): bronze high on the left, silver across the upper
+  right, gold low on the right towards its dome. The columns over the domes had only the 150 px between the
+  header and the title, because the title stands where domes 1 and 2 are.
+- **The clock**: the photograph alone until `--beat-draw`; the night complete at about `--beat-drawn`; the
+  layers' acts run to 6.8 s, past `--beat-drawn` — a measured exception like the machine's eye's, because three
+  acts inside 2.5 s read as one blur.
 - **Rejected for Big Data**: El Molinón with match statistics (data laid on the photo is a TV graphic, not a
   drawing of the place, and a derby), the El Musel bulk terminal, El Molinón's stand as a table. No free
   photograph shows the observatory, the Teide and the sea together (about 170 checked on Commons and
@@ -558,9 +568,9 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   sea horizon at row 1130, 1.43° under the true horizon from 2,390 m.
 - **The band is the sky at night**: the night is a layer under the veil the script moves (`--night-x`,
   `--night-a`); the drawing is one canvas over the veil, the whole stage, with a hole for every line of the
-  copy, the CTA and the controls, measured on the page and erased after drawing (not clipped: the padded lines
-  overlap, and an even-odd clip paints the overlaps back), and a fade in past the seal. The network sits
-  between the header and the title on desktops, over the sea on phones.
+  copy, the CTA and the controls, measured on the page and erased to a quarter after drawing (links and beams
+  pass behind the copy dimmed, never at full strength; erased, not clipped — the padded lines overlap, and an
+  even-odd clip paints the overlaps back), and a fade in past the seal. Stars and names never land in a hole.
 - **The whole photograph** (1.5 wide) is shown, so the left dome clears the seal; where the band is narrow the
   frame shrinks before the dome goes under it, and on phones it is no wider than keeps the dome in.
 - **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end; pause

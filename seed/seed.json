@@ -2103,6 +2103,39 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "sky_bronze",
+							"children": [
+								{
+									"_type": "span",
+									"text": "bronze"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_silver",
+							"children": [
+								{
+									"_type": "span",
+									"text": "silver"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_gold",
+							"children": [
+								{
+									"_type": "span",
+									"text": "gold"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4743,6 +4776,39 @@
 								{
 									"_type": "span",
 									"text": "Replay the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_bronze",
+							"children": [
+								{
+									"_type": "span",
+									"text": "bronze"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_silver",
+							"children": [
+								{
+									"_type": "span",
+									"text": "silver"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_gold",
+							"children": [
+								{
+									"_type": "span",
+									"text": "gold"
 								}
 							]
 						},

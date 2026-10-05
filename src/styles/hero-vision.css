@@ -34,8 +34,10 @@
 .vision__eye,
 .vision__tint,
 .vision__scan { position: absolute; inset: 0; }
-/* colour blends only where there is a middle tone: black stays black, the white stays white */
-.vision__tint { background: linear-gradient(90deg in oklch, var(--scene-c) max(var(--vclip, 0px), 18%), var(--color-machine-red) 48%); mix-blend-mode: color; }
+/* colour blends only where there is a middle tone: black stays black, the white stays white. The violet is a
+   tint at the left edge and the red takes over by a third of the frame (founder, 2026-10-05: "menos
+   protagonismo al violeta… más fuerza al rojo, sin pasarse"; it held violet to 18 % and reached red at 48 %) */
+.vision__tint { background: linear-gradient(90deg in oklch, var(--scene-c) max(var(--vclip, 0px), 8%), var(--color-machine-red) 32%); mix-blend-mode: color; }
 /* the quay's bright upper corner dimmed, where the readout sits */
 .vision__scan { background: linear-gradient(200deg, color-mix(in srgb, var(--color-ground-dark) 70%, transparent) 0, transparent 48%); }
 

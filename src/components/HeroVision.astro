@@ -91,7 +91,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 </HeroScene>
 
 <script>
-	import { SCENE_ROW } from "../utils/hero-art";
+	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
 	const hero = document.querySelector<HTMLElement>(".s-hero--vision");
 	if (hero) {
@@ -326,7 +326,7 @@ const replayLabel = L("vision_replay", "Repetir la animación");
 		function play() {
 			wrapReadout();
 			hero!.classList.add("is-playing");
-			clock.at("end", 8000, finish);
+			clock.at("end", SCENE_BEATS.end, finish);
 			clock.at("type", 5200, startTyping);
 		}
 

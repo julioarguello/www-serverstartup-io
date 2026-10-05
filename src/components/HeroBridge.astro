@@ -78,7 +78,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 </HeroScene>
 
 <script>
-	import { SCENE_ROW } from "../utils/hero-art";
+	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
 	const hero = document.querySelector<HTMLElement>(".s-hero--bridge");
 	if (hero) {
@@ -95,17 +95,10 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 
 		/* the drawing's frame and the landmarks bridge.py drew its outline on (2016 × 1344) */
 		const VB_W = 2016, VB_H = 1344;
-		const RIGHT_IN = 0.8185;                 /* the Las Arenas tower's inner leg */
 		const CROP_V = 0.8;                      /* the plate's crop, just under the tug */
-		const BAND_H = 0.9;                      /* the frame's height, of the band's: the lighthouse's is 0.88 */
-		const LEFT_OUT = 0.135;                  /* the Portugalete tower's outer leg */
-		const DECK_V = 0.39;                     /* the girder's top chord at its highest, by Las Arenas */
-		const RISE = 0.08;                       /* how far the banks may lift off the band's floor */
+		const FILL = 0.86;                       /* what shows of the frame, of the band's height: as the museum's and the warehouse's */
 		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
 		const BLEED = 0.04;                      /* how far past the band's edge the frame runs: half the banks' fade */
-		/* what a protocol needs between the excerpt's padded last line and the girder: 10 of margin, the
-		   name (12.5, and 3 around it), 18 to the circle, the shortest stem (30), 2 to spare */
-		const UP_ROOM = 10 + 15.5 + 18 + 30 + 2;
 		const GX0 = 336, GX1 = 1692;
 		const SPAN0 = GX0 + 70, SPAN1 = GX1 - 70;
 		const chordTop = (x: number) => 545 - (x - 420) * 0.017;
@@ -153,24 +146,6 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			for (const [x, y] of onStage) for (const q of boxes) if (inside(x, y, q)) return true;
 			return false;
 		}
-		/* the least drop that clears every box: moving the frame down only translates the points, so each
-		   point under a box forbids one interval of drops — sort them and take the first gap */
-		function leastDrop(pairs: [Box[], [number, number][]][]): number {
-			const bad: [number, number][] = [];
-			for (const [boxes, onStage] of pairs) for (const [x, y] of onStage) for (const q of boxes) {
-				if (x <= q.l) continue;
-				if (x >= q.r) continue;
-				bad.push([q.t - y, q.b - y]);
-			}
-			bad.sort((u, v) => u[0] - v[0]);
-			let d = 0;
-			for (const [lo, hi] of bad) {
-				if (hi <= d) continue;
-				if (lo >= d) break;
-				d = hi;
-			}
-			return d;
-		}
 		/* every line of the copy, padded, in the stage's pixels: nothing of the bridge may touch a letter */
 		function textBoxes(s: DOMRect): Box[] {
 			const out: Box[] = [];
@@ -192,30 +167,17 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			hero.style.setProperty("--bw", `${g.W}px`);
 		}
 
-		/* desktops: sized by the band like the lighthouse, the Las Arenas tower just past the column. The
-		   frame starts where the seal ends (founder, 2026-10-02: "que empiece justo a continuación del
-		   cubo"): what lies left of it is cut, and the scene shrinks only if the Portugalete tower would be.
-		   It rises from the band's floor as far as a protocol still fits between the excerpt and the girder,
-		   by at most a fade's height (the banks then fade into the band before its floor); only the title
-		   and the excerpt hold it down */
+		/* desktops: one framing for every photograph (#553, founder 2026-10-05: "la de integración queda
+		   totalmente descolgada"): what shows of the frame — down to the crop under the tug — is 86 % of the
+		   band's height, resting on its floor, running off its right edge; it starts where the seal ends and
+		   lies under the copy's veil like the museum and the warehouse. The connectors keep off the copy's
+		   text by themselves (placePlugs measures it) */
 		function fitWide() {
 			const s = stage.getBoundingClientRect();
-			const cs = getComputedStyle(inner), ib = inner.getBoundingClientRect();
-			const colR = ib.right - s.left - parseFloat(cs.paddingRight);
 			const sr = seal.getBoundingClientRect();
 			const sealR = sr.left - s.left + SEAL_R * sr.width + 8;
-			let H = BAND_H * s.height, W = 1.5 * H;
-			if (colR + 10 - (RIGHT_IN - LEFT_OUT) * W < sealR + 30) { W = (colR + 10 - sealR - 30) / (RIGHT_IN - LEFT_OUT); H = W / 1.5; }
-			const lead = textBoxes(s).filter((q) => !q.quote && !q.button);
-			const excerptBottom = Math.max(0, ...lead.map((q) => q.b));
-			const floor = s.height - CROP_V * H;
-			/* the Las Arenas tower just past the column — unless that leaves band to its right: then the scene
-			   moves right until the banks' own fade straddles the band's edge, so the art bleeds off it like
-			   every other vertical's (founder, 2026-10-03) */
-			const L0 = colR + 10 - RIGHT_IN * W;
-			const L = L0 + Math.max(0, s.width + BLEED * W - (L0 + W));
-			const g = { L, T: Math.max(excerptBottom + UP_ROOM - DECK_V * H, floor - RISE * H), W, H };
-			g.T += Math.ceil(leastDrop([[lead, placed(g, hardPts)]]));
+			const H = (FILL * s.height) / CROP_V, W = 1.5 * H;
+			const g = { L: s.width + BLEED * W - W, T: s.height - CROP_V * H, W, H };
 			setGeo(g);
 			hero.style.setProperty("--bclip", `${Math.max(0, sealR - g.L)}px`);
 		}
@@ -323,8 +285,11 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		function startPacman() {
 			pac?.remove();
 			pac = null;
-			if (!hero.classList.contains("is-done") || plugs.length === 0) return;
-			const [a, b] = [SPAN0, SPAN1].map((x) => toStage(x, (chordTop(x) + chordBot(x)) / 2, geo));
+			if (!hero.classList.contains("is-fed") || plugs.length === 0) return;
+			/* between the first and the last connector, not tower to tower: since the bridge fills the band (#553)
+			   its girder runs on under the copy, and the connectors are what keeps off the text */
+			const ends = [...plugs].sort((p, q) => p.mid[0] - q.mid[0]);
+			const [a, b] = [ends[0].mid, ends[ends.length - 1].mid];
 			const el = document.createElement("i");
 			el.className = "bridge__pac";
 			const body = document.createElement("b");
@@ -392,33 +357,44 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		}
 		/* reduced motion: the same picture, held — three ghosts standing on the girder, Pac-Man at rest */
 		function still() {
-			[0.35, 0.55, 0.75].forEach((t, k) => {
-				const x = GX0 + (GX1 - GX0) * t;
-				const [px, py] = toStage(x, (chordTop(x) + chordBot(x)) / 2, geo);
+			if (plugs.length === 0) return;
+			/* between the outer connectors, as the Pac-Man runs: the girder's left end may lie under the copy (#553) */
+			const ends = [...plugs].sort((p, q) => p.mid[0] - q.mid[0]);
+			const [a, b] = [ends[0].mid, ends[ends.length - 1].mid];
+			[0.2, 0.5, 0.8].forEach((t, k) => {
+				const [px, py] = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 				const { g } = ghost(COLORS[(k * 2) % Math.max(1, COLORS.length)] ?? "");
 				g.style.transform = `translate(${px}px, ${py}px)`;
 				bus.appendChild(g);
 			});
 			startPacman();
 		}
-		function startFeed() { if (feed !== null || reduced || pause.checked || document.hidden || !hero.classList.contains("is-done")) return; feed = window.setInterval(send, 1300); send(); }
+		function startFeed() { if (feed !== null || reduced || pause.checked || document.hidden || !hero.classList.contains("is-fed")) return; feed = window.setInterval(send, 1300); send(); }
 		function stopFeed() { if (feed !== null) { clearInterval(feed); feed = null; } }
 		function freezeFeed(on: boolean) { for (const a of bus.getAnimations({ subtree: true })) on ? a.pause() : a.play(); }
 
-		/* the sequence, 8 s like every opening (founder, 2026-10-04): the banks alone · the bridge, whole (CSS,
-		   3.2 s → 6.4 s) · every connector at once · the messages (founder, 2026-10-02: "que el puente aparezca
-		   de una sola vez, y los conectores también"). Pause freezes it where it is (SceneClock) */
+		/* the sequence, on the openings' clock (SCENE_BEATS, #553): the banks alone · the bridge, whole (CSS, by
+		   the drawn beat) · every connector at once, half a second later · the messages a second after that
+		   (founder, 2026-10-02: "que el puente aparezca de una sola vez, y los conectores también"). Pause
+		   freezes it where it is (SceneClock) */
 		const clock = new SceneClock();
+		function wire() { hero.classList.add("is-wired"); }
+		function feedOn() {
+			hero.classList.add("is-wired", "is-fed");
+			startFeed();
+			startPacman();
+		}
 		function finish() {
 			clock.clear();
 			hero.classList.remove("is-playing");
 			hero.classList.add("is-done");
-			startFeed();
-			startPacman();
+			feedOn();
 		}
 		function play() {
 			hero.classList.add("is-playing");
-			clock.at("end", 8000, finish);
+			clock.at("wire", SCENE_BEATS.drawn + 500, wire);
+			clock.at("feed", SCENE_BEATS.drawn + 1500, feedOn);
+			clock.at("end", SCENE_BEATS.end, finish);
 		}
 
 		/* a resize refits the frame every frame, as the lighthouse follows the window; the connectors wait,
@@ -436,7 +412,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		/* once: after the faces are in, so the copy's lines and the names are measured as they render */
 		if (document.fonts.status === "loaded") layout(); else document.fonts.ready.then(layout);
 		if (reduced) {
-			hero.classList.add("is-done");
+			hero.classList.add("is-done", "is-wired", "is-fed");
 		} else {
 			const img = hero.querySelector<HTMLImageElement>(".bridge__banks")!;
 			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
@@ -456,7 +432,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 			pac = null;
 			plugs.forEach((p) => p.el.classList.remove("is-hit"));
 			pause.checked = false;
-			hero.classList.remove("is-paused", "is-done", "is-playing");
+			hero.classList.remove("is-paused", "is-done", "is-playing", "is-wired", "is-fed");
 			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */
 			play();
 		});

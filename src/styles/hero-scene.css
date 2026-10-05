@@ -1,6 +1,12 @@
 /* ═══ HERO — the scene every vertical opens with (#529, #531); a vertical brings only its art. docs/architecture.md §4.5 ═══ */
 .s-hero--scene {
 	--scene-c: var(--accentColor, var(--color-edge));
+	/* one clock for every opening (#553), mirrored by SCENE_BEATS in hero-art.ts for the scripts: the photograph
+	   alone until --beat-draw, the drawing or the machine's layer complete by --beat-drawn, the payoff after it,
+	   everything at rest by 8 s. The lighthouse keeps these as fractions of its --radar-t (24 % and 64 %); the
+	   machine's eye keeps its own three beats, approved as they are (founder, 2026-10-05) */
+	--beat-draw: 2s;
+	--beat-drawn: 4.5s;
 	/* the h1 sits where a centred 320 px block would put it: it never moves with the excerpt */
 	--scene-copy-ref: 320px;
 	position: relative;

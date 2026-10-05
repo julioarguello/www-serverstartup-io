@@ -312,9 +312,23 @@ grey from its banks plate (#817975) and the AI scene drifted toward its colour u
 went back to the one haze. **And the art always reaches the band's right edge** (founder, 2026-10-03:
 "no hay margen a la derecha en el faro y en el puente colgante sí"): the radar's rings and the AI frame
 already ran off it; the bridge, anchored by its Las Arenas tower just past the column, left 71–451 px of
-empty band (1280–2560). It now moves right by whatever band is left, until the banks' own fade straddles
-the edge (`BLEED`, 4 % of the frame); its photograph cannot grow, the crop already ends where the Commons
-original does. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
+empty band (1280–2560). It now runs off the edge by `BLEED` (4 % of the frame, half the banks' fade).
+**One framing for every photograph** (#553, founder 2026-10-05: "la de integración queda totalmente
+descolgada"): what shows of the frame is 86 % of the band's height (the machine's eye keeps its 81 %: at 86 %
+its brackets around the tug are withheld, and the founder approved that scene as it is), resting on the
+band's floor, running off its right edge and lying under the copy's veil where it is wide enough to. The bridge used to shrink and drop
+until no tower and no label touched the copy, which left it a low strip; now it fills the band like the
+museum and the warehouse, its connectors still keep off the text (they are placed against the copy's
+measured lines), and the Pac-Man and the reduced-motion ghosts run between the outer connectors rather
+than tower to tower, since the girder's left end now passes under the copy. The lighthouse is the one
+cut-out: its radar's rings and plan are what fill its band.
+**One clock for every opening** (#553): the photograph alone until `--beat-draw` (2 s), the drawing or
+the machine's layer complete by `--beat-drawn` (4.5 s), the payoff after it, everything at rest by 8 s —
+declared once in `hero-scene.css` and mirrored by `SCENE_BEATS` in `hero-art.ts` for the scripts. The
+lighthouse keeps them as fractions of its `--radar-t` (24 %, 64 %); the machine's eye keeps its own three
+beats (photograph to 3.8 s, the reading at 5.2 s), approved as they are. The bridge used to wait to 3.2 s
+and take 3.2 s more ("tarda mucho"): it is now whole by 4.5 s, its connectors come at 5 s and the messages
+at 6 s. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
 the copy, fades over 14 % of the frame instead of 60 px. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). **On phones and tablets (≤ 1100 px) the first screen is the screen** (#543): one `100svh` box — title,
@@ -377,8 +391,10 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **The machine's eye is a homage to the Terminator's HUD that starts in the section's violet and ends in
   the film's red** (founder, 2026-10-03: "no quiero perder el violeta … se va haciendo rojo cuanto más a
   la derecha"). The CMS palette is untouched: the cube, menu and accents keep the violet, and the red
-  (`--color-machine-red`, #E0141E) lives only in the frame's tint. The gradient holds violet under the
-  copy (to 18 % of the frame) and is the red, whole, from the ship's stern on (48 %): the reticle, the
+  (`--color-machine-red`, #E0141E) lives only in the frame's tint. The gradient holds violet as a tint
+  at the frame's left edge (to 8 %) and is the red, whole, by a third of the frame (32 %) — it held violet
+  to 18 % and reached red at 48 % until the founder asked for "menos protagonismo al violeta… más fuerza al
+  rojo, sin pasarse" (2026-10-05, #553): the reticle, the
   tug and the whole reading are red, as the founder marked on a capture. In
   OKLCH so the passage goes through magenta rather than mud. A full palette change (AI red, integration
   in the bridge's RAL 3005 wine) was mocked on the real pages and set aside. It is CSS on the one
@@ -439,8 +455,9 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 ### 4.8 The Guggenheim's elevation, the greenfield vertical (#547)
 
 - **Three beats in 8 s, like every opening** (founder, 2026-10-03/04): the plot without the museum in
-  black and white, held 2 s; the museum drawn as an architect's elevation over it in about 4 s, held
-  whole; the photograph from 6.4 s, and the drawing goes. The same time as the others ("misma o similar
+  black and white, held 2 s; the museum drawn as an architect's elevation over it, complete by about
+  4.5 s on the openings' clock (#553; each line's delay was stretched × 1.8, to about 6 s, out of step with
+  the others), held whole; the photograph from 5.6 s, and the drawing goes by 7 s. The same time as the others ("misma o similar
   duración en todos"); a 5 s round read "muy rápido", and every opening moved to 8 s with it.
 - **Karpathy's epigraph** (founder's choice, 2026-10-04, after rejecting Gehry, Brooks, Brand and Gall
   for something recent on why custom pays off against a SaaS): "[AI] empowers trained professionals to

@@ -50,7 +50,7 @@ const replayLabel = L("store_replay", "Repetir la animación");
 </HeroScene>
 
 <script>
-	import { SCENE_ROW } from "../utils/hero-art";
+	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
 	import cube from "../assets/hero/ec-pedido.json";
 	const hero = document.querySelector<HTMLElement>(".s-hero--store");
@@ -214,7 +214,7 @@ const replayLabel = L("store_replay", "Repetir la animación");
 			t = 0;
 			hero!.classList.add("is-playing");
 			run();
-			clock.at("end", 8000, finish);
+			clock.at("end", SCENE_BEATS.end, finish);
 		}
 
 		let settling: number | null = null;

@@ -22,7 +22,8 @@ writes, under new names so no browser keeps an older cut:
 
 - public/assets/hero/ec-almacen-restaurado{-720,,-2016}.webp   the warehouse, restored, brand painted out
 - src/assets/hero/ec-almacen.svg     the lids, one per cell, each with its start as `--d`
-- src/assets/hero/ec-pedido.json     the order cube's frames, projected, for the component to play
+- src/assets/hero/ec-pedido.json     the order cube's frames, projected, for the component to play: its
+                                     visible faces and the logo's 2 x 2 split on them
 """
 import os, sys, json
 import numpy as np, cv2
@@ -169,9 +170,21 @@ def clip_floor(poly):
     return out
 
 
+def clip_segment(a, b):
+    """a segment against the floor: the part still in the cell does not show"""
+    if a[1] < 0 and b[1] < 0:
+        return None
+    if a[1] < 0:
+        a = a + (b - a) * (-a[1] / (b[1] - a[1]))
+    elif b[1] < 0:
+        b = b + (a - b) * (-b[1] / (a[1] - b[1]))
+    return a, b
+
+
 def frame(lift, turn):
+    """the visible faces, and the logo's 2 x 2 split on each: the lines through the midpoints of its sides"""
     V, c = pose(lift, turn)
-    faces = []
+    faces, grid = [], []
     for f in FACES:
         fc = V[list(f)].mean(0)
         if np.dot(CAMERA - fc, fc - c) <= 0:
@@ -181,7 +194,12 @@ def frame(lift, turn):
             continue
         P = proj(poly)
         faces.append({"k": "top" if f == TOP else "side", "p": [round(float(v), 1) for v in (P - [0, CROP_Y]).ravel()]})
-    return faces
+        q = [V[i] for i in f]
+        for a, b in (((q[0] + q[1]) / 2, (q[2] + q[3]) / 2), ((q[1] + q[2]) / 2, (q[3] + q[0]) / 2)):
+            seg = clip_segment(a, b)
+            if seg:
+                grid += [round(float(v), 1) for v in (proj(list(seg)) - [0, CROP_Y]).ravel()]
+    return {"f": faces, "g": grid}
 
 
 def hexagon():

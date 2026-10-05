@@ -480,10 +480,10 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **Four beats in 8 s, like every opening** (founder, 2026-10-04/05): an automated warehouse, robots on the
   rails of its grid ("Ocado warehouse bots.jpg", Techwords, CC BY-SA 4.0); a lid lights up on every cell, in
   a wave from the order's cell (the stock: under the rails every cell holds a stack of bins); one bin rises
-  out of its cell as a **perfect cube**, turns until it is seen as the house mark draws it, and becomes the
-  logo where it stands: its faces split 2 × 2 and logo.svg's two plates come in behind it, the light one in
-  the section's colour, the dark one turned (founder, 2026-10-05: "mi logo no solo es un cubo"; a first round
-  flew a plain cube to the band's seal). The logo was born of these hives (`reference/legacy/docs/logo.md`). Rejected on the way: the Encants plan view, the port of Avilés (no free
+  out of its cell as a **perfect cube**, the logo's 2 × 2 split showing on its faces as it leaves (in the
+  section's blue lightened: the founder, 2026-10-05, "no las pongas en negro, destacan mucho"), turns until it
+  is seen exactly as the logo draws it, and flies to the band's seal, which lights up. A round that composed
+  the whole logo in place (plates and all) was rejected the same day. Rejected on the way: the Encants plan view, the port of Avilés (no free
   photo of containers there), container ships (neutral ones and our own tanker loaded by FLUX), the arcades
   of calle Galiana, a six-colour puzzle cube, and a high-angle AutoStore grid (sharper but not the look).
 - **Measured on the photograph, never placed by eye** (`docs/design/hero-rotativo/ocado.py`): the rails'
@@ -495,10 +495,12 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **The cube is computed, the browser plays it**: `ec-pedido.json` holds 91 frames projected through the
   same camera (rising out of its cell, clipped at the floor; then turning 45° and tilting to 35.26°, the
   isometric elevation), and the turned cube's seven points in the seal's order (T, UR, LR, B, LL, UL, the
-  centre of the Y). The turn ends at the mark's own elevation (isometric, SiteMark's 200 × 228 cube), so the
-  script only eases those seven points onto the mark's at the same centre and width, its edges taking the
-  mark's ink, and places the logo there; the plates and the 2 × 2 grid enter by CSS. The loop runs on rAF only
-  while the cube moves and stops after: pause holds it with the CSS (SceneClock for the timer).
+  centre of the Y); each frame also carries the 2 × 2 split's segments, clipped at the floor while the cube
+  rises, and during the flight the split is rebuilt from the seven points as SiteMark draws it (the lines
+  through the midpoints of each face's sides). The script interpolates those seven to the seal's own on desktops, its stroke moving
+  from white to the seal's colour and width so it lands as the seal; where the scene is its own row the
+  stage clips, so the cube stays and draws itself as the seal does. The loop runs on rAF only while the
+  opening plays and stops at its end: pause holds it with the CSS (SceneClock for the timer).
 - **Where the cube rises**: cell (1, 9), in front of the second robot, so it falls at 69–93 % of the frame,
   past the copy's column (the frame's `ORDER` fraction plays the elevation's `TOWER`), and the nearest
   robot stays visible.

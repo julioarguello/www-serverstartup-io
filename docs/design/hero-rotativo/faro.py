@@ -38,6 +38,12 @@ writes src/assets/hero/cdn-faro.json: the building's outline (GrabCut, seeded by
 rings and the sweep pass behind it), the lantern's glass (cut out of the night, where the light is
 born) and its centre (the radar's origin), the boxes text keeps off, and the row below which nothing
 is sky.
+
+    python3 faro.py register <cdn-faro-restaurado-1760.webp>
+
+adds the line drawing's place on the photograph ("plan": x, y, width in the 1320 px units): it was drawn
+on the cut-out #529 used, so the similarity between the cut-out and this photograph is measured (SIFT on the
+building, RANSAC) and the drawing carried through it.
 """
 import os, sys, json
 import numpy as np, cv2
@@ -215,10 +221,50 @@ def measure():
         "house": box(below),
         "sky": round(horizon(cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY).astype(float), k), 1),
     }
+    if os.path.exists(DATA) and "plan" in json.load(open(DATA)):
+        data["plan"] = json.load(open(DATA))["plan"]  # `register`'s, kept
     json.dump(data, open(DATA, "w"), separators=(",", ":"))
     print(os.path.relpath(DATA), "building", len(data["building"]) // 2, "vertices; lantern at", data["lantern"]["c"],
           "; tower", data["tower"], "; house", data["house"], "; sky above row", data["sky"])
 
 
+# the line drawing #529 drew on the cut-out (cdn-faro-plan, kept as cdn-faro-perfil): 1210 x 1392, shown in the
+# cut-out's own 1760 x 2020 box with object-fit: cover, so the two shared one frame
+PLAN = (1210, 1392)
+CUTOUT = (1760, 2020)
+
+
+def register(cutout):
+    """the drawing on the whole photograph: the similarity from the cut-out it was drawn on (cdn-faro-restaurado-1760,
+    retired; `git show 69a5694:public/assets/hero/cdn-faro-restaurado-1760.webp`) to the 3024 px file, measured by
+    SIFT on the building and RANSAC, then the drawing's box carried through it"""
+    cut = np.array(Image.open(cutout).convert("RGBA"))
+    assert cut.shape[1::-1] == CUTOUT, cut.shape
+    lim = np.array(Image.open(os.path.join(OUT, "home-faro-limpio-3024.webp")).convert("RGB"))
+    k = lim.shape[1] / FRAME[0]
+    cg, lg = cv2.cvtColor(cut[..., :3], cv2.COLOR_RGB2GRAY), cv2.cvtColor(lim, cv2.COLOR_RGB2GRAY)
+    near = np.zeros_like(lg)
+    near[int(120 * k):int(500 * k), int(700 * k):int(1070 * k)] = 255
+    sift = cv2.SIFT_create(8000)
+    k1, d1 = sift.detectAndCompute(cg, (cut[..., 3] > 200).astype(np.uint8) * 255)
+    k2, d2 = sift.detectAndCompute(lg, near)
+    good = [m for m, n in cv2.BFMatcher(cv2.NORM_L2).knnMatch(d1, d2, k=2) if m.distance < 0.75 * n.distance]
+    p1 = np.float32([k1[m.queryIdx].pt for m in good])
+    p2 = np.float32([k2[m.trainIdx].pt for m in good])
+    M, inl = cv2.estimateAffinePartial2D(p1, p2, method=cv2.RANSAC, ransacReprojThreshold=2.0, maxIters=20000,
+                                         confidence=0.999)
+    ok = inl.ravel() == 1
+    res = np.linalg.norm(p1[ok] @ M[:, :2].T + M[:, 2] - p2[ok], axis=1)
+    scale, rot = float(np.hypot(M[0, 0], M[1, 0])), float(np.degrees(np.arctan2(M[1, 0], M[0, 0])))
+    # the drawing's pixels in the cut-out's box (cover: scaled by width, centred vertically), then on the photograph
+    a = CUTOUT[0] / PLAN[0]
+    x0, y0 = M @ [0, -(PLAN[1] * a - CUTOUT[1]) / 2, 1]
+    data = json.load(open(DATA))
+    data["plan"] = [round(x0 / k, 2), round(y0 / k, 2), round(PLAN[0] * a * scale / k, 2)]
+    json.dump(data, open(DATA, "w"), separators=(",", ":"))
+    print(f"{len(good)} matches, {int(ok.sum())} inliers, residual median {np.median(res):.2f} px (3024 px file), "
+          f"scale {scale:.4f}, rotation {rot:.4f} deg; the drawing at x, y, width {data['plan']} (1320 px units)")
+
+
 if __name__ == "__main__":
-    {"prepare": prepare, "finish": finish, "measure": measure}[sys.argv[1]](*sys.argv[2:])
+    {"prepare": prepare, "finish": finish, "measure": measure, "register": register}[sys.argv[1]](*sys.argv[2:])

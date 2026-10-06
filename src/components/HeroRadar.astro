@@ -21,7 +21,7 @@
  * conic gradient), never a transform on an SVG group. Chrome strings come from the `panel_labels` widget,
  * English in both locales — a machine voice, like the PR card.
  */
-import { HERO_RADAR, HERO_RADAR_SIZES, RADAR_RINGS } from "../utils/hero-art";
+import { HERO_RADAR, HERO_RADAR_SIZES, HERO_RADAR_PLAN_SIZES, RADAR_RINGS } from "../utils/hero-art";
 import faro from "../assets/hero/cdn-faro.json";
 import HeroScene from "./HeroScene.astro";
 
@@ -56,6 +56,9 @@ const skyClip = `M-5,-5H6V${r4(faro.sky / FH)}H-5Z M${building.join(" L")}Z`;
 /* the sweep: a disc as wide as the rings reach, centred on the lantern */
 const sweepStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%;width:${r4(((2 * reach) / FW) * 100)}%`;
 const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
+/* the profile: where `faro.py register` measured it lands on the photograph's lighthouse */
+const [PX, PY, PW] = faro.plan;
+const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;width:${r4((PW / FW) * 100)}%`;
 ---
 
 <HeroScene scene="radar" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ events: JSON.stringify(events) }}>
@@ -63,6 +66,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		<div class="scene__frame radar__box radar__frame">
 			<img class="radar__photo" src={HERO_RADAR.src} srcset={HERO_RADAR.srcset} sizes={HERO_RADAR_SIZES} width={HERO_RADAR.width} height={HERO_RADAR.height} alt="" fetchpriority="high" decoding="async" />
 			<canvas class="radar__night" aria-hidden="true"></canvas>
+			<img class="radar__plan" style={planStyle} src={HERO_RADAR.plan} srcset={`${HERO_RADAR.planSmall} 660w, ${HERO_RADAR.plan} 1210w`} sizes={HERO_RADAR_PLAN_SIZES} width="1210" height="1392" alt="" fetchpriority="low" decoding="async" />
 		</div>
 		<div class="radar__box radar__screen">
 			<svg viewBox={`0 0 ${FW} ${FH}`} preserveAspectRatio="xMidYMid meet">

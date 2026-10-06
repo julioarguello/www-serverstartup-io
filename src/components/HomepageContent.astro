@@ -178,7 +178,8 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 						srcset={i === 0 ? srcset : undefined}
 						data-src={i === 0 ? undefined : src}
 						data-srcset={i === 0 ? undefined : srcset}
-						sizes={HOME_PHOTO_SIZES}
+						sizes={i === 0 ? HOME_PHOTO_SIZES : undefined}
+						data-sizes={i === 0 ? undefined : HOME_PHOTO_SIZES}
 						alt=""
 						width={slide.photo.width}
 						height={slide.photo.height}
@@ -435,8 +436,11 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 	// first screen's own bytes.
 	const later = () => {
 		for (const img of document.querySelectorAll<HTMLImageElement>(".s-hero__photo[data-srcset]")) {
+			// sizes first: it is only valid beside a srcset, so it travels as data too (#573)
+			img.sizes = img.dataset.sizes ?? "";
 			img.srcset = img.dataset.srcset ?? "";
 			img.src = img.dataset.src ?? "";
+			delete img.dataset.sizes;
 			delete img.dataset.srcset;
 			delete img.dataset.src;
 		}

@@ -140,6 +140,8 @@ const { entries: memberEntries } = await getEmDashCollection("members", {
 	locale,
 });
 const members = memberEntries ?? [];
+// the deferred hero photos' src until the page has loaded (see the stage below)
+const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 ---
 
 <!-- ══════ HERO — six photographs, one voyage (#413, #560) ══════
@@ -161,13 +163,15 @@ const members = memberEntries ?? [];
 			    at once: 830 KB on a phone, which held the <h1> — the home's LCP
 			    — back to 3.7 s on Lighthouse's slow 4G. They carry their sources
 			    as data until the page has loaded; the first is on screen for
-			    six seconds before the second is due. */}
+			    six seconds before the second is due. Until then their `src` is
+			    a one-pixel transparent GIF: an <img> without one is invalid
+			    HTML (html-validate in CI), and it costs no request. */}
 			{heroSlides.map((slide, i) => {
 				const { src, srcset } = homePhotoSources(slide.photo);
 				return (
 					<img
 						class="s-hero__photo"
-						src={i === 0 ? src : undefined}
+						src={i === 0 ? src : BLANK}
 						srcset={i === 0 ? srcset : undefined}
 						data-src={i === 0 ? undefined : src}
 						data-srcset={i === 0 ? undefined : srcset}

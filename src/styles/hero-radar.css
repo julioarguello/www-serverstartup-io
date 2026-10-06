@@ -34,6 +34,16 @@
 /* the screen: the rings and the sweep are the sky's — clipped above the horizon, the building cut out
    (#radar-sky, measured on the photograph) */
 .radar__screen { pointer-events: none; clip-path: url(#radar-sky); }
+/* on desktops the radar is the photograph's too: the screen wears the frame's own fades, so nothing of it shows
+   past the frame or left of where the photograph's left fade begins — never across the band behind the copy */
+@media (min-width: 1101px) {
+	.radar__screen {
+		-webkit-mask-image: linear-gradient(90deg, transparent var(--sclip, 0px), var(--color-ground-dark) calc(var(--sclip, 0px) + var(--sfade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%);
+		-webkit-mask-composite: source-in;
+		mask-image: linear-gradient(90deg, transparent var(--sclip, 0px), var(--color-ground-dark) calc(var(--sclip, 0px) + var(--sfade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%);
+		mask-composite: intersect;
+	}
+}
 .radar__screen svg {
 	position: absolute;
 	inset: 0;

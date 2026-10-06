@@ -138,6 +138,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		let NIGHT = "";
 		const front: DuskFront = { knots: [], soft: 160 };
 		let lampAt = NIGHT_END;
+		let photoFrom = 0;                       /* stage px where the photograph shows whole, past its left fade */
 
 		/* the copy's lines, as the browser laid them out: the longest one's right end, on the stage */
 		function textRight(s: DOMRect): number {
@@ -166,6 +167,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			const H = W / ASPECT;
 			hero!.style.setProperty("--sclip", `${Math.max(0, from - L)}px`);
 			hero!.style.setProperty("--sfade-l", `${Math.round(0.14 * W)}px`);
+			photoFrom = Math.max(from, L) + Math.round(0.14 * W);
 			hero!.style.setProperty("--sfade-b", "0px");
 			/* the front walks across what shows: past the veil it keeps an even pace (the Teide's lesson: never a
 			   front crossing hidden ground and then rushing) */
@@ -182,6 +184,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			const L = Math.min(0, Math.max(s.width - W, 0.72 * s.width - (CX / FW) * W));
 			hero!.style.setProperty("--sclip", "0px");
 			hero!.style.setProperty("--sfade-l", "0px");
+			photoFrom = 0;
 			hero!.style.setProperty("--sfade-b", `${Math.round(0.12 * H)}px`);
 			front.soft = Math.max(120, 0.33 * s.width);
 			front.knots = [[NIGHT_AT, 0], [NIGHT_END, s.width + front.soft]];
@@ -190,7 +193,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 
 		/* what placing text reads from the page, taken once per pass and relative to the band, so a placement
 		   made before a scroll still compares with one made after it */
-		type View = { o: DOMRect; f: Rect; band: Rect; head: number; st: Rect; copy: Rect; ctl: Rect | null; poly: [number, number][] };
+		type View = { o: DOMRect; f: Rect; band: Rect; head: number; st: Rect; copy: Rect; ctl: Rect | null; pic: Rect; poly: [number, number][] };
 		let view: View;
 		function rel(q: Rect, o: DOMRect): Rect {
 			return { left: q.left - o.left, top: q.top - o.top, right: q.right - o.left, bottom: q.bottom - o.top };
@@ -206,10 +209,20 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 				st: rel(stage.getBoundingClientRect(), o),
 				copy: rel(copyBox(), o),
 				ctl: k ? rel(k, o) : null,
+				pic: { left: 0, top: 0, right: 0, bottom: 0 },
 				poly: [],
 			};
 			const b = faro.building;
 			for (let i = 0; i < b.length; i += 2) view.poly.push(px(b[i], b[i + 1]));
+			/* the photograph's own sky, on desktops: past the copy's right edge and the photograph's left fade,
+			   below its top fade, above the horizon — where the events and the echo live */
+			const f = view.f, st = view.st;
+			view.pic = {
+				left: Math.max(view.copy.right + 24, st.left + photoFrom),
+				top: f.top + 0.12 * (f.bottom - f.top),
+				right: f.right,
+				bottom: px(0, faro.sky)[1],
+			};
 		}
 		/* frame units → band px */
 		function px(x: number, y: number): [number, number] {
@@ -255,9 +268,11 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 				b.top - pad < r.bottom;
 		}
 		/* where nothing written may land: off the band or the stage that clips it, on the copy, on the controls,
-		   on the tower or the house, below the sky's last row, or on what is already written */
-		function clearOf(r: Rect, taken: Rect[], trail = false): boolean {
-			const { band, head, st, copy: c, ctl: k } = view;
+		   on the tower or the house, below the sky's last row, or on what is already written; the events and the
+		   echo, on desktops, nowhere but the photograph's own sky (`inPhoto`) */
+		function clearOf(r: Rect, taken: Rect[], trail: boolean | null = false, inPhoto = false): boolean {
+			const { band, head, st, copy: c, ctl: k, pic } = view;
+			if (inPhoto && !narrow && (r.left < pic.left || r.right > pic.right || r.top < pic.top || r.bottom > pic.bottom)) return false;
 			if (r.left < band.left + 8 || r.right > band.right - 8 || r.top < Math.max(band.top, head) + 8 || r.bottom > band.bottom - 8) return false;
 			if (narrow) {
 				if (r.left < st.left + 4 || r.right > st.right - 4 || r.top < st.top + 4 || r.bottom > st.bottom - 4) return false;
@@ -265,20 +280,20 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			if (k && hits(r, k, 10)) return false;
 			if (onBuilding(r, 8)) return false;
 			if (r.bottom > px(0, faro.sky)[1] - 4) return false;
-			if (inBeam(r, trail)) return false;
+			if (trail !== null && inBeam(r, trail)) return false;
 			return !taken.some((b) => hits(r, b, 8));
 		}
 		/* the beam at rest: the sweep stops at 300°, its bright edge 60° anticlockwise from east and its trail
-		   fading behind it to 128°. Paper labels keep off the bright edge; the orange events and the echo off the
-		   whole trail (orange on orange fails) */
+		   fading behind it to 128°. Paper text (the labels, the echo) keeps off the bright edge; the events still at
+		   rest, orange, off the whole trail (orange on orange fails) */
 		function inBeam(r: Rect, trail: boolean): boolean {
 			const BEAM = [56, trail ? 130 : 80];
 			const [cx, cy] = px(CX, CY);
-			for (const [x, y] of [[r.left, r.top], [r.right, r.top], [r.left, r.bottom], [r.right, r.bottom], [(r.left + r.right) / 2, (r.top + r.bottom) / 2]]) {
-				const deg = (Math.atan2(cy - y, x - cx) * 180) / Math.PI;
-				if (BEAM[0] < deg && deg < BEAM[1]) return true;
-			}
-			return false;
+			/* the bearings the rectangle spans, not its corners alone: the edge can pass between them */
+			const deg = [[r.left, r.top], [r.right, r.top], [r.left, r.bottom], [r.right, r.bottom]].map(([x, y]) => (Math.atan2(cy - y, x - cx) * 180) / Math.PI);
+			const lo = Math.min(...deg), hi = Math.max(...deg);
+			if (hi - lo > 180) return false;   /* it straddles the bearing behind the lantern, far from the beam */
+			return BEAM[0] < hi && lo < BEAM[1];
 		}
 		/* a label anchored at a frame point, reading left of it (its tick on its right) or right of it */
 		function labelRect(el: HTMLElement, x: number, y: number, left: boolean): Rect {
@@ -356,13 +371,17 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		}
 		/* the visitor's echo: the first of a few spots in open sky that is clear */
 		const ECHO: [number, number][] = [[430, 40], [300, 130], [1010, 110], [560, 300], [260, 380], [1010, 300], [500, 330], [500, 180]];
+		/* desktops: every point of a grid over the photograph's sky, nearest the lantern first */
+		const ECHO_WIDE: [number, number][] = [];
+		for (let x = 560; x <= 1320; x += 30) for (let y = 0; y < faro.sky; y += 18) ECHO_WIDE.push([x, y]);
+		ECHO_WIDE.sort((p, q) => Math.hypot(p[0] - CX, p[1] - CY) - Math.hypot(q[0] - CX, q[1] - CY));
 		function placeEcho() {
 			if (youEl.hidden) return;
 			look();
 			youEl.style.visibility = "hidden";
-			for (const [x, y] of ECHO) {
+			for (const [x, y] of narrow ? ECHO : ECHO_WIDE) {
 				const r = labelRect(youEl, x, y, false);
-				if (!clearOf(r, placed, true)) continue;
+				if (!clearOf(r, placed, false, true)) continue;
 				youEl.style.left = `${(x / FW) * 100}%`;
 				youEl.style.top = `${(y / FH) * 100}%`;
 				youEl.style.visibility = "";
@@ -410,17 +429,18 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			raf = 0;
 		}
 
-		/* candidate zones for the events, in frame units — all in the sky — and the side each reads to; a candidate
-		   is then checked against the page, because the frame sits differently at every viewport */
-		const ZONES = (): [number, number, number, number, boolean][] => narrow
-			? [[490, 800, 230, 430, false], [490, 800, 110, 230, false]]
-			: [[380, 820, -90, 130, false], [560, 850, 150, 330, true], [1000, 1300, -40, 300, false], [200, 560, 200, 420, false], [700, 1000, -110, 60, false], [60, 380, -90, 130, false]];
-		function clear(x: number, y: number, left: boolean, text: string): boolean {
+		/* phones and tablets: candidate zones for the events, in frame units, in the sky left of the tower, and the
+		   side each reads to; a candidate is then checked against the page (desktops use `spots`) */
+		const ZONES = (): [number, number, number, number, boolean][] => [[490, 800, 230, 430, false], [490, 800, 110, 230, false]];
+		/* a moving event may land where the beam will pass or rest — it is where an echo shows, and the feed is
+		   cleared when the beam comes to rest; a still one keeps off the whole resting trail (`trail === null`:
+		   no beam test at all) */
+		function clear(x: number, y: number, left: boolean, text: string, still = false): boolean {
 			const [ax, ay] = px(x, y);
 			const w = text.length * 7.6 + 22, h = 16;
 			const r = { left: left ? ax - w : ax, top: ay - h / 2, right: left ? ax : ax + w, bottom: ay + h / 2 };
 			const echo = youEl.hidden ? [] : [rel(youEl.getBoundingClientRect(), view.o)];
-			return clearOf(r, [...placed, ...echo], true);
+			return clearOf(r, [...placed, ...echo], still || narrow ? true : null, true);
 		}
 		const live: [number, number][] = [];
 		let timer: number | null = null;
@@ -434,8 +454,39 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			feed.appendChild(d);
 			return d;
 		}
+		/* on desktops the photograph's sky right of the copy is a narrow strip whose shape changes with every
+		   viewport, so the events are not drawn from fixed zones there: every point of a grid over the sky, reading
+		   either way, that is clear for this text — the narrow ones simply hold fewer */
+		/* no two events within 42 units of each other vertically and 450 horizontally */
+		function apart(taken: [number, number][], c: [number, number, boolean]): boolean {
+			for (const q of taken) {
+				const dy = Math.abs(q[1] - c[1]), dx = Math.abs(q[0] - c[0]);
+				if (dy < 42 && dx < 450) return false;
+			}
+			return true;
+		}
+		function spots(text: string, still: boolean): [number, number, boolean][] {
+			const out: [number, number, boolean][] = [];
+			for (let x = 560; x <= 1320; x += 30) for (let y = 0; y < faro.sky; y += 18) for (const left of [false, true]) if (clear(x, y, left, text, still)) out.push([x, y, left]);
+			return out;
+		}
 		function blip() {
 			look();
+			if (!narrow) {
+				/* the next event that has room: where the strip is narrow, the short ones */
+				let text = "", ok: [number, number, boolean][] = [];
+				for (let n = 0; n < EVENTS.length && !ok.length; n++) {
+					text = EVENTS[k % EVENTS.length];
+					k += 1;
+					ok = spots(text, false).filter((c) => apart(live, c));
+				}
+				if (!ok.length) return;
+				const [x, y, left] = ok[Math.floor(Math.random() * ok.length)];
+				const me: [number, number] = [x, y];
+				live.push(me);
+				expire(place(x, y, left, text), me, 2400);
+				return;
+			}
 			const zones = ZONES();
 			let x = 0, y = 0, z = zones[0], tries = 0;
 			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
@@ -486,12 +537,24 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		function settle() {
 			look();
 			const still: [number, number][] = [];
+			if (!narrow) {
+				/* up to three, apart from each other, in the order of the events */
+				for (const text of EVENTS.slice(0, 6)) {
+					if (still.length >= 3) break;
+					const ok = spots(text, true).filter((c) => apart(still, c));
+					if (!ok.length) continue;
+					const [x, y, left] = ok[Math.floor(ok.length / 2)];
+					still.push([x, y]);
+					place(x, y, left, text).classList.add("is-still");
+				}
+				return;
+			}
 			ZONES().forEach((z, i) => {
 				const text = EVENTS[i];
 				if (!text) return;
 				for (let a = 0; a < 5; a++) for (let b = 0; b < 4; b++) {
 					const x = z[0] + ((z[1] - z[0]) * (a + 0.5)) / 5, y = z[2] + ((z[3] - z[2]) * (b + 0.5)) / 4;
-					if (still.some((q) => Math.abs(q[1] - y) < 42 && Math.abs(q[0] - x) < 450) || !clear(x, y, z[4], text)) continue;
+					if (still.some((q) => Math.abs(q[1] - y) < 42 && Math.abs(q[0] - x) < 450) || !clear(x, y, z[4], text, true)) continue;
 					still.push([x, y]);
 					place(x, y, z[4], text).classList.add("is-still");
 					return;

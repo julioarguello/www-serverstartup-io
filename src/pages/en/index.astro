@@ -18,10 +18,10 @@ Astro.cache.set(cacheHint);
 const { title, excerpt } = entry?.data ?? { title: "Server Startup", excerpt: "" };
 const settings = await getSiteSettings() as SiteSettings;
 const description = excerpt || `${title} — Server Startup`;
-// The document title is the H1's head (before the colon): Base appends
+// The document title is the H1's head (before the colon or the comma): Base appends
 // the site name and html-validate caps <title> at 70 chars — the full
 // H1 overflows it. H1 and <title> differing is standard SEO practice.
-const seoTitle = title.split(":")[0].trim();
+const seoTitle = title.split(/[:,]/)[0].trim();
 const schemas = homepageJsonLd({
 	siteUrl: Astro.site?.origin!,
 	description,

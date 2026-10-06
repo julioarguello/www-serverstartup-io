@@ -544,7 +544,9 @@ Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the
 and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
 rotating edge (Base.astro), so the two cannot drift.
 
-- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only. The pause
+- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only. Each photograph holds still and the next dissolves in over 1.5 s on top of it; the
+  caption leaves before the next arrives, one text at a time (the push and the quick fades read as
+  "PowerPoint trasnochado", founder 2026-10-06). The pause
   is the verticals' own control (`scene-ctl.css`, shared since #560), in the band's corner. The
   arrows **seek** the clock — every animation on it, the header's edge included, is set to the
   chosen slide's time — and the rotation goes on (founder: "si le doy a avanzar que no se desactive
@@ -576,6 +578,9 @@ rotating edge (Base.astro), so the two cannot drift.
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
   grounds). On phones the first photograph is the LCP (its strip is the largest element), so Base
   preloads it in the `<head>` (`homePhotoSources`, the same srcset the slide uses).
+- **Width and sharpness**: on a very wide screen the frame stops at twice the band's height, its sides
+  dissolving into the band (cropped to a strip, the subjects fell outside it); every photograph is
+  also cut at 3024 px, which a 1512 px laptop at 2x needs — 2016 was stretched 1.5× there.
 
 ## 5. SEO
 

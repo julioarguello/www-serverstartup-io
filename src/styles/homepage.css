@@ -40,12 +40,12 @@
 	z-index: 0;
 }
 
-/* Six photographs stacked in one box, cross-fading, each pushing in slowly
-   while it shows (4.5 % over its six seconds: movement a reader feels rather
-   than watches). The slide colours arrive as `--cc` and the stagger as `--i`
-   on an inline `style=`; no stylesheet declares either, so every reference
-   carries a fallback (#462): the worst this degrades to is ink and no
-   stagger. `--focus` keeps each subject right of the copy. */
+/* Six photographs stacked in one box. Each holds still and the next dissolves
+   in over it in a second and a half (founder, 2026-10-06: the push and the
+   quick fades read as "PowerPoint trasnochado"; "quiero algo más sobrio").
+   The slide colours arrive as `--cc` and the stagger as `--i` on an inline
+   `style=`; no stylesheet declares either, so every reference carries a
+   fallback (#462). `--focus` keeps each subject right of the copy. */
 .s-hero__photo {
 	position: absolute;
 	inset: 0;
@@ -63,6 +63,10 @@
 .s-hero__photo:first-of-type {
 	opacity: 1;
 	animation-name: s-hero-photo-lead;
+}
+
+.s-hero__photo:last-of-type {
+	animation-name: s-hero-photo-last;
 }
 
 /* Phones and tablets: the photograph is its own strip under the header and the copy
@@ -143,7 +147,7 @@
 
 .s-hero__rule:first-child {
 	opacity: 1;
-	animation-name: s-hero-item-lead;
+	animation-name: s-hero-item;
 }
 
 /* ── the rotating half: index line, name, and the vertical's own words ── */
@@ -162,7 +166,7 @@
 .s-hero__item:first-child {
 	opacity: 1;
 	visibility: visible;
-	animation-name: s-hero-item-lead;
+	animation-name: s-hero-item;
 }
 
 .s-hero__meta {
@@ -408,34 +412,35 @@
 	animation-play-state: paused;
 }
 
-/* One slide is 16.6667 % of the 36 s cycle; the next fades in over the
-   following 2.7778 % (one second). */
+/* One slide is 16.6667 % of the 36 s cycle. The next photograph dissolves in
+   over 4.1667 % (1.5 s) on top of the one showing, which stays whole beneath it
+   until it is covered — never two half-faded pictures. The last slide fades
+   OUT instead, over the first, which is back underneath by then. */
 @keyframes s-hero-photo {
-	0% { opacity: 0; transform: scale(1); }
-	2.7778%, 16.6667% { opacity: 1; }
-	19.4444% { opacity: 0; transform: scale(1.045); }
-	100% { opacity: 0; transform: scale(1.045); }
+	0% { opacity: 0; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
+	4.1667%, 20.8333% { opacity: 1; }
+	20.8334%, 100% { opacity: 0; }
 }
 
 @keyframes s-hero-photo-lead {
-	0% { opacity: 1; transform: scale(1); }
-	16.6667% { opacity: 1; }
-	19.4444% { opacity: 0; transform: scale(1.045); }
-	100% { opacity: 0; transform: scale(1.045); }
+	0%, 20.8333% { opacity: 1; }
+	20.8334%, 99.9% { opacity: 0; }
+	100% { opacity: 1; }
 }
 
+@keyframes s-hero-photo-last {
+	0% { opacity: 0; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
+	4.1667%, 16.6667% { opacity: 1; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
+	20.8333%, 100% { opacity: 0; }
+}
+
+/* The caption leaves in 0.3 s as the next photograph starts to dissolve, and
+   the next one arrives once the picture is half way — one text at a time. */
 @keyframes s-hero-item {
-	0% { opacity: 0; visibility: hidden; }
-	2.7778% { opacity: 1; visibility: visible; }
+	0%, 2.5% { opacity: 0; visibility: hidden; }
+	3.3333% { opacity: 1; visibility: visible; }
 	16.6667% { opacity: 1; visibility: visible; }
-	19.4444% { opacity: 0; visibility: hidden; }
-	100% { opacity: 0; visibility: hidden; }
-}
-
-@keyframes s-hero-item-lead {
-	0% { opacity: 1; visibility: visible; }
-	16.6667% { opacity: 1; visibility: visible; }
-	19.4444% { opacity: 0; visibility: hidden; }
+	17.5% { opacity: 0; visibility: hidden; }
 	100% { opacity: 0; visibility: hidden; }
 }
 
@@ -517,9 +522,22 @@
 	.s-hero__stage {
 		inset: 0;
 		height: auto;
+		margin-inline: auto;
+		/* token-guard: off — the photograph's frame, not a measure of text: on a very wide screen it
+		   stops at twice the band's height, or the photographs were cropped to a strip and their
+		   subjects fell outside it (founder, 2026-10-06) */
+		max-width: 200svh;
+		/* token-guard: on */
 	}
 	.s-hero__photo {
 		object-position: var(--focus, 62% 50%);
+	}
+	/* where the frame stops short of the band, its sides dissolve into it */
+	@media (min-aspect-ratio: 2/1) {
+		.s-hero__stage {
+			-webkit-mask-image: linear-gradient(90deg, transparent 0%, var(--color-primary) 8%, var(--color-primary) 92%, transparent 100%);
+			mask-image: linear-gradient(90deg, transparent 0%, var(--color-primary) 8%, var(--color-primary) 92%, transparent 100%);
+		}
 	}
 	.s-hero__scrim {
 		background-image: var(--hero-spot), var(--hero-scrim-photo);

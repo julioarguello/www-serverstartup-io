@@ -214,8 +214,8 @@ export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T
 }
 
 /**
- * Each slide's photograph, written at 720, 1320 and 2016 px as `<stem>-720.webp`, `<stem>.webp` and
- * `<stem>-2016.webp`. Four are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
+ * Each slide's photograph, written at 720, 1320, 2016 and 3024 px as `<stem>-720.webp`, `<stem>.webp`,
+ * `<stem>-2016.webp` and `<stem>-3024.webp` (a 1512 px wide laptop at 2x needs the last). Four are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
  * the lighthouse as a whole photograph without its masts or sheds, the bridge WITH its bridge, and the
  * warehouse further away. The tug is the AI page's own photograph: the bridge and the tug are two
  * slides, each its own subject, with the cut between them (founder, 2026-10-06: "abandono la idea de
@@ -238,7 +238,7 @@ export const HOME_PHOTO_SIZES = "100vw";
 /** A home photograph's 1320 px file and its srcset — one spelling for the slide and the head's preload. */
 export function homePhotoSources(photo: HomePhoto): { src: string; srcset: string } {
 	const src = `${photo.stem}.webp`;
-	return { src, srcset: `${photo.stem}-720.webp 720w, ${src} 1320w, ${photo.stem}-2016.webp 2016w` };
+	return { src, srcset: `${photo.stem}-720.webp 720w, ${src} 1320w, ${photo.stem}-2016.webp 2016w, ${photo.stem}-3024.webp 3024w` };
 }
 
 /** The photograph a home slide shows for a service entry, or null for one not on the voyage. */

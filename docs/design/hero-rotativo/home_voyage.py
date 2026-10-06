@@ -21,6 +21,8 @@ The lighthouse is faro.py's.
     python3 docs/design/hero-rotativo/home_voyage.py bridge <seedvr2 output of the whole bridge photo>
     python3 docs/design/hero-rotativo/home_voyage.py warehouse-prepare <original> <donor, left> <out.png>
     python3 docs/design/hero-rotativo/home_voyage.py warehouse <seedvr2 output of out.png>
+    python3 docs/design/hero-rotativo/home_voyage.py large <tug's 2x restoration> <bridge original> \
+        <Guggenheim's 2x restoration> <dir of teide.py> <Teide original> <Teide's 2x restoration>
 """
 import os, sys
 import numpy as np, cv2
@@ -53,12 +55,18 @@ def reletter(rgb, boxes, font_path=FONT):
 
 
 def write(img, stem, widths):
+    """every width under its own name; 1320, the default src, under the plain one"""
     for w in widths:
         h = round(img.height * w / img.width)
-        name = f"{stem}-{w}.webp" if w != widths[1] else f"{stem}.webp"
+        name = f"{stem}.webp" if w == 1320 else f"{stem}-{w}.webp"
         path = os.path.join(OUT, name)
         img.resize((w, h), Image.LANCZOS).save(path, "WEBP", quality=84, method=6)
         print(name, (w, h), os.path.getsize(path) // 1024, "KB")
+
+
+# the home's widths: 3024 for double-density laptops (a 1512 px wide screen at 2x); the slides used to
+# stop at 2016 and showed soft there (founder, 2026-10-06: "no sé si las imágenes tienen calidad")
+WIDTHS = [3024, 2016, 1320, 720]
 
 
 def bridge(restored):
@@ -68,7 +76,7 @@ def bridge(restored):
     kb = W / 2016
     boxes = [tuple(round(v * kb) for v in box) for box in PHOTOS["bridge"]["boxes"]]
     out = Image.fromarray(reletter(np.ascontiguousarray(np.asarray(src)), boxes))
-    write(out, "home-puente-salida", [2016, 1320, 720])
+    write(out, "home-puente-salida", WIDTHS)
 
 
 WAREHOUSE_LEFT = 298  # the photograph's left edge in the 1344 x 720 extension
@@ -132,8 +140,36 @@ def warehouse(restored):
     from photo_restore import neutral_whites
     rgb = np.asarray(Image.open(restored).convert("RGB")).astype(np.float32) / 255
     rgb = neutral_whites(rgb, np.ones(rgb.shape[:2], np.float32))
-    write(Image.fromarray((rgb * 255 + .5).clip(0, 255).astype(np.uint8)), "home-almacen", [2016, 1320, 720])
+    write(Image.fromarray((rgb * 255 + .5).clip(0, 255).astype(np.uint8)), "home-almacen", WIDTHS)
+
+
+def large(tug_restored, bridge_original, gg_restored, teide_dir, teide_original, teide_restored):
+    """the 3024 px cut of the three slides that are the vertical pages' own photographs, from their
+    largest restorations and through their own steps, so the home's sharper cut matches the page's"""
+    from photo_restore import neutral_whites, keep_original, TUG_SOURCE, TUG_CROP, TUG_TEXT
+    # the tug: photo_restore.py's tug step, then stern_label.py's letters at the 3100 px frame's boxes
+    big = np.asarray(Image.open(tug_restored).convert("RGB")).astype(np.float32)
+    orig = np.asarray(Image.open(bridge_original).convert("RGB").crop(TUG_SOURCE).resize(big.shape[1::-1], Image.LANCZOS)).astype(np.float32)
+    l, t, r, b = TUG_CROP
+    big = keep_original(big, orig, TUG_TEXT)[t:b, l:r]
+    rgb = (neutral_whites(big.clip(0, 255) / 255, np.ones(big.shape[:2], np.float32)) * 255 + .5).clip(0, 255).astype(np.uint8)
+    k = rgb.shape[1] / 2016
+    boxes = [tuple(round(v * k) for v in box) for box in PHOTOS["tug"]["boxes"]]
+    tug = Image.fromarray(reletter(np.ascontiguousarray(rgb), boxes))
+    write(tug, "ia-remolcador-aviles", [3024])
+    # the museum: guggenheim.py's whites and its mark painted out
+    from guggenheim import unmark
+    g = cv2.cvtColor(cv2.imread(gg_restored), cv2.COLOR_BGR2RGB).astype(np.float32) / 255
+    g = neutral_whites(g, np.ones(g.shape[:2], np.float32))
+    g = unmark(cv2.cvtColor((g * 255 + .5).clip(0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR))
+    write(Image.fromarray(cv2.cvtColor(g, cv2.COLOR_BGR2RGB)), "gf-guggenheim-restaurado", [3024])
+    # the observatory: teide.py's photo step (#557), at the home's width
+    sys.path.insert(0, teide_dir)
+    import teide
+    teide.SIZES = [(3024, "-3024")]
+    teide.PUB = OUT
+    teide.photo(teide_original, teide_restored)
 
 
 if __name__ == "__main__":
-    {"bridge": bridge, "warehouse-prepare": warehouse_prepare, "warehouse": warehouse}[sys.argv[1]](*sys.argv[2:])
+    {"bridge": bridge, "warehouse-prepare": warehouse_prepare, "warehouse": warehouse, "large": large}[sys.argv[1]](*sys.argv[2:])

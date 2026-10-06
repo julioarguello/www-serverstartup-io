@@ -217,16 +217,16 @@ export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T
 /**
  * Each slide's photograph, written at 720, 1320 and 2016 px as `<stem>-720.webp`, `<stem>.webp` and
  * `<stem>-2016.webp`. Four are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
- * the lighthouse as a whole photograph without its masts or sheds, the bridge and the tug MIRRORED so
- * the tanker sails on, towards the next stop (founder: "el barco tendría que ir en sentido opuesto" —
- * on the home only), and the warehouse further away ("haces demasiado zoom").
+ * the lighthouse as a whole photograph without its masts or sheds, the bridge and the tug with the
+ * SHIPS turned so the tanker sails on, towards the next stop — the ships, not the photograph (founder:
+ * "el giro del barco, no de la imagen"; on the home only) — and the warehouse further away.
  * `focus` is the object-position that keeps the subject right of the copy.
  */
 export type HomePhoto = { stem: string; width: number; height: number; focus: string };
 export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
 	cdn: { stem: "/assets/hero/home-faro-limpio", width: 1320, height: 707, focus: "70% 50%" },
-	int: { stem: "/assets/hero/home-puente", width: 1320, height: 880, focus: "50% 45%" },
-	ia: { stem: "/assets/hero/home-remolcador", width: 1320, height: 710, focus: "70% 50%" },
+	int: { stem: "/assets/hero/home-puente-giro", width: 1320, height: 880, focus: "50% 45%" },
+	ia: { stem: "/assets/hero/home-remolcador-giro", width: 1320, height: 709, focus: "70% 50%" },
 	gf: { stem: "/assets/hero/gf-guggenheim-restaurado", width: 1320, height: 645, focus: "62% 50%" },
 	ec: { stem: "/assets/hero/home-almacen", width: 1320, height: 707, focus: "62% 55%" },
 	bd: { stem: "/assets/hero/bd-observatorio-entero", width: 1320, height: 880, focus: "50% 60%" },

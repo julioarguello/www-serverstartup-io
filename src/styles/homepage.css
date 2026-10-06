@@ -126,12 +126,37 @@
 	inset-inline: 0;
 	top: 0;
 	translate: 0 -100%;
-	padding-inline: inherit;
-	padding-bottom: var(--space-3);
-	/* #304 — one measure. The caption ends where the kicker and the heading
-	   end, not on a second, wider edge of its own. No pane since #560: the
-	   veil carries it, as on the vertical pages. */
+	padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+	background-color: var(--color-hero-card);
+	/* #304 — one measure. The card ends where the kicker and the heading
+	   end, not on a second, wider edge of its own. The pane is back (founder,
+	   2026-10-06: the caption as the original card, over a lighter veil). */
 	max-width: var(--measure-statement);
+}
+
+/* The rule down the card's left edge, in the showing vertical's colour. Six
+   stacked bars and not a `border-left`, because `--cc` arrives per slide from
+   the CMS and a keyframe cannot be handed a value it has never seen. */
+.s-hero__rules {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: var(--block-rule);
+}
+
+.s-hero__rule {
+	position: absolute;
+	inset: 0;
+	background-color: var(--cc, var(--color-primary));
+	opacity: 0;
+	animation: s-hero-item var(--hero-cycle) linear infinite;
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
+}
+
+.s-hero__rule:first-child {
+	opacity: 1;
+	animation-name: s-hero-item-lead;
 }
 
 /* ── the rotating half: index line, name, and the vertical's own words ── */
@@ -172,23 +197,19 @@
 	color: var(--color-hero-ink-soft);
 }
 
-/* inline, not a flex row: as a flex item the arrow wrapped onto a line of
-   its own whenever the name took two */
 .s-hero__link {
-	display: inline;
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 12px;
 	color: var(--color-secondary);
-}
-
-.s-hero__link .s-hero__arrow {
-	margin-left: .3em;
-	white-space: nowrap;
 }
 
 .s-hero__name {
 	font-family: var(--font-family);
-	font-size: 32px;
-	font-weight: 800;
-	line-height: 1.08;
+	font-size: 24px;
+	font-weight: 650;
+	line-height: 30px;
 	text-wrap: balance;
 }
 
@@ -204,34 +225,31 @@
 }
 
 /* ── the copy, in paper ── */
-/* The company's line is a LABEL since #560 (founder, 2026-10-05: "una
-   mezcla entre lo que tenemos y la propuesta de labels"): the fixed half of
-   the band was the heaviest thing on it and the half that changes went
-   unnoticed. It stays the page's <h1> — what SEO and a screen reader read —
-   set small, in the terminal's mono; the vertical's name is the headline. */
 .s-hero h1 {
-	/* paper, not paper at 82 %: at 15 px it is owed 4.5:1, and the
-	   Guggenheim's clouds held the softer ink to 3.9:1 */
 	color: var(--color-secondary);
-	font-family: var(--font-family-mono);
-	font-size: 14px;
-	font-weight: 500;
-	line-height: 1.5;
-	letter-spacing: .02em;
-	text-wrap: balance;
+	/* Smaller than the page's h1 at every width (#420, direction C): the band
+	   now carries a second heading-sized thing — the vertical's name inside
+	   the card — and two 72px objects in one screen is not a hierarchy. */
+	font-size: 40px;
+	line-height: 48px;
+	text-wrap: pretty;
+	text-shadow: var(--hero-halo);
+	/* the box ends where the longest line does, not at the column's edge */
+	width: fit-content;
 }
 
 .s-hero__kicker {
 	margin-top: var(--widget-spacing);
 }
 
-/* …and the kicker under it, a second label: small, in paper at reduced weight */
 .s-hero__kicker p {
-	color: var(--color-hero-ink-soft);
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 1.5;
+	color: var(--color-secondary);
+	font-size: var(--text-sub-size, 26px);
+	font-weight: var(--text-sub-weight, 500);
+	line-height: var(--text-sub-lh, 30px);
 	text-wrap: pretty;
+	text-shadow: var(--hero-halo);
+	width: fit-content;
 }
 
 /* The vertical's own words, under its name and inside the same card. The six
@@ -316,7 +334,10 @@
 	font-size: 11px;
 	font-weight: 500;
 	text-transform: lowercase;
-	color: var(--color-hero-ink-soft);
+	/* paper at rest too: 11 px over the card's pane is owed 4.5:1, and the
+	   82 % ink measured 4.1:1 over the brighter photographs; the showing one
+	   is told by its bar and its weight */
+	color: var(--color-secondary);
 	animation: s-hero-name var(--hero-cycle) steps(1, end) infinite;
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
@@ -330,6 +351,7 @@
    fail CLOSED on an engine that cannot do it: a hero with no picture at all. */
 .s-hero.is-manual .s-hero__seal,
 .s-hero.is-manual .s-hero__photo,
+.s-hero.is-manual .s-hero__rule,
 .s-hero.is-manual .s-hero__item,
 .s-hero.is-manual .s-hero__dot,
 .s-hero.is-manual .s-hero__stop-name {
@@ -338,8 +360,9 @@
 
 .s-hero.is-manual .s-hero__photo { opacity: 0; transform: none; }
 .s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
+.s-hero.is-manual .s-hero__rule { opacity: 0; }
 .s-hero.is-manual .s-hero__dot { background-size: 0% 100%; }
-.s-hero.is-manual .s-hero__stop-name { color: var(--color-hero-ink-soft); }
+.s-hero.is-manual .s-hero__stop-name { font-weight: 500; }
 
 .s-hero.is-manual[data-slide="0"] .s-hero__photo:nth-of-type(1),
 .s-hero.is-manual[data-slide="1"] .s-hero__photo:nth-of-type(2),
@@ -375,7 +398,7 @@
 .s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__stop-name,
 .s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__stop-name,
 .s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__stop-name {
-	color: var(--color-secondary);
+	font-weight: 700;
 }
 
 .s-hero.is-manual[data-slide="0"] .s-hero__seal { color: var(--c1, var(--color-secondary)); }
@@ -385,12 +408,21 @@
 .s-hero.is-manual[data-slide="4"] .s-hero__seal { color: var(--c5, var(--color-secondary)); }
 .s-hero.is-manual[data-slide="5"] .s-hero__seal { color: var(--c6, var(--color-secondary)); }
 
+.s-hero.is-manual[data-slide="0"] .s-hero__rule:nth-child(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__rule:nth-child(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__rule:nth-child(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__rule:nth-child(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__rule:nth-child(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__rule:nth-child(6) {
+	opacity: 1;
+}
+
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
    lands on the vertical's link must not have it slide out from under them.
    Only the link: focus on an arrow froze the whole band, so advancing looked
    like stopping (founder, 2026-10-05). */
-.s-hero:has(.scene__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal),
-.s-hero:has(.s-hero__link:focus-visible) :is(.s-hero__photo, .s-hero__item, .s-hero__dot, .s-hero__stop-name, .s-hero__seal) {
+.s-hero:has(.scene__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__rule, .s-hero__dot, .s-hero__stop-name, .s-hero__seal),
+.s-hero:has(.s-hero__link:focus-visible) :is(.s-hero__photo, .s-hero__item, .s-hero__rule, .s-hero__dot, .s-hero__stop-name, .s-hero__seal) {
 	animation-play-state: paused;
 }
 
@@ -462,8 +494,8 @@
 }
 
 @keyframes s-hero-name {
-	0% { color: var(--color-secondary); }
-	16.6667%, 100% { color: var(--color-hero-ink-soft); }
+	0% { font-weight: 700; }
+	16.6667%, 100% { font-weight: 500; }
 }
 
 /* #315's rule, applied to the loudest motion on the site: someone who asked
@@ -471,6 +503,7 @@
    still, and the other five never appear. */
 @media (prefers-reduced-motion: reduce) {
 	.s-hero__seal,
+	.s-hero__rule,
 	.s-hero__photo,
 	.s-hero__item,
 	.s-hero__dot,
@@ -478,7 +511,7 @@
 		animation: none;
 	}
 	.s-hero__stop:first-child .s-hero__dot { background-size: 100% 100%; }
-	.s-hero__stop:first-child .s-hero__stop-name { color: var(--color-secondary); }
+	.s-hero__stop:first-child .s-hero__stop-name { font-weight: 700; }
 	/* Nothing moves, so the STOP has nothing to stop and goes — but the
 	   arrows are the only way to reach the other five, and the named bars the
 	   only thing saying which one you are on. They stay. */
@@ -490,6 +523,9 @@
 @media (min-width: 768px) {
 	.s-hero__stop-name {
 		display: block;
+	}
+	.s-hero__card {
+		padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
 	}
 	.s-hero__pitch-item {
 		margin-top: 12px;
@@ -503,28 +539,24 @@
 	/* The heading gives back what the card takes. At the page's 64px the
 	   fixed half would still outweigh the moving half by two to one; at 48
 	   against the card's 30 they read as heading and subject. */
-	/* the column is one measure (#304): across it, the kicker reads at the
-	   body's size or it runs past 75 characters a line (layout gate) */
-	.s-hero__kicker p {
-		font-size: var(--text-body);
+	.s-hero h1 {
+		font-size: 48px;
+		line-height: 56px;
 	}
 	.s-hero__name {
-		font-size: 44px;
-	}
-	.s-hero__pitch-item {
-		font-size: 20px;
+		font-size: 30px;
+		line-height: 38px;
 	}
 }
 
 @media (min-width: 1025px) {
 	/* desktops: the whole band is the photograph, the copy on its veil, the
-	   caption back in the copy's flow */
+	   card back in the copy's flow */
 	.s-hero__card {
 		position: relative;
 		inset-inline: auto;
 		translate: none;
-		padding: 0;
-		margin-top: var(--space-6);
+		margin-top: var(--space-5);
 	}
 	.s-hero {
 		padding: calc(var(--header-h) + var(--space-8)) 0 var(--space-8);
@@ -535,7 +567,7 @@
 		height: auto;
 	}
 	.s-hero__scrim {
-		background-image: var(--hero-scrim-photo-foot), var(--hero-scrim-photo);
+		background-image: var(--hero-spot), var(--hero-scrim-photo);
 	}
 	/* desktops: under the copy, leaving by the left margin, as on the vertical pages */
 	.s-hero__seal {
@@ -545,14 +577,12 @@
 		width: 760px;
 	}
 	.s-hero h1 {
-		font-size: 15px;
+		font-size: 56px;
+		line-height: 64px;
 	}
 	.s-hero__name {
-		font-size: clamp(48px, 4.2vw, 64px);
-		line-height: 1.04;
-	}
-	.s-hero__pitch-item {
-		font-size: clamp(20px, 1.6vw, 24px);
+		font-size: 34px;
+		line-height: 42px;
 	}
 	.s-hero__arrow {
 		font-size: 26px;

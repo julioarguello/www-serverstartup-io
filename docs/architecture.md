@@ -549,25 +549,26 @@ rotating edge (Base.astro), so the two cannot drift.
   arrows **seek** the clock — every animation on it, the header's edge included, is set to the
   chosen slide's time — and the rotation goes on (founder: "si le doy a avanzar que no se desactive
   el play"); the courtesy freeze holds only while the vertical's link has keyboard focus.
-- **Type**: the company's line is a label — still the `<h1>`, 15 px mono — and the kicker reads at
-  body size under it; the vertical's name is the headline (64 px on desktops). The fixed half used
-  to be the heaviest thing on the band and the half that changes went unnoticed.
-  Each photograph pushes in 4.5 % while it shows; the bridge's walks into the tug's frame instead
-  of fading, because the tug's photograph was cut from it (`home_voyage.py`, `TUG`).
+- **Type and card**: the heading and the kicker as they were, the vertical's caption in the original
+  card — pane, a rule in the vertical's colour, «01 / 6 especialidad» (founder, 2026-10-06, after
+  trying the company's line as a small label). The veil is lighter (the photographs barely showed);
+  what holds the large type over a bright sky is a halo round its letters, a soft shade behind the
+  copy and a veil that never drops under a third before the copy's box ends (79 % of 1440 px).
 - **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
   deliberately not `areas_claim`, which the rows further down already say). No caption naming the
   place: the founder struck it. The bars under them carry `menu_short` and fill in the vertical's
   colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
   margin — takes the colour of the vertical showing, on the same clock.
-- **The bridge's walk into the tug** ends at 6 s and holds while the tug fades in over it — the
-  same picture, so no two framings ever show at once — and lands exactly on the next slide: the script measures both
-  `object-fit: cover` boxes and hands the end of the walk to the keyframe as `--zx`, `--zy`, `--zs`,
-  from the rectangle `home_voyage.py` cut the tug out of (`src/assets/hero/home-into.json`). A fixed
-  percentage matched one band proportion only, and the tug jumped.
+- **The bridge's walk into the tug** is one movement: the rectangle the tug's photograph was cut
+  from (`src/assets/hero/home-into.json`, written by `home_voyage.py`) must land on that photograph
+  wherever both `object-fit: cover` boxes put them — a zoom by z about one fixed point P. The bridge
+  zooms about P from its first second; while the tug fades in (6 → 7 s) it zooms about the same P at
+  the same pace from the frame the bridge shows, and goes on pushing after. The script writes both
+  keyframes in pixels (no `var()` inside `@keyframes`); the stylesheet's are the no-script fallback.
 - **The home's own photographs**: the lighthouse as a whole photograph (masts and sheds painted
-  out, extended to the left: `faro.py`), the bridge with its bridge, both the bridge and the tug
-  MIRRORED so the tanker sails on (the founder's, home only; the stern relettered after the
-  mirror), and the warehouse further away — the whole photograph extended to the left.
+  out, extended to the left: `faro.py`), the bridge with its bridge, and in it the SHIPS turned — not the
+  photograph — so the tanker sails on (the founder's, home only): FLUX's empty water behind them,
+  the ships cut out by GrabCut, flipped together and relettered, and the warehouse further away — the whole photograph extended to the left.
 - **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
   caption stands on its foot, above the heading — over the whole band the copy hid the picture,
   and under the heading the caption fell below a phone's fold (the layout gate's G18).

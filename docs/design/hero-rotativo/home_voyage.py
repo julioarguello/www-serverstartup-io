@@ -5,14 +5,16 @@ are not the verticals' files:
 
 * the bridge, WITH its bridge: the integration page takes the bridge out and draws it back in; the
   home shows it whole, restored like the others (SeedVR2 3B on the Commons original, 2304 px wide);
-* on the home only, the tanker and the tug sail the other way — inland, towards the next stop — so
-  the bridge is MIRRORED (founder: "el barco tendría que ir en sentido opuesto"), and the stern is
-  relettered after the mirror, so SERVER STARTUP reads the right way round. The letters are
-  stern_label.py's, at the mirrored boxes;
-* the AI slide is cut from that same mirrored photograph, not from the AI page's file: mirrored, the
-  AI page's crop puts the tug on the left, under the home's title, and a crop of the same frame is
-  also what makes the step from the bridge to the tug a real zoom (TUG, in the original's pixels).
-
+* on the home only, the tanker and the tug sail the other way — inland, towards the next stop
+  (founder: "el barco tendría que ir en sentido opuesto… el giro del barco, no de la imagen"). The
+  photograph is NOT mirrored: the ships are. A FLUX.2 [dev] edit of the photograph without them
+  (1344 x 896, seed 7), aligned to it by an affine fit, is the water they leave behind. The ships are
+  cut out by GrabCut inside their two boxes (TANKER, TUG), seeded by that difference — where the
+  photograph and the empty water agree it is background, where they differ most it is a ship — then
+  flipped together about their middle and laid back on the water, and the stern is relettered after
+  the flip (stern_label.py's letters, at the flipped boxes), so SERVER STARTUP reads the right way;
+* the AI slide is cut from that same photograph, the ships in its right 60 % (TUG), which is also
+  what makes the step from the bridge to the tug a real zoom (home-into.json carries the rectangle);
 * the warehouse, further away (founder, 2026-10-05: "haces demasiado zoom, aléjalo un poco"): the
   e-commerce page's file crops the ceiling and the home's band crops its sides again. The home takes
   the WHOLE photograph, ceiling included, its operator's marks painted out as ocado.py does, and
@@ -22,7 +24,7 @@ are not the verticals' files:
 
 The lighthouse is faro.py's.
 
-    python3 docs/design/hero-rotativo/home_voyage.py bridge <seedvr2 output of the whole bridge photo>
+    python3 docs/design/hero-rotativo/home_voyage.py bridge <seedvr2 output of the whole bridge photo> <donor, no ships>
     python3 docs/design/hero-rotativo/home_voyage.py warehouse-prepare <original> <donor, left> <out.png>
     python3 docs/design/hero-rotativo/home_voyage.py warehouse <seedvr2 output of out.png>
 """
@@ -37,13 +39,16 @@ from stern_label import OUT, LINES, ORIGINAL, letters, light, render, PHOTOS  # 
 FONT = "/System/Library/Fonts/Helvetica.ttc"
 INTO_JSON = os.path.normpath(os.path.join(HERE, "..", "..", "..", "src", "assets", "hero", "home-into.json"))
 ORIGINAL_W = 5333  # the Commons original's width (Ebaki, 5333 x 3555)
-# the AI slide in the MIRRORED original's pixels: the tanker and the tug in its right 60 %, at the band's 16 : 8.6
-TUG = (787, 1665, 3717, 3240)
-
-
-def mirrored(boxes, width, k=1.0):
-    """a line's box after scaling by k and mirroring left to right"""
-    return [(round(width - r * k), round(t * k), round(width - l * k), round(b * k)) for l, t, r, b in boxes]
+# in the original's pixels: each ship's box (they are flipped together, about the middle of both); and
+# the AI slide, the ships in its right 60 %, at the band's 16 : 8.6
+TANKER = (2032, 1956, 2842, 2588)
+TUG_BOAT = (2838, 2315, 3305, 2711)
+# below the quays' water line, the water is the flipped photograph's own — real ripples, and the wake
+# that follows the ships — instead of FLUX's, which is flatter and lighter. Its top keeps clear of the
+# quays on BOTH sides of the flip (the far quay's edge lands on the near side, mirrored); a polygon in
+# the original's pixels, its foot kept above the near promenade on both sides of the flip
+BAND = [(1875, 2511), (2395, 2419), (2669, 2425), (2940, 2419), (3460, 2511), (3460, 2990), (1875, 2990)]
+TUG = (719, 1686, 3650, 3261)
 
 
 def reletter(rgb, boxes, font_path=FONT):
@@ -74,17 +79,75 @@ def write(img, stem, widths):
         print(name, (w, h), os.path.getsize(path) // 1024, "KB")
 
 
-def bridge(restored):
+def bridge(restored, donor_path):
     src = Image.open(restored).convert("RGB")
-    # the stern's boxes were measured on the 2016 px restoration of the whole original (BRIDGE_CROP starts at 0, 0)
-    k = src.width / 2016
-    rgb = np.ascontiguousarray(np.asarray(src)[:, ::-1])
-    out = Image.fromarray(reletter(rgb, mirrored(PHOTOS["bridge"]["boxes"], src.width, k)))
-    write(out, "home-puente", [2016, 1320, 720])
-    s = src.width / ORIGINAL_W
-    write(out.crop(tuple(round(v * s) for v in TUG)), "home-remolcador", [2016, 1320, 720])
+    rgb = np.asarray(src).astype(np.float32)
+    H, W = rgb.shape[:2]
+    s = W / ORIGINAL_W
+    # the water behind the ships: the donor, aligned to the photograph (FLUX moves what it keeps a little)
+    donor = cv2.cvtColor(cv2.imread(donor_path), cv2.COLOR_BGR2RGB)
+    small = cv2.resize(rgb.astype(np.uint8), donor.shape[1::-1], interpolation=cv2.INTER_AREA)
+    M = np.eye(2, 3, dtype=np.float32)
+    _, M = cv2.findTransformECC(cv2.cvtColor(small, cv2.COLOR_RGB2GRAY).astype(np.float32),
+                                cv2.cvtColor(donor, cv2.COLOR_RGB2GRAY).astype(np.float32),
+                                M, cv2.MOTION_AFFINE, (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6), None, 5)
+    k = W / donor.shape[1]
+    A = M.astype(np.float64).copy()
+    A[:, 2] *= k
+    big = cv2.resize(donor, (W, H), interpolation=cv2.INTER_CUBIC)
+    water = cv2.warpAffine(big, A, (W, H), flags=cv2.INTER_CUBIC | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REFLECT).astype(np.float32)
+    boxes_px = [[round(v * s) for v in box] for box in (TANKER, TUG_BOAT)]
+    X0, Y0 = min(b[0] for b in boxes_px) - 60, min(b[1] for b in boxes_px) - 60
+    X1, Y1 = max(b[2] for b in boxes_px) + 60, max(b[3] for b in boxes_px) + 60
+    sub = np.ascontiguousarray(rgb[Y0:Y1, X0:X1].astype(np.uint8)[..., ::-1])
+    diff = np.abs(cv2.GaussianBlur(rgb[Y0:Y1, X0:X1], (0, 0), 2) - cv2.GaussianBlur(water[Y0:Y1, X0:X1], (0, 0), 2)).max(2)
+    cut = np.zeros(sub.shape[:2], np.uint8)
+    for x0, y0, x1, y1 in boxes_px:
+        g = np.full(sub.shape[:2], cv2.GC_BGD, np.uint8)
+        r = g[y0 - Y0:y1 - Y0, x0 - X0:x1 - X0]
+        d = diff[y0 - Y0:y1 - Y0, x0 - X0:x1 - X0]
+        r[:] = cv2.GC_PR_BGD
+        r[d > 22] = cv2.GC_PR_FGD
+        r[d > 60] = cv2.GC_FGD
+        r[d < 7] = cv2.GC_BGD
+        cv2.grabCut(sub, g, None, np.zeros((1, 65)), np.zeros((1, 65)), 6, cv2.GC_INIT_WITH_MASK)
+        cut |= np.where((g == 1) | (g == 3), 1, 0).astype(np.uint8)
+    # water the cut swept in: where photograph and empty water agree, it is not a ship
+    cut &= cv2.dilate((diff > 10).astype(np.uint8), np.ones((5, 5), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(cut)
+    cut = np.isin(lab, [i for i in range(1, n) if st[i, 4] > 4000]).astype(np.uint8)
+    cut = cv2.morphologyEx(cut, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
+    m = np.zeros((H, W), np.float32)
+    m[Y0:Y1, X0:X1] = cut
+    soft = cv2.GaussianBlur(cv2.dilate(m, np.ones((7, 7), np.uint8)), (0, 0), 2.5)[..., None]
+    # the water toned to the photograph's own, locally: the slow part of their difference, read where
+    # there is no ship (normalised convolution), so the fill takes the light of the water around it
+    keep = (cv2.dilate(m, np.ones((31, 31), np.uint8)) == 0).astype(np.float32)
+    region = np.zeros((H, W), np.float32)
+    region[max(0, Y0 - 400):Y1 + 400, max(0, X0 - 400):X1 + 400] = 1
+    keep *= region
+    num = cv2.GaussianBlur((rgb - water) * keep[..., None], (0, 0), 50)
+    den = cv2.GaussianBlur(keep, (0, 0), 50)[..., None]
+    water += num / np.maximum(den, 1e-3)
+    out = rgb * (1 - soft) + water * soft
+    # the ships, flipped together about the middle of both, laid back on the water
+    cx = (min(b[0] for b in boxes_px) + max(b[2] for b in boxes_px)) / 2
+    F = np.float32([[-1, 0, 2 * cx], [0, 1, 0]])
+    ships = cv2.warpAffine(rgb, F, (W, H), flags=cv2.INTER_LINEAR)
+    fm = cv2.warpAffine(cv2.GaussianBlur(m, (0, 0), 1.2), F, (W, H), flags=cv2.INTER_LINEAR)[..., None]
+    band = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(band, [np.int32([[x * s, y * s] for x, y in BAND])], 1)
+    bm = cv2.GaussianBlur(band.astype(np.float32), (0, 0), 25)[..., None]
+    out = out * (1 - bm) + ships * bm
+    out = out * (1 - fm) + ships * fm
+    # the stern, relettered at the flipped boxes (measured on the 2016 px restoration of the whole original)
+    kb = W / 2016
+    boxes = [(round(2 * cx - r * kb), round(t * kb), round(2 * cx - l * kb), round(b * kb)) for l, t, r, b in PHOTOS["bridge"]["boxes"]]
+    out = Image.fromarray(reletter(np.clip(out + .5, 0, 255).astype(np.uint8), boxes))
+    write(out, "home-puente-giro", [2016, 1320, 720])
+    write(out.crop(tuple(round(v * s) for v in TUG)), "home-remolcador-giro", [2016, 1320, 720])
     # where the tug's photograph lies inside the bridge's, as fractions: the home's zoom reads it
-    oh = src.height / s
+    oh = H / s
     into = [round(TUG[0] / ORIGINAL_W, 5), round(TUG[1] / oh, 5), round(TUG[2] / ORIGINAL_W, 5), round(TUG[3] / oh, 5)]
     with open(INTO_JSON, "w") as f:
         json.dump({"into": into}, f)

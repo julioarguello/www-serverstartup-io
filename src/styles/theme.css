@@ -232,34 +232,49 @@
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
 	--color-machine-red: #E0141E;
 	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */     /* the Terminator's eye, where the AI scene's violet ends (#537) */
-	/* The home's veil since its slides became photographs (#560): brighter
-	   than the drawn plates, so the plateau runs further right — the caption
-	   and the heading end at the column's measure, about 72 % of a 1440 px
-	   band, and stand on it whole. Since the heading became a 15 px label on
-	   one line (owed 4.5:1, not the 3:1 of large type) it runs to 58 %, and
-	   the plateau with it. The pane the plates' caption needed went
-	   with them; this carries the copy instead. */
+	/* The card the rotating half of the band lives in (founder's direction C,
+	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
+	   the panel reads as a pane laid on the picture rather than a box that
+	   punched a hole in it.
+
+	   BLACK, where the founder's sketch drew white at 7%. A white pane LIFTS
+	   the ground under the copy, and §5 of the a11y gate measures the pitch —
+	   20px at weight 300, the combination AA owes 4.5:1 — straight through it:
+	   white at 7% put the greenfield plate at exactly 4.5:1, the threshold
+	   itself and so no margin at all, and even at 5% it only reached 4.6:1.
+	   Black at 22% is indistinguishable from it on the plate (both sit over a
+	   scrim that is already 0.9 opaque on the card's left half, where only the
+	   coloured rule draws the edge) and it measures 7:1 instead. The pane the
+	   founder asked for, paid for out of the picture rather than the copy. */
+	--color-hero-card: rgba(0, 0, 0, 0.22);
+	/* The home's veil since its slides became photographs (#560). Lighter
+	   than the plates' (founder, 2026-10-06: "el velo es demasiado oscuro,
+	   las imágenes casi no se distinguen"): the heading and the kicker are
+	   large type, owed 3:1, and the card carries its own pane. Measured: a
+	   bright sky (#c8d4e0) under 30 % ink is the most large type can stand
+	   on, and the copy's box runs to 79 % of a 1440 px band — so the veil
+	   never drops under a third before 80 %, and is lighter than that
+	   everywhere it can be. */
 	--hero-scrim-photo: linear-gradient(
 		101deg,
-		rgba(30, 30, 30, 0.94) 0%,
-		rgba(30, 30, 30, 0.9) 58%,
-		rgba(30, 30, 30, 0.62) 72%,
-		rgba(30, 30, 30, 0) 92%
+		rgba(30, 30, 30, 0.82) 0%,
+		rgba(30, 30, 30, 0.66) 40%,
+		rgba(30, 30, 30, 0.46) 66%,
+		rgba(30, 30, 30, 0.34) 80%,
+		rgba(30, 30, 30, 0) 96%
 	);
-	/* …and its foot, where the caption and the named bars stand on whatever
-	   the photograph has there — the warehouse's white robots measured the
-	   caption at 3.8:1 without it (#560) */
+	/* …and a soft shade behind the copy alone: the heading and the kicker run
+	   over the sky at their right end, where the lighter veil left them at
+	   2.1:1. The picture keeps its light everywhere else. */
+	--hero-spot: radial-gradient(ellipse 46% 58% at 34% 46%, rgba(30, 30, 30, 0.62) 0%, rgba(30, 30, 30, 0.5) 45%, rgba(30, 30, 30, 0) 100%);
+	/* …and a halo round the heading's and the kicker's letters, which is what
+	   holds them where they cross a bright sky (2.3:1 without it) */
+	--hero-halo: 0 0 2px rgba(30, 30, 30, 0.55), 0 0 14px rgba(30, 30, 30, 0.7), 0 0 32px rgba(30, 30, 30, 0.55);
 	/* phones and tablets: the photograph is a strip under the header; the
-	   caption stands on its foot, which runs into the band's ink */
+	   card stands on its foot, which runs into the band's ink */
 	--hero-scrim-strip:
-		linear-gradient(0deg, rgba(30, 30, 30, 1) 0%, rgba(30, 30, 30, 0.84) 38%, rgba(30, 30, 30, 0) 66%),
-		linear-gradient(180deg, rgba(30, 30, 30, 0.6) 0%, rgba(30, 30, 30, 0) 30%);
-	--hero-scrim-photo-foot: linear-gradient(
-		0deg,
-		rgba(30, 30, 30, 0.9) 0%,
-		rgba(30, 30, 30, 0.7) 26%,
-		rgba(30, 30, 30, 0) 58%
-	);
+		linear-gradient(0deg, rgba(30, 30, 30, 1) 0%, rgba(30, 30, 30, 0.9) 36%, rgba(30, 30, 30, 0) 62%),
+		linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(30, 30, 30, 0) 26%);
 	/* Six slides, six seconds each. Named here because the header's edge
 	   rotates on the same clock as the images and the two must not drift. */
 	--hero-cycle: 36s;

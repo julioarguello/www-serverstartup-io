@@ -1,10 +1,13 @@
 /**
  * The dusk a photograph opening paints over its photograph (#556, #567).
  *
- * Night falls as a front moving left to right across the frame, with a wide soft edge so the dusk is seen to
- * fall rather than wiped in; what keeps or gains its light (the Teide's domes, the Cabo Peñas lantern) is cut
- * out of it. The night is a canvas under the veil, the size of the photograph; each scene places the frame,
- * sets the front's knots and paints on its own clock. Big Data opened with it; the lighthouse shares it.
+ * Two ways night falls, on one canvas under the veil the size of the photograph, with what keeps or gains its
+ * light (the Teide's domes, the Cabo Peñas lantern) cut out of it:
+ * - a FRONT moving left to right with a wide soft edge (Big Data: each telescope's layer is born as it reaches
+ *   its dome), `paintNight`;
+ * - EVENLY over the whole frame at once, slow at first like real twilight (the lighthouse: the founder saw no
+ *   sense in a direction there, 2026-10-06), `duskLevel` + `paintNightEven` — and the level is what the scene
+ *   lights its own lights by.
  */
 
 /** A front: where its leading edge is at each time (ms → stage px, piecewise linear), and its soft edge (px). */
@@ -62,6 +65,30 @@ export function paintNight(ctx: CanvasRenderingContext2D, f: DuskFront, n: Night
 	g.addColorStop(1, "rgba(0, 0, 0, 0)");
 	ctx.fillStyle = g;
 	ctx.fillRect(0, 0, Math.max(0, fx), n.height);
+	cutOut(ctx, n);
+}
+
+/** How far the even dusk has fallen at `ms`, 0 to 1: nothing before `from`, complete at `to`, slow at first. */
+export function duskLevel(ms: number, from: number, to: number): number {
+	const x = clamp((ms - from) / (to - from));
+	return x * x * (3 - 2 * x) * (0.4 + 0.6 * x);
+}
+
+/** Paint the even dusk at `level` (0 to 1) on the frame's canvas, every cut-out left in its own light. */
+export function paintNightEven(ctx: CanvasRenderingContext2D, n: NightFrame, level: number): void {
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+	if (level <= 0) return;
+	ctx.setTransform(n.dpr, 0, 0, n.dpr, 0, 0);
+	ctx.globalAlpha = level;
+	ctx.fillStyle = n.color;
+	ctx.fillRect(0, 0, n.width, n.height);
+	ctx.globalAlpha = 1;
+	cutOut(ctx, n);
+}
+
+/** What keeps its light: erased from the night, softly. */
+function cutOut(ctx: CanvasRenderingContext2D, n: NightFrame): void {
 	ctx.globalCompositeOperation = "destination-out";
 	ctx.filter = "blur(3px)";
 	ctx.fillStyle = "#000";

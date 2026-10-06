@@ -205,10 +205,11 @@ All routes exist in both ES and EN:
 
 The CDN page opens on the Cabo Peñas lighthouse, the whole photograph the home shows (§4.11,
 `home-faro-limpio`: masts and sheds painted out, the frame extended to the left, `faro.py`). On the
-openings' one clock: the photograph alone until `--beat-draw` (2 s); then dusk falls over it, left to
-right, the lighthouse's orange profile — #529's line drawing — draws itself over the darkening building
-(complete by 4 s, half a second before the beam, so it reads on its own) and the lantern lights up as the
-dusk reaches it, by `--beat-drawn` (4.5 s); then the lantern's beam is a radar's sweep — range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
+openings' one clock: the photograph alone until `--beat-draw` (2 s); then dusk falls evenly over the
+whole photograph, slow at first like real twilight, complete at 5 s; the lighthouse's orange profile —
+#529's line drawing — draws itself over the darkening building (complete by 4 s, half a second before the
+beam, so it reads on its own), and the darker the screen, the brighter the lantern and the more the
+profile's lines glow; then the lantern's beam is a radar's sweep — range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
 ZERO TRUST), a stream of edge events and the visitor as one echo, all over the darkened sky — until
 7.4 s; at rest by 8 s (`SCENE_BEATS.end`). The lighthouse stands at the edge and lights what
 approaches; it is the counter-image of the castle-and-moat perimeter, which is why the epigraph under
@@ -238,14 +239,17 @@ Decisions that are not obvious from the code, and the measurement behind each:
   outline (GrabCut, seeded by a rough polygon off a 20 px grid; the outline is GrabCut's), the
   lantern's glass and its centre (922.3, 214.6 of 1320 × 707), the tower's and the house's boxes, and
   the last row of sky (446.5, the headland's line left of the house).
-- **The dusk is the Big Data opening's** (§4.10), now shared: `src/utils/scene-dusk.ts` paints a
-  front with a soft edge a third of the frame wide on a canvas under the veil, with what keeps its
-  light cut out — here the lantern's glass. The front crosses the part hidden under the copy's veil in
-  300 ms and the visible photograph at an even pace, complete at 5 s (the Teide's lesson: never a
-  front crossing hidden ground and then rushing). The lantern's light (`--color-lantern`, a warm
-  white, never the section's orange) rises over 800 ms from the moment the dusk's middle reaches it.
-  Extracting the shared piece was proved inert: the Big Data opening at 9 s is pixel-identical before
-  and after.
+- **The dusk is even, and the lighthouse takes its light from it** (founder, 2026-10-06: Big Data's
+  left-to-right front makes sense for its layers, «en el caso del faro no le veo ningún sentido… que
+  oscureciera de forma natural por toda la pantalla, y… cuanto más oscura se vuelve la pantalla, más
+  luminosidad tenga el faro y las líneas del mismo»). `src/utils/scene-dusk.ts` holds both ways night
+  falls on the same canvas under the veil, with what keeps its light cut out (here the lantern's glass):
+  Big Data's front (`paintNight`) and the even dusk (`duskLevel`, `paintNightEven`), whose level, 0 to 1,
+  from 2 to 5 s with a slow start, is the one value the lighthouse is lit by — never a second timer: the
+  lantern's light (`--color-lantern`, a warm white, never the section's orange) at that opacity, and the
+  profile's `--glow`, which brightens its lines (up to 1.35×) and gives them a halo of the section's
+  orange warmed by the lantern. Under reduced motion, and frozen from outside, all three are at full.
+  Big Data's opening is pixel-identical at 9 s before and after each change to the shared module.
 - **The frame is every photograph opening's** (`.scene__frame`, 86 % of the band, on its floor), placed
   by the copy's measured lines: the tower 48 px clear of the longest line, the house's right wall
   24 px clear of the band's edge, the lantern halfway between where both fit. Where the band is too
@@ -613,7 +617,7 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   frame shrinks before the dome goes under it, and on phones it is no wider than keeps the dome in.
 - **The dusk is shared** since #567 (`src/utils/scene-dusk.ts`: the front's knots, when it reaches a
   column, the night painted with its cut-outs; `.scene__frame` for the frame's place and fades;
-  `--color-scene-night`): the lighthouse falls into the same night (§4.4).
+  `--color-scene-night`): the lighthouse falls into the same night, evenly rather than as a front (§4.4).
 - **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end, the
   finished network drawn once more as it rests; pause holds it (SceneClock for the timer). The colours are tokens (`--color-sky-line`, the section's navy lightened
   to read at night; `--color-sky-bronze`, `-silver`, `-gold`), read by the canvas through hidden inks.

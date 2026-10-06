@@ -103,7 +103,7 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 <script>
 	import { SCENE_ROW, SCENE_BEATS, RADAR_RINGS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
-	import { reached, paintNight, type DuskFront } from "../utils/scene-dusk";
+	import { duskLevel, paintNightEven } from "../utils/scene-dusk";
 	import faro from "../assets/hero/cdn-faro.json";
 	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
 	if (hero) {
@@ -132,7 +132,6 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 		const GAP = 48;                          /* px between the copy's longest line and the tower */
 		const MARGIN = 24;                       /* px between the house's right wall and the band's edge */
 		const NIGHT_AT = SCENE_BEATS.draw, NIGHT_END = SCENE_BEATS.drawn + 500, END = SCENE_BEATS.end;
-		const LAMP_MS = 800;                     /* the lantern lights up as the dusk's middle reaches it */
 
 		type Geo = { L: number; T: number; W: number; H: number };
 		type Rect = { left: number; top: number; right: number; bottom: number };
@@ -140,8 +139,6 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 		let narrow = matchMedia(SCENE_ROW).matches;
 		let dpr = 1;
 		let NIGHT = "";
-		const front: DuskFront = { knots: [], soft: 160 };
-		let lampAt = NIGHT_END;
 		let photoFrom = 0;                       /* stage px where the photograph shows whole, past its left fade */
 
 		/* the copy's lines, as the browser laid them out: the longest one's right end, on the stage */
@@ -173,12 +170,6 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 			hero!.style.setProperty("--sfade-l", `${Math.round(0.14 * W)}px`);
 			photoFrom = Math.max(from, L) + Math.round(0.14 * W);
 			hero!.style.setProperty("--sfade-b", "0px");
-			/* the front walks across what shows: past the veil it keeps an even pace (the Teide's lesson: never a
-			   front crossing hidden ground and then rushing) */
-			const col = copy.getBoundingClientRect().right - s.left;
-			const start = Math.max(from, L + 0.05 * W), seen = Math.max(start, col - 40);
-			front.soft = Math.max(160, 0.33 * W);
-			front.knots = [[NIGHT_AT, start], [NIGHT_AT + 300, seen], [NIGHT_END, Math.min(s.width, L + W) + front.soft]];
 			return { L, T: s.height - H, W, H };
 		}
 		/* phones and tablets: the scene is its own row under the copy, the frame as tall as the row, the lantern
@@ -190,8 +181,6 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 			hero!.style.setProperty("--sfade-l", "0px");
 			photoFrom = 0;
 			hero!.style.setProperty("--sfade-b", `${Math.round(0.12 * H)}px`);
-			front.soft = Math.max(120, 0.33 * s.width);
-			front.knots = [[NIGHT_AT, 0], [NIGHT_END, s.width + front.soft]];
 			return { L, T: 0, W, H };
 		}
 
@@ -404,24 +393,28 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 			night.width = Math.round(geo.W * dpr);
 			night.height = Math.round(geo.H * dpr);
 			NIGHT = getComputedStyle(hero!.querySelector<HTMLElement>(".radar__ink")!).color;
-			lampAt = reached(front, geo.L + (CX / FW) * geo.W);
 			hero!.classList.add("is-placed");
 			paint(t);
 			placeLabels();
 		}
 
-		/* the dusk and the lantern, on the scene's clock */
-		const ease = (x: number) => x * x * (3 - 2 * x);
+		/* the dusk falls evenly over the whole photograph, and the lighthouse takes its light from it: the darker
+		   the screen, the brighter the lantern and the more the profile's lines glow (founder, 2026-10-06: «cuanto
+		   más oscura se vuelve la pantalla, más luminosidad tenga el faro y las líneas del mismo») — one value, never
+		   a second timer */
+		const plan = hero.querySelector<HTMLElement>(".radar__plan")!;
 		function paint(ms: number) {
-			paintNight(nctx, front, { left: geo.L, width: geo.W, height: geo.H, dpr, color: NIGHT, scale: geo.W / FW, cutouts: [faro.lantern.p] }, ms, NIGHT_AT, END);
-			lamp.style.opacity = String(ease(Math.min(1, Math.max(0, (ms - lampAt) / LAMP_MS))));
+			const level = duskLevel(ms, NIGHT_AT, NIGHT_END);
+			paintNightEven(nctx, { left: geo.L, width: geo.W, height: geo.H, dpr, color: NIGHT, scale: geo.W / FW, cutouts: [faro.lantern.p] }, level);
+			lamp.style.opacity = String(level);
+			plan.style.setProperty("--glow", String(level));
 		}
 		let t = 0, raf = 0, last = 0;
 		function tick(now: number) {
 			t += now - last;
 			last = now;
 			paint(t);
-			raf = t < Math.max(NIGHT_END, lampAt + LAMP_MS) ? requestAnimationFrame(tick) : 0;
+			raf = t < NIGHT_END ? requestAnimationFrame(tick) : 0;
 		}
 		function run() {
 			if (raf) return;

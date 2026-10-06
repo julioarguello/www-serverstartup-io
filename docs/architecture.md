@@ -251,11 +251,24 @@ Decisions that are not obvious from the code, and the measurement behind each:
   orange warmed by the lantern. Under reduced motion, and frozen from outside, all three are at full.
   Big Data's opening is pixel-identical at 9 s before and after each change to the shared module.
 - **The frame is every photograph opening's** (`.scene__frame`, 86 % of the band, on its floor), placed
-  by the copy's measured lines: the tower 48 px clear of the longest line, the house's right wall
-  24 px clear of the band's edge, the lantern halfway between where both fit. Where the band is too
-  narrow for both (seen at 1101 and 1180 px) the frame shrinks to 85 % and then lets the house's right
-  wing run off the edge — the copy always wins.
-  On phones and tablets the frame is as tall as the scene's row, the lantern at 72 % of its width.
+  by the copy's column: the tower 48 px clear of it, the house's right wall 24 px clear of the band's
+  edge, the lantern halfway between where both fit. Where the band is too narrow for both (seen at 1101
+  and 1180 px) the frame shrinks to 85 % and then lets the house's right wing run off the edge — the
+  copy always wins. On phones and tablets the frame is as tall as the scene's row, the lantern at 72 %
+  of its width.
+- **The photograph paints at first render** (#568). Both photograph openings hid their frame until
+  their module script had placed it; the sheets now place it with the script's own arithmetic, from
+  the stage's size (a size container: `cqw`/`cqh`), the measured fractions set on the element (`--tl`,
+  `--hr`, `--lc` here; `--dome-l` for Big Data) and the seal's place declared once (`--seal-left`,
+  `--seal-w`). That is why the lighthouse is placed by the column, which CSS knows, and not by the
+  lines' measured ends, which it does not (8 px of difference at 1778). The script only refines the
+  frame, as a transform (`alignFrame`), never a layout shift; measured at 1101–2560 and 360–768 on
+  both pages, CSS already matches and no transform is applied, CLS 0. Only the radar's own layers wait
+  for the script. Lighthouse 12.8.2 mobile with applied (devtools) throttling, 3 runs each, before →
+  after: Big Data LCP render delay 1121–1145 → 15–59 ms, LCP 3.24–3.26 → 2.15–2.20 s, score 0.90 →
+  0.95–0.96; CDN 1201–1355 → 15–25 ms, LCP 3.25–3.40 → 2.07–2.08 s, 0.88–0.89 → 0.94–0.95. The default
+  simulated run does not move (render delay ~1.2–1.4 s both ways): on the local stack the scripts run
+  before the first paint anyway, and the simulation charges the module chain to the LCP.
 - **The rings and the sweep are the sky's**: centred on the lantern (one every 80 frame units, the
   dashed one at the light's nominal range, 35 nautical miles — 10 nm a ring; `RADAR_RINGS`), and
   clipped by one SVG path to what lies above the horizon with the building cut out, so they pass

@@ -581,8 +581,9 @@ rotating edge (Base.astro), so the two cannot drift.
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
   grounds). On phones the first photograph is the LCP (its strip is the largest element), so Base
   preloads it in the `<head>` (`homePhotoSources`, the same srcset the slide uses).
-- **Width and sharpness**: on a very wide screen the frame stops at twice the band's height, its sides
-  dissolving into the band (cropped to a strip, the subjects fell outside it); every photograph is
+- **Width and sharpness**: on a very wide screen the frame stops at twice the band's height, anchored
+  to the band's right edge where the subjects stand, its left side dissolving under the veil (cropped
+  to a strip, the subjects fell outside it; centred, it left a dark strip on the right); every photograph is
   also cut at 3024 px, which a 1512 px laptop at 2x needs — 2016 was stretched 1.5× there.
 
 ## 5. SEO

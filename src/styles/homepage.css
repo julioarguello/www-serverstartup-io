@@ -535,25 +535,39 @@
 		top: auto;
 		left: auto;
 		right: max(20px, calc((100% - var(--container-max)) / 2 + 20px));
-		bottom: var(--space-7);
+		bottom: var(--space-5);
 		translate: none;
 		width: 34rem;
 	}
-	/* the bars stop short of the column's edge: their 11 px names must stand on
-	   the veil, and past 60 % of the band it gives way to the photograph */
+	/* the bars as wide as their names, so no name is cut and the row stops short
+	   of where the veil gives way to the photograph (60 % of the band) */
 	.s-hero__ticker {
-		margin-top: var(--space-6);
-		width: 30rem;
+		margin-top: var(--space-5);
+		width: fit-content;
+	}
+	.s-hero__dots {
+		flex: none;
+	}
+	.s-hero__stop {
+		flex: none;
+	}
+	.s-hero__stop-name {
+		overflow: visible;
+		text-overflow: clip;
 	}
 	.s-hero {
 		/* the foot is the card's: the copy centres in what is left above it */
-		padding: calc(var(--header-h) + var(--space-6)) 0 calc(var(--space-8) + 13rem);
+		padding: calc(var(--header-h) + var(--space-5)) 0 calc(var(--space-5) + 13.5rem);
 		justify-content: center;
 	}
 	.s-hero__stage {
 		inset: 0;
 		height: auto;
-		margin-inline: auto;
+		/* anchored to the band's right edge, where every subject stands: centred, the frame left a dark
+		   strip on the right that nothing covered (founder, 2026-10-06), while its left edge falls
+		   under the veil anyway */
+		margin-left: auto;
+		margin-right: 0;
 		/* token-guard: off — the photograph's frame, not a measure of text: on a very wide screen it
 		   stops at twice the band's height, or the photographs were cropped to a strip and their
 		   subjects fell outside it (founder, 2026-10-06) */
@@ -563,11 +577,11 @@
 	.s-hero__photo {
 		object-position: var(--focus, 62% 50%);
 	}
-	/* where the frame stops short of the band, its sides dissolve into it */
+	/* where the frame stops short of the band, its left side dissolves into it */
 	@media (min-aspect-ratio: 2/1) {
 		.s-hero__stage {
-			-webkit-mask-image: linear-gradient(90deg, transparent 0%, var(--color-primary) 8%, var(--color-primary) 92%, transparent 100%);
-			mask-image: linear-gradient(90deg, transparent 0%, var(--color-primary) 8%, var(--color-primary) 92%, transparent 100%);
+			-webkit-mask-image: linear-gradient(90deg, transparent 0%, var(--color-primary) 14%);
+			mask-image: linear-gradient(90deg, transparent 0%, var(--color-primary) 14%);
 		}
 	}
 	.s-hero__scrim {

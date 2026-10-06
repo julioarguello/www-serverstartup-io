@@ -137,11 +137,14 @@ fi
 # through caches.default (the adapter's own endpoint does it, #323).
 # `[^"]+` would swallow a whole srcset attribute — commas, spaces and all — so
 # cut at the first of either: one URL, not the list it may sit in.
-IMG=$(curl -s "$BASE/" | grep -oE '/_image\?[^"]+' | head -1 | sed -e 's/[ ,].*//' -e 's/&amp;/\&/g')
+# Read on Quiénes somos: the home's last /_image were the team photographs, and
+# the team left the home in #565 — this check went blind there, as it should.
+IMG_PAGE="/quienes-somos"
+IMG=$(curl -s "$BASE$IMG_PAGE" | grep -oE '/_image\?[^"]+' | head -1 | sed -e 's/[ ,].*//' -e 's/&amp;/\&/g')
 if [ -z "$IMG" ]; then
-	# Not a pass. Either the homepage stopped routing images through /_image —
-	# in which case this check needs rewriting, not skipping — or / is broken.
-	echo "  FAIL no /_image URL found on / — this check cannot run, and a check that cannot run is not a green one" >&2
+	# Not a pass. Either the page stopped routing images through /_image — in
+	# which case this check needs rewriting, not skipping — or the page is broken.
+	echo "  FAIL no /_image URL found on $IMG_PAGE — this check cannot run, and a check that cannot run is not a green one" >&2
 	FAIL=1
 else
 	HDR_FILE=$(mktemp)

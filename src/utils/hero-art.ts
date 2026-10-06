@@ -198,6 +198,55 @@ export const HERO_STORE = {
 /** The same frame rules as the elevation's: 1.85 × 86 % of the band on desktops, up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. Here the photograph IS the first paint. */
 export const HERO_STORE_SIZES = HERO_ELEVATION_SIZES;
 
+/**
+ * The home's voyage (#560, founder 2026-10-05: "From the coast to the stars"). The home stopped
+ * showing the drawn plates: it shows the six verticals' PHOTOGRAPHS, never their animations (those
+ * belong to each page), in an order that tells one story — the coast, the bridge over the ría,
+ * the tug under that same bridge, up the river to the museum, the warehouse, night over the Teide.
+ * It is deliberately not FACE_ORDER: the menu, the footer and the area rows keep theirs.
+ */
+export const HOME_VOYAGE: FaceKey[] = ["cdn", "int", "ia", "gf", "ec", "bd"];
+
+/** The voyage's order for any list keyed by slug; unmapped entries drop out. */
+export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T[]): T[] {
+	const rank = (e: T) => HOME_VOYAGE.indexOf(FACE_BY_SLUG[e.slug ?? e.id]);
+	return entries.filter((e) => rank(e) !== -1).sort((a, b) => rank(a) - rank(b));
+}
+
+/**
+ * Each slide's photograph, written at 720, 1320, 2016 and 3024 px as `<stem>-720.webp`, `<stem>.webp`,
+ * `<stem>-2016.webp` and `<stem>-3024.webp` (a 1512 px wide laptop at 2x needs the last). Four are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
+ * the lighthouse as a whole photograph without its masts or sheds, the bridge WITH its bridge, and the
+ * warehouse further away. The tug is the AI page's own photograph: the bridge and the tug are two
+ * slides, each its own subject, with the cut between them (founder, 2026-10-06: "abandono la idea de
+ * que integración e IA vayan anidadas… que se note el salto"). `focus` is the object-position that keeps the subject right of the copy on desktops;
+ * `focusNarrow`, where given, the one for the photograph's strip on phones and tablets.
+ */
+export type HomePhoto = { stem: string; width: number; height: number; focus: string; focusNarrow?: string };
+export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
+	// desktops: the lighthouse a little further right of the copy (founder, 2026-10-06); phones and
+	// tablets show a narrow slice of the frame, which has to be the one with the lighthouse in it
+	cdn: { stem: "/assets/hero/home-faro-limpio", width: 1320, height: 707, focus: "20% 50%", focusNarrow: "70% 50%" },
+	int: { stem: "/assets/hero/home-puente-salida", width: 1320, height: 880, focus: "50% 45%" },
+	ia: { stem: "/assets/hero/ia-remolcador-aviles", width: 1320, height: 852, focus: "70% 50%" },
+	gf: { stem: "/assets/hero/gf-guggenheim-restaurado", width: 1320, height: 645, focus: "62% 50%" },
+	ec: { stem: "/assets/hero/home-almacen", width: 1320, height: 707, focus: "62% 55%" },
+	bd: { stem: "/assets/hero/bd-observatorio-entero", width: 1320, height: 880, focus: "50% 60%" },
+};
+export const HOME_PHOTO_SIZES = "100vw";
+
+/** A home photograph's 1320 px file and its srcset — one spelling for the slide and the head's preload. */
+export function homePhotoSources(photo: HomePhoto): { src: string; srcset: string } {
+	const src = `${photo.stem}.webp`;
+	return { src, srcset: `${photo.stem}-720.webp 720w, ${src} 1320w, ${photo.stem}-2016.webp 2016w, ${photo.stem}-3024.webp 3024w` };
+}
+
+/** The photograph a home slide shows for a service entry, or null for one not on the voyage. */
+export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | null {
+	const face = FACE_BY_SLUG[entry.slug ?? entry.id];
+	return face ? HOME_PHOTO[face] : null;
+}
+
 export const HERO_SKY = {
 	/** three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon (Mike Peel, CC BY-SA 4.0), whole, restored, the operator's logo painted out of the doors: WebP, 1320×880 */
 	photo: "/assets/hero/bd-observatorio-entero.webp",

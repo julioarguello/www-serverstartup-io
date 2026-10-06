@@ -1,13 +1,17 @@
 Saltar al contenido
 ~Server Startup
 EN
-Ingeniería de software: arquitectura, integración y operación
-Más de veinte años de oficio en comercio electrónico, integración de sistemas y el dato. Partners oficiales de Cloudflare desde 2019.
-01 / 6
-especialidad
-Comercio electrónico
-→
-Más de veinte años dentro de SAP Commerce Cloud. Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del core, ajustada al estándar, para que sobreviva versión tras versión, es lo que casi nadie hace. Y el rendimiento, nuestra especialidad.
+Ingeniería de software, de la arquitectura a producción
+Más de veinte años en comercio electrónico, integración de sistemas y datos.
+Partners oficiales de Cloudflare desde 2019.
+CDN, WAF y seguridad edge→
+Lo primero que ve quien llega: el borde, defendido.
+cdn y waf
+integración
+ia
+greenfield
+comercio
+big data
 Cloudflare Partner oficial
 Aceleramos y protegemos tu infraestructura con las soluciones más avanzadas de Cloudflare
 CDN global

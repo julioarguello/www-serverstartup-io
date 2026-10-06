@@ -606,6 +606,62 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **No service page opens with a plate any more**: the layout gate's plate example (Big Data since #551) is
   gone; its photographic routes are the two homes.
 
+### 4.11 The home's voyage (#560)
+
+The home's band rotates through the six verticals' **photographs**, never their openings: the
+animations belong to each vertical's page and would spoil it (founder, 2026-10-05). The order
+tells one story, *from the coast to the stars* — the Cabo Peñas lighthouse, the Vizcaya Bridge,
+the tug under it, up the river to the Guggenheim, the warehouse, night over the
+Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the menu, the footer
+and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
+rotating edge (Base.astro), so the two cannot drift.
+
+- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only. Each photograph holds still and the next dissolves in over 1.5 s on top of it; the
+  caption leaves before the next arrives, one text at a time (the push and the quick fades read as
+  "PowerPoint trasnochado", founder 2026-10-06). The pause
+  is the verticals' own control (`scene-ctl.css`, shared since #560), in the band's corner. The
+  arrows **seek** the clock — every animation on it, the header's edge included, is set to the
+  chosen slide's time — and the rotation goes on (founder: "si le doy a avanzar que no se desactive
+  el play"); the courtesy freeze holds only while the vertical's link has keyboard focus.
+- **Type and card**: the heading and the kicker as they were; the vertical's caption in the original
+  card (pane and a rule in the vertical's colour), set on desktops in the band's lower right corner,
+  apart from the heading, standing on the **chapter rail** (founder's choice C, 2026-10-06, after
+  calling the old bars "enanas, feas, fuera de sitio"): six equal tracks as wide as the column,
+  names at 16 px under them, arrows closing the rail at the right; on phones and tablets the rail
+  sits right under the card, in the first screen. The title wraps to two lines at its register; the
+  kicker is two sentences, one line each from 768 px. The veil is lighter (the photographs barely
+  showed): a soft shade behind the copy (`--hero-spot`, widened when the kicker became two unbroken
+  lines — 3.7:1 at 1280 x 720 before, 6.0 after; the a11y gate's hero pass measures 1280 x 720 since)
+  and a shade under the rail alone (`--hero-foot`) hold the type at AA on all six photographs.
+- **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
+  deliberately not `areas_claim`, which the rows further down already say). No caption naming the
+  place: the founder struck it. The rail's tracks carry `menu_short` and fill in the vertical's
+  colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
+  margin, smaller since 2026-10-06 on every page (760 → 460 px) — in the colour of the vertical
+  showing: six seals, one per colour, dissolving on the photographs' clock. One seal recoloured by its
+  keyframes stayed one colour (its keyframes had been lost in an edit, and `var()` inside `@keyframes`
+  is not honoured everywhere anyway).
+- **The bridge and the tug are two slides**, each its own subject, with the cut between them: the
+  bridge with its bridge, then the AI page's own photograph of the tug. A zoom from one into the
+  other (the tug cut from the bridge's frame) was built and dropped by the founder ("abandono la idea
+  de que integración e IA vayan anidadas… que se note el salto").
+- **The home's own photographs**: the lighthouse as a whole photograph (masts and sheds painted
+  out, extended to the left: `faro.py`), the bridge with its bridge, its ships as photographed (turning
+  them was tried: flipped, they sailed into the quay, and a tanker coming IN needs a bow the
+  photograph does not have), and the warehouse further away — the whole photograph extended to the left.
+- **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
+  caption stands on its foot, above the heading — over the whole band the copy hid the picture,
+  and under the heading the caption fell below a phone's fold (the layout gate's G18).
+- **Weight**: only the first photograph loads with the page; the other five carry their sources
+  as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
+  slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
+  grounds). On phones the first photograph is the LCP (its strip is the largest element), so Base
+  preloads it in the `<head>` (`homePhotoSources`, the same srcset the slide uses).
+- **Width and sharpness**: on a very wide screen the frame stops at twice the band's height, anchored
+  to the band's right edge where the subjects stand, its left side dissolving under the veil (cropped
+  to a strip, the subjects fell outside it; centred, it left a dark strip on the right); every photograph is
+  also cut at 3024 px, which a 1512 px laptop at 2x needs — 2016 was stretched 1.5× there.
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

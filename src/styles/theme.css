@@ -251,6 +251,37 @@
 	   coloured rule draws the edge) and it measures 7:1 instead. The pane the
 	   founder asked for, paid for out of the picture rather than the copy. */
 	--color-hero-card: rgba(0, 0, 0, 0.22);
+	/* The home's veil since its slides became photographs (#560). Lighter
+	   than the plates' (founder, 2026-10-06: "el velo es demasiado oscuro,
+	   las imágenes casi no se distinguen"): the heading and the kicker are
+	   large type, owed 3:1, and the card carries its own pane. Measured: a
+	   bright sky (#c8d4e0) under 30 % ink is the most large type can stand
+	   on, and the copy's box runs to 79 % of a 1440 px band — so the veil
+	   never drops under a third before 80 %, and is lighter than that
+	   everywhere it can be. */
+	--hero-scrim-photo: linear-gradient(
+		101deg,
+		rgba(30, 30, 30, 0.82) 0%,
+		rgba(30, 30, 30, 0.66) 40%,
+		rgba(30, 30, 30, 0.46) 66%,
+		rgba(30, 30, 30, 0.34) 80%,
+		rgba(30, 30, 30, 0) 96%
+	);
+	/* …and a soft shade behind the copy alone: the heading and the kicker run
+	   over the sky at their right end, where the lighter veil left them at
+	   2.1:1. The picture keeps its light everywhere else. Widened when the
+	   kicker became two unbroken lines (2026-10-06): their right end ran past
+	   the old ellipse onto the bright cliff, 3.7:1 at 1280 x 720; now 6.0. */
+	--hero-spot: radial-gradient(ellipse 62% 58% at 40% 44%, rgba(30, 30, 30, 0.62) 0%, rgba(30, 30, 30, 0.5) 50%, rgba(30, 30, 30, 0) 100%);
+	/* the chapter rail stands on the photograph's foot: a shade under it alone,
+	   from the veil's weight at the band's edge to nothing at the rail's top —
+	   without it the 16 px names measured 3.7–4.3:1 over the brighter photos */
+	--hero-foot: linear-gradient(0deg, rgba(30, 30, 30, 0.72) 0, rgba(30, 30, 30, 0) var(--space-9));
+	/* phones and tablets: the photograph is a strip under the header; the
+	   card stands on its foot, which runs into the band's ink */
+	--hero-scrim-strip:
+		linear-gradient(0deg, rgba(30, 30, 30, 1) 0%, rgba(30, 30, 30, 0.9) 36%, rgba(30, 30, 30, 0) 62%),
+		linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(30, 30, 30, 0) 26%);
 	/* Six slides, six seconds each. Named here because the header's edge
 	   rotates on the same clock as the images and the two must not drift. */
 	--hero-cycle: 36s;

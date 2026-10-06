@@ -1,0 +1,40 @@
+/* ═══ The band's controls — every vertical's opening and the home (#560) ═══
+   One pause (and, where an opening can be replayed, a replay) in the band's
+   lower right corner. The home's carousel took the verticals' own controls
+   (founder, 2026-10-05: "el botón de pause y seguir hazlo como en el resto de
+   verticales"), so they live here rather than in the scene's sheet. */
+/* WCAG 2.2.2: pause stops all motion, replay restarts it */
+.scene__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
+.scene__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.scene__pause-btn,
+.scene__replay {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--color-secondary);
+	color: var(--color-secondary);
+	background: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
+	cursor: pointer;
+	font: inherit;
+	font-size: 14px;
+}
+.scene__replay { font-size: 20px; line-height: 1; }
+.scene__replay::before { content: "↻"; }
+.scene__pause-btn::before { content: "❚❚"; }
+.scene__pause:checked + .scene__pause-btn::before { content: "▶"; }
+.scene__pause:focus-visible + .scene__pause-btn,
+.scene__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
+/* on hover devices the controls wait at 35 % until hovered or focused */
+@media (hover: hover) {
+	.scene__ctl { opacity: .35; transition: opacity .25s ease; }
+	.s-hero:hover .scene__ctl,
+	.scene__ctl:focus-within { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	/* nothing to replay when nothing moves */
+	.scene__replay { display: none; }
+}

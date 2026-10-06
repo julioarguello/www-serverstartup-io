@@ -942,7 +942,7 @@ console.log("── the hero band: ink over the plates");
 
 	const TEXT_SELECTOR = [
 		"h1", ".s-hero__kicker p", ".s-hero__pitch-item",
-		".s-hero__name", ".s-hero__n", ".s-hero__tag", ".s-hero__body",
+		".s-hero__name", ".s-hero__n", ".s-hero__tag", ".s-hero__body", ".s-hero__stop-name",
 	].map((c) => `.s-hero ${c}`).join(", ");
 
 	// Freeze the band on plate `k`. Returns how many plates the band has, so
@@ -961,7 +961,9 @@ console.log("── the hero band: ink over the plates");
 			hero.classList.add("is-done");
 			return 1;
 		}
-		const plates = hero.querySelectorAll(".s-hero__plate").length;
+		// the home's slides are photographs since #560 (`.s-hero__photo`); a vertical page without a
+		// scene still holds one drawn plate
+		const plates = hero.querySelectorAll(".s-hero__photo, .s-hero__plate").length;
 		if (plates > 1) {
 			hero.classList.add("is-manual");
 			hero.dataset.slide = String(k);
@@ -1012,8 +1014,11 @@ console.log("── the hero band: ink over the plates");
 	}
 
 	// 1440 is where the scrim runs sideways and 390 is where it runs down the
-	// picture — two different gradients, so two different verdicts.
-	const SIZES = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
+	// picture — two different gradients, so two different verdicts. 1280 x 720
+	// is the common laptop where the home's kicker, held to one line per
+	// sentence, runs furthest into the photograph: 3.7:1 there while 1440 read
+	// exactly 4.5 (2026-10-06), so 1440 alone could not see it.
+	const SIZES = [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 390, height: 844 }];
 	const perRoute = await inParallel(heroRoutes, async (route, lane, report) => {
 		let measured = 0, frames = 0, tightest = { ratio: Infinity };
 		let worstHere = { ratio: Infinity };
@@ -1059,7 +1064,7 @@ console.log("── the hero band: ink over the plates");
 			}
 			await page.close();
 		}
-		report.ok(`${route} — hero measured at 1440 and 390; tightest ${worstHere.ratio}:1 ` +
+		report.ok(`${route} — hero measured at 1440, 1280 and 390; tightest ${worstHere.ratio}:1 ` +
 			`(.${worstHere.name}, plate ${worstHere.plate} @${worstHere.vp})`);
 		return { measured, frames, tightest };
 	});
@@ -1073,9 +1078,13 @@ console.log("── the hero band: ink over the plates");
 
 	// A band that rendered nothing measures nothing and reports green. The
 	// home carries six plates and every vertical one, in both locales.
-	if (frames < 28 || measured < frames * 2) {
+	// 24 frames per size: the six slides on each home and one on each of the
+	// twelve vertical pages (48 at two sizes, measured 2026-10-06; the floor was
+	// a loose 28 until the third size made it worth stating).
+	const FRAMES = 24 * SIZES.length;
+	if (frames < FRAMES || measured < frames * 2) {
 		console.error(`✗ THIS GATE IS BLIND — ${frames} hero frame(s) photographed and ${measured} ` +
-			"text box(es) measured, below the 28 frames and 2 boxes each this site has.");
+			`text box(es) measured, below the ${FRAMES} frames and 2 boxes each this site has.`);
 		process.exit(3);
 	}
 	ok(`${measured} text boxes over ${frames} plate frames; tightest was .${tightest.name} at ` +
@@ -1134,6 +1143,45 @@ console.log("── the opening h1: one line at 768, 1024 and 1440 (#529)");
 		process.exit(3);
 	}
 	ok(`${OPENINGS.length} openings read at three widths — every h1 one line, none overflowing`);
+}
+
+// ── 5c. The home's two kicker lines: one line each on any desktop ──────────
+// The years and what they cover, then the partnership (founder, 2026-10-06:
+// "que nada salte de línea"). homepage.css sizes both by the longer one; a
+// longer line overflows its column here, by locale and by text.
+console.log("── the home's kicker: two lines, one line each, at 768, 1024 and 1440");
+{
+	let read = 0;
+	for (const home of ["/", "/en"]) {
+		for (const width of [768, 1024, 1440]) {
+			const page = await browser.newPage();
+			await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
+			await page.goto(BASE + home, { waitUntil: "networkidle2", timeout: 60000 });
+			const lines = await page.evaluate(() =>
+				[...document.querySelectorAll(".s-hero--home .s-hero__kicker p")].map((p) => ({
+					text: p.textContent.trim(),
+					rows: Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)),
+					over: p.scrollWidth > p.clientWidth + 1,
+				})),
+			);
+			await page.close();
+			if (lines.length !== 2) {
+				fail(home, `${lines.length} kicker line(s) @${width}, not 2 — the selector or the CMS blocks are stale`);
+				continue;
+			}
+			for (const l of lines) {
+				read += 1;
+				if (l.rows > 1 || l.over) {
+					fail(home, `the kicker line "${l.text}" ${l.over ? "overflows its column" : `wraps to ${l.rows} lines`} @${width}; its constant in homepage.css is below this line's width`);
+				}
+			}
+		}
+	}
+	if (read < 12) {
+		console.error(`✗ THIS GATE IS BLIND — ${read} kicker line(s) read, below the 12 the two homes have at three widths.`);
+		process.exit(3);
+	}
+	ok(`${read} kicker lines read on both homes — every one on one line, none overflowing`);
 }
 
 console.log("── 2.1.4 character key shortcut");

@@ -2,13 +2,17 @@ Skip to content
 ~Server Startup
 /en
 ES
-Software engineering: architecture, integration and operations
-Over twenty years of craft in e-commerce, systems integration and data. Official Cloudflare partners since 2019.
-01 / 6
-specialty
-E-commerce
-→
-Over twenty years inside SAP Commerce Cloud. Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.
+Software engineering, from architecture to production
+Over twenty years in e-commerce, systems integration and data.
+Official Cloudflare partners since 2019.
+CDN, WAF & Edge Security→
+The first thing anyone arriving sees: the edge, defended.
+cdn & waf
+integration
+ai
+greenfield
+e-commerce
+big data
 Official Cloudflare partner
 We speed up and protect your infrastructure with the most advanced services Cloudflare has to offer.
 Global CDN

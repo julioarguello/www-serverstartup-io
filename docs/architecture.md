@@ -552,8 +552,9 @@ rotating edge (Base.astro), so the two cannot drift.
 - **Type and card**: the heading and the kicker as they were, the vertical's caption in the original
   card — pane, a rule in the vertical's colour, «01 / 6 especialidad» (founder, 2026-10-06, after
   trying the company's line as a small label). The veil is lighter (the photographs barely showed);
-  what holds the large type over a bright sky is a halo round its letters, a soft shade behind the
-  copy and a veil that never drops under a third before the copy's box ends (79 % of 1440 px).
+  what holds the large type over a bright sky is a soft shade behind the copy and a veil that never
+  drops under a third before the copy's box ends (79 % of 1440 px). A halo round the letters was
+  tried and dropped: it left dark smudges that read as ghost letters.
 - **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
   deliberately not `areas_claim`, which the rows further down already say). No caption naming the
   place: the founder struck it. The bars under them carry `menu_short` and fill in the vertical's

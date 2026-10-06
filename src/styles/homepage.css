@@ -233,9 +233,6 @@
 	font-size: 40px;
 	line-height: 48px;
 	text-wrap: pretty;
-	text-shadow: var(--hero-halo);
-	/* the box ends where the longest line does, not at the column's edge */
-	width: fit-content;
 }
 
 .s-hero__kicker {
@@ -248,8 +245,6 @@
 	font-weight: var(--text-sub-weight, 500);
 	line-height: var(--text-sub-lh, 30px);
 	text-wrap: pretty;
-	text-shadow: var(--hero-halo);
-	width: fit-content;
 }
 
 /* The vertical's own words, under its name and inside the same card. The six

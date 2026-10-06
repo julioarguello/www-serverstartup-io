@@ -230,8 +230,12 @@
 	--color-ground-dark: #232724;
 	--color-ground-haze: #A1ABAA;
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
-	--color-machine-red: #E0141E;
-	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */     /* the Terminator's eye, where the AI scene's violet ends (#537) */
+	--color-machine-red: #E0141E;     /* the Terminator's eye, where the AI scene's violet ends (#537) */
+	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */
+	--color-sky-line: #8DB3E2;        /* the Big Data sky's stars and links: the section's navy, lightened to read at night (#556) */
+	--color-sky-bronze: #C0875A;      /* the medallion's layers, one per telescope (#556): bronze, */
+	--color-sky-silver: #C9D4DF;      /* silver, */
+	--color-sky-gold: #F2C14E;        /* and gold */
 	/* The card the rotating half of the band lives in (founder's direction C,
 	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
 	   the panel reads as a pane laid on the picture rather than a box that
@@ -344,6 +348,10 @@
 	   page, which is exactly what reads as "no criterion" (founder, #304).
 	   The column is therefore sized by the TEXT, not by the screen. */
 	--measure-statement: var(--container-max);
+	/* The one exception, and only for fine print: an opening's epigraph stops well short of the column
+	   (founder, 2026-10-05, #558: "que la quote … vaya tan a la derecha no lo veo") — at the column's width
+	   it ran under the art, into the lighthouse's labels. About 55 characters a line at its 15 px. */
+	--measure-epigraph: min(var(--container-max), 620px);
 
 	--radius-pill: 99px;              /* pills and toggles only */
 	--focus-ring: 0 0 0 3px rgba(30, 30, 30, 0.2);

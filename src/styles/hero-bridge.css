@@ -134,6 +134,8 @@
 	from { clip-path: polygon(50% 50%, 100% 20%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 80%); }
 	to { clip-path: polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 50%); }
 }
+/* still at rest and under reduced motion: its mouth half open (#558: nothing loops past the end) */
+.s-hero--bridge.is-done .bridge__pac > b { animation: none; clip-path: polygon(50% 50%, 100% 25%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 75%); }
 @media (prefers-reduced-motion: reduce) { .bridge__pac > b { animation: none; clip-path: polygon(50% 50%, 100% 25%, 100% 0, 0 0, 0 100%, 100% 100%, 100% 75%); } }
 
 /* on the openings' clock (#553): the banks alone until --beat-draw, the bridge whole by --beat-drawn (opacity),
@@ -148,7 +150,12 @@
 }
 @keyframes bridge-lay { from { opacity: 0; } to { opacity: 1; } }
 
-/* phones: names a size smaller */
+/* phones and tablets: names a size smaller on phones; and below the girder they stand on the photograph itself,
+   not on the band, so they carry the band's own dark as a halo to read over the buildings (#558: "SAP Commerce"
+   was lost against the town) */
 @media (max-width: 767px) {
 	.bridge__plug > span { font-size: 11px; }
+}
+@media (max-width: 1100px) {
+	.bridge__plug--down > span { color: var(--color-secondary); text-shadow: 0 0 3px var(--color-ground-dark), 0 0 6px var(--color-ground-dark); }
 }

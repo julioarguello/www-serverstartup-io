@@ -322,13 +322,28 @@ museum and the warehouse, its connectors still keep off the text (they are place
 measured lines), and the Pac-Man and the reduced-motion ghosts run between the outer connectors rather
 than tower to tower, since the girder's left end now passes under the copy. The lighthouse is the one
 cut-out: its radar's rings and plan are what fill its band.
-**One clock for every opening** (#553): the photograph alone until `--beat-draw` (2 s), the drawing or
-the machine's layer complete by `--beat-drawn` (4.5 s), the payoff after it, everything at rest by 8 s —
-declared once in `hero-scene.css` and mirrored by `SCENE_BEATS` in `hero-art.ts` for the scripts. The
-lighthouse keeps them as fractions of its `--radar-t` (24 %, 64 %); the machine's eye keeps its own three
-beats (photograph to 3.8 s, the reading at 5.2 s), approved as they are. The bridge used to wait to 3.2 s
-and take 3.2 s more ("tarda mucho"): it is now whole by 4.5 s, its connectors come at 5 s and the messages
-at 6 s. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
+**One clock and one grammar for every opening** (#553, #558): 0–2 s the photograph alone (`--beat-draw`);
+2–4.5 s the transformation (the drawing, the machine's view, the night), complete by `--beat-drawn`; 4.5–7 s
+the payoff (the radar and its events, the connectors and their messages, the reading, the order's cube);
+**at rest by 8 s — nothing loops past the end** (founder, 2026-10-05: "que se paren todas"); replay is the
+way to see it again. Declared once in `hero-scene.css` and mirrored by `SCENE_BEATS` in `hero-art.ts`. Until
+#558 three openings never stopped — the lighthouse's sweep turned forever and its events began only after
+the end, the bridge's messages and Pac-Man ran forever, the machine's listing walked and MATCH blinked
+forever — and two kept beats of their own (the eye at 3.8 s and 5.2 s, the cube at 4.2 s). Now: the
+lighthouse crosses to the drawing by 4.5 s (25 %/56 % of `--radar-t`), the radar is in by 5.3 s, its sweep
+turns once to 300° and its events run from 5.3 s to 7.4 s, then one still event per zone holds (the reduced-
+motion picture); the bridge's connectors come at 4.6 s, its messages and Pac-Man at 5 s, no new message
+after 7 s, and at 8 s three ghosts stand on the girder with the Pac-Man still; the eye builds at 2 s, the
+reading types at 4.5 s, the listing walks to 7.4 s and MATCH blinks three times; the cube rises at 4.5 s and
+lands on the seal at 7 s. The epigraph stops short of the column (`--measure-epigraph`, 620 px): at the
+column's width it ran under the art, into the lighthouse's labels. **On phones and tablets nothing written spills off the
+photograph or under the controls** (#558, founder: "parte de las letras salen fuera de la imagen"), measured
+on all six at 360, 390, 430 and 768 px with device emulation: the machine's readout and listing sit inside its
+photograph (the frame is 120 % of the row, the ship's bow cropped, as the other scenes crop — at 98 % the sky
+over the tug was 67 px for an 84 px readout); the lighthouse withholds a ring label the stage's edge would cut
+(only where the stage clips: on desktops it does not); the bridge's names keep off the controls on phones too
+("Cloud Storage" stood behind the replay button), and those under the girder, which stand on the photograph,
+carry the band's dark as a halo. The AI frame does the same from 2560 up (`BLEED`, 2 %), and its left edge, which then lies under
 the copy, fades over 14 % of the frame instead of 60 px. A vertical brings its art through two slots (`under` the veil, `over`
 it), its own script, and an entry in `HERO_SCENE` (`src/utils/hero-art.ts`). The radar (§4.4) was moved onto this base. The veil is a
 per-scene token (`--scene-veil`, 78 % by default). **On phones and tablets (≤ 1100 px) the first screen is the screen** (#543): one `100svh` box — title,
@@ -533,6 +548,63 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 - **The pause control's label is no longer `aria-hidden`** (all four scenes): W3C Nu rejects `aria-hidden`
   on a label bound to a control, and it only came to light here because `/en/e-commerce` is one of the two
   pages the a11y gate sends to Nu. The input's `aria-label` names the control.
+
+### 4.10 Night over the Teide Observatory, the Big Data vertical (#556)
+
+- **Dusk falls, and the medallion is born in the sky** (founder, 2026-10-05, sixth round): three
+  robotic-telescope domes at Izaña, the sea and an island on the horizon ("Teide Observatory 2018 077.jpg",
+  Mike Peel, CC BY-SA 4.0). On the openings' one clock: the photograph alone until `--beat-draw`; then dusk,
+  from left to right at an even pace, a front whose soft edge is a third of the photograph wide (so the dusk
+  is seen to fall, not wiped in), complete just past `--beat-drawn`; the domes keep their light (the night is a
+  canvas under the veil with their silhouettes cut out); as the dusk reaches each dome a layer of stars is born
+  in the sky over it — bronze, silver, gold, one after the other, each dome sending a soft beam up to its own;
+  then the payoff, thick dots running along the links; at rest by 8 s, the finished sky staying. Each layer is
+  named (`sky_bronze`, `sky_silver`, `sky_gold` in `panel_labels`).
+- **Joe Reis's epigraph** (founder's choice, 2026-10-05): «Data models tend to evolve more slowly than code,
+  and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take
+  the time to do things right. Move slowly to move faster and safer over the long haul.» — *Practical Data
+  Modeling*, May 2025, verified against the post; the ES is a translation. Chosen over his own line on AI
+  generating "a working pipeline" over garbage semantics, which on its own says how it goes wrong and never
+  how to do it right ("nosotros lo hacemos bien").
+- **Consolidation, not a neural network** (the founder asked whether the comparison held; it does not: a
+  network mixes everything and learns weights — that is the AI vertical — while the medallion refines): ten
+  raw stars, bronze; four clean ones, silver, each gathering its own group of bronze; two that matter, gold,
+  each gathering its own group of silver. Every star reads from its own group (each star feeds its nearest in
+  the next layer), never all to all. The stars are round, with a soft halo. All of them are in the photograph's
+  sky, never on the copy; where the copy covers all of a band's sky (a lower frame, as at 1440 × 900), that
+  layer climbs into the night above the photograph, under the header. Frozen from outside (the a11y gate sets
+  `is-done`), the scene jumps to its end state (the excerpt then measures 8.9:1).
+- **Six rounds**, each rejected for its execution, never for the message: a graticule with thousands of
+  detections and a test sweep; regular columns over the domes, all three layers in 2.5 s ("va mega rápido…
+  una horizontal muy estrecha… la perfección no existe"); scattered stars above the title and down the right of
+  the copy, partly off the photograph and read top-down; the three layers in the band under the copy, over the
+  ground; a network born behind a narrow front, with the domes drawn as elevations and a failing red star
+  ("se quedan un rato enorme esperando y luego va a toda hostia"; the profiles dropped; "la estrella roja, no sé
+  qué coño es"; "¿estrellas cuadradas?").
+- **Rejected for Big Data**: El Molinón with match statistics (data laid on the photo is a TV graphic, not a
+  drawing of the place, and a derby), the El Musel bulk terminal, El Molinón's stand as a table. No free
+  photograph shows the observatory, the Teide and the sea together (about 170 checked on Commons and
+  Openverse; the IAC's gallery is non-commercial only).
+- **Measured on the photograph** (`docs/design/hero-rotativo/teide.py`): the domes' silhouettes — GrabCut cut at
+  the plinth, the walkway's rail removed, the shaded shell filled by its hull, smoothed — which keep their light
+  in the dusk and set each layer's band. The stars go through the camera fitted to the photograph: the focal length, 8,795 px, from the EXIF's 39 mm over
+  the file's focal-plane resolution; no roll (the doors' edges are vertical); the pitch, 5.3° down, from the
+  sea horizon at row 1130, 1.43° under the true horizon from 2,390 m.
+- **The band is the sky at night**: the night is a layer under the veil the script moves (`--night-x`,
+  `--night-a`); the drawing is one canvas over the veil, the whole stage, with a hole for every line of the
+  copy, the CTA and the controls, measured on the page and erased whole after drawing — nothing behind a
+  letter, not even dimmed (erased, not clipped: the padded lines overlap, and an even-odd clip paints the
+  overlaps back) — and a fade in past the seal.
+- **The whole photograph** (1.5 wide) is shown, so the left dome clears the seal; where the band is narrow the
+  frame shrinks before the dome goes under it, and on phones it is no wider than keeps the dome in.
+- **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end, the
+  finished network drawn once more as it rests; pause holds it (SceneClock for the timer). The colours are tokens (`--color-sky-line`, the section's navy lightened
+  to read at night; `--color-sky-bronze`, `-silver`, `-gold`), read by the canvas through hidden inks.
+- **The photograph is restored** like the others (§4.6): SeedVR2 3B at 2× on the photograph scaled to 2304 px;
+  the whites measured on the domes only — the haze over the sea passed for white and taking it out (b −10.6)
+  greyed the sky; on the domes it is a +0.9, b +3.4. The operator's logo is painted out of two doors.
+- **No service page opens with a plate any more**: the layout gate's plate example (Big Data since #551) is
+  gone; its photographic routes are the two homes.
 
 ### 4.11 The home's voyage (#560)
 

@@ -2153,6 +2153,61 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "sky_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pausar la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Repetir la animación"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_bronze",
+							"children": [
+								{
+									"_type": "span",
+									"text": "bronze"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_silver",
+							"children": [
+								{
+									"_type": "span",
+									"text": "silver"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_gold",
+							"children": [
+								{
+									"_type": "span",
+									"text": "gold"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -4849,6 +4904,61 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"_key": "sky_pause",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Pause the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_replay",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Replay the animation"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_bronze",
+							"children": [
+								{
+									"_type": "span",
+									"text": "bronze"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_silver",
+							"children": [
+								{
+									"_type": "span",
+									"text": "silver"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sky_gold",
+							"children": [
+								{
+									"_type": "span",
+									"text": "gold"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
 							"_key": "pr_merge",
 							"children": [
 								{
@@ -7293,6 +7403,34 @@
 					"excerpt": "Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema, picos de campaña y fuentes de datos variables es otra historia. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture) y tests que se cuentan por miles.",
 					"cta_label": "Hablemos de tus datos",
 					"content": [
+						{
+							"_type": "block",
+							"_key": "bq0",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "bql0",
+									"_type": "link",
+									"href": "https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "bqa0",
+									"text": "«Los modelos de datos evolucionan más despacio que el código, y el daño de un mal modelo es sigiloso. No sabrás que estás en peligro hasta que sea demasiado tarde. Así que tómate el tiempo de hacer las cosas bien. Ve despacio para ir más rápido y más seguro a largo plazo.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "bqb0",
+									"text": "Joe Reis",
+									"marks": [
+										"bql0"
+									]
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "k1",
@@ -10901,6 +11039,34 @@
 					"excerpt": "A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources is another story. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, and tests that number in the thousands.",
 					"cta_label": "Let's talk data",
 					"content": [
+						{
+							"_type": "block",
+							"_key": "bq0",
+							"style": "blockquote",
+							"markDefs": [
+								{
+									"_key": "bql0",
+									"_type": "link",
+									"href": "https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "bqa0",
+									"text": "«Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.» ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "bqb0",
+									"text": "Joe Reis",
+									"marks": [
+										"bql0"
+									]
+								}
+							]
+						},
 						{
 							"_type": "block",
 							"_key": "k1",

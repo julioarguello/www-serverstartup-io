@@ -117,8 +117,8 @@ export const SCENE_ROW = "(max-width: 1100px)";
  *  payoff after it, everything at rest by `end`. */
 export const SCENE_BEATS = { draw: 2000, drawn: 4500, end: 8000 } as const;
 
-export type HeroSceneKind = "radar" | "bridge" | "vision" | "elevation" | "store";
-export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision", gf: "elevation", ec: "store" };
+export type HeroSceneKind = "radar" | "bridge" | "vision" | "elevation" | "store" | "sky";
+export const HERO_SCENE: Partial<Record<FaceKey, HeroSceneKind>> = { cdn: "radar", int: "bridge", ia: "vision", gf: "elevation", ec: "store", bd: "sky" };
 
 /** The scene this slug (either locale) opens with, or `null` for a held plate or a plain page. */
 export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null {
@@ -247,3 +247,12 @@ export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | 
 	return face ? HOME_PHOTO[face] : null;
 }
 
+export const HERO_SKY = {
+	/** three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon (Mike Peel, CC BY-SA 4.0), whole, restored, the operator's logo painted out of the doors: WebP, 1320×880 */
+	photo: "/assets/hero/bd-observatorio-entero.webp",
+	photoSmall: "/assets/hero/bd-observatorio-entero-720.webp",
+	photoLarge: "/assets/hero/bd-observatorio-entero-2016.webp",
+};
+
+/** The elevation's sizes: the frame is 1.5 × 86 % of the band on desktops (less where the band is narrow, so the left dome clears the seal), up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. The photograph is the first paint. */
+export const HERO_SKY_SIZES = HERO_ELEVATION_SIZES;

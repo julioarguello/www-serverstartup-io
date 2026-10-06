@@ -57,17 +57,17 @@
 }
 
 /* the sequence, 8 s like every opening: the warehouse 2 s; the photograph dims and the lids light up in a wave
-   from the order's cell (each from its --d); the cube's frames from 4.2 s (the script); its flight from 6.1 s;
-   the seal lights up as it lands at 6.8 s; the drawing goes and the photograph comes back. Pause freezes all
+   from the order's cell (each from its --d); the cube's frames from --beat-drawn (the script, #558); its flight
+   from 6.3 s; the seal lights up as it lands at 7 s; the drawing goes and the photograph comes back. Pause freezes all
    of it (SceneClock holds the timer, the script holds the cube) */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.s-hero--store:not(.is-placed) .store__box { visibility: hidden; }
 	.s-hero--store.is-playing .store__photo { animation: store-dim 5.6s ease-in-out var(--beat-draw) both; }
 	.s-hero--store.is-playing .store__drawing { animation: store-drawing 5.6s ease-in-out var(--beat-draw) both; }
 	.s-hero--store.is-playing .store__drawing [pathLength] { stroke-dasharray: 1; animation: store-draw .3s ease-out calc(var(--beat-draw) + .2s + var(--d, 0ms)) both; }
-	.s-hero--store.is-playing .store__drawing .store__cell { animation: store-draw .4s ease-out 4.2s both, store-show .4s ease-out 4.2s both; }
-	.s-hero--store.is-playing .store__grid { animation: store-show .5s ease-out 4.5s both; }
-	.s-hero--store.is-playing .scene__seal { animation: store-seal 1.2s ease-out 6.8s both; }
+	.s-hero--store.is-playing .store__drawing .store__cell { animation: store-draw .4s ease-out var(--beat-drawn) both, store-show .4s ease-out var(--beat-drawn) both; }
+	.s-hero--store.is-playing .store__grid { animation: store-show .5s ease-out calc(var(--beat-drawn) + .3s) both; }
+	.s-hero--store.is-playing .scene__seal { animation: store-seal 1s ease-out 7s both; }
 	/* as specific as the rules above, and after them: their `animation` shorthand resets the play state */
 	.s-hero.s-hero--store.is-playing.is-paused * { animation-play-state: paused; }
 }

@@ -20,6 +20,7 @@ import HeroRadar from "../../components/HeroRadar.astro";
 import HeroBridge from "../../components/HeroBridge.astro";
 import HeroElevation from "../../components/HeroElevation.astro";
 import HeroStore from "../../components/HeroStore.astro";
+import HeroSky from "../../components/HeroSky.astro";
 import HeroVision from "../../components/HeroVision.astro";
 import type { CacheHint } from "emdash";
 import type { SiteSettings } from "../../types";
@@ -134,6 +135,15 @@ const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 			quote={heroQuote}
 			labels={labels}
 		/>
+	) : heroScene === "sky" ? (
+		<HeroSky
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath="/en/contact"
+			quote={heroQuote}
+			labels={labels}
+		/>
 	) : heroScene === "vision" ? (
 		<HeroVision
 			title={title}
@@ -224,4 +234,5 @@ const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
 	@import "../../styles/hero-vision.css";
 	@import "../../styles/hero-elevation.css";
 	@import "../../styles/hero-store.css";
+	@import "../../styles/hero-sky.css";
 </style>

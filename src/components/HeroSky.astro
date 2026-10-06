@@ -1,0 +1,512 @@
+---
+/**
+ * HeroSky — the opening of the Big Data vertical (#556).
+ *
+ * Three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon. The founder's
+ * story (2026-10-05): dusk falls from left to right, the domes keeping their light; as it reaches each dome, a
+ * layer of stars is born in the sky over it — the medallion's: many raw stars, bronze; fewer clean ones, silver,
+ * each gathering its own group of bronze; a few that matter, gold, each gathering its own group of silver.
+ * Consolidation, not a neural network: never all to all. Data then runs along the links, and the finished sky
+ * stays. On the openings' one clock: the photograph alone until --beat-draw, the dusk complete just past
+ * --beat-drawn, the payoff after, at rest by the end.
+ *
+ * The band, the copy, the epigraphs, the seal, the veil and the controls are the scene every vertical
+ * shares (HeroScene.astro). The domes and the stars are measured on the photograph (`teide.py`); each layer
+ * stands over its own dome. The night is a front the script moves across the photograph (under the
+ * veil); the drawing is one canvas over the veil, the whole stage — at night the band IS the sky — with a hole
+ * for every line of the copy.
+ */
+import { HERO_SKY, HERO_SKY_SIZES } from "../utils/hero-art";
+import HeroScene from "./HeroScene.astro";
+
+interface Props {
+	title: string;
+	excerptHtml: string;
+	ctaLabel: string;
+	contactPath: string;
+	quote: any[] | null;
+	labels: { get: (widget: string, key: string, fallback: string) => string };
+}
+const { title, excerptHtml, ctaLabel, contactPath, quote, labels } = Astro.props;
+const L = (k: string, fb: string) => labels.get("panel_labels", k, fb);
+const pauseLabel = L("sky_pause", "Pausar la animación");
+const replayLabel = L("sky_replay", "Repetir la animación");
+/* the layers' names, the medallion's own words in both locales */
+const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "silver"), L("sky_gold", "gold")]);
+---
+
+<HeroScene scene="sky" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
+	<div slot="under" class="sky__box">
+		<img class="sky__photo" src={HERO_SKY.photo} srcset={`${HERO_SKY.photoSmall} 720w, ${HERO_SKY.photo} 1320w, ${HERO_SKY.photoLarge} 2016w`} sizes={HERO_SKY_SIZES} width="1320" height="880" alt="" fetchpriority="high" decoding="async" />
+		<canvas class="sky__night" aria-hidden="true"></canvas>
+	</div>
+	<canvas slot="over" class="sky__data" aria-hidden="true" data-layers={layerNames}></canvas>
+	<i slot="over" class="sky__ink sky__ink--line" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--bronze" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--silver" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--gold" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--night" aria-hidden="true"></i>
+	<i slot="over" class="sky__ink sky__ink--label" aria-hidden="true"></i>
+</HeroScene>
+
+<script>
+	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
+	import { SceneClock } from "../utils/scene-clock";
+	import sky from "../assets/hero/bd-cielo.json";
+	const hero = document.querySelector<HTMLElement>(".s-hero--sky");
+	if (hero) {
+		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
+		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
+		const canvas = hero.querySelector<HTMLCanvasElement>(".sky__data")!;
+		const ctx = canvas.getContext("2d")!;
+		const dusk = hero.querySelector<HTMLCanvasElement>(".sky__night")!;
+		const nctx = dusk.getContext("2d")!;
+		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
+		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
+		const NAMES: string[] = JSON.parse(canvas.dataset.layers || "[]");
+
+		const [FW, FH] = sky.frame;
+		const ASPECT = FW / FH;                  /* the whole photograph */
+		const BAND_H = 0.86;                     /* the frame's height, of the band's */
+		const BLEED = 0.02;                      /* how far past the band's edge the frame runs */
+		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width (186 of 200) */
+		const FROM_FADE = 140;                   /* px over which the drawing fades in past the seal */
+		/* the left dome's left edge, of the frame's width: the frame shrinks before it goes under the seal */
+		const DOME_L = Math.min(...sky.domes[0].p.filter((_, i) => i % 2 === 0)) / FW;
+
+		type Geo = { L: number; T: number; W: number; H: number };
+		type Box = { l: number; t: number; r: number; b: number };
+		type Star = { x: number; y: number; r: number };
+		type Packet = { phase: number; period: number; r: number };
+		type Link = { a: Star; b: Star; cx: number; cy: number; alpha: number; width: number; packets: Packet[] };
+		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
+		let holes: Box[] = [];
+		let layers: Star[][] = [];
+		let links: Link[][] = [];
+		let tags: { x: number; y: number }[] = [];
+		let bands: { l: number; r: number }[] = [];
+		let from = 0;                            /* where the drawing may start: past the seal on desktops */
+		let dpr = 1;
+
+		/* the colours and the labels' face are the stylesheet's (tokens), resolved through hidden inks */
+		function ink(k: string) {
+			return getComputedStyle(hero!.querySelector(`.sky__ink--${k}`) as HTMLElement);
+		}
+		let LINE = "", NIGHT = "", TIERS: string[] = [], FONT = "";
+
+		/* desktops: sized by the band, resting on its floor, running off its right edge like every scene; where
+		   the band is narrow the frame shrinks so the left dome clears the seal */
+		function fitWide(s: DOMRect): Geo {
+			const sr = seal.getBoundingClientRect();
+			from = sr.left - s.left + SEAL_R * sr.width + 8;
+			const full = ASPECT * BAND_H * s.height;
+			const room = (s.width - from - FROM_FADE) / (1 - BLEED - DOME_L);
+			const W = Math.max(0.6 * full, Math.min(full, room)), H = W / ASPECT;
+			const L = s.width + BLEED * W - W;
+			hero!.style.setProperty("--sclip", `${Math.max(0, from - L)}px`);
+			return { L, T: s.height - H, W, H };
+		}
+		/* phones and tablets: the scene is its own row under the copy, contained in it, flush right, as wide as
+		   keeps the left dome in */
+		function fitNarrow(s: DOMRect): Geo {
+			const W = Math.min(1.25 * s.width, ASPECT * s.height, (s.width - 8) / (1 - BLEED - DOME_L)), H = W / ASPECT;
+			from = 0;
+			hero!.style.setProperty("--sclip", "0px");
+			return { L: s.width - W * (1 - BLEED), T: (s.height - H) / 2, W, H };
+		}
+		/* every line of the copy, padded */
+		function textBoxes(s: DOMRect): Box[] {
+			const out: Box[] = [];
+			const pad = (q: DOMRect): Box => ({ l: q.left - s.left - 14, r: q.right - s.left + 14, t: q.top - s.top - 10, b: q.bottom - s.top + 10 });
+			for (const el of hero!.querySelectorAll<HTMLElement>(".s-hero__copy h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
+				const r = document.createRange();
+				r.selectNodeContents(el);
+				for (const q of r.getClientRects()) if (q.width > 2) out.push(pad(q));
+			}
+			for (const sel of [".s-hero__copy .btn", ".scene__ctl"]) {
+				const b = hero!.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
+				if (b) out.push(pad(b));
+			}
+			return out;
+		}
+		/* the frame's pixels on the stage */
+		const sx = (x: number) => geo.L + (x * geo.W) / FW;
+		const sy = (y: number) => geo.T + (y * geo.H) / FH;
+
+		/* a seeded generator: the same sky on every visit, irregular but never random between paints */
+		function seeded(seed: number) {
+			return () => {
+				seed = (seed + 0x6d2b79f5) | 0;
+				let x = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+				x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+				return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+			};
+		}
+
+		/* the timeline, in ms from the start, on the openings' one clock (SCENE_BEATS): the photograph alone until
+		   --beat-draw; then dusk, slowly, from left to right, a front with a wide soft edge across the photograph
+		   at an even pace, complete just past --beat-drawn — each layer is born as it reaches its dome, bronze,
+		   silver, gold, one after the other; then the payoff, data running along every link; at rest by the end,
+		   the finished network staying (founder: "tiene que darme tiempo a ver cómo oscurece") */
+		const NIGHT_AT = SCENE_BEATS.draw, NIGHT_END = SCENE_BEATS.drawn + 500, END = SCENE_BEATS.end;
+		let SOFT = 160;                          /* the front's soft edge, px: a third of the photograph */
+		const PICK_MS = 500, BEAM_MS = 700, TAG_MS = 400, CALM_MS = 600;
+		/* the medallion: many raw stars, fewer clean ones, a few that matter; each reads from its own group */
+		const COUNT = [10, 4, 2], COUNT_NARROW = [8, 3, 2];
+		const RADIUS = [2.6, 4.2, 6];
+		const clamp = (x: number) => Math.min(1, Math.max(0, x));
+		const ease = (x: number) => x * x * (3 - 2 * x);
+		/* the front: an even pace from the photograph's left edge to past its right edge */
+		let knots: [number, number][] = [];
+		function frontX(ms: number) {
+			if (!knots.length) return 0;
+			const [[t0, x0], [t1, x1]] = knots;
+			return x0 + (x1 - x0) * clamp((ms - t0) / (t1 - t0));
+		}
+		/* when the front's middle reaches stage column x */
+		function reached(x: number) {
+			if (!knots.length) return 0;
+			const [[t0, x0], [t1, x1]] = knots;
+			return t0 + (t1 - t0) * clamp((x + SOFT / 3 - x0) / (x1 - x0));
+		}
+
+		function nearest(a: Star, list: Star[]) {
+			let best = list[0];
+			for (const b of list) if (Math.hypot(b.x - a.x, b.y - a.y) < Math.hypot(best.x - a.x, best.y - a.y)) best = b;
+			return best;
+		}
+		/* the network: in the photograph's sky — under its faded top, over the sea horizon — never on a line of
+		   the copy; three bands left to right, each over its own dome */
+		function compose(s: DOMRect, narrow: boolean) {
+			const rnd = seeded(556);
+			const counts = narrow ? COUNT_NARROW : COUNT;
+			const x0 = narrow ? Math.max(14, geo.L + 14) : Math.max(geo.L + 0.09 * geo.W, from + FROM_FADE);
+			const x1 = Math.min(s.width, geo.L + geo.W) - (narrow ? 14 : 28);
+			const y0 = Math.max(10, geo.T + 0.05 * geo.H), y1 = sy(sky.sea) - 14;
+			const span = x1 - x0;
+			bands = [[0, 0.3], [0.38, 0.64], [0.72, 1]].map(([a, b]) => ({ l: x0 + a * span, r: x0 + b * span }));
+			const blocked = (x: number, y: number) => holes.some((h) => h.l - 10 < x && x < h.r + 10 && h.t - 10 < y && y < h.b + 10);
+			/* where the copy covers all of a band's sky (a lower frame), the layer climbs into the night over the
+			   photograph, under the header */
+			const head = document.querySelector("header")?.getBoundingClientRect();
+			const sky0 = Math.max(10, (head ? head.bottom - s.top : 0) + 24);
+			layers = counts.map((n, k) => {
+				const out: Star[] = [];
+				let minD = narrow ? 26 : [30, 50, 60][k], top = y0;
+				for (let tries = 0; out.length < n && tries < 6000; tries++) {
+					if (tries % 800 === 799) minD *= 0.85;
+					if (tries === 2400) top = Math.min(y0, sky0);
+					const x = bands[k].l + (bands[k].r - bands[k].l) * rnd(), y = top + (y1 - top) * rnd();
+					if (blocked(x, y) || out.some((p) => Math.hypot(p.x - x, p.y - y) < minD)) continue;
+					out.push({ x, y, r: RADIUS[k] });
+				}
+				return out.sort((p, q) => p.x - q.x);
+			});
+			/* the night: from the photograph's left edge, its soft edge a third of the photograph wide, so the dusk is
+			   seen to fall rather than wiped in */
+			SOFT = Math.max(160, 0.33 * geo.W);
+			const startX = narrow ? Math.max(0, geo.L) : Math.max(from, geo.L + 0.05 * geo.W);
+			knots = [[NIGHT_AT, startX], [NIGHT_END, Math.min(s.width, geo.L + geo.W) + SOFT]];
+			if (layers.some((l) => !l.length)) { layers = []; links = []; tags = []; return; }
+			/* consolidation, not a network: each star reads from its own group of the layer before — every raw star
+			   feeds the nearest clean one, every clean one the nearest that matters — never all to all */
+			links = [[], []];
+			for (let k = 1; k < 3; k++) {
+				for (const a of layers[k - 1]) {
+					const b = nearest(a, layers[k]);
+					const dx = b.x - a.x, dy = b.y - a.y, bow = (rnd() - 0.5) * 0.25;
+					/* the data: small dots, few and slow, so they live in the sky without pulling at the eye (founder:
+					   "puntitos más pequeños y quizás menos movimiento para no molestar") */
+					const packets = Array.from({ length: rnd() < 0.6 ? 1 : 0 }, () => ({ phase: rnd(), period: 2600 + 1600 * rnd(), r: 1.3 + 0.5 * rnd() }));
+					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.32 + 0.3 * rnd(), width: 0.5 + 0.4 * rnd(), packets });
+				}
+				/* a star of the layer that nobody feeds would be a star without data: it takes the nearest one */
+				for (const b of layers[k]) if (!links[k - 1].some((l) => l.b === b)) {
+					const a = nearest(b, layers[k - 1]);
+					links[k - 1].push({ a, b, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, alpha: 0.4, width: 0.7, packets: [{ phase: rnd(), period: 3000, r: 1.5 }] });
+				}
+			}
+			/* and silver reads from silver too, as clean tables are joined with each other (founder: "que algún
+			   silver lea también de otro silver"): each of the two closest pairs, the left one feeding the right */
+			const pairs: [Star, Star][] = [];
+			const sv = layers[1];
+			for (let i = 0; i < sv.length; i++) for (let j = i + 1; j < sv.length; j++) pairs.push([sv[i], sv[j]]);
+			pairs.sort((p, q) => Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y) - Math.hypot(q[0].x - q[1].x, q[0].y - q[1].y));
+			for (const [a, b] of pairs.slice(0, Math.min(2, pairs.length))) {
+				const dx = b.x - a.x, dy = b.y - a.y, bow = 0.22;
+				links[0].push({ a, b, cx: (a.x + b.x) / 2 - dy * bow, cy: (a.y + b.y) / 2 + dx * bow, alpha: 0.45, width: 0.6, packets: [{ phase: rnd(), period: 3200, r: 1.4 }] });
+			}
+			/* each layer's name under its lowest star, or over its highest where that would touch the copy */
+			ctx.font = FONT;
+			tags = layers.map((l, k) => {
+				const cx = l.reduce((m, p) => m + p.x, 0) / l.length;
+				const low = Math.max(...l.map((p) => p.y)) + 22, high = Math.min(...l.map((p) => p.y)) - 14;
+				const w = ctx.measureText(NAMES[k] || "").width / 2 + 6;
+				const hit = (y: number) => holes.some((h) => h.l < cx + w && cx - w < h.r && h.t < y + 4 && y - 14 < h.b) || y1 + 20 < y || y0 - 6 > y;
+				return { x: Math.min(Math.max(cx, x0 + w), x1 - w), y: hit(low) ? high : low };
+			});
+		}
+
+		function layout() {
+			const s = stage.getBoundingClientRect();
+			const narrow = matchMedia(SCENE_ROW).matches;
+			geo = narrow ? fitNarrow(s) : fitWide(s);
+			holes = narrow ? [] : textBoxes(s);
+			hero!.style.setProperty("--sx", `${geo.L}px`);
+			hero!.style.setProperty("--sy", `${geo.T}px`);
+			hero!.style.setProperty("--sw", `${geo.W}px`);
+			hero!.style.setProperty("--sfade-l", `${Math.round(0.14 * geo.W)}px`);
+			hero!.style.setProperty("--sfade-b", narrow ? `${Math.round(0.12 * geo.H)}px` : "0px");
+			dpr = Math.min(2, window.devicePixelRatio || 1);
+			canvas.width = Math.round(s.width * dpr);
+			canvas.height = Math.round(s.height * dpr);
+			dusk.width = Math.round(geo.W * dpr);
+			dusk.height = Math.round(geo.H * dpr);
+			LINE = ink("line").color; NIGHT = ink("night").color;
+			TIERS = [ink("bronze").color, ink("silver").color, ink("gold").color];
+			const lf = ink("label");
+			FONT = `${lf.fontWeight} ${lf.fontSize} ${lf.fontFamily}`;
+			compose(s, narrow);
+			hero!.classList.add("is-placed");
+			draw(t);
+		}
+
+		/* the night, under the veil, on the photograph: the band's dark up to the front, with a soft edge; the
+		   domes keep their light (founder: "a medida que se hace de noche, dejarlos con luz") */
+		function night(ms: number) {
+			nctx.setTransform(1, 0, 0, 1, 0, 0);
+			nctx.clearRect(0, 0, dusk.width, dusk.height);
+			if (!knots.length || NIGHT_AT > ms) return;
+			nctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			const fx = frontX(Math.min(ms, END)) - geo.L;
+			const g = nctx.createLinearGradient(fx - SOFT, 0, fx, 0);
+			g.addColorStop(0, NIGHT);
+			g.addColorStop(1, "rgba(0, 0, 0, 0)");
+			nctx.fillStyle = g;
+			nctx.fillRect(0, 0, Math.max(0, fx), geo.H);
+			nctx.globalCompositeOperation = "destination-out";
+			nctx.filter = "blur(3px)";
+			const k = geo.W / FW;
+			nctx.fillStyle = "#000";
+			for (const d of sky.domes) {
+				nctx.beginPath();
+				for (let i = 0; i < d.p.length; i += 2) {
+					if (i) nctx.lineTo(d.p[i] * k, d.p[i + 1] * k);
+					else nctx.moveTo(d.p[i] * k, d.p[i + 1] * k);
+				}
+				nctx.closePath();
+				nctx.fill();
+			}
+			nctx.filter = "none";
+			nctx.globalCompositeOperation = "source-over";
+		}
+
+		/* a star: round, with a soft halo, never a square */
+		function dot(x: number, y: number, r: number, c: string, a: number) {
+			ctx.globalAlpha = a * 0.35;
+			ctx.fillStyle = c;
+			ctx.beginPath();
+			ctx.arc(x, y, r * 2.2, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.globalAlpha = a;
+			ctx.beginPath();
+			ctx.arc(x, y, r, 0, 2 * Math.PI);
+			ctx.fill();
+		}
+		const bez = (l: Link, f: number) => [(1 - f) * (1 - f) * l.a.x + 2 * (1 - f) * f * l.cx + f * f * l.b.x, (1 - f) * (1 - f) * l.a.y + 2 * (1 - f) * f * l.cy + f * f * l.b.y];
+
+		let t = 0;
+		function draw(ms: number) {
+			night(ms);
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			if (!knots.length || NIGHT_AT > ms) return;
+			ms = Math.min(ms, END);
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			const fx = frontX(ms);
+			const shown = (x: number) => clamp((fx - SOFT / 3 - x) / SOFT);
+
+			/* the stars the night reveals as it passes: round, faint */
+			const size = Math.max(0.6, Math.min(1.1, (3.2 * geo.W) / FW));
+			ctx.fillStyle = LINE;
+			for (let i = 0; i < sky.stars.length; i += 3) {
+				const x = sx(sky.stars[i]), a = shown(x);
+				if (a <= 0) continue;
+				const m = sky.stars[i + 2];
+				ctx.globalAlpha = a * [0.3, 0.5, 0.8][m];
+				ctx.beginPath();
+				ctx.arc(x, sy(sky.stars[i + 1]), [0.6, 0.9, 1.4][m] * size, 0, 2 * Math.PI);
+				ctx.fill();
+			}
+
+			/* each lit dome sends a soft beam up to the layer it composes, as the front reaches its band */
+			ctx.lineCap = "round";
+			sky.domes.forEach((d, k) => {
+				const l = layers[k];
+				if (!l || !bands[k]) return;
+				const b = ease(clamp((ms - reached(bands[k].l)) / BEAM_MS));
+				if (b <= 0) return;
+				const x0 = sx(d.c[0]), y0 = sy(d.c[1]) - 4;
+				const x1 = l.reduce((m, p) => m + p.x, 0) / l.length, y1 = Math.max(...l.map((p) => p.y)) + 12;
+				const g = ctx.createLinearGradient(x0, y0, x1, y1);
+				g.addColorStop(0, TIERS[k]);
+				g.addColorStop(1, "rgba(0, 0, 0, 0)");
+				ctx.strokeStyle = g;
+				ctx.globalAlpha = 0.45;
+				ctx.lineWidth = 1.25;
+				ctx.beginPath();
+				ctx.moveTo(x0, y0);
+				ctx.lineTo(x0 + (x1 - x0) * b, y0 + (y1 - y0) * b);
+				ctx.stroke();
+			});
+
+			/* the links grow behind the front, out of the group they read from */
+			ctx.strokeStyle = LINE;
+			for (const set of links) for (const l of set) {
+				const u = clamp((fx - SOFT / 3 - l.a.x) / Math.max(60, l.b.x - l.a.x));
+				if (u <= 0) continue;
+				ctx.globalAlpha = l.alpha;
+				ctx.lineWidth = l.width;
+				ctx.beginPath();
+				ctx.moveTo(l.a.x, l.a.y);
+				/* a quadratic Bézier cut at u: de Casteljau */
+				const qx = l.a.x + (l.cx - l.a.x) * u, qy = l.a.y + (l.cy - l.a.y) * u;
+				const rx = l.cx + (l.b.x - l.cx) * u, ry = l.cy + (l.b.y - l.cy) * u;
+				ctx.quadraticCurveTo(qx, qy, qx + (rx - qx) * u, qy + (ry - qy) * u);
+				ctx.stroke();
+			}
+
+			/* the data: small dots running along the complete links, towards the layer that reads it; they calm
+			   down in the last moments, and the finished network stays */
+			const calm = 1 - ease(clamp((ms - END + CALM_MS) / CALM_MS));
+			links.forEach((set, k) => {
+				for (const l of set) {
+					const since = ms - reached(Math.max(l.a.x, l.b.x));
+					if (since <= 0) continue;
+					for (const p of l.packets) {
+						const f = (since / p.period + p.phase) % 1;
+						const [x, y] = bez(l, f);
+						ctx.globalAlpha = calm * clamp(since / 300) * (0.35 + 0.45 * Math.sin(Math.PI * f));
+						ctx.fillStyle = TIERS[k + 1];
+						ctx.beginPath();
+						ctx.arc(x, y, p.r, 0, 2 * Math.PI);
+						ctx.fill();
+					}
+				}
+			});
+
+			/* the stars of each layer, lit as the front reaches them, a ring closing on each */
+			layers.forEach((l, k) => l.forEach((p) => {
+				const u = clamp((ms - reached(p.x)) / PICK_MS);
+				if (u <= 0) return;
+				dot(p.x, p.y, p.r, TIERS[k], ease(u));
+				ctx.globalAlpha = (1 - u) * 0.8;
+				ctx.strokeStyle = TIERS[k];
+				ctx.lineWidth = 1.25;
+				ctx.beginPath();
+				ctx.arc(p.x, p.y, p.r + 12 * (1 - ease(u)), 0, 2 * Math.PI);
+				ctx.stroke();
+			}));
+
+			/* each layer's name, once the front has passed its last star */
+			ctx.font = FONT;
+			ctx.textAlign = "center";
+			tags.forEach((g, k) => {
+				const u = clamp((ms - reached(Math.max(...layers[k].map((p) => p.x))) - 200) / TAG_MS);
+				if (u <= 0) return;
+				ctx.globalAlpha = u * 0.95;
+				ctx.fillStyle = TIERS[k];
+				ctx.fillText(NAMES[k] || "", g.x, g.y);
+			});
+
+			/* the copy: a hole for every line — nothing behind a letter (erased, not clipped: the padded lines
+			   overlap, and an even-odd clip paints their overlaps back); and a fade in from the seal */
+			ctx.globalCompositeOperation = "destination-out";
+			ctx.globalAlpha = 1;
+			ctx.fillStyle = "#000";               /* what is erased is the alpha: any opaque colour */
+			for (const h of holes) ctx.fillRect(h.l, h.t, h.r - h.l, h.b - h.t);
+			if (from > 0) {
+				const g = ctx.createLinearGradient(from, 0, from + FROM_FADE, 0);
+				g.addColorStop(0, "rgba(0, 0, 0, 1)");
+				g.addColorStop(1, "rgba(0, 0, 0, 0)");
+				ctx.fillStyle = g;
+				ctx.fillRect(0, 0, from + FROM_FADE, canvas.height / dpr);
+			}
+			ctx.globalCompositeOperation = "source-over";
+			ctx.globalAlpha = 1;
+		}
+
+		const clock = new SceneClock();
+		let raf = 0, last = 0;
+		function tick(now: number) {
+			t += now - last;
+			last = now;
+			draw(t);
+			raf = t < END ? requestAnimationFrame(tick) : 0;
+		}
+		function run() {
+			if (raf) return;
+			last = performance.now();
+			raf = requestAnimationFrame(tick);
+		}
+		function stop() {
+			if (raf) cancelAnimationFrame(raf);
+			raf = 0;
+		}
+		function finish() {
+			stop();
+			clock.clear();
+			t = END;
+			draw(t);
+			hero!.classList.remove("is-playing");
+			hero!.classList.add("is-done");
+		}
+		function play() {
+			t = 0;
+			hero!.classList.add("is-playing");
+			run();
+			clock.at("end", END, finish);
+		}
+
+		/* frozen from outside (the a11y gate sets is-done on a scene to measure its end state): the end, at once */
+		new MutationObserver(() => {
+			if (hero.classList.contains("is-done") && t < END) finish();
+		}).observe(hero, { attributes: true, attributeFilter: ["class"] });
+
+		let settling: number | null = null;
+		window.addEventListener("resize", () => {
+			if (settling !== null) clearTimeout(settling);
+			settling = window.setTimeout(layout, 120);
+		});
+		layout();
+		/* the copy's webfonts move its lines: measure again once they are in */
+		document.fonts?.ready.then(layout);
+		if (reduced) {
+			/* no motion: the finished network, at once */
+			t = END;
+			draw(t);
+			hero.classList.add("is-done");
+		} else {
+			const img = hero.querySelector<HTMLImageElement>(".sky__photo")!;
+			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
+		}
+		/* pause freezes the frame where it is, the night, the drawing and the clock alike */
+		pause.addEventListener("change", () => {
+			hero.classList.toggle("is-paused", pause.checked);
+			if (pause.checked) { clock.hold(); stop(); }
+			else if (hero.classList.contains("is-playing")) { clock.resume(); run(); }
+		});
+		replay.addEventListener("click", () => {
+			if (reduced) return;
+			stop();
+			clock.clear();
+			pause.checked = false;
+			hero.classList.remove("is-paused", "is-done", "is-playing");
+			t = 0;
+			draw(t);
+			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */
+			play();
+		});
+	}
+</script>

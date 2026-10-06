@@ -978,63 +978,6 @@
 /* #304: the closing heading shares the column like everything else —
    70% was the page's fifth width */
 
-/* ═══ EL EQUIPO — the faces behind "the same three engineers" (#304) ═══
-   The home asserted it twice and never showed anyone. Data card family:
-   the photo IS the card, the name and role sit under it. */
-.s-team-strip {
-	padding: var(--rhythm-section) 0;
-}
-
-/* the statement that used to head its own band: same weight, now inside the
-   section it was always talking about */
-.s-team-strip__statement {
-	margin-top: var(--space-3);
-}
-
-.s-team-strip__statement p {
-	font-size: var(--text-sub-size, 26px);
-	font-weight: var(--text-sub-weight, 500);
-	line-height: var(--text-sub-lh, 30px);
-}
-
-.s-team-strip__lead {
-	margin-top: var(--space-3);
-}
-
-.s-team-strip__grid {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--space-4);
-	list-style: none;
-	margin: var(--space-5) 0 0;
-	padding: 0;
-}
-
-.s-team-strip__card img {
-	width: 100%;
-	aspect-ratio: 4 / 3;
-	object-fit: cover;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius);
-	margin-bottom: var(--space-3);
-}
-
-.s-team-strip__card h3 {
-	font-size: 20px;
-	line-height: 1.2;
-}
-
-.s-team-strip__card p {
-	color: var(--color-text-muted);
-	font-size: 16px;
-	line-height: 1.4;
-	margin-top: 2px;
-}
-
-@media (min-width: 768px) {
-	.s-team-strip__grid { grid-template-columns: repeat(3, 1fr); }
-}
-
 /* ═══ LA PRUEBA — the site as its own evidence (#304) ═══
    Statement block: the claim is checkable, so it gets the weight. */
 .s-proof {
@@ -1113,8 +1056,6 @@
 }
 
 /* the house dashed link convention reaches the new blocks */
-.s-team-strip__lead a,
-.s-team-strip__statement a,
 .s-cf__desc a,
 .s-proof__inner a {
 	color: inherit;
@@ -1125,12 +1066,8 @@
 	text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
 }
 
-.s-team-strip__lead a:hover,
-.s-team-strip__statement a:hover,
 .s-cf__desc a:hover,
 .s-proof__inner a:hover,
-.s-team-strip__lead a:focus-visible,
-.s-team-strip__statement a:focus-visible,
 .s-cf__desc a:focus-visible,
 .s-proof__inner a:focus-visible {
 	text-decoration-style: solid;

@@ -27,7 +27,8 @@ The code isn't the product; what's still alive years later is.
 AI
 Artificial Intelligence
 The agent proposes, the engineer disposes. AI is a means.
-references
+Who we have worked with
+See all references
 Official Cloudflare partner
 We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2.
 CDN
@@ -53,15 +54,6 @@ error
 SEO
 100
 error
-The team
-No middlemen, no handovers.
-The same engineers cover every layer: whoever designs, writes; whoever writes, operates.
-Daniel Sío
-E-commerce operations
-Ignacio Ibaseta
-Infrastructure as code and the data platform
-Julio Argüello
-Founder · integration and architecture
 1 team =
 6 verticals = Ø
 0

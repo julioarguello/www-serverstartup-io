@@ -215,9 +215,10 @@ const MEASURE_MAX = 75;
 const BODY_MIN_PX = 16;
 const MEASURE_CHARS = 60;
 const MEASURE_ROUTES = ["/", "/en", "/comercio-electronico", "/quienes-somos"];
-/** G19: the framed photographs, and the pages that render them. */
-const FRAME_ROUTES = ["/", "/en"];
-const FRAME_SELECTOR = ".s-team-strip__card img";
+/** G19: the framed photographs, and the pages that render them. The team's faces
+ *  left the home (#565); Quiénes somos is where they are framed now. */
+const FRAME_ROUTES = ["/quienes-somos", "/en/about-us"];
+const FRAME_SELECTOR = ".team-card__photo img";
 /** The footer is the same on every route but the home, which shows the references
  *  band higher up and leaves it out of its footer (#562); one full footer per locale
  *  is the whole surface. */
@@ -687,7 +688,10 @@ const PLANT_FRAMES = (sel) => {
 	//     documents at the row control above, and it caught this plant on its
 	//     first revert too.
 	imgs[0].style.boxShadow = "0 0 0 7px rgb(255, 0, 255)";
-	imgs[0].style.borderTopWidth = "9px";
+	// the whole edge, not just its width: a width alone paints nothing where the
+	// photograph has no border style of its own — Quiénes somos' do not (#565), and
+	// the plant went unreported there. A plant must not need what it checks.
+	imgs[0].style.borderTop = "9px solid rgb(255, 0, 255)";
 	// B — photograph 2 gets a change that is not chrome. Nothing new may be
 	//     said about it.
 	imgs[1].style.objectFit = "contain";

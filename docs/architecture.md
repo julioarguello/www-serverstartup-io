@@ -206,8 +206,9 @@ All routes exist in both ES and EN:
 The CDN page opens on the Cabo Peñas lighthouse, the whole photograph the home shows (§4.11,
 `home-faro-limpio`: masts and sheds painted out, the frame extended to the left, `faro.py`). On the
 openings' one clock: the photograph alone until `--beat-draw` (2 s); then dusk falls over it, left to
-right, and the lantern lights up as the dusk reaches it, by `--beat-drawn` (4.5 s); then the lantern's
-beam is a radar's sweep — range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
+right, the lighthouse's orange profile — #529's line drawing — draws itself over the darkening building
+(complete by 4 s, half a second before the beam, so it reads on its own) and the lantern lights up as the
+dusk reaches it, by `--beat-drawn` (4.5 s); then the lantern's beam is a radar's sweep — range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
 ZERO TRUST), a stream of edge events and the visitor as one echo, all over the darkened sky — until
 7.4 s; at rest by 8 s (`SCENE_BEATS.end`). The lighthouse stands at the edge and lights what
 approaches; it is the counter-image of the castle-and-moat perimeter, which is why the epigraph under
@@ -218,8 +219,18 @@ Until #567 the page showed the lighthouse as a tight cut-out on the dark band, c
 drawing; among five whole photographs on the home it read as a needle in a haystack, and the founder
 asked for the page to follow the home («la página de cdn tb cambia», 2026-10-05). Over a whole
 photograph the radar's paper labels would sit on grey sky and fail contrast; of the two options
-offered, the founder took the dusk.
+offered, the founder took the dusk. A first dusk version dropped the line drawing; the founder wanted it
+back («me has quitado el perfil del faro, que molaba bastante») with the dusk and the beam («conjúgalo
+todo», 2026-10-06).
 
+- **The profile is registered on the photograph by measurement**: it was drawn on the cut-out (it shared
+  that cut-out's 1760 × 2020 box, `object-fit: cover`), and the cut-out and `home-faro-limpio` come from
+  one Commons original, so `faro.py register` measures the similarity between them — SIFT on the
+  building, RANSAC: 396 inliers of 493 matches, residual median 0.49 px on the 3024 px file, scale
+  0.5356, rotation −0.002° — and carries the drawing's box through it (`plan` in `cdn-faro.json`: x, y,
+  width in the photograph's 1320 px units). The component places it in percentages of the frame: no
+  script, the same at every size. It sits above the night, so the dusk never dims the orange, and fades
+  in from 2 to 4 s, main's own crossfade.
 Decisions that are not obvious from the code, and the measurement behind each:
 
 - **What the scene needs from the photograph is measured on it**, never placed by eye:
@@ -291,8 +302,9 @@ Decisions that are not obvious from the code, and the measurement behind each:
 - **The title is one line on any desktop**, like every other hero's (`docs/design-system.md`,
   Typography).
 - **Assets**: the home's photograph at its four widths (720, 1320, 2016, 3024), with the observatory's
-  `sizes` (98vw on phones, so Lighthouse's 412 px phone takes the 720 file, 35 KB); the cut-out and the
-  drawing #529 used are retired. Credit and licence (Einaz80, CC BY-SA 4.0) in
+  `sizes` (98vw on phones, so Lighthouse's 412 px phone takes the 720 file, 35 KB); the profile as
+  `cdn-faro-perfil.webp` (1210 px, 156 KB) and `-660` (82 KB) — #529's `cdn-faro-plan*`, unchanged,
+  under new names; the cut-out is retired. Credit and licence (Einaz80, CC BY-SA 4.0) in
   `docs/design/hero-rotativo/README.md`.
 - **What the gates demanded**:
   - *perf*: Lighthouse 12.8.2 mobile on the local stack, five runs: 0.97–0.98, LCP 2.2–2.3 s (the

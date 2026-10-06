@@ -28,6 +28,9 @@
 
 .radar__photo,
 .radar__night { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+/* the lighthouse's profile (#529's drawing), placed by the measured registration on the photograph's
+   lighthouse; above the night, so the dusk never dims the orange */
+.radar__plan { position: absolute; display: block; height: auto; opacity: 0; }
 /* the night's colour, read by the canvas: the band's own dark, translucent */
 .radar__ink { position: absolute; visibility: hidden; color: var(--color-scene-night); }
 
@@ -179,28 +182,34 @@
 }
 .radar__blip--l::after { left: auto; right: 0; }
 
-/* the sequence, on the openings' one grammar: the photograph alone to 2 s and the dusk with the lantern to
-   4.5 s (the script, on the same clock) · the radar in by 5.3 s (66 %), its sweep — the beam — turning once to
-   300° and the events (script) until 7.4 s · at rest by 8 s: the sweep still, the events held, as reduced
-   motion shows it */
+/* the sequence, on the openings' one grammar: the photograph alone to 2 s · the dusk falls with the lantern
+   lighting up (the script, on the same clock) and the profile draws itself over the lighthouse, complete by 4 s
+   (50 %), half a second before the beam starts, so it reads on its own · the radar in by 5.3 s (66 %), its sweep
+   — the beam — turning once to 300° and the events (script) until 7.4 s · at rest by 8 s: the sweep still, the
+   events held, as reduced motion shows it */
+.s-hero--radar.is-playing .radar__plan { animation: radar-plan var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-playing .radar__screen svg,
 .s-hero--radar.is-playing .radar__hud { animation: radar-in var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-playing .radar__sweep { animation: radar-sweep var(--radar-t) linear forwards, radar-in var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-done .radar__sweep { opacity: 1; transform: rotate(300deg); }
+.s-hero--radar.is-done .radar__plan,
 .s-hero--radar.is-done .radar__screen svg,
 .s-hero--radar.is-done .radar__hud { opacity: 1; }
 .s-hero--radar.is-paused .radar__sweep,
+.s-hero--radar.is-paused .radar__plan,
 .s-hero--radar.is-paused .radar__you::before,
 .s-hero--radar.is-paused .radar__blip,
 .s-hero--radar.is-paused .radar__screen svg,
 .s-hero--radar.is-paused .radar__hud { animation-play-state: paused; }
 
+@keyframes radar-plan { 0% { opacity: 0; } 25% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes radar-in { 0% { opacity: 0; } 56% { opacity: 0; } 66% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes radar-sweep { 0%, 56% { transform: rotate(0deg); } 100% { transform: rotate(300deg); } }
 @keyframes radar-pulse { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
 @keyframes radar-blip { 0% { opacity: 0; } 6% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
+	.s-hero--radar .radar__plan,
 	.s-hero--radar .radar__screen svg,
 	.s-hero--radar .radar__hud,
 	.s-hero--radar .radar__sweep { opacity: 1 !important; animation: none !important; }

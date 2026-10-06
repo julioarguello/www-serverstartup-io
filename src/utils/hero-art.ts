@@ -232,7 +232,18 @@ export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | 
  * the whole lighthouse, masts and sheds painted out, the frame extended to the left (faro.py). What the
  * scene plays over it is measured on it (`faro.py measure` → src/assets/hero/cdn-faro.json).
  */
-export const HERO_RADAR = { ...homePhotoSources(HOME_PHOTO.cdn), width: HOME_PHOTO.cdn.width, height: HOME_PHOTO.cdn.height };
+export const HERO_RADAR = {
+	...homePhotoSources(HOME_PHOTO.cdn),
+	width: HOME_PHOTO.cdn.width,
+	height: HOME_PHOTO.cdn.height,
+	/** the lighthouse's profile, orange line work on alpha, lossless — #529's drawing (cdn-faro-plan) under a new
+	 *  name, registered on this photograph by `faro.py register` */
+	plan: "/assets/hero/cdn-faro-perfil.webp",
+	/** the same drawing at 660 px */
+	planSmall: "/assets/hero/cdn-faro-perfil-660.webp",
+};
+/** The drawing is about 31 % of the frame's width: about 66vw on phones, 30vw on desktops. */
+export const HERO_RADAR_PLAN_SIZES = "(max-width: 1100px) 66vw, 30vw";
 
 /** The radar's rings, in the photograph's 1320 px units, centred on the lantern: one every `step`, as far as
  *  `reach` (past the band's left edge at every width), and the dashed one at the light's nominal range, 35

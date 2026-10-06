@@ -81,9 +81,9 @@ for on every frame of the cross-fade, and the scrim over the copy was always doi
 photograph of the Cabo Peñas lighthouse over which dusk falls, the lantern lights up and its beam
 becomes a radar's sweep (`src/components/HeroRadar.astro`). Since #567 the photograph is the home's
 own, `home-faro-limpio.webp` (and `-720`, `-2016`, `-3024`), credited below; what the scene plays
-over it is measured on it (`faro.py measure` → `src/assets/hero/cdn-faro.json`). The cut-out and
-the line drawing #529 used (`cdn-faro-restaurado*`, `cdn-faro-plan*`) are retired. The photograph
-is not NASA's and is not public domain:
+over it is measured on it (`faro.py measure` → `src/assets/hero/cdn-faro.json`). #529's line drawing
+comes back as `cdn-faro-perfil.webp` (and `-660`), registered on this photograph by `faro.py register`;
+the cut-out (`cdn-faro-restaurado*`) is retired. The photograph is not NASA's and is not public domain:
 
 | Asset | Photograph | Credit | Licence |
 | --- | --- | --- | --- |
@@ -102,6 +102,7 @@ is not NASA's and is not public domain:
 | `src/assets/hero/ec-pedido.json` | The order's cube, rising out of its cell and turning to the logo's view, projected frame by frame through the same camera (`ocado.py`) | derivative of the above | CC BY-SA 4.0 |
 | `bd-observatorio-entero.webp` (and `-720`, `-2016`, `-3024`) | Three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon, the whole photograph; restored (SeedVR2 3B at 2×, the whites measured on the domes), the operator's logo painted out of two doors (`teide.py`); the Big Data hero (#556) | [Mike Peel, Wikimedia Commons, "Teide Observatory 2018 077.jpg"](https://commons.wikimedia.org/wiki/File:Teide_Observatory_2018_077.jpg) | CC BY-SA 4.0 |
 | `home-faro-limpio.webp` (and `-720`, `-2016`, `-3024`) | The Cabo Peñas lighthouse as a whole photograph, for the home (#560): the lattice mast, antennas, guy wires and weather tower painted out, and the sheds right of the house with their fence (Workers AI, FLUX.2 [dev] as a donor inside each box only), extended 2003 px to the left — heath, gorse and the coast are FLUX.2's continuation, not the photograph — and restored with SeedVR2 3B (`faro.py`) | [Einaz80, Wikimedia Commons, "Cape Penas Lighthouse.jpg"](https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg) | CC BY-SA 4.0 |
+| `cdn-faro-perfil.webp`, `cdn-faro-perfil-660.webp` | The lighthouse's profile: a line drawing generated from #529's cut-out of the same photograph (Workers AI, FLUX.2 [dev]; the pipeline is in the design thread of #529), registered on `home-faro-limpio` by `faro.py register` | derivative of the above | CC BY-SA 4.0 |
 | `home-puente-salida.webp` (and `-720`, `-2016`, `-3024`) | The Vizcaya Bridge, whole and with its bridge, restored with SeedVR2 3B, the tanker's stern lettered SERVER STARTUP / AVILÉS / YULO 11062024 as on the vertical pages (`home_voyage.py`, with `stern_label.py`'s letters) | [Ebaki, Wikimedia Commons, "Bizkaia zubia - Puente Bizkaia.jpg"](https://commons.wikimedia.org/wiki/File:Bizkaia_zubia_-_Puente_Bizkaia.jpg) | CC BY-SA 4.0 |
 | `home-almacen.webp` (and `-720`, `-2016`, `-3024`) | The warehouse further away, for the home (#560): the whole photograph, ceiling included, the operator's marks painted out as `ocado.py` does, extended to the left — the grid and its robots there are FLUX.2 [dev]'s continuation, aligned to the photograph by an affine fit and cut along the seam where the two differ least — restored with SeedVR2 3B (`home_voyage.py`) | [Techwords, Wikimedia Commons, "Ocado warehouse bots.jpg"](https://commons.wikimedia.org/wiki/File:Ocado_warehouse_bots.jpg) | CC BY-SA 4.0 |
 

@@ -1,19 +1,19 @@
 .legal {
-	padding: var(--open-pad-top) 0 var(--space-8);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .legal-inner {
 }
 
 .legal h1 {
-	margin-bottom: 24px;
+	margin-bottom: var(--space-4);
 }
 
 .legal :global(h2) {
 	/* These already carry the section-heading tilde from theme.css, so they
 	   are section headings and take the section-heading size with it (#451). */
-	margin-top: 32px;
-	margin-bottom: 8px;
+	margin-top: var(--space-5);
+	margin-bottom: var(--space-2);
 }
 
 .legal :global(p) {

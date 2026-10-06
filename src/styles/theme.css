@@ -175,6 +175,13 @@
 	--color-console-faint: rgba(255, 255, 255, 0.3);
 	--color-console-line: rgba(255, 255, 255, 0.16);
 	--color-console-ok: #5BB974;      /* the live cursor / OK state */
+	/* the window dots: everyone reads them as a terminal, so they are the
+	   console's own signal and NOT the section palette — a palette change
+	   must not repaint them. Three copies of these literals had drifted to
+	   three fences and one unfenced rule (#570). */
+	--color-console-dot-1: #EA4335;
+	--color-console-dot-2: #F38020;
+	--color-console-dot-3: #3E7D50;
 
 	/* ── The hero band (#413) ────────────────────────────────────────────
 	   The one place the site goes dark outside the machine voice. The ground

@@ -1,20 +1,20 @@
 .search-page {
-	padding: var(--open-pad-top) 0 var(--space-8);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .search-inner h1 {
-	margin-bottom: 24px;
+	margin-bottom: var(--space-4);
 }
 
 .search-form {
 	display: flex;
-	gap: 8px;
-	margin-bottom: 32px;
+	gap: var(--space-2);
+	margin-bottom: var(--space-5);
 }
 
 .search-input {
 	flex: 1;
-	padding: 12px 16px;
+	padding: 12px var(--space-3);
 	font-family: var(--font-family);
 	font-size: 18px;
 	font-weight: 300;
@@ -33,16 +33,18 @@
 	font-size: 18px;
 	font-weight: 300;
 	color: var(--color-text-muted);
-	margin-bottom: 24px;
+	margin-bottom: var(--space-4);
 }
 
-.search-hint {
+/* its own name: `.search-hint` is the header prompt's, global and nowrap,
+   and it pushed this paragraph 59px past a phone's edge (#570) */
+.search-page__hint {
 	color: var(--color-text-muted);
 }
 
 .search-results {
 	display: flex;
 	flex-direction: column;
-	gap: 32px;
+	gap: var(--space-5);
 }
 

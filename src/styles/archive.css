@@ -6,12 +6,12 @@
 .archive-section {
 	max-width: var(--container-max);
 	margin: 0 auto;
-	padding: 48px 24px;
+	padding: 48px var(--space-4);
 }
 
 .archive-header {
 	margin-bottom: 48px;
-	padding-bottom: 32px;
+	padding-bottom: var(--space-5);
 	border-bottom: 1px solid var(--color-border);
 }
 
@@ -22,14 +22,14 @@
 	color: var(--color-accent);
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
-	margin-bottom: 8px;
+	margin-bottom: var(--space-2);
 }
 
 .archive-title {
 	font-size: 40px;
 	font-weight: 700;
 	letter-spacing: -0.02em;
-	margin-bottom: 8px;
+	margin-bottom: var(--space-2);
 }
 
 .archive-count {
@@ -40,7 +40,7 @@
 .posts-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	gap: 48px 32px;
+	gap: 48px var(--space-5);
 }
 
 .no-posts {

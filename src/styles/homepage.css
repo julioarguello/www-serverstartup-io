@@ -174,25 +174,6 @@
 	animation-name: s-hero-item;
 }
 
-.s-hero__meta {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 4px 10px;
-	margin-bottom: 8px;
-	font-family: var(--font-family-mono);
-	font-size: 12px;
-	font-weight: 500;
-}
-
-.s-hero__n {
-	color: var(--color-secondary);
-}
-
-.s-hero__tag {
-	color: var(--color-hero-ink-soft);
-}
-
 /* inline, not a flex row: as a flex item the arrow wrapped onto a line of its
    own whenever the vertical's name took two */
 .s-hero__link {
@@ -709,18 +690,18 @@
 	   width/height as attributes — those give the browser the ratio so it can
 	   reserve the box, and CSS stays in charge of how big it draws. */
 	width: 268px;
-	margin-bottom: 24px;
+	margin-bottom: var(--space-4);
 }
 
 .s-cf__desc {
-	margin-top: 24px;
+	margin-top: var(--space-4);
 }
 
 .s-cf__features {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
-	margin: 32px 0;
+	gap: var(--space-3);
+	margin: var(--space-5) 0;
 	width: 100%;
 }
 
@@ -788,7 +769,7 @@
 .s-areas__inner {
 	display: flex;
 	flex-direction: column;
-	gap: 40px;
+	gap: var(--space-6);
 }
 
 .s-areas__header .text-sub {
@@ -825,7 +806,7 @@
 	align-items: baseline;
 	border-top: var(--row-rule) solid var(--color-border);
 	border-left: var(--row-accent) solid transparent;
-	padding: 18px 4px 18px 16px;
+	padding: 18px var(--space-1) 18px var(--space-3);
 	text-decoration: none;
 	color: var(--color-primary);
 	transition: background-color 0.15s, border-color 0.15s;
@@ -883,7 +864,7 @@
 	   alone. */
 	font-size: 18px;
 	line-height: 1.45;
-	color: color-mix(in srgb, var(--color-primary) 72%, transparent);
+	color: var(--color-text-muted);
 }
 
 /* A pseudo-element, not a span (#453). `aria-hidden` keeps a decorative arrow
@@ -897,7 +878,7 @@
 	align-self: center;
 	font-family: var(--font-family-mono);
 	font-size: 18px;
-	color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+	color: var(--color-text-muted);
 	transition: color 0.15s;
 }
 
@@ -949,35 +930,6 @@
 	padding-top: calc(var(--rhythm-section) * 2);
 }
 
-/* ═══ CTA — dark bg ═══ */
-.s-cta {
-	background-color: var(--color-primary);
-	padding: var(--rhythm-band) 0;
-}
-
-.s-cta__heading {
-	color: var(--color-secondary);
-	width: 100%;
-}
-
-.s-cta__subtitle {
-	color: var(--color-secondary);
-	/* one step under the heading, or the subline reads as a second heading */
-	margin-top: var(--space-3);
-}
-
-.s-cta__body {
-	color: var(--color-secondary);
-	margin-top: 16px;
-}
-
-.s-cta .btn {
-	margin-top: 32px;
-}
-
-/* #304: the closing heading shares the column like everything else —
-   70% was the page's fifth width */
-
 /* ═══ LA PRUEBA — the site as its own evidence (#304) ═══
    Statement block: the claim is checkable, so it gets the weight. */
 .s-proof {
@@ -993,6 +945,12 @@
 
 .s-proof__inner h2 {
 	margin-bottom: var(--space-3);
+}
+
+/* body prose, like every other paragraph: it inherited the 16px base on phones */
+.s-proof__inner p {
+	font-size: var(--text-body);
+	line-height: 1.45;
 }
 
 .s-proof__inner p + p {

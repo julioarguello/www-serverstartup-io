@@ -177,6 +177,16 @@
  *       with anything, which is the whole objection, and it is invisible to
  *       every other gate — it changes no contrast, no token and no word.
  *
+ *   G21 every document opening that is not photographic closes on
+ *       `--rhythm-section`, the same as every section after it (#570). The
+ *       band-less pages (privacy, search, the 404) had kept 80px, `/referencias`
+ *       8px on top, the 404 a literal inset, and nothing measured a bottom.
+ *
+ *   G22 no page scrolls sideways at the phone width. The header's global
+ *       `.search-hint` (nowrap) leaked onto the search page's own paragraph of
+ *       the same name and pushed the document to 452px in a 393px viewport —
+ *       on one page, in one locale, invisible to a gate that read four routes.
+ *
  *   G18 `.s-hero__card` opens above the fold at 390×844. The card is the only
  *       thing in the hero band that says what we do; a phone that has to
  *       scroll to reach it is a phone that was shown a picture and a heading.
@@ -321,6 +331,11 @@ const OPENING_ROUTES = [
 	{ route: "/en/deconstructing", opening: ".s-doc" },
 	{ route: "/en/references", opening: ".s-hero" },
 	{ route: "/en/privacy-policy", opening: ".legal" },
+	// the band-less page types, out of every route list until #570
+	{ route: "/search", opening: ".search-page" },
+	{ route: "/en/search", opening: ".search-page" },
+	{ route: "/no-existe-ci", opening: ".not-found" },
+	{ route: "/en/no-such-page-ci", opening: ".not-found" },
 ];
 /** The openings are measured at the two widths the tokens switch between. */
 const OPENING_WIDTHS = [390, 1440];
@@ -1025,9 +1040,20 @@ const MEASURE_OPENING = (sel) => {
 		});
 	}
 
+	// the token resolved by the browser, not parsed: it is a var() of a var()
+	const probe = document.createElement("div");
+	probe.style.paddingTop = "var(--rhythm-section)";
+	document.body.append(probe);
+	const rhythm = px(getComputedStyle(probe).paddingTop);
+	probe.remove();
+	const doc = document.documentElement;
+
 	return {
 		headerFound: !!header,
 		headerH: header ? header.getBoundingClientRect().height : null,
+		rhythm,
+		padBottom: opening ? px(getComputedStyle(opening).paddingBottom) : null,
+		overflowX: doc.scrollWidth - doc.clientWidth,
 		tokenHeaderH: px(root.getPropertyValue("--header-h")),
 		tokenClear: px(root.getPropertyValue("--open-clear")),
 		openingFound: !!opening,
@@ -1052,6 +1078,23 @@ const PLANT_OPENING_INSET = (sel) => {
 	const st = document.createElement("style");
 	st.textContent = `${sel} { padding-top: 213px !important; }`;
 	document.head.append(st);
+	return {};
+};
+
+/** G21: an opening closes on a bottom of its own. */
+const PLANT_OPENING_BOTTOM = (sel) => {
+	if (!document.querySelector(sel)) return { missing: sel };
+	const st = document.createElement("style");
+	st.textContent = `${sel} { padding-bottom: 80px !important; }`;
+	document.head.append(st);
+	return {};
+};
+
+/** G22: something too wide for the page. */
+const PLANT_SIDEWAYS = () => {
+	const main = document.querySelector("main");
+	if (!main) return { missing: "main" };
+	main.insertAdjacentHTML("beforeend", '<div class="ci-plant-wide" style="width:3000px;height:1px"></div>');
 	return {};
 };
 
@@ -1098,6 +1141,20 @@ const judgeOpening = (m, where, spec) => {
 				msg: `\`${spec.opening}\` reserves ${r(m.padTop)}px where the opening inset is ${want}px`,
 			});
 	}
+
+	if (!spec.photographic && Math.abs(m.padBottom - m.rhythm) > 1)
+		found.push({
+			g: "G21",
+			where,
+			msg: `\`${spec.opening}\` closes on ${r(m.padBottom)}px where the section rhythm is ${m.rhythm}px`,
+		});
+
+	if (m.overflowX > 1)
+		found.push({
+			g: "G22",
+			where,
+			msg: `the document scrolls sideways by ${m.overflowX}px`,
+		});
 
 	for (const b of m.behind)
 		found.push({
@@ -1555,6 +1612,8 @@ const hoverSkins = async (page, m) => {
 		{ id: "G15", why: "a header token that lies", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_HEADER_TOKEN, arg: undefined, expect: /--header-h says/ },
 		{ id: "G16", why: "an opening with an inset of its own", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_OPENING_INSET, arg: doc.opening, expect: /reserves .* where the opening inset is/ },
 		{ id: "G17", why: "a watermark fixed behind the page", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_FIXED_LAYER, arg: undefined, expect: /painted fixed behind the document/ },
+		{ id: "G21", why: "an opening with a bottom of its own", route: doc.route, spec: doc, w: 1440, h: 900, plant: PLANT_OPENING_BOTTOM, arg: doc.opening, expect: /closes on .* where the section rhythm is/ },
+		{ id: "G22", why: "a page that scrolls sideways", route: doc.route, spec: doc, w: 390, h: 844, plant: PLANT_SIDEWAYS, arg: undefined, expect: /scrolls sideways by \d+px/ },
 		{
 			id: "G18",
 			why: "a hero card pushed below the fold",
@@ -1600,7 +1659,7 @@ const hoverSkins = async (page, m) => {
 		await browser.close();
 		process.exit(3);
 	}
-	ok("4 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, a watermark fixed behind the page, and a hero card below the fold");
+	ok("6 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, an opening with a bottom of its own, a page that scrolls sideways, a watermark fixed behind the page, and a hero card below the fold");
 }
 
 // ── the real scan
@@ -1877,6 +1936,18 @@ if (findings.length) {
 		console.error("  `photographic: true`, with the reason, rather than widening the assertion.");
 		for (const f of by("G16")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G21").length) {
+		fail(`${by("G21").length} opening(s) close on a bottom of their own.`);
+		console.error("  Every section has `--rhythm-section` on EACH side (#304), the opening included —");
+		console.error("  a band-less page ends on it too, and the footer brings its own (#570).");
+		for (const f of by("G21")) console.error(`    ${f.where}  ${f.msg}`);
+	}
+	if (by("G22").length) {
+		fail(`${by("G22").length} page(s) scroll sideways.`);
+		console.error("  Nothing may scroll horizontally at a phone width (§14). Find the element wider than");
+		console.error("  the viewport — the last one was a global class leaking onto a page paragraph (#570).");
+		for (const f of by("G22")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G17").length) {
 		fail(`${by("G17").length} decorative layer(s) are painted fixed behind the document.`);
 		console.error("  A fixed layer below the content cannot be composed with anything: its relationship to");
@@ -1925,7 +1996,7 @@ ok(
 	`${MENU_ROUTES.length} routes × ${MENU_SIZES.length} sizes: the open panel wastes at most ${MENU_WASTE_MAX}% of the viewport and every current row is marked unlike a hovered one`
 );
 ok(
-	`${openingsSeen / OPENING_WIDTHS.length} page openings \u00d7 ${OPENING_WIDTHS.length} widths: \`--header-h\` matches the rendered header, every document opening reserves the same inset, nothing is painted fixed behind the page, and the hero card opens above the fold at ${FOLD.width}\u00d7${FOLD.height}`
+	`${openingsSeen / OPENING_WIDTHS.length} page openings \u00d7 ${OPENING_WIDTHS.length} widths: \`--header-h\` matches the rendered header, every document opening reserves the same inset and closes on the section rhythm, no page scrolls sideways, nothing is painted fixed behind the page, and the hero card opens above the fold at ${FOLD.width}\u00d7${FOLD.height}`
 );
 ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`

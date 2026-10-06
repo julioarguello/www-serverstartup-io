@@ -60,3 +60,28 @@ const buttonUrl = hasLink
 		<a href={buttonUrl} class="btn btn-light btn-solid">{buttonLabel}</a>
 	</div>
 </section>
+
+<style>
+	/* The closing band, styled where it is rendered: the home and the service
+	   sheets each carried a copy, and the copies had drifted (#570). It
+	   shares the column like everything else (#304). */
+	.s-cta {
+		background-color: var(--color-primary);
+		padding: var(--rhythm-band) 0;
+	}
+
+	.s-cta__heading {
+		color: var(--color-secondary);
+		width: 100%;
+	}
+
+	.s-cta__subtitle {
+		color: var(--color-secondary);
+		/* one step under the heading, or the subline reads as a second heading */
+		margin-top: var(--space-3);
+	}
+
+	.s-cta .btn {
+		margin-top: var(--space-5);
+	}
+</style>

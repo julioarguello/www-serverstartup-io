@@ -13,6 +13,20 @@ What counts as a violation, in a *declaration* outside the token file:
   · `border-radius` with anything but a token (or 0 / 50% / a percentage)
   · `box-shadow` with anything but a token (or `none`)
   · `max-width` with anything but the column token (or `100%` / `none`)
+  · `color` made translucent with `color-mix(… N%, transparent)` — ink at
+    reduced weight is ONE step, `--color-text-muted` (#570: four alphas the
+    #304 audit had removed were back, one of them a 2.6:1 glyph)
+  · a value spelled exactly as a token's definition (`color-mix(in srgb,
+    var(--color-primary) 4%, transparent)` is `--color-tint`)
+  · a margin, padding or gap in px that IS a rung of the spacing scale —
+    `32px` is `var(--space-5)`; an off-scale value is not judged here (#570)
+
+Declarations are read one by one, not one per line (#570). The earlier
+reader matched a line that STARTED with a declaration, so a one-line rule
+(`.x { background: #ea4335; }`) and every second declaration on a line went
+unread — 595 of them, one an unfenced colour literal the gate printed green
+over. In a component, only its `<style>` blocks are CSS; the frontmatter and
+the markup are blanked first, so an object literal is not read as a rule.
 
 That last one is the layout rule made executable. A page has ONE width: every
 heading, paragraph, box, panel and row ends at the column's right edge. The
@@ -62,7 +76,15 @@ TOKEN_FILE = ROOT / "src" / "styles" / "theme.css"
 COLOR_LITERAL = re.compile(
     r"(?<![\w-])(#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\))"
 )
-DECL = re.compile(r"^\s*([a-z-]+)\s*:\s*([^;]+);", re.IGNORECASE)
+# a declaration starts a line or follows `{` / `;`, and ends at `;` or `}` —
+# so `.x { a: 1; b: 2 }` yields two, and `a:hover {` (no `;`/`}` before the
+# `{`) yields none
+DECL = re.compile(r"(?:^|[{;])\s*(-?-?[a-z][a-z-]*)\s*:\s*([^;{}]+?)\s*(?=[;}])", re.IGNORECASE)
+STYLE_BLOCK = re.compile(r"(<style\b[^>]*>)(.*?)(</style>)", re.DOTALL)
+TRANSLUCENT = re.compile(r"color-mix\([^;]*\d+%\s*,\s*transparent\s*\)")
+SPACING_PROP = re.compile(r"^(margin|padding)(-[a-z-]+)?$|^(row-|column-)?gap$")
+# a px length not preceded by a minus or by another digit/word character
+PX_ATOM = re.compile(r"(?<![\w.-])(\d+(?:\.\d+)?)px\b")
 
 # `var(--token, <fallback>)` — the fallback is part of a token USE
 VAR_FALLBACK = re.compile(r"var\(\s*--[\w-]+\s*,[^)]*\)")
@@ -177,6 +199,50 @@ WIDTH_OK = re.compile(r"^(100%|none|var\(--container-max\)|var\(--measure-statem
                       r"|100vw|fit-content|max-content|min-content|inherit|initial|unset)$")
 
 
+def theme_values(theme_text: str) -> tuple[dict[str, str], dict[str, str]]:
+    """`(spacing, spelled)`: px rung -> `--space-N`, and a normalised token
+    definition -> its name, for the definitions worth recognising when they
+    are written out again (a `color-mix`, which no colour regex can see)."""
+    spacing: dict[str, str] = {}
+    spelled: dict[str, str] = {}
+    for line in COMMENT.sub("", theme_text).splitlines():
+        m = re.match(r"^\s*(--[\w-]+)\s*:\s*([^;]+);", line)
+        if not m:
+            continue
+        name, value = m.group(1), m.group(2).strip()
+        sm = re.fullmatch(r"(\d+)px", value)
+        if name.startswith("--space-") and sm:
+            spacing[sm.group(1)] = name
+        elif value.startswith("color-mix("):
+            spelled[normalise(value)] = name
+    return spacing, spelled
+
+
+def normalise(value: str) -> str:
+    """Spacing and literal fallbacks do not change what a value is."""
+    return re.sub(r"\s+", "", VAR_FALLBACK_STRIP.sub(r"var(\1)", value)).lower()
+
+
+VAR_FALLBACK_STRIP = re.compile(r"var\(\s*(--[\w-]+)\s*,[^)]*\)")
+
+
+def css_only(path: Path, raw: str) -> str:
+    """The text the browser reads as CSS, with line numbering intact: a
+    stylesheet whole, a component only inside its `<style>` blocks."""
+    if path.suffix != ".astro":
+        return raw
+    out, last = [], 0
+    for m in STYLE_BLOCK.finditer(raw):
+        out.append(re.sub(r"[^\n]", " ", raw[last:m.start(2)]))
+        out.append(m.group(2))
+        last = m.end(2)
+    out.append(re.sub(r"[^\n]", " ", raw[last:]))
+    return "".join(out)
+
+
+THEME = theme_values(TOKEN_FILE.read_text(encoding="utf-8")) if TOKEN_FILE.exists() else ({}, {})
+
+
 def scan(path: Path) -> tuple[list[tuple[int, str, str]], int]:
     """Return (violations, muted_lines) for `path`.
 
@@ -187,7 +253,8 @@ def scan(path: Path) -> tuple[list[tuple[int, str, str]], int]:
     raw = path.read_text(encoding="utf-8")
     raw_lines = raw.splitlines()
     # blank out comments but keep line numbering intact
-    stripped = COMMENT.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), raw)
+    stripped = COMMENT.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), css_only(path, raw))
+    spacing, spelled = THEME
 
     findings: list[tuple[int, str, str]] = []
     muted = 0
@@ -198,32 +265,46 @@ def scan(path: Path) -> tuple[list[tuple[int, str, str]], int]:
         elif GUARD_ON.search(source):
             off = False
 
-        m = DECL.match(line)
-        if not m:
+        decls = DECL.findall(line)
+        if not decls:
             # a colour literal outside a declaration (e.g. an SVG attribute in
             # an .astro file) is not CSS — ignore it
             continue
         if off:
-            muted += 1
+            muted += len(decls)
             continue
-        prop, value = m.group(1).lower(), m.group(2).strip()
-
-        if prop == "border-radius":
-            if not RADIUS_OK.match(value):
-                findings.append((n, prop, f"{value!r} is not var(--radius…) or 0"))
-        elif prop == "box-shadow":
-            if not SHADOW_OK.match(value):
-                findings.append((n, prop, f"{value!r} is not var(--shadow…) or none"))
-        elif prop == "max-width":
-            if not WIDTH_OK.match(value):
-                findings.append((n, prop, f"{value!r} is a width of its own — a page has one "
-                                          f"(var(--container-max)); use 100% inside a box"))
-
-        # a literal inside `var(--token, …)` is a fallback, not a declaration
-        for lit in COLOR_LITERAL.findall(VAR_FALLBACK.sub("", value)):
-            findings.append((n, prop, f"colour literal {lit} — declare it in theme.css"))
+        for prop, value in decls:
+            findings.extend((n, p, r) for p, r in judge(prop.lower(), value.strip(), spacing, spelled))
 
     return findings, muted
+
+
+def judge(prop: str, value: str, spacing: dict[str, str], spelled: dict[str, str]):
+    """Every reason one declaration breaks the token rules, as (prop, reason)."""
+    if prop == "border-radius":
+        if not RADIUS_OK.match(value):
+            yield prop, f"{value!r} is not var(--radius…) or 0"
+    elif prop == "box-shadow":
+        if not SHADOW_OK.match(value):
+            yield prop, f"{value!r} is not var(--shadow…) or none"
+    elif prop == "max-width":
+        if not WIDTH_OK.match(value):
+            yield prop, (f"{value!r} is a width of its own — a page has one "
+                         f"(var(--container-max)); use 100% inside a box")
+    elif prop == "color" and TRANSLUCENT.search(value):
+        yield prop, (f"{value!r} is translucent ink — reduced weight is one step, "
+                     f"var(--color-text-muted)")
+    elif SPACING_PROP.match(prop):
+        for px in PX_ATOM.findall(VAR_FALLBACK.sub("", value)):
+            if px in spacing:
+                yield prop, f"{px}px is var({spacing[px]}) — the spacing scale lives in theme.css"
+
+    if normalise(value) in spelled:
+        yield prop, f"{value!r} is var({spelled[normalise(value)]}) written out"
+
+    # a literal inside `var(--token, …)` is a fallback, not a declaration
+    for lit in COLOR_LITERAL.findall(VAR_FALLBACK.sub("", value)):
+        yield prop, f"colour literal {lit} — declare it in theme.css"
 
 
 # ── positive control ────────────────────────────────────────────────────────
@@ -255,11 +336,34 @@ CONTROL_CSS = """/* fixture — lives in a temp dir, never in the repository tre
 	border-radius: var(--radius);
 	max-width: 100%;
 }
+.canary-oneline { background: #abcabc; }
+.canary-second { margin: 0; color: #123456; }
+.canary-translucent {
+	color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+}
+.canary-spelled {
+	background: color-mix(in srgb, var(--color-primary) 4%, transparent);
+}
+.canary-spacing {
+	margin-top: 32px;
+}
+.canary-spacing-ok { margin: var(--space-5) 12px -8px; top: 32px; }
 /* token-guard: off — foreign chrome */
 .canary-fenced {
 	color: #ff0000;
 }
 /* token-guard: on */
+"""
+
+# A component is CSS only inside its <style>: an object literal in the
+# frontmatter must not read as a rule, and the style block still must.
+CONTROL_ASTRO = """---
+const tone = { color: "#00ff00" };
+---
+<p>{tone.color}</p>
+<style>
+	.canary-astro { color: #0000ff; }
+</style>
 """
 
 CONTROL_EXPECTED = {
@@ -268,6 +372,11 @@ CONTROL_EXPECTED = {
     "canary-radius": "not var(--radius",
     "canary-shadow": "not var(--shadow",
     "canary-width": "a width of its own",
+    "canary-oneline": "colour literal",
+    "canary-second": "colour literal",
+    "canary-translucent": "translucent ink",
+    "canary-spelled": "written out",
+    "canary-spacing": "spacing scale",
 }
 
 
@@ -277,12 +386,16 @@ def positive_control() -> int:
         fixture = Path(tmp) / "canary.css"
         fixture.write_text(CONTROL_CSS, encoding="utf-8")
         findings, muted = scan(fixture)
+        component = Path(tmp) / "canary.astro"
+        component.write_text(CONTROL_ASTRO, encoding="utf-8")
+        astro_findings, _ = scan(component)
 
     lines = CONTROL_CSS.splitlines()
 
     def selector_of(line_no: int) -> str:
-        """The rule a finding sits in — walk back to the nearest selector."""
-        for n in range(line_no - 1, -1, -1):
+        """The rule a finding sits in — walk back to the nearest selector,
+        starting at the finding's own line: a one-line rule is its own."""
+        for n in range(line_no, -1, -1):
             if lines[n].startswith("."):
                 return lines[n].split()[0].lstrip(".")
         return "<none>"
@@ -296,7 +409,11 @@ def positive_control() -> int:
         reasons = seen.get(selector, [])
         if not any(expected in r for r in reasons):
             blind.append(f"planted {selector} ({expected!r}) was NOT reported")
-    for selector in ("canary-token", "canary-ok", "canary-fenced"):
+    astro_lines = sorted(n for n, _, _ in astro_findings)
+    if astro_lines != [6]:
+        blind.append(f"canary.astro reported at lines {astro_lines}, expected [6] — the "
+                     f"<style> block only, never the frontmatter")
+    for selector in ("canary-token", "canary-ok", "canary-fenced", "canary-spacing-ok"):
         if selector in seen:
             blind.append(f"{selector} is legal CSS but was reported: {seen[selector]}")
     if muted != 1:

@@ -70,7 +70,9 @@
 .s-hero--vision.is-playing .vision__ch:not(.is-on) { visibility: hidden; }
 /* numbered from 14, as a listing seen mid-scroll (the film's was 6502 assembly); a counter, since lists lose their markers sitewide */
 .vision__code { margin: 0; padding: 0; list-style: none; counter-reset: line 13; font-family: var(--font-family-listing); font-stretch: normal; font-weight: 400; font-size: 14px; line-height: 1.5; white-space: nowrap; text-transform: none; letter-spacing: 0; }
+/* token-guard: off — the gutter of the film's listing, dimmed as the film dims it */
 .vision__code li::before { counter-increment: line; content: counter(line) "  "; color: color-mix(in srgb, var(--color-secondary) 60%, transparent); }
+/* token-guard: on */
 .vision__code li.is-active { font-weight: 700; }
 .vision__code li.is-active::after { content: " ▌"; }
 

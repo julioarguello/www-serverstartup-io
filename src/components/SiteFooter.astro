@@ -263,7 +263,7 @@ const partnerMarks = (partnerLogos.length > 0
 		margin: 0;
 		font-size: 16px;
 		line-height: 1.5;
-		color: color-mix(in srgb, var(--color-primary) 72%, transparent);
+		color: var(--color-text-muted);
 	}
 
 	.footer-partners {
@@ -285,7 +285,7 @@ const partnerMarks = (partnerLogos.length > 0
 		font-size: 12px;
 		letter-spacing: 0.06em;
 		text-transform: lowercase;
-		color: color-mix(in srgb, var(--color-primary) 62%, transparent);
+		color: var(--color-text-muted);
 	}
 
 	/* The columns keep the width their content asks for and wrap when there is
@@ -308,7 +308,7 @@ const partnerMarks = (partnerLogos.length > 0
 	.footer-list {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: var(--space-2);
 	}
 
 	/* One size for every link in the footer (#454). There were five — 13, 14,
@@ -349,7 +349,7 @@ const partnerMarks = (partnerLogos.length > 0
 	}
 
 	.footer-cta {
-		margin-top: 24px;
+		margin-top: var(--space-4);
 		/* a CTA that breaks across four lines is not a button any more */
 		white-space: nowrap;
 	}

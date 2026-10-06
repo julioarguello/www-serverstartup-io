@@ -15,7 +15,7 @@
 .s-hero__inner {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 24px;
+	gap: var(--space-4);
 	align-items: center;
 }
 
@@ -205,7 +205,7 @@
 /* section h2s inside the closer (any element before them): section-level air,
    matching .s-inst__heading's top margin */
 .s-inst__closer * + h2 {
-	margin-top: 40px;
+	margin-top: var(--space-6);
 }
 
 /* The equation headline (`A medida ≠ acoplado`). It used to be the site's one
@@ -219,7 +219,7 @@
    the face comes with them. What makes the line an equation is the `≠`, not
    the typeface. */
 .s-inst__heading {
-	margin: 40px 0 20px;
+	margin: var(--space-6) 0 20px;
 }
 
 .s-inst__lead {
@@ -265,7 +265,7 @@
 	/* Size and leading come from `main h2` (theme.css). Pinning them here is
 	   what put two headings of the same structural level at two sizes on the
 	   same page (#451). Only the space below is this block's business. */
-	margin-bottom: 16px;
+	margin-bottom: var(--space-3);
 }
 
 .s-inst__closer p {
@@ -277,7 +277,7 @@
 
 .s-inst__closer blockquote {
 	border-left: 3px solid var(--accentColor, var(--color-primary));
-	padding-left: 16px;
+	padding-left: var(--space-3);
 	font-style: italic;
 	margin: 0 0 14px;
 }
@@ -352,7 +352,7 @@
 .inst__bar {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: var(--space-2);
 	padding: 14px 20px;
 	border-bottom: 1px solid var(--color-border-soft);
 	font-size: 15px;
@@ -386,13 +386,10 @@
 	display: inline-block;
 }
 
-/* token-guard: off — the window dots are the console's own signal:
-   everyone reads them as a terminal, and a palette change must not
-   repaint them */
-.inst__bar--dots i:nth-child(1) { background: #ea4335; }
-.inst__bar--dots i:nth-child(2) { background: #f38020; }
-.inst__bar--dots i:nth-child(3) { background: #3e7d50; }
-/* token-guard: on */
+/* the window dots: tokens of their own, never the section palette */
+.inst__bar--dots i:nth-child(1) { background: var(--color-console-dot-1); }
+.inst__bar--dots i:nth-child(2) { background: var(--color-console-dot-2); }
+.inst__bar--dots i:nth-child(3) { background: var(--color-console-dot-3); }
 
 /* token-guard: off — a storefront cart: its greens, greys and rules belong to the shop being shown */
 /* ═══ CART (e-commerce) ═══ */
@@ -575,7 +572,7 @@
 }
 
 .term__ok {
-	color: #5bb974;
+	color: var(--color-console-ok);
 }
 
 .term__label {
@@ -646,23 +643,6 @@
 	font-weight: 300;
 	line-height: 1.45;
 }
-
-/* ═══ CTA ═══ */
-.s-cta {
-	background-color: var(--color-primary);
-	padding: var(--rhythm-band) 0;
-}
-
-.s-cta__heading {
-	color: var(--color-secondary);
-	width: 100%;
-}
-
-.s-cta__subtitle { color: var(--color-secondary); margin-top: var(--space-3); }
-
-.s-cta .btn { margin-top: 32px; }
-
-
 
 /* ═══ Generic item list (below panels that don't embed the bullets) ═══ */
 .inst-list {
@@ -960,16 +940,13 @@
 	.bq__grid th, .bq__grid td { padding: 6px 7px; }
 }
 
-/* ≤480: the results table needs the last 9px (measured 340 in a 331 box) */
+/* ≤480: the results table needs the last 9px (measured 340 in a 331 box),
+   and snake_case tokens (ultima_ejecucion) still exceed the column on a
+   393px phone — let them break rather than scroll. The break used to start
+   at ≤380, which left 393 scrolling 11px internally (#570). */
 @media (max-width: 480px) {
 	.bq__grid { font-size: 11px; }
-	.bq__grid th, .bq__grid td { padding: 5px 5px; }
-}
-
-/* ≤380: snake_case tokens (ultima_ejecucion) exceed the column budget of
-   the narrowest phones — let them break rather than scroll */
-@media (max-width: 380px) {
-	.bq__grid th, .bq__grid td { overflow-wrap: anywhere; }
+	.bq__grid th, .bq__grid td { padding: 5px 5px; overflow-wrap: anywhere; }
 }
 
 

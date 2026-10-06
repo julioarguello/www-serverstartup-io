@@ -218,8 +218,10 @@ const MEASURE_ROUTES = ["/", "/en", "/comercio-electronico", "/quienes-somos"];
 /** G19: the framed photographs, and the pages that render them. */
 const FRAME_ROUTES = ["/", "/en"];
 const FRAME_SELECTOR = ".s-team-strip__card img";
-/** The footer is the same on every route; one per locale is the whole surface. */
-const FOOTER_ROUTES = ["/", "/en"];
+/** The footer is the same on every route but the home, which shows the references
+ *  band higher up and leaves it out of its footer (#562); one full footer per locale
+ *  is the whole surface. */
+const FOOTER_ROUTES = ["/quienes-somos", "/en/about-us"];
 /**
  * The width from which the whole reference set must fit on one line. Below it
  * the strip wraps and G5 takes over; above it a wrapped mark is the orphan.

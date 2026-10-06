@@ -658,7 +658,7 @@
 	width: 100%;
 }
 
-.s-cta__subtitle { color: var(--color-secondary); }
+.s-cta__subtitle { color: var(--color-secondary); margin-top: var(--space-3); }
 
 .s-cta .btn { margin-top: 32px; }
 

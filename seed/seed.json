@@ -2215,6 +2215,72 @@
 									"text": "Merge pull request"
 								}
 							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_file",
+							"children": [
+								{
+									"_type": "span",
+									"text": "lighthouserc.json"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_perf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Performance"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_a11y",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Accessibility"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_bp",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Best practices"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_seo",
+							"children": [
+								{
+									"_type": "span",
+									"text": "SEO"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_level",
+							"children": [
+								{
+									"_type": "span",
+									"text": "error"
+								}
+							]
 						}
 					]
 				},
@@ -4964,6 +5030,72 @@
 								{
 									"_type": "span",
 									"text": "Merge pull request"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_file",
+							"children": [
+								{
+									"_type": "span",
+									"text": "lighthouserc.json"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_perf",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Performance"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_a11y",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Accessibility"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_bp",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Best practices"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_seo",
+							"children": [
+								{
+									"_type": "span",
+									"text": "SEO"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "lh_level",
+							"children": [
+								{
+									"_type": "span",
+									"text": "error"
 								}
 							]
 						}
@@ -14768,6 +14900,7 @@
 				"status": "published",
 				"data": {
 					"title": "Julio Argüello",
+					"excerpt": "Fundador · integración y arquitectura",
 					"content": [
 						{
 							"_type": "block",
@@ -14794,6 +14927,7 @@
 				"status": "published",
 				"data": {
 					"title": "Ignacio Ibaseta",
+					"excerpt": "Infraestructura como código y plataforma de datos",
 					"content": [
 						{
 							"_type": "block",
@@ -14831,6 +14965,7 @@
 				"status": "published",
 				"data": {
 					"title": "Daniel Sío",
+					"excerpt": "Operación de comercio electrónico",
 					"content": [
 						{
 							"_type": "block",
@@ -14858,6 +14993,7 @@
 				"translationOf": "member-julio",
 				"data": {
 					"title": "Julio Argüello",
+					"excerpt": "Founder · integration and architecture",
 					"content": [
 						{
 							"_type": "block",
@@ -14885,6 +15021,7 @@
 				"translationOf": "member-ignacio",
 				"data": {
 					"title": "Ignacio Ibaseta",
+					"excerpt": "Infrastructure as code and the data platform",
 					"content": [
 						{
 							"_type": "block",
@@ -14923,6 +15060,7 @@
 				"translationOf": "member-daniel",
 				"data": {
 					"title": "Daniel Sío",
+					"excerpt": "E-commerce operations",
 					"content": [
 						{
 							"_type": "block",
@@ -19760,7 +19898,7 @@
 							"src": "/assets/logo-cloudflare-partner.png",
 							"alt": "Cloudflare Partner Network"
 						},
-						"excerpt": "Aceleramos y protegemos tu infraestructura con las soluciones más avanzadas de Cloudflare",
+						"excerpt": "Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.",
 						"content": [
 							{
 								"_type": "block",
@@ -19768,7 +19906,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Cloudflare Partner oficial"
+										"text": "Partner oficial de Cloudflare"
 									}
 								]
 							},
@@ -19777,23 +19915,59 @@
 								"style": "normal",
 								"markDefs": [
 									{
-										"_key": "cfk1",
+										"_key": "cfl",
 										"_type": "link",
-										"href": "https://www.cloudflare.com/es-es/",
-										"blank": true
+										"href": "https://www.cloudflare.com/es-es/"
 									}
 								],
 								"children": [
 									{
 										"_type": "span",
-										"text": "Aceleramos y protegemos tu infraestructura con las soluciones más avanzadas de "
+										"text": "Desplegamos y operamos "
 									},
 									{
 										"_type": "span",
 										"text": "Cloudflare",
 										"marks": [
-											"cfk1"
+											"cfl"
 										]
+									},
+									{
+										"_type": "span",
+										"text": " para nuestros clientes, y esta misma web corre entera sobre su plataforma: "
+									},
+									{
+										"_type": "span",
+										"text": "Workers",
+										"marks": [
+											"code"
+										]
+									},
+									{
+										"_type": "span",
+										"text": ", "
+									},
+									{
+										"_type": "span",
+										"text": "D1",
+										"marks": [
+											"code"
+										]
+									},
+									{
+										"_type": "span",
+										"text": " y "
+									},
+									{
+										"_type": "span",
+										"text": "R2",
+										"marks": [
+											"code"
+										]
+									},
+									{
+										"_type": "span",
+										"text": "."
 									}
 								]
 							},
@@ -19803,7 +19977,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "CDN global"
+										"text": "CDN"
 									}
 								]
 							},
@@ -19813,7 +19987,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "para mejorar la velocidad de carga"
+										"text": "Caché en el borde, purgada en cuanto publicas."
 									}
 								]
 							},
@@ -19833,7 +20007,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "para reforzar la seguridad"
+										"text": "Reglas escritas para tu tráfico y acceso sin VPN."
 									}
 								]
 							},
@@ -19843,7 +20017,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Workers y Edge Computing"
+										"text": "Workers"
 									}
 								]
 							},
@@ -19853,7 +20027,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "para arquitecturas modernas y flexibles"
+										"text": "Lógica en el borde, sin servidores que mantener."
 									}
 								]
 							}
@@ -19874,7 +20048,7 @@
 							"src": "/assets/logo-cloudflare-partner.png",
 							"alt": "Cloudflare Partner Network"
 						},
-						"excerpt": "We speed up and protect your infrastructure with Cloudflare's most advanced services",
+						"excerpt": "We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2.",
 						"content": [
 							{
 								"_type": "block",
@@ -19891,27 +20065,59 @@
 								"style": "normal",
 								"markDefs": [
 									{
-										"_key": "cfk1",
+										"_key": "cfl",
 										"_type": "link",
-										"href": "https://www.cloudflare.com/",
-										"blank": true
+										"href": "https://www.cloudflare.com/"
 									}
 								],
 								"children": [
 									{
 										"_type": "span",
-										"text": "We speed up and protect your infrastructure with the most advanced services "
+										"text": "We deploy and run "
 									},
 									{
 										"_type": "span",
 										"text": "Cloudflare",
 										"marks": [
-											"cfk1"
+											"cfl"
 										]
 									},
 									{
 										"_type": "span",
-										"text": " has to offer."
+										"text": " for our clients, and this very site runs on it end to end: "
+									},
+									{
+										"_type": "span",
+										"text": "Workers",
+										"marks": [
+											"code"
+										]
+									},
+									{
+										"_type": "span",
+										"text": ", "
+									},
+									{
+										"_type": "span",
+										"text": "D1",
+										"marks": [
+											"code"
+										]
+									},
+									{
+										"_type": "span",
+										"text": " and "
+									},
+									{
+										"_type": "span",
+										"text": "R2",
+										"marks": [
+											"code"
+										]
+									},
+									{
+										"_type": "span",
+										"text": "."
 									}
 								]
 							},
@@ -19921,7 +20127,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Global CDN"
+										"text": "CDN"
 									}
 								]
 							},
@@ -19931,7 +20137,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "to improve load times"
+										"text": "Edge caching, purged the moment you publish."
 									}
 								]
 							},
@@ -19951,7 +20157,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "to harden security"
+										"text": "Rules written for your traffic, and access without a VPN."
 									}
 								]
 							},
@@ -19961,7 +20167,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Workers and edge computing"
+										"text": "Workers"
 									}
 								]
 							},
@@ -19971,7 +20177,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "for modern, flexible architectures"
+										"text": "Logic at the edge, with no servers to look after."
 									}
 								]
 							}

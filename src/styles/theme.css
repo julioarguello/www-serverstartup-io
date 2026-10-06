@@ -595,6 +595,23 @@ ul, ol { list-style: none; }
 	color: var(--accentLabel, var(--color-primary));
 }
 
+/* The one exception to the ghost rule (#264): the closing band's button is the
+   page's single conversion action, so it is filled at rest — paper on the dark
+   band (#562). On hover it turns to the outline: the section colour cannot be
+   the hover here, because where the page has no section it is ink — the band's
+   own ground — and the button vanished under the pointer (measured on the home
+   and Contacto, both #1E1E1E). */
+.btn-light.btn-solid {
+	background-color: var(--color-secondary);
+	color: var(--color-primary);
+}
+.btn-light.btn-solid:hover,
+.btn-light.btn-solid:focus-visible {
+	background-color: transparent;
+	border-color: var(--color-secondary);
+	color: var(--color-secondary);
+}
+
 /* ─────────────────────────────────────────
    Section headings — the house mark (#298)
    Every section heading inside <main> opens with the terminal tilde. It

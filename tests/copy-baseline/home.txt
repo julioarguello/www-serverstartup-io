@@ -12,15 +12,6 @@ ia
 greenfield
 comercio
 big data
-Cloudflare Partner oficial
-Aceleramos y protegemos tu infraestructura con las soluciones más avanzadas de Cloudflare
-CDN global
-para mejorar la velocidad de carga
-WAF y Zero Trust
-para reforzar la seguridad
-Workers y Edge Computing
-para arquitecturas modernas y flexibles
-Descubre más sobre Cloudflare
 Áreas de especialización
 Comercio electrónico
 Ampliar SAP Commerce es fácil; sobrevivir a la actualización, no.
@@ -35,18 +26,41 @@ El código no es el producto; lo que sigue vivo años después, sí.
 AI
 Inteligencia artificial
 El agente propone, el ingeniero dispone. La IA es un medio.
+referencias
+Partner oficial de Cloudflare
+Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.
+CDN
+Caché en el borde, purgada en cuanto publicas.
+WAF y Zero Trust
+Reglas escritas para tu tráfico y acceso sin VPN.
+Workers
+Lógica en el borde, sin servidores que mantener.
+Descubre más sobre Cloudflare
 Calidad y rendimiento
 Nuestro oficio es la calidad y el rendimiento donde salen caros: procesos críticos y volúmenes grandes. El pico de campaña, el catálogo que hay que reindexar, la integración que tiene que cerrar el día.
 Esta web es una muestra pequeña de la misma disciplina, aplicada a nuestro propio escaparate. Ninguna versión se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El umbral está escrito en el repositorio público, y cada ejecución del control también. Mira cómo está hecha.
+lighthouserc.json
+Performance
+≥ 95
+error
+Accessibility
+100
+error
+Best practices
+100
+error
+SEO
+100
+error
 El equipo
 Sin intermediarios y sin traspasos.
 Los mismos ingenieros recorren todas las capas: el que diseña, escribe; el que escribe, opera.
 Daniel Sío
-Ingeniero
+Operación de comercio electrónico
 Ignacio Ibaseta
-Ingeniero
+Infraestructura como código y plataforma de datos
 Julio Argüello
-Ingeniero
+Fundador · integración y arquitectura
 1 equipo =
 6 verticales = Ø
 0
@@ -54,7 +68,6 @@ traspasos
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto
-referencias
 ~Server Startup
 Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019.
 La casa
@@ -63,7 +76,6 @@ Deconstruyendo esta web
 Referencias
 Contacto
 Escríbenos
-Cuéntanos tu proyecto
 somos partners
 © 2026 Server Startup, S.L.
 Aviso legal

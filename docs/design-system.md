@@ -280,6 +280,10 @@ blindness (exit 3) rather than obeying it.
    follows the first screen. See "The opening of a vertical".
 8. **The header stays fixed** (#543). It is transparent over the opening and solid on scroll, never
    hidden on load, and it has no hide-on-scroll.
+9. **One call to action per page, and the closing one is filled** (#562). Where the closing band
+   (`CtaGlobal`) asks, the footer does not ask again. The band's button is the one exception to the
+   ghost rule (#264): `.btn-solid`, paper at rest, outline on hover — the section colour cannot be its
+   hover, because on a page with no section it is ink, the band's own ground.
 
 ## Where the budget came from (#475)
 

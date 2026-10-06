@@ -158,8 +158,9 @@ const { color: accentInkColor } = accentInk(headerAccent);
 // rotates — a vertical page has one colour and it is already the accent.
 // The home tells its six in the voyage's order (#560), not the menu's: sortByVoyage is the list the
 // hero itself is built from.
+const onHome = heroOverlay && !activeService;
 const heroSlideColors: string[] =
-	heroOverlay && !activeService
+	onHome
 		? sortByVoyage(services).map((svc: any) => svc.data?.color || "#1E1E1E")
 		: [];
 
@@ -337,6 +338,7 @@ const resolvedOgType = ogType || "website";
 	</main>
 
 	<SiteFooter
+		references={!onHome}
 		trustTitle={trustTitle}
 		houseTitle={houseTitle}
 		signature={signature}

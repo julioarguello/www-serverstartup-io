@@ -42,6 +42,8 @@ import SiteMark from "./SiteMark.astro";
  * G7 multiplies by it rather than trusting the box.
  */
 interface Props {
+	/** false on the home, which shows the references higher up (#562) */
+	references?: boolean;
 	trustTitle: string;
 	houseTitle: string;
 	signature: string;
@@ -64,6 +66,7 @@ interface Props {
 }
 
 const {
+	references = true,
 	trustTitle,
 	houseTitle,
 	signature,
@@ -104,14 +107,17 @@ const partnerMarks = (partnerLogos.length > 0
 ---
 
 <footer class="site-footer">
-	<!-- Citable references (#296): one static band, every content page.
+	<!-- Citable references (#296): one static band, every content page but
+	     the home, which shows it right after the areas (#562).
 	     Replaces the old strip, which read `partners` where five duplicate
 	     Cloudflare placeholders lived — the same logo, five times, sitewide. -->
-	<ReferenceBanner
-		title={trustTitle}
-		href={`${localePrefix}/${referencesSlug}`}
-		ariaLabel={t("trust_section")}
-	/>
+	{references && (
+		<ReferenceBanner
+			title={trustTitle}
+			href={`${localePrefix}/${referencesSlug}`}
+			ariaLabel={t("trust_section")}
+		/>
+	)}
 
 	<div class="footer-main">
 		<div class="container footer-signature">
@@ -346,6 +352,13 @@ const partnerMarks = (partnerLogos.length > 0
 		margin-top: 24px;
 		/* a CTA that breaks across four lines is not a button any more */
 		white-space: nowrap;
+	}
+
+	/* No page repeats a CTA label (#304): where the closing band already asks,
+	   the footer does not ask again (#562 — the home said «Cuéntanos tu
+	   proyecto» twice, two screens apart). */
+	body:has(.s-cta) .footer-cta {
+		display: none;
 	}
 
 	/* The funding line. 46px tall at EVERY width, by construction: the rules

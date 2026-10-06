@@ -27,8 +27,19 @@ From the Commons original (Einaz80, "Cape Penas Lighthouse.jpg", CC BY-SA 4.0, 4
 
     python3 faro.py prepare <original> <donor, masts> <donor, sheds> <donor, left> <out.png>
     python3 faro.py finish <seedvr2 output>
+
+The CDN page opens on the same photograph (#567): dusk falls over it, the lantern lights up and the
+radar's sweep is its beam. What the component needs from the photograph is measured on the finished
+3024 px file, never placed by eye:
+
+    python3 faro.py measure
+
+writes src/assets/hero/cdn-faro.json: the building's outline (GrabCut, seeded by a rough polygon; the
+rings and the sweep pass behind it), the lantern's glass (cut out of the night, where the light is
+born) and its centre (the radar's origin), the boxes text keeps off, and the row below which nothing
+is sky.
 """
-import os, sys
+import os, sys, json
 import numpy as np, cv2
 from PIL import Image
 
@@ -129,5 +140,85 @@ def finish(restored):
         print(name, os.path.getsize(path) // 1024, "KB")
 
 
+# --- the CDN opening (#567): what the dusk and the radar need from the finished photograph, measured on it ---
+
+FRAME = (1320, 707)  # the coordinates the component plays in: the 1320 px file
+# GrabCut's seed only, never the outline: a rough polygon round the lantern, the tower and the house, read
+# off a 20 px grid over the 3024 px file. The outline is GrabCut's, from the pixels
+SEED = [(720, 486), (720, 372), (727, 366), (775, 350), (880, 314), (877, 300), (870, 280), (870, 257), (881, 247),
+        (881, 222), (892, 220), (892, 195), (902, 175), (915, 162), (921, 139), (923, 139), (930, 162), (943, 175),
+        (955, 193), (954, 220), (964, 222), (964, 247), (968, 257), (975, 257), (975, 280), (968, 300), (962, 324),
+        (1049, 362), (1050, 372), (1050, 486)]
+FOOT = 484.5        # the house's and the tower's foot on the grass
+GLASS = (193, 237)  # the lantern's glass, between the cupola's rim and the gallery's floor
+GLASS_MID = 208     # a row through the glass alone, above the gallery's railing: its width is the glass's
+ROOF = 312          # the house's ridge: above it, only the tower and the lantern
+DATA = os.path.normpath(os.path.join(HERE, "..", "..", "..", "src", "assets", "hero", "cdn-faro.json"))
+
+
+def horizon(grey, k):
+    """the highest row where the sky meets land or sea, left of the house: below it nothing is sky"""
+    g = cv2.GaussianBlur(grey, (0, 0), 3)
+    dy = np.diff(g, axis=0)
+    rows = [(int(np.argmin(dy[int(380 * k):int(520 * k), X])) + int(380 * k)) / k
+            for X in range(int(20 * k), int(700 * k), int(10 * k))]
+    return min(rows)
+
+
+def measure():
+    rgb = np.array(Image.open(os.path.join(OUT, "home-faro-limpio-3024.webp")).convert("RGB"))
+    img = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+    H, W = img.shape[:2]
+    k = W / FRAME[0]
+    seed = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(seed, [np.round(np.array(SEED) * k).astype(np.int32)], 255)
+    gc = np.full((H, W), cv2.GC_BGD, np.uint8)
+    gc[cv2.dilate(seed, np.ones((41, 41), np.uint8)) > 0] = cv2.GC_PR_BGD
+    gc[seed > 0] = cv2.GC_PR_FGD
+    gc[cv2.erode(seed, np.ones((25, 25), np.uint8)) > 0] = cv2.GC_FGD
+    x0, y0, x1, y1 = int(700 * k), int(120 * k), int(1070 * k), int(500 * k)
+    sub = gc[y0:y1, x0:x1].copy()
+    cv2.grabCut(img[y0:y1, x0:x1], sub, None, np.zeros((1, 65)), np.zeros((1, 65)), 6, cv2.GC_INIT_WITH_MASK)
+    m = np.zeros((H, W), np.uint8)
+    m[y0:y1, x0:x1] = (((sub == 1) | (sub == 3)) * 255).astype(np.uint8)
+    m[int(FOOT * k):] = 0
+    _, lab, st, _ = cv2.connectedComponentsWithStats(m)
+    m = ((lab == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))) * 255).astype(np.uint8)
+    m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((7, 7), np.uint8))
+
+    def outline(mask, eps):
+        c = max(cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[0], key=cv2.contourArea)
+        return cv2.approxPolyDP(c.astype(np.float32), eps, True)[:, 0, :] / k
+
+    def flat(p):
+        return [round(float(v), 1) for v in np.asarray(p).ravel()]
+
+    def box(mask):
+        ys, xs = np.nonzero(mask)
+        return [round(xs.min() / k, 1), round(ys.min() / k, 1), round((xs.max() + 1) / k, 1), round((ys.max() + 1) / k, 1)]
+
+    # the glass: the outline's rows between the cupola and the gallery, as wide as the glass is at its middle
+    cols = np.nonzero(m[int(GLASS_MID * k)])[0]
+    glass = np.zeros_like(m)
+    glass[int(GLASS[0] * k):int(GLASS[1] * k), cols.min():cols.max() + 1] = 255
+    glass &= m
+    gy, gx = np.nonzero(glass)
+    above, below = m.copy(), m.copy()
+    above[int(ROOF * k):] = 0
+    below[:int(ROOF * k)] = 0
+    data = {
+        "frame": list(FRAME),
+        "building": flat(outline(m, 1.6)),
+        "lantern": {"c": [round(gx.mean() / k, 1), round(gy.mean() / k, 1)], "p": flat(outline(glass, 1.2))},
+        # what text keeps off, as two boxes: the tower with its lantern, and the house
+        "tower": box(above),
+        "house": box(below),
+        "sky": round(horizon(cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY).astype(float), k), 1),
+    }
+    json.dump(data, open(DATA, "w"), separators=(",", ":"))
+    print(os.path.relpath(DATA), "building", len(data["building"]) // 2, "vertices; lantern at", data["lantern"]["c"],
+          "; tower", data["tower"], "; house", data["house"], "; sky above row", data["sky"])
+
+
 if __name__ == "__main__":
-    {"prepare": prepare, "finish": finish}[sys.argv[1]](*sys.argv[2:])
+    {"prepare": prepare, "finish": finish, "measure": measure}[sys.argv[1]](*sys.argv[2:])

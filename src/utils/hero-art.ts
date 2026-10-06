@@ -90,9 +90,10 @@ export function heroGroundForSlug(slug: string | undefined): HeroGround | null {
  * a real place photographed, drawn, and then made into the vertical's own
  * instrument, on the band every scene shares (HeroScene.astro):
  *
- * - `radar` (#529) — the Cabo Peñas lighthouse, photographed, drawn as a plan,
- *   read as a radar screen: the counter-image of the castle-and-moat
- *   perimeter, which is why it belongs to the edge-security page.
+ * - `radar` (#529, #567) — the Cabo Peñas lighthouse, the whole photograph:
+ *   dusk falls, the lantern lights up and its beam is a radar's sweep — the
+ *   counter-image of the castle-and-moat perimeter, which is why it belongs
+ *   to the edge-security page.
  * - `bridge` (#531) — the Vizcaya Bridge between Portugalete and Las Arenas:
  *   the two banks with no bridge, the bridge laid as a technical drawing, then
  *   what plugs into it, because the bridge is the bus.
@@ -125,27 +126,6 @@ export function heroSceneForSlug(slug: string | undefined): HeroSceneKind | null
 	const face = slug ? FACE_BY_SLUG[slug] : undefined;
 	return (face && HERO_SCENE[face]) || null;
 }
-
-export const HERO_RADAR = {
-	/** the building, soft-edged into the band, restored (photo_restore.py: SeedVR2 + its own whites): WebP with alpha, 1320×1515 */
-	photo: "/assets/hero/cdn-faro-restaurado.webp",
-	/** the same photo at 720 px for the phone column (78vw) */
-	photoSmall: "/assets/hero/cdn-faro-restaurado-720.webp",
-	/** the same at 1760 px, for double-density desktops (the column is about 650 px wide there) */
-	photoLarge: "/assets/hero/cdn-faro-restaurado-1760.webp",
-	/** the same building as orange line work on alpha, lossless, 1210×1392 */
-	plan: "/assets/hero/cdn-faro-plan.webp",
-	/** the same drawing at 660 px, lossless, for the phone column */
-	planSmall: "/assets/hero/cdn-faro-plan-660.webp",
-};
-
-/**
- * The art box is 78vw on phones and 43.4% of the stage above 700 px, so the
- * browser can pick the small variant from the viewport alone. Lighthouse's
- * mobile run (412 px, slow 4G) scored 0.85 with the full-size pair as the LCP:
- * 434 KB where the column needs 190 (#529).
- */
-export const HERO_RADAR_SIZES = "(max-width: 700px) 78vw, 43.4vw";
 
 export const HERO_BRIDGE = {
 	/** the two banks without the bridge or the sky, cut off just under the tug, restored (photo_restore.py: SeedVR2 + its own whites), our lettering on the tanker's stern (stern_label.py): WebP with alpha, 1320×730 */
@@ -247,6 +227,18 @@ export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | 
 	return face ? HOME_PHOTO[face] : null;
 }
 
+/**
+ * The CDN opening's photograph is the home's own (#567, founder 2026-10-05: «la página de cdn tb cambia»):
+ * the whole lighthouse, masts and sheds painted out, the frame extended to the left (faro.py). What the
+ * scene plays over it is measured on it (`faro.py measure` → src/assets/hero/cdn-faro.json).
+ */
+export const HERO_RADAR = { ...homePhotoSources(HOME_PHOTO.cdn), width: HOME_PHOTO.cdn.width, height: HOME_PHOTO.cdn.height };
+
+/** The radar's rings, in the photograph's 1320 px units, centred on the lantern: one every `step`, as far as
+ *  `reach` (past the band's left edge at every width), and the dashed one at the light's nominal range, 35
+ *  nautical miles (es.wikipedia, Faro de Cabo Peñas) — 10 nm a ring. The labelled rings are the first four. */
+export const RADAR_RINGS = { step: 80, reach: 1440, range: 280 } as const;
+
 export const HERO_SKY = {
 	/** three robotic-telescope domes at the Teide Observatory, the sea and an island on the horizon (Mike Peel, CC BY-SA 4.0), whole, restored, the operator's logo painted out of the doors: WebP, 1320×880 */
 	photo: "/assets/hero/bd-observatorio-entero.webp",
@@ -256,3 +248,6 @@ export const HERO_SKY = {
 
 /** The elevation's sizes: the frame is 1.5 × 86 % of the band on desktops (less where the band is narrow, so the left dome clears the seal), up to 125 % of the width below 1100 px, 98vw on phones so a 412 px phone takes the 720 file. The photograph is the first paint. */
 export const HERO_SKY_SIZES = HERO_ELEVATION_SIZES;
+
+/** The lighthouse's frame is sized like the observatory's (86 % of the band, wider than tall): the same sizes, so a 412 px phone takes the 720 file. */
+export const HERO_RADAR_SIZES = HERO_ELEVATION_SIZES;

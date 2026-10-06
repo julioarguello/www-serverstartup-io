@@ -159,7 +159,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			const tx = textRight(s) + GAP;
 			const [tl, hr, lc] = [faro.tower[0] / FW, faro.house[2] / FW, CX / FW];
 			const full = ASPECT * BAND_H * s.height;
-			const W = Math.max(0.7 * full, Math.min(full, (s.width - MARGIN - tx) / (hr - tl)));
+			const W = Math.max(0.85 * full, Math.min(full, (s.width - MARGIN - tx) / (hr - tl)));
 			const lo = tx - tl * W, hi = s.width - MARGIN - hr * W;
 			const mid = (tx + s.width) / 2 - lc * W;
 			const L = lo > hi ? lo : Math.min(hi, Math.max(lo, mid));
@@ -188,16 +188,37 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			return { L, T: 0, W, H };
 		}
 
-		/* frame units → page px */
-		function px(x: number, y: number): [number, number] {
-			const f = hud.getBoundingClientRect();
-			return [f.left + (x / FW) * f.width, f.top + (y / FH) * f.height];
+		/* what placing text reads from the page, taken once per pass and relative to the band, so a placement
+		   made before a scroll still compares with one made after it */
+		type View = { o: DOMRect; f: Rect; band: Rect; head: number; st: Rect; copy: Rect; ctl: Rect | null; poly: [number, number][] };
+		let view: View;
+		function rel(q: Rect, o: DOMRect): Rect {
+			return { left: q.left - o.left, top: q.top - o.top, right: q.right - o.left, bottom: q.bottom - o.top };
 		}
-		/* the building's measured outline, on the page: nothing written touches it, by `pad` px */
+		function look() {
+			const o = hero!.getBoundingClientRect();
+			const k = ctl?.getBoundingClientRect();
+			view = {
+				o,
+				f: rel(hud.getBoundingClientRect(), o),
+				band: { left: 0, top: 0, right: o.width, bottom: o.height },
+				head: document.querySelector("header")?.getBoundingClientRect().height ?? 0,
+				st: rel(stage.getBoundingClientRect(), o),
+				copy: rel(copyBox(), o),
+				ctl: k ? rel(k, o) : null,
+				poly: [],
+			};
+			const b = faro.building;
+			for (let i = 0; i < b.length; i += 2) view.poly.push(px(b[i], b[i + 1]));
+		}
+		/* frame units → band px */
+		function px(x: number, y: number): [number, number] {
+			const f = view.f;
+			return [f.left + (x / FW) * (f.right - f.left), f.top + (y / FH) * (f.bottom - f.top)];
+		}
+		/* the building's measured outline: nothing written touches it, by `pad` px */
 		function onBuilding(r: Rect, pad: number): boolean {
-			const o = faro.building;
-			const poly: [number, number][] = [];
-			for (let i = 0; i < o.length; i += 2) poly.push(px(o[i], o[i + 1]));
+			const poly = view.poly;
 			const R = { left: r.left - pad, top: r.top - pad, right: r.right + pad, bottom: r.bottom + pad };
 			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
 			function within(q: [number, number]): boolean {
@@ -236,14 +257,11 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		/* where nothing written may land: off the band or the stage that clips it, on the copy, on the controls,
 		   on the tower or the house, below the sky's last row, or on what is already written */
 		function clearOf(r: Rect, taken: Rect[], trail = false): boolean {
-			const band = hero!.getBoundingClientRect();
-			const head = document.querySelector("header")?.getBoundingClientRect().bottom ?? band.top;
+			const { band, head, st, copy: c, ctl: k } = view;
 			if (r.left < band.left + 8 || r.right > band.right - 8 || r.top < Math.max(band.top, head) + 8 || r.bottom > band.bottom - 8) return false;
 			if (narrow) {
-				const st = stage.getBoundingClientRect();
 				if (r.left < st.left + 4 || r.right > st.right - 4 || r.top < st.top + 4 || r.bottom > st.bottom - 4) return false;
-			} else if (hits(r, copyBox(), 14)) return false;
-			const k = ctl?.getBoundingClientRect();
+			} else if (hits(r, c, 14)) return false;
 			if (k && hits(r, k, 10)) return false;
 			if (onBuilding(r, 8)) return false;
 			if (r.bottom > px(0, faro.sky)[1] - 4) return false;
@@ -281,6 +299,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		const placed: Rect[] = [];
 		const BEARINGS = [135, 145, 125, 155, 115, 165, 105, 175, 95, 45, 35, 25, 15];
 		function placeLabels() {
+			look();
 			placed.length = 0;
 			const [origin, ...ringLabs] = Array.from(hud.querySelectorAll<HTMLElement>(".radar__lab:not(.radar__range)"));
 			const rangeEl = hud.querySelector<HTMLElement>(".radar__range");
@@ -339,6 +358,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		const ECHO: [number, number][] = [[430, 40], [300, 130], [1010, 110], [560, 300], [260, 380], [1010, 300], [500, 330], [500, 180]];
 		function placeEcho() {
 			if (youEl.hidden) return;
+			look();
 			youEl.style.visibility = "hidden";
 			for (const [x, y] of ECHO) {
 				const r = labelRect(youEl, x, y, false);
@@ -399,7 +419,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			const [ax, ay] = px(x, y);
 			const w = text.length * 7.6 + 22, h = 16;
 			const r = { left: left ? ax - w : ax, top: ay - h / 2, right: left ? ax : ax + w, bottom: ay + h / 2 };
-			const echo = youEl.hidden ? [] : [youEl.getBoundingClientRect()];
+			const echo = youEl.hidden ? [] : [rel(youEl.getBoundingClientRect(), view.o)];
 			return clearOf(r, [...placed, ...echo], true);
 		}
 		const live: [number, number][] = [];
@@ -415,6 +435,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 			return d;
 		}
 		function blip() {
+			look();
 			const zones = ZONES();
 			let x = 0, y = 0, z = zones[0], tries = 0;
 			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
@@ -463,6 +484,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		function feedOff() { feeding = false; stopFeed(); }
 		/* the end: one still event per zone, at the first clear point of a grid over it, apart from the others */
 		function settle() {
+			look();
 			const still: [number, number][] = [];
 			ZONES().forEach((z, i) => {
 				const text = EVENTS[i];

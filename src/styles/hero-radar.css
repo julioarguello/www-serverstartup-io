@@ -103,7 +103,8 @@
 	font-size: 11px;
 	font-weight: 400;
 	letter-spacing: 0;
-	color: var(--color-console-ink);
+	/* paper at reduced weight: the console's 72 % measured 4.4:1 on the night sky at 768 */
+	color: var(--color-hero-ink-soft);
 }
 .radar__you {
 	translate: 0 -50%;
@@ -146,7 +147,12 @@
 	padding-left: 22px;
 	animation: radar-blip 2.4s ease-out forwards;
 }
-.radar__blip--l { translate: -100% -50%; padding-left: 0; padding-right: 22px; }
+/* the night under the text, from just before its first letter: where an event lands on a ring, the orange
+   line under orange text measured 2.9:1 — the plate dims the line, never the sky */
+.radar__blip {
+	background: linear-gradient(var(--color-scene-night), var(--color-scene-night)) no-repeat 17px 0 / calc(100% - 17px) 100%;
+}
+.radar__blip--l { translate: -100% -50%; padding-left: 0; padding-right: 22px; background-position: 0 0; }
 /* the events held at the end, one per zone (#558) */
 .radar__blip.is-still { animation: none; opacity: 1; }
 .radar__blip::after {

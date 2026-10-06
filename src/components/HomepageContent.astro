@@ -185,15 +185,16 @@ const members = memberEntries ?? [];
 		</div>
 	)}
 	{/* The seal the vertical pages carry (HeroScene.astro: the logo cube's outline and inner edges),
-	    large and faint, leaving by the left margin — here in the colour of the vertical showing, on
-	    the same clock as the photographs (founder, 2026-10-05: "echo de menos el cubito"). The six
-	    colours come from the CMS as --c1…--c6, like the header's edge. */}
-	{heroSlides.length > 0 && (
-		<svg class="s-hero__seal" viewBox="0 0 200 228" aria-hidden="true" style={heroSlides.map((s, i) => `--c${i + 1}:${s.color}`).join(";")}>
+	    faint, leaving by the left margin — here in the colour of the vertical showing (founder,
+	    2026-10-05: "echo de menos el cubito"). Six seals, one per colour, dissolving on the same clock
+	    as the photographs: one seal recoloured by its keyframes stayed one colour where var() inside
+	    @keyframes is not honoured (founder, 2026-10-06: "siempre en el mismo color"). */}
+	{heroSlides.map((slide, i) => (
+		<svg class="s-hero__seal" viewBox="0 0 200 228" aria-hidden="true" style={`--i:${i};--cc:${slide.color}`}>
 			<path fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214" />
 		</svg>
-	)}
-<div class="container s-hero__inner">
+	))}
+	<div class="container s-hero__inner">
 		{/* The hybrid the founder asked for (2026-08-27): what the COMPANY is
 		    holds still — the <h1> and the line under it are the same on all six
 		    frames, which is also what SEO and a screen reader read — and what
@@ -243,34 +244,34 @@ const members = memberEntries ?? [];
 						</li>
 					))}
 				</ul>
-			{heroSlides.length > 1 && (
-				<div class="s-hero__ticker">
-					{/* `hidden` until the script un-hides them: a control that does
-					    nothing is worse than no control, and with no JS the CSS
-					    rotation still carries the band on its own. */}
-					<button type="button" class="s-hero__nav" data-hero-nav="-1" aria-label={t("hero_prev")} hidden>
-						<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-							<path d="M10 2.5 4.5 8l5.5 5.5"></path>
-						</svg>
-					</button>
-					{/* The index names the stops instead of counting them: on a voyage
-					    "01 / 06" says nothing, the six names say the route. Each bar
-					    fills in its vertical's colour while its photograph shows. */}
-					<span class="s-hero__dots" aria-hidden="true">
-						{heroSlides.map((slide, i) => (
-							<span class="s-hero__stop" style={`--i:${i};--cc:${slide.color}`}>
-								<span class="s-hero__dot"></span>
-								<span class="s-hero__stop-name">{slide.short}</span>
-							</span>
-						))}
-					</span>
-					<button type="button" class="s-hero__nav" data-hero-nav="1" aria-label={t("hero_next")} hidden>
-						<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-							<path d="M6 2.5 11.5 8 6 13.5"></path>
-						</svg>
-					</button>
-				</div>
-			)}
+			</div>
+		)}
+		{heroSlides.length > 1 && (
+			<div class="s-hero__ticker">
+				{/* `hidden` until the script un-hides them: a control that does
+				    nothing is worse than no control, and with no JS the CSS
+				    rotation still carries the band on its own. */}
+				<button type="button" class="s-hero__nav" data-hero-nav="-1" aria-label={t("hero_prev")} hidden>
+					<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path d="M10 2.5 4.5 8l5.5 5.5"></path>
+					</svg>
+				</button>
+				{/* The index names the stops instead of counting them: on a voyage
+				    "01 / 06" says nothing, the six names say the route. Each bar
+				    fills in its vertical's colour while its photograph shows. */}
+				<span class="s-hero__dots" aria-hidden="true">
+					{heroSlides.map((slide, i) => (
+						<span class="s-hero__stop" style={`--i:${i};--cc:${slide.color}`}>
+							<span class="s-hero__dot"></span>
+							<span class="s-hero__stop-name">{slide.short}</span>
+						</span>
+					))}
+				</span>
+				<button type="button" class="s-hero__nav" data-hero-nav="1" aria-label={t("hero_next")} hidden>
+					<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path d="M6 2.5 11.5 8 6 13.5"></path>
+					</svg>
+				</button>
 			</div>
 		)}
 	</div>

@@ -3,8 +3,7 @@ Saltar al contenido
 EN
 Ingeniería de software: arquitectura, integración y operación
 Más de veinte años de oficio en comercio electrónico, integración de sistemas y el dato. Partners oficiales de Cloudflare desde 2019.
-CDN, WAF y seguridad edge
-→
+CDN, WAF y seguridad edge→
 Lo primero que ve quien llega: el borde, defendido.
 cdn y waf
 integración

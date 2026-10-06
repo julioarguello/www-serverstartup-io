@@ -84,20 +84,25 @@
 	z-index: 1;
 }
 
-/* The seal (#560): the vertical pages' cube, faint, in the showing vertical's
-   colour. Phones and tablets hang it from the band's foot, as the scenes do. */
+/* The seal (#560): the vertical pages' cube, faint — six of them, one per
+   vertical's colour, dissolving into each other on the photographs' clock.
+   Phones and tablets hang it from the band's foot, as the scenes do. */
 .s-hero__seal {
 	position: absolute;
 	z-index: 0;
-	left: -140px;
-	bottom: -120px;
-	width: 420px;
+	left: -90px;
+	bottom: -80px;
+	width: 280px;
 	height: auto;
-	color: var(--c1, var(--color-secondary));
-	opacity: .16;
+	color: var(--cc, var(--color-secondary));
+	opacity: 0;
 	pointer-events: none;
 	animation: s-hero-seal var(--hero-cycle) linear infinite;
-	animation-delay: -0.5s;
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
+}
+
+.s-hero__seal:first-of-type {
+	opacity: .16;
 }
 
 /* ── the card: everything that rotates, in one piece (founder's direction C)
@@ -188,12 +193,16 @@
 	color: var(--color-hero-ink-soft);
 }
 
+/* inline, not a flex row: as a flex item the arrow wrapped onto a line of its
+   own whenever the vertical's name took two */
 .s-hero__link {
-	display: inline-flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 4px 12px;
+	display: inline;
 	color: var(--color-secondary);
+}
+
+.s-hero__link .s-hero__arrow {
+	margin-left: .3em;
+	white-space: nowrap;
 }
 
 .s-hero__name {
@@ -345,6 +354,7 @@
 }
 
 .s-hero.is-manual .s-hero__photo { opacity: 0; transform: none; }
+.s-hero.is-manual .s-hero__seal { opacity: 0; }
 .s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
 .s-hero.is-manual .s-hero__rule { opacity: 0; }
 .s-hero.is-manual .s-hero__dot { background-size: 0% 100%; }
@@ -387,12 +397,6 @@
 	font-weight: 700;
 }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__seal { color: var(--c1, var(--color-secondary)); }
-.s-hero.is-manual[data-slide="1"] .s-hero__seal { color: var(--c2, var(--color-secondary)); }
-.s-hero.is-manual[data-slide="2"] .s-hero__seal { color: var(--c3, var(--color-secondary)); }
-.s-hero.is-manual[data-slide="3"] .s-hero__seal { color: var(--c4, var(--color-secondary)); }
-.s-hero.is-manual[data-slide="4"] .s-hero__seal { color: var(--c5, var(--color-secondary)); }
-.s-hero.is-manual[data-slide="5"] .s-hero__seal { color: var(--c6, var(--color-secondary)); }
 
 .s-hero.is-manual[data-slide="0"] .s-hero__rule:nth-child(1),
 .s-hero.is-manual[data-slide="1"] .s-hero__rule:nth-child(2),
@@ -401,6 +405,15 @@
 .s-hero.is-manual[data-slide="4"] .s-hero__rule:nth-child(5),
 .s-hero.is-manual[data-slide="5"] .s-hero__rule:nth-child(6) {
 	opacity: 1;
+}
+
+.s-hero.is-manual[data-slide="0"] .s-hero__seal:nth-of-type(1),
+.s-hero.is-manual[data-slide="1"] .s-hero__seal:nth-of-type(2),
+.s-hero.is-manual[data-slide="2"] .s-hero__seal:nth-of-type(3),
+.s-hero.is-manual[data-slide="3"] .s-hero__seal:nth-of-type(4),
+.s-hero.is-manual[data-slide="4"] .s-hero__seal:nth-of-type(5),
+.s-hero.is-manual[data-slide="5"] .s-hero__seal:nth-of-type(6) {
+	opacity: .16;
 }
 
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
@@ -436,6 +449,13 @@
 
 /* The caption leaves in 0.3 s as the next photograph starts to dissolve, and
    the next one arrives once the picture is half way — one text at a time. */
+/* the seals cross-fade as one: the next comes in while the last goes */
+@keyframes s-hero-seal {
+	0% { opacity: 0; }
+	4.1667%, 16.6667% { opacity: .16; }
+	20.8333%, 100% { opacity: 0; }
+}
+
 @keyframes s-hero-item {
 	0%, 2.5% { opacity: 0; visibility: hidden; }
 	3.3333% { opacity: 1; visibility: visible; }
@@ -510,13 +530,24 @@
 	/* desktops: the whole band is the photograph, the copy on its veil, the
 	   card back in the copy's flow */
 	.s-hero__card {
-		position: relative;
-		inset-inline: auto;
+		position: absolute;
+		z-index: 2;
+		top: auto;
+		left: auto;
+		right: max(20px, calc((100% - var(--container-max)) / 2 + 20px));
+		bottom: var(--space-7);
 		translate: none;
-		margin-top: var(--space-5);
+		width: 34rem;
+	}
+	/* the bars stop short of the column's edge: their 11 px names must stand on
+	   the veil, and past 60 % of the band it gives way to the photograph */
+	.s-hero__ticker {
+		margin-top: var(--space-6);
+		width: 30rem;
 	}
 	.s-hero {
-		padding: calc(var(--header-h) + var(--space-8)) 0 var(--space-8);
+		/* the foot is the card's: the copy centres in what is left above it */
+		padding: calc(var(--header-h) + var(--space-6)) 0 calc(var(--space-8) + 13rem);
 		justify-content: center;
 	}
 	.s-hero__stage {
@@ -544,10 +575,22 @@
 	}
 	/* desktops: under the copy, leaving by the left margin, as on the vertical pages */
 	.s-hero__seal {
-		left: -200px;
-		top: 290px;
+		left: -120px;
+		top: 330px;
 		bottom: auto;
-		width: 760px;
+		width: 460px;
+	}
+	/* the card in the band's lower right corner, apart from the heading, as a
+	   caption on the photograph (founder, 2026-10-06: "lo separa del título
+	   principal y le da más protagonismo"); the bars stay under the kicker.
+	   The column stops being the card's containing block so the card can take
+	   the band's corner; what stays in it is lifted over the photograph */
+	.s-hero__inner {
+		position: static;
+	}
+	.s-hero__inner > :not(.s-hero__card) {
+		position: relative;
+		z-index: 1;
 	}
 	.s-hero h1 {
 		font-size: 56px;

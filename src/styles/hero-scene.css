@@ -32,9 +32,10 @@
 .scene__seal {
 	position: absolute;
 	z-index: 1;
-	left: -200px;
-	top: 290px;
-	width: 760px;
+	/* 760 px until #560: the founder found it oversized on every page (2026-10-06) */
+	left: -120px;
+	top: 330px;
+	width: 460px;
 	height: auto;
 	color: var(--scene-c);
 	opacity: .16;
@@ -107,7 +108,7 @@
 	.s-hero--scene .s-hero__stage { grid-row: 2; position: relative; inset: auto; margin-top: var(--space-3, 16px); overflow: hidden; container-type: size; }
 	.s-hero--scene .s-hero__scrim { display: none; }
 	.scene__ctl { right: 12px; bottom: 12px; }
-	.scene__seal { left: -140px; top: auto; bottom: -120px; width: 420px; }
+	.scene__seal { left: -90px; top: auto; bottom: -80px; width: 280px; }
 }
 /* phones: the type follows the screen's height, so the first screen holds on every phone */
 @media (max-width: 767px) {

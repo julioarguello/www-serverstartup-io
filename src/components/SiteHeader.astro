@@ -253,7 +253,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		background: none;
 		border: none;
 		cursor: pointer;
-		padding: 4px;
+		padding: var(--space-1);
 		line-height: 0;
 		border-radius: var(--radius);
 	}
@@ -394,7 +394,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	/* the key hint sits where a shell would print its own status */
 	.search-hint {
 		margin-left: auto;
-		padding-left: 16px;
+		padding-left: var(--space-3);
 		color: var(--color-text-muted);
 		white-space: nowrap;
 	}
@@ -403,7 +403,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		border: 1px solid var(--color-border);
 		border-bottom-width: 2px;
 		border-radius: var(--radius);
-		padding: 0 4px;
+		padding: 0 var(--space-1);
 		background: var(--color-secondary);
 	}
 
@@ -482,7 +482,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	.search-form--menu .search-line {
 		padding: 12px 14px;
 		flex-wrap: wrap;
-		row-gap: 8px;
+		row-gap: var(--space-2);
 	}
 	/* Placeholder and typed value share one ink. #338's whole point is that
 	   the line is a REAL command whose argument happens to be pre-filled —
@@ -516,7 +516,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	   ellipsizes (the two extreme slugs are the only ones that still do). */
 	@media (max-width: 480px) {
 		.site-header .header-inner { padding-inline: 12px; }
-		.header-brand { flex: 1; gap: 8px; }
+		.header-brand { flex: 1; gap: var(--space-2); }
 		.brand-cube { width: 26px; height: 30px; }
 		.brand-prompt { font-size: 0.8rem; flex: 1; }
 		.brand-path {
@@ -548,7 +548,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 	.header-actions {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: var(--space-2);
 	}
 
 	@media (min-width: 768px) {

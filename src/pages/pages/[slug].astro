@@ -66,11 +66,11 @@ Astro.cache.set(cacheHint);
 	.page-article {
 		max-width: var(--container-max);
 		margin: 0 auto;
-		padding: 64px 24px 64px;
+		padding: var(--space-7) var(--space-4) var(--space-7);
 	}
 
 	.page-header {
-		margin-bottom: 32px;
+		margin-bottom: var(--space-5);
 	}
 
 	.page-title {
@@ -97,14 +97,14 @@ Astro.cache.set(cacheHint);
 
 	.page-content :global(blockquote) {
 		margin: 1.5em 0;
-		padding-left: 24px;
+		padding-left: var(--space-4);
 		border-left: 3px solid var(--color-border);
 		color: var(--color-text-muted);
 	}
 
 	.page-content :global(pre) {
 		margin: 1.5em 0;
-		padding: 16px;
+		padding: var(--space-3);
 		background: var(--color-surface);
 		border-radius: var(--radius);
 		overflow-x: auto;

@@ -1,5 +1,5 @@
 .posts-page {
-	padding: var(--open-pad-top) 0 var(--space-8);
+	padding: var(--open-pad-top) 0 var(--rhythm-section);
 }
 
 .page-header {
@@ -20,7 +20,7 @@
 }
 
 .post-item {
-	padding: 32px 0;
+	padding: var(--space-5) 0;
 	border-bottom: 1px solid var(--color-border);
 }
 
@@ -44,7 +44,7 @@
 	gap: 12px;
 	font-size: 14px;
 	color: var(--color-text-muted);
-	margin-bottom: 8px;
+	margin-bottom: var(--space-2);
 }
 
 .meta-dot {
@@ -64,7 +64,7 @@
 .post-byline {
 	display: inline-flex;
 	align-items: center;
-	gap: 4px;
+	gap: var(--space-1);
 }
 
 .post-byline-avatar {
@@ -95,7 +95,7 @@
 	font-weight: 600;
 	line-height: 30px;
 	letter-spacing: -0.01em;
-	margin-bottom: 8px;
+	margin-bottom: var(--space-2);
 	transition: color 0.2s;
 }
 
@@ -112,13 +112,13 @@
 .post-tags {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 16px;
+	gap: var(--space-2);
+	margin-top: var(--space-3);
 }
 
 .post-tag {
 	display: inline-block;
-	padding: 4px 12px;
+	padding: var(--space-1) 12px;
 	font-size: 14px;
 	color: var(--color-text-muted);
 	background: var(--color-surface);

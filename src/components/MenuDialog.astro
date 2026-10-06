@@ -285,7 +285,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		max-width: var(--container-max);
 		width: 100%;
 		margin: 0 auto;
-		padding: 0 24px 0 30px;
+		padding: 0 var(--space-4) 0 30px;
 		display: flex;
 		align-items: center;
 		gap: 12px;
@@ -333,7 +333,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		color: var(--menu-ink-soft);
 		background: var(--menu-tint);
 		border-radius: var(--radius);
-		padding-inline: 4px;
+		padding-inline: var(--space-1);
 		overflow: hidden;
 		text-overflow: ellipsis;
 		/* token-guard: off — truncation, not a measure: the same clamp the
@@ -372,7 +372,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		margin: 0 auto;
 		/* 76px of fixed strip plus air; the strip is `position: fixed`, so this
 		   padding is the only thing keeping the console out from under it. */
-		padding: 108px 24px var(--space-5);
+		padding: 108px var(--space-4) var(--space-5);
 		display: grid;
 		grid-template-columns: 1fr auto;
 		column-gap: 48px;
@@ -407,7 +407,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 	.menu-spec {
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
+		gap: var(--space-1);
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -469,7 +469,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 
 	.menu-site {
 		margin: 22px 0 0;
-		padding: 16px 10px 0;
+		padding: var(--space-3) 10px 0;
 		/* a hairline, not a dash: the site separates with `--color-border`
 		   everywhere else, and a dashed rule is a texture, not a boundary */
 		border-top: 1px solid var(--menu-rule);
@@ -584,7 +584,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 	@media (min-width: 701px) and (max-width: 1100px) {
 		.menu-inner {
 			column-gap: 28px;
-			padding-inline: 40px;
+			padding-inline: var(--space-6);
 		}
 		.logo-stage { transform: scale(0.85); margin: -14px 0; }
 		.menu-die { padding-right: 6px; }
@@ -598,7 +598,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 		.spec-title--long { display: none; }
 		.spec-title--short { display: inline; }
 		.menu-bar { height: 60px; }
-		.menu-bar__inner { padding: 0 16px 0 22px; gap: 8px; }
+		.menu-bar__inner { padding: 0 var(--space-3) 0 22px; gap: var(--space-2); }
 		.menu-bar__cube { width: 24px; height: 27px; }
 		.menu-bar__word,
 		.menu-bar__path { font-size: 0.8rem; }
@@ -612,7 +612,7 @@ const homeLink = siteLinks.find((l) => l.key === "home") ?? null;
 			grid-template-columns: 1fr;
 			column-gap: 20px;
 			row-gap: 20px;
-			padding: 76px 16px 40px;
+			padding: 76px var(--space-3) var(--space-6);
 			align-content: start;
 		}
 		/* The desktop placement has to be undone by hand: `grid-column: 2` in a

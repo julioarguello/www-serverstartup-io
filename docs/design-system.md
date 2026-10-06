@@ -13,9 +13,9 @@ the reason to read this file rather than grep for hex codes.
 
 | Gate | Asserts |
 | ---- | ------- |
-| `ci-check-design-tokens.py` | Every colour, radius, shadow and max-width literal outside theme.css is a defect **and** every token theme.css declares is consumed by something. Both directions, because each was violated in turn. |
+| `ci-check-design-tokens.py` | Every colour, radius, shadow and max-width literal outside theme.css is a defect, and so are ink made translucent with `color-mix(… N%, transparent)` (muted is one step, `--color-text-muted`), a token's definition written out again, and a margin, padding or gap in px that is a rung of the spacing scale. **And** every token theme.css declares is consumed by something. Both directions, because each was violated in turn. It reads every declaration, not one per line: until #570 a one-line rule went unread. |
 | `ci-check-var-resolves.mjs` | Every `var()` resolves on the elements its rule matches (26 routes × 2 widths), and every runtime-injected `var()` carries a fallback. An unresolved `var()` with no fallback does not fall back — it invalidates the whole declaration. |
-| `ci-check-layout.mjs` | The composition itself: one right edge per block, one heading system, equal row heights, the footer's alignment and the funding marks' size. Geometry, not a screenshot diff. |
+| `ci-check-layout.mjs` | The composition itself: one right edge per block, one heading system, equal row heights, the footer's alignment and the funding marks' size, every page type's opening (the 404 and search included) reserving the same inset and closing on `--rhythm-section`, and no page scrolling sideways at a phone width. Geometry, not a screenshot diff. |
 | `ci-check-a11y.mjs` | Measured contrast of every text box in the open menu and over every hero plate, axe on 28 routes, keyboard traversal, reflow at 320px, W3C Nu. |
 | `copy-baseline.mjs` | The rendered words of 26 routes, frozen. A CSS change that moves text is visible here. |
 | `ci-check-css-budget.py` | The source budget in principle 1 — **and** that the figure printed beside it still matches the tree, to within 5 KB. The 2026-08-05 version of this file was four times out of date, which is exactly why nobody noticed the budget was 2.6x over. |
@@ -54,7 +54,7 @@ about the same thing.
 | `--color-edge` / `--color-tint-edge` | `#F38020` / 8% of it | Cloudflare's own orange, and its tint |
 | `--color-surface` / `-soft` / `-hover` / `-sheet` | `#f5f5f5` / `#fafafa` / `#e8e8e8` / `#FDFDFB` | Neutral grounds |
 | `--color-marked` | `rgba(206,212,218,.5)` | Text highlight |
-| `--color-console-*` (10) | `#101214` … | The machine voice: console grounds, bars, dimmed ink, the green OK |
+| `--color-console-*` (10) | `#101214` … | The machine voice: console grounds, bars, dimmed ink, the green OK, the three window dots |
 | `--color-hero-*` / `--hero-scrim*` | paper at an opacity | Copy and chrome over a photographic plate (#413) |
 
 ### The vertical palette lives in the CMS, not here
@@ -244,9 +244,11 @@ narrow — an escape hatch nobody can see is how a gate goes quiet.
 ```
 Exempts a region from the **literal** check. For chrome that belongs to a
 product being imitated: the service instruments quote foreign UI, and a house
-token there would be a lie about someone else's brand. 295 declarations sit
-inside these regions today, almost all of them `service.css`'s instruments, and
-every run prints that count.
+token there would be a lie about someone else's brand. 387 declarations sat
+inside these regions on 2026-10-06, 342 of them in `service.css`'s instruments,
+and every run prints the current count. The figure rose from 295 when the gate
+began reading every declaration on a line, not just the first (#570). Nothing
+was added to the fences; they had been counted short.
 
 ```css
 /* token-scale: on */   …   /* token-scale: off */
@@ -302,8 +304,8 @@ and two of the three are not instruments at all. Two things account for most of
 it, and both are deliberate:
 
 - `service.css` carries the imitations of foreign UI — the cart, the BigQuery
-  console, the GitHub pull request. **276 of the 295 muted declarations in the
-  whole tree are in it**, because a house token there would be a lie about
+  console, the GitHub pull request. **Most of the fenced declarations in the
+  whole tree are in it** (342 of 387 on 2026-10-06), because a house token there would be a lie about
   someone else's brand. That is the vertical pages' whole argument (#413), not
   bloat.
 - Roughly half of `theme.css` is prose explaining why each rule exists. That is

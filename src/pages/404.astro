@@ -137,8 +137,8 @@ const pieces = (servicesResult.entries ?? [])
 <style>
 	.not-found {
 		text-align: center;
-		padding-top: calc(80px + 40px);
-		padding-bottom: 80px;
+		/* the opening every page type shares (#456), and the one rhythm (#570) */
+		padding-block: var(--open-pad-top) var(--rhythm-section);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -158,7 +158,7 @@ const pieces = (servicesResult.entries ?? [])
 	.nf-console__bar {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: var(--space-2);
 		padding: 12px 18px;
 		background: var(--color-console-bar);
 	}
@@ -170,13 +170,10 @@ const pieces = (servicesResult.entries ?? [])
 		display: inline-block;
 	}
 
-	/* token-guard: off — the window dots are the console's own signal: everyone
-	   reads them as a terminal, and a palette change must not repaint them.
-	   Same three as .inst__bar--dots in service.css, on purpose. */
-	.nf-console__bar i:nth-child(1) { background: #ea4335; }
-	.nf-console__bar i:nth-child(2) { background: #f38020; }
-	.nf-console__bar i:nth-child(3) { background: #3e7d50; }
-	/* token-guard: on */
+	/* the window dots — the same three tokens as .inst__bar--dots in service.css */
+	.nf-console__bar i:nth-child(1) { background: var(--color-console-dot-1); }
+	.nf-console__bar i:nth-child(2) { background: var(--color-console-dot-2); }
+	.nf-console__bar i:nth-child(3) { background: var(--color-console-dot-3); }
 
 	.nf-console__bar span {
 		font-family: var(--font-family-mono);
@@ -222,7 +219,7 @@ const pieces = (servicesResult.entries ?? [])
 	.not-found__logo {
 		width: 190px;
 		height: auto;
-		margin-bottom: 8px;
+		margin-bottom: var(--space-2);
 	}
 
 	.not-found h1 {
@@ -241,7 +238,7 @@ const pieces = (servicesResult.entries ?? [])
 	}
 
 	.not-found > p {
-		margin-bottom: 32px;
+		margin-bottom: var(--space-5);
 		max-width: 100%;
 	}
 
@@ -310,7 +307,6 @@ const pieces = (servicesResult.entries ?? [])
 	}
 
 	@media (min-width: 768px) {
-		.not-found { padding-top: 150px; }
 		.not-found__logo { width: 210px; }
 		.nf-console__trace { font-size: 13px; padding: 22px 26px 26px; }
 	}

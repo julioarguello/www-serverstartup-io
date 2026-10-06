@@ -4,7 +4,7 @@
    (founder, 2026-10-05: "el botón de pause y seguir hazlo como en el resto de
    verticales"), so they live here rather than in the scene's sheet. */
 /* WCAG 2.2.2: pause stops all motion, replay restarts it */
-.scene__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: 8px; }
+.scene__ctl { position: absolute; right: var(--space-3, 16px); bottom: var(--space-3, 16px); z-index: 3; display: flex; gap: var(--space-2); }
 .scene__pause { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .scene__pause-btn,
 .scene__replay {
@@ -16,7 +16,7 @@
 	padding: 0;
 	border: 1px solid var(--color-secondary);
 	color: var(--color-secondary);
-	background: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
+	background: var(--color-scene-night);
 	cursor: pointer;
 	font: inherit;
 	font-size: 14px;

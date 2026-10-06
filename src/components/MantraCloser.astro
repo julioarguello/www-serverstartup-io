@@ -105,7 +105,7 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		margin: 0;
 		padding: var(--space-4) var(--space-5) var(--space-5);
 		border-left: var(--block-rule) solid var(--color-primary, #1e1e1e);
-		background: color-mix(in srgb, var(--color-primary, #1e1e1e) 4%, transparent);
+		background: var(--color-tint);
 	}
 
 	.mantra__eq {
@@ -142,7 +142,7 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		overflow: hidden;
 		vertical-align: baseline;
 		line-height: 0;
-		margin-right: 8px;
+		margin-right: var(--space-2);
 	}
 	.mantra__cells-grid {
 		display: grid;
@@ -166,7 +166,7 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	}
 	.mantra__cube-wrap {
 		display: inline-block;
-		margin-right: 8px;
+		margin-right: var(--space-2);
 		vertical-align: baseline;
 		overflow: hidden;
 		line-height: 0;
@@ -176,8 +176,8 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	.mantra__eq b {
 		font-style: normal;
 		font-weight: 400;
-		padding: 0 8px;
-		color: color-mix(in srgb, var(--color-primary, #1e1e1e) 45%, transparent);
+		padding: 0 var(--space-2);
+		color: var(--color-text-muted);
 	}
 
 	.mantra a {

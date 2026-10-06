@@ -19,11 +19,37 @@
 	width: var(--sw, auto);
 	aspect-ratio: 1320 / 707;
 }
-/* before the script places it (no script at all), the photograph waits on the band's floor, the lighthouse
-   right of the column; with a script it is hidden until placed, so it never jumps */
-.s-hero--radar:not(.is-placed) .radar__box { left: auto; right: -30%; top: auto; bottom: 0; height: 86%; width: auto; }
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-	.s-hero--radar:not(.is-placed) .radar__box { visibility: hidden; }
+/* the photograph places itself, by the arithmetic HeroRadar's fitWide/fitNarrow use (the script only refines
+   it, #568): desktops — 86 % of the band's height, on its floor; the tower 48 px past the copy's column, the
+   house's right wall 24 px inside the band, the lantern halfway between where both fit, the frame shrunk to
+   85 % at most where they do not; phones and tablets — as tall as the scene's row, the lantern at 72 % of
+   its width, the row covered. --tl, --hr, --lc are measured (cdn-faro.json), set on the element */
+.s-hero--radar .radar__frame {
+	--full: calc(86cqh * 1320 / 707);
+	--tx: calc(50cqw + var(--container-max) / 2 - 20px + 48px);
+	--fw: max(calc(var(--full) * .85), min(var(--full), calc((100cqw - 24px - var(--tx)) / (var(--hr) - var(--tl)))));
+	--fl: clamp(calc(var(--tx) - var(--tl) * var(--fw)), calc((var(--tx) + 100cqw) / 2 - var(--lc) * var(--fw)), calc(100cqw - 24px - var(--hr) * var(--fw)));
+	left: var(--fl);
+	top: calc(100cqh - var(--fw) * 707 / 1320);
+	width: var(--fw);
+	--sclip: max(0px, calc(var(--seal-to) - var(--fl)));
+	--sfade-l: calc(var(--fw) * .14);
+	--sfade-b: 0px;
+}
+@media (max-width: 1100px) {
+	.s-hero--radar .radar__frame {
+		--fw: calc(100cqh * 1320 / 707);
+		--fl: min(0px, max(calc(100cqw - var(--fw)), calc(72cqw - var(--lc) * var(--fw))));
+		top: 0;
+		--sclip: 0px;
+		--sfade-l: 0px;
+		--sfade-b: 12cqh;
+	}
+}
+/* the radar's own layers — the screen, the lantern's light, the text — wait for the script's geometry; the
+   photograph never does */
+@media (scripting: enabled) {
+	.s-hero--radar:not(.is-placed) .radar__box:not(.radar__frame) { visibility: hidden; }
 }
 
 .radar__photo,

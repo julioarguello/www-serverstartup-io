@@ -9,6 +9,9 @@
 	--beat-drawn: 4.5s;
 	/* the h1 sits where a centred 320 px block would put it: it never moves with the excerpt */
 	--scene-copy-ref: 320px;
+	/* the seal's place, declared once: its sheet and the photograph frames' default placement both read it */
+	--seal-left: -120px;
+	--seal-w: 460px;
 	position: relative;
 	isolation: isolate;
 	display: flex;
@@ -26,6 +29,7 @@
 	position: absolute;
 	inset: 0;
 	z-index: 0;
+	container-type: size;
 }
 
 /* the seal: one logo cube, large, leaving by the left margin under the epigraph */
@@ -33,9 +37,9 @@
 	position: absolute;
 	z-index: 1;
 	/* 760 px until #560: the founder found it oversized on every page (2026-10-06) */
-	left: -120px;
+	left: var(--seal-left);
 	top: 330px;
-	width: 460px;
+	width: var(--seal-w);
 	height: auto;
 	color: var(--scene-c);
 	opacity: .16;
@@ -96,15 +100,16 @@
 	background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) 0%, color-mix(in srgb, var(--color-ground-dark) var(--scene-veil, 78%), transparent) calc(50% + var(--container-max) / 2 - 160px), color-mix(in srgb, var(--color-ground-dark) var(--scene-veil-mid, 55%), transparent) calc(50% + var(--container-max) / 2 - 40px), transparent calc(50% + var(--container-max) / 2 + 70px));
 }
 
-/* a photograph opening's frame (#556, #567): placed by its scene's script (--sx, --sy, --sw); it starts where
-   the seal ends and fades in from the left, where it lies under the copy, and from its own top edge; where the
-   scene is its own row its foot fades into the band too: never a seam between photograph and ground */
+/* a photograph opening's frame (#556, #567): it places ITSELF, in its scene's sheet, from the stage's size (the
+   stage is a size container) — the same geometry the scene's script computes — so the photograph paints at
+   first render, never hidden until a script has run (#568: that wait was ~1.3 s of LCP on a throttled phone);
+   the script only refines it, as a transform (alignFrame). It starts where the seal ends and fades in from the
+   left, where it lies under the copy, and from its own top edge; where the scene is its own row its foot fades
+   into the band too: never a seam between photograph and ground. The seal's right vertex, for the sheets: */
+.s-hero--scene { --seal-to: calc(var(--seal-left) + var(--seal-w) * .93 + 8px); }
 .scene__frame {
 	position: absolute;
-	left: var(--sx, auto);
-	right: var(--sx-r, auto);
-	top: var(--sy, auto);
-	bottom: auto;
+	transform-origin: 0 0;
 	isolation: isolate;
 	pointer-events: none;
 	-webkit-mask-image: linear-gradient(90deg, transparent var(--sclip, 0px), var(--color-ground-dark) calc(var(--sclip, 0px) + var(--sfade-l, 60px))), linear-gradient(180deg, transparent 0, var(--color-ground-dark) 12%, var(--color-ground-dark) calc(100% - var(--sfade-b, 0px)), transparent 100%);

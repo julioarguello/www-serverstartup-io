@@ -58,12 +58,15 @@ const sweepStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%;wid
 const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 /* the profile: where `faro.py register` measured it lands on the photograph's lighthouse */
 const [PX, PY, PW] = faro.plan;
+/* what the sheet places the photograph by, before any script: the tower's left edge, the house's right wall and
+   the lantern, as fractions of the frame's width */
+const frameStyle = `--tl:${r4(faro.tower[0] / FW)};--hr:${r4(faro.house[2] / FW)};--lc:${r4(CX / FW)}`;
 const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;width:${r4((PW / FW) * 100)}%`;
 ---
 
 <HeroScene scene="radar" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ events: JSON.stringify(events) }}>
 	<Fragment slot="under">
-		<div class="scene__frame radar__box radar__frame">
+		<div class="scene__frame radar__box radar__frame" style={frameStyle}>
 			<img class="radar__photo" src={HERO_RADAR.src} srcset={HERO_RADAR.srcset} sizes={HERO_RADAR_SIZES} width={HERO_RADAR.width} height={HERO_RADAR.height} alt="" fetchpriority="high" decoding="async" />
 			<canvas class="radar__night" aria-hidden="true"></canvas>
 			<img class="radar__plan" style={planStyle} src={HERO_RADAR.plan} srcset={`${HERO_RADAR.planSmall} 660w, ${HERO_RADAR.plan} 1210w`} sizes={HERO_RADAR_PLAN_SIZES} width="1210" height="1392" alt="" fetchpriority="low" decoding="async" />
@@ -103,7 +106,7 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 <script>
 	import { SCENE_ROW, SCENE_BEATS, RADAR_RINGS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
-	import { duskLevel, paintNightEven } from "../utils/scene-dusk";
+	import { duskLevel, paintNightEven, alignFrame } from "../utils/scene-dusk";
 	import faro from "../assets/hero/cdn-faro.json";
 	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
 	if (hero) {
@@ -111,6 +114,7 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
 		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
 		const night = hero.querySelector<HTMLCanvasElement>(".radar__night")!;
+		const frame = hero.querySelector<HTMLElement>(".radar__frame")!;
 		const nctx = night.getContext("2d")!;
 		const lamp = hero.querySelector<HTMLElement>(".radar__lamp")!;
 		const scale = hero.querySelector<SVGGElement>(".radar__scale")!;
@@ -141,24 +145,15 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 		let NIGHT = "";
 		let photoFrom = 0;                       /* stage px where the photograph shows whole, past its left fade */
 
-		/* the copy's lines, as the browser laid them out: the longest one's right end, on the stage */
-		function textRight(s: DOMRect): number {
-			let right = 0;
-			for (const el of hero!.querySelectorAll<HTMLElement>(".s-hero__copy h1, .s-hero__body p, .s-hero__copy .btn")) {
-				const r = document.createRange();
-				r.selectNodeContents(el);
-				for (const q of r.getClientRects()) if (q.width > 2) right = Math.max(right, q.right - s.left);
-			}
-			return right;
-		}
-		/* desktops: sized by the band, on its floor; placed so the tower stands clear of the copy's longest line
-		   and the house's right wall clear of the band's edge, the lantern halfway between where both fit; where
-		   the band is too narrow for both the frame shrinks, and below that the house runs off the edge — the copy
-		   always wins */
+		/* desktops: sized by the band, on its floor; placed so the tower stands clear of the copy's column (no line
+		   reaches past it) and the house's right wall clear of the band's edge, the lantern halfway between where
+		   both fit; where the band is too narrow for both the frame shrinks, and below that the house runs off the
+		   edge — the copy always wins. hero-radar.css places the photograph by the same arithmetic before this
+		   runs (#568), which is why it reads the column, which CSS knows, rather than the lines' measured ends */
 		function fitWide(s: DOMRect): Geo {
 			const sr = seal.getBoundingClientRect();
 			const from = sr.left - s.left + SEAL_R * sr.width + 8;
-			const tx = textRight(s) + GAP;
+			const tx = copy.getBoundingClientRect().right - s.left + GAP;
 			const [tl, hr, lc] = [faro.tower[0] / FW, faro.house[2] / FW, CX / FW];
 			const full = ASPECT * BAND_H * s.height;
 			const W = Math.max(0.85 * full, Math.min(full, (s.width - MARGIN - tx) / (hr - tl)));
@@ -386,6 +381,10 @@ const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;widt
 			const s = stage.getBoundingClientRect();
 			narrow = matchMedia(SCENE_ROW).matches;
 			geo = narrow ? fitNarrow(s) : fitWide(s);
+			/* the photograph placed itself in CSS; this refines it to the geometry above, and its fades with it (the
+			   other boxes — screen, light, text — wait for these variables) */
+			const k = alignFrame(frame, geo, s);
+			for (const v of ["--sclip", "--sfade-l", "--sfade-b"]) frame.style.setProperty(v, `${parseFloat(hero!.style.getPropertyValue(v)) / k}px`);
 			hero!.style.setProperty("--sx", `${geo.L}px`);
 			hero!.style.setProperty("--sy", `${geo.T}px`);
 			hero!.style.setProperty("--sw", `${geo.W}px`);

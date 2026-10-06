@@ -414,7 +414,7 @@ const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
 		   is then checked against the page, because the frame sits differently at every viewport */
 		const ZONES = (): [number, number, number, number, boolean][] => narrow
 			? [[490, 800, 230, 430, false], [490, 800, 110, 230, false]]
-			: [[380, 820, -90, 130, false], [560, 850, 150, 330, true], [1000, 1300, -40, 300, false], [200, 560, 200, 420, false], [700, 1000, -110, 60, false]];
+			: [[380, 820, -90, 130, false], [560, 850, 150, 330, true], [1000, 1300, -40, 300, false], [200, 560, 200, 420, false], [700, 1000, -110, 60, false], [60, 380, -90, 130, false]];
 		function clear(x: number, y: number, left: boolean, text: string): boolean {
 			const [ax, ay] = px(x, y);
 			const w = text.length * 7.6 + 22, h = 16;

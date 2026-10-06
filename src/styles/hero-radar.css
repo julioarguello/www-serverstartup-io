@@ -1,35 +1,39 @@
-/* ═══ HERO — the radar scene of the edge-security vertical (#529) ═══
-   The band, the copy, the epigraph, the seal, the veil and the controls are
-   the shared scene (hero-scene.css). What is the radar's own: three boxes
-   that share one geometry — the screen under, the art, the text overlay
-   over — so a label positioned in percentages lands on its ring; the
-   lighthouse photograph that becomes a drawing; the sweep, the events and
-   the visitor's echo. The only orange is the section's own (--scene-c). */
+/* ═══ HERO — dusk over the Cabo Peñas lighthouse, the edge-security vertical (#529, #567), docs/architecture.md §4.4 ═══
+   The band, the copy, the epigraph, the seal, the veil and the controls are the shared scene (hero-scene.css);
+   the frame's place and fades are every photograph opening's (.scene__frame). What is the lighthouse's own:
+   four boxes that share one geometry — the photograph with its dusk, the radar screen, the lantern's light,
+   the text overlay — placed by the script (--sx, --sy, --sw) so a label positioned in the photograph's
+   percentages lands where it was measured; the sweep, the events and the visitor's echo. The only orange is
+   the section's own (--scene-c). */
 .s-hero--radar {
 	--radar-c: var(--scene-c);
-	/* small orange text on the dark ground: mixed toward paper it clears 4.5:1 */
-	--radar-c-text: color-mix(in srgb, var(--radar-c) 80%, var(--color-secondary));
+	/* small orange text on the night sky: mixed toward paper it clears 4.5:1 */
+	--radar-c-text: color-mix(in srgb, var(--radar-c) 70%, var(--color-secondary));
 	--radar-t: 8s;                    /* every opening lasts about 8 s (founder, 2026-10-04) */
 }
 
-/* the drawing's frame: sized by the BAND'S HEIGHT, never taller than it (88 %
-   of the band, which is what 48 % of a 1440 × 900 viewport gave — on a wide,
-   short screen a width-sized frame overflowed the band and only a fragment of
-   the house showed, hugely enlarged), bottom-anchored so the house sits on the
-   band's floor, and placed by the COLUMN, not the viewport: its left edge sits
-   10 px past the column's right edge, pulled back by 58 % of its own width, so
-   the tower starts just past the copy at every width and no line touches it. */
 .radar__box {
 	position: absolute;
-	left: calc(50% + var(--container-max) / 2 - 10px);
-	translate: -58% 0;
-	bottom: -8%;
-	height: min(88%, calc(48vw * 2020 / 1760));
-	width: auto;
-	aspect-ratio: 1760 / 2020;
+	left: var(--sx, auto);
+	top: var(--sy, auto);
+	width: var(--sw, auto);
+	aspect-ratio: 1320 / 707;
+}
+/* before the script places it (no script at all), the photograph waits on the band's floor, the lighthouse
+   right of the column; with a script it is hidden until placed, so it never jumps */
+.s-hero--radar:not(.is-placed) .radar__box { left: auto; right: -30%; top: auto; bottom: 0; height: 86%; width: auto; }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+	.s-hero--radar:not(.is-placed) .radar__box { visibility: hidden; }
 }
 
-.radar__screen { pointer-events: none; }
+.radar__photo,
+.radar__night { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+/* the night's colour, read by the canvas: the band's own dark, translucent */
+.radar__ink { position: absolute; visibility: hidden; color: var(--color-scene-night); }
+
+/* the screen: the rings and the sweep are the sky's — clipped above the horizon, the building cut out
+   (#radar-sky, measured on the photograph) */
+.radar__screen { pointer-events: none; clip-path: url(#radar-sky); }
 .radar__screen svg {
 	position: absolute;
 	inset: 0;
@@ -38,33 +42,34 @@
 	overflow: visible;
 	opacity: 0;
 }
-.radar__rings { stroke: var(--radar-c); stroke-width: 1.5; stroke-opacity: .5; }
+.radar__rings { stroke: var(--radar-c); stroke-width: 1.5; stroke-opacity: .45; }
 .radar__range-ring { stroke: var(--radar-c); stroke-width: 1.8; stroke-opacity: .8; }
-.radar__scale { stroke: var(--color-secondary); stroke-width: 1.2; stroke-opacity: .55; }
+.radar__scale { stroke: var(--color-secondary); stroke-width: 1.2; stroke-opacity: .5; }
 
-/* the sweep: a disc of 3200 frame units centred on the tower base (777.5, 1063 of 1205.5 × 1384), turned on the compositor at 12 rpm */
+/* the sweep is the lantern's beam: a disc centred on the lantern, as wide as the rings reach, turned on the
+   compositor */
 .radar__sweep {
 	position: absolute;
-	width: 265.4%;
 	aspect-ratio: 1;
-	left: 64.5%;
-	top: 76.8%;
 	translate: -50% -50%;
 	border-radius: 50%;
-	background: conic-gradient(from 90deg, transparent 0deg 292deg, color-mix(in srgb, var(--radar-c) 0%, transparent) 292deg, color-mix(in srgb, var(--radar-c) 34%, transparent) 358.5deg, var(--radar-c) 360deg);
+	background: conic-gradient(from 90deg, transparent 0deg 292deg, color-mix(in srgb, var(--radar-c) 0%, transparent) 292deg, color-mix(in srgb, var(--radar-c) 34%, transparent) 356deg, color-mix(in srgb, var(--color-lantern) 70%, var(--radar-c)) 360deg);
 	will-change: transform;
 	opacity: 0;
 }
 
-.radar__art img {
+/* the lantern's light: a warm glow on the glass the dusk left uncovered, its strength set by the script as
+   the dusk reaches it */
+.radar__light { pointer-events: none; }
+.radar__lamp {
 	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	width: 9%;
+	aspect-ratio: 1;
+	translate: -50% -50%;
+	border-radius: 50%;
+	background: radial-gradient(circle, var(--color-lantern) 0 14%, color-mix(in srgb, var(--color-lantern) 55%, transparent) 26%, color-mix(in srgb, var(--color-lantern) 12%, transparent) 50%, transparent 70%);
+	opacity: 0;
 }
-.radar__photo { opacity: 1; }
-.radar__plan { opacity: 0; }
 
 /* the text overlay: fixed sizes, positioned in percentages of the frame, in paper */
 .radar__hud {
@@ -74,13 +79,14 @@
 }
 .radar__hud > * { position: absolute; white-space: nowrap; }
 .radar__hud .radar__feed { inset: 0; }
-.radar__lab, .radar__origin {
+.radar__lab {
 	font-size: 12px;
 	font-weight: 500;
 	letter-spacing: .08em;
 	color: var(--color-secondary);
+	translate: calc(-100% - 10px) -50%;
 }
-.radar__lab { translate: calc(-100% - 10px) -50%; }
+/* the tick that crosses the ring at the label's anchor */
 .radar__lab::after {
 	content: "";
 	position: absolute;
@@ -91,16 +97,15 @@
 	background: var(--color-secondary);
 	opacity: .6;
 }
+.radar__lab--r { translate: 10px -50%; }
+.radar__lab--r::after { left: auto; right: calc(100% + 4px); }
 .radar__range {
 	font-size: 11px;
-	color: var(--color-text-muted-dark);
-	right: 0;
-	top: 76.8%;
-	translate: 0 -120%;
+	font-weight: 400;
+	letter-spacing: 0;
+	color: var(--color-console-ink);
 }
 .radar__you {
-	left: 3%;
-	top: 68%;
 	translate: 0 -50%;
 	font-size: 12.5px;
 	font-weight: 500;
@@ -154,42 +159,32 @@
 	translate: 0 -50%;
 	border-radius: 50%;
 	background: var(--radar-c);
-	box-shadow: none;
 	outline: 5px solid color-mix(in srgb, var(--radar-c) 35%, transparent);
 }
 .radar__blip--l::after { left: auto; right: 0; }
 
-/* the sequence, on the openings' one grammar (#558): the photograph alone to 2 s (25 %) · crossfade to the
-   drawing by 4.5 s (56 %) · the radar in by 5.3 s (66 %), its sweep turning once to 300° and the events (script)
-   until 7.4 s · at rest by 8 s: the sweep still, the events held, as reduced motion shows it */
-.s-hero--radar.is-playing .radar__photo { animation: radar-photo var(--radar-t) ease-in-out forwards; }
-.s-hero--radar.is-playing .radar__plan { animation: radar-plan var(--radar-t) ease-in-out forwards; }
+/* the sequence, on the openings' one grammar: the photograph alone to 2 s and the dusk with the lantern to
+   4.5 s (the script, on the same clock) · the radar in by 5.3 s (66 %), its sweep — the beam — turning once to
+   300° and the events (script) until 7.4 s · at rest by 8 s: the sweep still, the events held, as reduced
+   motion shows it */
 .s-hero--radar.is-playing .radar__screen svg,
 .s-hero--radar.is-playing .radar__hud { animation: radar-in var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-playing .radar__sweep { animation: radar-sweep var(--radar-t) linear forwards, radar-in var(--radar-t) ease-in-out forwards; }
 .s-hero--radar.is-done .radar__sweep { opacity: 1; transform: rotate(300deg); }
-.s-hero--radar.is-done .radar__photo { opacity: 0; }
-.s-hero--radar.is-done .radar__plan,
 .s-hero--radar.is-done .radar__screen svg,
 .s-hero--radar.is-done .radar__hud { opacity: 1; }
 .s-hero--radar.is-paused .radar__sweep,
 .s-hero--radar.is-paused .radar__you::before,
 .s-hero--radar.is-paused .radar__blip,
-.s-hero--radar.is-paused .radar__photo,
-.s-hero--radar.is-paused .radar__plan,
 .s-hero--radar.is-paused .radar__screen svg,
 .s-hero--radar.is-paused .radar__hud { animation-play-state: paused; }
 
-@keyframes radar-photo { 0% { opacity: 1; } 25% { opacity: 1; } 56% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes radar-plan { 0% { opacity: 0; } 25% { opacity: 0; } 56% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes radar-in { 0% { opacity: 0; } 56% { opacity: 0; } 66% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes radar-sweep { 0%, 56% { transform: rotate(0deg); } 100% { transform: rotate(300deg); } }
 @keyframes radar-pulse { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
 @keyframes radar-blip { 0% { opacity: 0; } 6% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
-	.s-hero--radar .radar__photo { opacity: 0 !important; animation: none !important; }
-	.s-hero--radar .radar__plan,
 	.s-hero--radar .radar__screen svg,
 	.s-hero--radar .radar__hud,
 	.s-hero--radar .radar__sweep { opacity: 1 !important; animation: none !important; }
@@ -199,15 +194,8 @@
 	.s-hero--radar .radar__sweep { transform: rotate(300deg); }
 }
 
-/* phones and tablets: the art has its own row (hero-scene.css); the frame is contained in it — as tall as the
-   row allows, never wider than 78 % of it — centred, so the overlay box is still exactly the image */
-@media (max-width: 1100px) {
-	.radar__box { left: 50%; translate: -50% 0; top: 0; bottom: auto; height: min(100cqh, 78cqw * 2020 / 1760); width: auto; aspect-ratio: 1760 / 2020; }
-}
 @media (max-width: 767px) {
-	.radar__you { left: 2%; top: 97%; }
-	.radar__origin { left: 78%; }
-	.radar__lab, .radar__origin { font-size: 10.5px; }
+	.radar__lab { font-size: 10.5px; }
 	.radar__blip, .radar__you { font-size: 11px; }
 	.radar__range { display: none; }
 }

@@ -236,6 +236,10 @@
 	--color-sky-bronze: #C0875A;      /* the medallion's layers, one per telescope (#556): bronze, */
 	--color-sky-silver: #C9D4DF;      /* silver, */
 	--color-sky-gold: #F2C14E;        /* and gold */
+	/* the dusk the photograph openings paint (scene-dusk.ts): the band's own dark, translucent, so the
+	   photograph still reads under it (#556, #567) */
+	--color-scene-night: color-mix(in srgb, var(--color-ground-dark) 80%, transparent);
+	--color-lantern: #FFE7B0;         /* the Cabo Peñas lantern, lit at dusk: a warm white, never the section's orange (#567) */
 	/* The card the rotating half of the band lives in (founder's direction C,
 	   2026-08-27). A lift, not a fill: at 7% the plate still shows through, so
 	   the panel reads as a pane laid on the picture rather than a box that

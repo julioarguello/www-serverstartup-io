@@ -21,10 +21,13 @@ El pilar son tres ingenieros. Los mismos, de principio a fin.
 Pocos clientes a la vez, por elección. Máxima implicación, y ningún junior aprendiendo con tu presupuesto.
 Trabajamos dentro de tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de dbt que cierra las ventas del día. Ese es nuestro sitio.
 Daniel Sío
+Operación de comercio electrónico
 El alma del equipo. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo, y mantiene el e-commerce en producción. Buen amigo antes que buen ingeniero. Y muy buen ingeniero.
 Ignacio Ibaseta
+Infraestructura como código y plataforma de datos
 El Pepito Grillo del equipo. Te avisa de cada curva antes de tomarla y por eso llega siempre el primero. Trabajador incansable, puntual como un cron. Mecánica fina, cero averías y muchos kilómetros juntos.
 Julio Argüello
+Fundador · integración y arquitectura
 El capitán. Dile que algo no se puede hacer y tienes su atención. Encuentra la manera, con más tiempo o menos presupuesto; a medias es lo único que no le sale. Rema todo el día y no se pierde un atardecer con su otra tripulación, la de casa.
 Nuestros valores
 Pocas cosas, bien hechas.

@@ -57,6 +57,6 @@ const buttonUrl = hasLink
 			const text = block.children?.map((c: any) => c.text).join("") || "";
 			return text ? <p class="text-sub s-cta__subtitle">{text}</p> : null;
 		})}
-		<a href={buttonUrl} class="btn btn-light">{buttonLabel}</a>
+		<a href={buttonUrl} class="btn btn-light btn-solid">{buttonLabel}</a>
 	</div>
 </section>

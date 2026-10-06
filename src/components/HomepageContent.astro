@@ -29,6 +29,8 @@ import { PortableText } from "emdash/ui";
 import TeamPhoto from "./TeamPhoto.astro";
 import PtLink from "./PtLink.astro";
 import CtaGlobal from "./CtaGlobal.astro";
+import ReferenceBanner from "./ReferenceBanner.astro";
+import lhci from "../../lighthouserc.json";
 import MantraCloser from "./MantraCloser.astro";
 import { FACE_BY_SLUG, sortByFace } from "../utils/nav";
 import CubeEmblem from "./CubeEmblem.astro";
@@ -140,6 +142,25 @@ const { entries: memberEntries } = await getEmDashCollection("members", {
 	locale,
 });
 const members = memberEntries ?? [];
+
+// The quality section's console (#562): the gate's four thresholds, read from
+// the file CI asserts them from, so the claim and the gate cannot drift. Its
+// chrome is Lighthouse's own words, English in both locales like every quoted
+// product (panel_labels).
+const LH_KEYS: Record<string, string> = {
+	"categories:performance": "lh_perf",
+	"categories:accessibility": "lh_a11y",
+	"categories:best-practices": "lh_bp",
+	"categories:seo": "lh_seo",
+};
+const gateRows = Object.entries(lhci.ci.assert.assertions).flatMap(([category, [level, options]]) =>
+	typeof level === "string" && typeof options === "object" && options !== null && "minScore" in options
+		? [{
+			label: labels.get("panel_labels", LH_KEYS[category] ?? category, category),
+			score: Math.round(options.minScore * 100),
+			level: labels.get("panel_labels", "lh_level", level),
+		}]
+		: []);
 // the deferred hero photos' src until the page has loaded (see the stage below)
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 ---
@@ -296,13 +317,6 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 	)}
 </section>
 
-<!-- ══════ CLOUDFLARE PARTNER (CMS-driven) ══════
-     Section order, founder 2026-08-27: the team band moved from second place
-     to the last one before the CTA ("la parte del equipo en la home hay que
-     bajarla, a final de calidad y rendimiento"). What we do comes first; who
-     does it closes. -->
-<CloudflarePartner />
-
 <!-- ══════ ÁREAS DE ESPECIALIZACIÓN (CMS-driven) ══════ -->
 <section class="s-areas" id="areas-especializacion" aria-label={areasSection?.heading || labels.get("footer_headings", "services_title", "Áreas de especialización")}>
 	<div class="container s-areas__inner">
@@ -364,6 +378,24 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 	</div>
 </section>
 
+<!-- ══════ REFERENCIAS — the proof, right after what we do (#562) ══════
+     The footer carries this band on every other page (#296); on the home it
+     was the strongest proof on the page and it sat under the closing call to
+     action, where few readers arrive. -->
+<ReferenceBanner
+	title={labels.get("footer_headings", "trust_title", "Confían en nosotros")}
+	href={`${locale === "en" ? "/en/references" : "/referencias"}`}
+	ariaLabel={t("trust_section")}
+/>
+
+<!-- ══════ CLOUDFLARE PARTNER (CMS-driven) ══════
+     Section order: what we do, who has trusted us with it, then the platform
+     we do much of it on (#562 — it used to open the page, ahead of the areas,
+     saying what we resell before what we do). The team band closes, before the
+     CTA (founder 2026-08-27: "la parte del equipo en la home hay que bajarla,
+     a final de calidad y rendimiento"). -->
+<CloudflarePartner />
+
 <!-- ══════ CALIDAD Y RENDIMIENTO — the craft, and this site as its sample ══════ -->
 {proofSection && (
 	<section class="s-proof" aria-label={proofSection.heading}>
@@ -374,6 +406,19 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 				<CubeEmblem class="s-proof__die" color="var(--color-primary)" faceKey="dec" size={104} />
 				<h2>{proofSection.heading}</h2>
 				<PortableText value={proofSection.blocks} components={ptComponents} />
+				{/* the thresholds the paragraph states, as the gate holds them */}
+				<div class="s-gate">
+					<p class="s-gate__bar">{labels.get("panel_labels", "lh_file", "lighthouserc.json")}</p>
+					<ul class="s-gate__rows" role="list">
+						{gateRows.map((row) => (
+							<li>
+								<span class="s-gate__name">{row.label}</span>
+								<span class="s-gate__score">{row.score < 100 ? `≥ ${row.score}` : row.score}</span>
+								<span class="s-gate__level">{row.level}</span>
+							</li>
+						))}
+					</ul>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -407,9 +452,10 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 							/>
 						)}
 						<h3>{m.data.title}</h3>
-						{/* the role is a UI label, like on Contacto — the members
-						    collection carries no excerpt */}
-						<p>{engineerCaption}</p>
+						{/* what each one does, from the member's excerpt (#562 —
+						    three cards that all said «Ingeniero» told the reader
+						    nothing); the shared label only if a member has none */}
+						<p>{m.data.excerpt || engineerCaption}</p>
 					</li>
 				))}
 			</ul>

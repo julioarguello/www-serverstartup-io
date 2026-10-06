@@ -21,10 +21,13 @@ Three engineers hold this up. The same ones, start to finish.
 Few clients at a time, by choice. Deep involvement, and no junior learning on your budget.
 We work inside your team, not around it. The middleware wiring your ERP to the storefront, the WAF stopping bad traffic, the dbt model that closes the day's sales. That's where you'll find us.
 Daniel Sío
+E-commerce operations
 The soul of the team. Master of ceremonies, above all when they end in karaoke. He will get you up a mountain or lift your mood, and keeps the e-commerce running. A good friend before a good engineer. And a very good one.
 Ignacio Ibaseta
+Infrastructure as code and the data platform
 The team's Jiminy Cricket. Calls out every bend before you take it, which is why he always arrives first. Tireless, punctual as a cron. Fine mechanics, zero breakdowns and plenty of miles together.
 Julio Argüello
+Founder · integration and architecture
 The captain. Say something cannot be done and he is all ears. He finds the way, with more time or less budget; half-done he cannot do. Rows all day and never misses a sunset with his other crew, the one at home.
 Our values
 Few things, done well.

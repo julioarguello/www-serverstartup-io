@@ -662,6 +662,23 @@ rotating edge (Base.astro), so the two cannot drift.
   to a strip, the subjects fell outside it; centred, it left a dark strip on the right); every photograph is
   also cut at 3024 px, which a 1512 px laptop at 2x needs — 2016 was stretched 1.5× there.
 
+### 4.12 The home's order (#562)
+
+After the design review of 2026-10-06 (founder: "dales caña a todos"): hero → areas →
+**references** → Cloudflare → quality → team → mantra → closing CTA. What we do comes first, then
+who has trusted us with it, then the platform we do much of it on.
+
+- **References**: the home renders `ReferenceBanner` after the areas, and its footer leaves it out
+  (`SiteFooter references={false}`, from `Base`'s `onHome`); every other page keeps it in the
+  footer (#296). The layout gate's footer pass reads `/quienes-somos` for that reason.
+- **Cloudflare**: no longer the page's opening section; its copy says what we do with it and that
+  this site runs on it (`Workers`, `D1`, `R2`), not "the most advanced solutions".
+- **Quality**: the four Lighthouse thresholds as a console (`.s-gate`), read from
+  `lighthouserc.json` at build time, so the claim and the gate cannot drift. Its chrome is
+  Lighthouse's words (`panel_labels` → `lh_*`), English in both locales like every quoted product.
+- **Team**: each card says what the person does, from the member's `excerpt` (also on Quiénes
+  somos and in its JSON-LD); the shared «Ingeniero» label is only the fallback.
+
 ## 5. SEO
 
 ### 5.1 Meta Tags

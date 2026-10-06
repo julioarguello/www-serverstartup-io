@@ -1138,6 +1138,45 @@ console.log("── the opening h1: one line at 768, 1024 and 1440 (#529)");
 	ok(`${OPENINGS.length} openings read at three widths — every h1 one line, none overflowing`);
 }
 
+// ── 5c. The home's two kicker lines: one line each on any desktop ──────────
+// The years and what they cover, then the partnership (founder, 2026-10-06:
+// "que nada salte de línea"). homepage.css sizes both by the longer one; a
+// longer line overflows its column here, by locale and by text.
+console.log("── the home's kicker: two lines, one line each, at 768, 1024 and 1440");
+{
+	let read = 0;
+	for (const home of ["/", "/en"]) {
+		for (const width of [768, 1024, 1440]) {
+			const page = await browser.newPage();
+			await page.setViewport({ width, height: 900, deviceScaleFactor: 1 });
+			await page.goto(BASE + home, { waitUntil: "networkidle2", timeout: 60000 });
+			const lines = await page.evaluate(() =>
+				[...document.querySelectorAll(".s-hero--home .s-hero__kicker p")].map((p) => ({
+					text: p.textContent.trim(),
+					rows: Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)),
+					over: p.scrollWidth > p.clientWidth + 1,
+				})),
+			);
+			await page.close();
+			if (lines.length !== 2) {
+				fail(home, `${lines.length} kicker line(s) @${width}, not 2 — the selector or the CMS blocks are stale`);
+				continue;
+			}
+			for (const l of lines) {
+				read += 1;
+				if (l.rows > 1 || l.over) {
+					fail(home, `the kicker line "${l.text}" ${l.over ? "overflows its column" : `wraps to ${l.rows} lines`} @${width}; its constant in homepage.css is below this line's width`);
+				}
+			}
+		}
+	}
+	if (read < 12) {
+		console.error(`✗ THIS GATE IS BLIND — ${read} kicker line(s) read, below the 12 the two homes have at three widths.`);
+		process.exit(3);
+	}
+	ok(`${read} kicker lines read on both homes — every one on one line, none overflowing`);
+}
+
 console.log("── 2.1.4 character key shortcut");
 {
 	const page = await browser.newPage();

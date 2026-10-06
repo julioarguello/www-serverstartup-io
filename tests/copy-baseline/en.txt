@@ -2,8 +2,9 @@ Skip to content
 ~Server Startup
 /en
 ES
-Software engineering: architecture, integration and operations
-Over twenty years of craft in e-commerce, systems integration and data. Official Cloudflare partners since 2019.
+Software engineering, from architecture to production
+Over twenty years in e-commerce, systems integration and data.
+Official Cloudflare partners since 2019.
 CDN, WAF & Edge Security→
 The first thing anyone arriving sees: the edge, defended.
 cdn & waf

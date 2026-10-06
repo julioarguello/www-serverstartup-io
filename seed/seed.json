@@ -14784,7 +14784,7 @@
 				"slug": "home",
 				"status": "published",
 				"data": {
-					"title": "Ingeniería de software: arquitectura, integración y operación",
+					"title": "Ingeniería de software, de la arquitectura a producción",
 					"excerpt": "Partners oficiales de Cloudflare desde 2019. Siempre los mismos ingenieros senior: quien diseña tu arquitectura escribe el código. Un equipo. Seis verticales. Cero traspasos.",
 					"content": [
 						{
@@ -14806,17 +14806,12 @@
 									"_key": "hk4",
 									"_type": "link",
 									"href": "/big-data-cloud-analytics"
-								},
-								{
-									"_key": "hk1",
-									"_type": "link",
-									"href": "/cdn-waf-seguridad-edge-cloudflare"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Más de veinte años de oficio en "
+									"text": "Más de veinte años en "
 								},
 								{
 									"_type": "span",
@@ -14838,18 +14833,36 @@
 								},
 								{
 									"_type": "span",
-									"text": " y el "
+									"text": " y "
 								},
 								{
 									"_type": "span",
-									"text": "dato",
+									"text": "datos",
 									"marks": [
 										"hk4"
 									]
 								},
 								{
 									"_type": "span",
-									"text": ". Partners oficiales de "
+									"text": "."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "h_partner",
+							"markDefs": [
+								{
+									"_key": "hk1",
+									"_type": "link",
+									"href": "/cdn-waf-seguridad-edge-cloudflare"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Partners oficiales de "
 								},
 								{
 									"_type": "span",
@@ -16043,7 +16056,7 @@
 				"locale": "en",
 				"translationOf": "page-home",
 				"data": {
-					"title": "Software engineering: architecture, integration and operations",
+					"title": "Software engineering, from architecture to production",
 					"excerpt": "Official Cloudflare partners since 2019. Always the same senior engineers: whoever designs your architecture writes the code. One team. Six verticals. Zero handoffs.",
 					"content": [
 						{
@@ -16065,17 +16078,12 @@
 									"_key": "hk4",
 									"_type": "link",
 									"href": "/en/big-data-cloud-analytics"
-								},
-								{
-									"_key": "hk1",
-									"_type": "link",
-									"href": "/en/cdn-waf-edge-security-cloudflare"
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"text": "Over twenty years of craft in "
+									"text": "Over twenty years in "
 								},
 								{
 									"_type": "span",
@@ -16108,7 +16116,25 @@
 								},
 								{
 									"_type": "span",
-									"text": ". Official "
+									"text": "."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "h_partner",
+							"markDefs": [
+								{
+									"_key": "hk1",
+									"_type": "link",
+									"href": "/en/cdn-waf-edge-security-cloudflare"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"text": "Official "
 								},
 								{
 									"_type": "span",

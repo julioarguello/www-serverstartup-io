@@ -209,7 +209,12 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 		<h1>{title}</h1>
 		{heroSection?.blocks.length > 0 && (
 			<div class="s-hero__kicker">
-				<PortableText value={[heroSection.blocks[0]]} components={ptComponents} />
+				{/* Two lines, read by position: the years and what they cover, then
+				    the partnership (founder, 2026-10-06: "tres líneas: el titular, la
+				    de más de veinte años y la de partners, y que nada salte de
+				    línea"). Each fits its own line on any screen from 768 px up —
+				    homepage.css sizes them by the longer one. */}
+				<PortableText value={heroSection.blocks.slice(0, 2)} components={ptComponents} />
 			</div>
 		)}
 		{/* ── the card: everything that rotates, inside one piece ──

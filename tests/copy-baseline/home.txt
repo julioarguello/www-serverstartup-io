@@ -1,8 +1,9 @@
 Saltar al contenido
 ~Server Startup
 EN
-Ingeniería de software: arquitectura, integración y operación
-Más de veinte años de oficio en comercio electrónico, integración de sistemas y el dato. Partners oficiales de Cloudflare desde 2019.
+Ingeniería de software, de la arquitectura a producción
+Más de veinte años en comercio electrónico, integración de sistemas y datos.
+Partners oficiales de Cloudflare desde 2019.
 CDN, WAF y seguridad edge→
 Lo primero que ve quien llega: el borde, defendido.
 cdn y waf

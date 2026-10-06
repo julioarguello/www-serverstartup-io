@@ -247,6 +247,20 @@
 	text-wrap: pretty;
 }
 
+/* One line each from 768 px up, as the opening h1s are (#529): sized by the
+   longer of the two, «Más de veinte años en comercio electrónico, integración de
+   sistemas y datos.», 38.45 em in the kicker's face (999 px at 26 px, measured in
+   Chrome with the loaded font), against the column's inline size — 21.5 px in
+   the 840 px column, the house 26 px once the column is wide enough. The a11y
+   gate reads both lines at 768, 1024 and 1440; a longer line fails there by name
+   and this constant moves with it. */
+@media (min-width: 768px) {
+	.s-hero--home .s-hero__kicker p {
+		font-size: min(var(--text-sub-size, 26px), calc(100cqi / 38.45 * 0.985));
+		white-space: nowrap;
+	}
+}
+
 /* The vertical's own words, under its name and inside the same card. The six
    items are stacked in one grid cell, so the card takes the height of the
    longest and never jumps as they swap. */

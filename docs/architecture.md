@@ -553,13 +553,17 @@ rotating edge (Base.astro), so the two cannot drift.
   el play"); the courtesy freeze holds only while the vertical's link has keyboard focus.
 - **Type and card**: the heading and the kicker as they were; the vertical's caption in the original
   card (pane and a rule in the vertical's colour), set on desktops in the band's lower right corner,
-  apart from the heading — the band's foot is reserved for it — with the named bars under the kicker,
-  30 rem wide so their small names stay on the veil. The veil is lighter (the photographs barely
-  showed): a soft shade behind the copy and a veil that never drops under a third before the copy's
-  box ends (79 % of 1440 px) hold the large type at 3:1.
+  apart from the heading, standing on the **chapter rail** (founder's choice C, 2026-10-06, after
+  calling the old bars "enanas, feas, fuera de sitio"): six equal tracks as wide as the column,
+  names at 16 px under them, arrows closing the rail at the right; on phones and tablets the rail
+  sits right under the card, in the first screen. The title wraps to two lines at its register; the
+  kicker is two sentences, one line each from 768 px. The veil is lighter (the photographs barely
+  showed): a soft shade behind the copy (`--hero-spot`, widened when the kicker became two unbroken
+  lines — 3.7:1 at 1280 x 720 before, 6.0 after; the a11y gate's hero pass measures 1280 x 720 since)
+  and a shade under the rail alone (`--hero-foot`) hold the type at AA on all six photographs.
 - **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
   deliberately not `areas_claim`, which the rows further down already say). No caption naming the
-  place: the founder struck it. The bars under them carry `menu_short` and fill in the vertical's
+  place: the founder struck it. The rail's tracks carry `menu_short` and fill in the vertical's
   colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
   margin, smaller since 2026-10-06 on every page (760 → 460 px) — in the colour of the vertical
   showing: six seals, one per colour, dissolving on the photographs' clock. One seal recoloured by its

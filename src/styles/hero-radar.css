@@ -27,8 +27,10 @@
 .s-hero--radar .radar__frame {
 	--full: calc(86cqh * 1320 / 707);
 	--tx: calc(50cqw + var(--container-max) / 2 - 20px + 48px);
-	--fw: max(calc(var(--full) * .85), min(var(--full), calc((100cqw - 24px - var(--tx)) / (var(--hr) - var(--tl)))));
-	--fl: clamp(calc(var(--tx) - var(--tl) * var(--fw)), calc((var(--tx) + 100cqw) / 2 - var(--lc) * var(--fw)), calc(100cqw - 24px - var(--hr) * var(--fw)));
+	/* --tl, --hr, --lc come from the template (cdn-faro.json); the fallbacks are today's measured values,
+	   so the frame keeps its place if the template ever stops writing them */
+	--fw: max(calc(var(--full) * .85), min(var(--full), calc((100cqw - 24px - var(--tx)) / (var(--hr, 0.7953) - var(--tl, 0.6584)))));
+	--fl: clamp(calc(var(--tx) - var(--tl, 0.6584) * var(--fw)), calc((var(--tx) + 100cqw) / 2 - var(--lc, 0.6987) * var(--fw)), calc(100cqw - 24px - var(--hr, 0.7953) * var(--fw)));
 	left: var(--fl);
 	top: calc(100cqh - var(--fw) * 707 / 1320);
 	width: var(--fw);
@@ -39,7 +41,7 @@
 @media (max-width: 1100px) {
 	.s-hero--radar .radar__frame {
 		--fw: calc(100cqh * 1320 / 707);
-		--fl: min(0px, max(calc(100cqw - var(--fw)), calc(72cqw - var(--lc) * var(--fw))));
+		--fl: min(0px, max(calc(100cqw - var(--fw)), calc(72cqw - var(--lc, 0.6987) * var(--fw))));
 		top: 0;
 		--sclip: 0px;
 		--sfade-l: 0px;

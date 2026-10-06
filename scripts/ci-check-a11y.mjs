@@ -1014,8 +1014,11 @@ console.log("── the hero band: ink over the plates");
 	}
 
 	// 1440 is where the scrim runs sideways and 390 is where it runs down the
-	// picture — two different gradients, so two different verdicts.
-	const SIZES = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
+	// picture — two different gradients, so two different verdicts. 1280 x 720
+	// is the common laptop where the home's kicker, held to one line per
+	// sentence, runs furthest into the photograph: 3.7:1 there while 1440 read
+	// exactly 4.5 (2026-10-06), so 1440 alone could not see it.
+	const SIZES = [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 390, height: 844 }];
 	const perRoute = await inParallel(heroRoutes, async (route, lane, report) => {
 		let measured = 0, frames = 0, tightest = { ratio: Infinity };
 		let worstHere = { ratio: Infinity };
@@ -1061,7 +1064,7 @@ console.log("── the hero band: ink over the plates");
 			}
 			await page.close();
 		}
-		report.ok(`${route} — hero measured at 1440 and 390; tightest ${worstHere.ratio}:1 ` +
+		report.ok(`${route} — hero measured at 1440, 1280 and 390; tightest ${worstHere.ratio}:1 ` +
 			`(.${worstHere.name}, plate ${worstHere.plate} @${worstHere.vp})`);
 		return { measured, frames, tightest };
 	});
@@ -1075,9 +1078,13 @@ console.log("── the hero band: ink over the plates");
 
 	// A band that rendered nothing measures nothing and reports green. The
 	// home carries six plates and every vertical one, in both locales.
-	if (frames < 28 || measured < frames * 2) {
+	// 24 frames per size: the six slides on each home and one on each of the
+	// twelve vertical pages (48 at two sizes, measured 2026-10-06; the floor was
+	// a loose 28 until the third size made it worth stating).
+	const FRAMES = 24 * SIZES.length;
+	if (frames < FRAMES || measured < frames * 2) {
 		console.error(`✗ THIS GATE IS BLIND — ${frames} hero frame(s) photographed and ${measured} ` +
-			"text box(es) measured, below the 28 frames and 2 boxes each this site has.");
+			`text box(es) measured, below the ${FRAMES} frames and 2 boxes each this site has.`);
 		process.exit(3);
 	}
 	ok(`${measured} text boxes over ${frames} plate frames; tightest was .${tightest.name} at ` +

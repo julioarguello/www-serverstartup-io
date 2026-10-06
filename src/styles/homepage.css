@@ -279,52 +279,76 @@
 	text-wrap: pretty;
 }
 
-/* ── the ticker: which of the six is showing, and the way to stop it ── */
+/* ── the chapter rail: which of the six is showing, and the way through them ──
+   Founder, 2026-10-06: the old row — 11 px names on bars as wide as their
+   names, floating between the kicker and the card — read "enanas, feas, fuera
+   de sitio". The six verticals are the band's chapters: six equal tracks, each
+   filling in its vertical's colour, the name under it at reading size, the
+   arrows closing the rail. On desktop the rail runs along the band's foot, as
+   wide as the column, and the card stands on it; on phones and tablets it
+   stands right under the card, at the photograph's foot, in the first screen.
+   The band reads top to bottom: who we are, what you are looking at, where you
+   are in the six. */
+.s-hero__inner {
+	display: flex;
+	flex-direction: column;
+}
+
 .s-hero__ticker {
 	display: flex;
 	align-items: center;
-	gap: var(--space-3);
-	margin-top: var(--space-3);
+	gap: var(--space-2);
+	order: -1;
+	margin: var(--space-3) 0 var(--space-5);
 }
 
-/* The two arrows sit with the dots and the stop, one control cluster rather
-   than chevrons floating over the picture — over a photograph they would need
-   their own scrim to stay legible, and the band already has one. */
 .s-hero__nav {
 	display: grid;
 	place-items: center;
-	width: 26px;
-	height: 26px;
+	width: 36px;
+	height: 36px;
 	padding: 0;
-	border: 0;
+	border: 1px solid var(--color-hero-rule);
 	border-radius: var(--radius);
-	background: none;
-	color: var(--color-hero-ink-soft);
+	background-color: var(--color-hero-card);
+	color: var(--color-secondary);
 	cursor: pointer;
 }
 
-.s-hero__nav:hover {
-	color: var(--color-secondary);
-	background-color: var(--color-hero-dot);
+.s-hero__nav svg {
+	width: 14px;
+	height: 14px;
 }
+
+.s-hero__nav:hover,
+.s-hero__nav:focus-visible {
+	background-color: var(--color-hero-dot);
+	border-color: var(--color-secondary);
+}
+
+/* the arrows close the rail at its right end */
+.s-hero__dots { order: 1; }
+.s-hero__nav[data-hero-nav="-1"] { order: 2; }
+.s-hero__nav[data-hero-nav="1"] { order: 3; }
 
 .s-hero__dots {
 	display: flex;
 	flex: 1;
-	gap: 8px;
+	gap: var(--space-1);
 	min-width: 0;
+	margin-right: var(--space-2);
 }
 
 .s-hero__stop {
 	display: grid;
-	flex: 1;
-	gap: 6px;
+	flex: 1 1 0;
+	gap: var(--space-2);
 	min-width: 0;
 }
 
-/* The bar fills in the vertical's colour while its photograph shows. */
+/* The track fills in the vertical's colour while its photograph shows. */
 .s-hero__dot {
-	height: 3px;
+	height: var(--block-rule);
 	background-color: var(--color-hero-dot);
 	background-image: linear-gradient(var(--cc, var(--color-primary)), var(--cc, var(--color-primary)));
 	background-repeat: no-repeat;
@@ -339,13 +363,14 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	font-family: var(--font-family-mono);
-	font-size: 11px;
+	font-family: var(--font-family);
+	font-size: 16px;
+	line-height: 22px;
 	font-weight: 500;
 	text-transform: lowercase;
-	/* paper at rest too: 11 px over the card's pane is owed 4.5:1, and the
-	   82 % ink measured 4.1:1 over the brighter photographs; the showing one
-	   is told by its bar and its weight */
+	/* paper at rest too: 16 px is owed 4.5:1, which the foot shade under the
+	   rail holds on every photograph; the showing one is told by its track and
+	   its weight */
 	color: var(--color-secondary);
 	animation: s-hero-name var(--hero-cycle) steps(1, end) infinite;
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
@@ -522,7 +547,10 @@
 		margin-top: 12px;
 	}
 	.s-hero__ticker {
-		margin-top: var(--space-4);
+		margin: var(--space-3) 0 var(--space-6);
+	}
+	.s-hero__dots {
+		gap: var(--space-3);
 	}
 	.s-hero__meta {
 		font-size: 13px;
@@ -549,29 +577,28 @@
 		top: auto;
 		left: auto;
 		right: max(20px, calc((100% - var(--container-max)) / 2 + 20px));
-		bottom: var(--space-5);
+		/* standing on the rail: its track, its gap and one line of names */
+		bottom: calc(var(--space-3) + var(--space-6) + var(--space-2));
 		translate: none;
 		width: 34rem;
 	}
-	/* the bars as wide as their names, so no name is cut and the row stops short
-	   of where the veil gives way to the photograph (60 % of the band) */
+	/* the rail along the band's foot, from the column's left edge to its right;
+	   like the card, it is left out of the rule below that lifts the copy */
 	.s-hero__ticker {
-		margin-top: var(--space-5);
-		width: fit-content;
+		position: absolute;
+		z-index: 2;
+		left: max(20px, calc((100% - var(--container-max)) / 2 + 20px));
+		right: max(20px, calc((100% - var(--container-max)) / 2 + 20px));
+		bottom: var(--space-3);
+		margin: 0;
 	}
 	.s-hero__dots {
-		flex: none;
-	}
-	.s-hero__stop {
-		flex: none;
-	}
-	.s-hero__stop-name {
-		overflow: visible;
-		text-overflow: clip;
+		margin-right: var(--space-3);
 	}
 	.s-hero {
-		/* the foot is the card's: the copy centres in what is left above it */
-		padding: calc(var(--header-h) + var(--space-5)) 0 calc(var(--space-5) + 13.5rem);
+		/* the foot is the card's and the rail's: the copy centres in what is left
+		   above them */
+		padding: calc(var(--header-h) + var(--space-5)) 0 calc(var(--space-3) + var(--space-6) + var(--space-2) + 13.5rem);
 		justify-content: center;
 	}
 	.s-hero__stage {
@@ -599,7 +626,7 @@
 		}
 	}
 	.s-hero__scrim {
-		background-image: var(--hero-spot), var(--hero-scrim-photo);
+		background-image: var(--hero-foot), var(--hero-spot), var(--hero-scrim-photo);
 	}
 	/* desktops: under the copy, leaving by the left margin, as on the vertical pages */
 	.s-hero__seal {
@@ -610,13 +637,13 @@
 	}
 	/* the card in the band's lower right corner, apart from the heading, as a
 	   caption on the photograph (founder, 2026-10-06: "lo separa del título
-	   principal y le da más protagonismo"); the bars stay under the kicker.
-	   The column stops being the card's containing block so the card can take
+	   principal y le da más protagonismo"), standing on the chapter rail.
+	   The column stops being the containing block so the card and the rail can take
 	   the band's corner; what stays in it is lifted over the photograph */
 	.s-hero__inner {
 		position: static;
 	}
-	.s-hero__inner > :not(.s-hero__card) {
+	.s-hero__inner > :not(.s-hero__card, .s-hero__ticker) {
 		position: relative;
 		z-index: 1;
 	}

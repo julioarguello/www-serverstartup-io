@@ -265,8 +265,14 @@
 	);
 	/* …and a soft shade behind the copy alone: the heading and the kicker run
 	   over the sky at their right end, where the lighter veil left them at
-	   2.1:1. The picture keeps its light everywhere else. */
-	--hero-spot: radial-gradient(ellipse 46% 58% at 34% 46%, rgba(30, 30, 30, 0.62) 0%, rgba(30, 30, 30, 0.5) 45%, rgba(30, 30, 30, 0) 100%);
+	   2.1:1. The picture keeps its light everywhere else. Widened when the
+	   kicker became two unbroken lines (2026-10-06): their right end ran past
+	   the old ellipse onto the bright cliff, 3.7:1 at 1280 x 720; now 6.0. */
+	--hero-spot: radial-gradient(ellipse 62% 58% at 40% 44%, rgba(30, 30, 30, 0.62) 0%, rgba(30, 30, 30, 0.5) 50%, rgba(30, 30, 30, 0) 100%);
+	/* the chapter rail stands on the photograph's foot: a shade under it alone,
+	   from the veil's weight at the band's edge to nothing at the rail's top —
+	   without it the 16 px names measured 3.7–4.3:1 over the brighter photos */
+	--hero-foot: linear-gradient(0deg, rgba(30, 30, 30, 0.72) 0, rgba(30, 30, 30, 0) var(--space-9));
 	/* phones and tablets: the photograph is a strip under the header; the
 	   card stands on its foot, which runs into the band's ink */
 	--hero-scrim-strip:

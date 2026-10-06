@@ -52,7 +52,7 @@
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	object-position: var(--focus, 62% 50%);
+	object-position: var(--focus-n, var(--focus, 62% 50%));
 	opacity: 0;
 	animation: s-hero-photo var(--hero-cycle) linear infinite;
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
@@ -560,6 +560,9 @@
 	.s-hero__stage {
 		inset: 0;
 		height: auto;
+	}
+	.s-hero__photo {
+		object-position: var(--focus, 62% 50%);
 	}
 	.s-hero__scrim {
 		background-image: var(--hero-spot), var(--hero-scrim-photo);

@@ -10,6 +10,22 @@
  *   lights its own lights by.
  */
 
+/**
+ * The photograph's frame places itself in CSS (`.scene__frame` and each scene's sheet), so it paints at first
+ * render — it is the opening's largest paint, and hiding it until a script ran cost ~1.3 s of LCP render delay
+ * on a throttled phone (#568). The script then only refines it to the exact geometry it computed, as a
+ * transform, which is never a layout shift. Returns the scale applied (1 where CSS already matched), which the
+ * frame's local lengths (its fades) are divided by.
+ */
+export function alignFrame(el: HTMLElement, g: { L: number; T: number; W: number }, stage: DOMRect): number {
+	el.style.transform = "";
+	const r = el.getBoundingClientRect();
+	const dx = g.L - (r.left - stage.left), dy = g.T - (r.top - stage.top), k = r.width ? g.W / r.width : 1;
+	if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(k - 1) < 0.001) return 1;
+	el.style.transform = `translate(${dx}px, ${dy}px) scale(${k})`;
+	return k;
+}
+
 /** A front: where its leading edge is at each time (ms → stage px, piecewise linear), and its soft edge (px). */
 export type DuskFront = { knots: [number, number][]; soft: number };
 

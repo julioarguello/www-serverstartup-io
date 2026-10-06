@@ -17,6 +17,7 @@
  * for every line of the copy.
  */
 import { HERO_SKY, HERO_SKY_SIZES } from "../utils/hero-art";
+import sky from "../assets/hero/bd-cielo.json";
 import HeroScene from "./HeroScene.astro";
 
 interface Props {
@@ -33,10 +34,12 @@ const pauseLabel = L("sky_pause", "Pausar la animación");
 const replayLabel = L("sky_replay", "Repetir la animación");
 /* the layers' names, the medallion's own words in both locales */
 const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "silver"), L("sky_gold", "gold")]);
+/* the left dome's left edge, of the frame's width: the sheet places the frame by it before any script runs */
+const domeL = Math.min(...sky.domes[0].p.filter((_, i) => i % 2 === 0)) / sky.frame[0];
 ---
 
 <HeroScene scene="sky" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
-	<div slot="under" class="scene__frame sky__box">
+	<div slot="under" class="scene__frame sky__box" style={`--dome-l:${domeL.toFixed(5)}`}>
 		<img class="sky__photo" src={HERO_SKY.photo} srcset={`${HERO_SKY.photoSmall} 720w, ${HERO_SKY.photo} 1320w, ${HERO_SKY.photoLarge} 2016w`} sizes={HERO_SKY_SIZES} width="1320" height="880" alt="" fetchpriority="high" decoding="async" />
 		<canvas class="sky__night" aria-hidden="true"></canvas>
 	</div>
@@ -52,7 +55,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 <script>
 	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
-	import { frontX as frontAt, reached as reachedBy, paintNight, type DuskFront } from "../utils/scene-dusk";
+	import { frontX as frontAt, reached as reachedBy, paintNight, alignFrame, type DuskFront } from "../utils/scene-dusk";
 	import sky from "../assets/hero/bd-cielo.json";
 	const hero = document.querySelector<HTMLElement>(".s-hero--sky");
 	if (hero) {
@@ -62,6 +65,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		const canvas = hero.querySelector<HTMLCanvasElement>(".sky__data")!;
 		const ctx = canvas.getContext("2d")!;
 		const dusk = hero.querySelector<HTMLCanvasElement>(".sky__night")!;
+		const box = hero.querySelector<HTMLElement>(".sky__box")!;
 		const nctx = dusk.getContext("2d")!;
 		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
 		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
@@ -105,7 +109,6 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			const room = (s.width - from - FROM_FADE) / (1 - BLEED - DOME_L);
 			const W = Math.max(0.6 * full, Math.min(full, room)), H = W / ASPECT;
 			const L = s.width + BLEED * W - W;
-			hero!.style.setProperty("--sclip", `${Math.max(0, from - L)}px`);
 			return { L, T: s.height - H, W, H };
 		}
 		/* phones and tablets: the scene is its own row under the copy, contained in it, flush right, as wide as
@@ -113,7 +116,6 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		function fitNarrow(s: DOMRect): Geo {
 			const W = Math.min(1.25 * s.width, ASPECT * s.height, (s.width - 8) / (1 - BLEED - DOME_L)), H = W / ASPECT;
 			from = 0;
-			hero!.style.setProperty("--sclip", "0px");
 			return { L: s.width - W * (1 - BLEED), T: (s.height - H) / 2, W, H };
 		}
 		/* every line of the copy, padded */
@@ -245,11 +247,11 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			const narrow = matchMedia(SCENE_ROW).matches;
 			geo = narrow ? fitNarrow(s) : fitWide(s);
 			holes = narrow ? [] : textBoxes(s);
-			hero!.style.setProperty("--sx", `${geo.L}px`);
-			hero!.style.setProperty("--sy", `${geo.T}px`);
-			hero!.style.setProperty("--sw", `${geo.W}px`);
-			hero!.style.setProperty("--sfade-l", `${Math.round(0.14 * geo.W)}px`);
-			hero!.style.setProperty("--sfade-b", narrow ? `${Math.round(0.12 * geo.H)}px` : "0px");
+			/* the frame placed itself in CSS; this refines it to the geometry above, and its fades with it */
+			const k = alignFrame(box, geo, s);
+			box.style.setProperty("--sclip", `${Math.max(0, from - geo.L) / k}px`);
+			box.style.setProperty("--sfade-l", `${Math.round(0.14 * geo.W) / k}px`);
+			box.style.setProperty("--sfade-b", narrow ? `${Math.round(0.12 * geo.H) / k}px` : "0px");
 			dpr = Math.min(2, window.devicePixelRatio || 1);
 			canvas.width = Math.round(s.width * dpr);
 			canvas.height = Math.round(s.height * dpr);

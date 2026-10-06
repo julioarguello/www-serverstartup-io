@@ -154,8 +154,7 @@ const members = memberEntries ?? [];
 			{/* The six verticals' photographs, never their openings: the
 			    animations belong to each vertical's page and would spoil it
 			    (founder, 2026-10-05). Each holds still but for a slow push and
-			    cross-fades into the next; the bridge's ends in a walk into the
-			    same photograph, where the next slide, the tug, was cut from.
+			    cross-fades into the next.
 
 			    Only the first loads with the page. The other five sit in the
 			    viewport (stacked, transparent), so `loading="lazy"` fetches them
@@ -167,7 +166,7 @@ const members = memberEntries ?? [];
 				const { src, srcset } = homePhotoSources(slide.photo);
 				return (
 					<img
-						class:list={["s-hero__photo", slide.face === "int" && "s-hero__photo--into", slide.face === "ia" && "s-hero__photo--from"]}
+						class="s-hero__photo"
 						src={i === 0 ? src : undefined}
 						srcset={i === 0 ? srcset : undefined}
 						data-src={i === 0 ? undefined : src}
@@ -416,7 +415,6 @@ const members = memberEntries ?? [];
 <CtaGlobal />
 
 <script>
-	import { HOME_INTO } from "../utils/hero-art";
 	/**
 	 * The hero's manual control (founder, 2026-08-27: "el carrusel me debía de
 	 * permitir moverme yo entre las opciones, con las flechas").
@@ -446,60 +444,6 @@ const members = memberEntries ?? [];
 	if (document.readyState === "complete") later();
 	else window.addEventListener("load", later, { once: true });
 
-	// The bridge's walk into the tug (#560) is ONE movement (founder, 2026-10-06: "tiene que formar
-	// parte de un todo… que la pantalla siga en el mismo sitio"). The rectangle the tug's photograph was
-	// cut from must land exactly on that photograph, wherever both `object-fit: cover` boxes put them;
-	// that is a zoom by z about one fixed point P, so the bridge zooms about P from its first second, and
-	// while the tug fades in (6 → 7 s) it zooms about the same P at the same pace, from the very frame the
-	// bridge shows — never two framings at once — and goes on pushing after. The keyframes are written
-	// here in pixels and numbers (var() inside @keyframes is not honoured everywhere); the stylesheet's
-	// own keyframes of the same names are the fallback with no script.
-	const into = hero?.querySelector<HTMLImageElement>(".s-hero__photo--into");
-	const from = hero?.querySelector<HTMLImageElement>(".s-hero__photo--from");
-	const placed = (img: HTMLImageElement) => {
-		const bw = img.clientWidth, bh = img.clientHeight;
-		const nw = Number(img.getAttribute("width")), nh = Number(img.getAttribute("height"));
-		const [px, py] = getComputedStyle(img).objectPosition.split(" ").map((v) => parseFloat(v) / 100);
-		const s = Math.max(bw / nw, bh / nh);
-		return { bw, bh, x: (bw - nw * s) * px, y: (bh - nh * s) * py, w: nw * s, h: nh * s };
-	};
-	const keys = document.createElement("style");
-	document.head.append(keys);
-	const CYCLE = 36, END = 7; // seconds: the bridge leaves at 7 s, when the tug has faded in
-	const pct = (t: number) => `${((t / CYCLE) * 100).toFixed(4)}%`;
-	const aim = () => {
-		if (!into || !from) return;
-		const a = placed(into), b = placed(from);
-		if (!a.bw || !b.w) return;
-		const [l, t] = HOME_INTO;
-		const z = b.w / ((HOME_INTO[2] - l) * a.w);
-		const tx = b.x - z * (a.x + l * a.w), ty = b.y - z * (a.y + t * a.h);
-		const P = `${(tx / (1 - z)).toFixed(1)}px ${(ty / (1 - z)).toFixed(1)}px`;
-		into.style.transformOrigin = P;
-		from.style.transformOrigin = P;
-		// one camera at one pace (founder, 2026-10-06: the walk in was too fast at the end): the bridge
-		// zooms at a constant rate for its seven seconds, geometric so it reads even; the tug takes the
-		// same zoom while it fades in and carries it on, easing out over a second and a half
-		const s = (sec: number) => Math.pow(z, sec / END);
-		const TAU = 1.5;
-		const tug = (u: number) => (u <= 1 ? Math.pow(z, (u - 1) / END) : Math.pow(z, (TAU * (1 - Math.exp(-(u - 1) / TAU))) / END));
-		const steps = (t0: number, t1: number, f: (sec: number) => string) => {
-			const out: string[] = [];
-			for (let sec = t0; sec <= t1 + 1e-9; sec += 0.25) out.push(`${pct(sec - t0)} { ${f(sec)} }`);
-			return out.join("\n");
-		};
-		const op = (u: number) => (u <= 1 ? Math.max(0, u) : u <= 6 ? 1 : Math.max(0, 7 - u));
-		keys.textContent = `@keyframes s-hero-photo-into {
-			${steps(0, END, (sec) => `opacity: ${Math.min(1, sec).toFixed(3)}; transform: scale(${s(sec).toFixed(5)});`)}
-			${pct(END + 0.001)}, 100% { opacity: 0; transform: scale(1); }
-		}
-		@keyframes s-hero-photo-from {
-			${steps(0, END, (u) => `opacity: ${op(u).toFixed(3)}; transform: scale(${tug(u).toFixed(5)});`)}
-			${pct(END + 0.001)}, 100% { opacity: 0; transform: scale(${tug(END).toFixed(5)}); }
-		}`;
-	};
-	aim();
-	if (into) new ResizeObserver(aim).observe(into);
 
 	const navs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-hero-nav]"));
 	const n = document.querySelectorAll(".s-hero__photo").length;

@@ -539,7 +539,7 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
 The home's band rotates through the six verticals' **photographs**, never their openings: the
 animations belong to each vertical's page and would spoil it (founder, 2026-10-05). The order
 tells one story, *from the coast to the stars* — the Cabo Peñas lighthouse, the Vizcaya Bridge,
-the tug under that same bridge, up the river to the Guggenheim, the warehouse, night over the
+the tug under it, up the river to the Guggenheim, the warehouse, night over the
 Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the menu, the footer
 and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
 rotating edge (Base.astro), so the two cannot drift.
@@ -560,12 +560,10 @@ rotating edge (Base.astro), so the two cannot drift.
   place: the founder struck it. The bars under them carry `menu_short` and fill in the vertical's
   colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
   margin — takes the colour of the vertical showing, on the same clock.
-- **The bridge's walk into the tug** is one movement: the rectangle the tug's photograph was cut
-  from (`src/assets/hero/home-into.json`, written by `home_voyage.py`) must land on that photograph
-  wherever both `object-fit: cover` boxes put them — a zoom by z about one fixed point P. The bridge
-  zooms about P at one constant rate for its seven seconds; while the tug fades in (6 → 7 s) it zooms
-  about the same P at the same rate from the frame the bridge shows, then eases out over 1.5 s. The script writes both
-  keyframes in pixels (no `var()` inside `@keyframes`); the stylesheet's are the no-script fallback.
+- **The bridge and the tug are two slides**, each its own subject, with the cut between them: the
+  bridge with its bridge, then the AI page's own photograph of the tug. A zoom from one into the
+  other (the tug cut from the bridge's frame) was built and dropped by the founder ("abandono la idea
+  de que integración e IA vayan anidadas… que se note el salto").
 - **The home's own photographs**: the lighthouse as a whole photograph (masts and sheds painted
   out, extended to the left: `faro.py`), the bridge with its bridge, its ships as photographed (turning
   them was tried: flipped, they sailed into the quay, and a tanker coming IN needs a bow the

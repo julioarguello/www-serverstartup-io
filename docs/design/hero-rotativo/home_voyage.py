@@ -1,6 +1,6 @@
 """The home's six photographs, where they differ from the verticals' own (#560).
 
-The home tells one voyage, from the coast to the stars (founder, 2026-10-05). Two of its photographs
+The home tells one voyage, from the coast to the stars (founder, 2026-10-05). Three of its photographs
 are not the verticals' files:
 
 * the bridge, WITH its bridge: the integration page takes the bridge out and draws it back in; the
@@ -9,8 +9,6 @@ are not the verticals' files:
   4): flipped, they sailed into the quay; what the founder wanted — the tanker coming in, towards the
   viewer — needs its bow, and the photograph only has its stern. The stern is relettered as on the
   vertical pages (stern_label.py's letters at its own boxes);
-* the AI slide is cut from that same photograph, the ships in its right 60 % (TUG), which is also
-  what makes the step from the bridge to the tug a real zoom (home-into.json carries the rectangle);
 * the warehouse, further away (founder, 2026-10-05: "haces demasiado zoom, aléjalo un poco"): the
   e-commerce page's file crops the ceiling and the home's band crops its sides again. The home takes
   the WHOLE photograph, ceiling included, its operator's marks painted out as ocado.py does, and
@@ -24,7 +22,7 @@ The lighthouse is faro.py's.
     python3 docs/design/hero-rotativo/home_voyage.py warehouse-prepare <original> <donor, left> <out.png>
     python3 docs/design/hero-rotativo/home_voyage.py warehouse <seedvr2 output of out.png>
 """
-import os, sys, json
+import os, sys
 import numpy as np, cv2
 from PIL import Image
 
@@ -33,10 +31,6 @@ sys.path.insert(0, HERE)
 from stern_label import OUT, LINES, ORIGINAL, letters, light, render, PHOTOS  # noqa: E402
 
 FONT = "/System/Library/Fonts/Helvetica.ttc"
-INTO_JSON = os.path.normpath(os.path.join(HERE, "..", "..", "..", "src", "assets", "hero", "home-into.json"))
-ORIGINAL_W = 5333  # the Commons original's width (Ebaki, 5333 x 3555)
-# in the original's pixels: the AI slide, the ships in its right 60 %, at the band's 16 : 8.6
-TUG = (719, 1686, 3650, 3261)
 
 
 def reletter(rgb, boxes, font_path=FONT):
@@ -70,21 +64,11 @@ def write(img, stem, widths):
 def bridge(restored):
     src = Image.open(restored).convert("RGB")
     W = src.width
-    s = W / ORIGINAL_W
     # the stern, relettered at its own boxes (measured on the 2016 px restoration of the whole original)
     kb = W / 2016
     boxes = [tuple(round(v * kb) for v in box) for box in PHOTOS["bridge"]["boxes"]]
     out = Image.fromarray(reletter(np.ascontiguousarray(np.asarray(src)), boxes))
     write(out, "home-puente-salida", [2016, 1320, 720])
-    write(out.crop(tuple(round(v * s) for v in TUG)), "home-remolcador-salida", [2016, 1320, 720])
-    H = src.height
-    # where the tug's photograph lies inside the bridge's, as fractions: the home's zoom reads it
-    oh = H / s
-    into = [round(TUG[0] / ORIGINAL_W, 5), round(TUG[1] / oh, 5), round(TUG[2] / ORIGINAL_W, 5), round(TUG[3] / oh, 5)]
-    with open(INTO_JSON, "w") as f:
-        json.dump({"into": into}, f)
-        f.write("\n")
-    print(os.path.relpath(INTO_JSON), into)
 
 
 WAREHOUSE_LEFT = 298  # the photograph's left edge in the 1344 x 720 extension

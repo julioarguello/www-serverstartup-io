@@ -24,7 +24,6 @@
  * upload.
  */
 import { FACE_BY_SLUG, FACE_ORDER, type FaceKey } from "./nav";
-import homeInto from "../assets/hero/home-into.json";
 
 /** face → the plate that vertical wears. */
 export const HERO_ART: Record<FaceKey, string> = {
@@ -217,9 +216,10 @@ export function sortByVoyage<T extends { id: string; slug?: string }>(entries: T
 /**
  * Each slide's photograph, written at 720, 1320 and 2016 px as `<stem>-720.webp`, `<stem>.webp` and
  * `<stem>-2016.webp`. Four are the home's own (docs/design/hero-rotativo/faro.py, home_voyage.py):
- * the lighthouse as a whole photograph without its masts or sheds, the bridge WITH its bridge and the
- * tug cut from that same photograph (so the step from one to the other is a zoom), and the warehouse
- * further away. `focus` is the object-position that keeps the subject right of the copy on desktops;
+ * the lighthouse as a whole photograph without its masts or sheds, the bridge WITH its bridge, and the
+ * warehouse further away. The tug is the AI page's own photograph: the bridge and the tug are two
+ * slides, each its own subject, with the cut between them (founder, 2026-10-06: "abandono la idea de
+ * que integración e IA vayan anidadas… que se note el salto"). `focus` is the object-position that keeps the subject right of the copy on desktops;
  * `focusNarrow`, where given, the one for the photograph's strip on phones and tablets.
  */
 export type HomePhoto = { stem: string; width: number; height: number; focus: string; focusNarrow?: string };
@@ -228,7 +228,7 @@ export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
 	// tablets show a narrow slice of the frame, which has to be the one with the lighthouse in it
 	cdn: { stem: "/assets/hero/home-faro-limpio", width: 1320, height: 707, focus: "20% 50%", focusNarrow: "70% 50%" },
 	int: { stem: "/assets/hero/home-puente-salida", width: 1320, height: 880, focus: "50% 45%" },
-	ia: { stem: "/assets/hero/home-remolcador-salida", width: 1320, height: 709, focus: "70% 50%" },
+	ia: { stem: "/assets/hero/ia-remolcador-aviles", width: 1320, height: 852, focus: "70% 50%" },
 	gf: { stem: "/assets/hero/gf-guggenheim-restaurado", width: 1320, height: 645, focus: "62% 50%" },
 	ec: { stem: "/assets/hero/home-almacen", width: 1320, height: 707, focus: "62% 55%" },
 	bd: { stem: "/assets/hero/bd-observatorio-entero", width: 1320, height: 880, focus: "50% 60%" },
@@ -247,9 +247,3 @@ export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | 
 	return face ? HOME_PHOTO[face] : null;
 }
 
-/**
- * The tug's photograph inside the bridge's, as fractions of its width and height (left, top, right,
- * bottom). Written by home_voyage.py, which cuts the one out of the other, so the home's zoom from the
- * bridge lands exactly on the next slide at any band proportion.
- */
-export const HOME_INTO = homeInto.into as [number, number, number, number];

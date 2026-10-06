@@ -65,19 +65,6 @@
 	animation-name: s-hero-photo-lead;
 }
 
-/* The bridge does not fade: it walks into itself, towards the tug the next
-   slide was cut from (home_voyage.py's TUG), and the tug fades in over it at
-   the very same place. The script measures both boxes and hands the end of
-   the walk over as --zx, --zy, --zs; the fallbacks are the 16 : 8.6 band's. */
-.s-hero__photo--into {
-	animation-name: s-hero-photo-into;
-}
-
-/* …and the tug holds still while it fades in, so it is where the walk ended */
-.s-hero__photo--from {
-	animation-name: s-hero-photo-from;
-}
-
 /* Phones and tablets: the photograph is its own strip under the header and the copy
    stands below it on ink, as the vertical pages' scenes do (#560). Over the
    whole band the copy covered the picture entirely — a slideshow nobody
@@ -435,36 +422,6 @@
 	16.6667% { opacity: 1; }
 	19.4444% { opacity: 0; transform: scale(1.045); }
 	100% { opacity: 0; transform: scale(1.045); }
-}
-
-/* the push to 4 s, then two seconds walking in, done at 6 s — where the
-   slide's six seconds end — and held: the tug's photograph fades in over the
-   finished frame from 6 to 7 s, the very same picture (founder, 2026-10-05:
-   while the walk still ran under the fade, two framings showed at once) */
-@keyframes s-hero-photo-into {
-	0% { opacity: 0; transform: scale(1); }
-	2.7778% { opacity: 1; }
-	11.1111% { opacity: 1; transform: scale(1.03); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
-	16.6667%, 19.4444% { opacity: 1; transform: translate(var(--zx, 7.8%), var(--zy, -23.6%)) scale(var(--zs, 1.82)); }
-	19.4445%, 100% { opacity: 0; transform: scale(1); }
-}
-
-@keyframes s-hero-photo-from {
-	0% { opacity: 0; transform: scale(1); }
-	2.7778% { opacity: 1; transform: scale(1); }
-	16.6667% { opacity: 1; }
-	19.4444% { opacity: 0; transform: scale(1.04); }
-	100% { opacity: 0; transform: scale(1.04); }
-}
-
-/* each colour held while its photograph shows, turning during the cross-fade */
-@keyframes s-hero-seal {
-	0%, 16.6667% { color: var(--c1, var(--color-secondary)); }
-	19.4444%, 33.3333% { color: var(--c2, var(--color-secondary)); }
-	36.1111%, 50% { color: var(--c3, var(--color-secondary)); }
-	52.7778%, 66.6667% { color: var(--c4, var(--color-secondary)); }
-	69.4444%, 83.3333% { color: var(--c5, var(--color-secondary)); }
-	86.1111%, 100% { color: var(--c6, var(--color-secondary)); }
 }
 
 @keyframes s-hero-item {

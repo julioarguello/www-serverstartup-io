@@ -3,6 +3,7 @@ Skip to content
 /en/cdn-waf-edge-security-cloudflare
 ES
 ORIGIN
+CDN
 WAF
 ACCESS
 ZERO TRUST

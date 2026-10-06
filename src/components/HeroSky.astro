@@ -17,6 +17,7 @@
  * for every line of the copy.
  */
 import { HERO_SKY, HERO_SKY_SIZES } from "../utils/hero-art";
+import sky from "../assets/hero/bd-cielo.json";
 import HeroScene from "./HeroScene.astro";
 
 interface Props {
@@ -33,10 +34,12 @@ const pauseLabel = L("sky_pause", "Pausar la animación");
 const replayLabel = L("sky_replay", "Repetir la animación");
 /* the layers' names, the medallion's own words in both locales */
 const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "silver"), L("sky_gold", "gold")]);
+/* the left dome's left edge, of the frame's width: the sheet places the frame by it before any script runs */
+const domeL = Math.min(...sky.domes[0].p.filter((_, i) => i % 2 === 0)) / sky.frame[0];
 ---
 
 <HeroScene scene="sky" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel}>
-	<div slot="under" class="sky__box">
+	<div slot="under" class="scene__frame sky__box" style={`--dome-l:${domeL.toFixed(5)}`}>
 		<img class="sky__photo" src={HERO_SKY.photo} srcset={`${HERO_SKY.photoSmall} 720w, ${HERO_SKY.photo} 1320w, ${HERO_SKY.photoLarge} 2016w`} sizes={HERO_SKY_SIZES} width="1320" height="880" alt="" fetchpriority="high" decoding="async" />
 		<canvas class="sky__night" aria-hidden="true"></canvas>
 	</div>
@@ -52,6 +55,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 <script>
 	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
+	import { frontX as frontAt, reached as reachedBy, paintNight, alignFrame, type DuskFront } from "../utils/scene-dusk";
 	import sky from "../assets/hero/bd-cielo.json";
 	const hero = document.querySelector<HTMLElement>(".s-hero--sky");
 	if (hero) {
@@ -61,6 +65,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		const canvas = hero.querySelector<HTMLCanvasElement>(".sky__data")!;
 		const ctx = canvas.getContext("2d")!;
 		const dusk = hero.querySelector<HTMLCanvasElement>(".sky__night")!;
+		const box = hero.querySelector<HTMLElement>(".sky__box")!;
 		const nctx = dusk.getContext("2d")!;
 		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
 		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
@@ -104,7 +109,6 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			const room = (s.width - from - FROM_FADE) / (1 - BLEED - DOME_L);
 			const W = Math.max(0.6 * full, Math.min(full, room)), H = W / ASPECT;
 			const L = s.width + BLEED * W - W;
-			hero!.style.setProperty("--sclip", `${Math.max(0, from - L)}px`);
 			return { L, T: s.height - H, W, H };
 		}
 		/* phones and tablets: the scene is its own row under the copy, contained in it, flush right, as wide as
@@ -112,7 +116,6 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		function fitNarrow(s: DOMRect): Geo {
 			const W = Math.min(1.25 * s.width, ASPECT * s.height, (s.width - 8) / (1 - BLEED - DOME_L)), H = W / ASPECT;
 			from = 0;
-			hero!.style.setProperty("--sclip", "0px");
 			return { L: s.width - W * (1 - BLEED), T: (s.height - H) / 2, W, H };
 		}
 		/* every line of the copy, padded */
@@ -150,26 +153,17 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		   silver, gold, one after the other; then the payoff, data running along every link; at rest by the end,
 		   the finished network staying (founder: "tiene que darme tiempo a ver cómo oscurece") */
 		const NIGHT_AT = SCENE_BEATS.draw, NIGHT_END = SCENE_BEATS.drawn + 500, END = SCENE_BEATS.end;
-		let SOFT = 160;                          /* the front's soft edge, px: a third of the photograph */
 		const PICK_MS = 500, BEAM_MS = 700, TAG_MS = 400, CALM_MS = 600;
 		/* the medallion: many raw stars, fewer clean ones, a few that matter; each reads from its own group */
 		const COUNT = [10, 4, 2], COUNT_NARROW = [8, 3, 2];
 		const RADIUS = [2.6, 4.2, 6];
 		const clamp = (x: number) => Math.min(1, Math.max(0, x));
 		const ease = (x: number) => x * x * (3 - 2 * x);
-		/* the front: an even pace from the photograph's left edge to past its right edge */
-		let knots: [number, number][] = [];
-		function frontX(ms: number) {
-			if (!knots.length) return 0;
-			const [[t0, x0], [t1, x1]] = knots;
-			return x0 + (x1 - x0) * clamp((ms - t0) / (t1 - t0));
-		}
-		/* when the front's middle reaches stage column x */
-		function reached(x: number) {
-			if (!knots.length) return 0;
-			const [[t0, x0], [t1, x1]] = knots;
-			return t0 + (t1 - t0) * clamp((x + SOFT / 3 - x0) / (x1 - x0));
-		}
+		/* the front (scene-dusk.ts): an even pace from the photograph's left edge to past its right edge; its soft
+		   edge a third of the photograph */
+		const front: DuskFront = { knots: [], soft: 160 };
+		const frontX = (ms: number) => frontAt(front, ms);
+		const reached = (x: number) => reachedBy(front, x);
 
 		function nearest(a: Star, list: Star[]) {
 			let best = list[0];
@@ -205,9 +199,9 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			});
 			/* the night: from the photograph's left edge, its soft edge a third of the photograph wide, so the dusk is
 			   seen to fall rather than wiped in */
-			SOFT = Math.max(160, 0.33 * geo.W);
+			front.soft = Math.max(160, 0.33 * geo.W);
 			const startX = narrow ? Math.max(0, geo.L) : Math.max(from, geo.L + 0.05 * geo.W);
-			knots = [[NIGHT_AT, startX], [NIGHT_END, Math.min(s.width, geo.L + geo.W) + SOFT]];
+			front.knots = [[NIGHT_AT, startX], [NIGHT_END, Math.min(s.width, geo.L + geo.W) + front.soft]];
 			if (layers.some((l) => !l.length)) { layers = []; links = []; tags = []; return; }
 			/* consolidation, not a network: each star reads from its own group of the layer before — every raw star
 			   feeds the nearest clean one, every clean one the nearest that matters — never all to all */
@@ -253,11 +247,11 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			const narrow = matchMedia(SCENE_ROW).matches;
 			geo = narrow ? fitNarrow(s) : fitWide(s);
 			holes = narrow ? [] : textBoxes(s);
-			hero!.style.setProperty("--sx", `${geo.L}px`);
-			hero!.style.setProperty("--sy", `${geo.T}px`);
-			hero!.style.setProperty("--sw", `${geo.W}px`);
-			hero!.style.setProperty("--sfade-l", `${Math.round(0.14 * geo.W)}px`);
-			hero!.style.setProperty("--sfade-b", narrow ? `${Math.round(0.12 * geo.H)}px` : "0px");
+			/* the frame placed itself in CSS; this refines it to the geometry above, and its fades with it */
+			const k = alignFrame(box, geo, s);
+			box.style.setProperty("--sclip", `${Math.max(0, from - geo.L) / k}px`);
+			box.style.setProperty("--sfade-l", `${Math.round(0.14 * geo.W) / k}px`);
+			box.style.setProperty("--sfade-b", narrow ? `${Math.round(0.12 * geo.H) / k}px` : "0px");
 			dpr = Math.min(2, window.devicePixelRatio || 1);
 			canvas.width = Math.round(s.width * dpr);
 			canvas.height = Math.round(s.height * dpr);
@@ -275,31 +269,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 		/* the night, under the veil, on the photograph: the band's dark up to the front, with a soft edge; the
 		   domes keep their light (founder: "a medida que se hace de noche, dejarlos con luz") */
 		function night(ms: number) {
-			nctx.setTransform(1, 0, 0, 1, 0, 0);
-			nctx.clearRect(0, 0, dusk.width, dusk.height);
-			if (!knots.length || NIGHT_AT > ms) return;
-			nctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-			const fx = frontX(Math.min(ms, END)) - geo.L;
-			const g = nctx.createLinearGradient(fx - SOFT, 0, fx, 0);
-			g.addColorStop(0, NIGHT);
-			g.addColorStop(1, "rgba(0, 0, 0, 0)");
-			nctx.fillStyle = g;
-			nctx.fillRect(0, 0, Math.max(0, fx), geo.H);
-			nctx.globalCompositeOperation = "destination-out";
-			nctx.filter = "blur(3px)";
-			const k = geo.W / FW;
-			nctx.fillStyle = "#000";
-			for (const d of sky.domes) {
-				nctx.beginPath();
-				for (let i = 0; i < d.p.length; i += 2) {
-					if (i) nctx.lineTo(d.p[i] * k, d.p[i + 1] * k);
-					else nctx.moveTo(d.p[i] * k, d.p[i + 1] * k);
-				}
-				nctx.closePath();
-				nctx.fill();
-			}
-			nctx.filter = "none";
-			nctx.globalCompositeOperation = "source-over";
+			paintNight(nctx, front, { left: geo.L, width: geo.W, height: geo.H, dpr, color: NIGHT, scale: geo.W / FW, cutouts: sky.domes.map((d) => d.p) }, ms, NIGHT_AT, END);
 		}
 
 		/* a star: round, with a soft halo, never a square */
@@ -321,11 +291,11 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			night(ms);
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			if (!knots.length || NIGHT_AT > ms) return;
+			if (!front.knots.length || NIGHT_AT > ms) return;
 			ms = Math.min(ms, END);
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			const fx = frontX(ms);
-			const shown = (x: number) => clamp((fx - SOFT / 3 - x) / SOFT);
+			const shown = (x: number) => clamp((fx - front.soft / 3 - x) / front.soft);
 
 			/* the stars the night reveals as it passes: round, faint */
 			const size = Math.max(0.6, Math.min(1.1, (3.2 * geo.W) / FW));
@@ -364,7 +334,7 @@ const layerNames = JSON.stringify([L("sky_bronze", "bronze"), L("sky_silver", "s
 			/* the links grow behind the front, out of the group they read from */
 			ctx.strokeStyle = LINE;
 			for (const set of links) for (const l of set) {
-				const u = clamp((fx - SOFT / 3 - l.a.x) / Math.max(60, l.b.x - l.a.x));
+				const u = clamp((fx - front.soft / 3 - l.a.x) / Math.max(60, l.b.x - l.a.x));
 				if (u <= 0) continue;
 				ctx.globalAlpha = l.alpha;
 				ctx.lineWidth = l.width;

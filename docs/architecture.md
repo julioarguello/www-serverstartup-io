@@ -201,105 +201,136 @@ All routes exist in both ES and EN:
 | `styles/contact.css` | Contact page |
 | `styles/search.css` | Search page |
 
-### 4.4 The radar hero of the edge-security vertical (#529)
+### 4.4 The radar hero of the edge-security vertical (#529, #567)
 
-The CDN page opens with a scene instead of a held plate: a photograph of the Cabo Peñas
-lighthouse, cut out to the building, on a dark band that is not black, crossfades into a line
-drawing of the same building, and a radar screen settles behind it — range rings read from the
-origin outwards (ORIGIN · CDN · WAF · ACCESS · ZERO TRUST), a sweep at 12 rpm, a stream of
-edge events, and the visitor as one echo. The lighthouse stands at the edge and lights what
-approaches; it is the counter-image of the castle-and-moat perimeter, which is why the epigraph
-under the CTA carries Cloudflare's own sentence about the castle, signed «— Cloudflare» with the
-source behind the name.
+The CDN page opens on the Cabo Peñas lighthouse, the whole photograph the home shows (§4.11,
+`home-faro-limpio`: masts and sheds painted out, the frame extended to the left, `faro.py`). On the
+openings' one clock: the photograph alone until `--beat-draw` (2 s); then dusk falls evenly over the
+whole photograph, slow at first like real twilight, complete at 5 s; the lighthouse's orange profile —
+#529's line drawing — draws itself over the darkening building (complete by 4 s, half a second before the
+beam, so it reads on its own), and the darker the screen, the brighter the lantern and the more the
+profile's lines glow; then the lantern's beam is a radar's sweep — range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
+ZERO TRUST), a stream of edge events and the visitor as one echo, all over the darkened sky — until
+7.4 s; at rest by 8 s (`SCENE_BEATS.end`). The lighthouse stands at the edge and lights what
+approaches; it is the counter-image of the castle-and-moat perimeter, which is why the epigraph under
+the CTA carries Cloudflare's own sentence about the castle, signed «— Cloudflare» with the source
+behind the name.
 
-The band (founder, 2026-10-01, after four rounds of static prototypes measured for contrast):
-`--color-ground-dark` (#232724, "un negro menos negro") drifting from the column's right edge
-toward `--color-ground-haze`, the tone the cutout's own edge pixels average to, so the photograph
-lands on a kindred colour instead of a halo; the logo cube as one large seal in the section's
-colour, leaving by the left margin; the copy in paper, at the column's full width and the
-register every hero shares. A light version (the band tinted with the vertical's colour) and a
-version with the cutout soft-edged were built and rejected: the soft edge kept real sky inside
-the mask, which on any dark ground lit up as a glow around the tower — no gradient could hide
-it, only the tight silhouette did.
+Until #567 the page showed the lighthouse as a tight cut-out on the dark band, crossfading into a line
+drawing; among five whole photographs on the home it read as a needle in a haystack, and the founder
+asked for the page to follow the home («la página de cdn tb cambia», 2026-10-05). Over a whole
+photograph the radar's paper labels would sit on grey sky and fail contrast; of the two options
+offered, the founder took the dusk. A first dusk version dropped the line drawing; the founder wanted it
+back («me has quitado el perfil del faro, que molaba bastante») with the dusk and the beam («conjúgalo
+todo», 2026-10-06).
 
+- **The profile is registered on the photograph by measurement**: it was drawn on the cut-out (it shared
+  that cut-out's 1760 × 2020 box, `object-fit: cover`), and the cut-out and `home-faro-limpio` come from
+  one Commons original, so `faro.py register` measures the similarity between them — SIFT on the
+  building, RANSAC: 396 inliers of 493 matches, residual median 0.49 px on the 3024 px file, scale
+  0.5356, rotation −0.002° — and carries the drawing's box through it (`plan` in `cdn-faro.json`: x, y,
+  width in the photograph's 1320 px units). The component places it in percentages of the frame: no
+  script, the same at every size. It sits above the night, so the dusk never dims the orange, and fades
+  in from 2 to 4 s, main's own crossfade.
 Decisions that are not obvious from the code, and the measurement behind each:
 
-- **Every piece of text is HTML, positioned in percentages of the drawing's frame, never text
-  inside the SVG.** SVG text scales with the box: the ring labels rendered at 3.8 px on a
-  393 px phone and 8.8 px on a 1440 px laptop. The overlay (`.radar__hud`) shares the plate's
-  geometry, so a label at `left: 41.97%; top: 27.31%` lands on its ring at every size — on
-  phones the box must be exactly the contained image (`left: 11vw; width: 78vw`) or the
-  percentages drift off the rings.
-- **The sweep is a rotated `conic-gradient` div, not a transform on an SVG group.** A CSS
-  transform on an inline-SVG `<g>` re-runs style, layout and paint every frame (1 440 layouts
-  per 10 s measured in Chrome); the div composites on the GPU.
-- **Pause reaches everything.** `animation-play-state` is not inherited and never reaches a
-  `setInterval`, so the home's checkbox pattern alone would leave the sweep turning and the
-  events arriving: the component's script owns start/stop and also stops on `visibilitychange`
-  and under `prefers-reduced-motion` (which renders the end state with one still event per
-  zone). **Beside the pause, a replay** (founder, 2026-10-01): back to the photograph and through
-  the sequence again, the pause released and the feed cleared — the class is removed, a reflow
-  forced, the class re-added, or the CSS animations never restart. Where a pointer can hover the
-  two controls wait at 35 % until the band is hovered or one has focus; on touch devices, which
-  cannot hover, they stay at full strength under the art. Under reduced motion the replay is
-  hidden: nothing moves to replay. **Pause freezes the frame
-  where it is, and play goes on from there** (founder, 2026-10-04: pausing used to jump to the end of
-  the opening): the CSS stops on `animation-play-state`, and the timeouts that end the opening or start
-  its text run on `SceneClock` (`src/utils/scene-clock.ts`), which keeps what each has left. A pause rule
-  must out-rank every rule that sets the `animation` shorthand, which resets the play state.
-- **The copy is in front, the drawing stays behind it** (founder, 2026-10-01: "no que la imagen
-  desapareciera"). The veil under the column is the ground at 78 %, not solid: the rings and the
-  house's left half show through dimmed, and from 40 px before the column's right edge it is
-  gone. Measured at 78 % at 1024, 1440, 1865 and 2560, percentile 1: body 9.5–10.7:1 over the
-  drawing, 9.6–10.7 over the photograph; the epigraph 6.0–9.7. Lighter is not available: the
-  sweep's leading edge is the section colour at full strength, and under paper text at 65 % it
-  measures 3.6:1; the drawing *in front* of the veil, lines at full orange under the paragraph,
-  would be 1.7:1. Events spawn only within the rings' reach (the leftmost zones end at the
-  1260-unit ring), so none appears where there is no radar.
-- **The frame is sized by the band's height, never taller than it** (88 %, what 48 % of a
-  1440 × 900 viewport gave), and placed by the column — its left edge 10 px past the column's
-  right edge, pulled back by 58 % of its own width so the tower starts just past the copy. A
-  width-sized frame overflowed the band on a wide, short screen (3318 × 783, the founder's) and
-  showed one fragment of the house, hugely enlarged, with the echo on the title.
-- **Nothing is written over the building, the copy or the band's edge.** Events pick a
-  candidate in one of five frame zones and then check it against the page — the copy's box, the
-  building's rectangle in frame coordinates, the ring labels, the visitor's echo and the band's
-  edges — because the frame sits differently at every viewport now that the copy spans the
-  column; a candidate that fails is redrawn, up to forty times. Two zones on phones; labels at
-  most 24 characters; no two live events within 6 % vertically.
-- **The title is one line on any desktop**, and so is every other hero's: one register in
-  `service.css`, sized by the longest title the CMS holds, guarded by the a11y gate at 768 and
-  1440 (`docs/design-system.md`, Typography).
+- **What the scene needs from the photograph is measured on it**, never placed by eye:
+  `faro.py measure` writes `src/assets/hero/cdn-faro.json` from the 3024 px file — the building's
+  outline (GrabCut, seeded by a rough polygon off a 20 px grid; the outline is GrabCut's), the
+  lantern's glass and its centre (922.3, 214.6 of 1320 × 707), the tower's and the house's boxes, and
+  the last row of sky (446.5, the headland's line left of the house).
+- **The dusk is even, and the lighthouse takes its light from it** (founder, 2026-10-06: Big Data's
+  left-to-right front makes sense for its layers, «en el caso del faro no le veo ningún sentido… que
+  oscureciera de forma natural por toda la pantalla, y… cuanto más oscura se vuelve la pantalla, más
+  luminosidad tenga el faro y las líneas del mismo»). `src/utils/scene-dusk.ts` holds both ways night
+  falls on the same canvas under the veil, with what keeps its light cut out (here the lantern's glass):
+  Big Data's front (`paintNight`) and the even dusk (`duskLevel`, `paintNightEven`), whose level, 0 to 1,
+  from 2 to 5 s with a slow start, is the one value the lighthouse is lit by — never a second timer: the
+  lantern's light (`--color-lantern`, a warm white, never the section's orange) at that opacity, and the
+  profile's `--glow`, which brightens its lines (up to 1.35×) and gives them a halo of the section's
+  orange warmed by the lantern. Under reduced motion, and frozen from outside, all three are at full.
+  Big Data's opening is pixel-identical at 9 s before and after each change to the shared module.
+- **The frame is every photograph opening's** (`.scene__frame`, 86 % of the band, on its floor), placed
+  by the copy's column: the tower 48 px clear of it, the house's right wall 24 px clear of the band's
+  edge, the lantern halfway between where both fit. Where the band is too narrow for both (seen at 1101
+  and 1180 px) the frame shrinks to 85 % and then lets the house's right wing run off the edge — the
+  copy always wins. On phones and tablets the frame is as tall as the scene's row, the lantern at 72 %
+  of its width.
+- **The photograph paints at first render** (#568). Both photograph openings hid their frame until
+  their module script had placed it; the sheets now place it with the script's own arithmetic, from
+  the stage's size (a size container: `cqw`/`cqh`), the measured fractions set on the element (`--tl`,
+  `--hr`, `--lc` here; `--dome-l` for Big Data) and the seal's place declared once (`--seal-left`,
+  `--seal-w`). That is why the lighthouse is placed by the column, which CSS knows, and not by the
+  lines' measured ends, which it does not (8 px of difference at 1778). The script only refines the
+  frame, as a transform (`alignFrame`), never a layout shift; measured at 1101–2560 and 360–768 on
+  both pages, CSS already matches and no transform is applied, CLS 0. Only the radar's own layers wait
+  for the script. Lighthouse 12.8.2 mobile with applied (devtools) throttling, 3 runs each, before →
+  after: Big Data LCP render delay 1121–1145 → 15–59 ms, LCP 3.24–3.26 → 2.15–2.20 s, score 0.90 →
+  0.95–0.96; CDN 1201–1355 → 15–25 ms, LCP 3.25–3.40 → 2.07–2.08 s, 0.88–0.89 → 0.94–0.95. The default
+  simulated run does not move (render delay ~1.2–1.4 s both ways): on the local stack the scripts run
+  before the first paint anyway, and the simulation charges the module chain to the LCP.
+- **The rings and the sweep are the sky's**: centred on the lantern (one every 80 frame units, the
+  dashed one at the light's nominal range, 35 nautical miles — 10 nm a ring; `RADAR_RINGS`), and
+  clipped by one SVG path to what lies above the horizon with the building cut out, so they pass
+  behind the lantern, the tower and the house. On desktops the screen also wears the frame's own fades:
+  nothing of the radar shows past the frame or left of where the photograph's left fade begins (it
+  used to arc across the whole band, behind the copy).
+- **On desktops the events and the echo live in the photograph's own sky**: right of the copy's box
+  plus 24 px, past the left fade, below the top fade, above the horizon. That strip changes shape
+  with every viewport, so the events are not drawn from fixed zones there but from every clear point
+  of a grid over it, the next event that fits taking the turn; a strip with no room holds none. At
+  1280 and 1440 that is one or two events in the run, none at rest and no echo; at 1778 about five,
+  one at rest; at 2560 eight, three at rest. Phones keep their two zones.
+- **Every piece of text is HTML, positioned in percentages of the frame, never text inside the
+  SVG.** SVG text scales with the box: the ring labels rendered at 3.8 px on a 393 px phone.
+- **Nothing is written on the lantern, the tower or the house, the copy, the controls, the header or
+  below the sky.** Every label, event and the echo is placed at runtime against the page, measured
+  once per pass and relative to the band: ORIGIN beside the lantern (right of the tower, else left of
+  it); the four ring labels along the one bearing that keeps most of them in open sky (a scale reads
+  along a line), a ring that bearing cannot hold taking the nearest one that can; the range on its
+  dashed ring; the echo at the clear spot nearest the lantern. A label with no clear place is
+  withheld — at 1101 and 1180 px wide, two or three are. The collision with the building is with its
+  measured outline, not a box (a box withheld CDN at 1440 on the weathervane's corner).
+- **The beam at rest**: the sweep turns once, from 4.5 to 8 s, to 300°, its bright edge 60°
+  anticlockwise from east and its trail fading behind it to 128°. Paper text (the labels, the echo)
+  keeps off the bright edge — by the bearings the text spans, not its corners, which the edge passed
+  between; the events still at rest, orange, off the whole trail. A moving event may land where the
+  beam will pass: that is where an echo shows, and the feed clears when the beam comes to rest.
+- **The events carry a plate of the night under their text** (from just before the first letter):
+  an event landing on a ring put orange text over an orange line, 2.9:1 at 768 px; with the plate the
+  tightest event is 6.7:1. Measured at the end state as the a11y gate measures (98th-percentile
+  ground), at 1440, 1280, 1778 × 715, 390 and 768: tightest radar text 5.2:1 (the range at 768),
+  ORIGIN 5.3–7.2, events 6.7–7.4; the excerpt 7.4–8.1 by the same script (the gate reads 8.8 at
+  1440).
+- **The sweep is a rotated `conic-gradient` div, not a transform on an SVG group.** A CSS transform on
+  an inline-SVG `<g>` re-runs style, layout and paint every frame; the div composites on the GPU.
+- **Pause reaches everything**: the CSS stops on `animation-play-state`; the dusk's rAF loop stops and
+  resumes from its own accumulated time; the events' timers and the end run on `SceneClock`. Replay
+  goes back to the photograph by day. Frozen from outside (the a11y gate sets `is-done`), the scene
+  jumps to its end state: the dusk fallen, the lantern lit, one still event per zone — what reduced
+  motion shows at once.
 - **The visitor's echo is fetched by the browser** from `/api/whoami` (`no-store`,
-  `cf-connecting-ip` + `cf.city`) and hidden unless the edge answers. Service pages are cached
-  at the edge for an hour (§9): an address rendered into the HTML would be served to the next
-  visitor. The privacy policy names this processing in both locales.
-- **Chrome strings are CMS labels** (`panel_labels` → `radar_*`), English in both locales as a
-  machine voice, like the PR card. The quotation is CMS content: the service body opens with a
-  `blockquote`, which the page hands to the hero and withholds from the instrument
-  (`partnerInHero`), so the instrument's intro renders as plain paragraphs.
-- **Only the CDN face.** `heroRadarForSlug()` keys on the face like the plates do, so both
-  locale slugs render it and the other five verticals keep their plates untouched.
-- **Timing is the founder's ear, not a rule**: the reveal takes `--radar-t`, 8 s like every opening
-  (founder, 2026-10-04: "muy rápido"; it was 5 s); then one event every 0.52 s, each alive 2.4 s. The reveal only runs once per page
-  load; this hero is not a carousel slide.
-- **Assets** live in `public/assets/hero/` like the plates (R2 is not seedable): the photograph
-  as WebP with alpha at 1320 px (142 KB, the tight cutout) and the plan as lossless WebP
-  (156 KB), each with a phone variant (720 px, 48 KB; 660 px, 82 KB) picked by `srcset` with
-  `sizes="(max-width: 700px) 78vw, 43.4vw"`. Credit and licence (CC BY-SA 4.0, derivative
-  drawing included) in `docs/design/hero-rotativo/README.md`.
-- **What the gates demanded, measured on the first CI run** — the next vertical with a photo
-  hero meets the same three:
-  - *perf*: Lighthouse's mobile run (412 px, slow 4G) scored 0.85 with the full-size pair as the
-    LCP. The phone `srcset` is what fixed it (0.95, three runs, e-commerce control 0.96).
-    Fetching the plan from a `load` handler was tried and dropped: Lighthouse simulates the
-    throttled network from the observed request graph and cannot see a time dependency a
-    script introduces, so the deferral measured the same (0.93–0.96) while adding a code path.
-  - *rendered copy*: the visitor echo and the event feed declare `data-volatile`, which
-    `copy-baseline.mjs` drops before reading the page. Wrangler fills `request.cf` from the
-    machine's own address, so the echo said "Bilbao" on the laptop and "San Jose" on the runner.
-  - *a11y*: the hero-band pixel pass counts `.s-hero__plate` and finds none here; it treats a
-    `.s-hero--radar` as one plate frozen in its end state (tightest 15.2:1 on the h1).
+  `cf-connecting-ip` + `cf.city`) and hidden unless the edge answers. Service pages are cached at the
+  edge for an hour (§9): an address rendered into the HTML would be served to the next visitor. The
+  privacy policy names this processing in both locales.
+- **Chrome strings are CMS labels** (`panel_labels` → `radar_*`), English in both locales as a machine
+  voice, like the PR card. The quotation is CMS content: the service body opens with a `blockquote`,
+  which the page hands to the hero and withholds from the instrument (`partnerInHero`).
+- **The title is one line on any desktop**, like every other hero's (`docs/design-system.md`,
+  Typography).
+- **Assets**: the home's photograph at its four widths (720, 1320, 2016, 3024), with the observatory's
+  `sizes` (98vw on phones, so Lighthouse's 412 px phone takes the 720 file, 35 KB); the profile as
+  `cdn-faro-perfil.webp` (1210 px, 156 KB) and `-660` (82 KB) — #529's `cdn-faro-plan*`, unchanged,
+  under new names; the cut-out is retired. Credit and licence (Einaz80, CC BY-SA 4.0) in
+  `docs/design/hero-rotativo/README.md`.
+- **What the gates demanded**:
+  - *perf*: Lighthouse 12.8.2 mobile on the local stack, five runs: 0.97–0.98, LCP 2.2–2.3 s (the
+    photograph), Big Data control 0.97. A JS-deferred fetch does not help Lighthouse's simulation; the
+    phone `srcset` pair does (#529: 0.85 → 0.95).
+  - *rendered copy*: the echo and the event feed declare `data-volatile`. The ring labels shown depend
+    on the viewport; the baseline is pinned at 1440 × 900, where all five show.
+  - *a11y*: the hero-band pixel pass treats a scene as one plate frozen in its end state (excerpt
+    8.8:1 at 1440).
 
 ### 4.5 The shared scene and the bridge hero of the integration vertical (#531)
 
@@ -597,6 +628,9 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   overlaps back) — and a fade in past the seal.
 - **The whole photograph** (1.5 wide) is shown, so the left dome clears the seal; where the band is narrow the
   frame shrinks before the dome goes under it, and on phones it is no wider than keeps the dome in.
+- **The dusk is shared** since #567 (`src/utils/scene-dusk.ts`: the front's knots, when it reaches a
+  column, the night painted with its cut-outs; `.scene__frame` for the frame's place and fades;
+  `--color-scene-night`): the lighthouse falls into the same night, evenly rather than as a front (§4.4).
 - **Played, not animated in CSS**: one rAF loop draws everything from the clock and stops at the end, the
   finished network drawn once more as it rests; pause holds it (SceneClock for the timer). The colours are tokens (`--color-sky-line`, the section's navy lightened
   to read at night; `--color-sky-bronze`, `-silver`, `-gold`), read by the canvas through hidden inks.

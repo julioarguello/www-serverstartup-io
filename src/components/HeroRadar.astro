@@ -1,28 +1,28 @@
 ---
 /**
- * HeroRadar — the opening of the edge-security vertical (#529).
+ * HeroRadar — the opening of the edge-security vertical (#529, #567).
  *
- * A photograph of the Cabo Peñas lighthouse, cut out to the building, turns
- * into a line drawing of the same building, and a radar screen settles behind
- * it: range rings read from the origin outwards (ORIGIN · CDN · WAF · ACCESS ·
- * ZERO TRUST), a sweep at 12 rpm, a stream of edge events, and the visitor as
- * one echo. The lighthouse stands at the edge and lights what approaches — the
+ * The Cabo Peñas lighthouse, the whole photograph the home shows (#560). On the openings' one clock: the
+ * photograph alone until --beat-draw; then dusk falls over it, left to right, and the lantern lights up; from
+ * --beat-drawn the lantern's beam is a radar's sweep, with range rings read from the origin outwards
+ * (ORIGIN · CDN · WAF · ACCESS · ZERO TRUST), a stream of edge events, and the visitor as one echo, all over
+ * the darkened sky; at rest by the end. The lighthouse stands at the edge and lights what approaches — the
  * counter-image of the castle-and-moat perimeter the quotation describes.
  *
- * The band, the copy, the epigraph, the seal, the veil and the controls are
- * the scene every vertical shares (HeroScene.astro, hero-scene.css); this
- * component brings the art and the live layer. The drawing sits past the
- * column's right edge so no line of text ever touches it, in either phase.
+ * The band, the copy, the epigraph, the seal, the veil and the controls are the scene every vertical shares
+ * (HeroScene.astro); the dusk is the Big Data opening's (scene-dusk.ts). What the scene needs from the
+ * photograph is measured on it (`faro.py measure` → cdn-faro.json): the lantern, where the light is born and
+ * the rings are centred; the building's outline, which the rings and the sweep pass behind; the boxes no text
+ * may touch; the row below which nothing is sky. The script places the frame by the copy's measured lines, so
+ * the tower always stands clear of them.
  *
- * Two rules the review fixed: every piece of text is HTML at a fixed size
- * positioned in percentages of the frame, never text inside the scaled SVG;
- * and the sweep is a composited element (a rotated conic gradient), never a
- * transform on an SVG group, which re-lays the whole drawing out every frame.
- *
- * Chrome strings come from the `panel_labels` widget, English in both
- * locales — a machine voice, like the PR card.
+ * Two rules the review fixed (#529) still hold: every piece of text is HTML at a fixed size positioned in
+ * percentages of the frame, never text inside the scaled SVG; and the sweep is a composited element (a rotated
+ * conic gradient), never a transform on an SVG group. Chrome strings come from the `panel_labels` widget,
+ * English in both locales — a machine voice, like the PR card.
  */
-import { HERO_RADAR, HERO_RADAR_SIZES } from "../utils/hero-art";
+import { HERO_RADAR, HERO_RADAR_SIZES, HERO_RADAR_PLAN_SIZES, RADAR_RINGS } from "../utils/hero-art";
+import faro from "../assets/hero/cdn-faro.json";
 import HeroScene from "./HeroScene.astro";
 
 interface Props {
@@ -43,120 +43,453 @@ const events = L("radar_events", "").split(";").map((e) => e.trim()).filter(Bool
 const pauseLabel = L("radar_pause", "Pausar el radar");
 const replayLabel = L("radar_replay", "Repetir la animación");
 
-/* Where each ring label sits, in % of the 1205.5 × 1384 frame the drawing was
-   solved in: the origin at the tower base, the four rings where the 70°
-   bearing crosses them, in open sky left of the tower, nearest the copy. */
-const RING_POS: [number, number][] = [
-	[72.2, 91.2],
-	[41.97, 27.31],
-	[36.91, 15.1],
-	[31.77, 2.89],
-	[26.71, -9.32],
-];
+const [FW, FH] = faro.frame;
+const [CX, CY] = faro.lantern.c;
+const { step, reach } = RADAR_RINGS;
+const radii = Array.from({ length: Math.floor(reach / step) }, (_, i) => (i + 1) * step);
+/* the rings and the sweep are the sky's: clipped to what lies above the horizon, with the building cut out —
+   one path in the frame's own fractions, the building's outline closed on the horizon row */
+const r4 = (v: number) => Math.round(v * 1e4) / 1e4;
+const outline: number[] = faro.building;
+const building = Array.from({ length: outline.length / 2 }, (_, i) => `${r4(outline[2 * i] / FW)},${r4(Math.min(outline[2 * i + 1], faro.sky) / FH)}`);
+const skyClip = `M-5,-5H6V${r4(faro.sky / FH)}H-5Z M${building.join(" L")}Z`;
+/* the sweep: a disc as wide as the rings reach, centred on the lantern */
+const sweepStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%;width:${r4(((2 * reach) / FW) * 100)}%`;
+const lampStyle = `left:${r4((CX / FW) * 100)}%;top:${r4((CY / FH) * 100)}%`;
+/* the profile: where `faro.py register` measured it lands on the photograph's lighthouse */
+const [PX, PY, PW] = faro.plan;
+/* what the sheet places the photograph by, before any script: the tower's left edge, the house's right wall and
+   the lantern, as fractions of the frame's width */
+const frameStyle = `--tl:${r4(faro.tower[0] / FW)};--hr:${r4(faro.house[2] / FW)};--lc:${r4(CX / FW)}`;
+const planStyle = `left:${r4((PX / FW) * 100)}%;top:${r4((PY / FH) * 100)}%;width:${r4((PW / FW) * 100)}%`;
 ---
 
 <HeroScene scene="radar" title={title} excerptHtml={excerptHtml} ctaLabel={ctaLabel} contactPath={contactPath} quote={quote} pauseLabel={pauseLabel} replayLabel={replayLabel} data={{ events: JSON.stringify(events) }}>
 	<Fragment slot="under">
+		<div class="scene__frame radar__box radar__frame" style={frameStyle}>
+			<img class="radar__photo" src={HERO_RADAR.src} srcset={HERO_RADAR.srcset} sizes={HERO_RADAR_SIZES} width={HERO_RADAR.width} height={HERO_RADAR.height} alt="" fetchpriority="high" decoding="async" />
+			<canvas class="radar__night" aria-hidden="true"></canvas>
+			<img class="radar__plan" style={planStyle} src={HERO_RADAR.plan} srcset={`${HERO_RADAR.planSmall} 660w, ${HERO_RADAR.plan} 1210w`} sizes={HERO_RADAR_PLAN_SIZES} width="1210" height="1392" alt="" fetchpriority="low" decoding="async" />
+		</div>
 		<div class="radar__box radar__screen">
-			{/* rings every 180 units from the tower base at (777.5, 1063); the dashed one is the light's nominal range, 35 nautical miles (es.wikipedia, Faro de Cabo Peñas) */}
-			<svg viewBox="0 0 1205.5 1384" preserveAspectRatio="xMidYMid meet">
+			<svg viewBox={`0 0 ${FW} ${FH}`} preserveAspectRatio="xMidYMid meet">
+				<defs>
+					<clipPath id="radar-sky" clipPathUnits="objectBoundingBox"><path clip-rule="evenodd" d={skyClip} /></clipPath>
+				</defs>
 				<g class="radar__rings" fill="none">
-					{[180, 360, 540, 720, 900, 1080, 1260, 1440].map((r) => <circle cx="777.5" cy="1063" r={r} />)}
-					<line x1="-1500" y1="1063" x2="3000" y2="1063" /><line x1="777.5" y1="-600" x2="777.5" y2="2700" />
-					<line x1="-355" y1="-70" x2="1910" y2="2196" /><line x1="1910" y1="-70" x2="-355" y2="2196" />
+					{radii.map((r) => <circle cx={CX} cy={CY} r={r} />)}
+					<line x1={CX - reach} y1={CY} x2={CX + reach} y2={CY} /><line x1={CX} y1={CY - reach} x2={CX} y2={CY + reach} />
+					<line x1={CX - reach} y1={CY - reach} x2={CX + reach} y2={CY + reach} /><line x1={CX + reach} y1={CY - reach} x2={CX - reach} y2={CY + reach} />
 				</g>
-				<circle class="radar__range-ring" cx="777.5" cy="1063" r="630" fill="none" stroke-dasharray="10 8" />
+				<circle class="radar__range-ring" cx={CX} cy={CY} r={RADAR_RINGS.range} fill="none" stroke-dasharray="10 8" />
+				{/* the scale the ring labels read along, turned by the script to the bearing they were placed on */}
 				<g class="radar__scale" fill="none">
-					<line x1="777.5" y1="1063" x2="300" y2="-250" />
-					<line x1="520" y1="382" x2="542" y2="390" /><line x1="459" y1="213" x2="481" y2="221" /><line x1="397" y1="44" x2="419" y2="52" /><line x1="336" y1="-125" x2="358" y2="-117" />
+					<line x1={CX} y1={CY} x2={CX + 4.5 * step} y2={CY} />
+					{[1, 2, 3, 4].map((i) => <line x1={CX + i * step} y1={CY - 9} x2={CX + i * step} y2={CY + 9} />)}
 				</g>
 			</svg>
-			<div class="radar__sweep"></div>
+			<div class="radar__sweep" style={sweepStyle}></div>
 		</div>
-		<div class="radar__box radar__art">
-			<img class="radar__photo" src={HERO_RADAR.photo} srcset={`${HERO_RADAR.photoSmall} 720w, ${HERO_RADAR.photo} 1320w, ${HERO_RADAR.photoLarge} 1760w`} sizes={HERO_RADAR_SIZES} width="1320" height="1515" alt="" fetchpriority="high" decoding="async" />
-			<img class="radar__plan" src={HERO_RADAR.plan} srcset={`${HERO_RADAR.planSmall} 660w, ${HERO_RADAR.plan} 1210w`} sizes={HERO_RADAR_SIZES} width="1210" height="1392" alt="" fetchpriority="low" decoding="async" />
-		</div>
+		<div class="radar__box radar__light"><span class="radar__lamp" style={lampStyle}></span></div>
 	</Fragment>
 	<div slot="over" class="radar__box radar__hud">
 		{rings.map((r, i) => (
-			<span class={i === 0 ? "radar__origin" : "radar__lab"} style={`left:${RING_POS[i]?.[0] ?? 0}%;top:${RING_POS[i]?.[1] ?? 0}%`}>{r}</span>
+			<span class:list={["radar__lab", i === 0 && "radar__origin"]}>{r}</span>
 		))}
-		<span class="radar__range">{range}</span>
+		<span class="radar__lab radar__range">{range}</span>
 		<span class="radar__you" data-volatile hidden><b>{you}</b><span class="radar__ip"></span></span>
 		<div class="radar__feed" data-volatile></div>
 	</div>
+	<i slot="over" class="radar__ink" aria-hidden="true"></i>
 </HeroScene>
 
 <script>
-	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
+	import { SCENE_ROW, SCENE_BEATS, RADAR_RINGS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
+	import { duskLevel, paintNightEven, alignFrame } from "../utils/scene-dusk";
+	import faro from "../assets/hero/cdn-faro.json";
 	const hero = document.querySelector<HTMLElement>(".s-hero--radar");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-		const narrow = matchMedia(SCENE_ROW).matches;
-		const feed = hero.querySelector<HTMLElement>(".radar__feed")!;
-		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
-		const EVENTS: string[] = JSON.parse(hero.dataset.events || "[]");
-		/* candidate zones in % of the frame, and the side each label reads to; a candidate is then
-		   checked against the page — never over the copy, the building, the ring labels, the visitor's
-		   echo or past the band's edge — because the frame sits differently at every viewport */
-		const ZONES: [number, number, number, number, boolean][] = narrow
-			? [[2, 6, 86, 92, false], [40, 50, 2, 8, false]]
-			: [[10, 60, -14, 12, false], [60, 86, -14, 12, true], [-28, 10, 14, 58, false], [78, 92, 14, 56, false], [-28, 12, 62, 90, false]];
-		/* the building, in % of the frame: the tower and the house */
-		const BUILDING: [number, number, number, number] = [18, 92, 20, 104];
+		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
+		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
+		const night = hero.querySelector<HTMLCanvasElement>(".radar__night")!;
+		const frame = hero.querySelector<HTMLElement>(".radar__frame")!;
+		const nctx = night.getContext("2d")!;
+		const lamp = hero.querySelector<HTMLElement>(".radar__lamp")!;
+		const scale = hero.querySelector<SVGGElement>(".radar__scale")!;
 		const hud = hero.querySelector<HTMLElement>(".radar__hud")!;
+		const feed = hero.querySelector<HTMLElement>(".radar__feed")!;
 		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
 		const after = hero.querySelector<HTMLElement>(".s-hero__after");
-		/* the copy and the epigraph under it (#543 moved the epigraph out of the copy's box), as one rectangle */
-		function copyBox(): DOMRect {
+		const ctl = hero.querySelector<HTMLElement>(".scene__ctl");
+		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
+		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
+		const youEl = hero.querySelector<HTMLElement>(".radar__you")!;
+		const EVENTS: string[] = JSON.parse(hero.dataset.events || "[]");
+
+		const [FW, FH] = faro.frame;
+		const ASPECT = FW / FH;
+		const [CX, CY] = faro.lantern.c;
+		const BAND_H = 0.86;                     /* the frame's height, of the band's (the openings' one framing) */
+		const SEAL_R = 0.93;                     /* the seal's right vertex, of its width */
+		const GAP = 48;                          /* px between the copy's longest line and the tower */
+		const MARGIN = 24;                       /* px between the house's right wall and the band's edge */
+		const NIGHT_AT = SCENE_BEATS.draw, NIGHT_END = SCENE_BEATS.drawn + 500, END = SCENE_BEATS.end;
+
+		type Geo = { L: number; T: number; W: number; H: number };
+		type Rect = { left: number; top: number; right: number; bottom: number };
+		let geo: Geo = { L: 0, T: 0, W: 0, H: 0 };
+		let narrow = matchMedia(SCENE_ROW).matches;
+		let dpr = 1;
+		let NIGHT = "";
+		let photoFrom = 0;                       /* stage px where the photograph shows whole, past its left fade */
+
+		/* desktops: sized by the band, on its floor; placed so the tower stands clear of the copy's column (no line
+		   reaches past it) and the house's right wall clear of the band's edge, the lantern halfway between where
+		   both fit; where the band is too narrow for both the frame shrinks, and below that the house runs off the
+		   edge — the copy always wins. hero-radar.css places the photograph by the same arithmetic before this
+		   runs (#568), which is why it reads the column, which CSS knows, rather than the lines' measured ends */
+		function fitWide(s: DOMRect): Geo {
+			const sr = seal.getBoundingClientRect();
+			const from = sr.left - s.left + SEAL_R * sr.width + 8;
+			const tx = copy.getBoundingClientRect().right - s.left + GAP;
+			const [tl, hr, lc] = [faro.tower[0] / FW, faro.house[2] / FW, CX / FW];
+			const full = ASPECT * BAND_H * s.height;
+			const W = Math.max(0.85 * full, Math.min(full, (s.width - MARGIN - tx) / (hr - tl)));
+			const lo = tx - tl * W, hi = s.width - MARGIN - hr * W;
+			const mid = (tx + s.width) / 2 - lc * W;
+			const L = lo > hi ? lo : Math.min(hi, Math.max(lo, mid));
+			const H = W / ASPECT;
+			hero!.style.setProperty("--sclip", `${Math.max(0, from - L)}px`);
+			hero!.style.setProperty("--sfade-l", `${Math.round(0.14 * W)}px`);
+			photoFrom = Math.max(from, L) + Math.round(0.14 * W);
+			hero!.style.setProperty("--sfade-b", "0px");
+			return { L, T: s.height - H, W, H };
+		}
+		/* phones and tablets: the scene is its own row under the copy, the frame as tall as the row, the lantern
+		   right of centre so the sky left of the tower holds the labels and the events, the row always covered */
+		function fitNarrow(s: DOMRect): Geo {
+			const H = s.height, W = ASPECT * H;
+			const L = Math.min(0, Math.max(s.width - W, 0.72 * s.width - (CX / FW) * W));
+			hero!.style.setProperty("--sclip", "0px");
+			hero!.style.setProperty("--sfade-l", "0px");
+			photoFrom = 0;
+			hero!.style.setProperty("--sfade-b", `${Math.round(0.12 * H)}px`);
+			return { L, T: 0, W, H };
+		}
+
+		/* what placing text reads from the page, taken once per pass and relative to the band, so a placement
+		   made before a scroll still compares with one made after it */
+		type View = { o: DOMRect; f: Rect; band: Rect; head: number; st: Rect; copy: Rect; ctl: Rect | null; pic: Rect; poly: [number, number][] };
+		let view: View;
+		function rel(q: Rect, o: DOMRect): Rect {
+			return { left: q.left - o.left, top: q.top - o.top, right: q.right - o.left, bottom: q.bottom - o.top };
+		}
+		function look() {
+			const o = hero!.getBoundingClientRect();
+			const k = ctl?.getBoundingClientRect();
+			view = {
+				o,
+				f: rel(hud.getBoundingClientRect(), o),
+				band: { left: 0, top: 0, right: o.width, bottom: o.height },
+				head: document.querySelector("header")?.getBoundingClientRect().height ?? 0,
+				st: rel(stage.getBoundingClientRect(), o),
+				copy: rel(copyBox(), o),
+				ctl: k ? rel(k, o) : null,
+				pic: { left: 0, top: 0, right: 0, bottom: 0 },
+				poly: [],
+			};
+			const b = faro.building;
+			for (let i = 0; i < b.length; i += 2) view.poly.push(px(b[i], b[i + 1]));
+			/* the photograph's own sky, on desktops: past the copy's right edge and the photograph's left fade,
+			   below its top fade, above the horizon — where the events and the echo live */
+			const f = view.f, st = view.st;
+			view.pic = {
+				left: Math.max(view.copy.right + 24, st.left + photoFrom),
+				top: f.top + 0.12 * (f.bottom - f.top),
+				right: f.right,
+				bottom: px(0, faro.sky)[1],
+			};
+		}
+		/* frame units → band px */
+		function px(x: number, y: number): [number, number] {
+			const f = view.f;
+			return [f.left + (x / FW) * (f.right - f.left), f.top + (y / FH) * (f.bottom - f.top)];
+		}
+		/* the building's measured outline: nothing written touches it, by `pad` px */
+		function onBuilding(r: Rect, pad: number): boolean {
+			const poly = view.poly;
+			const R = { left: r.left - pad, top: r.top - pad, right: r.right + pad, bottom: r.bottom + pad };
+			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
+			function within(q: [number, number]): boolean {
+				return R.left < q[0] &&
+					q[0] < R.right &&
+					R.top < q[1] &&
+					q[1] < R.bottom;
+			}
+			if (poly.some(within)) return true;
+			const inside = (x: number, y: number) => {
+				let c = false;
+				for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+					const [xi, yi] = poly[i], [xj, yj] = poly[j];
+					if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c;
+				}
+				return c;
+			};
+			const nx = Math.max(2, Math.ceil((R.right - R.left) / 6)), ny = Math.max(2, Math.ceil((R.bottom - R.top) / 6));
+			for (let i = 0; i <= nx; i++) for (let j = 0; j <= ny; j++) if (inside(R.left + ((R.right - R.left) * i) / nx, R.top + ((R.bottom - R.top) * j) / ny)) return true;
+			return false;
+		}
+		/* the copy and the epigraph under it, as one rectangle */
+		function copyBox(): Rect {
 			const a = copy.getBoundingClientRect();
 			if (!after) return a;
 			const b = after.getBoundingClientRect();
-			const l = Math.min(a.left, b.left), t = Math.min(a.top, b.top);
-			return new DOMRect(l, t, Math.max(a.right, b.right) - l, Math.max(a.bottom, b.bottom) - t);
+			return { left: Math.min(a.left, b.left), top: Math.min(a.top, b.top), right: Math.max(a.right, b.right), bottom: Math.max(a.bottom, b.bottom) };
 		}
-		const youEl = hero.querySelector<HTMLElement>(".radar__you");
-		function clear(x: number, y: number, left: boolean, text: string): boolean {
-			const f = hud.getBoundingClientRect();
-			const band = hero.getBoundingClientRect();
-			const w = text.length * 7.6 + 22, h = 16;
-			const px = f.left + (x / 100) * f.width, py = f.top + (y / 100) * f.height;
-			const r = { left: left ? px - w : px, top: py - h / 2, right: left ? px : px + w, bottom: py + h / 2 };
-			/* one comparison per line: the cms-text lint reads `> … <` on one line as a text node */
-			const hits = (b: { left: number; top: number; right: number; bottom: number }, pad: number) =>
-				r.left < b.right + pad &&
+		/* one comparison per line: the cms-text lint reads `> … <` on one line as a text node */
+		function hits(r: Rect, b: Rect, pad: number): boolean {
+			return r.left < b.right + pad &&
 				b.left - pad < r.right &&
 				r.top < b.bottom + pad &&
 				b.top - pad < r.bottom;
-			if (r.left < band.left + 8 || r.right > band.right - 8 || r.top < band.top + 8 || r.bottom > band.bottom - 8) return false;
-			if (!narrow && hits(copyBox(), 14)) return false;
-			if (youEl && !youEl.hidden && hits(youEl.getBoundingClientRect(), 10)) return false;
-			if (BUILDING[0] < x && x < BUILDING[1] && BUILDING[2] < y && y < BUILDING[3]) return false;
-			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab, .radar__origin, .radar__range")) if (hits(el.getBoundingClientRect(), 8)) return false;
-			return true;
+		}
+		/* where nothing written may land: off the band or the stage that clips it, on the copy, on the controls,
+		   on the tower or the house, below the sky's last row, or on what is already written; the events and the
+		   echo, on desktops, nowhere but the photograph's own sky (`inPhoto`) */
+		function clearOf(r: Rect, taken: Rect[], trail: boolean | null = false, inPhoto = false): boolean {
+			const { band, head, st, copy: c, ctl: k, pic } = view;
+			if (inPhoto && !narrow && (r.left < pic.left || r.right > pic.right || r.top < pic.top || r.bottom > pic.bottom)) return false;
+			if (r.left < band.left + 8 || r.right > band.right - 8 || r.top < Math.max(band.top, head) + 8 || r.bottom > band.bottom - 8) return false;
+			if (narrow) {
+				if (r.left < st.left + 4 || r.right > st.right - 4 || r.top < st.top + 4 || r.bottom > st.bottom - 4) return false;
+			} else if (hits(r, c, 14)) return false;
+			if (k && hits(r, k, 10)) return false;
+			if (onBuilding(r, 8)) return false;
+			if (r.bottom > px(0, faro.sky)[1] - 4) return false;
+			if (trail !== null && inBeam(r, trail)) return false;
+			return !taken.some((b) => hits(r, b, 8));
+		}
+		/* the beam at rest: the sweep stops at 300°, its bright edge 60° anticlockwise from east and its trail
+		   fading behind it to 128°. Paper text (the labels, the echo) keeps off the bright edge; the events still at
+		   rest, orange, off the whole trail (orange on orange fails) */
+		function inBeam(r: Rect, trail: boolean): boolean {
+			const BEAM = [56, trail ? 130 : 80];
+			const [cx, cy] = px(CX, CY);
+			/* the bearings the rectangle spans, not its corners alone: the edge can pass between them */
+			const deg = [[r.left, r.top], [r.right, r.top], [r.left, r.bottom], [r.right, r.bottom]].map(([x, y]) => (Math.atan2(cy - y, x - cx) * 180) / Math.PI);
+			const lo = Math.min(...deg), hi = Math.max(...deg);
+			if (hi - lo > 180) return false;   /* it straddles the bearing behind the lantern, far from the beam */
+			return BEAM[0] < hi && lo < BEAM[1];
+		}
+		/* a label anchored at a frame point, reading left of it (its tick on its right) or right of it */
+		function labelRect(el: HTMLElement, x: number, y: number, left: boolean): Rect {
+			const [ax, ay] = px(x, y);
+			const w = el.offsetWidth, h = el.offsetHeight;
+			return left ? { left: ax - 10 - w, top: ay - h / 2, right: ax + 4, bottom: ay + h / 2 } : { left: ax - 4, top: ay - h / 2, right: ax + 10 + w, bottom: ay + h / 2 };
+		}
+		function put(el: HTMLElement, x: number, y: number, left: boolean) {
+			el.style.left = `${(x / FW) * 100}%`;
+			el.style.top = `${(y / FH) * 100}%`;
+			el.classList.toggle("radar__lab--r", !left);
+			el.style.visibility = "";
+		}
+
+		/* the ring labels, placed against the page: ORIGIN beside the lantern, never on it; the four rings along
+		   the one bearing, of those tried, that keeps most of them in open sky — a scale reads along a line; the
+		   range on its dashed ring. A label with no clear place is withheld */
+		const placed: Rect[] = [];
+		const BEARINGS = [135, 145, 125, 155, 115, 165, 105, 175, 95, 45, 35, 25, 15];
+		function placeLabels() {
+			look();
+			placed.length = 0;
+			const [origin, ...ringLabs] = Array.from(hud.querySelectorAll<HTMLElement>(".radar__lab:not(.radar__range)"));
+			const rangeEl = hud.querySelector<HTMLElement>(".radar__range");
+			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab")) el.style.visibility = "hidden";
+			if (origin) {
+				for (const [x, left] of [[faro.tower[2] + 24, false], [faro.tower[0] - 24, true]] as [number, boolean][]) {
+					const r = labelRect(origin, x, CY, left);
+					if (!clearOf(r, placed)) continue;
+					put(origin, x, CY, left);
+					placed.push(r);
+					break;
+				}
+			}
+			const at = (deg: number, r: number): [number, number] => [CX + r * Math.cos((deg * Math.PI) / 180), CY - r * Math.sin((deg * Math.PI) / 180)];
+			let best = { deg: BEARINGS[0], fit: [] as Rect[], n: -1 };
+			for (const deg of BEARINGS) {
+				const left = Math.cos((deg * Math.PI) / 180) < 0;
+				const fit: Rect[] = [];
+				ringLabs.forEach((el, i) => {
+					const [x, y] = at(deg, (i + 1) * RADAR_RINGS.step);
+					const r = labelRect(el, x, y, left);
+					if (clearOf(r, [...placed, ...fit])) fit.push(r);
+				});
+				if (fit.length > best.n) best = { deg, fit, n: fit.length };
+				if (fit.length === ringLabs.length) break;
+			}
+			{
+				/* a ring the bearing could not hold takes the nearest bearing that can, rather than going unnamed */
+				ringLabs.forEach((el, i) => {
+					for (const deg of [best.deg, ...BEARINGS.filter((d) => d !== best.deg).sort((a, b) => Math.abs(a - best.deg) - Math.abs(b - best.deg))]) {
+						const l = Math.cos((deg * Math.PI) / 180) < 0;
+						const [x, y] = at(deg, (i + 1) * RADAR_RINGS.step);
+						const r = labelRect(el, x, y, l);
+						if (!clearOf(r, placed)) continue;
+						put(el, x, y, l);
+						placed.push(r);
+						return;
+					}
+				});
+				scale.setAttribute("transform", `rotate(${-best.deg} ${CX} ${CY})`);
+			}
+			if (rangeEl) {
+				for (const deg of [30, 45, 60, 20, 75, 10, 150, 165]) {
+					const left = Math.cos((deg * Math.PI) / 180) < 0;
+					const [x, y] = at(deg, RADAR_RINGS.range);
+					const r = labelRect(rangeEl, x, y, left);
+					if (!clearOf(r, placed)) continue;
+					put(rangeEl, x, y, left);
+					placed.push(r);
+					break;
+				}
+			}
+			placeEcho();
+		}
+		/* the visitor's echo: the first of a few spots in open sky that is clear */
+		const ECHO: [number, number][] = [[430, 40], [300, 130], [1010, 110], [560, 300], [260, 380], [1010, 300], [500, 330], [500, 180]];
+		/* desktops: every point of a grid over the photograph's sky, nearest the lantern first */
+		const ECHO_WIDE: [number, number][] = [];
+		for (let x = 560; x <= 1320; x += 30) for (let y = 0; y < faro.sky; y += 18) ECHO_WIDE.push([x, y]);
+		ECHO_WIDE.sort((p, q) => Math.hypot(p[0] - CX, p[1] - CY) - Math.hypot(q[0] - CX, q[1] - CY));
+		function placeEcho() {
+			if (youEl.hidden) return;
+			look();
+			youEl.style.visibility = "hidden";
+			for (const [x, y] of narrow ? ECHO : ECHO_WIDE) {
+				const r = labelRect(youEl, x, y, false);
+				if (!clearOf(r, placed, false, true)) continue;
+				youEl.style.left = `${(x / FW) * 100}%`;
+				youEl.style.top = `${(y / FH) * 100}%`;
+				youEl.style.visibility = "";
+				return;
+			}
+		}
+
+		function layout() {
+			const s = stage.getBoundingClientRect();
+			narrow = matchMedia(SCENE_ROW).matches;
+			geo = narrow ? fitNarrow(s) : fitWide(s);
+			/* the photograph placed itself in CSS; this refines it to the geometry above, and its fades with it (the
+			   other boxes — screen, light, text — wait for these variables) */
+			const k = alignFrame(frame, geo, s);
+			for (const v of ["--sclip", "--sfade-l", "--sfade-b"]) frame.style.setProperty(v, `${parseFloat(hero!.style.getPropertyValue(v)) / k}px`);
+			hero!.style.setProperty("--sx", `${geo.L}px`);
+			hero!.style.setProperty("--sy", `${geo.T}px`);
+			hero!.style.setProperty("--sw", `${geo.W}px`);
+			dpr = Math.min(2, window.devicePixelRatio || 1);
+			night.width = Math.round(geo.W * dpr);
+			night.height = Math.round(geo.H * dpr);
+			NIGHT = getComputedStyle(hero!.querySelector<HTMLElement>(".radar__ink")!).color;
+			hero!.classList.add("is-placed");
+			paint(t);
+			placeLabels();
+		}
+
+		/* the dusk falls evenly over the whole photograph, and the lighthouse takes its light from it: the darker
+		   the screen, the brighter the lantern and the more the profile's lines glow (founder, 2026-10-06: «cuanto
+		   más oscura se vuelve la pantalla, más luminosidad tenga el faro y las líneas del mismo») — one value, never
+		   a second timer */
+		const plan = hero.querySelector<HTMLElement>(".radar__plan")!;
+		function paint(ms: number) {
+			const level = duskLevel(ms, NIGHT_AT, NIGHT_END);
+			paintNightEven(nctx, { left: geo.L, width: geo.W, height: geo.H, dpr, color: NIGHT, scale: geo.W / FW, cutouts: [faro.lantern.p] }, level);
+			lamp.style.opacity = String(level);
+			plan.style.setProperty("--glow", String(level));
+		}
+		let t = 0, raf = 0, last = 0;
+		function tick(now: number) {
+			t += now - last;
+			last = now;
+			paint(t);
+			raf = t < NIGHT_END ? requestAnimationFrame(tick) : 0;
+		}
+		function run() {
+			if (raf) return;
+			last = performance.now();
+			raf = requestAnimationFrame(tick);
+		}
+		function stop() {
+			if (raf) cancelAnimationFrame(raf);
+			raf = 0;
+		}
+
+		/* phones and tablets: candidate zones for the events, in frame units, in the sky left of the tower, and the
+		   side each reads to; a candidate is then checked against the page (desktops use `spots`) */
+		const ZONES = (): [number, number, number, number, boolean][] => [[490, 800, 230, 430, false], [490, 800, 110, 230, false]];
+		/* a moving event may land where the beam will pass or rest — it is where an echo shows, and the feed is
+		   cleared when the beam comes to rest; a still one keeps off the whole resting trail (`trail === null`:
+		   no beam test at all) */
+		function clear(x: number, y: number, left: boolean, text: string, still = false): boolean {
+			const [ax, ay] = px(x, y);
+			const w = text.length * 7.6 + 22, h = 16;
+			const r = { left: left ? ax - w : ax, top: ay - h / 2, right: left ? ax : ax + w, bottom: ay + h / 2 };
+			const echo = youEl.hidden ? [] : [rel(youEl.getBoundingClientRect(), view.o)];
+			return clearOf(r, [...placed, ...echo], still || narrow ? true : null, true);
 		}
 		const live: [number, number][] = [];
 		let timer: number | null = null;
 		let k = 0;
-
 		function place(x: number, y: number, left: boolean, text: string) {
 			const d = document.createElement("span");
 			d.className = "radar__blip" + (left ? " radar__blip--l" : "");
-			d.style.left = `${x}%`;
-			d.style.top = `${y}%`;
+			d.style.left = `${(x / FW) * 100}%`;
+			d.style.top = `${(y / FH) * 100}%`;
 			d.textContent = text;
 			feed.appendChild(d);
 			return d;
 		}
+		/* on desktops the photograph's sky right of the copy is a narrow strip whose shape changes with every
+		   viewport, so the events are not drawn from fixed zones there: every point of a grid over the sky, reading
+		   either way, that is clear for this text — the narrow ones simply hold fewer */
+		/* no two events within 42 units of each other vertically and 450 horizontally */
+		function apart(taken: [number, number][], c: [number, number, boolean]): boolean {
+			for (const q of taken) {
+				const dy = Math.abs(q[1] - c[1]), dx = Math.abs(q[0] - c[0]);
+				if (dy < 42 && dx < 450) return false;
+			}
+			return true;
+		}
+		function spots(text: string, still: boolean): [number, number, boolean][] {
+			const out: [number, number, boolean][] = [];
+			for (let x = 560; x <= 1320; x += 30) for (let y = 0; y < faro.sky; y += 18) for (const left of [false, true]) if (clear(x, y, left, text, still)) out.push([x, y, left]);
+			return out;
+		}
 		function blip() {
-			let x = 0, y = 0, z = ZONES[0], tries = 0;
+			look();
+			if (!narrow) {
+				/* the next event that has room: where the strip is narrow, the short ones */
+				let text = "", ok: [number, number, boolean][] = [];
+				for (let n = 0; n < EVENTS.length && !ok.length; n++) {
+					text = EVENTS[k % EVENTS.length];
+					k += 1;
+					ok = spots(text, false).filter((c) => apart(live, c));
+				}
+				if (!ok.length) return;
+				const [x, y, left] = ok[Math.floor(Math.random() * ok.length)];
+				const me: [number, number] = [x, y];
+				live.push(me);
+				expire(place(x, y, left, text), me, 2400);
+				return;
+			}
+			const zones = ZONES();
+			let x = 0, y = 0, z = zones[0], tries = 0;
 			/* a plain function, not an arrow: the cms-text lint reads `=> … <` on one line as a text node */
-			function near(q: [number, number]): boolean { return Math.abs(q[1] - y) < 6 && Math.abs(q[0] - x) < 34; }
+			function near(q: [number, number]): boolean { return Math.abs(q[1] - y) < 42 && Math.abs(q[0] - x) < 450; }
 			const text = EVENTS[k % EVENTS.length];
 			do {
-				z = ZONES[Math.floor(Math.random() * ZONES.length)];
+				z = zones[Math.floor(Math.random() * zones.length)];
 				x = z[0] + Math.random() * (z[1] - z[0]);
 				y = z[2] + Math.random() * (z[3] - z[2]);
 			} while (++tries < 40 && (live.some(near) || !clear(x, y, z[4], text)));
@@ -164,11 +497,10 @@ const RING_POS: [number, number][] = [
 			k += 1;
 			const me: [number, number] = [x, y];
 			live.push(me);
-			const d = place(x, y, z[4], text);
-			expire(d, me, 2400);
+			expire(place(x, y, z[4], text), me, 2400);
 		}
 		/* each event leaves after 2.4 s; the pause freezes it in place — the timer stops and resumes with what it
-		   had left (before #543 the events on screen still vanished while paused) */
+		   had left */
 		type Pending = { me: [number, number]; left: number; at: number; t: number | null };
 		const pending = new Map<HTMLElement, Pending>();
 		function expire(d: HTMLElement, me: [number, number], ms: number) {
@@ -182,32 +514,12 @@ const RING_POS: [number, number][] = [
 		function thawEvents() {
 			for (const [d, r] of pending) if (r.t === null) expire(d, r.me, Math.max(0, r.left));
 		}
-		/* a ring label that lands on the copy is withheld: the frame is placed by the column, but at
-		   narrower desktops the rings' upper labels still reach into it */
-		/* …and so is one under the pause and replay controls, at every width (#543: on phones the controls sit in
-		   the art row's corner, over the origin ring's label) */
-		const ctl = hero.querySelector<HTMLElement>(".scene__ctl");
-		function apartFrom(r: DOMRect, c: DOMRect): boolean {
-			const across = r.right < c.left - 10 || c.right + 10 < r.left;
-			const down = r.bottom < c.top - 10 || c.bottom + 10 < r.top;
-			return across || down;
+		function clearFeed() {
+			for (const r of pending.values()) if (r.t !== null) clearTimeout(r.t);
+			pending.clear();
+			feed.replaceChildren();
+			live.length = 0;
 		}
-		function settleLabels() {
-			const c = copyBox();
-			const k = ctl?.getBoundingClientRect();
-			const st = hero!.querySelector<HTMLElement>(".s-hero__stage")?.getBoundingClientRect();
-			for (const el of hud.querySelectorAll<HTMLElement>(".radar__lab, .radar__origin, .radar__range")) {
-				el.style.visibility = "";
-				const r = el.getBoundingClientRect();
-				/* …and, where the scene is its own row and the stage clips, one cut by its edge: on phones the upper
-				   rings' labels ran off its top (#558). On desktops the stage does not clip */
-				const off = narrow && !!st && (st.top > r.top || r.bottom > st.bottom || st.left > r.left || r.right > st.right);
-				if ((!narrow && !apartFrom(r, c)) || (k && !apartFrom(r, k)) || off) el.style.visibility = "hidden";
-			}
-		}
-		settleLabels();
-		let settling: number | null = null;
-		window.addEventListener("resize", () => { if (settling !== null) clearTimeout(settling); settling = window.setTimeout(settleLabels, 150); });
 		/* the events run inside the opening's payoff, never past its end (#558): from the radar's arrival to
 		   7.4 s; at the end the feed clears and one still event per zone holds, as reduced motion shows it */
 		const FEED_AT = SCENE_BEATS.drawn + 800, FEED_END = SCENE_BEATS.end - 600;
@@ -217,69 +529,109 @@ const RING_POS: [number, number][] = [
 		function stopFeed() { if (timer !== null) { clearInterval(timer); timer = null; } }
 		function feedOn() { feeding = true; startFeed(); }
 		function feedOff() { feeding = false; stopFeed(); }
+		/* the end: one still event per zone, at the first clear point of a grid over it, apart from the others */
 		function settle() {
-			ZONES.forEach((z, i) => { const x = (z[0] + z[1]) / 2, y = (z[2] + z[3]) / 2; if (EVENTS[i] && clear(x, y, z[4], EVENTS[i])) place(x, y, z[4], EVENTS[i]).classList.add("is-still"); });
+			look();
+			const still: [number, number][] = [];
+			if (!narrow) {
+				/* up to three, apart from each other, in the order of the events */
+				for (const text of EVENTS.slice(0, 6)) {
+					if (still.length >= 3) break;
+					const ok = spots(text, true).filter((c) => apart(still, c));
+					if (!ok.length) continue;
+					const [x, y, left] = ok[Math.floor(ok.length / 2)];
+					still.push([x, y]);
+					place(x, y, left, text).classList.add("is-still");
+				}
+				return;
+			}
+			ZONES().forEach((z, i) => {
+				const text = EVENTS[i];
+				if (!text) return;
+				for (let a = 0; a < 5; a++) for (let b = 0; b < 4; b++) {
+					const x = z[0] + ((z[1] - z[0]) * (a + 0.5)) / 5, y = z[2] + ((z[3] - z[2]) * (b + 0.5)) / 4;
+					if (still.some((q) => Math.abs(q[1] - y) < 42 && Math.abs(q[0] - x) < 450) || !clear(x, y, z[4], text, true)) continue;
+					still.push([x, y]);
+					place(x, y, z[4], text).classList.add("is-still");
+					return;
+				}
+			});
 		}
 		function done() {
+			stop();
 			clock.clear();
 			feedOff();
-			for (const r of pending.values()) if (r.t !== null) clearTimeout(r.t);
-			pending.clear();
-			feed.replaceChildren();
-			live.length = 0;
-			hero.classList.remove("is-playing");
-			hero.classList.add("is-done");
+			clearFeed();
+			t = END;
+			paint(t);
+			hero!.classList.remove("is-playing");
+			hero!.classList.add("is-done");
 			settle();
 		}
+		function play() {
+			t = 0;
+			hero!.classList.add("is-playing");
+			run();
+			clock.at("feed", FEED_AT, feedOn);
+			clock.at("feed-end", FEED_END, feedOff);
+			clock.at("end", END, done);
+		}
+
+		/* frozen from outside (the a11y gate sets is-done on a scene to measure its end state): the end, at once */
+		new MutationObserver(() => {
+			if (hero.classList.contains("is-done") && t < END) done();
+		}).observe(hero, { attributes: true, attributeFilter: ["class"] });
 
 		pause.addEventListener("change", () => {
 			hero.classList.toggle("is-paused", pause.checked);
-			if (pause.checked) { clock.hold(); stopFeed(); freezeEvents(); } else { clock.resume(); thawEvents(); startFeed(); }
+			if (pause.checked) { clock.hold(); stop(); stopFeed(); freezeEvents(); }
+			else if (hero.classList.contains("is-playing")) { clock.resume(); run(); thawEvents(); startFeed(); }
 		});
 		document.addEventListener("visibilitychange", () => { if (document.hidden) stopFeed(); else startFeed(); });
 
-		const plan = hero.querySelector<HTMLImageElement>(".radar__plan")!;
-		const replay = hero.querySelector<HTMLButtonElement>(".scene__replay")!;
-		function play() {
-			plan.addEventListener("animationend", done, { once: true });
-			hero.classList.add("is-playing");
-			clock.at("feed", FEED_AT, feedOn);
-			clock.at("feed-end", FEED_END, feedOff);
-		}
+		let settling: number | null = null;
+		window.addEventListener("resize", () => {
+			if (settling !== null) clearTimeout(settling);
+			settling = window.setTimeout(layout, 150);
+		});
+		layout();
+		/* the copy's webfonts move its lines: measure again once they are in */
+		document.fonts?.ready.then(layout);
 		if (reduced) {
-			/* the resting state at once, with one still event per zone */
+			/* the resting state at once: the dusk fallen, the lantern lit, one still event per zone */
+			t = END;
+			paint(t);
 			hero.classList.add("is-done");
 			settle();
 		} else {
-			const imgs = Array.from(hero.querySelectorAll<HTMLImageElement>(".radar__art img"));
-			let n = 0;
-			const ready = () => { if (++n === imgs.length) play(); };
-			imgs.forEach((im) => (im.complete ? ready() : im.addEventListener("load", ready, { once: true })));
+			const img = hero.querySelector<HTMLImageElement>(".radar__photo")!;
+			if (img.complete) play(); else img.addEventListener("load", play, { once: true });
 		}
-		/* replay: back to the photograph and through the sequence again; the pause is released, the feed cleared */
+		/* replay: back to the photograph by day and through the sequence again; the pause released, the feed cleared */
 		replay.addEventListener("click", () => {
 			if (reduced) return;
-			feedOff();
+			stop();
 			clock.clear();
-			for (const r of pending.values()) if (r.t !== null) clearTimeout(r.t);
-			pending.clear();
-			feed.replaceChildren();
-			live.length = 0;
+			feedOff();
+			clearFeed();
 			pause.checked = false;
 			hero.classList.remove("is-paused", "is-done", "is-playing");
+			t = 0;
+			paint(t);
 			void hero.offsetWidth; /* a reflow between removing and re-adding the class, or the animations never restart */
 			play();
 		});
 
 		/* the visitor's echo: asked by the browser so the cached page never carries anyone's address; hidden unless the edge answers */
 		const ipEl = hero.querySelector<HTMLElement>(".radar__ip");
-		if (youEl && ipEl) {
+		if (ipEl) {
 			fetch("/api/whoami", { cache: "no-store" })
 				.then((r) => (r.ok ? r.json() : null))
 				.then((d: { ip?: string; city?: string } | null) => {
 					if (!d || !d.ip) return;
 					ipEl.textContent = d.city ? ` · ${d.ip} · ${d.city}` : ` · ${d.ip}`;
 					youEl.hidden = false;
+					placeEcho();
 				})
 				.catch(() => {});
 		}

@@ -244,7 +244,15 @@ Decisions that are not obvious from the code, and the measurement behind each:
 - **The rings and the sweep are the sky's**: centred on the lantern (one every 80 frame units, the
   dashed one at the light's nominal range, 35 nautical miles — 10 nm a ring; `RADAR_RINGS`), and
   clipped by one SVG path to what lies above the horizon with the building cut out, so they pass
-  behind the lantern, the tower and the house.
+  behind the lantern, the tower and the house. On desktops the screen also wears the frame's own fades:
+  nothing of the radar shows past the frame or left of where the photograph's left fade begins (it
+  used to arc across the whole band, behind the copy).
+- **On desktops the events and the echo live in the photograph's own sky**: right of the copy's box
+  plus 24 px, past the left fade, below the top fade, above the horizon. That strip changes shape
+  with every viewport, so the events are not drawn from fixed zones there but from every clear point
+  of a grid over it, the next event that fits taking the turn; a strip with no room holds none. At
+  1280 and 1440 that is one or two events in the run, none at rest and no echo; at 1778 about five,
+  one at rest; at 2560 eight, three at rest. Phones keep their two zones.
 - **Every piece of text is HTML, positioned in percentages of the frame, never text inside the
   SVG.** SVG text scales with the box: the ring labels rendered at 3.8 px on a 393 px phone.
 - **Nothing is written on the lantern, the tower or the house, the copy, the controls, the header or
@@ -252,12 +260,14 @@ Decisions that are not obvious from the code, and the measurement behind each:
   once per pass and relative to the band: ORIGIN beside the lantern (right of the tower, else left of
   it); the four ring labels along the one bearing that keeps most of them in open sky (a scale reads
   along a line), a ring that bearing cannot hold taking the nearest one that can; the range on its
-  dashed ring; the echo at the first clear spot of a short list. A label with no clear place is
+  dashed ring; the echo at the clear spot nearest the lantern. A label with no clear place is
   withheld — at 1101 and 1180 px wide, two or three are. The collision with the building is with its
   measured outline, not a box (a box withheld CDN at 1440 on the weathervane's corner).
 - **The beam at rest**: the sweep turns once, from 4.5 to 8 s, to 300°, its bright edge 60°
-  anticlockwise from east and its trail fading behind it to 128°. Paper labels keep off the bright
-  edge; the orange events and the echo off the whole trail.
+  anticlockwise from east and its trail fading behind it to 128°. Paper text (the labels, the echo)
+  keeps off the bright edge — by the bearings the text spans, not its corners, which the edge passed
+  between; the events still at rest, orange, off the whole trail. A moving event may land where the
+  beam will pass: that is where an echo shows, and the feed clears when the beam comes to rest.
 - **The events carry a plate of the night under their text** (from just before the first letter):
   an event landing on a ring put orange text over an orange line, 2.9:1 at 768 px; with the plate the
   tightest event is 6.7:1. Measured at the end state as the a11y gate measures (98th-percentile

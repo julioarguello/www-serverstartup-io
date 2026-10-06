@@ -11,7 +11,8 @@
    in the scene's row, flush right, as wide as keeps the left dome in */
 .sky__box {
 	--full: 129cqh;
-	--room: calc((100cqw - var(--seal-to) - 140px) / (0.98 - var(--dome-l)));
+	/* --dome-l comes from the template (the left dome measured on the photograph); the fallback is today's value */
+	--room: calc((100cqw - var(--seal-to) - 140px) / (0.98 - var(--dome-l, 0.13735)));
 	--fw: max(calc(var(--full) * .6), min(var(--full), var(--room)));
 	--fl: calc(100cqw - var(--fw) * .98);
 	left: var(--fl);
@@ -24,7 +25,7 @@
 }
 @media (max-width: 1100px) {
 	.sky__box {
-		--fw: min(125cqw, 150cqh, calc((100cqw - 8px) / (0.98 - var(--dome-l))));
+		--fw: min(125cqw, 150cqh, calc((100cqw - 8px) / (0.98 - var(--dome-l, 0.13735))));
 		top: calc(50cqh - var(--fw) / 3);
 		--sclip: 0px;
 		--sfade-b: calc(var(--fw) / 1.5 * .12);

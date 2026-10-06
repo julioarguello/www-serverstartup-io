@@ -665,10 +665,15 @@ rotating edge (Base.astro), so the two cannot drift.
 ### 4.12 The home's order (#562)
 
 After the design review of 2026-10-06 (founder: "dales caña a todos"): hero → areas →
-**references** → Cloudflare → quality → team → mantra → closing CTA. What we do comes first, then
+**references** → Cloudflare → quality → mantra → closing CTA. The team band left the home in #565
+(founder, 2026-10-06: «podemos quitarlo de la home»): the same three people are on Quiénes somos and
+Contacto. What we do comes first, then
 who has trusted us with it, then the platform we do much of it on.
 
-- **References**: the home renders `ReferenceBanner` after the areas, and its footer leaves it out
+- **References**: the home renders `ReferenceBanner` after the areas as a section of its own — the
+  house heading «Con quién hemos trabajado» (true of clients, the two collaborations and the former
+  client alike), the logos in the column and a link to all of them (#565, `footer_headings` →
+  `references_heading`, `references_all`) — and its footer leaves it out
   (`SiteFooter references={false}`, from `Base`'s `onHome`); every other page keeps it in the
   footer (#296). The layout gate's footer pass reads `/quienes-somos` for that reason.
 - **Cloudflare**: no longer the page's opening section; its copy says what we do with it and that
@@ -676,8 +681,11 @@ who has trusted us with it, then the platform we do much of it on.
 - **Quality**: the four Lighthouse thresholds as a console (`.s-gate`), read from
   `lighthouserc.json` at build time, so the claim and the gate cannot drift. Its chrome is
   Lighthouse's words (`panel_labels` → `lh_*`), English in both locales like every quoted product.
-- **Team**: each card says what the person does, from the member's `excerpt` (also on Quiénes
-  somos and in its JSON-LD); the shared «Ingeniero» label is only the fallback.
+- **Team**: each card says what the person does, from the member's `excerpt` (Quiénes somos and its
+  JSON-LD). The three photographs were restored in #565 the way the hero photographs are (SeedVR2 3B
+  at 2×, colour locked, nothing reframed: the founder kept the photographs themselves) and are
+  written at 1600 × 1200 under their old names — `astro:assets` hashes them, so no cache keeps the
+  old ones. The layout gate's G19 reads them on Quiénes somos.
 
 ## 5. SEO
 

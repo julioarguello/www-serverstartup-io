@@ -26,7 +26,8 @@ El código no es el producto; lo que sigue vivo años después, sí.
 AI
 Inteligencia artificial
 El agente propone, el ingeniero dispone. La IA es un medio.
-referencias
+Con quién hemos trabajado
+Ver todas las referencias
 Partner oficial de Cloudflare
 Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.
 CDN
@@ -52,15 +53,6 @@ error
 SEO
 100
 error
-El equipo
-Sin intermediarios y sin traspasos.
-Los mismos ingenieros recorren todas las capas: el que diseña, escribe; el que escribe, opera.
-Daniel Sío
-Operación de comercio electrónico
-Ignacio Ibaseta
-Infraestructura como código y plataforma de datos
-Julio Argüello
-Fundador · integración y arquitectura
 1 equipo =
 6 verticales = Ø
 0

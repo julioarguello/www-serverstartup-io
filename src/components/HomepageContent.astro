@@ -8,16 +8,15 @@
  * Content source: pages/home (EmDash CMS, locale-scoped)
  * PT sections split by h2 headings, read BY POSITION:
  *   [0] hero — blocks before the first h2
- *   [1] the team — how they work AND who they are, merged (founder
- *       2026-08-19: the method and the people were two sections saying the
- *       same thing); lead + body, then the faces from the members collection
- *   [2] areas — heading only
- *   [3] quality and performance — the craft, then this site as its sample
+ *   [1] areas — heading only
+ *   [2] quality and performance — the craft, then this site as its sample
  *
- * Band order on the page (founder 2026-08-27): hero · Cloudflare partner ·
- * areas · quality and performance · the team · CTA. The CMS sections are still
- * read BY POSITION from the PT content — that order is the CMS's, and the one
- * above is the page's; they are not the same list.
+ * Band order on the page (#562, #565): hero · areas · references · Cloudflare
+ * partner · quality and performance · CTA. The team band left the home
+ * (founder 2026-10-06, #565): the same three people are on Quiénes somos, and
+ * the home said it twice (#342). The CMS sections are still read BY POSITION
+ * from the PT content — that order is the CMS's, and the one above is the
+ * page's; they are not the same list.
  *
  * CTA block sourced from cta_global widget area.
  * Service cards derived from services collection.
@@ -26,7 +25,6 @@
 import { getEmDashEntry, getEmDashCollection } from "emdash";
 import CloudflarePartner from "./CloudflarePartner.astro";
 import { PortableText } from "emdash/ui";
-import TeamPhoto from "./TeamPhoto.astro";
 import PtLink from "./PtLink.astro";
 import CtaGlobal from "./CtaGlobal.astro";
 import ReferenceBanner from "./ReferenceBanner.astro";
@@ -62,7 +60,6 @@ const { entries: serviceEntries } = await getEmDashCollection("services", {
 const services = serviceEntries ?? [];
 
 const labels = await getUiLabels(locale);
-const engineerCaption = labels.get("footer_headings", "engineer_caption", locale === "en" ? "Engineer" : "Ingeniero");
 
 // The areas rows carry one line of claim each (#453), keyed by cube face —
 // deliberately NOT `services.excerpt`, which feeds the hero card, the vertical
@@ -123,25 +120,10 @@ if (currentSection.heading || currentSection.blocks.length > 0) {
 // Named section extraction — BY POSITION, never by heading words: the
 // copy is the founder's to change (#273 renamed the second band and the
 // old text match silently dropped the whole section from the page).
-// CMS order for pages/home: [hero ¶s] · h2 how-we-work · h2 areas.
+// CMS order for pages/home: [hero ¶s] · h2 areas · h2 quality.
 const heroSection = sections[0]; // blocks before first h2
-const teamSection = sections[1];
-const areasSection = sections[2];
-const proofSection = sections[3];
-
-// The team band: the statement (first block) then the body (second)
-const teamLeadBlock = teamSection?.blocks[0];
-const teamBodyBlock = teamSection?.blocks[1];
-
-// The team's faces: the home asserts "the same three engineers" twice before
-// this point and never showed one (#304 founder review). Same collection the
-// About page uses — no new content, no new component.
-const { entries: memberEntries } = await getEmDashCollection("members", {
-	limit: 50,
-	orderBy: { title: "asc" },
-	locale,
-});
-const members = memberEntries ?? [];
+const areasSection = sections[1];
+const proofSection = sections[2];
 
 // The quality section's console (#562): the gate's four thresholds, read from
 // the file CI asserts them from, so the claim and the gate cannot drift. Its
@@ -383,7 +365,8 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
      was the strongest proof on the page and it sat under the closing call to
      action, where few readers arrive. -->
 <ReferenceBanner
-	title={labels.get("footer_headings", "trust_title", "Confían en nosotros")}
+	title={labels.get("footer_headings", "references_heading", locale === "en" ? "Who we have worked with" : "Con quién hemos trabajado")}
+	more={labels.get("footer_headings", "references_all", locale === "en" ? "See all references" : "Ver todas las referencias")}
 	href={`${locale === "en" ? "/en/references" : "/referencias"}`}
 	ariaLabel={t("trust_section")}
 />
@@ -420,45 +403,6 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 					</ul>
 				</div>
 			</div>
-		</div>
-	</section>
-)}
-
-<!-- ══════ EL EQUIPO — how they work and who they are (the last band before the CTA) ══════ -->
-{teamSection && members.length > 0 && (
-	<section class="s-team-strip" aria-label={teamSection.heading}>
-		<div class="container">
-			<h2>{teamSection.heading}</h2>
-			{teamLeadBlock && (
-				<div class="s-team-strip__statement">
-					<PortableText value={[teamLeadBlock]} components={ptComponents} />
-				</div>
-			)}
-			{teamBodyBlock && (
-				<div class="s-team-strip__lead">
-					<PortableText value={[teamBodyBlock]} components={ptComponents} />
-				</div>
-			)}
-			<ul class="s-team-strip__grid" role="list">
-				{members.map((m: any) => (
-					<li class="s-team-strip__card">
-						{m.data.featured_image?.src && (
-							<TeamPhoto
-								image={m.data.featured_image}
-								alt={m.data.title}
-								width={270}
-								height={203}
-								sizes="(min-width: 1200px) 270px, (min-width: 700px) 230px, 91vw"
-							/>
-						)}
-						<h3>{m.data.title}</h3>
-						{/* what each one does, from the member's excerpt (#562 —
-						    three cards that all said «Ingeniero» told the reader
-						    nothing); the shared label only if a member has none */}
-						<p>{m.data.excerpt || engineerCaption}</p>
-					</li>
-				))}
-			</ul>
 		</div>
 	</section>
 )}

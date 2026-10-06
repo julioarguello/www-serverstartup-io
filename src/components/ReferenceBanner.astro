@@ -22,8 +22,13 @@ interface Props {
 	title: string;
 	href: string;
 	ariaLabel: string;
+	/** On the home the band is a section of the page (#565): a section heading in
+	 *  the column, the logos under it and a link to all of them. Elsewhere it is the
+	 *  footer's quiet label. */
+	more?: string;
 }
-const { title, href, ariaLabel } = Astro.props;
+const { title, href, ariaLabel, more } = Astro.props;
+const asSection = Boolean(more);
 
 const { entries } = await getEmDashCollection("references", {
 	orderBy: { created_at: "asc" },
@@ -42,9 +47,11 @@ const logos = (entries ?? [])
 ---
 
 {logos.length > 0 && (
-	<section class="ref-banner" aria-label={ariaLabel}>
+	<section class:list={["ref-banner", { "ref-banner--section": asSection }]} aria-label={ariaLabel}>
 		<div class="ref-banner__inner">
-			<h2 class="ref-banner__title"><a href={href}>{title}</a></h2>
+			{asSection
+				? <h2 class="ref-banner__heading">{title}</h2>
+				: <h2 class="ref-banner__title"><a href={href}>{title}</a></h2>}
 			<ul class="ref-banner__row" role="list" style={`--ref-cols:${logos.length}`}>
 				{logos.map((l) => (
 					<li>
@@ -52,6 +59,7 @@ const logos = (entries ?? [])
 					</li>
 				))}
 			</ul>
+			{asSection && <p class="ref-banner__more"><a href={href}>{more}</a></p>}
 		</div>
 	</section>
 )}
@@ -111,6 +119,37 @@ const logos = (entries ?? [])
 	.ref-banner__title:focus-visible {
 		color: var(--color-primary, #1e1e1e);
 		text-decoration-style: solid;
+	}
+
+	/* The home's variant (#565): a section like the others — the house heading
+	   (the tilde comes from \`main h2\`), the logos in the one column, a link to
+	   all of them under the row. */
+	.ref-banner--section {
+		padding: var(--rhythm-section) 0;
+	}
+	.ref-banner--section .ref-banner__inner {
+		align-items: stretch;
+		max-width: var(--container-max);
+	}
+	.ref-banner__heading {
+		margin: 0;
+	}
+	.ref-banner__more {
+		margin: 0;
+		font-size: var(--text-body);
+	}
+	.ref-banner__more a {
+		color: inherit;
+		text-decoration: underline;
+		text-decoration-style: dashed;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 4px;
+		text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
+	}
+	.ref-banner__more a:hover,
+	.ref-banner__more a:focus-visible {
+		text-decoration-style: solid;
+		text-decoration-color: currentColor;
 	}
 
 	/* One row, wrapping on narrow screens — never a scroller.

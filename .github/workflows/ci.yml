@@ -293,6 +293,15 @@ jobs:
         shell: node scripts/ci-gate.mjs bash -e {0}
         run: python3 scripts/ci-check-image-hrefs.py http://localhost:8787
 
+      - name: Team copy (describes the team, never counts it)
+        # #575. The site says who does the work and how, never how many: a
+        # count caps the capacity a reader imagines and dates the copy. It came
+        # back once through a widget copied onto every page, so this reads the
+        # rendered pages — text, meta descriptions, JSON-LD — where a number
+        # arrives from any source. The mantra «1 equipo» is a negative control.
+        shell: node scripts/ci-gate.mjs bash -e {0}
+        run: python3 scripts/ci-check-team-copy.py http://localhost:8787
+
       - name: Every var() resolves, and the template-fed ones carry a fallback
         # #462. An unresolved `var()` with no fallback does not fall back: it
         # invalidates the whole declaration, and the element loses the property.
@@ -548,7 +557,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 20 steps that can fail"
+            echo "## Quality gates — 21 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -580,6 +589,7 @@ jobs:
             echo "| rendered copy | every seed route matches its baseline · menu links match the seed |"
             echo "| security headers | full #164 suite |"
             echo "| image hrefs | every /_image href is a path, never a URL |"
+            echo "| team copy | no count of people, in text, meta or JSON-LD |"
             echo "| var() resolution | every var() resolves, and the template-fed ones carry a fallback |"
             echo "| layout invariants | rows stay equal, ROWs draw no box, no copy printed twice, the footer holds its line and its measure |"
             echo "| a11y | axe sample · keyboard traversal, every route · menu focus trap · WCAG 2.1.4 · reflow 320px · W3C Nu |"

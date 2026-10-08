@@ -3,14 +3,14 @@ Saltar al contenido
 /contacto
 EN
 Hablemos
-Escríbenos. Te responde Daniel, Ignacio o Julio.
+Escríbenos. Te responde quien hace el trabajo.
 Si corre prisa, WhatsApp. Si puede esperar, email.
 Daniel Sío
-Ingeniero
+Operación de comercio electrónico
 Ignacio Ibaseta
-Ingeniero
+Infraestructura como código y plataforma de datos
 Julio Argüello
-Ingeniero
+Fundador · integración y arquitectura
 WhatsApp
 Teléfono
 Email
@@ -21,7 +21,7 @@ Server Startup S.L. · Bizkaia · desde 2019.
 traspasos
 referencias
 ~Server Startup
-Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019.
+Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.
 La casa
 Quiénes somos
 Deconstruyendo esta web

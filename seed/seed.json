@@ -45,8 +45,8 @@
 		},
 		{
 			"slug": "members",
-			"label": "Miembros",
-			"labelSingular": "Miembro",
+			"label": "Personas",
+			"labelSingular": "Persona",
 			"supports": [
 				"revisions",
 				"search"
@@ -1194,7 +1194,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "rendimiento|95 o más;accesibilidad|100;buenas prácticas|100;SEO|100;rutas con copia congelada|26;pasos que pueden fallar|20"
+									"text": "rendimiento|95 o más;accesibilidad|100;buenas prácticas|100;SEO|100;rutas con copia congelada|26;pasos que pueden fallar|21"
 								}
 							]
 						},
@@ -1227,7 +1227,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "L5|el borde|×1|el `worker` que responde|src/worker.ts;L4|la puerta|×7|las cabeceras de seguridad|src/middleware.ts;L3|el render|×26|las rutas públicas|src/pages/;L2|el CMS|×5|un *plugin* nuestro con la API de `EmDash`|src/plugins/cache-purge.ts;L1|los datos|×3|`D1`, `R2` y `KV`|wrangler.jsonc;L0|el origen|×43|el corpus entero|seed/seed.json;—|los ingenieros|×3|no incluidos: ya estaban|"
+									"text": "L5|el borde|×1|el `worker` que responde|src/worker.ts;L4|la puerta|×7|las cabeceras de seguridad|src/middleware.ts;L3|el render|×26|las rutas públicas|src/pages/;L2|el CMS|×5|un *plugin* nuestro con la API de `EmDash`|src/plugins/cache-purge.ts;L1|los datos|×3|`D1`, `R2` y `KV`|wrangler.jsonc;L0|el origen|×43|el corpus entero|seed/seed.json;—|los ingenieros|—|no incluidos: ya estaban|"
 								}
 							]
 						},
@@ -2295,7 +2295,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019."
+									"text": "Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019."
 								}
 							]
 						},
@@ -2361,7 +2361,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Ingeniero"
+									"text": "Ingeniero senior"
 								}
 							]
 						},
@@ -3161,7 +3161,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El equipo"
+									"text": "Quién responde del trabajo"
 								}
 							]
 						},
@@ -4033,7 +4033,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "performance|95 or more;accessibility|100;best practices|100;SEO|100;routes with frozen copy|26;steps that can fail|20"
+									"text": "performance|95 or more;accessibility|100;best practices|100;SEO|100;routes with frozen copy|26;steps that can fail|21"
 								}
 							]
 						},
@@ -4066,7 +4066,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "L5|the edge|×1|the `worker` that answers|src/worker.ts;L4|the door|×7|the security headers|src/middleware.ts;L3|the render|×26|the public routes|src/pages/;L2|the CMS|×5|a *plugin* of ours on the `EmDash` API|src/plugins/cache-purge.ts;L1|the data|×3|`D1`, `R2` and `KV`|wrangler.jsonc;L0|the origin|×43|the whole corpus|seed/seed.json;—|the engineers|×3|not included: already there|"
+									"text": "L5|the edge|×1|the `worker` that answers|src/worker.ts;L4|the door|×7|the security headers|src/middleware.ts;L3|the render|×26|the public routes|src/pages/;L2|the CMS|×5|a *plugin* of ours on the `EmDash` API|src/plugins/cache-purge.ts;L1|the data|×3|`D1`, `R2` and `KV`|wrangler.jsonc;L0|the origin|×43|the whole corpus|seed/seed.json;—|the engineers|—|not included: already there|"
 								}
 							]
 						},
@@ -5133,7 +5133,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019."
+									"text": "Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019."
 								}
 							]
 						},
@@ -5199,7 +5199,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Engineer"
+									"text": "Senior engineer"
 								}
 							]
 						},
@@ -6000,7 +6000,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The team"
+									"text": "Who answers for the work"
 								}
 							]
 						},
@@ -14952,7 +14952,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El capitán. Dile que algo no se puede hacer y tienes su atención. Encuentra la manera, con más tiempo o menos presupuesto; a medias es lo único que no le sale. Rema todo el día y no se pierde un atardecer con su otra tripulación, la de casa."
+									"text": "Dile que algo no se puede hacer y tienes su atención. Encuentra la manera, con más tiempo o menos presupuesto; a medias es lo único que no le sale. Rema todo el día y no se pierde un atardecer con su tripulación, la de casa."
 								}
 							]
 						}
@@ -14979,18 +14979,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El Pepito Grillo del equipo. Te avisa de cada curva antes de tomarla y por eso llega siempre el primero. Trabajador incansable, puntual como un "
-								},
-								{
-									"_type": "span",
-									"text": "cron",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"text": ". Mecánica fina, cero averías y muchos kilómetros juntos."
+									"text": "El Pepito Grillo de cada proyecto. Te avisa de cada curva antes de tomarla y por eso llega siempre el primero. Incansable. Mecánica fina, cero averías y muchos kilómetros juntos."
 								}
 							]
 						}
@@ -15017,7 +15006,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El alma del equipo. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo, y mantiene el e-commerce en producción. Buen amigo antes que buen ingeniero. Y muy buen ingeniero."
+									"text": "El alma de cada proyecto. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo. Buen amigo antes que buen ingeniero. Y muy buen ingeniero."
 								}
 							]
 						}
@@ -15045,7 +15034,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The captain. Say something cannot be done and he is all ears. He finds the way, with more time or less budget; half-done he cannot do. Rows all day and never misses a sunset with his other crew, the one at home."
+									"text": "Say something cannot be done and he is all ears. He finds the way, with more time or less budget; half-done he cannot do. Rows all day and never misses a sunset with his crew, the one at home."
 								}
 							]
 						}
@@ -15073,18 +15062,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The team's Jiminy Cricket. Calls out every bend before you take it, which is why he always arrives first. Tireless, punctual as a "
-								},
-								{
-									"_type": "span",
-									"text": "cron",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"text": ". Fine mechanics, zero breakdowns and plenty of miles together."
+									"text": "Every project's Jiminy Cricket. Calls out every bend before you take it, which is why he always arrives first. Tireless. Fine mechanics, zero breakdowns and plenty of miles together."
 								}
 							]
 						}
@@ -15112,7 +15090,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The soul of the team. Master of ceremonies, above all when they end in karaoke. He will get you up a mountain or lift your mood, and keeps the e-commerce running. A good friend before a good engineer. And a very good one."
+									"text": "The soul of every project. Master of ceremonies, above all when they end in karaoke. He will get you up a mountain or lift your mood. A good friend before a good engineer. And a very good one."
 								}
 							]
 						}
@@ -15371,7 +15349,7 @@
 				"status": "published",
 				"data": {
 					"title": "Quiénes somos",
-					"excerpt": "Tres ingenieros senior sostienen la casa, los mismos de principio a fin. Backend, integración, datos y edge desde Getxo, desde 2019.",
+					"excerpt": "Ingenieros senior que sostienen la casa, los mismos de principio a fin. Backend, integración, datos y edge desde Getxo, desde 2019.",
 					"content": [
 						{
 							"_type": "block",
@@ -15621,7 +15599,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El proyecto arrancó por cuenta propia en 2017. En enero de 2019 se convirtió en sociedad, desde Getxo. Hoy el pilar son tres ingenieros senior, con más de veinte años de producción cada uno."
+									"text": "El proyecto arrancó por cuenta propia en 2017. En enero de 2019 se convirtió en sociedad, desde Getxo. Hoy la sostienen ingenieros senior con más de veinte años de producción cada uno."
 								}
 							]
 						},
@@ -15801,7 +15779,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El equipo"
+									"text": "Quién responde del trabajo"
 								}
 							]
 						},
@@ -15811,7 +15789,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El pilar son tres ingenieros. Los mismos, de principio a fin.",
+									"text": "El equipo justo: cada ingeniero aporta, sin relleno. Llevan años trabajando juntos, los mismos de principio a fin.",
 									"marks": [
 										"strong"
 									]
@@ -15834,7 +15812,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Trabajamos dentro de tu equipo, no desde fuera. El "
+									"text": "Trabajamos junto a tu equipo, no desde fuera. El "
 								},
 								{
 									"_type": "span",
@@ -16046,7 +16024,7 @@
 				"status": "published",
 				"data": {
 					"title": "Hablemos",
-					"excerpt": "Escríbenos por WhatsApp, teléfono o email. Te responde Daniel, Ignacio o Julio, sin comerciales de por medio.",
+					"excerpt": "Escríbenos por WhatsApp, teléfono o email. Te responde quien hace el trabajo, sin intermediarios.",
 					"content": [
 						{
 							"_type": "block",
@@ -16054,7 +16032,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Escríbenos. Te responde Daniel, Ignacio o Julio."
+									"text": "Escríbenos. Te responde quien hace el trabajo."
 								}
 							]
 						},
@@ -16582,7 +16560,7 @@
 				"translationOf": "page-quienes-somos",
 				"data": {
 					"title": "About us",
-					"excerpt": "Three senior engineers hold it up, the same ones start to finish. Backend, integration, data and edge, from Getxo, since 2019.",
+					"excerpt": "Senior engineers hold it up, the same ones start to finish. Backend, integration, data and edge, from Getxo, since 2019.",
 					"content": [
 						{
 							"_type": "block",
@@ -16773,7 +16751,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The project started as freelance work in 2017. In January 2019 it became a company, from Getxo. Today the pillar is three senior engineers, each with twenty-plus years in production."
+									"text": "The project started as freelance work in 2017. In January 2019 it became a company, from Getxo. Today it is held up by senior engineers, each with twenty-plus years in production."
 								}
 							]
 						},
@@ -16909,7 +16887,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The team"
+									"text": "Who answers for the work"
 								}
 							]
 						},
@@ -16919,7 +16897,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Three engineers hold this up. The same ones, start to finish.",
+									"text": "Exactly the team it takes: every engineer contributes, no filler. They have worked together for years, the same ones start to finish.",
 									"marks": [
 										"strong"
 									]
@@ -16942,7 +16920,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We work inside your team, not around it. The "
+									"text": "We work alongside your team, not around it. The "
 								},
 								{
 									"_type": "span",
@@ -17155,7 +17133,7 @@
 				"translationOf": "page-contacto",
 				"data": {
 					"title": "Let's talk",
-					"excerpt": "Reach us on WhatsApp, by phone or by email. Daniel, Ignacio or Julio answers, with no salespeople in between.",
+					"excerpt": "Reach us on WhatsApp, by phone or by email. The people who do the work answer, with no one in between.",
 					"content": [
 						{
 							"_type": "block",
@@ -17163,7 +17141,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Write to us. Daniel, Ignacio or Julio answers."
+									"text": "Write to us. The people who do the work answer."
 								}
 							]
 						},
@@ -17814,7 +17792,7 @@
 								{
 									"_type": "span",
 									"_key": "k1e",
-									"text": "Antes de preguntarle nada a una persona, la rama pasa por veinte pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:",
+									"text": "Antes de preguntarle nada a una persona, la rama pasa por veintiún pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:",
 									"marks": []
 								}
 							]
@@ -18581,7 +18559,7 @@
 								{
 									"_type": "span",
 									"_key": "k1e",
-									"text": "Before a person is asked anything, the branch goes through twenty steps that can fail. They refuse what a reading by eye does not catch:",
+									"text": "Before a person is asked anything, the branch goes through twenty-one steps that can fail. They refuse what a reading by eye does not catch:",
 									"marks": []
 								}
 							]

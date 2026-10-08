@@ -11,8 +11,8 @@ Write to **[ventas@serverstartup.io](mailto:ventas@serverstartup.io)**
 - Include what you found, where, and how to reproduce it — a curl command
   beats a paragraph.
 
-You will get an answer from one of the three people who wrote the code, not
-a ticket queue.
+You will get an answer from an engineer who wrote the code, not a ticket
+queue.
 
 ## Scope
 

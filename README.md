@@ -1,8 +1,8 @@
 # serverstartup.io
 
-The website of [Server Startup](https://serverstartup.io) — three senior
-engineers in Getxo doing backend architecture, systems integration, data
-platforms and edge security. One team. Four verticals. Zero handoffs.
+The website of [Server Startup](https://serverstartup.io) — senior engineers
+in Getxo doing backend architecture, systems integration, data platforms and
+edge security. One team. Six verticals. Zero handoffs.
 
 This repository is the site itself, open on purpose: we explain how it is
 built at [/deconstruyendo](https://serverstartup.io/deconstruyendo)

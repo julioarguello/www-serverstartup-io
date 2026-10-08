@@ -29,18 +29,21 @@
 	line-height: 1.45;
 }
 
-/* ── Team row — the three engineers who answer: photo (or initial-letter
-   placeholder until photos are uploaded) + name + role. ── */
+/* ── Team row — the engineers who answer: photo (or initial-letter
+   placeholder until photos are uploaded) + name + caption. Equal columns, not
+   a wrapping flex row: the caption is each member's own line (#575), and at
+   natural width three of them no longer fit the column, which left one person
+   alone on a second row. Here a long caption wraps inside its own column. ── */
 .s-contact__team {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
 	gap: 20px var(--space-5);
 	margin-bottom: var(--space-6);
 }
 
 .s-contact__person {
 	display: grid;
-	grid-template-columns: 56px auto;
+	grid-template-columns: 56px minmax(0, 1fr);
 	grid-template-rows: auto auto;
 	column-gap: 12px;
 	align-items: center;

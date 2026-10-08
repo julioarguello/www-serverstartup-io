@@ -47,9 +47,11 @@ const emailEncoded = btoa(email);
 const phoneEncoded = settings.phoneEncoded || "";
 const whatsappEncoded = settings.whatsappEncoded || "";
 
-// No roles by design — every member carries the same caption (founder, #272)
+// Each person carries their own caption — the member's `excerpt`, the same
+// line Quiénes somos prints under the bio. The label is the fallback for a
+// member without one (#575; it was one shared caption since #272).
 const labels = await getUiLabels(locale);
-const engineerCaption = labels.get("footer_headings", "engineer_caption", "Engineer");
+const engineerCaption = labels.get("footer_headings", "engineer_caption", "Senior engineer");
 
 const whatsappLabel = settings.contactWhatsappLabel || "WhatsApp";
 const phoneLabel = settings.contactPhoneLabel || "Phone";
@@ -95,7 +97,7 @@ const altPath = entry ? await entryAlternatePath("pages", entry.data.id, "en") :
 								}
 							</div>
 							<span class="s-contact__person-name">{m.data.title}</span>
-							<span class="s-contact__person-caption">{engineerCaption}</span>
+							<span class="s-contact__person-caption">{m.data.excerpt || engineerCaption}</span>
 						</li>
 					))}
 				</ul>

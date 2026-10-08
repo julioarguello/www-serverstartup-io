@@ -62,7 +62,7 @@ Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project
 ~Server Startup
-Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019.
+Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019.
 The house
 About us
 Deconstructing this website

@@ -171,6 +171,7 @@ from a working tree; everything else runs here first.
 | Rendered copy | `node scripts/copy-baseline.mjs verify --base-url http://localhost:8787` | every seed route matches its baseline; an element declaring `data-volatile` (the radar's visitor echo, its event feed) is dropped before the page is read, because copy that differs by visitor or by the clock is not copy |
 | Headers | `scripts/ci-check-headers.sh http://localhost:8787` | full suite present |
 | Image URLs | `python3 scripts/ci-check-image-hrefs.py http://localhost:8787` | every `/_image` href is a path — an absolute one cannot work on Workers (#407) — and every transform names a quality, or the binding encodes near-losslessly (#409) |
+| Team copy | `python3 scripts/ci-check-team-copy.py http://localhost:8787` | the site describes the team and never counts it: no numeral before a word for people, no "team of N" / "we are N", in text, attributes (meta, alt, aria-label) or JSON-LD (#575) |
 | Accessibility | `node scripts/ci-check-a11y.mjs http://localhost:8787` | axe sample, keyboard traversal, focus trap, WCAG 2.1.4, reflow at 320px |
 | Lighthouse | `lighthouserc.json` assertions | perf ≥ 95; a11y, BP, SEO = 100 |
 

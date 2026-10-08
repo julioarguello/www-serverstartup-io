@@ -28,7 +28,7 @@ Changes to this policy
 If the way we process data changes, we will update this page. The published version is always the one in force.
 references
 ~Server Startup
-Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019.
+Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019.
 The house
 About us
 Deconstructing this website

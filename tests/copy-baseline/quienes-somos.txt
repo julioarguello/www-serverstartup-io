@@ -11,24 +11,24 @@ Fundada en 2019, Server Startup debe efectivamente su nombre a la trinchera de h
 Somos Server por especialización en backend. Nos gustan las tripas, la lógica compleja y afrontar retos. El rigor y la optimización.
 Y Startup por filosofía. Porque en este sector el mundo no para y hay que adaptarse y evolucionar continuamente. Claro que ya no somos una startup (tampoco el Pont Neuf de París, la ciudad de Nueva York o el Camp Nou se construyeron precisamente ayer...) pero conservamos la entereza e ilusión del primer día.
 EL CAMINO
-El proyecto arrancó por cuenta propia en 2017. En enero de 2019 se convirtió en sociedad, desde Getxo. Hoy el pilar son tres ingenieros senior, con más de veinte años de producción cada uno.
+El proyecto arrancó por cuenta propia en 2017. En enero de 2019 se convirtió en sociedad, desde Getxo. Hoy la sostienen ingenieros senior con más de veinte años de producción cada uno.
 Aquel mismo 2019 nos hicimos partner oficial de Cloudflare. Para 2022 el lema de la casa era “+ Calidad − Cantidad”: más criterio, menos volumen. Las dos cosas siguen en vigor.
 EL CUBO
 Si el mensaje de Server Startup es la chispa vital, el rock'n'roll de nuestros inicios, el cubo canaliza hoy esa energía. Simboliza el salto de madurez que dimos al pasar de implantar e-commerce complejos a integrar plataformas de exigencia extrema como Ocado. Sus famosas colmenas (hives), donde miles de robots optimizan el picking al milímetro, son un referente de modernidad y eficiencia logística.
 Nuestro logo nace de esa retícula. Símbolo de la precisión, el rigor, la escalabilidad y la búsqueda de sinergias que rigen nuestro día a día. Un espejo en el que mirarnos. Es el mismo cubo que te acompaña por todo este sitio.
-El equipo
-El pilar son tres ingenieros. Los mismos, de principio a fin.
+Quién responde del trabajo
+El equipo justo: cada ingeniero aporta, sin relleno. Llevan años trabajando juntos, los mismos de principio a fin.
 Pocos clientes a la vez, por elección. Máxima implicación, y ningún junior aprendiendo con tu presupuesto.
-Trabajamos dentro de tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de dbt que cierra las ventas del día. Ese es nuestro sitio.
+Trabajamos junto a tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de dbt que cierra las ventas del día. Ese es nuestro sitio.
 Daniel Sío
 Operación de comercio electrónico
-El alma del equipo. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo, y mantiene el e-commerce en producción. Buen amigo antes que buen ingeniero. Y muy buen ingeniero.
+El alma de cada proyecto. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo. Buen amigo antes que buen ingeniero. Y muy buen ingeniero.
 Ignacio Ibaseta
 Infraestructura como código y plataforma de datos
-El Pepito Grillo del equipo. Te avisa de cada curva antes de tomarla y por eso llega siempre el primero. Trabajador incansable, puntual como un cron. Mecánica fina, cero averías y muchos kilómetros juntos.
+El Pepito Grillo de cada proyecto. Te avisa de cada curva antes de tomarla y por eso llega siempre el primero. Incansable. Mecánica fina, cero averías y muchos kilómetros juntos.
 Julio Argüello
 Fundador · integración y arquitectura
-El capitán. Dile que algo no se puede hacer y tienes su atención. Encuentra la manera, con más tiempo o menos presupuesto; a medias es lo único que no le sale. Rema todo el día y no se pierde un atardecer con su otra tripulación, la de casa.
+Dile que algo no se puede hacer y tienes su atención. Encuentra la manera, con más tiempo o menos presupuesto; a medias es lo único que no le sale. Rema todo el día y no se pierde un atardecer con su tripulación, la de casa.
 Nuestros valores
 Pocas cosas, bien hechas.
 Preferimos decir que no a entregar tarde. Si un proyecto no encaja con lo que dominamos, te lo decimos en la primera reunión.
@@ -49,7 +49,7 @@ Infantil masculino del Urdaneta. Campeón provincial de Bizkaia 2024/25 y subcam
 traspasos
 referencias
 ~Server Startup
-Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019.
+Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.
 La casa
 Quiénes somos
 Deconstruyendo esta web

@@ -28,7 +28,7 @@ Cambios en esta política
 Si cambia la forma en que tratamos los datos, actualizaremos esta página. La versión publicada es siempre la vigente.
 referencias
 ~Server Startup
-Backend, integración, datos y edge. Los mismos tres ingenieros senior de principio a fin, desde Getxo, desde 2019.
+Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.
 La casa
 Quiénes somos
 Deconstruyendo esta web

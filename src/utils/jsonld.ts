@@ -112,17 +112,17 @@ export function aboutJsonLd(opts: AboutJsonLdOptions) {
 		name: SITE_NAME,
 		description: opts.description,
 		url: `${opts.siteUrl}${localePrefix}${aboutPath}`,
-		mainEntity: {
-			...organizationSchema(opts.siteUrl),
-			...(opts.members && opts.members.length > 0 && {
-				member: opts.members.map((m) => ({
-					"@type": "Person",
-					name: m.name,
-					...(m.role && { jobTitle: m.role }),
-					...(m.image && { image: m.image }),
-				})),
-			}),
-		},
+		mainEntity: organizationSchema(opts.siteUrl),
+		// The people the page presents, as people the page is about — not as
+		// members of the Organization node (#575).
+		...(opts.members && opts.members.length > 0 && {
+			mentions: opts.members.map((m) => ({
+				"@type": "Person",
+				name: m.name,
+				...(m.role && { jobTitle: m.role }),
+				...(m.image && { image: m.image }),
+			})),
+		}),
 	};
 }
 

@@ -3,14 +3,14 @@ Skip to content
 /en/contact
 ES
 Let's talk
-Write to us. Daniel, Ignacio or Julio answers.
+Write to us. The people who do the work answer.
 If it's urgent, WhatsApp. If it can wait, email.
 Daniel Sío
-Engineer
+E-commerce operations
 Ignacio Ibaseta
-Engineer
+Infrastructure as code and the data platform
 Julio Argüello
-Engineer
+Founder · integration and architecture
 WhatsApp
 Teléfono
 Email
@@ -21,7 +21,7 @@ Server Startup S.L. · Bizkaia, Spain · since 2019.
 handoffs
 references
 ~Server Startup
-Backend, integration, data and edge. The same three senior engineers from start to finish, from Getxo, since 2019.
+Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019.
 The house
 About us
 Deconstructing this website

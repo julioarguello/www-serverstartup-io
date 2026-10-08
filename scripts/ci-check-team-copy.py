@@ -17,6 +17,7 @@ fallback string, meta description — and fails on a COUNT OF PEOPLE:
   · a numeral before a noun for people     «tres ingenieros», «three senior engineers»
   · a team sized by a numeral              «un equipo de cuatro», «a team of five»
   · «somos N» / «we are N»
+  · a numeral standing for the people     «los mismos tres,», «the three of us»
   · a multiplier against the engineers     «los ingenieros ×3» (a table cell)
 
 It does NOT forbid numbers near the word "team": the mantra is literally
@@ -62,7 +63,13 @@ COUNT_PATTERNS = [
     re.compile(rf"\b(?:equipo|team)\s+(?:de|of)\s+{NUMERAL}\b", re.I),
     re.compile(rf"\b{NUMERAL}[- ](?:person|people|engineer)\s+team\b", re.I),
     # «somos tres», «we are three», «we're three»
-    re.compile(rf"\b(?:somos|we\s+are|we're)\s+{NUMERAL}\b", re.I),
+    re.compile(rf"\b(?:somos|we\s+are|we['’]re)\s+{NUMERAL}\b", re.I),
+    # the numeral standing for the people itself: «los mismos tres, de principio
+    # a fin», «the three of us», «tres de nosotros». Only where it ENDS the
+    # phrase or takes «of us»: «las mismas cinco direcciones» is a count of
+    # something else and passes.
+    re.compile(rf"\b(?:los\s+mismos|las\s+mismas|the\s+same)\s+{NUMERAL}(?=\s*[,.;:!?)]|\s*$)", re.I),
+    re.compile(rf"\b(?:the\s+{NUMERAL}\s+of\s+us|{NUMERAL}\s+de\s+nosotros)\b", re.I),
     # a table cell multiplying the engineers: «los ingenieros ×3»
     re.compile(rf"\b{PEOPLE}\W{{0,20}}[×x]\s*\d+", re.I),
 ]
@@ -138,7 +145,8 @@ CONTROL_HTML = """<!doctype html>
 <script>const decoy = "four engineers in a script is not copy";</script>
 </head>
 <p>Backend, integration, data and edge. The same three senior engineers from start to finish.</p>
-<p>Un equipo de cuatro, sin traspasos.</p><p>A team of five.</p><p>Somos dos.</p>
+<p>Un equipo de cuatro, sin traspasos.</p><p>A team of five.</p><p>Somos dos.</p><p>We’re six.</p>
+<p>Los mismos tres, de principio a fin. The three of us answer. Las mismas cinco direcciones.</p>
 <table><tr><td>los ingenieros</td><td>×3</td><td>no incluidos: ya estaban</td></tr>
 <tr><td>los datos</td><td>×3</td><td>D1, R2 y KV</td></tr></table>
 <p>1 equipo = ▪▪▪▪▪▪ verticales = 0 traspasos. One team. Six verticals. Zero handoffs.</p>
@@ -154,6 +162,9 @@ CONTROL_HITS = {
     "equipo de cuatro",
     "team of five",
     "Somos dos",
+    "We’re six",
+    "Los mismos tres",
+    "The three of us",
     "ingenieros ×3",
     "dos personas",
 }

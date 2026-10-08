@@ -700,7 +700,7 @@ rotating edge (Base.astro), so the two cannot drift.
 
 After the design review of 2026-10-06 (founder: "dales caña a todos"): hero → areas →
 **references** → Cloudflare → quality → mantra → closing CTA. The team band left the home in #565
-(founder, 2026-10-06: «podemos quitarlo de la home»): the same three people are on Quiénes somos and
+(founder, 2026-10-06: «podemos quitarlo de la home»): the same people are on Quiénes somos and
 Contacto. What we do comes first, then
 who has trusted us with it, then the platform we do much of it on.
 
@@ -715,11 +715,24 @@ who has trusted us with it, then the platform we do much of it on.
 - **Quality**: the four Lighthouse thresholds as a console (`.s-gate`), read from
   `lighthouserc.json` at build time, so the claim and the gate cannot drift. Its chrome is
   Lighthouse's words (`panel_labels` → `lh_*`), English in both locales like every quoted product.
-- **Team**: each card says what the person does, from the member's `excerpt` (Quiénes somos and its
-  JSON-LD). The three photographs were restored in #565 the way the hero photographs are (SeedVR2 3B
+- **Team**: each card says what the person does, from the member's `excerpt` (Quiénes somos, its
+  JSON-LD as `AboutPage.mentions`, and the Contacto captions since #575). The photographs were restored in #565 the way the hero photographs are (SeedVR2 3B
   at 2×, colour locked, nothing reframed: the founder kept the photographs themselves) and are
   written at 1600 × 1200 under their old names — `astro:assets` hashes them, so no cache keeps the
   old ones. The layout gate's G19 reads them on Quiénes somos.
+
+### 4.13 The team is described, never counted (#575)
+
+Founder decision, 2026-10-07: the site says who does the work and how — «siempre los mismos
+ingenieros senior», «quien diseña tu arquitectura escribe el código» — and never how many. A count
+caps the capacity a reader imagines and is false the day anyone joins or leaves. The mantra's
+«1 equipo» stays: it is the one team a client gets, not a headcount. Contacto names nobody («Te
+responde quien hace el trabajo»); the photographs and each person's caption carry the faces.
+
+`scripts/ci-check-team-copy.py` holds the line on the rendered pages — text, the attributes a
+reader or crawler is shown, and the JSON-LD — because the count once reached every route through a
+single widget. Its control plants every shape the copy actually used and, beside them, every number
+that must pass (the mantra, the verticals, the years, «tres semanas»).
 
 ## 5. SEO
 

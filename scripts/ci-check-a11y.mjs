@@ -942,7 +942,7 @@ console.log("── the hero band: ink over the plates");
 
 	const TEXT_SELECTOR = [
 		"h1", ".s-hero__kicker p", ".s-hero__pitch-item",
-		".s-hero__name", ".s-hero__n", ".s-hero__tag", ".s-hero__body", ".s-hero__stop-name",
+		".s-hero__name", ".s-hero__vname", ".s-hero__n", ".s-hero__tag", ".s-hero__body", ".s-hero__stop-name",
 	].map((c) => `.s-hero ${c}`).join(", ");
 
 	// Freeze the band on plate `k`. Returns how many plates the band has, so
@@ -961,9 +961,10 @@ console.log("── the hero band: ink over the plates");
 			hero.classList.add("is-done");
 			return 1;
 		}
-		// the home's slides are photographs since #560 (`.s-hero__photo`); a vertical page without a
-		// scene still holds one drawn plate
-		const plates = hero.querySelectorAll(".s-hero__photo, .s-hero__plate").length;
+		// the home's slides are photographs since #560 (`.s-hero__photo`), after the «nosotros» frame
+		// since #580 — no photograph, its subject the lit cube (`.s-hero__us`), and it is `data-slide`
+		// 0; a vertical page without a scene still holds one drawn plate
+		const plates = hero.querySelectorAll(".s-hero__photo, .s-hero__plate, .s-hero__us").length;
 		if (plates > 1) {
 			hero.classList.add("is-manual");
 			hero.dataset.slide = String(k);
@@ -1046,8 +1047,9 @@ console.log("── the hero band: ink over the plates");
 				measured += rows.length;
 				frames += 1;
 				// A vertical page's band carries two lines — the heading and the
-				// body. The home's carries five, because the index and the
-				// vertical's own sentence ride along with the plate.
+				// body. The home's carries more: the heading, its two lines, the
+				// card (the six names on «nosotros», a vertical's name and
+				// sentence on a photograph) and the rail.
 				const floor = plates > 1 ? 4 : 2;
 				if (rows.length < floor) {
 					report.fail(route, `hero @${vp.width} plate ${k + 1}: ${rows.length} text box(es), under the ` +
@@ -1077,11 +1079,11 @@ console.log("── the hero band: ink over the plates");
 	}
 
 	// A band that rendered nothing measures nothing and reports green. The
-	// home carries six plates and every vertical one, in both locales.
-	// 24 frames per size: the six slides on each home and one on each of the
-	// twelve vertical pages (48 at two sizes, measured 2026-10-06; the floor was
-	// a loose 28 until the third size made it worth stating).
-	const FRAMES = 24 * SIZES.length;
+	// home carries seven frames and every vertical one, in both locales.
+	// 26 frames per size: «nosotros» and the six slides on each home (#580) and
+	// one on each of the twelve vertical pages (the floor was 24 with six
+	// slides, 48 at two sizes, measured 2026-10-06).
+	const FRAMES = 26 * SIZES.length;
 	if (frames < FRAMES || measured < frames * 2) {
 		console.error(`✗ THIS GATE IS BLIND — ${frames} hero frame(s) photographed and ${measured} ` +
 			`text box(es) measured, below the ${FRAMES} frames and 2 boxes each this site has.`);

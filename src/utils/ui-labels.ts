@@ -12,10 +12,12 @@
  */
 import { getWidgetArea } from "emdash";
 
-type WidgetBlock = {
+export type WidgetBlock = {
 	_type: string;
 	_key?: string;
-	children?: Array<{ _type: string; text?: string }>;
+	style?: string;
+	markDefs?: unknown[];
+	children?: Array<{ _type: string; text?: string; marks?: string[] }>;
 };
 
 type Widget = {
@@ -47,6 +49,13 @@ export type UiLabels = {
 	 * meaningful, the order stays the seed's.
 	 */
 	getList(widgetTitle: string): string[];
+	/**
+	 * A widget's Portable Text blocks as the CMS holds them, marks included,
+	 * keyed by `_key` in the seed's order (#580). For copy that carries
+	 * emphasis or code — the strings above flatten every span to its text,
+	 * and prose rendered from them loses its marks silently (§14).
+	 */
+	getBlocks(widgetTitle: string): Map<string, WidgetBlock>;
 };
 
 const DEFAULT_LOCALE = "es";
@@ -68,10 +77,15 @@ export async function getUiLabels(locale: string = DEFAULT_LOCALE): Promise<UiLa
 
 	// Build a flat map: "widgetTitle:blockKey" → text
 	const map = new Map<string, string>();
+	const blocks = new Map<string, Map<string, WidgetBlock>>();
 	for (const widget of widgets) {
 		const wTitle = widget.title || "";
 		for (const block of widget.content || []) {
 			const key = block._key || "";
+			if (key) {
+				if (!blocks.has(wTitle)) blocks.set(wTitle, new Map());
+				blocks.get(wTitle)!.set(key, block);
+			}
 			const text =
 				block.children?.map((c) => c.text || "").join("") || "";
 			if (key) {
@@ -105,6 +119,9 @@ export async function getUiLabels(locale: string = DEFAULT_LOCALE): Promise<UiLa
 				if (key.startsWith(p)) lines.push(value);
 			}
 			return lines;
+		},
+		getBlocks(widgetTitle: string): Map<string, WidgetBlock> {
+			return blocks.get(widgetTitle) ?? new Map();
 		},
 	};
 }

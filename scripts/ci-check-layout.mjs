@@ -206,11 +206,14 @@ import { cdpDiagnosis, stackDiagnosis } from "./lib/stack-probe.mjs";
 
 const BASE = (process.argv[2] || "http://localhost:8787").replace(/\/$/, "");
 
-/** The lists that are ROWs, and the pages that render them. */
-const ROW_LISTS = [
-	{ route: "/", list: ".s-areas__rows", item: ".area-row__link", claim: ".area-row__claim" },
-	{ route: "/en", list: ".s-areas__rows", item: ".area-row__link", claim: ".area-row__claim" },
-];
+/**
+ * The lists that are ROWs, and the pages that render them. Empty since #580:
+ * the home's areas list was the site's one ROW list, and it left with the
+ * October home (the «nosotros» card indexes the verticals now). G1 and G2 stay,
+ * with their plant, for the next list built in that chrome — add it here in the
+ * same commit. G3 keeps its own control below either way.
+ */
+const ROW_LISTS = [];
 /** Pages whose whole copy must not repeat itself. */
 const PROSE_ROUTES = ["/", "/en"];
 /**
@@ -1266,7 +1269,7 @@ const hoverSkins = async (page, m) => {
 // exists to catch, the control fails first and the run exits 3 ("the scan is
 // broken") instead of 1 ("the page is wrong"). That happened on the first draft
 // of this file, on the first revert it was tested against.
-{
+if (ROW_LISTS.length) {
 	const spec = ROW_LISTS[0];
 	const page = await open(spec.route, 390);
 	const key = (f) => `${f.g}|${f.msg}`;
@@ -1316,6 +1319,31 @@ const hoverSkins = async (page, m) => {
 		process.exit(3);
 	}
 	ok("4 planted defects judged correctly — a ragged row, a boxed row, a duplicated paragraph, and a third row it left alone");
+	await page.close();
+}
+
+// ── G3's own control, for when no ROW list carries it (#580): the same plant's
+// duplicated paragraph, judged by difference on the first prose route.
+{
+	const page = await open(PROSE_ROUTES[0], 390);
+	const key = (f) => `${f.g}|${f.msg}`;
+	const scan = async () => judgeProse(await page.evaluate(MEASURE_PROSE, PROSE_MIN), "control");
+	const before = new Set((await scan()).map(key));
+	await page.evaluate(() => {
+		const MARK = "a sentence long enough to count as prose, printed here twice on purpose";
+		for (const _ of [0, 1]) {
+			const p = document.createElement("p");
+			p.textContent = MARK;
+			document.body.appendChild(p);
+		}
+	});
+	const fresh = (await scan()).filter((f) => !before.has(key(f)));
+	if (!fresh.some((f) => f.g === "G3")) {
+		console.error("✗ the positive control failed: G3 did not fire on a planted duplicate paragraph.");
+		await browser.close();
+		process.exit(3);
+	}
+	ok("a planted duplicate paragraph judged correctly (G3)");
 	await page.close();
 }
 
@@ -1990,7 +2018,7 @@ if (findings.length) {
 	process.exit(1);
 }
 
-ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} items each, heights within ${TOLERANCE}px, no chrome at rest`);
+if (ROW_LISTS.length) ok(`${ROW_LISTS.length} ROW list(s) × ${WIDTHS.length} widths: ${rowsSeen} items each, heights within ${TOLERANCE}px, no chrome at rest`);
 ok(`no run of ${PROSE_MIN}+ characters is printed twice on ${PROSE_ROUTES.join(" or ")}`);
 ok(
 	`${MENU_ROUTES.length} routes × ${MENU_SIZES.length} sizes: the open panel wastes at most ${MENU_WASTE_MAX}% of the viewport and every current row is marked unlike a hovered one`

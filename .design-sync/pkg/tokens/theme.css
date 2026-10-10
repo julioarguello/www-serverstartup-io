@@ -1,49 +1,13 @@
-/* Computer Modern (Knuth's TeX face, OFL) — the signature: the mantra's
-   equation, and the italic tail of the home's title (#580). Self-hosted and
-   subset to those glyphs, from 600 KB unsubset. */
-@font-face {
-	font-family: "CMU Serif";
-	src: url("/fonts/cmu-serif-500-roman.woff2") format("woff2");
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face {
-	font-family: "CMU Serif";
-	src: url("/fonts/cmu-serif-500-italic.woff2") format("woff2");
-	font-weight: 500;
-	font-style: italic;
-	font-display: swap;
-}
-@font-face {
-	font-family: "CMU Serif";
-	src: url("/fonts/cmu-serif-700-roman.woff2") format("woff2");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-
+/* serverstartup.io — src/styles/theme.css (origin/main), the only declaration of colour, radius, shadow and spacing.
+   @font-face rules moved to fonts/fonts.css. */
+/* Computer Modern (Knuth's TeX face, OFL) — the signature equation only.
+   Self-hosted and subset to the mantra's glyphs: 13 KB for the three cuts,
+   from 600 KB unsubset. Nothing else on the site uses it. */
 /* The AI scene's machine reading, in the faces of the film it quotes (#537; fontsinuse.com, The
    Terminator, 1984): its captions were Bessellen, a 1973 square face with no free cut (the one
    recreation, Modern Vision, is non-commercial), so Saira at 112.5 % width stands in; its listings were
    Apple II code printed in Letter Gothic, for which Inconsolata, drawn after it, stands in. Both OFL,
    subset by the Google Fonts API to what the reading prints: 6 KB and 19 KB, loaded only by that page. */
-@font-face {
-	font-family: "Saira HUD";
-	src: url("/fonts/saira-hud.woff2") format("woff2");
-	font-weight: 500;
-	font-stretch: 112.5%;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face {
-	font-family: "Inconsolata Listing";
-	src: url("/fonts/inconsolata-listing.woff2") format("woff2");
-	font-weight: 400 700;
-	font-style: normal;
-	font-display: swap;
-}
-
 /* The three symbols the brand's own devices print, cut from the real faces.
    Google's `latin` subset — which is what the fonts API downloads — carries
    neither U+2260 nor the two arrows, so with #450 shipping Alexandria and
@@ -64,23 +28,6 @@
    The other symbols the site prints — ✓ ✔ ✕ ⚠ ℹ ▶ ▾ ⌄ ─ │ ╰ ➜ ✋ 😉 — stay on
    the system fallback deliberately. They are interface furniture, not type;
    no text face carries them and every site on the web falls back for them. */
-@font-face {
-	font-family: "Alexandria Symbols";
-	src: url("/fonts/alexandria-symbols.woff2") format("woff2");
-	font-weight: 300 700;
-	font-style: normal;
-	font-display: swap;
-	unicode-range: U+2192, U+2197, U+2260;
-}
-@font-face {
-	font-family: "JetBrains Mono Symbols";
-	src: url("/fonts/jetbrains-mono-symbols.woff2") format("woff2");
-	font-weight: 400 500;
-	font-style: normal;
-	font-display: swap;
-	unicode-range: U+2192, U+2197, U+2260;
-}
-
 /*
  * Server Startup — Design System
  * EXACT values extracted from Elementor Kit (post-8.css).
@@ -94,7 +41,7 @@
 	/* Brand colors (kit-8 globals) */
 	--color-primary: #1E1E1E;
 	--color-secondary: #FFFFFF;
-	--color-text: #1E1E1E;
+	--color-text: #1E1E1E; /* @kind color */
 	--color-accent: #1E1E1E;
 
 	/* Interactions */
@@ -134,8 +81,8 @@
 	   at every size. Growing the column alone would just lengthen the line;
 	   growing neither leaves 20px text stranded in the middle of a 27-inch
 	   monitor. Below 1440 both are frozen — a laptop is already right. */
-	--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px);
-	--text-body: clamp(20px, calc(20px + (100vw - 1440px) * 0.004167), 24px);
+	--container-max: clamp(880px, calc(880px + (100vw - 1440px) * 0.1667), 1040px); /* @kind spacing */
+	--text-body: clamp(20px, calc(20px + (100vw - 1440px) * 0.004167), 24px); /* @kind font */
 	--widget-spacing: 20px;
 
 	/* ═══════════════════════════════════════════════════════════════
@@ -160,11 +107,11 @@
 	/* Ink at reduced weight. ONE step, not the four alphas the audit found
 	   (0.5/0.55/0.65/0.7): the 0.5 ones composited to #8F8F8F, which is
 	   3.0:1 on white — below AA for the small metadata they dressed. */
-	--color-text-muted: #6B6B6B;      /* 5.4:1 on paper */
+	--color-text-muted: #6B6B6B; /* @kind color */      /* 5.4:1 on paper */
 	/* …and its counterpart, for the same reduced weight on a dark
 	   instrument. #6B6B6B is 2.84:1 on the javadoc's own bar (#232724):
 	   the ink has to flip, not merely dim (#387). */
-	--color-text-muted-dark: #8C8C8C; /* 4.5:1 on #232724, 5.7:1 on #1b1e1c */
+	--color-text-muted-dark: #8C8C8C; /* @kind color */ /* 4.5:1 on #232724, 5.7:1 on #1b1e1c */
 
 	/* The console is a surface of its own — the machine voice (#304) */
 	--color-console: #101214;         /* terminal window ground */
@@ -218,14 +165,14 @@
 		rgba(30, 30, 30, 0.86) 42%,
 		rgba(30, 30, 30, 0.44) 70%,
 		rgba(30, 30, 30, 0) 100%
-	);
+	); /* @kind other */
 	--hero-scrim-portrait: linear-gradient(
 		184deg,
 		rgba(30, 30, 30, 0.96) 0%,
 		rgba(30, 30, 30, 0.90) 48%,
 		rgba(30, 30, 30, 0.48) 80%,
 		rgba(30, 30, 30, 0.20) 100%
-	);
+	); /* @kind other */
 	/* paper at reduced weight, the counterpart of --color-text-muted: 10.4:1
 	   on the ink ground, so the kicker holds AA over the darkened side */
 	--color-hero-ink-soft: rgba(255, 255, 255, 0.82);
@@ -238,7 +185,7 @@
 	--color-ground-haze: #A1ABAA;
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
 	--color-machine-red: #E0141E;     /* the Terminator's eye, where the AI scene's violet ends (#537) */
-	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */
+	--color-elev-line: #6FD48A; /* @kind color */       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */
 	--color-sky-line: #8DB3E2;        /* the Big Data sky's stars and links: the section's navy, lightened to read at night (#556) */
 	--color-sky-bronze: #C0875A;      /* the medallion's layers, one per telescope (#556): bronze, */
 	--color-sky-silver: #C9D4DF;      /* silver, */
@@ -277,61 +224,26 @@
 		rgba(30, 30, 30, 0.46) 66%,
 		rgba(30, 30, 30, 0.34) 80%,
 		rgba(30, 30, 30, 0) 96%
-	);
+	); /* @kind other */
 	/* …and a soft shade behind the copy alone: the heading and the kicker run
 	   over the sky at their right end, where the lighter veil left them at
 	   2.1:1. The picture keeps its light everywhere else. Widened when the
 	   kicker became two unbroken lines (2026-10-06): their right end ran past
 	   the old ellipse onto the bright cliff, 3.7:1 at 1280 x 720; now 6.0. */
-	--hero-spot: radial-gradient(ellipse 62% 58% at 40% 44%, rgba(30, 30, 30, 0.62) 0%, rgba(30, 30, 30, 0.5) 50%, rgba(30, 30, 30, 0) 100%);
+	--hero-spot: radial-gradient(ellipse 62% 58% at 40% 44%, rgba(30, 30, 30, 0.62) 0%, rgba(30, 30, 30, 0.5) 50%, rgba(30, 30, 30, 0) 100%); /* @kind other */
 	/* the chapter rail stands on the photograph's foot: a shade under it alone,
 	   from the veil's weight at the band's edge to nothing at the rail's top —
 	   without it the 16 px names measured 3.7–4.3:1 over the brighter photos */
-	--hero-foot: linear-gradient(0deg, rgba(30, 30, 30, 0.72) 0, rgba(30, 30, 30, 0) var(--space-9));
+	--hero-foot: linear-gradient(0deg, rgba(30, 30, 30, 0.72) 0, rgba(30, 30, 30, 0) var(--space-9)); /* @kind other */
 	/* phones and tablets: the photograph is a strip under the header; the
 	   card stands on its foot, which runs into the band's ink */
 	--hero-scrim-strip:
 		linear-gradient(0deg, rgba(30, 30, 30, 1) 0%, rgba(30, 30, 30, 0.9) 36%, rgba(30, 30, 30, 0) 62%),
-		linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(30, 30, 30, 0) 26%);
-	/* Seven frames, six seconds each: «nosotros», then the six photographs
-	   (#580). Named here because the header's edge and the title's tail
-	   rotate on the same clock as the images and the three must not drift. */
-	--hero-cycle: 42s;
-	--hero-step: 6s;
-	/* The brand's own voice on the band: graphite grey, 6.1:1 on the ground.
-	   The «nosotros» frame's tail and header edge (#580). */
-	--color-brand-grey: #A8A49C;
-	/* Light on the «nosotros» frame when it is not a vertical's colour: paper
-	   white, never gold ("el dorado no es mi línea gráfica de colores"). */
-	--color-light: #F7F5F0;
-	/* the haze at the band's far edge, on the frame with no photograph */
-	--hero-haze: linear-gradient(90deg, rgba(161, 171, 170, 0) 0%, rgba(161, 171, 170, 0.16) 100%);
-	/* The title's tail, one colour per frame (#580, brief §3.2). Phones and
-	   tablets set the h1 on the flat band under the photograph's strip, so
-	   the tail takes each vertical's on-band tint (≥ 4.5:1 on #232724).
-	   Desktops set it on the photograph itself, behind the veil: there each
-	   tint is lifted in OKLCH lightness at its own hue only as far as THAT
-	   frame's measured backing needs for 4.5:1 — the darker the photograph
-	   under the title, the more saturated the tail. Values from the approved
-	   Claude Design delivery (.design-sync/delivery/ns.js, 2026-10-10), two
-	   of them re-lifted by the same method (#580): the delivery measured a
-	   tail that had fallen back to Times Italic — its Computer Modern face
-	   failed to load — and the real face runs 47 px further right, over the
-	   bridge's and the museum's brighter sky. Integration #FFA89D → #FFADA2
-	   and greenfield #82B58F → #8ABD97 hold 4.5:1 on that sky in both
-	   locales (.design-sync/verify/contrast.cjs, 1440 × 900). */
-	--color-tail-cdn: #F38020;
-	--color-tail-int: #EC5D51;
-	--color-tail-ia: #9582CE;
-	--color-tail-gf: #669874;
-	--color-tail-ec: #0F95D5;
-	--color-tail-bd: #708FB4;
-	--color-tail-cdn-photo: #FFB98C;
-	--color-tail-int-photo: #FFADA2;
-	--color-tail-ia-photo: #D5CAFF;
-	--color-tail-gf-photo: #8ABD97;
-	--color-tail-ec-photo: #98D6FF;
-	--color-tail-bd-photo: #97B8DE;
+		linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(30, 30, 30, 0) 26%); /* @kind other */
+	/* Six slides, six seconds each. Named here because the header's edge
+	   rotates on the same clock as the images and the two must not drift. */
+	--hero-cycle: 36s; /* @kind other */
+	--hero-step: 6s; /* @kind other */
 
 	/* ── The menu panel (#417, re-inked #431) ────────────────────────────
 	   #417 put the panel on ink with the hero's own cube drawing behind it,
@@ -385,19 +297,19 @@
 	   `--rhythm-section` is the padding EACH side of a section declares, so
 	   two adjacent sections leave twice that between them (48px). Sections
 	   never add a one-off bottom: the neighbour's top is the other half. */
-	--rhythm-section: var(--space-4);   /* per side; 48px between sections */
-	--rhythm-band: var(--space-6);      /* inside a band (CTA, footer) */
+	--rhythm-section: var(--space-4); /* @kind spacing */   /* per side; 48px between sections */
+	--rhythm-band: var(--space-6); /* @kind spacing */      /* inside a band (CTA, footer) */
 
 	/* There is no second measure. A page has ONE width and everything inside
 	   it — headings, paragraphs, boxes, panels, rows — ends at the same
 	   edge. Any two-measure system alternates short and long lines down the
 	   page, which is exactly what reads as "no criterion" (founder, #304).
 	   The column is therefore sized by the TEXT, not by the screen. */
-	--measure-statement: var(--container-max);
+	--measure-statement: var(--container-max); /* @kind spacing */
 	/* The one exception, and only for fine print: an opening's epigraph stops well short of the column
 	   (founder, 2026-10-05, #558: "que la quote … vaya tan a la derecha no lo veo") — at the column's width
 	   it ran under the art, into the lighthouse's labels. About 55 characters a line at its 15 px. */
-	--measure-epigraph: min(var(--container-max), 620px);
+	--measure-epigraph: min(var(--container-max), 620px); /* @kind spacing */
 
 	--radius-pill: 99px;              /* pills and toggles only */
 	--focus-ring: 0 0 0 3px rgba(30, 30, 30, 0.2);
@@ -453,7 +365,7 @@
 	   registered to it at build time, and top-aligning the copy ran the
 	   kicker straight through the drawing. Measured, not assumed. */
 	--header-h: 69px;
-	--open-clear: var(--space-6);
+	--open-clear: var(--space-6); /* @kind spacing */
 	--open-pad-top: calc(var(--header-h) + var(--open-clear));
 	--open-mark-w: 68px;
 }

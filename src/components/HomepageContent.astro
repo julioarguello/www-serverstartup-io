@@ -5,22 +5,19 @@
  * Extracts the common homepage rendering logic used by both
  * index.astro (ES) and en/index.astro (EN).
  *
- * Content source: pages/home (EmDash CMS, locale-scoped)
- * PT sections split by h2 headings, read BY POSITION:
- *   [0] hero — blocks before the first h2
- *   [1] areas — heading only
- *   [2] quality and performance — the craft, then this site as its sample
+ * Content source: pages/home (EmDash CMS, locale-scoped). Its PT content is
+ * the hero's two lines under the heading, read BY POSITION.
  *
- * Band order on the page (#562, #565): hero · areas · references · Cloudflare
- * partner · quality and performance · CTA. The team band left the home
- * (founder 2026-10-06, #565): the same people are on Quiénes somos, and
- * the home said it twice (#342). The CMS sections are still read BY POSITION
- * from the PT content — that order is the CMS's, and the one above is the
- * page's; they are not the same list.
+ * Band order on the page (#580, founder 2026-10-09, after comparing seven
+ * reference homes): hero · client logos (no heading) · «Cómo trabajamos» ·
+ * mantra · Cloudflare partner · CTA. «Áreas de especialización» left: the
+ * «nosotros» frame's card is now the index of the six verticals, and the
+ * carousel shows each one. «Calidad y rendimiento» left too ("queda ahí como
+ * tira de nadie").
  *
  * CTA block sourced from cta_global widget area.
- * Service cards derived from services collection.
- * Section 3 (Cloudflare Partner) driven by partners collection.
+ * Hero slides derived from the services collection.
+ * Cloudflare partner block driven by the partners collection.
  */
 import { getEmDashEntry, getEmDashCollection } from "emdash";
 import CloudflarePartner from "./CloudflarePartner.astro";
@@ -28,12 +25,10 @@ import { PortableText } from "emdash/ui";
 import PtLink from "./PtLink.astro";
 import CtaGlobal from "./CtaGlobal.astro";
 import ReferenceBanner from "./ReferenceBanner.astro";
-import lhci from "../../lighthouserc.json";
 import MantraCloser from "./MantraCloser.astro";
-import { FACE_BY_SLUG, sortByFace } from "../utils/nav";
-import CubeEmblem from "./CubeEmblem.astro";
+import { FACE_BY_SLUG } from "../utils/nav";
 import { getUiLabels } from "../utils/ui-labels";
-import { excerptPlain } from "../utils/excerpt";
+import { excerptHtml } from "../utils/excerpt";
 import { HOME_PHOTO, HOME_PHOTO_SIZES, homePhotoSources, sortByVoyage, type HomePhoto } from "../utils/hero-art";
 
 // Whitespace-safe link mark: EmDash's default renderer inserts a space
@@ -50,9 +45,17 @@ if (!entry) return Astro.rewrite("/404");
 // served cf-cache-status BYPASS until the #357 E2E caught it. The hint is
 // set in the index pages' frontmatter; footer tags come from middleware.
 
-const { title, content, excerpt } = entry.data;
+const { title, content } = entry.data;
 
-// Fetch services collection for cards
+// The two-voice title (#580, brief §3.2): the head in the house face, the
+// tail — everything after the first comma — in Computer Modern italic,
+// coloured by the frame on screen. Split here, never in the CMS: the title
+// stays one string for SEO, the <title> element and a screen reader.
+const comma = title.indexOf(",");
+const titleHead = comma === -1 ? title : title.slice(0, comma + 1);
+const titleTail = comma === -1 ? "" : title.slice(comma + 1).trim();
+
+// Fetch services collection for the slides
 const { entries: serviceEntries } = await getEmDashCollection("services", {
 	orderBy: { created_at: "asc" },
 	locale,
@@ -61,130 +64,110 @@ const services = serviceEntries ?? [];
 
 const labels = await getUiLabels(locale);
 
-// The areas rows carry one line of claim each (#453), keyed by cube face —
-// deliberately NOT `services.excerpt`, which feeds the hero card, the vertical
-// page lede and the meta description, and would move search snippets on twelve
-// pages if it were cut to fit a row. The short titles are the menu's own
-// `menu_short` (#428): the same six names, so no new copy to keep in sync.
-const claims = labels.getAll("areas_claim");
+// The short names are the menu's own `menu_short` (#428): the same six names,
+// so no new copy to keep in sync. `us` is the brand frame's.
 const short = labels.getAll("menu_short");
 
-// ── The rotating hero (#413, the voyage since #560) ─────────────────────
-// Six photographs, one per vertical, in the voyage's order — the coast, the
-// bridge, the tug under it, the museum, the warehouse, night over the Teide —
-// not the menu's (founder, 2026-10-05: "From the coast to the stars"). The
-// header's edge is handed the same list by Base (sortByVoyage), so the two
-// cannot disagree. Anything not mapped to a face drops out.
+// ── The rotating hero (#413, the voyage since #560, «nosotros» since #580) ──
+// Seven frames on one clock. The first is the company, not a vertical
+// (founder: "Yo voy a la home y lo primero que veo es un faro… eso no me
+// representa, eso es un vertical"): the logo's cube, lit, in the seal's place,
+// and the card as the index of the six verticals. Then six photographs, one
+// per vertical, in the voyage's order — the coast, the bridge, the tug under
+// it, the museum, the warehouse, night over the Teide. The header's edge is
+// handed the same list by Base (sortByVoyage), so the two cannot disagree.
 //
-// What changes in front of each picture is the vertical's name and one line,
-// CMS `hero_line`, keyed by face like `areas_claim` and deliberately not that
-// key — the area rows further down already say it, and a hero repeating the
-// rows was the complaint of 2026-08-27. No caption naming the place: the
-// founder struck it ("no aporta", 2026-10-05). The bars under the caption carry `menu_short`, the six names the
-// menu already uses.
+// What changes in front of each picture is the vertical's name and one
+// factual line, CMS `hero_line` keyed by face: what we do in that vertical,
+// in a practitioner's words (founder 2026-10-09, brief §3.3). Markdown-lite —
+// `code` and *italics* — rendered by the excerpt helper, as the service
+// heroes do.
 const lines = labels.getAll("hero_line");
-const heroSlides = sortByVoyage(services).map((svc: any) => {
+const heroSlides = sortByVoyage(services).flatMap((svc: any) => {
 	const slug = svc.slug ?? svc.id;
 	const face = FACE_BY_SLUG[slug];
-	return {
+	if (!face) return [];
+	return [{
 		face,
 		href: `${localePrefix}/${slug}`,
 		title: svc.data.title as string,
 		color: (svc.data.color as string) || "#1E1E1E",
 		photo: HOME_PHOTO[face] as HomePhoto,
-		line: lines[face] ?? excerptPlain((svc.data.excerpt as string) || ""),
+		line: excerptHtml(lines[face] ?? ((svc.data.excerpt as string) || "")),
 		short: short[face] ?? (svc.data.title as string),
-	};
+	}];
 });
+// Frame k ≥ 1 is slide k − 1; frame 0 is «nosotros».
+const frames = heroSlides.length + 1;
 
-// Split PT content by h2 headings into named sections
-type Section = { heading: string; blocks: any[] };
-const sections: Section[] = [];
-let currentSection: Section = { heading: "", blocks: [] };
+// The tail's colour per frame, as custom properties the clock's keyframes
+// read: `--tm*` on the flat band (phones, tablets), `--tp*` on the
+// photograph (desktops). From theme.css, keyed by face — never a copy of the
+// palette here.
+const tailVars = [
+	"--tm0:var(--color-brand-grey);--tp0:var(--color-brand-grey)",
+	...heroSlides.map((s, i) =>
+		`--tm${i + 1}:var(--color-tail-${s.face});--tp${i + 1}:var(--color-tail-${s.face}-photo)`),
+].join(";");
 
-for (const block of (content as any[]) || []) {
-	if (block._type === "block" && block.style === "h2") {
-		if (currentSection.heading || currentSection.blocks.length > 0) {
-			sections.push(currentSection);
-		}
-		const headingText = block.children?.map((c: any) => c.text).join("") || "";
-		currentSection = { heading: headingText, blocks: [] };
-	} else {
-		currentSection.blocks.push(block);
-	}
-}
-if (currentSection.heading || currentSection.blocks.length > 0) {
-	sections.push(currentSection);
-}
+// «Cómo trabajamos» (#580, brief §3.4): seven items, a bold declarative
+// phrase and one sentence each, from the `how_we_work` widget. Portable Text
+// with its marks — the phrases carry `code` (SDD, SaaS) and the sentences
+// code and italics. The label block is keyed `<id>`, its sentence `<id>_body`.
+const how = labels.getBlocks("how_we_work");
+const howHeading = how.get("heading")?.children?.map((c) => c.text ?? "").join("") ?? "";
+const howItems = [...how.entries()]
+	.filter(([key]) => key !== "heading" && !key.endsWith("_body"))
+	.map(([key, label]) => ({ key, label, body: how.get(`${key}_body`) }));
 
-// Named section extraction — BY POSITION, never by heading words: the
-// copy is the founder's to change (#273 renamed the second band and the
-// old text match silently dropped the whole section from the page).
-// CMS order for pages/home: [hero ¶s] · h2 areas · h2 quality.
-const heroSection = sections[0]; // blocks before first h2
-const areasSection = sections[1];
-const proofSection = sections[2];
-
-// The quality section's console (#562): the gate's four thresholds, read from
-// the file CI asserts them from, so the claim and the gate cannot drift. Its
-// chrome is Lighthouse's own words, English in both locales like every quoted
-// product (panel_labels).
-const LH_KEYS: Record<string, string> = {
-	"categories:performance": "lh_perf",
-	"categories:accessibility": "lh_a11y",
-	"categories:best-practices": "lh_bp",
-	"categories:seo": "lh_seo",
-};
-const gateRows = Object.entries(lhci.ci.assert.assertions).flatMap(([category, [level, options]]) =>
-	typeof level === "string" && typeof options === "object" && options !== null && "minScore" in options
-		? [{
-			label: labels.get("panel_labels", LH_KEYS[category] ?? category, category),
-			score: Math.round(options.minScore * 100),
-			level: labels.get("panel_labels", "lh_level", level),
-		}]
-		: []);
 // the deferred hero photos' src until the page has loaded (see the stage below)
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+// The «Filamento» cube: the logo's outline, its three inner edges and the
+// six cell lines, in the seal's 200 × 228 drawing (HeroScene.astro).
+const CUBE = {
+	outline: "M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214",
+	spokes: ["M100,114 14,64", "M100,114 186,64", "M100,114 100,214"],
+	ring: ["M14,64 100,14", "M186,64 100,14", "M186,64 186,164", "M100,214 186,164", "M100,214 14,164", "M14,64 14,164"],
+	cells: "M57,39 143,89 M143,39 57,89 M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114",
+};
 ---
 
-<!-- ══════ HERO — six photographs, one voyage (#413, #560) ══════
+<!-- ══════ HERO — «nosotros», then six photographs, one voyage (#413, #560, #580) ══════
      The picture rotates; the <h1> does not. One stable heading is what SEO
      and a screen reader read, and it is also the only honest one: the six
-     verticals are what the company does, not six different companies.
-     The only link in the band is the vertical's name — the founder removed
-     both CTA buttons ("con clicar en el title suficiente"). -->
-<section class="s-hero s-hero--home" aria-label={t("hero_intro")}>
+     verticals are what the company does, not six different companies. -->
+<section class="s-hero s-hero--home" aria-label={t("hero_intro")} style={`--frames:${frames}`}>
 	{heroSlides.length > 0 && (
 		<div class="s-hero__stage" aria-hidden="true">
+			{/* «nosotros» has no photograph (#580): the band's own ground, lit by
+			    the cube, with the haze at its far edge. */}
+			<span class="s-hero__haze"></span>
 			{/* The six verticals' photographs, never their openings: the
 			    animations belong to each vertical's page and would spoil it
-			    (founder, 2026-10-05). Each holds still but for a slow push and
-			    cross-fades into the next.
+			    (founder, 2026-10-05). Each holds still and cross-fades into the
+			    next.
 
-			    Only the first loads with the page. The other five sit in the
-			    viewport (stacked, transparent), so `loading="lazy"` fetches them
-			    at once: 830 KB on a phone, which held the <h1> — the home's LCP
-			    — back to 3.7 s on Lighthouse's slow 4G. They carry their sources
-			    as data until the page has loaded; the first is on screen for
-			    six seconds before the second is due. Until then their `src` is
-			    a one-pixel transparent GIF: an <img> without one is invalid
-			    HTML (html-validate in CI), and it costs no request. */}
+			    None loads with the page (#580): the first frame is «nosotros»,
+			    with no photograph, and the first photograph is not due for six
+			    seconds. They carry their sources as data until the page has
+			    loaded, so they never compete with the <h1> — the home's LCP —
+			    for the first screen's bytes. Until then their `src` is a
+			    one-pixel transparent GIF: an <img> without one is invalid HTML
+			    (html-validate in CI), and it costs no request. */}
 			{heroSlides.map((slide, i) => {
 				const { src, srcset } = homePhotoSources(slide.photo);
 				return (
 					<img
 						class="s-hero__photo"
-						src={i === 0 ? src : BLANK}
-						srcset={i === 0 ? srcset : undefined}
-						data-src={i === 0 ? undefined : src}
-						data-srcset={i === 0 ? undefined : srcset}
-						sizes={i === 0 ? HOME_PHOTO_SIZES : undefined}
-						data-sizes={i === 0 ? undefined : HOME_PHOTO_SIZES}
+						src={BLANK}
+						data-src={src}
+						data-srcset={srcset}
+						data-sizes={HOME_PHOTO_SIZES}
 						alt=""
 						width={slide.photo.width}
 						height={slide.photo.height}
-						style={`--i:${i};--focus:${slide.photo.focus};--focus-n:${slide.photo.focusNarrow ?? slide.photo.focus}`}
-						fetchpriority={i === 0 ? "high" : "low"}
+						style={`--i:${i + 1};--focus:${slide.photo.focus};--focus-n:${slide.photo.focusNarrow ?? slide.photo.focus}`}
+						fetchpriority="low"
 						decoding="async"
 					/>
 				);
@@ -192,99 +175,133 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 			<span class="s-hero__scrim"></span>
 		</div>
 	)}
-	{/* The seal the vertical pages carry (HeroScene.astro: the logo cube's outline and inner edges),
-	    faint, leaving by the left margin — here in the colour of the vertical showing (founder,
-	    2026-10-05: "echo de menos el cubito"). Six seals, one per colour, dissolving on the same clock
-	    as the photographs: one seal recoloured by its keyframes stayed one colour where var() inside
-	    @keyframes is not honoured (founder, 2026-10-06: "siempre en el mismo color"). */}
-	{heroSlides.map((slide, i) => (
-		<svg class="s-hero__seal" viewBox="0 0 200 228" aria-hidden="true" style={`--i:${i};--cc:${slide.color}`}>
-			<path fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214" />
+	{/* The seal and the cube are one drawing in one place (brief §3.1, option
+	    4a): on «nosotros» the logo's cube is the subject — its edges light up
+	    in paper white from the centre of the «Y» outwards («Filamento», chosen
+	    2026-10-09) — and on the next frame it recedes to the faint outline in
+	    that vertical's colour. Nothing moves between frames; only the light
+	    changes ("el cubo aparece a la izquierda… es un sin Dios"). Seven
+	    outlines, one per frame, dissolving on the photographs' clock. */}
+	{heroSlides.length > 0 && (
+		<svg class="s-hero__mark" viewBox="0 0 200 228" aria-hidden="true">
+			<defs>
+				<radialGradient id="hero-spill">
+					<stop offset="0" class="s-hero__spill-0" />
+					<stop offset=".5" class="s-hero__spill-1" />
+					<stop offset="1" class="s-hero__spill-2" />
+				</radialGradient>
+				<filter id="hero-bloom" x="-20%" y="-20%" width="140%" height="140%">
+					<feGaussianBlur stdDeviation="3" />
+				</filter>
+			</defs>
+			<g class="s-hero__us">
+				<circle class="s-hero__spill" cx="100" cy="114" r="134" fill="url(#hero-spill)" />
+				<g class="s-hero__filament">
+					<g class="s-hero__bloom" filter="url(#hero-bloom)">
+						{CUBE.spokes.map((d) => <path class="s-hero__spoke" pathLength="1" d={d} />)}
+						{CUBE.ring.map((d) => <path class="s-hero__ring" pathLength="1" d={d} />)}
+					</g>
+					<g class="s-hero__lines">
+						{CUBE.spokes.map((d) => <path class="s-hero__spoke" pathLength="1" d={d} />)}
+						{CUBE.ring.map((d) => <path class="s-hero__ring" pathLength="1" d={d} />)}
+					</g>
+					<path class="s-hero__cells" d={CUBE.cells} />
+				</g>
+			</g>
+			<path class="s-hero__seal" d={CUBE.outline} style="--i:0" />
+			{heroSlides.map((slide, i) => (
+				<path class="s-hero__seal" d={CUBE.outline} style={`--i:${i + 1};--cc:${slide.color}`} />
+			))}
 		</svg>
-	))}
+	)}
 	<div class="container s-hero__inner">
-		{/* The hybrid the founder asked for (2026-08-27): what the COMPANY is
-		    holds still — the <h1> and the line under it are the same on all six
-		    frames, which is also what SEO and a screen reader read — and what
-		    the PICTURE is showing changes underneath it, in the vertical's own
-		    words. The heading and the sentence below it are the only copy that
-		    survives every frame; everything else in the band agrees with the
-		    plate. */}
-		<h1>{title}</h1>
-		{heroSection?.blocks.length > 0 && (
+		{/* What the COMPANY is holds still — the <h1> and the two lines under it
+		    are the same on all seven frames, which is also what SEO and a screen
+		    reader read. Only the tail's colour follows the frame, in step with
+		    the photograph (brief §3.2: "eso está mal" when it lingered). */}
+		<h1 style={tailVars}>
+			{titleHead}{titleTail && " "}{titleTail && <span class="ss-title__tail">{titleTail}</span>}
+		</h1>
+		{content?.length > 0 && (
 			<div class="s-hero__kicker">
 				{/* Two lines, read by position: the years and what they cover, then
 				    the partnership (founder, 2026-10-06: "tres líneas: el titular, la
 				    de más de veinte años y la de partners, y que nada salte de
 				    línea"). Each fits its own line on any screen from 768 px up —
 				    homepage.css sizes them by the longer one. */}
-				<PortableText value={heroSection.blocks.slice(0, 2)} components={ptComponents} />
+				<PortableText value={(content as any[]).slice(0, 2)} components={ptComponents} />
 			</div>
 		)}
 		{/* ── the card: everything that rotates, inside one piece ──
-		    Direction C, chosen by the founder 2026-08-27 ("optamos por C").
-		    Before this, the two LARGEST things in the band never changed and
-		    the two SMALLEST did, so nothing on screen said which half was the
-		    picture's caption — and the pitch was the same string, verbatim,
-		    that `.s-areas` renders further down the page. Gathering the index
-		    line, the vertical's name, its words and the ticker into a panel
-		    with a rule in the vertical's own colour makes the rotating half
-		    one object you can point at. The h1 drops from 72px to 56px so the
-		    name inside the card can be big enough to be read as the subject.
-
-		    One list, not two: the index line and the pitch used to be separate
-		    stacks animated on the same delay, which meant nothing but the
-		    arithmetic kept them showing the same vertical. */}
+		    Direction C, chosen by the founder 2026-08-27. Same position, same
+		    chrome on all seven frames — the card never disappears, it changes
+		    scale (brief §3.1): on «nosotros» it is the index of the six
+		    verticals, each row a link; on each photograph it narrows to the one
+		    vertical on screen, its name and what we do there. */}
 		{heroSlides.length > 0 && (
 			<div class="s-hero__card">
 				{/* The card's rule takes the showing vertical's colour. It is
 				    six stacked bars rather than a border on the card, because
 				    the colour arrives with the slide from the CMS and CSS
-				    keyframes cannot be told it. */}
+				    keyframes cannot be told it. «nosotros» has none: each of its
+				    rows carries its own. */}
 				<span class="s-hero__rules" aria-hidden="true">
 					{heroSlides.map((slide, i) => (
-						<i class="s-hero__rule" style={`--i:${i};--cc:${slide.color}`}></i>
+						<i class="s-hero__rule" style={`--i:${i + 1};--cc:${slide.color}`}></i>
 					))}
 				</span>
-				<ul class="s-hero__index" role="list">
-					{heroSlides.map((slide, i) => (
-						<li class="s-hero__item" style={`--i:${i};--cc:${slide.color}`}>
-							<a href={slide.href} class="s-hero__link">
-								<span class="s-hero__name">{slide.title}</span>
-								<span class="s-hero__arrow" aria-hidden="true">&rarr;</span>
-							</a>
-							<p class="s-hero__pitch-item">{slide.line}</p>
-						</li>
-					))}
-				</ul>
+				<div class="s-hero__deck">
+					<nav class="s-hero__verticals" aria-label={t("hero_index")} style="--i:0">
+						<ul role="list">
+							{heroSlides.map((slide) => (
+								<li style={`--cc:${slide.color}`}>
+									<a href={slide.href} class="s-hero__vlink">
+										<i class="s-hero__vrule" aria-hidden="true"></i>
+										{/* both names ship and the breakpoint picks one, as the menu
+										    does (#428); `display:none` keeps the other out of the
+										    accessibility tree */}
+										<span class="s-hero__vname s-hero__vname--long">{slide.title}</span>
+										<span class="s-hero__vname s-hero__vname--short">{slide.short}</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</nav>
+					<ul class="s-hero__index" role="list">
+						{heroSlides.map((slide, i) => (
+							<li class="s-hero__item" style={`--i:${i + 1};--cc:${slide.color}`}>
+								<a href={slide.href} class="s-hero__link">
+									<span class="s-hero__name">{slide.title}</span>
+									<span class="s-hero__arrow" aria-hidden="true">&rarr;</span>
+								</a>
+								<p class="s-hero__pitch-item" set:html={slide.line} />
+							</li>
+						))}
+					</ul>
+				</div>
 			</div>
 		)}
-		{heroSlides.length > 1 && (
+		{heroSlides.length > 0 && (
 			<div class="s-hero__ticker">
-				{/* `hidden` until the script un-hides them: a control that does
+				{/* The rail is the navigation (brief §9.8: no arrows). It names the
+				    stops instead of counting them: on a voyage "01 / 07" says
+				    nothing, the names say the route. Each track fills in its
+				    frame's colour while the frame shows. The stops become buttons
+				    once the script is here to make them work — a control that does
 				    nothing is worse than no control, and with no JS the CSS
 				    rotation still carries the band on its own. */}
-				<button type="button" class="s-hero__nav" data-hero-nav="-1" aria-label={t("hero_prev")} hidden>
-					<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-						<path d="M10 2.5 4.5 8l5.5 5.5"></path>
-					</svg>
-				</button>
-				{/* The index names the stops instead of counting them: on a voyage
-				    "01 / 06" says nothing, the six names say the route. Each bar
-				    fills in its vertical's colour while its photograph shows. */}
-				<span class="s-hero__dots" aria-hidden="true">
+				<div class="s-hero__dots" aria-label={t("hero_rail")} role="group">
+					<span class="s-hero__stop" style="--i:0;--cc:var(--color-brand-grey)">
+						<span class="s-hero__dot"></span>
+						<span class="s-hero__stop-name">{short.us ?? ""}</span>
+					</span>
 					{heroSlides.map((slide, i) => (
-						<span class="s-hero__stop" style={`--i:${i};--cc:${slide.color}`}>
+						<span class="s-hero__stop" style={`--i:${i + 1};--cc:${slide.color}`}>
 							<span class="s-hero__dot"></span>
 							<span class="s-hero__stop-name">{slide.short}</span>
 						</span>
 					))}
-				</span>
-				<button type="button" class="s-hero__nav" data-hero-nav="1" aria-label={t("hero_next")} hidden>
-					<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-						<path d="M6 2.5 11.5 8 6 13.5"></path>
-					</svg>
-				</button>
+				</div>
 			</div>
 		)}
 	</div>
@@ -292,7 +309,7 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 	    own control (scene-ctl.css), in the band's corner — a checkbox, so it stops the CSS clock with no
 	    script: Tab reaches it, Space stops the band, its aria-label names it. No replay: a carousel
 	    has nothing to start over. */}
-	{heroSlides.length > 1 && (
+	{heroSlides.length > 0 && (
 		<div class="scene__ctl">
 			<input type="checkbox" id="hero-pause" class="scene__pause" aria-label={t("hero_pause")} />
 			<label for="hero-pause" class="scene__pause-btn"></label>
@@ -300,140 +317,60 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 	)}
 </section>
 
-<!-- ══════ ÁREAS DE ESPECIALIZACIÓN (CMS-driven) ══════ -->
-<section class="s-areas" id="areas-especializacion" aria-label={areasSection?.heading || labels.get("footer_headings", "services_title", "Áreas de especialización")}>
-	<div class="container s-areas__inner">
-		<div class="s-areas__header">
-			<h2>{areasSection?.heading || `~ ${labels.get("footer_headings", "services_title", "Áreas de especialización")}`}</h2>
-		</div>
-
-		<!-- ROW, not card (#453). Six white boxes with a full paragraph each
-		     ran 1695px on a 390px phone — two whole screens for six names —
-		     with row heights of 214 to 305px, because the paragraphs differ
-		     in length. Ragged item heights are the actual reason a list
-		     starts demanding boxes to tidy it up; equalise the lines and the
-		     box has nothing left to do.
-
-		     So: one title line, one claim line, the cube in a fixed left
-		     gutter, and the vertical's colour only on hover, focus and
-		     current. At rest the block is monochrome. Six colours shouting
-		     at a reader who has not asked anything yet is decoration; the
-		     same colour arriving under the pointer is the signal that the
-		     row is a link — which the old chrome never gave.
-
-		     The claim is `areas_claim`, a NEW CMS key, not a shortened
-		     excerpt. `services.excerpt` feeds four places — the hero card,
-		     the vertical page lede, and the meta description with the
-		     JSON-LD — so cutting it would move search snippets on twelve
-		     pages. And the excerpt was already printed VERBATIM twice on
-		     this screen, once in the hero card and once here, twenty lines
-		     apart; that repetition is what made the block read as filler.
-
-		     The title ships twice, like the menu's (#428): "CDN, WAF y
-		     seguridad edge" is two lines at 390px, and a two-line title
-		     un-equalises the very rows this change equalises. Both spans
-		     are in the HTML and CSS picks one at 700px — `display:none`
-		     also drops the other from the accessibility tree, so a screen
-		     reader reads exactly one. No JS measuring: the answer must not
-		     depend on which text happens to be there. `menu_short` already
-		     holds those six names, so this costs no new copy. -->
-		<ul class="s-areas__rows" role="list">
-			{sortByFace(services)
-				.map((svc) => {
-					const d = svc.data;
-					const cardColor = d.color || "#1E1E1E";
-					const slug = (svc as any).slug ?? svc.id;
-					const face = FACE_BY_SLUG[slug];
-					const title = d.title ?? slug;
-					return (
-						<li class="area-row" style={`--cc:${cardColor}`}>
-							<a href={`${localePrefix}/${slug}`} class="area-row__link">
-								<CubeEmblem class="area-row__die" color={cardColor} faceKey={face ?? undefined} size={40} />
-								<span class="area-row__title area-row__title--long">{title}</span>
-								{/* no short name in the CMS = the long one, never an empty title */}
-								<span class="area-row__title area-row__title--short">{(face && short[face]) || title}</span>
-								<span class="area-row__claim">{(face && claims[face]) || excerptPlain(d.excerpt || "")}</span>
-							</a>
-						</li>
-					);
-				})}
-		</ul>
-	</div>
-</section>
-
-<!-- ══════ REFERENCIAS — the proof, right after what we do (#562) ══════
-     The footer carries this band on every other page (#296); on the home it
-     was the strongest proof on the page and it sat under the closing call to
-     action, where few readers arrive. -->
+<!-- ══════ CLIENT LOGOS — directly under the band, no heading (#580) ══════
+     5 of the 7 reference homes the founder compared show logos, and none
+     leaves them for the foot of the page. The only place client names appear. -->
 <ReferenceBanner
 	title={labels.get("footer_headings", "references_heading", locale === "en" ? "Who we have worked with" : "Con quién hemos trabajado")}
 	more={labels.get("footer_headings", "references_all", locale === "en" ? "See all references" : "Ver todas las referencias")}
 	href={`${locale === "en" ? "/en/references" : "/referencias"}`}
 	ariaLabel={t("trust_section")}
+	headless
 />
 
-<!-- ══════ CLOUDFLARE PARTNER (CMS-driven) ══════
-     Section order: what we do, who has trusted us with it, then the platform
-     we do much of it on (#562 — it used to open the page, ahead of the areas,
-     saying what we resell before what we do). The team band closes, before the
-     CTA (founder 2026-08-27: "la parte del equipo en la home hay que bajarla,
-     a final de calidad y rendimiento"). -->
-<CloudflarePartner />
-
-<!-- ══════ CALIDAD Y RENDIMIENTO — the craft, and this site as its sample ══════ -->
-{proofSection && (
-	<section class="s-proof" aria-label={proofSection.heading}>
+<!-- ══════ CÓMO TRABAJAMOS (#580) ══════
+     Seven items, each a bold declarative phrase plus one sentence. No icons,
+     no numbering, no cards (brief §3.4). Its last item is «Dicho y hecho», and
+     the mantra follows it directly. -->
+{howItems.length > 0 && (
+	<section class="s-how" aria-labelledby="how-heading">
 		<div class="container">
-			<div class="s-proof__inner">
-				{/* the deconstruction face: the same mark that page wears, so the
-				    claim and the page that backs it read as one thing */}
-				<CubeEmblem class="s-proof__die" color="var(--color-primary)" faceKey="dec" size={104} />
-				<h2>{proofSection.heading}</h2>
-				<PortableText value={proofSection.blocks} components={ptComponents} />
-				{/* the thresholds the paragraph states, as the gate holds them */}
-				<div class="s-gate">
-					<p class="s-gate__bar">{labels.get("panel_labels", "lh_file", "lighthouserc.json")}</p>
-					<ul class="s-gate__rows" role="list">
-						{gateRows.map((row) => (
-							<li>
-								<span class="s-gate__name">{row.label}</span>
-								<span class="s-gate__score">{row.score < 100 ? `≥ ${row.score}` : row.score}</span>
-								<span class="s-gate__level">{row.level}</span>
-							</li>
-						))}
-					</ul>
-				</div>
-			</div>
+			<h2 id="how-heading">{howHeading}</h2>
+			<ul class="s-how__list" role="list">
+				{howItems.map((item) => (
+					<li>
+						<div class="s-how__label"><PortableText value={[item.label]} components={ptComponents} /></div>
+						{item.body && <div class="s-how__body"><PortableText value={[item.body]} components={ptComponents} /></div>}
+					</li>
+				))}
+			</ul>
 		</div>
 	</section>
 )}
 
-<!-- ══════ CTA (from cta_global widget) ══════ -->
 <div class="container mantra-wrap">
 	<MantraCloser />
 </div>
 
+<!-- ══════ CLOUDFLARE PARTNER (CMS-driven) — exactly as it was, orange ground included ══════ -->
+<CloudflarePartner />
+
+<!-- ══════ CTA (from cta_global widget) ══════ -->
 <CtaGlobal />
 
 <script>
 	/**
-	 * The hero's manual control (founder, 2026-08-27: "el carrusel me debía de
-	 * permitir moverme yo entre las opciones, con las flechas").
-	 *
-	 * The rotation itself stays in CSS — it is the LCP band and it must run
-	 * with or without this file. All this does is hand the visitor the wheel:
-	 * the two arrows are `hidden` in the markup and only appear once we are
-	 * here to make them work.
-	 *
-	 * Taking manual control ENDS the rotation, which is why the pause button
-	 * hides itself in that state: there is nothing left to pause, and WCAG
-	 * 2.2.2 is satisfied by the thing having stopped.
+	 * The hero's manual control. The rotation itself stays in CSS — it is the
+	 * LCP band and it must run with or without this file. All this does is
+	 * load the photographs once the page is in, measure the card, and hand the
+	 * visitor the wheel: the rail's stops become buttons (brief §9.8: the rail
+	 * is the navigation, no arrows).
 	 */
-	const hero = document.querySelector<HTMLElement>(".s-hero");
+	const hero = document.querySelector<HTMLElement>(".s-hero--home");
 
-	// The five photographs after the first, once the page has loaded (#560):
-	// in the markup their sources are data, so they never compete with the
-	// first screen's own bytes.
+	// The six photographs, once the page has loaded (#560, #580): in the
+	// markup their sources are data, so they never compete with the first
+	// screen's own bytes — the first is not on screen for six seconds.
 	const later = () => {
 		for (const img of document.querySelectorAll<HTMLImageElement>(".s-hero__photo[data-srcset]")) {
 			// sizes first: it is only valid beside a srcset, so it travels as data too (#573)
@@ -448,19 +385,50 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 	if (document.readyState === "complete") later();
 	else window.addEventListener("load", later, { once: true });
 
-
-	const navs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-hero-nav]"));
-	const n = document.querySelectorAll(".s-hero__photo").length;
+	/**
+	 * The card changes scale between the index and one vertical (brief §3.1).
+	 * CSS cannot animate a height to `auto`, so the two heights are measured
+	 * here and handed to the clock's keyframes as custom properties. The
+	 * animation itself runs from the first paint either way — started later it
+	 * would keep its own time, off the band's clock — and until the heights
+	 * arrive both of its states are `auto`: the card holds the taller of the
+	 * two, the same layout, never a broken one.
+	 */
+	const card = hero?.querySelector<HTMLElement>(".s-hero__card");
+	const measure = () => {
+		if (!hero || !card) return;
+		const index = card.querySelector<HTMLElement>(".s-hero__verticals");
+		const items = Array.from(card.querySelectorAll<HTMLElement>(".s-hero__item"));
+		if (!index || !items.length) return;
+		// grid items in one cell: their heights are their content's, whatever the deck's is
+		const us = index.offsetHeight;
+		const v = Math.max(...items.map((it) => it.offsetHeight));
+		const cs = getComputedStyle(card);
+		card.style.setProperty("--deck-us", `${us}px`);
+		card.style.setProperty("--deck-v", `${v}px`);
+		// the phone's cube stands above the card's tallest state
+		hero.style.setProperty("--card-h", `${parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + Math.max(us, v)}px`);
+	};
+	if (hero && card) {
+		(document.fonts?.ready ?? Promise.resolve()).then(measure);
+		let rz = 0;
+		new ResizeObserver(() => {
+			cancelAnimationFrame(rz);
+			rz = requestAnimationFrame(measure);
+		}).observe(hero);
+	}
 
 	/**
-	 * The arrows (founder, 2026-08-27: "moverme yo entre las opciones, con las
-	 * flechas") JUMP the band's clock to the chosen slide and the rotation goes
-	 * on from there (2026-10-05: "si le doy a avanzar que no se desactive el
-	 * play"). Every animation on the clock — the photographs, the captions,
-	 * the bars, the seal and the header's edge — started together, so setting
-	 * one time on all of them moves the whole band at once, paused or not.
+	 * The stops JUMP the band's clock to the chosen frame and the rotation goes
+	 * on from there (founder, 2026-10-05: "si le doy a avanzar que no se
+	 * desactive el play"). Every animation on the clock — the photographs, the
+	 * card, the tracks, the cube, the tail and the header's edge — started
+	 * together, so setting one time on all of them moves the whole band at
+	 * once, paused or not.
 	 */
-	if (hero && navs.length && n > 1) {
+	const stops = Array.from(hero?.querySelectorAll<HTMLElement>(".s-hero__stop") ?? []);
+	const n = stops.length;
+	if (hero && n > 1) {
 		const secs = (name: string, fallback: number) => {
 			const raw = getComputedStyle(hero).getPropertyValue(name).trim();
 			const v = parseFloat(raw);
@@ -468,15 +436,15 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 			return raw.endsWith("ms") ? v / 1000 : v;
 		};
 		// the clock is the stylesheet's, read back rather than restated here
-		const cycle = secs("--hero-cycle", 36) * 1000;
+		const cycle = secs("--hero-cycle", 42) * 1000;
 		const step = secs("--hero-step", 6) * 1000;
-		// every slide's animation is delayed by `--i * step - 0.5 s`; one second in, the slide is whole
+		// every frame's animation is delayed by `--i * step - 0.5 s`; one second in, the frame is whole
 		const LEAD = 500, IN = 1000;
 		const clocked = () => [
 			...hero.getAnimations({ subtree: true }),
 			...(document.querySelector(".site-header")?.getAnimations() ?? []),
 		];
-		const now = () => Number(hero.querySelector(".s-hero__photo")?.getAnimations()[0]?.currentTime ?? 0);
+		const now = () => Number(hero.querySelector(".s-hero__seal")?.getAnimations()[0]?.currentTime ?? 0);
 		const current = () => Math.floor(((((now() + LEAD) % cycle) + cycle) % cycle) / step) % n;
 		const show = (i: number) => {
 			const k = ((i % n) + n) % n;
@@ -484,17 +452,30 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 			const at = round * cycle + k * step - LEAD + IN;
 			for (const a of clocked()) a.currentTime = at;
 		};
-		for (const btn of navs) {
-			btn.hidden = false;
-			btn.addEventListener("click", () => show(current() + Number(btn.dataset.heroNav)));
-		}
-		// Arrow keys, but only while focus is inside the band — never a global
-		// shortcut (WCAG 2.1.4, the same reason `/` is scoped to the header).
-		hero.addEventListener("keydown", (e) => {
-			if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-			if (e.metaKey || e.ctrlKey || e.altKey) return;
-			e.preventDefault();
-			show(current() + (e.key === "ArrowRight" ? 1 : -1));
+		stops.forEach((stop, i) => {
+			const name = stop.querySelector(".s-hero__stop-name")?.textContent?.trim() ?? "";
+			stop.setAttribute("role", "button");
+			stop.setAttribute("aria-label", name);
+			stop.tabIndex = 0;
+			stop.addEventListener("click", () => { if (i !== current()) show(i); });
+			stop.addEventListener("keydown", (e) => {
+				if (e.metaKey || e.ctrlKey || e.altKey) return;
+				let to: number | null = null;
+				if (e.key === "ArrowRight") to = (i + 1) % n;
+				else if (e.key === "ArrowLeft") to = (i + n - 1) % n;
+				else if (e.key === "Home") to = 0;
+				else if (e.key === "End") to = n - 1;
+				else if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					show(i);
+					return;
+				}
+				if (to === null) return;
+				e.preventDefault();
+				stops[to].focus();
+				show(to);
+			});
 		});
+		hero.classList.add("has-rail");
 	}
 </script>

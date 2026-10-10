@@ -215,16 +215,10 @@ export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
 };
 export const HOME_PHOTO_SIZES = "100vw";
 
-/** A home photograph's 1320 px file and its srcset — one spelling for the slide and the head's preload. */
+/** A home photograph's 1320 px file and its srcset. */
 export function homePhotoSources(photo: HomePhoto): { src: string; srcset: string } {
 	const src = `${photo.stem}.webp`;
 	return { src, srcset: `${photo.stem}-720.webp 720w, ${src} 1320w, ${photo.stem}-2016.webp 2016w, ${photo.stem}-3024.webp 3024w` };
-}
-
-/** The photograph a home slide shows for a service entry, or null for one not on the voyage. */
-export function homePhotoFor(entry: { id: string; slug?: string }): HomePhoto | null {
-	const face = FACE_BY_SLUG[entry.slug ?? entry.id];
-	return face ? HOME_PHOTO[face] : null;
 }
 
 /**

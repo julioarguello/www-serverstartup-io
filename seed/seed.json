@@ -672,76 +672,15 @@
 									"text": "IA"
 								}
 							]
-						}
-					]
-				},
-				{
-					"type": "content",
-					"title": "areas_claim",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ec",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ampliar SAP Commerce es fácil; sobrevivir a la actualización, no."
-								}
-							]
 						},
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "cdn",
+							"_key": "us",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Partners de Cloudflare desde 2019, casi siempre ante una tienda."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "bd",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Montar un flujo de datos es rápido; que aguante años, no."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "int",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Un guante, no un martillo: lo que planificamos es lo que ejecutamos."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "gf",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El código no es el producto; lo que sigue vivo años después, sí."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ia",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El agente propone, el ingeniero dispone. La IA es un medio."
+									"text": "Nosotros"
 								}
 							]
 						}
@@ -758,7 +697,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Lo primero que ve quien llega: el borde, defendido."
+									"text": "Caché hasta el `HTML`, reglas `WAF` y de bots ajustadas a tu tráfico, lógica en `Workers` y la cuenta entera en `Terraform`."
 								}
 							]
 						},
@@ -769,7 +708,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Dos orillas, un solo bus. Lo que planificamos, lo ejecutamos."
+									"text": "Diseñamos con `EIP` la plantilla que hereda cada flujo. Más flujos o más volumen no reabren la arquitectura."
 								}
 							]
 						},
@@ -780,7 +719,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "La máquina asiste; el ingeniero dispone."
+									"text": "Programamos con agentes bajo reglas versionadas y los ponemos en tu sistema con permisos mínimos y techo de gasto."
 								}
 							]
 						},
@@ -791,7 +730,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "La obra, donde no había nada, en producción años después."
+									"text": "Nunca partimos de cero. El *framework* de cada pila ya existe, en `Quarkus`, `Spring Boot` o `Cloud Run`. Lo opera quien lo diseñó."
 								}
 							]
 						},
@@ -802,7 +741,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "B2C y B2B sobre SAP Commerce Cloud y Ocado Smart Platform."
+									"text": "`SAP Commerce Cloud` desde `hybris`, el *middleware* de `Ocado Smart Platform` y el negocio, del catálogo al `TPV`."
 								}
 							]
 						},
@@ -813,7 +752,244 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Del dato en bruto al oro, capa a capa."
+									"text": "Datos de fiar, en la nube o en un CPD propio. Modelo primero, `dbt` en lo analítico y lo operacional, y pruebas en cada carga."
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
+					"title": "how_we_work",
+					"content": [
+						{
+							"_type": "block",
+							"style": "h2",
+							"_key": "heading",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cómo trabajamos"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "team",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Los mismos ingenieros, de principio a fin."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "team_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Quien diseña tu sistema lo lleva a producción. Y cada mañana mira sus alertas."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "contract",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Primero el contrato."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "contract_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cada interfaz se acuerda y se versiona antes que el código que la cumple ("
+								},
+								{
+									"_type": "span",
+									"text": "contract first",
+									"marks": [
+										"em"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ")."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "config",
+							"children": [
+								{
+									"_type": "span",
+									"text": "La configuración es código."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "config_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Permisos y entornos están en "
+								},
+								{
+									"_type": "span",
+									"text": "Terraform",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ", con historial y revisión. Nada vive solo en la cabeza de alguien."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sdd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Desarrollo guiado por especificación ("
+								},
+								{
+									"_type": "span",
+									"text": "SDD",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ")."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sdd_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Fijamos qué debe hacer y cómo se comprueba antes de generar una línea, con las reglas de tu negocio escritas y versionadas. Así el tiempo va donde rinde la experiencia, al diseño y a la revisión. Cuando un test falla, arreglamos el código, no el test."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "red",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Nada se despliega en rojo."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "red_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cada cambio pasa tests, análisis estático y escaneo de seguridad en "
+								},
+								{
+									"_type": "span",
+									"text": "CI/CD",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " antes de llegar a producción. Allí, trazas y métricas con "
+								},
+								{
+									"_type": "span",
+									"text": "OpenTelemetry",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "saas",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Si un "
+								},
+								{
+									"_type": "span",
+									"text": "SaaS",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " ya lo resuelve, no lo construimos."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "saas_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Preferimos perder un proyecto a mantener software que sobra."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "word",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Dicho y hecho."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "word_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Lo que empezamos, lo terminamos. Cada día nos ocupamos de que el proyecto vaya bien, porque en él va nuestra palabra."
 								}
 							]
 						}
@@ -2215,72 +2391,6 @@
 									"text": "Merge pull request"
 								}
 							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_file",
-							"children": [
-								{
-									"_type": "span",
-									"text": "lighthouserc.json"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_perf",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Performance"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_a11y",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Accessibility"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_bp",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Best practices"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_seo",
-							"children": [
-								{
-									"_type": "span",
-									"text": "SEO"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_level",
-							"children": [
-								{
-									"_type": "span",
-									"text": "error"
-								}
-							]
 						}
 					]
 				},
@@ -3091,22 +3201,22 @@
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "hero_prev",
+							"_key": "hero_rail",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Ver la especialidad anterior"
+									"text": "Fotogramas"
 								}
 							]
 						},
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "hero_next",
+							"_key": "hero_index",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Ver la especialidad siguiente"
+									"text": "Verticales"
 								}
 							]
 						},
@@ -3511,76 +3621,15 @@
 									"text": "AI"
 								}
 							]
-						}
-					]
-				},
-				{
-					"type": "content",
-					"title": "areas_claim",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ec",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Extending SAP Commerce is easy; surviving the upgrade is not."
-								}
-							]
 						},
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "cdn",
+							"_key": "us",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Cloudflare partners since 2019, usually in front of a shop."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "bd",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Building a data pipeline is fast; making it last years is not."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "int",
-							"children": [
-								{
-									"_type": "span",
-									"text": "A glove, not a hammer: what we plan is what we ship."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "gf",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The code isn't the product; what's still alive years later is."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ia",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The agent proposes, the engineer disposes. AI is a means."
+									"text": "About us"
 								}
 							]
 						}
@@ -3597,7 +3646,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The first thing anyone arriving sees: the edge, defended."
+									"text": "We cache down to the `HTML`, tune `WAF` and bot rules on your traffic, run logic in `Workers` and keep the whole account in `Terraform`."
 								}
 							]
 						},
@@ -3608,7 +3657,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Two banks, one bus. What we plan is what we run."
+									"text": "We design, with `EIP`, the template every flow inherits. More flows or more volume never reopen the architecture."
 								}
 							]
 						},
@@ -3619,7 +3668,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The machine assists; the engineer decides."
+									"text": "We build with agents under versioned rules, and put them into your systems with least privilege and a spending cap."
 								}
 							]
 						},
@@ -3630,7 +3679,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Built where there was nothing, still running years later."
+									"text": "We never start from zero. Each stack already has its *framework*, in `Quarkus`, `Spring Boot` or `Cloud Run`. Whoever designs it runs it."
 								}
 							]
 						},
@@ -3641,7 +3690,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "B2C and B2B, on SAP Commerce Cloud and the Ocado Smart Platform."
+									"text": "`SAP Commerce Cloud` since `hybris`, the *middleware* behind `Ocado Smart Platform`, and the business, from catalogue to `POS`."
 								}
 							]
 						},
@@ -3652,7 +3701,233 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "From raw data to gold, layer by layer."
+									"text": "Data you can trust, in the cloud or in your own data centre. Model first, `dbt` on the analytical and the operational side, tests on every load."
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "content",
+					"title": "how_we_work",
+					"content": [
+						{
+							"_type": "block",
+							"style": "h2",
+							"_key": "heading",
+							"children": [
+								{
+									"_type": "span",
+									"text": "How we work"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "team",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The same engineers, start to finish."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "team_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Whoever designs your system takes it to production. And checks its alerts every morning."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "contract",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Contract first."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "contract_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Every interface is agreed and versioned before the code that fulfils it."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "config",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Configuration is code."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "config_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Permissions and environments live in "
+								},
+								{
+									"_type": "span",
+									"text": "Terraform",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ", with history and review. Nothing lives only in someone's head."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sdd",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Specification-driven development ("
+								},
+								{
+									"_type": "span",
+									"text": "SDD",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ")."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "sdd_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "We settle what it must do and how it is checked before a line is generated, with your business rules written down and versioned. That puts the time where experience pays: design and review. When a test fails, we fix the code, not the test."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "red",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Nothing ships on red."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "red_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Every change passes tests, static analysis and a security scan in "
+								},
+								{
+									"_type": "span",
+									"text": "CI/CD",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " before it reaches production. There, traces and metrics with "
+								},
+								{
+									"_type": "span",
+									"text": "OpenTelemetry",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "saas",
+							"children": [
+								{
+									"_type": "span",
+									"text": "If a "
+								},
+								{
+									"_type": "span",
+									"text": "SaaS",
+									"marks": [
+										"code"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " already solves it, we don't build it."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "saas_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "We would rather lose a project than maintain software nobody needs."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "word",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Promise kept."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "word_body",
+							"children": [
+								{
+									"_type": "span",
+									"text": "What we start, we finish. Every day we make sure the project goes well, because our word is in it."
 								}
 							]
 						}
@@ -5054,72 +5329,6 @@
 									"text": "Merge pull request"
 								}
 							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_file",
-							"children": [
-								{
-									"_type": "span",
-									"text": "lighthouserc.json"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_perf",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Performance"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_a11y",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Accessibility"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_bp",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Best practices"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_seo",
-							"children": [
-								{
-									"_type": "span",
-									"text": "SEO"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "lh_level",
-							"children": [
-								{
-									"_type": "span",
-									"text": "error"
-								}
-							]
 						}
 					]
 				},
@@ -5930,22 +6139,22 @@
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "hero_prev",
+							"_key": "hero_rail",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Show the previous specialty"
+									"text": "Frames"
 								}
 							]
 						},
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "hero_next",
+							"_key": "hero_index",
 							"children": [
 								{
 									"_type": "span",
-									"text": "Show the next specialty"
+									"text": "Verticals"
 								}
 							]
 						},
@@ -15242,102 +15451,6 @@
 									"text": ". Quien diseña tu arquitectura escribe el código. Y da la cara si algo se rompe."
 								}
 							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"_key": "a_h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Áreas de especialización"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"_key": "p_h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Calidad y rendimiento"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "p_body",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Nuestro oficio es la calidad y el rendimiento donde salen caros: procesos críticos y volúmenes grandes. El pico de campaña, el catálogo que hay que reindexar, la integración que tiene que cerrar el día."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "p_body2",
-							"markDefs": [
-								{
-									"_key": "pk1",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json",
-									"blank": true
-								},
-								{
-									"_key": "pk3",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
-									"blank": true
-								},
-								{
-									"_key": "pk2",
-									"_type": "link",
-									"href": "/deconstruyendo"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Esta web es una muestra pequeña de la misma disciplina, aplicada a nuestro propio escaparate. Ninguna versión se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El "
-								},
-								{
-									"_type": "span",
-									"text": "umbral",
-									"marks": [
-										"pk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " está escrito en el repositorio público, y "
-								},
-								{
-									"_type": "span",
-									"text": "cada ejecución del control",
-									"marks": [
-										"pk3"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " también. "
-								},
-								{
-									"_type": "span",
-									"text": "Mira cómo está hecha",
-									"marks": [
-										"pk2"
-									]
-								},
-								{
-									"_type": "span",
-									"text": "."
-								}
-							]
 						}
 					]
 				},
@@ -16450,102 +16563,6 @@
 								{
 									"_type": "span",
 									"text": ". Whoever designs your architecture writes the code. And answers for it when something breaks."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"_key": "a_h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Areas of expertise"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"_key": "p_h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Quality and performance"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "p_body",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Our craft is quality and performance where they get expensive: critical processes and large volumes. The campaign peak, the catalogue that has to be reindexed, the integration that has to close the day."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "p_body2",
-							"markDefs": [
-								{
-									"_key": "pk1",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json",
-									"blank": true
-								},
-								{
-									"_key": "pk3",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain",
-									"blank": true
-								},
-								{
-									"_key": "pk2",
-									"_type": "link",
-									"href": "/en/deconstructing"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "This site is a small sample of the same discipline, applied to our own shop window. No version ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The "
-								},
-								{
-									"_type": "span",
-									"text": "threshold",
-									"marks": [
-										"pk1"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " is written in the public repository, and so is "
-								},
-								{
-									"_type": "span",
-									"text": "every run of the check",
-									"marks": [
-										"pk3"
-									]
-								},
-								{
-									"_type": "span",
-									"text": ". "
-								},
-								{
-									"_type": "span",
-									"text": "See how it is built",
-									"marks": [
-										"pk2"
-									]
-								},
-								{
-									"_type": "span",
-									"text": "."
 								}
 							]
 						}

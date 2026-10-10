@@ -15,7 +15,7 @@ import { resolveBlogSiteIdentity } from "../utils/site-identity";
 import { getUiLabels } from "../utils/ui-labels";
 import { routeAlternatePath } from "../utils/alternate";
 import { sortByFace } from "../utils/nav";
-import { HOME_PHOTO_SIZES, homePhotoFor, homePhotoSources, sortByVoyage } from "../utils/hero-art";
+import { sortByVoyage } from "../utils/hero-art";
 import type { SiteSettings } from "../types";
 
 import SiteHeader from "../components/SiteHeader.astro";
@@ -157,17 +157,12 @@ const { color: accentInkColor } = accentInk(headerAccent);
 // fetch: the bar cannot drift from the plate it is sitting on. Only the home
 // rotates — a vertical page has one colour and it is already the accent.
 // The home tells its six in the voyage's order (#560), not the menu's: sortByVoyage is the list the
-// hero itself is built from.
+// hero itself is built from. Its first frame is «nosotros» (#580), in the brand's grey.
 const onHome = heroOverlay && !activeService;
 const heroSlideColors: string[] =
 	onHome
-		? sortByVoyage(services).map((svc: any) => svc.data?.color || "#1E1E1E")
+		? ["var(--color-brand-grey)", ...sortByVoyage(services).map((svc: any) => svc.data?.color || "#1E1E1E")]
 		: [];
-
-// …and its first photograph, preloaded: it is the home's LCP on a phone, and found only once the
-// stylesheets have been read it waited 0.4–0.7 s on Lighthouse's slow 4G before its fetch began (#560).
-const voyageFirst = heroSlideColors.length ? sortByVoyage(services).map(homePhotoFor).find(Boolean) : null;
-const voyagePreload = voyageFirst ? homePhotoSources(voyageFirst) : null;
 
 // Contact info from site settings
 const s = settings as SiteSettings;
@@ -284,7 +279,10 @@ const resolvedOgType = ogType || "website";
 	     carry the size-adjust / ascent-override that hold CLS at zero while the
 	     real face arrives, and CLS is 0.000 on all five URLs because of them. */}
 	<Font cssVariable="--font-sans" preload={[{ weight: 300, subset: "latin" }, { weight: 700, subset: "latin" }]} />
-	{voyagePreload && <link rel="preload" as="image" href={voyagePreload.src} imagesrcset={voyagePreload.srcset} imagesizes={HOME_PHOTO_SIZES} fetchpriority="high" />}
+	{/* The home's first frame has no photograph (#580): its LCP is the <h1>, whose tail is set in
+	    Computer Modern italic — fetched with the page, not once the stylesheet asks, so the tail
+	    does not repaint in another face. */}
+	{onHome && <link rel="preload" as="font" type="font/woff2" href="/fonts/cmu-serif-500-italic.woff2" crossorigin="anonymous" />}
 	<Font cssVariable="--font-mono" />
 	<title>{pageTitle}</title>
 	<meta name="description" content={pageDescription} />

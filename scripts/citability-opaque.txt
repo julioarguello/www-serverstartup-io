@@ -57,3 +57,14 @@ reference/figma-extract/renders/*.pdf   # MEASURED 2026-08-25: type is converted
                                         # "seguridad": zero hits after CMap decoding.
 reference/figma-extract/canvas.fig   # Figma's own binary format (kiwi), no public parser
 reference/server-startup-design.fig  # same
+
+# ── Claude Design sync (#580): the live site as handed to the design agent ──
+.design-sync/current/screens/*.jpg  # screenshots of the preview's openings, taken with
+                                    # Puppeteer and encoded by ffmpeg: pixels of pages that
+                                    # already pass this gate as HTML. Their only header text
+                                    # is the encoder tag `Lavc61.19.100` (the JPEG COM
+                                    # marker) — no EXIF, no XMP (checked 2026-10-10).
+.design-sync/pkg/fonts/*.woff       # the CMU Serif cuts handed to the design agent: glyph
+                                    # outlines and the foundry's own name table
+.design-sync/pkg/fonts/*.woff2      # Alexandria, JetBrains Mono, Inconsolata and Saira, the
+                                    # same: outlines and name tables, no prose

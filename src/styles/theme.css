@@ -1,6 +1,6 @@
-/* Computer Modern (Knuth's TeX face, OFL) — the signature equation only.
-   Self-hosted and subset to the mantra's glyphs: 13 KB for the three cuts,
-   from 600 KB unsubset. Nothing else on the site uses it. */
+/* Computer Modern (Knuth's TeX face, OFL) — the signature: the mantra's
+   equation, and the italic tail of the home's title (#580). Self-hosted and
+   subset to those glyphs, from 600 KB unsubset. */
 @font-face {
 	font-family: "CMU Serif";
 	src: url("/fonts/cmu-serif-500-roman.woff2") format("woff2");
@@ -293,10 +293,46 @@
 	--hero-scrim-strip:
 		linear-gradient(0deg, rgba(30, 30, 30, 1) 0%, rgba(30, 30, 30, 0.9) 36%, rgba(30, 30, 30, 0) 62%),
 		linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(30, 30, 30, 0) 26%);
-	/* Six slides, six seconds each. Named here because the header's edge
-	   rotates on the same clock as the images and the two must not drift. */
-	--hero-cycle: 36s;
+	/* Seven frames, six seconds each: «nosotros», then the six photographs
+	   (#580). Named here because the header's edge and the title's tail
+	   rotate on the same clock as the images and the three must not drift. */
+	--hero-cycle: 42s;
 	--hero-step: 6s;
+	/* The brand's own voice on the band: graphite grey, 6.1:1 on the ground.
+	   The «nosotros» frame's tail and header edge (#580). */
+	--color-brand-grey: #A8A49C;
+	/* Light on the «nosotros» frame when it is not a vertical's colour: paper
+	   white, never gold ("el dorado no es mi línea gráfica de colores"). */
+	--color-light: #F7F5F0;
+	/* the haze at the band's far edge, on the frame with no photograph */
+	--hero-haze: linear-gradient(90deg, rgba(161, 171, 170, 0) 0%, rgba(161, 171, 170, 0.16) 100%);
+	/* The title's tail, one colour per frame (#580, brief §3.2). Phones and
+	   tablets set the h1 on the flat band under the photograph's strip, so
+	   the tail takes each vertical's on-band tint (≥ 4.5:1 on #232724).
+	   Desktops set it on the photograph itself, behind the veil: there each
+	   tint is lifted in OKLCH lightness at its own hue only as far as THAT
+	   frame's measured backing needs for 4.5:1 — the darker the photograph
+	   under the title, the more saturated the tail. Values from the approved
+	   Claude Design delivery (.design-sync/delivery/ns.js, 2026-10-10), two
+	   of them re-lifted by the same method (#580): the delivery measured a
+	   tail that had fallen back to Times Italic — its Computer Modern face
+	   failed to load — and the real face runs 47 px further right, over the
+	   bridge's and the museum's brighter sky. Integration #FFA89D → #FFADA2
+	   and greenfield #82B58F → #8ABD97 hold 4.5:1 on that sky in both
+	   locales (.design-sync/verify/contrast.cjs, 1440 × 900).
+	   Mapped to the faces in HERO_TAIL (src/utils/hero-art.ts). */
+	--color-tail-cdn: #F38020;
+	--color-tail-int: #EC5D51;
+	--color-tail-ia: #9582CE;
+	--color-tail-gf: #669874;
+	--color-tail-ec: #0F95D5;
+	--color-tail-bd: #708FB4;
+	--color-tail-cdn-photo: #FFB98C;
+	--color-tail-int-photo: #FFADA2;
+	--color-tail-ia-photo: #D5CAFF;
+	--color-tail-gf-photo: #8ABD97;
+	--color-tail-ec-photo: #98D6FF;
+	--color-tail-bd-photo: #97B8DE;
 
 	/* ── The menu panel (#417, re-inked #431) ────────────────────────────
 	   #417 put the panel on ink with the hero's own cube drawing behind it,
@@ -393,12 +429,13 @@
 
 	   The accent colour is a STATE on a ROW and a fixed edge on a PANEL. It is
 	   not decoration six times over at rest — that was how the areas block
-	   ended up shouting six colours at a reader who had not asked yet. */
+	   ended up shouting six colours at a reader who had not asked yet. ROW has
+	   no list on the site since #580 (the home's areas left), so its two
+	   tokens left with it: declare `--row-rule` (1px) and `--row-accent` (4px)
+	   again with the next one. */
 	--block-rule: 3px;         /* BLOCK's left rule */
 	--panel-border: 1px;       /* PANEL's hairline */
 	--panel-edge: 4px;         /* PANEL's accent top edge */
-	--row-rule: 1px;           /* ROW's hairline above */
-	--row-accent: 4px;         /* ROW's left rule — hover / focus / current only */
 
 	/* ── The opening (#456) ──────────────────────────────────────────────
 	   Every page type starts the same way: the fixed header's own height,

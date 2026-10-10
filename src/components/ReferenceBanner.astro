@@ -26,8 +26,12 @@ interface Props {
 	 *  the column, the logos under it and a link to all of them. Elsewhere it is the
 	 *  footer's quiet label. */
 	more?: string;
+	/** The home's band opens on the logos alone, directly under the hero (#580,
+	 *  founder 2026-10-09): no heading — the logos say it. The title still
+	 *  names the section for assistive technology through `ariaLabel`. */
+	headless?: boolean;
 }
-const { title, href, ariaLabel, more } = Astro.props;
+const { title, href, ariaLabel, more, headless = false } = Astro.props;
 const asSection = Boolean(more);
 
 const { entries } = await getEmDashCollection("references", {
@@ -50,7 +54,7 @@ const logos = (entries ?? [])
 	<section class:list={["ref-banner", { "ref-banner--section": asSection }]} aria-label={ariaLabel}>
 		<div class="ref-banner__inner">
 			{asSection
-				? <h2 class="ref-banner__heading">{title}</h2>
+				? !headless && <h2 class="ref-banner__heading">{title}</h2>
 				: <h2 class="ref-banner__title"><a href={href}>{title}</a></h2>}
 			<ul class="ref-banner__row" role="list" style={`--ref-cols:${logos.length}`}>
 				{logos.map((l) => (

@@ -1,0 +1,15 @@
+{
+  "projectId": "7d9baea8-f1f8-46ab-a12e-29ddddb3fab8",
+  "shape": "package",
+  "pkg": "@serverstartup/style",
+  "globalName": "ServerStartup",
+  "entry": ".design-sync/pkg/index.js",
+  "extraFonts": [
+    "fonts/fonts.css"
+  ],
+  "guidelinesGlob": [
+    "*.md"
+  ],
+  "readmeHeader": ".design-sync/conventions.md",
+  "cssEntry": "style.css"
+}

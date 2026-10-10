@@ -31,3 +31,8 @@ docs/design/hero-rotativo/images.json
 # TREATED files under public/assets/hero/ground/ are tracked and are what the
 # site serves; these are 0.2-2 MB each and re-fetchable by nasa_id.
 docs/design/hero-rotativo/.cache/
+
+# Claude Design sync (#580): the converter's working copy and the bundle it builds
+# from .design-sync/ — both regenerated on every sync. .design-sync/ itself is tracked.
+.ds-sync/
+ds-bundle/

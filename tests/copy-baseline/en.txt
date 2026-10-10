@@ -2,33 +2,43 @@ Skip to content
 ~Server Startup
 /en
 ES
-Software engineering, from architecture to production
+Software engineering,
+from architecture to production
 Over twenty years in e-commerce, systems integration and data.
 Official Cloudflare partners since 2019.
-CDN, WAF & Edge Security→
-The first thing anyone arriving sees: the edge, defended.
+CDN, WAF & Edge Security
+Systems Integration
+Artificial Intelligence
+Greenfield development
+E-commerce
+Big Data & Cloud Analytics
+about us
 cdn & waf
 integration
 ai
 greenfield
 e-commerce
 big data
-Areas of expertise
-E-commerce
-Extending SAP Commerce is easy; surviving the upgrade is not.
-Systems Integration
-A glove, not a hammer: what we plan is what we ship.
-Big Data & Cloud Analytics
-Building a data pipeline is fast; making it last years is not.
-CDN, WAF & Edge Security
-Cloudflare partners since 2019, usually in front of a shop.
-Greenfield development
-The code isn't the product; what's still alive years later is.
-AI
-Artificial Intelligence
-The agent proposes, the engineer disposes. AI is a means.
-Who we have worked with
 See all references
+How we work
+The same engineers, start to finish.
+Whoever designs your system takes it to production. And checks its alerts every morning.
+Contract first.
+Every interface is agreed and versioned before the code that fulfils it.
+Configuration is code.
+Permissions and environments live in Terraform, with history and review. Nothing lives only in someone's head.
+Specification-driven development (SDD).
+We settle what it must do and how it is checked before a line is generated, with your business rules written down and versioned. That puts the time where experience pays: design and review. When a test fails, we fix the code, not the test.
+Nothing ships on red.
+Every change passes tests, static analysis and a security scan in CI/CD before it reaches production. There, traces and metrics with OpenTelemetry.
+If a SaaS already solves it, we don't build it.
+We would rather lose a project than maintain software nobody needs.
+Promise kept.
+What we start, we finish. Every day we make sure the project goes well, because our word is in it.
+1 team =
+6 verticals = Ø
+0
+handoffs
 Official Cloudflare partner
 We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2.
 CDN
@@ -38,26 +48,6 @@ Rules written for your traffic, and access without a VPN.
 Workers
 Logic at the edge, with no servers to look after.
 More about Cloudflare
-Quality and performance
-Our craft is quality and performance where they get expensive: critical processes and large volumes. The campaign peak, the catalogue that has to be reindexed, the integration that has to close the day.
-This site is a small sample of the same discipline, applied to our own shop window. No version ships if performance drops below 95, or if accessibility, best practices and SEO are not 100: the check runs on every change and blocks the deploy. The threshold is written in the public repository, and so is every run of the check. See how it is built.
-lighthouserc.json
-Performance
-≥ 95
-error
-Accessibility
-100
-error
-Best practices
-100
-error
-SEO
-100
-error
-1 team =
-6 verticals = Ø
-0
-handoffs
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project

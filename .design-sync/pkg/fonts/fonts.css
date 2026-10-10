@@ -1,0 +1,70 @@
+/* Brand faces: Alexandria (sans, variable 300-700), JetBrains Mono (mono, variable 400-500),
+   Computer Modern (CMU Serif: the signature italic and the equation). All OFL. */
+@font-face {
+	font-family: "Alexandria";
+	src: url("./alexandria-var.woff2") format("woff2");
+	font-weight: 300 700;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "JetBrains Mono";
+	src: url("./jetbrains-mono-var.woff2") format("woff2");
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "CMU Serif";
+	src: url("./cmu-serif-roman.woff") format("woff");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "CMU Serif";
+	src: url("./cmu-serif-italic.woff") format("woff");
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: "CMU Serif";
+	src: url("./cmu-serif-bold.woff") format("woff");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Symbol and scene subsets shipped by the site (theme.css). */
+@font-face {
+	font-family: "Saira HUD";
+	src: url("./saira-hud.woff2") format("woff2");
+	font-weight: 500;
+	font-stretch: 112.5%;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Inconsolata Listing";
+	src: url("./inconsolata-listing.woff2") format("woff2");
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Alexandria Symbols";
+	src: url("./alexandria-symbols.woff2") format("woff2");
+	font-weight: 300 700;
+	font-style: normal;
+	font-display: swap;
+	unicode-range: U+2192, U+2197, U+2260;
+}
+@font-face {
+	font-family: "JetBrains Mono Symbols";
+	src: url("./jetbrains-mono-symbols.woff2") format("woff2");
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+	unicode-range: U+2192, U+2197, U+2260;
+}

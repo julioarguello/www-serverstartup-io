@@ -24,15 +24,16 @@ interface Props {
 	 */
 	overHero?: boolean;
 	/**
-	 * The six vertical colours, in canonical order, when the band under the
-	 * bar rotates through them (the home). The edge rides the SAME clock as
-	 * the plates — one `--hero-cycle`, so the two cannot drift.
+	 * The seven frames' colours, in the band's order, when the band under the
+	 * bar rotates through them (the home): «nosotros» and the six verticals
+	 * (#580). The edge rides the SAME clock as the plates — one
+	 * `--hero-cycle`, so the two cannot drift.
 	 */
 	slideColors?: string[];
 }
 const { promptPath, accent, altPath, overHero = false, slideColors = [] } = Astro.props;
 
-// The edge's six stops, as custom properties the keyframes read. They come
+// The edge's seven stops, as custom properties the keyframes read. They come
 // from the CMS service entries (Base sorts them by face), never from a copy
 // of the palette in CSS: two lists of the same six colours are two lists that
 // will eventually disagree.
@@ -188,7 +189,7 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		fill: color-mix(in srgb, var(--accent, var(--color-primary)) 26%, var(--color-primary));
 	}
 
-	/* The edge rides the hero's clock. `--c1…--c6` are the CMS colours Base
+	/* The edge rides the hero's clock. `--c1…--c7` are the colours Base
 	   passes down; with no rotation (a vertical page) the edge simply keeps
 	   that page's accent, and `--c1` is the resting colour if the animation
 	   never runs — reduced motion, or a browser that skips it. */
@@ -202,11 +203,12 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 
 	@keyframes site-header-edge {
 		0% { border-bottom-color: var(--c1, var(--color-primary)); }
-		16.6667% { border-bottom-color: var(--c2); }
-		33.3333% { border-bottom-color: var(--c3); }
-		50% { border-bottom-color: var(--c4); }
-		66.6667% { border-bottom-color: var(--c5); }
-		83.3333% { border-bottom-color: var(--c6); }
+		14.2857% { border-bottom-color: var(--c2); }
+		28.5714% { border-bottom-color: var(--c3); }
+		42.8571% { border-bottom-color: var(--c4); }
+		57.1429% { border-bottom-color: var(--c5); }
+		71.4286% { border-bottom-color: var(--c6); }
+		85.7143% { border-bottom-color: var(--c7); }
 		100% { border-bottom-color: var(--c1, var(--color-primary)); }
 	}
 

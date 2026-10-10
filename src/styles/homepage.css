@@ -1,12 +1,13 @@
-/* ═══ HERO — six photographs, one voyage (#413, #560), mobile-first ═══
-   The band rotates through the six verticals' photographs in the voyage's
-   order (from the coast to the stars) while the heading holds still. The
-   photographs only — never the openings, which belong to each vertical's page.
+/* ═══ HERO — «nosotros», then six photographs, one voyage (#413, #560, #580) ═══
+   Seven frames on one clock, mobile-first. The first is the company: the
+   logo's cube, lit, on the band's own ground. Then the six verticals'
+   photographs in the voyage's order (from the coast to the stars) while the
+   heading holds still. The photographs only — never the openings, which
+   belong to each vertical's page.
 
-   Everything dark here is `--color-primary`, the brand ink (founder,
-   2026-08-27: "suave, tinta de marca"). It is deliberately NOT the console's
-   near-black: #304 gave black to the machine voice, and a hero that borrowed
-   it would take the meaning away from the consoles. */
+   The ground is `--color-ground-dark` (#232724), the one dark stage every
+   opening shares (brief §2, approved 2026-10-08), not the brand ink: on the
+   «nosotros» frame there is no photograph over it, and it is the stage. */
 .s-hero {
 	position: relative;
 	/* the plates and the scrim are painted inside this band and nowhere
@@ -14,20 +15,13 @@
 	isolation: isolate;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: flex-start;
 	min-height: 100svh;
 	/* the phone's photo strip: the header and two fifths of the screen */
 	--hero-strip: calc(var(--header-h) + 42svh);
-	/* #456 — the same inset as every other opening, but spelled from
-	   `--header-h` instead of the literal `80px` this used to guess with.
-	   The band stays centred: the six plates' cubes are registered to a
-	   centred column at build time, and top-aligning the copy ran the
-	   kicker straight through the drawing. */
 	padding: calc(var(--hero-strip) + var(--space-3)) 0 var(--space-6);
-	justify-content: flex-start;
-	/* the ground the plates are drawn on, and what shows while they load */
-	background-color: var(--color-primary);
+	background-color: var(--color-ground-dark);
 	/* the plates are cropped to the band; `clip` and not `hidden` so this
 	   never becomes a scroll container (§14) */
 	overflow: clip;
@@ -43,9 +37,10 @@
 /* Six photographs stacked in one box. Each holds still and the next dissolves
    in over it in a second and a half (founder, 2026-10-06: the push and the
    quick fades read as "PowerPoint trasnochado"; "quiero algo más sobrio").
-   The slide colours arrive as `--cc` and the stagger as `--i` on an inline
-   `style=`; no stylesheet declares either, so every reference carries a
-   fallback (#462). `--focus` keeps each subject right of the copy. */
+   Photograph `i` is frame `i` (1–6); frame 0 has none. The slide colours
+   arrive as `--cc` and the stagger as `--i` on an inline `style=`; no
+   stylesheet declares either, so every reference carries a fallback (#462).
+   `--focus` keeps each subject right of the copy. */
 .s-hero__photo {
 	position: absolute;
 	inset: 0;
@@ -58,21 +53,24 @@
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-/* The first photograph is on screen at load, not fading in: it is the LCP
-   element and an opacity ramp would cost the measurement half a second. */
-.s-hero__photo:first-of-type {
-	opacity: 1;
-	animation-name: s-hero-photo-lead;
-}
-
+/* the last fades OUT, over the «nosotros» ground, which is back by then */
 .s-hero__photo:last-of-type {
 	animation-name: s-hero-photo-last;
 }
 
+/* the haze at the far edge of the frame with no photograph */
+.s-hero__haze {
+	position: absolute;
+	inset: 0 0 0 72%;
+	background-image: var(--hero-haze);
+	animation: s-hero-us var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
+}
+
 /* Phones and tablets: the photograph is its own strip under the header and the copy
-   stands below it on ink, as the vertical pages' scenes do (#560). Over the
+   stands below it on the band, as the vertical pages' scenes do (#560). Over the
    whole band the copy covered the picture entirely — a slideshow nobody
-   could see. The strip fades into the ink at its foot. */
+   could see. The strip fades into the band at its foot. */
 .s-hero__scrim {
 	position: absolute;
 	inset: 0;
@@ -84,34 +82,104 @@
 	z-index: 1;
 }
 
-/* The seal (#560): the vertical pages' cube, faint — six of them, one per
-   vertical's colour, dissolving into each other on the photographs' clock.
-   Phones and tablets hang it from the band's foot, as the scenes do. */
-.s-hero__seal {
+/* ── the mark: the seal and the «nosotros» cube, one drawing (#580) ──
+   The logo's cube, in the seal's place, sized from the band (brief §3.1: the
+   subject fills ~86 % of its height, like the photographs) and leaving by the
+   left margin with 30 % of its width. On «nosotros» its edges light up; on the
+   six photographs it is the faint outline in that vertical's colour. Its
+   right edge stops short of the column, so nothing of it reaches a letter.
+   The drawing's box is 200 × 228 for a cube 200 tall: the svg is `--cube-h`
+   wide and 1.14 of it high, and the cube's outline starts 0.07 of it in. */
+.s-hero__mark {
 	position: absolute;
 	z-index: 0;
-	left: -90px;
-	bottom: -80px;
-	width: 280px;
-	height: auto;
-	color: var(--cc, var(--color-secondary));
-	opacity: 0;
+	/* phones and tablets: in the strip, under the header, above the card's
+	   tallest state (`--card-h`, measured by the script) */
+	--cube-h: max(var(--space-7), min(
+		calc((var(--hero-strip) - var(--header-h)) * 0.86),
+		calc(var(--hero-strip) - var(--header-h) - var(--card-h, 150px) - 28px)
+	));
+	left: calc(var(--cube-h) * -0.328);
+	top: calc(var(--header-h) + 12px - var(--cube-h) * 0.07);
+	width: var(--cube-h);
+	height: calc(var(--cube-h) * 1.14);
+	overflow: visible;
 	pointer-events: none;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.s-hero__seal {
+	stroke: var(--cc, var(--color-light));
+	stroke-width: 4;
+	opacity: 0;
 	animation: s-hero-seal var(--hero-cycle) linear infinite;
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
+/* «nosotros»: the frame's own outline is paper, as faint as the seals */
 .s-hero__seal:first-of-type {
 	opacity: .16;
 }
 
+/* «Filamento» (chosen 2026-10-09): the three spokes of the «Y» light from the
+   centre outwards, then the rim, then the cells; a bloom under the lines and
+   a spill of light around the cube. Paper white — never gold. Every state
+   below is the lit end state, which is what reduced motion and a stopped
+   band show; the clock's keyframes draw it on each pass. */
+.s-hero__us {
+	animation: s-hero-us var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
+}
+
+.s-hero__spill-0 { stop-color: var(--color-light); stop-opacity: .09; }
+.s-hero__spill-1 { stop-color: var(--color-light); stop-opacity: .035; }
+.s-hero__spill-2 { stop-color: var(--color-light); stop-opacity: 0; }
+
+.s-hero__spill {
+	animation: s-hero-spill var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
+}
+
+.s-hero__filament {
+	stroke: var(--color-light);
+}
+
+.s-hero__spoke,
+.s-hero__ring {
+	stroke-dasharray: 1 1;
+	stroke-dashoffset: 0;
+	animation: s-hero-spoke var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
+}
+
+.s-hero__ring {
+	animation-name: s-hero-ring;
+}
+
+.s-hero__lines {
+	stroke-width: 1.9;
+}
+
+.s-hero__bloom {
+	stroke-width: 5.7;
+	opacity: .5;
+	animation: s-hero-bloom var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
+}
+
+.s-hero__cells {
+	stroke-width: 1;
+	opacity: .36;
+	animation: s-hero-cells var(--hero-cycle) linear infinite;
+	animation-delay: -0.5s;
+}
+
 /* ── the card: everything that rotates, in one piece (founder's direction C)
-      The band used to put the vertical's name in 12px mono above a 72px
-      heading that never changed, and its words in a 20px paragraph below one
-      that never changed either — the two biggest things on screen were the
-      fixed half and the two smallest were the moving half, which is backwards.
-      Everything that changes now lives inside this panel, at the size the
-      picture's subject deserves. */
+      On «nosotros» it is the index of the six verticals; on each photograph
+      the one vertical on screen. Same position, same chrome — the card
+      never disappears, it changes scale (brief §3.1). */
 .s-hero__card {
 	/* Phones and tablets: the caption stands on the photograph's foot, just
 	   above the heading — under it, it fell below the fold of a phone, and
@@ -125,8 +193,7 @@
 	padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
 	background-color: var(--color-hero-card);
 	/* #304 — one measure. The card ends where the kicker and the heading
-	   end, not on a second, wider edge of its own. The pane is back (founder,
-	   2026-10-06: the caption as the original card, over a lighter veil). */
+	   end, not on a second, wider edge of its own. */
 	max-width: var(--measure-statement);
 }
 
@@ -150,30 +217,87 @@
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-.s-hero__rule:first-child {
-	opacity: 1;
-	animation-name: s-hero-item;
+/* The index and the six captions share one cell. The deck's height follows
+   the frame — the index's on «nosotros», a caption's on the photographs —
+   from the two heights the script measures; until they arrive both states
+   are `auto` and the card holds the taller. The animation runs from the
+   first paint either way, so it never leaves the band's clock. */
+.s-hero__deck {
+	display: grid;
+	overflow: clip;
+	height: var(--deck-us, auto);
+	animation: s-hero-deck var(--hero-cycle) linear infinite;
+	/* its 0 % is «nosotros» settled: 0.7 s into the frame */
+	animation-delay: 0.2s;
 }
 
-/* ── the rotating half: index line, name, and the vertical's own words ── */
+.s-hero__verticals,
+.s-hero__index {
+	grid-area: 1 / 1;
+	align-self: start;
+}
+
 .s-hero__index {
 	display: grid;
+}
+
+.s-hero__verticals,
+.s-hero__item {
+	animation: s-hero-item var(--hero-cycle) linear infinite;
+	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
 .s-hero__item {
 	grid-area: 1 / 1;
 	opacity: 0;
 	visibility: hidden;
-	animation: s-hero-item var(--hero-cycle) linear infinite;
-	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-.s-hero__item:first-child {
-	opacity: 1;
-	visibility: visible;
-	animation-name: s-hero-item;
+/* ── the index of the six verticals («nosotros») ── */
+.s-hero__verticals ul {
+	display: grid;
+	gap: var(--space-1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
+.s-hero__vlink {
+	display: block;
+	font-family: var(--font-family);
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 22px;
+	white-space: nowrap;
+	color: var(--color-secondary);
+	text-decoration: none;
+}
+
+.s-hero__vrule {
+	display: inline-block;
+	width: var(--block-rule);
+	height: 14px;
+	margin-right: 10px;
+	vertical-align: -2px;
+	background-color: var(--cc, var(--color-secondary));
+}
+
+/* both names ship and the breakpoint picks one, as the menu does (#428) */
+.s-hero__vname--long { display: none; }
+
+.s-hero__vlink:hover .s-hero__vname,
+.s-hero__vlink:focus-visible .s-hero__vname {
+	/* the same terminal selection the breadcrumb and the search slot wear */
+	background-color: color-mix(in srgb, var(--cc, var(--color-primary)) 40%, transparent);
+}
+
+/* phones: two columns of the short names */
+.s-hero__verticals ul {
+	grid-template-columns: 1fr 1fr;
+	column-gap: var(--space-3);
+}
+
+/* ── a vertical's caption: its name, then what we do there ── */
 /* inline, not a flex row: as a flex item the arrow wrapped onto a line of its
    own whenever the vertical's name took two */
 .s-hero__link {
@@ -186,12 +310,13 @@
 	white-space: nowrap;
 }
 
+/* the name on one line: there is room (brief §3.3) */
 .s-hero__name {
 	font-family: var(--font-family);
-	font-size: 24px;
+	font-size: min(24px, 5vw);
 	font-weight: 650;
 	line-height: 30px;
-	text-wrap: balance;
+	white-space: nowrap;
 }
 
 .s-hero__arrow {
@@ -201,8 +326,34 @@
 
 .s-hero__link:hover .s-hero__name,
 .s-hero__link:focus-visible .s-hero__name {
-	/* the same terminal selection the breadcrumb and the search slot wear */
 	background-color: color-mix(in srgb, var(--cc, var(--color-primary)) 40%, transparent);
+}
+
+/* One factual line: what we do in that vertical (founder 2026-10-09, brief
+   §3.3). Roman, not italic — a statement, not a quotation; `code` upright in
+   the mono face. Two lines on a desktop, three on a phone, never more. It
+   takes the card's width and never sets it: the name does. */
+.s-hero__pitch-item {
+	width: 0;
+	min-width: 100%;
+	margin-top: var(--space-2);
+	color: var(--color-secondary);
+	font-family: var(--font-family);
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 22px;
+	text-wrap: pretty;
+}
+
+.s-hero__pitch-item code {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-family: var(--font-family-mono), monospace;
+	font-size: .9em;
+	font-style: normal;
 }
 
 /* ── the copy, in paper ── */
@@ -214,6 +365,24 @@
 	font-size: 40px;
 	line-height: 48px;
 	text-wrap: pretty;
+}
+
+/* The two-voice title (#580, brief §3.2): the tail in Computer Modern italic,
+   sized so its x-height meets the head's (~+13 %), coloured by the frame.
+   The words never change; the colour follows the photograph, ~600 ms,
+   starting just after it begins to dissolve in. Code tokens stay upright. */
+.ss-title__tail {
+	font-family: "CMU Serif", serif;
+	font-size: 1.13em;
+	font-style: italic;
+	font-weight: 500;
+	font-synthesis: none;
+	letter-spacing: -.005em;
+	word-spacing: -.08em;
+	color: var(--tm0, var(--color-brand-grey));
+	animation: s-hero-tail var(--hero-cycle) linear infinite;
+	/* its 0 % is «nosotros» recoloured: 1.35 s into the frame */
+	animation-delay: 0.85s;
 }
 
 .s-hero__kicker {
@@ -253,34 +422,14 @@
 	}
 }
 
-/* The vertical's own words, under its name and inside the same card. The six
-   items are stacked in one grid cell, so the card takes the height of the
-   longest and never jumps as they swap. */
-.s-hero__pitch-item {
-	margin-top: 10px;
-	/* Paper, not paper-at-82%. The pitch is the one thing in the band that is
-	   20px at weight 300 — the combination AA owes 4.5:1 — and the card's
-	   white pane LIFTS the ground under it: at 82% ink the a11y gate measured
-	   exactly 4.5:1 on the greenfield plate, which is not a margin, it is a
-	   coin toss on rounding. Full white buys back the headroom the pane costs,
-	   and inside a panel this copy is the subject, not an aside. */
-	color: var(--color-secondary);
-	font-size: var(--text-body);
-	font-weight: 300;
-	line-height: 1.45;
-	text-wrap: pretty;
-}
-
-/* ── the chapter rail: which of the six is showing, and the way through them ──
-   Founder, 2026-10-06: the old row — 11 px names on bars as wide as their
-   names, floating between the kicker and the card — read "enanas, feas, fuera
-   de sitio". The six verticals are the band's chapters: six equal tracks, each
-   filling in its vertical's colour, the name under it at reading size, the
-   arrows closing the rail. On desktop the rail runs along the band's foot, as
-   wide as the column, and the card stands on it; on phones and tablets it
-   stands right under the card, at the photograph's foot, in the first screen.
-   The band reads top to bottom: who we are, what you are looking at, where you
-   are in the six. */
+/* ── the chapter rail: which of the seven is showing, and the way through them ──
+   Founder, 2026-10-06: the band's chapters are equal tracks, each filling in
+   its frame's colour, the name under it at reading size. On desktop the rail
+   runs along the band's foot, as wide as the column, and the card stands on
+   it; on phones and tablets it stands right under the card, at the
+   photograph's foot, in the first screen. Since #580 it is the only way
+   through them (brief §9.8: no arrows): the script makes each stop a button,
+   and the arrow keys walk the stops. */
 .s-hero__inner {
 	display: flex;
 	flex-direction: column;
@@ -294,41 +443,11 @@
 	margin: var(--space-3) 0 var(--space-5);
 }
 
-.s-hero__nav {
-	display: grid;
-	place-items: center;
-	width: 36px;
-	height: 36px;
-	padding: 0;
-	border: 1px solid var(--color-hero-rule);
-	border-radius: var(--radius);
-	background-color: var(--color-hero-card);
-	color: var(--color-secondary);
-	cursor: pointer;
-}
-
-.s-hero__nav svg {
-	width: 14px;
-	height: 14px;
-}
-
-.s-hero__nav:hover,
-.s-hero__nav:focus-visible {
-	background-color: var(--color-hero-dot);
-	border-color: var(--color-secondary);
-}
-
-/* the arrows close the rail at its right end */
-.s-hero__dots { order: 1; }
-.s-hero__nav[data-hero-nav="-1"] { order: 2; }
-.s-hero__nav[data-hero-nav="1"] { order: 3; }
-
 .s-hero__dots {
 	display: flex;
 	flex: 1;
 	gap: var(--space-1);
 	min-width: 0;
-	margin-right: var(--space-2);
 }
 
 .s-hero__stop {
@@ -336,9 +455,26 @@
 	flex: 1 1 0;
 	gap: var(--space-2);
 	min-width: 0;
+	/* a finger's reach on a phone, though the track is a hairline */
+	padding-block: var(--space-2);
+	margin-block: calc(var(--space-2) * -1);
 }
 
-/* The track fills in the vertical's colour while its photograph shows. */
+.has-rail .s-hero__stop {
+	cursor: pointer;
+}
+
+.has-rail .s-hero__stop:hover .s-hero__dot {
+	background-color: var(--color-hero-rule);
+}
+
+.s-hero__stop:focus-visible {
+	outline: 2px solid var(--color-secondary);
+	outline-offset: var(--space-1);
+	border-radius: var(--radius);
+}
+
+/* The track fills in the frame's colour while it shows. */
 .s-hero__dot {
 	height: var(--block-rule);
 	background-color: var(--color-hero-dot);
@@ -349,7 +485,7 @@
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
-/* named from tablets up; on a phone six names in 300 px read as six ellipses */
+/* named from tablets up; on a phone seven names in 300 px read as seven ellipses */
 .s-hero__stop-name {
 	display: none;
 	overflow: hidden;
@@ -368,73 +504,70 @@
 	animation-delay: calc(var(--i, 0) * var(--hero-step) - 0.5s);
 }
 
+/* the first stop's state with no clock: «nosotros» is the frame at rest */
+.s-hero__stop:first-child .s-hero__dot { background-size: 100% 100%; }
+.s-hero__stop:first-child .s-hero__stop-name { font-weight: 700; }
 
-/* ── manual mode: the visitor took the wheel ──
-   The script adds `.is-manual` and `data-slide` the first time an arrow is
-   used. Every animation stops for good — so the stop button has nothing left
-   to stop and steps aside — and the six states are spelled out rather than
-   computed, because a `calc()` comparison between two custom properties would
-   fail CLOSED on an engine that cannot do it: a hero with no picture at all. */
-.s-hero.is-manual .s-hero__seal,
+/* ── manual mode: a gate pinned the band ──
+   The a11y gate freezes a frame by setting `.is-manual` and `data-slide`
+   (0 = «nosotros», 1–6 the photographs) rather than clicking and hoping. Every
+   animation stops and the seven states are spelled out rather than computed,
+   because a `calc()` comparison between two custom properties would fail
+   CLOSED on an engine that cannot do it: a hero with no picture at all. */
 .s-hero.is-manual .s-hero__photo,
+.s-hero.is-manual .s-hero__haze,
+.s-hero.is-manual .s-hero__seal,
+.s-hero.is-manual .s-hero__us,
+.s-hero.is-manual .s-hero__spill,
+.s-hero.is-manual .s-hero__spoke,
+.s-hero.is-manual .s-hero__ring,
+.s-hero.is-manual .s-hero__bloom,
+.s-hero.is-manual .s-hero__cells,
 .s-hero.is-manual .s-hero__rule,
+.s-hero.is-manual .s-hero__deck,
+.s-hero.is-manual .s-hero__verticals,
 .s-hero.is-manual .s-hero__item,
 .s-hero.is-manual .s-hero__dot,
-.s-hero.is-manual .s-hero__stop-name {
+.s-hero.is-manual .s-hero__stop-name,
+.s-hero.is-manual .ss-title__tail {
 	animation: none;
 }
 
-.s-hero.is-manual .s-hero__photo { opacity: 0; transform: none; }
-.s-hero.is-manual .s-hero__seal { opacity: 0; }
-.s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
+.s-hero.is-manual .s-hero__photo,
+.s-hero.is-manual .s-hero__seal,
 .s-hero.is-manual .s-hero__rule { opacity: 0; }
+.s-hero.is-manual .s-hero__item { opacity: 0; visibility: hidden; }
 .s-hero.is-manual .s-hero__dot { background-size: 0% 100%; }
 .s-hero.is-manual .s-hero__stop-name { font-weight: 500; }
+.s-hero.is-manual .s-hero__deck { height: var(--deck-v, auto); }
+.s-hero.is-manual:not([data-slide="0"]) :is(.s-hero__us, .s-hero__haze, .s-hero__verticals) { opacity: 0; visibility: hidden; }
+.s-hero.is-manual[data-slide="0"] .s-hero__deck { height: var(--deck-us, auto); }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__photo:nth-of-type(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__photo:nth-of-type(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__photo:nth-of-type(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__photo:nth-of-type(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__photo:nth-of-type(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__photo:nth-of-type(6) {
+.s-hero.is-manual[data-slide="1"] .s-hero__photo:nth-of-type(1),
+.s-hero.is-manual[data-slide="2"] .s-hero__photo:nth-of-type(2),
+.s-hero.is-manual[data-slide="3"] .s-hero__photo:nth-of-type(3),
+.s-hero.is-manual[data-slide="4"] .s-hero__photo:nth-of-type(4),
+.s-hero.is-manual[data-slide="5"] .s-hero__photo:nth-of-type(5),
+.s-hero.is-manual[data-slide="6"] .s-hero__photo:nth-of-type(6) {
 	opacity: 1;
 }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__item:nth-child(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__item:nth-child(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__item:nth-child(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__item:nth-child(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__item:nth-child(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__item:nth-child(6) {
+.s-hero.is-manual[data-slide="1"] .s-hero__item:nth-child(1),
+.s-hero.is-manual[data-slide="2"] .s-hero__item:nth-child(2),
+.s-hero.is-manual[data-slide="3"] .s-hero__item:nth-child(3),
+.s-hero.is-manual[data-slide="4"] .s-hero__item:nth-child(4),
+.s-hero.is-manual[data-slide="5"] .s-hero__item:nth-child(5),
+.s-hero.is-manual[data-slide="6"] .s-hero__item:nth-child(6) {
 	opacity: 1;
 	visibility: visible;
 }
 
-.s-hero.is-manual[data-slide="0"] .s-hero__stop:nth-child(1) .s-hero__dot,
-.s-hero.is-manual[data-slide="1"] .s-hero__stop:nth-child(2) .s-hero__dot,
-.s-hero.is-manual[data-slide="2"] .s-hero__stop:nth-child(3) .s-hero__dot,
-.s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__dot,
-.s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__dot,
-.s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__dot {
-	background-size: 100% 100%;
-}
-
-.s-hero.is-manual[data-slide="0"] .s-hero__stop:nth-child(1) .s-hero__stop-name,
-.s-hero.is-manual[data-slide="1"] .s-hero__stop:nth-child(2) .s-hero__stop-name,
-.s-hero.is-manual[data-slide="2"] .s-hero__stop:nth-child(3) .s-hero__stop-name,
-.s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__stop-name,
-.s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__stop-name,
-.s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__stop-name {
-	font-weight: 700;
-}
-
-
-.s-hero.is-manual[data-slide="0"] .s-hero__rule:nth-child(1),
-.s-hero.is-manual[data-slide="1"] .s-hero__rule:nth-child(2),
-.s-hero.is-manual[data-slide="2"] .s-hero__rule:nth-child(3),
-.s-hero.is-manual[data-slide="3"] .s-hero__rule:nth-child(4),
-.s-hero.is-manual[data-slide="4"] .s-hero__rule:nth-child(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__rule:nth-child(6) {
+.s-hero.is-manual[data-slide="1"] .s-hero__rule:nth-child(1),
+.s-hero.is-manual[data-slide="2"] .s-hero__rule:nth-child(2),
+.s-hero.is-manual[data-slide="3"] .s-hero__rule:nth-child(3),
+.s-hero.is-manual[data-slide="4"] .s-hero__rule:nth-child(4),
+.s-hero.is-manual[data-slide="5"] .s-hero__rule:nth-child(5),
+.s-hero.is-manual[data-slide="6"] .s-hero__rule:nth-child(6) {
 	opacity: 1;
 }
 
@@ -443,86 +576,210 @@
 .s-hero.is-manual[data-slide="2"] .s-hero__seal:nth-of-type(3),
 .s-hero.is-manual[data-slide="3"] .s-hero__seal:nth-of-type(4),
 .s-hero.is-manual[data-slide="4"] .s-hero__seal:nth-of-type(5),
-.s-hero.is-manual[data-slide="5"] .s-hero__seal:nth-of-type(6) {
+.s-hero.is-manual[data-slide="5"] .s-hero__seal:nth-of-type(6),
+.s-hero.is-manual[data-slide="6"] .s-hero__seal:nth-of-type(7) {
 	opacity: .16;
 }
 
+.s-hero.is-manual[data-slide="0"] .s-hero__stop:nth-child(1) .s-hero__dot,
+.s-hero.is-manual[data-slide="1"] .s-hero__stop:nth-child(2) .s-hero__dot,
+.s-hero.is-manual[data-slide="2"] .s-hero__stop:nth-child(3) .s-hero__dot,
+.s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__dot,
+.s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__dot,
+.s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__dot,
+.s-hero.is-manual[data-slide="6"] .s-hero__stop:nth-child(7) .s-hero__dot {
+	background-size: 100% 100%;
+}
+
+.s-hero.is-manual[data-slide="0"] .s-hero__stop:nth-child(1) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="1"] .s-hero__stop:nth-child(2) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="2"] .s-hero__stop:nth-child(3) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="3"] .s-hero__stop:nth-child(4) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="4"] .s-hero__stop:nth-child(5) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="5"] .s-hero__stop:nth-child(6) .s-hero__stop-name,
+.s-hero.is-manual[data-slide="6"] .s-hero__stop:nth-child(7) .s-hero__stop-name {
+	font-weight: 700;
+}
+
+.s-hero.is-manual[data-slide="0"] .ss-title__tail { color: var(--tm0, var(--color-brand-grey)); }
+
+.s-hero.is-manual[data-slide="1"] .ss-title__tail { color: var(--tm1, var(--color-brand-grey)); }
+
+.s-hero.is-manual[data-slide="2"] .ss-title__tail { color: var(--tm2, var(--color-brand-grey)); }
+
+.s-hero.is-manual[data-slide="3"] .ss-title__tail { color: var(--tm3, var(--color-brand-grey)); }
+
+.s-hero.is-manual[data-slide="4"] .ss-title__tail { color: var(--tm4, var(--color-brand-grey)); }
+
+.s-hero.is-manual[data-slide="5"] .ss-title__tail { color: var(--tm5, var(--color-brand-grey)); }
+
+.s-hero.is-manual[data-slide="6"] .ss-title__tail { color: var(--tm6, var(--color-brand-grey)); }
+
+@media (min-width: 1025px) {
+
+	.s-hero.is-manual[data-slide="0"] .ss-title__tail { color: var(--tp0, var(--color-brand-grey)); }
+
+	.s-hero.is-manual[data-slide="1"] .ss-title__tail { color: var(--tp1, var(--color-brand-grey)); }
+
+	.s-hero.is-manual[data-slide="2"] .ss-title__tail { color: var(--tp2, var(--color-brand-grey)); }
+
+	.s-hero.is-manual[data-slide="3"] .ss-title__tail { color: var(--tp3, var(--color-brand-grey)); }
+
+	.s-hero.is-manual[data-slide="4"] .ss-title__tail { color: var(--tp4, var(--color-brand-grey)); }
+
+	.s-hero.is-manual[data-slide="5"] .ss-title__tail { color: var(--tp5, var(--color-brand-grey)); }
+
+	.s-hero.is-manual[data-slide="6"] .ss-title__tail { color: var(--tp6, var(--color-brand-grey)); }
+
+}
+
 /* WCAG 2.2.2 — the stop, and the courtesy freeze: a keyboard visitor who
-   lands on the vertical's link must not have it slide out from under them.
-   Only the link: focus on an arrow froze the whole band, so advancing looked
-   like stopping (founder, 2026-10-05). */
-.s-hero:has(.scene__pause:checked) :is(.s-hero__photo, .s-hero__item, .s-hero__rule, .s-hero__dot, .s-hero__stop-name, .s-hero__seal),
-.s-hero:has(.s-hero__link:focus-visible) :is(.s-hero__photo, .s-hero__item, .s-hero__rule, .s-hero__dot, .s-hero__stop-name, .s-hero__seal) {
+   lands on a link in the card must not have it slide out from under them.
+   Only the card's links: focus on a stop moves the band, it does not stop it
+   (founder, 2026-10-05). */
+.s-hero:has(.scene__pause:checked) *,
+.s-hero:has(.s-hero__link:focus-visible, .s-hero__vlink:focus-visible) * {
 	animation-play-state: paused;
 }
 
-/* One slide is 16.6667 % of the 36 s cycle. The next photograph dissolves in
-   over 4.1667 % (1.5 s) on top of the one showing, which stays whole beneath it
-   until it is covered — never two half-faded pictures. The last slide fades
-   OUT instead, over the first, which is back underneath by then. */
+/* One frame is 14.2857% of the 42 s cycle. The next photograph dissolves in
+   over 3.5714% (1.5 s) on top of the one showing, which stays whole beneath it
+   until it is covered — never two half-faded pictures. The last fades OUT
+   instead, over the «nosotros» ground. */
 @keyframes s-hero-photo {
 	0% { opacity: 0; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
-	4.1667%, 20.8333% { opacity: 1; }
-	20.8334%, 100% { opacity: 0; }
-}
-
-@keyframes s-hero-photo-lead {
-	0%, 20.8333% { opacity: 1; }
-	20.8334%, 99.9% { opacity: 0; }
-	100% { opacity: 1; }
+	3.5714%, 17.8571% { opacity: 1; }
+	17.8572%, 100% { opacity: 0; }
 }
 
 @keyframes s-hero-photo-last {
 	0% { opacity: 0; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
-	4.1667%, 16.6667% { opacity: 1; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
-	20.8333%, 100% { opacity: 0; }
+	3.5714%, 14.2857% { opacity: 1; animation-timing-function: cubic-bezier(.45, 0, .25, 1); }
+	17.8571%, 100% { opacity: 0; }
 }
 
-/* The caption leaves in 0.3 s as the next photograph starts to dissolve, and
-   the next one arrives once the picture is half way — one text at a time. */
 /* the seals cross-fade as one: the next comes in while the last goes */
 @keyframes s-hero-seal {
 	0% { opacity: 0; }
-	4.1667%, 16.6667% { opacity: .16; }
-	20.8333%, 100% { opacity: 0; }
+	3.5714%, 14.2857% { opacity: .16; }
+	17.8571%, 100% { opacity: 0; }
 }
 
+/* «nosotros»'s light and haze, on the same dissolve */
+@keyframes s-hero-us {
+	0% { opacity: 0; }
+	3.5714%, 14.2857% { opacity: 1; }
+	17.8571%, 100% { opacity: 0; }
+}
+
+/* «Filamento», drawn once per pass in the frame's 1.5–4 s: the spokes from
+   the centre (1.5–2.6 s), the rim (2.4–3.3 s), the bloom and the spill
+   swelling to 4 s, the cells last (3–4 s). Undrawn again only once the frame
+   has dissolved away. */
+@keyframes s-hero-spoke {
+	0%, 3.5714% { stroke-dashoffset: 1; }
+	6.1905%, 17.8571% { stroke-dashoffset: 0; }
+	17.8572%, 100% { stroke-dashoffset: 1; }
+}
+
+@keyframes s-hero-ring {
+	0%, 5.6429% { stroke-dashoffset: 1; }
+	7.8571%, 17.8571% { stroke-dashoffset: 0; }
+	17.8572%, 100% { stroke-dashoffset: 1; }
+}
+
+@keyframes s-hero-bloom {
+	0%, 5.6429% { opacity: 0; }
+	9.5238%, 17.8571% { opacity: .5; }
+	17.8572%, 100% { opacity: 0; }
+}
+
+@keyframes s-hero-spill {
+	0%, 5.2381% { opacity: 0; }
+	9.5238%, 17.8571% { opacity: 1; }
+	17.8572%, 100% { opacity: 0; }
+}
+
+@keyframes s-hero-cells {
+	0%, 7.1429% { opacity: 0; }
+	9.5238%, 17.8571% { opacity: .36; }
+	17.8572%, 100% { opacity: 0; }
+}
+
+/* The caption leaves in 0.3 s as the next photograph starts to dissolve, and
+   the next one arrives once the picture is well in — one text at a time. */
 @keyframes s-hero-item {
-	0%, 2.5% { opacity: 0; visibility: hidden; }
-	3.3333% { opacity: 1; visibility: visible; }
-	16.6667% { opacity: 1; visibility: visible; }
-	17.5% { opacity: 0; visibility: hidden; }
+	0%, 2.1429% { opacity: 0; visibility: hidden; }
+	2.8571% { opacity: 1; visibility: visible; }
+	14.2857% { opacity: 1; visibility: visible; }
+	15% { opacity: 0; visibility: hidden; }
 	100% { opacity: 0; visibility: hidden; }
 }
 
 @keyframes s-hero-fill {
 	0% { background-size: 0% 100%; }
-	16.6667% { background-size: 100% 100%; }
-	16.6668%, 100% { background-size: 0% 100%; }
+	14.2857% { background-size: 100% 100%; }
+	14.2858%, 100% { background-size: 0% 100%; }
 }
 
 @keyframes s-hero-name {
 	0% { font-weight: 700; }
-	16.6667%, 100% { font-weight: 500; }
+	14.2857%, 100% { font-weight: 500; }
+}
+
+/* The card follows the photograph: it changes scale 0.15–0.7 s into the
+   frame that leaves or enters «nosotros». Its 0 % is 0.7 s into «nosotros». */
+@keyframes s-hero-deck {
+	0%, 12.9762% { height: var(--deck-us, auto); }
+	14.2857%, 98.6905% { height: var(--deck-v, auto); }
+	100% { height: var(--deck-us, auto); }
+}
+
+@keyframes s-hero-tail {
+	0% { color: var(--tm0, var(--color-brand-grey)); }
+	12.8571% { color: var(--tm0, var(--color-brand-grey)); }
+	14.2857% { color: var(--tm1, var(--color-brand-grey)); }
+	27.1429% { color: var(--tm1, var(--color-brand-grey)); }
+	28.5714% { color: var(--tm2, var(--color-brand-grey)); }
+	41.4286% { color: var(--tm2, var(--color-brand-grey)); }
+	42.8571% { color: var(--tm3, var(--color-brand-grey)); }
+	55.7143% { color: var(--tm3, var(--color-brand-grey)); }
+	57.1429% { color: var(--tm4, var(--color-brand-grey)); }
+	70% { color: var(--tm4, var(--color-brand-grey)); }
+	71.4286% { color: var(--tm5, var(--color-brand-grey)); }
+	84.2857% { color: var(--tm5, var(--color-brand-grey)); }
+	85.7143% { color: var(--tm6, var(--color-brand-grey)); }
+	98.5714% { color: var(--tm6, var(--color-brand-grey)); }
+	100% { color: var(--tm0, var(--color-brand-grey)); }
+}
+
+@keyframes s-hero-tail-photo {
+	0% { color: var(--tp0, var(--color-brand-grey)); }
+	12.8571% { color: var(--tp0, var(--color-brand-grey)); }
+	14.2857% { color: var(--tp1, var(--color-brand-grey)); }
+	27.1429% { color: var(--tp1, var(--color-brand-grey)); }
+	28.5714% { color: var(--tp2, var(--color-brand-grey)); }
+	41.4286% { color: var(--tp2, var(--color-brand-grey)); }
+	42.8571% { color: var(--tp3, var(--color-brand-grey)); }
+	55.7143% { color: var(--tp3, var(--color-brand-grey)); }
+	57.1429% { color: var(--tp4, var(--color-brand-grey)); }
+	70% { color: var(--tp4, var(--color-brand-grey)); }
+	71.4286% { color: var(--tp5, var(--color-brand-grey)); }
+	84.2857% { color: var(--tp5, var(--color-brand-grey)); }
+	85.7143% { color: var(--tp6, var(--color-brand-grey)); }
+	98.5714% { color: var(--tp6, var(--color-brand-grey)); }
+	100% { color: var(--tp0, var(--color-brand-grey)); }
 }
 
 /* #315's rule, applied to the loudest motion on the site: someone who asked
-   the system for less does not get a slideshow. The first photograph stays,
-   still, and the other five never appear. */
+   the system for less does not get a slideshow. «nosotros» stays, lit and
+   still, and the photographs never appear. */
 @media (prefers-reduced-motion: reduce) {
-	.s-hero__seal,
-	.s-hero__rule,
-	.s-hero__photo,
-	.s-hero__item,
-	.s-hero__dot,
-	.s-hero__stop-name {
+	.s-hero--home * {
 		animation: none;
 	}
-	.s-hero__stop:first-child .s-hero__dot { background-size: 100% 100%; }
-	.s-hero__stop:first-child .s-hero__stop-name { font-weight: 700; }
-	/* Nothing moves, so the STOP has nothing to stop and goes — but the
-	   arrows are the only way to reach the other five, and the named bars the
-	   only thing saying which one you are on. They stay. */
+	/* Nothing moves, so the STOP has nothing to stop and goes — but the stops
+	   are the only way to the six photographs. They stay. */
 	.s-hero--home .scene__ctl {
 		display: none;
 	}
@@ -535,17 +792,11 @@
 	.s-hero__card {
 		padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
 	}
-	.s-hero__pitch-item {
-		margin-top: 12px;
-	}
 	.s-hero__ticker {
 		margin: var(--space-3) 0 var(--space-6);
 	}
 	.s-hero__dots {
 		gap: var(--space-3);
-	}
-	.s-hero__meta {
-		font-size: 13px;
 	}
 	/* The heading gives back what the card takes. At the page's 64px the
 	   fixed half would still outweigh the moving half by two to one; at 48
@@ -558,11 +809,24 @@
 		font-size: 30px;
 		line-height: 38px;
 	}
+	.s-hero__pitch-item {
+		margin-top: 12px;
+		line-height: 24px;
+	}
+	.s-hero__verticals ul {
+		grid-template-columns: repeat(3, auto);
+		justify-content: start;
+		column-gap: var(--space-6);
+	}
+	.s-hero__vlink {
+		font-size: 16px;
+		line-height: 24px;
+	}
 }
 
 @media (min-width: 1025px) {
 	/* desktops: the whole band is the photograph, the copy on its veil, the
-	   card back in the copy's flow */
+	   card in the band's lower right corner */
 	.s-hero__card {
 		position: absolute;
 		z-index: 2;
@@ -572,7 +836,22 @@
 		/* standing on the rail: its track, its gap and one line of names */
 		bottom: calc(var(--space-3) + var(--space-6) + var(--space-2));
 		translate: none;
-		width: 34rem;
+		/* the name sets the width, on one line; the line under it follows */
+		width: auto;
+		min-width: 34rem;
+	}
+	/* «nosotros»: six rows, each the vertical's whole name with its colour as
+	   the card's own left rule */
+	.s-hero__verticals ul {
+		grid-template-columns: 1fr;
+	}
+	.s-hero__vname--long { display: inline; }
+	.s-hero__vname--short { display: none; }
+	.s-hero__vrule {
+		position: absolute;
+		left: 0;
+		height: 16px;
+		margin: var(--space-1) 0 0;
 	}
 	/* the rail along the band's foot, from the column's left edge to its right;
 	   like the card, it is left out of the rule below that lifts the copy */
@@ -584,13 +863,13 @@
 		bottom: var(--space-3);
 		margin: 0;
 	}
-	.s-hero__dots {
-		margin-right: var(--space-3);
-	}
 	.s-hero {
-		/* the foot is the card's and the rail's: the copy centres in what is left
-		   above them */
-		padding: calc(var(--header-h) + var(--space-5)) 0 calc(var(--space-3) + var(--space-6) + var(--space-2) + 13.5rem);
+		/* The foot is the card's and the rail's: the copy centres in what is
+		   left above them. The card's tallest state (`--card-h`, measured by
+		   the script; the index's six rows until then) plus 32 px is kept
+		   clear — if copy, card and gap do not fit, the band grows, the card
+		   never rises into the lead (brief §9.7). */
+		padding: calc(var(--header-h) + var(--space-5)) 0 calc(var(--space-3) + var(--space-6) + var(--space-2) + var(--card-h, 228px) + var(--space-5));
 		justify-content: center;
 	}
 	.s-hero__stage {
@@ -620,18 +899,22 @@
 	.s-hero__scrim {
 		background-image: var(--hero-foot), var(--hero-spot), var(--hero-scrim-photo);
 	}
-	/* desktops: under the copy, leaving by the left margin, as on the vertical pages */
-	.s-hero__seal {
-		left: -120px;
-		top: 330px;
-		bottom: auto;
-		width: 460px;
+	/* The cube stands at the band's foot, 24 px up, as tall as 86 % of the
+	   band under the header allows — and no wider than the margin left of
+	   the column minus 40 px, so it never reaches the copy (brief §9.6). */
+	.s-hero__mark {
+		--cube-h: min(
+			calc((100svh - var(--header-h)) * 0.86),
+			max(120px, calc((max(20px, calc((100vw - var(--container-max)) / 2 + 20px)) - var(--space-6)) / 0.602))
+		);
+		top: auto;
+		bottom: calc(var(--space-4) - var(--cube-h) * 0.07);
 	}
-	/* the card in the band's lower right corner, apart from the heading, as a
-	   caption on the photograph (founder, 2026-10-06: "lo separa del título
-	   principal y le da más protagonismo"), standing on the chapter rail.
-	   The column stops being the containing block so the card and the rail can take
-	   the band's corner; what stays in it is lifted over the photograph */
+	.s-hero__lines { stroke-width: 1.4; }
+	.s-hero__bloom { stroke-width: 4.2; }
+	.s-hero__cells { stroke-width: .7; }
+	/* The column stops being the containing block so the card and the rail can
+	   take the band's corner; what stays in it is lifted over the photograph */
 	.s-hero__inner {
 		position: static;
 	}
@@ -641,7 +924,17 @@
 	}
 	.s-hero h1 {
 		font-size: 56px;
-		line-height: 64px;
+		line-height: 1.16;
+	}
+	/* the tail on its own line, the head's register above it */
+	.ss-title__tail {
+		display: block;
+		margin-top: .04em;
+		color: var(--tp0, var(--color-brand-grey));
+		animation-name: s-hero-tail-photo;
+	}
+	.s-hero__kicker {
+		margin-top: 36px;
 	}
 	.s-hero__name {
 		font-size: 34px;
@@ -649,6 +942,26 @@
 	}
 	.s-hero__arrow {
 		font-size: 26px;
+	}
+}
+
+/* A short desktop window (the founder looks at the home in one): the index
+   folds to two columns of the short names, so the card stays clear of the
+   lead (brief §9.7). */
+@media (min-width: 1025px) and (max-height: 719px) {
+	.s-hero__verticals ul {
+		grid-template-columns: 1fr 1fr;
+		column-gap: var(--space-4);
+	}
+	.s-hero__vname--long { display: none; }
+	.s-hero__vname--short { display: inline; }
+	.s-hero__vrule {
+		position: static;
+		height: 14px;
+		margin: 0 10px 0 0;
+	}
+	.s-hero {
+		padding-bottom: calc(var(--space-3) + var(--space-6) + var(--space-2) + var(--card-h, 166px) + var(--space-5));
 	}
 }
 
@@ -737,13 +1050,10 @@
 	.s-cf__feature { flex: 1; }
 }
 
-/* ═══ ÁREAS — six ROWs (#453) ═══ */
-/* Content links (#273): the sitewide dashed convention reaches the home.
-   Every ground the home draws on is now paper, so the links are ink on all
-   of them — the dark band this rule used to also cover is gone (#457). */
+/* Content links (#273): the sitewide dashed convention reaches the home. */
 .s-hero__kicker a,
-.s-hero__body a,
-.s-areas__header a {
+.s-cf__desc a,
+.s-how a {
 	color: inherit;
 	text-decoration: underline;
 	text-decoration-style: dashed;
@@ -753,281 +1063,78 @@
 }
 
 .s-hero__kicker a:hover,
-.s-hero__body a:hover,
-.s-areas__header a:hover,
+.s-cf__desc a:hover,
+.s-how a:hover,
 .s-hero__kicker a:focus-visible,
-.s-hero__body a:focus-visible,
-.s-areas__header a:focus-visible {
+.s-cf__desc a:focus-visible,
+.s-how a:focus-visible {
 	text-decoration-style: solid;
 	text-decoration-color: currentColor;
 }
 
-.s-areas {
-	padding: var(--rhythm-section) 0;
+/* The logos open the page under the band (#580): the band's foot and the
+   row are one step apart, not a section's rhythm on each side. */
+.s-hero--home + .ref-banner--section {
+	padding: var(--space-5) 0;
 }
 
-.s-areas__inner {
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-6);
+/* ═══ CÓMO TRABAJAMOS (#580, brief §3.4) ═══
+   Seven items, each a bold declarative phrase and one sentence. No icons, no
+   numbering, no cards: the phrase in a fixed left track and the sentence
+   beside it, so the seven phrases read down one edge. One column below
+   768 px. The column is the page's (#304) — the two tracks share it. */
+.s-how {
+	padding: var(--rhythm-section) 0 var(--space-5);
 }
 
-.s-areas__header .text-sub {
-	margin-top: var(--widget-spacing);
-}
-
-.s-areas__rows {
-	display: flex;
-	flex-direction: column;
-	/* no gap (#453): the hairline above each row IS the separator, and a gap
-	   on top of it draws two lines where the design has one */
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-/* ═══ ROW (#453) ═══ — see the chrome rule in theme.css.
-   Was #273's hybrid: white ground, hairline all round, 4px coloured left
-   border and a radius, at rest, six times. That is a card, and six cards are
-   a grid pretending to be a list. Now: a hairline above, and the vertical's
-   colour as a left rule that appears on hover, focus and current. Nothing at
-   rest.
-
-   The grid is `40px 1fr auto` with two rows, so the cube sits in a gutter
-   whose width does not depend on the title, the title and the claim share one
-   left edge down all six rows, and the arrow is pinned to the right. Equal
-   line counts + a fixed gutter = equal row heights, which is what the layout
-   gate asserts at 390, 768 and 1440. */
-.area-row__link {
+.s-how__list {
 	display: grid;
-	grid-template-columns: 40px 1fr auto;
-	column-gap: 18px;
-	row-gap: 2px;
+	gap: var(--space-4);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.s-how__list li {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-2) var(--space-5);
 	align-items: baseline;
-	border-top: var(--row-rule) solid var(--color-border);
-	border-left: var(--row-accent) solid transparent;
-	padding: 18px var(--space-1) 18px var(--space-3);
-	text-decoration: none;
+}
+
+.s-how__list p {
+	margin: 0;
 	color: var(--color-primary);
-	transition: background-color 0.15s, border-color 0.15s;
-}
-
-/* the first row's hairline would double the section header's own edge */
-.s-areas__rows > .area-row:first-child .area-row__link {
-	border-top-color: transparent;
-}
-
-.area-row__link:hover,
-.area-row__link:focus-visible {
-	background: color-mix(in srgb, var(--cc, var(--color-primary)) 5%, transparent);
-	border-left-color: var(--cc, var(--color-primary));
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.area-row__link { transition: none; }
-}
-
-.area-row__die {
-	grid-column: 1;
-	grid-row: 1 / 3;
-	align-self: center;
-	width: 40px;
-	height: auto;
-}
-
-.area-row__title {
-	grid-column: 2;
-	grid-row: 1;
 	font-family: var(--font-family);
-	font-size: 20px;
-	font-weight: 600;
-	line-height: 1.25;
-}
-
-/* Both names ship and the breakpoint picks one, exactly as the menu does
-   (#428) — `display:none` keeps the unused one out of the a11y tree too, so
-   a screen reader reads one title, not two. */
-.area-row__title--short { display: none; }
-
-.area-row__claim {
-	grid-column: 2;
-	grid-row: 2;
-	/* 18px, not 16 (#481). The column is the page's one measure and does not
-	   move — so at one edge, SMALLER type buys MORE characters per line, and
-	   this claim at 16px was running 82 of them: the widest running text on
-	   the site and the only body copy past the conventional 45-75. Type size
-	   is the only lever that shortens a line without inventing a second edge,
-	   which theme.css forbids in as many words (#304). 18px lands it at 73.
-	   It also finishes what the design review started: the claim used to be
-	   15px, smaller than the footer's own links, which is hierarchy upside
-	   down. The step to the 20px/600 title is now weight and ink, not size
-	   alone. */
-	font-size: 18px;
+	font-size: var(--text-body);
 	line-height: 1.45;
-	color: var(--color-text-muted);
+	text-wrap: pretty;
 }
 
-/* A pseudo-element, not a span (#453). `aria-hidden` keeps a decorative arrow
-   out of the accessibility tree but not out of the DOM, and copy-baseline reads
-   the DOM: the glyph landed in tests/copy-baseline/home.txt as if it were copy.
-   Nothing that is not language belongs in a file that freezes the language. */
-.area-row__link::after {
-	content: "→";
-	grid-column: 3;
-	grid-row: 1 / 3;
-	align-self: center;
-	font-family: var(--font-family-mono);
-	font-size: 18px;
-	color: var(--color-text-muted);
-	transition: color 0.15s;
+.s-how__label p {
+	font-weight: 600;
 }
 
-.area-row__link:hover::after,
-.area-row__link:focus-visible::after {
-	color: var(--cc, var(--color-primary));
+.s-how__body p {
+	font-weight: 300;
 }
 
-@media (prefers-reduced-motion: reduce) {
-	.area-row__link::after { transition: none; }
-}
-
-/* 390px leaves ~270px for the text column: "CDN, WAF y seguridad edge" is two
-   lines there and a two-line title un-equalises the rows. Same 700px switch as
-   the menu, and the same six names. */
-@media (max-width: 700px) {
-	.area-row__title--long { display: none; }
-	.area-row__title--short { display: inline; }
-	.area-row__link { column-gap: 14px; padding-left: 12px; }
-	.area-row__title { font-size: 18px; }
-	/* stays 15px below 700 (#481). The measure problem is a WIDE-viewport one —
-	   the column is 880-1040px there and the claim ran 82 characters. At 390
-	   the column is the phone, the claim already reads at 40-odd, and 16px
-	   wraps two of the six claims onto a second line, which un-equalises the
-	   rows and is the exact defect #453 removed. G1 caught it. */
-	.area-row__claim { font-size: 15px; }
+.s-how__list code {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-family: var(--font-family-mono), monospace;
+	font-size: .9em;
 }
 
 @media (min-width: 768px) {
-	.s-areas__inner { gap: 34px; }
-
-	.s-areas__header {
-		max-width: none;
+	.s-how__list li {
+		grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
 	}
-
-	/* the section title reads as one line — it wrapped inside the old
-	   two-column header and the break looked like a layout fault (#273).
-	   Its size is now the portal-wide section-heading size (theme.css). */
-	.s-areas__header h2 {
-		white-space: nowrap;
-	}
-
 }
 
-/* The first section after the band: every other section has the rhythm on
-   both sides, so two of them stand twice the rhythm apart; the one under the
-   band had only its own and looked pasted onto it (#562). */
-.s-hero--home + section {
-	padding-top: calc(var(--rhythm-section) * 2);
-}
-
-/* ═══ LA PRUEBA — the site as its own evidence (#304) ═══
-   Statement block: the claim is checkable, so it gets the weight. */
-.s-proof {
-	padding: var(--rhythm-section) 0;
-}
-
-/* deliberately NOT a statement box: it would sit directly on top of the
-   mantra, and two tinted boxes stacked read as a pile rather than as two
-   ideas. The claim carries its own weight — it is checkable. */
-.s-proof__inner {
-	padding: 0;
-}
-
-.s-proof__inner h2 {
-	margin-bottom: var(--space-3);
-}
-
-/* body prose, like every other paragraph: it inherited the 16px base on phones */
-.s-proof__inner p {
-	font-size: var(--text-body);
-	line-height: 1.45;
-}
-
-.s-proof__inner p + p {
-	margin-top: var(--space-3);
-}
-
-/* the deconstruction die, floated so the heading wraps around it */
-.s-proof__die {
-	float: right;
-	width: 72px;
-	height: auto;
-	margin: 0 0 var(--space-3) var(--space-4);
-}
-
-/* the gate's thresholds as the console holds them (#562): an instrument, so
-   it takes the column and speaks in the machine's voice — dark is the console's
-   alone. The four rows are read from lighthouserc.json. */
-.s-gate {
-	clear: both;
-	margin-top: var(--space-5);
-	background: var(--color-console);
-	border-radius: var(--radius);
-	overflow: hidden;
-	font-family: var(--font-family-mono);
-	font-size: 14px;
-	line-height: 1.6;
-}
-
-.s-gate__bar {
-	margin: 0;
-	padding: var(--space-2) var(--space-4);
-	background: var(--color-console-bar);
-	color: var(--color-console-dim);
-}
-
-.s-gate__rows {
-	display: grid;
-	gap: var(--space-1);
-	margin: 0;
-	padding: var(--space-3) var(--space-4) var(--space-4);
-	list-style: none;
-}
-
-.s-gate__rows li {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto auto;
-	gap: var(--space-4);
-	align-items: baseline;
-	color: var(--color-console-ink);
-}
-
-.s-gate__score {
-	color: var(--color-console-ok);
-	font-weight: 500;
-	font-variant-numeric: tabular-nums;
-	text-align: right;
-}
-
-.s-gate__level {
-	color: var(--color-console-dim);
-}
-
-/* the house dashed link convention reaches the new blocks */
-.s-cf__desc a,
-.s-proof__inner a {
-	color: inherit;
-	text-decoration: underline;
-	text-decoration-style: dashed;
-	text-decoration-thickness: 1px;
-	text-underline-offset: 4px;
-	text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
-}
-
-.s-cf__desc a:hover,
-.s-proof__inner a:hover,
-.s-cf__desc a:focus-visible,
-.s-proof__inner a:focus-visible {
-	text-decoration-style: solid;
-	text-decoration-color: currentColor;
+/* the mantra follows the last item, «Dicho y hecho», directly */
+.s-how + .mantra-wrap {
+	padding-top: 0;
 }

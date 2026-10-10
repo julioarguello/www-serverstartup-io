@@ -1,0 +1,43 @@
+:root {
+	/* Faces the site gets from Astro's <Font> (Google Fonts); declared here for designs. */
+	--font-sans: "Alexandria";
+	--font-mono: "JetBrains Mono";
+	--font-signature: "CMU Serif";
+
+	/* Direction for the openings, approved 2026-10-08 — one dark stage for the home and the six verticals. */
+	--ss-band: #232724;              /* the stage: the band behind every opening */
+	--ss-band-haze: #A1ABAA;         /* the haze at its far edge */
+	--ss-veil: rgba(35, 39, 36, 0.78); /* under the copy, over a photograph */
+	--ss-light: #F7F5F0;             /* light, when it is not a vertical colour: paper white, never gold */
+	--ss-ink-on-band: #FFFFFF;
+	--ss-muted-on-band: #A8A49C;     /* the brand voice on the band: graphite grey, 6.1:1 */
+
+	/* The six verticals: CMS colour, and the tint used for TEXT on the band (each >= 4.5:1 on #232724). */
+	--ss-cdn: #F38020;   --ss-cdn-on-band: #F38020;
+	--ss-int: #EA4335;   --ss-int-on-band: #EC5D51;
+	--ss-ia: #6B4FBB;    --ss-ia-on-band: #9582CE;
+	--ss-gf: #3E7D50;    --ss-gf-on-band: #669874;
+	--ss-ec: #008FD3;    --ss-ec-on-band: #0F95D5;
+	--ss-bd: #1D4E89;    --ss-bd-on-band: #708FB4;
+}
+
+/* The opening band and its two-voice title. */
+.ss-stage {
+	background: var(--ss-band);
+	color: var(--ss-ink-on-band);
+}
+.ss-title {
+	font-family: var(--font-sans), sans-serif;
+	font-weight: 700;
+	font-size: clamp(34px, 4.4vw, 64px);
+	line-height: 1.08;
+	color: var(--ss-ink-on-band);
+}
+.ss-title__tail {
+	font-family: var(--font-signature), serif;
+	font-style: italic;
+	font-weight: 400;
+	font-size: 1.13em;
+	word-spacing: -0.08em;
+	color: var(--ss-tail, var(--ss-muted-on-band));
+}

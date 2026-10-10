@@ -133,11 +133,25 @@ export default defineConfig({
 				JSON.stringify("/preview/{collection}/{id}"),
 		},
 		build: {
-			// 0 = never inline scripts into the HTML. The middleware CSP is
+			// Never inline a script into the HTML. The middleware CSP is
 			// script-src 'self' (no hashes, no unsafe-inline), so any script
 			// Vite inlines under the default 4 KB threshold is silently blocked
 			// by the browser — menu dialog and phone decode died this way.
-			assetsInlineLimit: 0,
+			// Nor any other asset (images, fonts): same as the `0` this was.
+			//
+			// Stylesheets under 4 KB ARE inlined (#568): the CSP allows inline
+			// styles, and on a vertical page four of its seven render-blocking
+			// sheets were component sheets under 2 KB, each a round-trip
+			// Lighthouse's simulation charged to the LCP. Astro's
+			// `inlineStylesheets: 'auto'` reads this same function. Every sheet
+			// this lets in is free of the syntax the W3C Nu checker rejects
+			// inside HTML (`container-type`, `field-sizing`, `vector-effect`),
+			// which is what sank inlining them all (#568, 2026-10-06). One sheet
+			// under the limit stays external on purpose: Astro's own
+			// `@layer astro.images` ships `object-position` pairs such as
+			// `bottom top`, which Nu rejects once they sit in the HTML.
+			assetsInlineLimit: (filePath, content) =>
+				filePath.endsWith(".css") && content.length < 4096 && !content.includes("@layer astro.images"),
 		},
 	},
 });

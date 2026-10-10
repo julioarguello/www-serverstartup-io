@@ -93,6 +93,23 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	</p>
 </aside>
 
+<script>
+	// Give the mantra its face as it approaches (see `.mantra.is-near`). No
+	// observer, no wait: the face is applied at once.
+	const mantras = document.querySelectorAll<HTMLElement>(".mantra");
+	if (!("IntersectionObserver" in window)) mantras.forEach((m) => m.classList.add("is-near"));
+	else {
+		const io = new IntersectionObserver((entries) => {
+			for (const e of entries) {
+				if (!e.isIntersecting) continue;
+				e.target.classList.add("is-near");
+				io.unobserve(e.target);
+			}
+		}, { rootMargin: "150% 0px" });
+		mantras.forEach((m) => io.observe(m));
+	}
+</script>
+
 <style is:global>
 	/* the house box: left rule + 4% ink tint, same pattern and rhythm as
 	   .s-partner (service.css) — the signature sits inside it instead of
@@ -108,14 +125,24 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		background: var(--color-tint);
 	}
 
+	/* The face arrives with the mantra, not with the page (#568). Declared
+	   up front, the three Computer Modern cuts were requested while the
+	   first screen loaded, and Lighthouse's simulation charged them to every
+	   page's LCP — the mantra sits at the page's foot. The text is the same
+	   from the start, laid out in the fallback serif; the script below gives
+	   it its face once it is within a screen and a half of the viewport. */
 	.mantra__eq {
 		margin: 0;
-		font-family: "CMU Serif", "Latin Modern Roman", "Times New Roman", serif;
+		font-family: "Latin Modern Roman", "Times New Roman", serif;
 		font-size: 27px;
 		line-height: 40px;
 		font-weight: 400;
 		font-style: italic;
 		color: var(--color-primary, #1e1e1e);
+	}
+
+	.mantra.is-near .mantra__eq {
+		font-family: "CMU Serif", "Latin Modern Roman", "Times New Roman", serif;
 	}
 
 	.mantra__n {

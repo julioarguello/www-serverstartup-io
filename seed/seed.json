@@ -3646,7 +3646,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We cache down to the `HTML`, tune `WAF` and bot rules on your traffic, run logic in `Workers` and keep the whole account in `Terraform`."
+									"text": "Caching down to the `HTML`, `WAF` and bot rules tuned to your traffic, logic in `Workers`, the whole account in `Terraform`."
 								}
 							]
 						},
@@ -3679,7 +3679,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We never start from zero. Each stack already has its *framework*, in `Quarkus`, `Spring Boot` or `Cloud Run`. Whoever designs it runs it."
+									"text": "Never from zero: each stack already has its *framework*, in `Quarkus`, `Spring Boot` or `Cloud Run`. Whoever designs it runs it."
 								}
 							]
 						},
@@ -3701,7 +3701,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Data you can trust, in the cloud or in your own data centre. Model first, `dbt` on the analytical and the operational side, tests on every load."
+									"text": "Data you can trust, in the cloud or on-premises. Model first, `dbt` for analytics and operations, tests on every load."
 								}
 							]
 						}

@@ -215,6 +215,20 @@ export const HOME_PHOTO: Record<FaceKey, HomePhoto> = {
 };
 export const HOME_PHOTO_SIZES = "100vw";
 
+/**
+ * The home title's tail, per vertical (#580, brief §3.2): the on-band tint where the h1 stands on the
+ * flat band (phones, tablets) and the lift it needs over that vertical's photograph (desktops). The
+ * values are theme.css tokens; this is only which one each face takes.
+ */
+export const HERO_TAIL: Record<FaceKey, { band: string; photo: string }> = {
+	cdn: { band: "var(--color-tail-cdn)", photo: "var(--color-tail-cdn-photo)" },
+	int: { band: "var(--color-tail-int)", photo: "var(--color-tail-int-photo)" },
+	ia: { band: "var(--color-tail-ia)", photo: "var(--color-tail-ia-photo)" },
+	gf: { band: "var(--color-tail-gf)", photo: "var(--color-tail-gf-photo)" },
+	ec: { band: "var(--color-tail-ec)", photo: "var(--color-tail-ec-photo)" },
+	bd: { band: "var(--color-tail-bd)", photo: "var(--color-tail-bd-photo)" },
+};
+
 /** A home photograph's 1320 px file and its srcset. */
 export function homePhotoSources(photo: HomePhoto): { src: string; srcset: string } {
 	const src = `${photo.stem}.webp`;

@@ -996,7 +996,9 @@ console.log("── the hero band: ink over the plates");
 		const page = await browser.newPage();
 		await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
 		await page.goto(BASE + "/", { waitUntil: "networkidle2", timeout: 60000 });
-		await page.evaluate(freeze, 0);
+		// frame 1, the first photograph: frame 0 is «nosotros» since #580, whose card is the
+		// index of the six verticals and carries no pitch line to plant on
+		await page.evaluate(freeze, 1);
 		await sleep(SETTLE_MS);
 		await page.addStyleTag({ content: ".s-hero__pitch-item { color: #3A3A3A !important; }" });
 		const boxes = await page.evaluate(readBoxes, TEXT_SELECTOR);

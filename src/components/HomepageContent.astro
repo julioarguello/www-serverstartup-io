@@ -29,7 +29,7 @@ import MantraCloser from "./MantraCloser.astro";
 import { FACE_BY_SLUG } from "../utils/nav";
 import { getUiLabels } from "../utils/ui-labels";
 import { excerptHtml } from "../utils/excerpt";
-import { HOME_PHOTO, HOME_PHOTO_SIZES, homePhotoSources, sortByVoyage, type HomePhoto } from "../utils/hero-art";
+import { HERO_TAIL, HOME_PHOTO, HOME_PHOTO_SIZES, homePhotoSources, sortByVoyage, type HomePhoto } from "../utils/hero-art";
 
 // Whitespace-safe link mark: EmDash's default renderer inserts a space
 // before punctuation that follows a link (#273 — the hero is link-heavy)
@@ -102,12 +102,11 @@ const frames = heroSlides.length + 1;
 
 // The tail's colour per frame, as custom properties the clock's keyframes
 // read: `--tm*` on the flat band (phones, tablets), `--tp*` on the
-// photograph (desktops). From theme.css, keyed by face — never a copy of the
-// palette here.
+// photograph (desktops). theme.css tokens, keyed by face in HERO_TAIL —
+// never a copy of the palette here.
 const tailVars = [
 	"--tm0:var(--color-brand-grey);--tp0:var(--color-brand-grey)",
-	...heroSlides.map((s, i) =>
-		`--tm${i + 1}:var(--color-tail-${s.face});--tp${i + 1}:var(--color-tail-${s.face}-photo)`),
+	...heroSlides.map((s, i) => `--tm${i + 1}:${HERO_TAIL[s.face].band};--tp${i + 1}:${HERO_TAIL[s.face].photo}`),
 ].join(";");
 
 // «Cómo trabajamos» (#580, brief §3.4): seven items, a bold declarative

@@ -319,7 +319,8 @@
 	   failed to load — and the real face runs 47 px further right, over the
 	   bridge's and the museum's brighter sky. Integration #FFA89D → #FFADA2
 	   and greenfield #82B58F → #8ABD97 hold 4.5:1 on that sky in both
-	   locales (.design-sync/verify/contrast.cjs, 1440 × 900). */
+	   locales (.design-sync/verify/contrast.cjs, 1440 × 900).
+	   Mapped to the faces in HERO_TAIL (src/utils/hero-art.ts). */
 	--color-tail-cdn: #F38020;
 	--color-tail-int: #EC5D51;
 	--color-tail-ia: #9582CE;
@@ -428,12 +429,13 @@
 
 	   The accent colour is a STATE on a ROW and a fixed edge on a PANEL. It is
 	   not decoration six times over at rest — that was how the areas block
-	   ended up shouting six colours at a reader who had not asked yet. */
+	   ended up shouting six colours at a reader who had not asked yet. ROW has
+	   no list on the site since #580 (the home's areas left), so its two
+	   tokens left with it: declare `--row-rule` (1px) and `--row-accent` (4px)
+	   again with the next one. */
 	--block-rule: 3px;         /* BLOCK's left rule */
 	--panel-border: 1px;       /* PANEL's hairline */
 	--panel-edge: 4px;         /* PANEL's accent top edge */
-	--row-rule: 1px;           /* ROW's hairline above */
-	--row-accent: 4px;         /* ROW's left rule — hover / focus / current only */
 
 	/* ── The opening (#456) ──────────────────────────────────────────────
 	   Every page type starts the same way: the fixed header's own height,

@@ -1,33 +1,43 @@
 Saltar al contenido
 ~Server Startup
 EN
-Ingeniería de software, de la arquitectura a producción
+Ingeniería de software,
+de la arquitectura a producción
 Más de veinte años en comercio electrónico, integración de sistemas y datos.
 Partners oficiales de Cloudflare desde 2019.
-CDN, WAF y seguridad edge→
-Lo primero que ve quien llega: el borde, defendido.
+CDN, WAF y seguridad edge
+Integración de sistemas
+Inteligencia artificial
+Desarrollo greenfield
+Comercio electrónico
+Big Data & Cloud Analytics
+nosotros
 cdn y waf
 integración
 ia
 greenfield
 comercio
 big data
-Áreas de especialización
-Comercio electrónico
-Ampliar SAP Commerce es fácil; sobrevivir a la actualización, no.
-Integración de sistemas
-Un guante, no un martillo: lo que planificamos es lo que ejecutamos.
-Big Data & Cloud Analytics
-Montar un flujo de datos es rápido; que aguante años, no.
-CDN, WAF y seguridad edge
-Partners de Cloudflare desde 2019, casi siempre ante una tienda.
-Desarrollo greenfield
-El código no es el producto; lo que sigue vivo años después, sí.
-AI
-Inteligencia artificial
-El agente propone, el ingeniero dispone. La IA es un medio.
-Con quién hemos trabajado
 Ver todas las referencias
+Cómo trabajamos
+Los mismos ingenieros, de principio a fin.
+Quien diseña tu sistema lo lleva a producción. Y cada mañana mira sus alertas.
+Primero el contrato.
+Cada interfaz se acuerda y se versiona antes que el código que la cumple (contract first).
+La configuración es código.
+Permisos y entornos están en Terraform, con historial y revisión. Nada vive solo en la cabeza de alguien.
+Desarrollo guiado por especificación (SDD).
+Fijamos qué debe hacer y cómo se comprueba antes de generar una línea, con las reglas de tu negocio escritas y versionadas. Así el tiempo va donde rinde la experiencia, al diseño y a la revisión. Cuando un test falla, arreglamos el código, no el test.
+Nada se despliega en rojo.
+Cada cambio pasa tests, análisis estático y escaneo de seguridad en CI/CD antes de llegar a producción. Allí, trazas y métricas con OpenTelemetry.
+Si un SaaS ya lo resuelve, no lo construimos.
+Preferimos perder un proyecto a mantener software que sobra.
+Dicho y hecho.
+Lo que empezamos, lo terminamos. Cada día nos ocupamos de que el proyecto vaya bien, porque en él va nuestra palabra.
+1 equipo =
+6 verticales = Ø
+0
+traspasos
 Partner oficial de Cloudflare
 Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.
 CDN
@@ -37,26 +47,6 @@ Reglas escritas para tu tráfico y acceso sin VPN.
 Workers
 Lógica en el borde, sin servidores que mantener.
 Descubre más sobre Cloudflare
-Calidad y rendimiento
-Nuestro oficio es la calidad y el rendimiento donde salen caros: procesos críticos y volúmenes grandes. El pico de campaña, el catálogo que hay que reindexar, la integración que tiene que cerrar el día.
-Esta web es una muestra pequeña de la misma disciplina, aplicada a nuestro propio escaparate. Ninguna versión se publica si el rendimiento baja de 95, o si accesibilidad, buenas prácticas y SEO no dan 100: el control corre en cada cambio y bloquea el despliegue. El umbral está escrito en el repositorio público, y cada ejecución del control también. Mira cómo está hecha.
-lighthouserc.json
-Performance
-≥ 95
-error
-Accessibility
-100
-error
-Best practices
-100
-error
-SEO
-100
-error
-1 equipo =
-6 verticales = Ø
-0
-traspasos
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

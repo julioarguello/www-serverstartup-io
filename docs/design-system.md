@@ -141,11 +141,13 @@ absence of a criterion is what read as disharmony.
 | - | - | - |
 | **BLOCK** | The house making a claim | `--block-rule: 3px` left rule + a tint of the same hue. No border, no radius, no shadow. |
 | **PANEL** | A machine surface: instrument, console, quoted foreign UI | `--panel-border: 1px` hairline, `--radius`, `--shadow-card`, a `--panel-edge: 4px` accent along the top. **The only thing on the site that gets a shadow.** |
-| **ROW** | One item in a list of links | `--row-rule: 1px` hairline above, `--row-accent: 4px` left rule that appears on hover / focus / current. Nothing else. |
+| **ROW** | One item in a list of links | A 1px hairline above, a 4px left rule that appears on hover / focus / current. Nothing else. |
 
 A row that draws a box is a card, and six of them are a grid pretending to be a
 list. `ci-check-layout.mjs` asserts rows carry no chrome at rest and that their
-heights agree within 8px.
+heights agree within 8px. No list on the site is a ROW since #580 — the home's
+areas list was the only one — so its tokens (`--row-rule`, `--row-accent`) and the
+gate's `ROW_LISTS` are empty until the next one; declare both with it.
 
 **A photograph is not one of these, and not a container at all (#482).** This
 table used to list *photograph* among PANEL's surfaces, which would have given

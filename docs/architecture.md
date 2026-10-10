@@ -650,11 +650,11 @@ Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the
 and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
 rotating edge (Base.astro), so the two cannot drift.
 
-- **One clock**, the one the plates had: `--hero-cycle` 36 s, `--hero-step` 6 s, CSS-only. Each photograph holds still and the next dissolves in over 1.5 s on top of it; the
+- **One clock**, the one the plates had: `--hero-cycle` 36 s (42 s and seven frames since #580, §4.12b), `--hero-step` 6 s, CSS-only. Each photograph holds still and the next dissolves in over 1.5 s on top of it; the
   caption leaves before the next arrives, one text at a time (the push and the quick fades read as
   "PowerPoint trasnochado", founder 2026-10-06). The pause
   is the verticals' own control (`scene-ctl.css`, shared since #560), in the band's corner. The
-  arrows **seek** the clock — every animation on it, the header's edge included, is set to the
+  arrows (the rail's stops since #580) **seek** the clock — every animation on it, the header's edge included, is set to the
   chosen slide's time — and the rotation goes on (founder: "si le doy a avanzar que no se desactive
   el play"); the courtesy freeze holds only while the vertical's link has keyboard focus.
 - **Type and card**: the heading and the kicker as they were; the vertical's caption in the original
@@ -667,8 +667,8 @@ rotating edge (Base.astro), so the two cannot drift.
   showed): a soft shade behind the copy (`--hero-spot`, widened when the kicker became two unbroken
   lines — 3.7:1 at 1280 x 720 before, 6.0 after; the a11y gate's hero pass measures 1280 x 720 since)
   and a shade under the rail alone (`--hero-foot`) hold the type at AA on all six photographs.
-- **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face —
-  deliberately not `areas_claim`, which the rows further down already say). No caption naming the
+- **What changes in front**: the vertical's name and one line (`hero_line`, a CMS key by face; a
+  factual line since #580, §4.12b). No caption naming the
   place: the founder struck it. The rail's tracks carry `menu_short` and fill in the vertical's
   colour, and the vertical pages' **seal** — the logo cube, large and faint, leaving by the left
   margin, smaller since 2026-10-06 on every page (760 → 460 px) — in the colour of the vertical
@@ -686,7 +686,7 @@ rotating edge (Base.astro), so the two cannot drift.
 - **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
   caption stands on its foot, above the heading — over the whole band the copy hid the picture,
   and under the heading the caption fell below a phone's fold (the layout gate's G18).
-- **Weight**: only the first photograph loads with the page; the other five carry their sources
+- **Weight** (superseded by #580: no photograph loads with the page, §4.12b): only the first photograph loads with the page; the other five carry their sources
   as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
   grounds). On phones the first photograph is the LCP (its strip is the largest element), so Base
@@ -696,30 +696,64 @@ rotating edge (Base.astro), so the two cannot drift.
   to a strip, the subjects fell outside it; centred, it left a dark strip on the right); every photograph is
   also cut at 3024 px, which a 1512 px laptop at 2x needs — 2016 was stretched 1.5× there.
 
-### 4.12 The home's order (#562)
+### 4.12 The home's order (#562, #580)
 
-After the design review of 2026-10-06 (founder: "dales caña a todos"): hero → areas →
-**references** → Cloudflare → quality → mantra → closing CTA. The team band left the home in #565
-(founder, 2026-10-06: «podemos quitarlo de la home»): the same people are on Quiénes somos and
-Contacto. What we do comes first, then
-who has trusted us with it, then the platform we do much of it on.
+Since the October home (#580, founder 2026-10-09, after comparing seven reference homes): hero →
+client logos (no heading) → **Cómo trabajamos** → mantra → Cloudflare → closing CTA. «Áreas de
+especialización» left — the «nosotros» card indexes the six verticals now, and the carousel shows
+each one — and so did «Calidad y rendimiento» ("queda ahí como tira de nadie"), its Lighthouse
+console and `panel_labels` → `lh_*` with it. The team band left in #565 (founder, 2026-10-06:
+«podemos quitarlo de la home»): the same people are on Quiénes somos and Contacto.
 
-- **References**: the home renders `ReferenceBanner` after the areas as a section of its own — the
-  house heading «Con quién hemos trabajado» (true of clients, the two collaborations and the former
-  client alike), the logos in the column and a link to all of them (#565, `footer_headings` →
-  `references_heading`, `references_all`) — and its footer leaves it out
-  (`SiteFooter references={false}`, from `Base`'s `onHome`); every other page keeps it in the
-  footer (#296). The layout gate's footer pass reads `/quienes-somos` for that reason.
-- **Cloudflare**: no longer the page's opening section; its copy says what we do with it and that
-  this site runs on it (`Workers`, `D1`, `R2`), not "the most advanced solutions".
-- **Quality**: the four Lighthouse thresholds as a console (`.s-gate`), read from
-  `lighthouserc.json` at build time, so the claim and the gate cannot drift. Its chrome is
-  Lighthouse's words (`panel_labels` → `lh_*`), English in both locales like every quoted product.
+- **References**: `ReferenceBanner` as a section, directly under the band, `headless` — no heading,
+  the logos and the link to all of them (`footer_headings` → `references_all`); its footer leaves
+  it out (`SiteFooter references={false}`, from `Base`'s `onHome`); every other page keeps it in
+  the footer (#296). 5 of the 7 reference homes show logos and none leaves them for the foot. The
+  layout gate's footer pass reads `/quienes-somos`.
+- **Cómo trabajamos**: seven items, a bold declarative phrase and one sentence each, no icons, no
+  numbering, no cards. The copy is the `how_we_work` widget in `ui_labels_{es,en}`, Portable Text
+  with its real `code` and `em` marks, read raw through `labels.getBlocks()` (the string getters
+  flatten marks) and rendered with `<PortableText>`: a label keyed `<id>`, its sentence `<id>_body`,
+  the h2 keyed `heading`. Its last item, «Dicho y hecho», leads into the mantra.
+- **Cloudflare**: exactly as before, orange ground included; its copy says what we do with it and
+  that this site runs on it (`Workers`, `D1`, `R2`).
 - **Team**: each card says what the person does, from the member's `excerpt` (Quiénes somos, its
   JSON-LD as `AboutPage.mentions`, and the Contacto captions since #575). The photographs were restored in #565 the way the hero photographs are (SeedVR2 3B
   at 2×, colour locked, nothing reframed: the founder kept the photographs themselves) and are
   written at 1600 × 1200 under their old names — `astro:assets` hashes them, so no cache keeps the
   old ones. The layout gate's G19 reads them on Quiénes somos.
+
+### 4.12b The October band: «nosotros» first (#580)
+
+The band is seven frames since #580, on the same CSS clock (`--hero-cycle` 42 s, `--hero-step` 6 s,
+the header's edge and the title's tail on it too). Frame 0 is the company, not a vertical (founder:
+"lo primero que veo es un faro… eso no me representa"): no photograph, the band's own ground
+(`--color-ground-dark`) with the haze at its far edge, and the logo's cube **in the seal's place** —
+its edges lighting up in paper white from the centre of the «Y» outwards («Filamento»). On the next
+frame it recedes to the faint outline in that vertical's colour: seal and cube are one drawing
+(`.s-hero__mark`), sized from the band (~86 % of its height, never wider than the margin left of the
+column on a desktop, above the card's tallest state on a phone), so nothing moves between frames.
+
+- **The card changes scale**: on «nosotros» it is the index of the six verticals (each row a link,
+  the full name on a desktop, `menu_short` in two columns on a phone or a short window); on each
+  photograph, the vertical's name on one line and one factual line, `hero_line` — markdown-lite
+  (`` `code` ``, `*italics*`), rendered with `excerptHtml`. The deck's height follows the frame from
+  two heights the script measures; until they arrive the card holds the taller.
+- **The two-voice title**: the h1 is split at its first comma in the template, never in the CMS; the
+  tail is Computer Modern italic (`.ss-title__tail`, the CMU italic re-subset to carry both locales'
+  tails and preloaded on the home), coloured per frame. Phones and tablets take each vertical's
+  on-band tint; desktops a tint lifted, at its own hue, only as far as that frame's photograph needs
+  for 4.5:1 — the tokens are `--color-tail-<face>[-photo]` in theme.css, mapped in `HERO_TAIL`.
+  **The Claude Design delivery measured a Times Italic tail**: its CMU 500 italic face failed to load
+  from the preview host and `font-synthesis: none` fell back to the system serif, so two of its
+  per-frame tints failed on the real face and were re-lifted by the same method.
+- **The rail is the navigation** (no arrows, brief §9.8): seven stops, buttons with the keyboard
+  (arrows walk them, Home/End), each seeking the clock as the arrows used to.
+- **No photograph loads with the page**: the first is six seconds away, so all six take their
+  sources on `load`, and Base no longer preloads one.
+- **Gates**: the a11y gate freezes frames through `.is-manual[data-slide]`, 0 = «nosotros»; the
+  verification scripts in `.design-sync/verify/` pin the clock through the Web Animations API and
+  run against a local stack or the preview.
 
 ### 4.13 The team is described, never counted (#575)
 

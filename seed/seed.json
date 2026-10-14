@@ -1805,7 +1805,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Entrega garantizada: dicho y hecho"
+									"text": "Entrega: dicho y hecho"
 								}
 							]
 						},
@@ -4743,7 +4743,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Guaranteed delivery: promise kept"
+									"text": "Delivery: promise kept"
 								}
 							]
 						},

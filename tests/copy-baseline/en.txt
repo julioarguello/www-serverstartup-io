@@ -35,10 +35,14 @@ If a SaaS already solves it, we don't build it.
 We would rather lose a project than maintain software nobody needs.
 Promise kept.
 What we start, we finish. Every day we make sure the project goes well, because our word is in it.
-1 team =
-6 verticals = Ø
-0
-handoffs
+1
+team
+.
+6
+verticals
+.
+promise kept
+.
 Official Cloudflare partner
 We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2.
 CDN

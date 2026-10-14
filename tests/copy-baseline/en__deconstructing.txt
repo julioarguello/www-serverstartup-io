@@ -168,7 +168,7 @@ Do not assemble without step 04. The agent drafts, the human signs.
 Step 03 never merges. Ever.
 ℹ Assembly data
 Assembly time: three weeks, in odd hours.
-Hardware included: zero handoffs.
+Hardware included: promise kept.
 View the repository →
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.

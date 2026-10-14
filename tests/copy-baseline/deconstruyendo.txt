@@ -168,7 +168,7 @@ No montar sin el paso 04. El agente redacta, el humano firma.
 El paso 03 nunca hace merge. Nunca.
 ℹ Datos de montaje
 Tiempo de montaje: tres semanas a ratos.
-Tornillería incluida: cero traspasos.
+Tornillería incluida: dicho y hecho.
 Ver el repositorio →
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.

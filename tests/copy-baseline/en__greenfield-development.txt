@@ -60,10 +60,14 @@ Maybe greenfield is where AI pays off most. It is certainly where it derails fir
 Our frameworks are that perimeter. The agent writes inside the rails, and an engineer signs every line that reaches main. The full story is in our AI vertical.
 Your technical debt is our problem
 Whoever designs the system deploys it and answers for its stability. The same senior engineers, from first commit to operations. We don't hand over and vanish. We walk the transition with you, and the knowledge stays in your house, not ours.
-1 team =
-6 verticals = Ø
-0
-handoffs
+1
+team
+.
+6
+verticals
+.
+promise kept
+.
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project

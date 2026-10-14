@@ -2,7 +2,7 @@
 
 The website of [Server Startup](https://serverstartup.io) — senior engineers
 in Getxo doing e-commerce, systems integration, data platforms, edge security,
-greenfield development and AI. One team. Six verticals. Zero handoffs.
+greenfield development and AI. One team. Six verticals. Promise kept.
 
 This repository is the site itself, open on purpose: we explain how it is
 built at [/deconstruyendo](https://serverstartup.io/deconstruyendo)

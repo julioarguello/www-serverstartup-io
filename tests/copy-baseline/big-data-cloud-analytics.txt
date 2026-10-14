@@ -42,10 +42,14 @@ Sinergias entre lo analítico y lo operacional
 En lo analítico trabajamos con dbt Cloud sobre BigQuery. Y cuando la transformación nace en la capa operacional, sobre una base relacional como Oracle, la gestionamos con dbt Core y el adapter que mantiene Oracle (con nuestras mejoras, tan obvias como necesarias...).
 Los mismos tests y el mismo versionado a los dos lados, sin peajes entre equipos. Al cuadro de mando, el dato llega ya probado.
 Conectamos BigQuery con tu e-commerce, con tu ERP y con el edge.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

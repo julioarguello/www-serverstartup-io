@@ -15,10 +15,14 @@ WhatsApp
 Teléfono
 Email
 Server Startup S.L. · Bizkaia · desde 2019.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 referencias
 ~Server Startup
 Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.

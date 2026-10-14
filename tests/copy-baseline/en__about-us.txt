@@ -43,10 +43,14 @@ We prescribe technology on merit, not on vendor agreements.
 Backing grassroots sport
 We sponsor grassroots sport. Youth teams and the 2026/27 provincial championship.
 Urdaneta under-14 boys. Bizkaia provincial champions 2024/25 and runners-up 2025/26. Photo: the club on Instagram.
-1 team =
-6 verticals = Ø
-0
-handoffs
+1
+team
+.
+6
+verticals
+.
+promise kept
+.
 references
 ~Server Startup
 Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019.

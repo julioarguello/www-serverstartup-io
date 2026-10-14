@@ -34,10 +34,14 @@ Si un SaaS ya lo resuelve, no lo construimos.
 Preferimos perder un proyecto a mantener software que sobra.
 Dicho y hecho.
 Lo que empezamos, lo terminamos. Cada día nos ocupamos de que el proyecto vaya bien, porque en él va nuestra palabra.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 Partner oficial de Cloudflare
 Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.
 CDN

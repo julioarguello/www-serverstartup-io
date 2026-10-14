@@ -21,8 +21,8 @@ fallback string, meta description — and fails on a COUNT OF PEOPLE:
   · a multiplier against the engineers     «los ingenieros ×3» (a table cell)
 
 It does NOT forbid numbers near the word "team": the mantra is literally
-«1 equipo = ▪▪▪▪▪▪ verticales = 0 traspasos», and that is the one team the
-client gets, not a headcount. The negative half of the control pins that down.
+«1 equipo → ▪▪▪▪▪▪ 6 verticales → ∎ dicho y hecho» (#579), and that is the one
+team the client gets, not a headcount. The negative half of the control pins that down.
 
 Read: visible text, plus the attributes a reader or a crawler is shown
 (`content`, `alt`, `title`, `aria-label`) — an excerpt reaches the meta
@@ -145,11 +145,11 @@ CONTROL_HTML = """<!doctype html>
 <script>const decoy = "four engineers in a script is not copy";</script>
 </head>
 <p>Backend, integration, data and edge. The same three senior engineers from start to finish.</p>
-<p>Un equipo de cuatro, sin traspasos.</p><p>A team of five.</p><p>Somos dos.</p><p>We’re six.</p>
+<p>Un equipo de cuatro, de principio a fin.</p><p>A team of five.</p><p>Somos dos.</p><p>We’re six.</p>
 <p>Los mismos tres, de principio a fin. The three of us answer. Las mismas cinco direcciones.</p>
 <table><tr><td>los ingenieros</td><td>×3</td><td>no incluidos: ya estaban</td></tr>
 <tr><td>los datos</td><td>×3</td><td>D1, R2 y KV</td></tr></table>
-<p>1 equipo = ▪▪▪▪▪▪ verticales = 0 traspasos. One team. Six verticals. Zero handoffs.</p>
+<p>1 equipo → ▪▪▪▪▪▪ 6 verticales → ∎ dicho y hecho. One team. Six verticals. Promise kept.</p>
 <p>Seis verticales. Más de veinte años de oficio. Tiempo de montaje: tres semanas a ratos.</p>
 <p>Trabajamos junto a tu equipo. Te responde una persona. One engineer answers.</p>
 <img src="/a.jpg" alt="dos personas en la foto">

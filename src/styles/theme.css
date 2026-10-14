@@ -23,6 +23,19 @@
 	font-display: swap;
 }
 
+/* The two signs the signature needs and Computer Modern's text cuts lack (#579): → and ∎, the
+   Halmos tombstone that closes a proof. Cut from Latin Modern Math 1.959 — Computer Modern's own
+   digital continuation, GUST e-foundry, LaTeX Project Public License — and renamed as that licence
+   asks of a derived work. 1 KB, and `unicode-range` keeps it off every page that does not set them. */
+@font-face {
+	font-family: "CM Proof Symbols";
+	src: url("/fonts/cm-proof-symbols.woff2") format("woff2");
+	font-weight: 400 700;
+	font-style: normal italic;
+	font-display: swap;
+	unicode-range: U+2192, U+220E;
+}
+
 /* The AI scene's machine reading, in the faces of the film it quotes (#537; fontsinuse.com, The
    Terminator, 1984): its captions were Bessellen, a 1973 square face with no free cut (the one
    recreation, Modern Vision, is non-commercial), so Saira at 112.5 % width stands in; its listings were

@@ -45,10 +45,14 @@ No montamos Cloudflare y desaparecemos. Vigilamos el tráfico, ajustamos las reg
 Hemos montado Cloudflare para:
 La plataforma no se acaba en el CDN y el WAF. Zero Trust, Access, Stream, R2. Te ayudamos a decidir qué piezas encajan y cuáles no.
 Esta misma web corre sobre Workers, D1 y R2, detrás del mismo WAF que operamos para clientes. La desmontamos pieza a pieza en Deconstruyendo esta web.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

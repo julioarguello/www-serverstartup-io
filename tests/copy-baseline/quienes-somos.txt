@@ -43,10 +43,14 @@ Prescribimos cada tecnología por idoneidad, no por acuerdos comerciales con fab
 Con el deporte base
 Patrocinamos deporte base. Equipos de cantera y un campeonato provincial en la temporada 2026/27.
 Infantil masculino del Urdaneta. Campeón provincial de Bizkaia 2024/25 y subcampeón 2025/26. Foto: el club en Instagram.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 referencias
 ~Server Startup
 Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.

@@ -45,10 +45,14 @@ We don't set up Cloudflare and disappear. We watch the traffic, adjust rules as 
 We've deployed Cloudflare for:
 The platform doesn't end at CDN and WAF. Zero Trust, Access, Stream, R2. We help you decide which pieces fit, and which don't.
 This very site runs on Workers, D1 and R2, behind the same WAF we run for clients. We take it apart, piece by piece, in Deconstructing this website.
-1 team =
-6 verticals = Ø
-0
-handoffs
+1
+team
+.
+6
+verticals
+.
+promise kept
+.
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project

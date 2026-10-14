@@ -1491,7 +1491,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Tornillería incluida: dicho y hecho."
+									"text": "Tornillería incluida: no sobra ninguna pieza."
 								}
 							]
 						},
@@ -1805,7 +1805,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Envío gratis: dicho y hecho"
+									"text": "Entrega garantizada: dicho y hecho"
 								}
 							]
 						},
@@ -4429,7 +4429,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Hardware included: promise kept."
+									"text": "Hardware included: no parts left over."
 								}
 							]
 						},
@@ -4743,7 +4743,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Free shipping: promise kept"
+									"text": "Guaranteed delivery: promise kept"
 								}
 							]
 						},

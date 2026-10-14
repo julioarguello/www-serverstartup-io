@@ -39,10 +39,14 @@ So we lead with security. Agents run on least-privilege credentials, work in env
 Whoever signs, answers. From August 2026, the EU AI Act also demands human oversight with the competence and authority to override or halt a high-risk system. That is already how we work.
 You won't find an AI product here. We don't have one, and we don't pretend to. What we have is a method made of versioned rules and protocols that steer the agents, distributable and auditable.
 This very website is built that way, by supervised agents, pull request by pull request. And if a chatbot won't solve anything for you, we'll tell you not to build one.
-1 team =
-6 verticals = Ø
-0
-handoffs
+1
+team
+.
+6
+verticals
+.
+promise kept
+.
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project

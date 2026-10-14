@@ -39,10 +39,14 @@ Por eso trabajamos con la seguridad por delante. Los agentes usan credenciales d
 El que firma, da la cara. Desde agosto de 2026, además, la ley europea de IA exige supervisión humana con competencia y autoridad para corregir o parar un sistema de alto riesgo. Nosotros ya trabajamos así.
 Aquí no vas a encontrar un producto de IA. No lo tenemos y no lo fingimos. Tenemos un método hecho de reglas y protocolos versionados que dirigen a los agentes, distribuible y auditable.
 Esta misma web se construye así, con agentes supervisados, pull request a pull request. Y si un chatbot no te resuelve nada, te diremos que no lo pongas.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

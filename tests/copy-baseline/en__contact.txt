@@ -15,10 +15,14 @@ WhatsApp
 Teléfono
 Email
 Server Startup S.L. · Bizkaia, Spain · since 2019.
-1 team =
-6 verticals = Ø
-0
-handoffs
+1
+team
+.
+6
+verticals
+.
+promise kept
+.
 references
 ~Server Startup
 Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019.

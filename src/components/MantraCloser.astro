@@ -7,17 +7,18 @@
  * CMS (ui_labels → mantra) and this component gives them their form, so a
  * new page cannot drift. Same move as the heading mark in #298.
  *
- * The form is an equation set in Computer Modern (Knuth's TeX face,
- * self-hosted, subset to these glyphs — 13 KB for three cuts), and every
- * figure carries its own glyph BENEATH it, all three numerals staying on
- * one baseline (founder design, 2026-08-18):
+ * The form is a sequence set in Computer Modern (Knuth's TeX face,
+ * self-hosted and subset), ending in the end-of-proof square (#579,
+ * founder 2026-10-09, replacing #263's «Cero traspasos», which readers took
+ * for a stock transfer or the sale of premises):
  *
- *     1 equipo   =   6 verticales   =   0 traspasos
- *     ▣              ▪▪▪▪▪▪
- *   the logo      the six faces        nothing — and that IS the claim
+ *     ⬢ 1 equipo  →  ▪▪▪▪▪▪ 6 verticales  →  ∎ dicho y hecho
  *
- * The glyphs are absolutely positioned so they never disturb the line;
- * the box reserves the room for them. Screen readers read the numerals
+ * the logo's cube, the six vertical colours as a one-row glyph, and ∎ — the
+ * Halmos tombstone, «quod erat demonstrandum» — in ink. The six coloured
+ * squares and the ink square rhyme on purpose: six verticals, one finished
+ * job. → and ∎ come from "CM Proof Symbols" (theme.css), Computer Modern's
+ * own signs. Screen readers read «1 equipo. 6 verticales. Dicho y hecho.»
  * and skip the glyphs.
  *
  * Chrome: the house box (left rule + 4% ink tint), the same pattern and
@@ -39,7 +40,7 @@ const en = locale === "en";
 const beats = [
 	labels.get("mantra", "beat_1", en ? "One team" : "Un equipo"),
 	labels.get("mantra", "beat_2", en ? "Six verticals" : "Seis verticales"),
-	labels.get("mantra", "beat_3", en ? "Zero handoffs" : "Cero traspasos"),
+	labels.get("mantra", "beat_3", en ? "Promise kept" : "Dicho y hecho"),
 ];
 const href = en ? "/en/about-us" : "/quienes-somos";
 
@@ -61,35 +62,48 @@ const faces = (serviceEntries ?? [])
 	})
 	.filter((f) => f.key)
 	.sort((a, b) => FACE_ORDER.indexOf(a.key) - FACE_ORDER.indexOf(b.key));
-// the figure carries the number, so the noun drops its quantifier
-const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, ""));
+// the figure carries the number, so the noun drops its quantifier; the
+// closing beat has no figure — ∎ stands in front of it
+const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six )/, ""));
 ---
 
 <aside class="mantra">
 	<p class="mantra__eq">
-		<span class="mantra__cube-wrap" aria-hidden="true">
-			<svg class="mantra__cube" width="21" height="24" viewBox="0 0 200 228" role="presentation">
-				<polygon points="100,14 186,64 100,114 14,64" fill="#CED4DA"></polygon>
-				<polygon points="14,64 100,114 100,214 14,164" fill="#CED4DA"></polygon>
-				<polygon points="100,114 186,64 186,164 100,214" fill="#E3E7EB"></polygon>
-				<path d="M100,14 186,64 186,164 100,214 14,164 14,64 Z"></path>
-				<path d="M14,64 100,114 186,64 M100,114 100,214"></path>
-				<path d="M57,39 143,89 M143,39 57,89"></path>
-				<path d="M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114"></path>
-			</svg>
+		{/* three beats, each a unit the line never breaks inside: it wraps
+		    between them, the arrow leading the next */}
+		<span class="mantra__step">
+			<span class="mantra__cube-wrap" aria-hidden="true">
+				<svg class="mantra__cube" width="21" height="24" viewBox="0 0 200 228" role="presentation">
+					<polygon points="100,14 186,64 100,114 14,64" fill="#CED4DA"></polygon>
+					<polygon points="14,64 100,114 100,214 14,164" fill="#CED4DA"></polygon>
+					<polygon points="100,114 186,64 186,164 100,214" fill="#E3E7EB"></polygon>
+					<path d="M100,14 186,64 186,164 100,214 14,164 14,64 Z"></path>
+					<path d="M14,64 100,114 186,64 M100,114 100,214"></path>
+					<path d="M57,39 143,89 M143,39 57,89"></path>
+					<path d="M57,89 57,189 M14,114 100,164 M143,89 143,189 M100,164 186,114"></path>
+				</svg>
+			</span>
+			<span class="mantra__n">1</span>
+			{selfPage ? <span>{nouns[0]}</span> : <a href={href}>{nouns[0]}</a>}
+			<span class="u-sr">. </span>
 		</span>
-		<span class="mantra__n">1</span>{" "}
-		{selfPage ? nouns[0] : <a href={href}>{nouns[0]}</a>} <b>=</b>
-		<span class="mantra__cells" aria-hidden="true"
-			><span class="mantra__cells-grid">
-				{faces.map((f) => <i style={`background:${f.color}`} title={f.title}></i>)}
-			</span></span
-		>
-		{/* the space before Ø must be explicit: under compressHTML: 'jsx' the
-		    newline after </b> is stripped and the equation renders "=Ø" */}
-		<span class="mantra__n">6</span> {nouns[1]} <b>=</b>{" "}
-		<span class="mantra__n mantra__empty" aria-hidden="true">Ø</span>
-		<span class="u-sr">0</span> {nouns[2]}
+		<span class="mantra__step">
+			<b class="mantra__to" aria-hidden="true"></b>
+			<span class="mantra__cells" aria-hidden="true"
+				><span class="mantra__cells-grid">
+					{faces.map((f) => <i style={`background:${f.color}`} title={f.title}></i>)}
+				</span></span
+			>
+			<span class="mantra__n">6</span>
+			<span>{nouns[1]}</span>
+			<span class="u-sr">. </span>
+		</span>
+		<span class="mantra__step">
+			<b class="mantra__to" aria-hidden="true"></b>
+			<span class="mantra__qed" aria-hidden="true"></span>
+			<span class="mantra__beat">{nouns[2]}</span>
+			<span class="u-sr">.</span>
+		</span>
 	</p>
 </aside>
 
@@ -131,7 +145,14 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	   page's LCP — the mantra sits at the page's foot. The text is the same
 	   from the start, laid out in the fallback serif; the script below gives
 	   it its face once it is within a screen and a half of the viewport. */
+	/* one line that wraps between beats, never inside the glyphs: a flex
+	   row, so the whitespace compressHTML strips between elements does not
+	   matter — the gaps are the margins below */
 	.mantra__eq {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		row-gap: var(--space-1);
 		margin: 0;
 		font-family: "Latin Modern Roman", "Times New Roman", serif;
 		font-size: 27px;
@@ -142,28 +163,54 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 	}
 
 	.mantra.is-near .mantra__eq {
-		font-family: "CMU Serif", "Latin Modern Roman", "Times New Roman", serif;
+		font-family: "CMU Serif", "CM Proof Symbols", "Latin Modern Roman", "Times New Roman", serif;
+	}
+
+	.mantra__step {
+		display: inline-flex;
+		align-items: baseline;
+		white-space: nowrap;
 	}
 
 	.mantra__n {
+		margin-right: .25em;
 		font-style: normal;
 		font-weight: 700;
 		font-size: 31px;
 	}
 
-	/* zero is the empty set: CMU Serif has no U+2205 (it lives in the math
-	   cuts), and its Ø is the identical drawing — screen readers get "0" */
-	.mantra__empty {
-		font-weight: 500;
+	/* → and ∎ are drawn by CSS, not written in the DOM: they are not
+	   language, and the copy baseline freezes language (#453's rule for the
+	   area rows' arrow) */
+	.mantra__to::before { content: "→"; }
+	.mantra__qed::before { content: "∎"; }
+
+	/* the steps between beats: upright, light, at the line's own size */
+	.mantra__to {
+		padding: 0 .45em;
+		font-style: normal;
+		font-weight: 400;
+		color: var(--color-text-muted);
 	}
 
-	/* the six faces ride IN FRONT of the figure, stacked (2x3) so the block
-	   matches the numeral's height instead of running along the line */
-	/* The block SITS on the text baseline. An inline-BLOCK whose content has
-	   no line box takes its bottom margin edge as baseline (CSS 2.1 §10.8);
-	   an inline-GRID instead synthesises one from its first row, which is why
-	   the earlier version floated (founder: "no quiero que bailen"). Hence
-	   the wrapper: inline-block outside, grid inside. */
+	/* ∎, in ink: the six coloured squares and this one rhyme */
+	.mantra__qed {
+		margin-right: .35em;
+		font-style: normal;
+		color: var(--color-primary, #1e1e1e);
+	}
+
+	/* the closing beat reads as the other two do, lowercase — in the CMS it
+	   keeps its capital (presentation only, §14) */
+	.mantra__beat {
+		text-transform: lowercase;
+	}
+
+	/* The six faces ride IN FRONT of the figure, in one row (#579), and SIT
+	   on the text baseline (founder, #295: "no quiero que bailen"). The
+	   wrapper is an item of the step's baseline-aligned flex row and holds no
+	   text, so its baseline is synthesised from its bottom edge: the squares
+	   stand on the line, measured at 1440 and 360 px. */
 	.mantra__cells {
 		display: inline-block;
 		overflow: hidden;
@@ -172,14 +219,13 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		margin-right: var(--space-2);
 	}
 	.mantra__cells-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		display: flex;
 		gap: 2px;
-		width: 16px;
 	}
 	.mantra__cells i {
-		aspect-ratio: 1;
 		display: block;
+		width: .3em;
+		height: .3em;
 	}
 
 	/* ink edges over grey faces — the mark reads at 21px only if the strokes
@@ -199,13 +245,6 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		line-height: 0;
 	}
 
-
-	.mantra__eq b {
-		font-style: normal;
-		font-weight: 400;
-		padding: 0 var(--space-2);
-		color: var(--color-text-muted);
-	}
 
 	.mantra a {
 		color: inherit;
@@ -238,10 +277,8 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six |Cero |Zero )/, "
 		.mantra__eq { font-size: 20px; line-height: 34px; }
 		.mantra__n { font-size: 23px; }
 		.mantra__cube { width: 17px; height: 19px; }
-		/* the glyph scales by its GRID. Two conflicting widths used to sit on
-		   the wrapper here (36px then 13px); the wrapper is `overflow: hidden`,
-		   so the losing value clipped the right column of faces on every
-		   phone. The wrapper shrink-wraps — it never carries a width. */
-		.mantra__cells-grid { width: 13px; gap: 1px; }
+		/* the wrapper is `overflow: hidden` and shrink-wraps — it never
+		   carries a width, or it clips the faces on a phone */
+		.mantra__cells-grid { gap: 1px; }
 	}
 </style>

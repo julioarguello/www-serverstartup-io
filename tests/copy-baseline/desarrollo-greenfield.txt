@@ -60,10 +60,14 @@ Puede que el greenfield sea donde más rinde la IA. Seguro que es donde antes de
 Nuestros frameworks son el perímetro. El agente escribe dentro de esos raíles y un ingeniero firma cada línea que llega a main. El detalle, en el vertical de IA.
 Tu deuda técnica es nuestro problema
 Quien diseña el sistema lo despliega y responde por su estabilidad. Los mismos ingenieros senior, del primer commit a la operación. No entregamos y desaparecemos. Acompañamos la transición y el conocimiento se queda en tu casa, no en la nuestra.
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

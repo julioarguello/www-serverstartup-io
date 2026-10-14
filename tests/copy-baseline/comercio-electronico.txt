@@ -13,7 +13,7 @@ Llevamos más de veinte años dentro de hybris y SAP Commerce Cloud. No vendemos
 A medida ≠ acoplado
 Tu cesta
 (6)
-Envío gratis: cero traspasos
+Envío gratis: dicho y hecho
 SAP Commerce Cloud
 Se parametriza y se extiende. Catálogos, precios, promociones, Solr. Sabemos dónde no tocar.
 1 ⌄
@@ -49,10 +49,14 @@ Motor de búsqueda. Qué se indexa, cada cuánto y a qué coste. El dimensionado
 Interfaces con S/4HANA y TPV. Pedidos, precios y devoluciones cuadrando entre la web, la tienda y el ERP.
 Cross-docking y fulfillment. Del pedido web a la preparación y la promesa de entrega, con sustitutos cuando falta producto.
 El equipo que trabaja sobre tu plataforma construye también tu pipeline de datos y escribe las reglas de tu WAF. Nadie te dirá «lo miro con el otro equipo».
-1 equipo =
-6 verticales = Ø
-0
-traspasos
+1
+equipo
+.
+6
+verticales
+.
+dicho y hecho
+.
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

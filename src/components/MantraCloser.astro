@@ -206,12 +206,11 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six )/, ""));
 		text-transform: lowercase;
 	}
 
-	/* the six faces ride IN FRONT of the figure, in one row (#579) */
-	/* The block SITS on the text baseline. An inline-BLOCK whose content has
-	   no line box takes its bottom margin edge as baseline (CSS 2.1 §10.8);
-	   an inline-GRID instead synthesises one from its first row, which is why
-	   the earlier version floated (founder: "no quiero que bailen"). Hence
-	   the wrapper: inline-block outside, grid inside. */
+	/* The six faces ride IN FRONT of the figure, in one row (#579), and SIT
+	   on the text baseline (founder, #295: "no quiero que bailen"). The
+	   wrapper is an item of the step's baseline-aligned flex row and holds no
+	   text, so its baseline is synthesised from its bottom edge: the squares
+	   stand on the line, measured at 1440 and 360 px. */
 	.mantra__cells {
 		display: inline-block;
 		overflow: hidden;

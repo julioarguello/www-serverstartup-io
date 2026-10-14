@@ -25,7 +25,7 @@
 
 /* The two signs the signature needs and Computer Modern's text cuts lack (#579): → and ∎, the
    Halmos tombstone that closes a proof. Cut from Latin Modern Math 1.959 — Computer Modern's own
-   digital continuation, GUST e-foundry, LaTeX Project Public License — and renamed as that licence
+   digital continuation, GUST e-foundry, GUST Font License (LPPL-based) — and renamed as that licence
    asks of a derived work. 1 KB, and `unicode-range` keeps it off every page that does not set them. */
 @font-face {
 	font-family: "CM Proof Symbols";

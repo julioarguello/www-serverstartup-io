@@ -1,12 +1,11 @@
 // Whether the card's box intersects the text boxes of the h1 and the lead, and whether the cube's
 // drawing reaches any letter of the band, frame by frame, across short and narrow viewports
-// (brief §9.6 and §9.7). Usage: node overlap-h.cjs [url]   (or U=<url>)
-const p = require('puppeteer');
-const { target, open, pinFrame } = require('./frame.cjs');
+// (brief §9.6 and §9.7). Usage: node overlap-h.cjs [url] [--engine webkit]   (or U=<url>)
+const { engine, target, launch, open, pinFrame } = require('./frame.cjs');
 const U = target();
 (async () => {
-	const b = await p.launch({ headless: 'new' });
-	const g = await b.newPage();
+	const { page: g, close } = await launch();
+	console.log('engine:', engine());
 	let bad = 0;
 	for (const [w, h] of [[1440, 620], [1366, 650], [1280, 560], [1280, 600], [1100, 600], [1024, 600], [1440, 900], [393, 852]]) {
 		const mobile = w < 768;
@@ -53,6 +52,6 @@ const U = target();
 			worst ? 'OVERLAP ' + Math.round(worst) + 'px (' + where + ')' : 'card ok',
 			'|', art ? 'CUBE ON A LETTER ' + Math.round(art) + 'px (' + artWhere + ')' : 'cube ok');
 	}
-	await b.close();
+	await close();
 	process.exit(bad ? 1 : 0);
 })();

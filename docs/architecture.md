@@ -250,6 +250,13 @@ Decisions that are not obvious from the code, and the measurement behind each:
   profile's `--glow`, which brightens its lines (up to 1.35×) and gives them a halo of the section's
   orange warmed by the lantern. Under reduced motion, and frozen from outside, all three are at full.
   Big Data's opening is pixel-identical at 9 s before and after each change to the shared module.
+- **The cut-outs are blurred once per layout, not once per frame** (#568). Re-running `blur(3px)` on
+  every repaint was ~70% of each dusk frame on a renderer without a GPU — Lighthouse's — and swung Big
+  Data's score between 0.70 and 0.98 on one build. `softCutouts` blurs them into a canvas the size of
+  their bounds and each frame erases with it (Big Data 41→14 ms per frame at CPU ×4, CDN 14→4; the
+  night differs by at most 8/255 in the blur's soft edge). `scripts/ci-check-hero-frames.mjs` holds the
+  line: it drives every opening's frames by hand and fails on a per-pixel effect set per frame (F1) or a
+  steady frame over Lighthouse's 50 ms long-task line (F2).
 - **The frame is every photograph opening's** (`.scene__frame`, 86 % of the band, on its floor), placed
   by the copy's column: the tower 48 px clear of it, the house's right wall 24 px clear of the band's
   edge, the lantern halfway between where both fit. Where the band is too narrow for both (seen at 1101

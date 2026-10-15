@@ -95,14 +95,14 @@ const plantStyle = (css) => `document.addEventListener("DOMContentLoaded", () =>
 	document.head.append(s);
 });`;
 
-/** H — returns the problems found on one home route. */
+/** H — the problems found on one home route, and the tail's colour on frame 0 (what reduced motion must hold). */
 async function home(page, route) {
 	await page.goto(`${BASE}${route}?engines=${Date.now()}`, { waitUntil: "load", timeout: 60_000 });
 	const step = await page.evaluate(() => {
 		const cycle = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--hero-cycle")) * 1000;
 		return cycle / document.querySelectorAll(".s-hero__dots .s-hero__stop").length;
 	});
-	if (!(step > 0)) return [`${route}: no rail, or no --hero-cycle — the band is not there to measure`];
+	if (!(step > 0)) return { problems: [`${route}: no rail, or no --hero-cycle — the band is not there to measure`] };
 	const frames = [];
 	for (const f of [0, 1, 2]) {
 		const at = (f + 0.5) * step;
@@ -118,7 +118,7 @@ async function home(page, route) {
 	if (new Set(tails).size !== 3) problems.push(`${route}: the tail's colour on frames 0/1/2 is ${tails.join(" / ")} — it should change on each`);
 	if (frames[0].deck === frames[1].deck) problems.push(`${route}: the card stays ${frames[0].deck}px between frames 0 and 1 — it should change height`);
 	if (!stops.length || stops.includes(false)) problems.push(`${route}: ${stops.filter((x) => !x).length} of ${stops.length} rail stops are not buttons`);
-	return problems;
+	return { problems, tail0: tails[0] };
 }
 
 /** V — returns the problems found on one vertical, and how long its opening took. */
@@ -138,11 +138,12 @@ async function vertical(page, route) {
 	return { problems: done ? [] : [`${route}: started but not is-done ${END + MARGIN} ms later`], took };
 }
 
-/** R — reduced motion, on one route: the end state at once, nothing running, no controls. */
-async function reduced(page, route) {
+/** R — reduced motion, on one route: the end state at once, nothing running, no controls; on the home, the tail in
+    its frame-0 colour as the same profile drew it with motion. */
+async function reduced(page, route, tail0) {
 	await page.goto(`${BASE}${route}?engines=${Date.now()}`, { waitUntil: "load", timeout: 60_000 });
 	await page.waitForTimeout(500);
-	return page.evaluate((route) => {
+	return page.evaluate(([route, tail0]) => {
 		const problems = [];
 		const band = document.querySelector(".s-hero--home") ?? document.querySelector(".s-hero--scene");
 		if (!band) return [`${route}: no band`];
@@ -151,8 +152,10 @@ async function reduced(page, route) {
 		if (running) problems.push(`${route}: ${running} animation(s) still running in the band`);
 		const shown = [...document.querySelectorAll(".scene__ctl")].filter((c) => getComputedStyle(c).display !== "none").length;
 		if (shown) problems.push(`${route}: a pause/replay control is shown with nothing to stop`);
+		const tail = document.querySelector(".ss-title__tail");
+		if (tail0 && tail && getComputedStyle(tail).color !== tail0) problems.push(`${route}: the tail is ${getComputedStyle(tail).color}, not frame 0's ${tail0} — the band does not hold its first frame`);
 		return problems;
-	}, route);
+	}, [route, tail0]);
 }
 
 async function profileRun(p) {
@@ -167,7 +170,7 @@ async function profileRun(p) {
 		const [frozen, stalled] = await Promise.all([
 			withPage(p, {}, async (page) => {
 				await page.addInitScript(plantStyle(".ss-title__tail { animation: none !important; }"));
-				return home(page, "/");
+				return (await home(page, "/")).problems;
 			}),
 			withPage(p, {}, async (page) => {
 				await page.route(/\/_astro\/Hero[A-Za-z]+\.astro_astro_type_script/, (r) => r.abort());
@@ -181,10 +184,11 @@ async function profileRun(p) {
 			Promise.all(HOME.map((r) => withPage(p, {}, (page) => home(page, r)))),
 			pool(VERTICALS, LANES, (r) => withPage(p, {}, (page) => vertical(page, r)).then((v) => ({ r, ...v }))),
 		]);
-		const still = await pool([...HOME, ...VERTICALS], LANES, (r) => withPage(p, { reducedMotion: "reduce" }, (page) => reduced(page, r)));
+		const tail0 = Object.fromEntries(HOME.map((r, i) => [r, homes[i].tail0]));
+		const still = await pool([...HOME, ...VERTICALS], LANES, (r) => withPage(p, { reducedMotion: "reduce" }, (page) => reduced(page, r, tail0[r])));
 		return {
 			p,
-			problems: [...homes.flat(), ...verticals.flatMap((v) => v.problems), ...still.flat()],
+			problems: [...homes.flatMap((h) => h.problems), ...verticals.flatMap((v) => v.problems), ...still.flat()],
 			took: verticals.map((v) => v.took).filter(Boolean),
 			seconds: Math.round((Date.now() - t0) / 1000),
 		};

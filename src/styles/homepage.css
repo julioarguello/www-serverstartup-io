@@ -778,11 +778,9 @@
 	.s-hero--home * {
 		animation: none;
 	}
-	/* Nothing moves, so the STOP has nothing to stop and goes — but the stops
-	   are the only way to the six photographs. They stay. */
-	.s-hero--home .scene__ctl {
-		display: none;
-	}
+	/* Nothing moves, so the STOP has nothing to stop and goes (scene-ctl.css,
+	   for every band) — but the stops are the only way to the six
+	   photographs. They stay. */
 }
 
 @media (min-width: 768px) {

@@ -35,6 +35,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	/* nothing to replay when nothing moves */
-	.scene__replay { display: none; }
+	/* Nothing moves, so there is nothing to stop or to replay: the opening starts at its end (#315), with no
+	   animation running and no frame requested — measured on all six, in WebKit and Chromium (#583). A pause
+	   that pauses nothing is a control that does nothing; the home's band already drops its own. */
+	.scene__ctl { display: none; }
 }

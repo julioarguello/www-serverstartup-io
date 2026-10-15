@@ -328,6 +328,15 @@ jobs:
         shell: node scripts/ci-gate.mjs bash -e {0}
         run: node scripts/ci-check-layout.mjs http://localhost:8787
 
+      - name: Hero frames (no per-pixel effect re-run per frame, the steady frame under the long-task line)
+        # #568. Big Data's Lighthouse score swung 0.70-0.98 on one build: the
+        # dusk re-ran blur(3px) on its cut-outs on every animation frame, and
+        # Lighthouse charged those frames as blocking time. Lighthouse names
+        # the script, never the line, so this drives each opening's frames by
+        # hand (fake clock, CPU x4, phone) and counts the effects it sets.
+        shell: node scripts/ci-gate.mjs bash -e {0}
+        run: node scripts/ci-check-hero-frames.mjs http://localhost:8787
+
   # ── a11y: 40 % of the old wall clock, alone on a runner ───────────────────
   #
   # This is the new critical path. Sharding ci-check-a11y.mjs itself is the next
@@ -557,7 +566,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 21 steps that can fail"
+            echo "## Quality gates — 22 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -592,6 +601,7 @@ jobs:
             echo "| team copy | no count of people, in text, meta or JSON-LD |"
             echo "| var() resolution | every var() resolves, and the template-fed ones carry a fallback |"
             echo "| layout invariants | rows stay equal, ROWs draw no box, no copy printed twice, the footer holds its line and its measure |"
+            echo "| hero frames | no per-pixel effect re-run per frame · the steady frame under 50 ms at CPU ×4 |"
             echo "| a11y | axe sample · keyboard traversal, every route · menu focus trap · WCAG 2.1.4 · reflow 320px · W3C Nu |"
             echo "| Lighthouse | perf >=95 · a11y 100 · bp 100 · seo 100 · one runner per URL |"
           } >> "$GITHUB_STEP_SUMMARY"

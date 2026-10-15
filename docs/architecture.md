@@ -315,7 +315,14 @@ Decisions that are not obvious from the code, and the measurement behind each:
   resumes from its own accumulated time; the events' timers and the end run on `SceneClock`. Replay
   goes back to the photograph by day. Frozen from outside (the a11y gate sets `is-done`), the scene
   jumps to its end state: the dusk fallen, the lantern lit, one still event per zone — what reduced
-  motion shows at once.
+  motion shows at once. Under reduced motion no pause or replay is shown, on any band (#583): nothing
+  runs and no frame is requested, so there is nothing for them to stop (`scene-ctl.css`).
+- **Every opening is checked in Safari's engine and on an Android profile** (#583).
+  `scripts/ci-check-engines.mjs` runs WebKit · iPhone 13, WebKit · Desktop Safari and Chromium · Pixel 7
+  side by side, one browser per page (Chromium animates only the page it treats as shown): the home's
+  tail and card animate on the real clock, every vertical reaches `is-playing` then `is-done`, and
+  reduced motion starts at rest with no control shown — Android's «Remove animations» is that setting,
+  and #315 intends it. Real devices by hand: `docs/how-to/check-a-real-device.md`.
 - **The visitor's echo is fetched by the browser** from `/api/whoami` (`no-store`,
   `cf-connecting-ip` + `cf.city`) and hidden unless the edge answers. Service pages are cached at the
   edge for an hour (§9): an address rendered into the HTML would be served to the next visitor. The

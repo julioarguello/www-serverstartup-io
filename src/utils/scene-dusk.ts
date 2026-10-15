@@ -105,18 +105,52 @@ export function paintNightEven(ctx: CanvasRenderingContext2D, n: NightFrame, lev
 
 /** What keeps its light: erased from the night, softly. */
 function cutOut(ctx: CanvasRenderingContext2D, n: NightFrame): void {
+	const m = softCutouts(ctx.canvas, n);
+	if (!m) return;
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.globalCompositeOperation = "destination-out";
-	ctx.filter = "blur(3px)";
-	ctx.fillStyle = "#000";
-	for (const p of n.cutouts) {
-		ctx.beginPath();
-		for (let i = 0; i < p.length; i += 2) {
-			if (i) ctx.lineTo(p[i] * n.scale, p[i + 1] * n.scale);
-			else ctx.moveTo(p[i] * n.scale, p[i + 1] * n.scale);
-		}
-		ctx.closePath();
-		ctx.fill();
-	}
-	ctx.filter = "none";
+	ctx.drawImage(m.img, m.x, m.y);
 	ctx.globalCompositeOperation = "source-over";
+	ctx.setTransform(n.dpr, 0, 0, n.dpr, 0, 0);
+}
+
+/* The cut-outs never move within a layout; only the night around them does. Blurred on every frame they were
+   most of a scene's main-thread time on a renderer without a GPU — Lighthouse's, which turned those frames into
+   blocking time (#568). So they are blurred once, into a canvas the size of their bounds, and every frame
+   erases with it. */
+type SoftCutouts = { scale: number; dpr: number; cutouts: number[][]; img: HTMLCanvasElement; x: number; y: number };
+const softened = new WeakMap<HTMLCanvasElement, SoftCutouts>();
+
+function softCutouts(c: HTMLCanvasElement, n: NightFrame): SoftCutouts | null {
+	/* the outlines are the scene's own constant lists, so the same list means the same outline */
+	const had = softened.get(c);
+	if (had && had.scale === n.scale && had.dpr === n.dpr && had.cutouts.length === n.cutouts.length && had.cutouts.every((p, i) => p === n.cutouts[i])) return had;
+	let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+	for (const p of n.cutouts) for (let i = 0; i < p.length; i += 2) {
+		const x = p[i] * n.scale * n.dpr, y = p[i + 1] * n.scale * n.dpr;
+		x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+	}
+	if (x0 > x1) return null;
+	/* room for the blur's tail on every side: 3px of deviation, past three of them, at either scale */
+	const pad = Math.ceil(10 * n.dpr);
+	const x = Math.floor(x0) - pad, y = Math.floor(y0) - pad;
+	const img = document.createElement("canvas");
+	img.width = Math.ceil(x1) + pad - x;
+	img.height = Math.ceil(y1) + pad - y;
+	const m = img.getContext("2d")!;
+	m.setTransform(n.dpr, 0, 0, n.dpr, -x, -y);
+	m.filter = "blur(3px)";
+	m.fillStyle = "#000";
+	for (const p of n.cutouts) {
+		m.beginPath();
+		for (let i = 0; i < p.length; i += 2) {
+			if (i) m.lineTo(p[i] * n.scale, p[i + 1] * n.scale);
+			else m.moveTo(p[i] * n.scale, p[i + 1] * n.scale);
+		}
+		m.closePath();
+		m.fill();
+	}
+	const made = { scale: n.scale, dpr: n.dpr, cutouts: [...n.cutouts], img, x, y };
+	softened.set(c, made);
+	return made;
 }

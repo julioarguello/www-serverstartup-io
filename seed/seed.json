@@ -1370,7 +1370,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "rendimiento|95 o más;accesibilidad|100;buenas prácticas|100;SEO|100;rutas con copia congelada|26;pasos que pueden fallar|22"
+									"text": "rendimiento|95 o más;accesibilidad|100;buenas prácticas|100;SEO|100;rutas con copia congelada|26;pasos que pueden fallar|23"
 								}
 							]
 						},
@@ -4308,7 +4308,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "performance|95 or more;accessibility|100;best practices|100;SEO|100;routes with frozen copy|26;steps that can fail|22"
+									"text": "performance|95 or more;accessibility|100;best practices|100;SEO|100;routes with frozen copy|26;steps that can fail|23"
 								}
 							]
 						},
@@ -17809,7 +17809,7 @@
 								{
 									"_type": "span",
 									"_key": "k1e",
-									"text": "Antes de preguntarle nada a una persona, la rama pasa por veintidós pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:",
+									"text": "Antes de preguntarle nada a una persona, la rama pasa por veintitrés pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:",
 									"marks": []
 								}
 							]
@@ -18576,7 +18576,7 @@
 								{
 									"_type": "span",
 									"_key": "k1e",
-									"text": "Before a person is asked anything, the branch goes through twenty-two steps that can fail. They refuse what a reading by eye does not catch:",
+									"text": "Before a person is asked anything, the branch goes through twenty-three steps that can fail. They refuse what a reading by eye does not catch:",
 									"marks": []
 								}
 							]

@@ -1,14 +1,13 @@
 // The WCAG ratio of every text in the band on its real pixels, frame by frame, at 1440 x 900 and
 // 393 x 852: it hides the text, screenshots each text box, and takes the 95th-percentile brightest
-// backing luminance. Usage: node contrast.cjs [url]   (or U=<url>)
-const p = require('puppeteer');
-const { target, open, pinFrame } = require('./frame.cjs');
+// backing luminance. Usage: node contrast.cjs [url] [--engine webkit]   (or U=<url>)
+const { engine, target, launch, open, pinFrame } = require('./frame.cjs');
 const U = target();
 const lum = (r, g, b) => { const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
 const cr = (a, b) => { const [x, y] = [a, b].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
 (async () => {
-	const b = await p.launch({ headless: 'new', args: ['--enable-gpu', '--use-angle=metal'] });
-	const g = await b.newPage();
+	const { page: g, close } = await launch(['--enable-gpu', '--use-angle=metal']);
+	console.log('engine:', engine());
 	let low = 0;
 	for (const [dv, vp] of [['desk', { width: 1440, height: 900 }], ['phone', { width: 393, height: 852, isMobile: true, hasTouch: true, deviceScaleFactor: 1 }]]) {
 		await g.setViewport(vp);
@@ -17,14 +16,33 @@ const cr = (a, b) => { const [x, y] = [a, b].sort((m, n) => n - m); return (x + 
 			await pinFrame(g, U, f, f ? 3000 : 5200);
 			const targets = await g.evaluate(() => {
 				const out = [];
+				// One box per line OF EACH TEXT NODE, in every engine: WebKit returns a range's client rects per word,
+				// Chromium per line, and the 95th percentile of a word's patch is not the line's — the same frame read
+				// 3.43 in WebKit and 4.77 in Chrome on identical pixels (#583). A text node's rects sharing a line are
+				// merged; separate text nodes (a link, a code span) stay separate boxes, as Chromium always measured.
+				const lines = (rects) => {
+					const by = new Map();
+					for (const x of rects) {
+						if (x.width < 4) continue;
+						const k = Math.round(x.top) + ':' + Math.round(x.height);
+						const l = by.get(k);
+						by.set(k, l ? { left: Math.min(l.left, x.left), top: l.top, right: Math.max(l.right, x.right), height: l.height } : { left: x.left, top: x.top, right: x.right, height: x.height });
+					}
+					return [...by.values()].map((l) => ({ left: l.left, top: l.top, width: l.right - l.left, height: l.height }));
+				};
 				const add = (name, el) => {
 					if (!el) return;
 					const cs = getComputedStyle(el);
 					if (cs.visibility === 'hidden' || +cs.opacity === 0 || cs.display === 'none') return;
-					const r = document.createRange();
-					r.selectNodeContents(el);
-					for (const x of r.getClientRects()) {
-						if (x.width < 4) continue;
+					const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+					const rects = [];
+					for (let n = w.nextNode(); n; n = w.nextNode()) {
+						if (!n.textContent.trim()) continue;
+						const r = document.createRange();
+						r.selectNodeContents(n);
+						rects.push(...lines(r.getClientRects()));
+					}
+					for (const x of rects) {
 						out.push({ name, col: cs.color, x: Math.max(0, x.left), y: Math.max(0, x.top), w: Math.min(x.width, innerWidth - x.left), h: x.height });
 					}
 				};
@@ -32,7 +50,7 @@ const cr = (a, b) => { const [x, y] = [a, b].sort((m, n) => n - m); return (x + 
 				// the head: the h1's own text, without the tail
 				const h1 = h.querySelector('h1');
 				add('tail', h.querySelector('.ss-title__tail'));
-				for (const n of [...h1.childNodes]) if (n.nodeType === 3 && n.textContent.trim()) { const r = document.createRange(); r.selectNodeContents(n); const cs = getComputedStyle(h1); for (const x of r.getClientRects()) if (x.width >= 4) out.push({ name: 'head', col: cs.color, x: x.left, y: x.top, w: x.width, h: x.height }); }
+				for (const n of [...h1.childNodes]) if (n.nodeType === 3 && n.textContent.trim()) { const r = document.createRange(); r.selectNodeContents(n); const cs = getComputedStyle(h1); for (const x of lines(r.getClientRects())) out.push({ name: 'head', col: cs.color, x: x.left, y: x.top, w: x.width, h: x.height }); }
 				h.querySelectorAll('.s-hero__kicker p').forEach((e) => add('lead', e));
 				h.querySelectorAll('.s-hero__item').forEach((it) => { if (+getComputedStyle(it).opacity > 0.5) { add('card-name', it.querySelector('.s-hero__name')); add('card-text', it.querySelector('.s-hero__pitch-item, .s-hero__fact')); } });
 				const idx = h.querySelector('.s-hero__verticals, .ns-index');
@@ -60,6 +78,6 @@ const cr = (a, b) => { const [x, y] = [a, b].sort((m, n) => n - m); return (x + 
 			if (/entregas/.test(U)) continue;
 		}
 	}
-	await b.close();
+	await close();
 	process.exit(low ? 1 : 0);
 })();

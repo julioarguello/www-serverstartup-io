@@ -18,9 +18,14 @@ against the site itself. Each takes its target as the first argument (or `U=`), 
 - `copy.cjs`: dumps the rendered title, index, card lines, rail, section order, «Cómo trabajamos» items and the
   mantra, for a verbatim comparison with `pkg/brief.md` (back in its markdown-lite: `code`, *italics*).
 
-All of them use the project's own `puppeteer` (run them from a checkout with `node_modules`).
+All of them use the project's own `puppeteer` (run them from a checkout with `node_modules`). `overlap-h.cjs` and
+`contrast.cjs` also take `--engine webkit` (or `ENGINE=webkit`) to measure in Safari's engine through the project's
+pinned Playwright (#583) — `npx playwright install webkit` once. `contrast.cjs` measures one box per line of each text
+node in both engines: WebKit reports a range's rectangles per word, and the brightest 5 % of one word's patch is not
+the line's (the same frame read 3.43 in WebKit and 4.77 in Chrome on identical pixels until the boxes were merged).
 
 ```bash
 node .design-sync/verify/overlap-h.cjs https://www-serverstartup-io-preview.serverstartup-s-partner-demo-account3612.workers.dev/
 node .design-sync/verify/contrast.cjs https://www-serverstartup-io-preview.serverstartup-s-partner-demo-account3612.workers.dev/en
+node .design-sync/verify/contrast.cjs https://www-serverstartup-io-preview.serverstartup-s-partner-demo-account3612.workers.dev/ --engine webkit
 ```

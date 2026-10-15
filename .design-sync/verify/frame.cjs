@@ -11,11 +11,44 @@
 const STEP = 6000;
 const LEAD = 500; // every frame's animations are delayed by i * step - 0.5 s
 
-const target = () => process.env.U || process.argv[2] || 'http://localhost:8791/entregas/nosotros/Home%20-%20nosotros.html';
+// `--engine webkit` (or ENGINE=webkit) measures in Safari's engine through Playwright (#583); the default is the
+// project's Puppeteer Chrome, unchanged.
+const engine = () => { const i = process.argv.indexOf('--engine'); return (i > -1 ? process.argv[i + 1] : process.env.ENGINE) || 'chromium'; };
+const target = () => process.env.U
+	|| process.argv.slice(2).find((a, i, all) => !a.startsWith('--') && all[i - 1] !== '--engine')
+	|| 'http://localhost:8791/entregas/nosotros/Home%20-%20nosotros.html';
+
+// The page the scripts drive. Chromium is Puppeteer's own page; any other engine gets the few calls the scripts make,
+// with Puppeteer's signatures. Playwright fixes `isMobile` per context, so a viewport that changes it opens a new one.
+async function launch(chromeArgs = []) {
+	const name = engine();
+	if (name === 'chromium') {
+		const b = await require('puppeteer').launch({ headless: 'new', args: chromeArgs });
+		return { page: await b.newPage(), close: () => b.close() };
+	}
+	const b = await require('playwright')[name].launch();
+	let ctx, page, mobile = null;
+	const wrap = {
+		async setViewport(vp) {
+			const size = { width: vp.width, height: vp.height };
+			if (page && !!vp.isMobile === mobile) return page.setViewportSize(size);
+			if (ctx) await ctx.close();
+			mobile = !!vp.isMobile;
+			ctx = await b.newContext({ viewport: size, isMobile: mobile, hasTouch: !!vp.hasTouch, deviceScaleFactor: vp.deviceScaleFactor ?? 1 });
+			page = await ctx.newPage();
+		},
+		goto: (url, o = {}) => page.goto(url, { ...o, waitUntil: o.waitUntil === 'networkidle2' ? 'networkidle' : o.waitUntil }),
+		evaluate: (fn, arg) => page.evaluate(fn, arg),
+		waitForFunction: (fn, o) => page.waitForFunction(fn, undefined, o),
+		addStyleTag: (o) => page.addStyleTag(o),
+		screenshot: ({ clip, type }) => page.screenshot({ clip, type }),
+	};
+	return { page: wrap, close: () => b.close() };
+}
 
 async function open(page, url) {
 	await page.goto(url + (url.includes('?') ? '&' : '?') + 'r=' + Math.random(), { waitUntil: 'networkidle2', timeout: 90000 });
-	await page.evaluate(() => document.fonts.ready);
+	await page.evaluate(() => document.fonts.ready.then(() => true));
 }
 
 async function pinFrame(page, url, f, at) {
@@ -45,4 +78,4 @@ async function pinFrame(page, url, f, at) {
 	await new Promise((r) => setTimeout(r, 300));
 }
 
-module.exports = { target, open, pinFrame, STEP };
+module.exports = { engine, target, launch, open, pinFrame, STEP };

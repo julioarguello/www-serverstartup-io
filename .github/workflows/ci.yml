@@ -37,7 +37,7 @@ permissions:
   pull-requests: read # gitleaks-action lists the PR's commits
 
 jobs:
-  # The scope decision is its own job because four jobs need its answer and the
+  # The scope decision is its own job because five jobs need its answer and the
   # issue's rule is that no worker waits for another worker. It is checkout plus
   # one bash script — the cheapest thing that can hold an output.
   scope:
@@ -406,6 +406,65 @@ jobs:
         shell: node scripts/ci-gate.mjs bash -e {0}
         run: node scripts/ci-check-a11y.mjs http://localhost:8787
 
+  # ── engines: Safari's engine and Android's Chromium, on their own runner (#583) ──
+  #
+  # Every other rendered gate runs Puppeteer's Chrome. WebKit on Linux needs
+  # system libraries installed with apt on every run (they cannot be cached),
+  # so this is a job of its own beside `a11y` rather than more minutes on
+  # `rendered`: it runs in parallel and stays off the critical path.
+  engines:
+    needs: scope
+    if: needs.scope.outputs.site == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
+        id: deps
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+            ~/.cache/puppeteer
+          key: deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
+
+      - name: Install  # not-a-gate: dependency install, not a check
+        if: steps.deps.outputs.cache-hit != 'true'
+        run: npm ci
+
+      # Playwright's browsers are a function of its pinned version, which the
+      # lockfile carries. A path of their own, not added to the shared key above:
+      # the other jobs save that entry too, without these browsers in it.
+      - name: Restore the Playwright browsers  # not-a-gate: a cache lookup, not a check
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install WebKit and Chromium for Playwright  # not-a-gate: browser and system-library install, not a check
+        run: npx playwright install --with-deps webkit chromium-headless-shell
+
+      - name: Build
+        run: npx astro build
+
+      - name: Boot seeded local stack
+        run: scripts/ci-local-stack.sh 8787
+
+      - name: Engines (WebKit · iPhone and Desktop Safari, Chromium · Pixel 7, reduced motion included)
+        # #583. The home's tail colour and card height animate `var()` inside
+        # @keyframes, checked in Safari's engine only by hand until now; and an
+        # Android phone's "Remove animations" showed every opening at rest,
+        # which #315 intends. This asserts both, on the real clock, and each
+        # profile must first catch a frozen tail and a scene that never starts.
+        shell: node scripts/ci-gate.mjs bash -e {0}
+        run: node scripts/ci-check-engines.mjs http://localhost:8787
+
   # ── perf: one runner per URL, same three runs and same assertions ─────────
   perf:
     needs: scope
@@ -524,7 +583,7 @@ jobs:
 
   # ── report: the Summary the four jobs above earned ────────────────────────
   report:
-    needs: [scope, static, rendered, a11y, perf]
+    needs: [scope, static, rendered, a11y, engines, perf]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -533,7 +592,7 @@ jobs:
         if: always()
         env:
           SITE: ${{ needs.scope.outputs.site }}
-          RESULTS: static=${{ needs.static.result }} rendered=${{ needs.rendered.result }} a11y=${{ needs.a11y.result }} perf=${{ needs.perf.result }}
+          RESULTS: static=${{ needs.static.result }} rendered=${{ needs.rendered.result }} a11y=${{ needs.a11y.result }} engines=${{ needs.engines.result }} perf=${{ needs.perf.result }}
         run: |
           {
             # One row per failable step above, in order. The page at
@@ -566,7 +625,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 22 steps that can fail"
+            echo "## Quality gates — 23 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -603,5 +662,6 @@ jobs:
             echo "| layout invariants | rows stay equal, ROWs draw no box, no copy printed twice, the footer holds its line and its measure |"
             echo "| hero frames | no per-pixel effect re-run per frame · the steady frame under 50 ms at CPU ×4 |"
             echo "| a11y | axe sample · keyboard traversal, every route · menu focus trap · WCAG 2.1.4 · reflow 320px · W3C Nu |"
+            echo "| engines | WebKit iPhone + Desktop Safari, Chromium Pixel 7: the home's tail and card animate · every opening starts and rests · reduced motion starts at rest, no pause |"
             echo "| Lighthouse | perf >=95 · a11y 100 · bp 100 · seo 100 · one runner per URL |"
           } >> "$GITHUB_STEP_SUMMARY"

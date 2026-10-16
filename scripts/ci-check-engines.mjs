@@ -103,10 +103,17 @@ async function home(page, route) {
 		return cycle / document.querySelectorAll(".s-hero__dots .s-hero__stop").length;
 	});
 	if (!(step > 0)) return { problems: [`${route}: no rail, or no --hero-cycle — the band is not there to measure`] };
+	/* Sampled mid-frame on the tail animation's OWN clock — its iteration and progress, in frames — never on
+	   the document's: on a loaded runner the band's animations start seconds after the timeline does, and
+	   "9 s" on the document read frame 0 twice in WebKit (CI, #589). The band always opens on frame 0. */
 	const frames = [];
 	for (const f of [0, 1, 2]) {
-		const at = (f + 0.5) * step;
-		await page.waitForFunction((t) => document.timeline.currentTime >= t, at, { polling: 100, timeout: at + 30_000 });
+		const reached = await page.waitForFunction((at) => {
+			const t = document.querySelector(".ss-title__tail")?.getAnimations()[0]?.effect?.getComputedTiming();
+			const n = document.querySelectorAll(".s-hero__dots .s-hero__stop").length;
+			return !!t && t.progress !== null && ((t.currentIteration ?? 0) + t.progress) * n >= at;
+		}, f + 0.5, { polling: 100, timeout: step + 30_000 }).catch(() => null);
+		if (!reached) return { problems: [`${route}: the tail's colour never reached frame ${f} — it does not animate`] };
 		frames.push(await page.evaluate(() => ({
 			tail: getComputedStyle(document.querySelector(".ss-title__tail")).color,
 			deck: Math.round(document.querySelector(".s-hero__deck").getBoundingClientRect().height),

@@ -312,7 +312,8 @@
 	content: "▮";
 	color: var(--color-console-ok);
 	margin-left: var(--space-2);
-	animation: s-boot-blink 1.1s steps(1) infinite;
+	/* four blinks, then lit: nothing blinks past 5 s (WCAG 2.2.2, #505) */
+	animation: s-boot-blink 1.1s steps(1) 4;
 }
 
 @keyframes s-boot-blink {

@@ -22,7 +22,7 @@
 	font-size: 14px;
 }
 .scene__replay { font-size: 20px; line-height: 1; }
-.scene__replay::before { content: "↻"; }
+.scene__replay::before { content: "↻"; content: "↻" / ""; }
 /* the glyphs are seen, not read — the input's aria-label names the control; without the empty alternative the
    tree carried a bare "❚❚" after it (WCAG-EM #505). The first declaration is for browsers that predate `/ ""` */
 .scene__pause-btn::before { content: "❚❚"; content: "❚❚" / ""; }

@@ -210,6 +210,8 @@
 
 .s-history__inner h3::before {
 	content: counter(hist-chapter, decimal-leading-zero) " · ";
+	/* the chapter number was read into each heading's name ("· EL NOMBRE"); seen, not read (#505): the plain value for browsers that predate `/ ""` */
+	content: counter(hist-chapter, decimal-leading-zero) " · " / "";
 }
 
 /* the closing thought (the cube) — highlighted conclusion.
@@ -310,6 +312,7 @@
 /* blinking block cursor after the log line (the wordmark's ▮) */
 .s-boot code::after {
 	content: "▮";
+	content: "▮" / ""; /* seen, not read (#505): the plain value for browsers that predate `/ ""` */
 	color: var(--color-console-ok);
 	margin-left: var(--space-2);
 	/* four blinks, then lit: nothing blinks past 5 s (WCAG 2.2.2, #505) */

@@ -1390,8 +1390,10 @@ console.log("── 2.2.2 nothing moves past 5 s unstoppable · 2.5.3 the name h
 		const spoken = [];
 		const walk = (n) => {
 			if (!n) return;
-			if (n.role === "heading" && /^~/.test(n.name || "")) spoken.push(`heading read as «${n.name}»`);
-			if (/^(StaticText|text)$/.test(n.role) && /^[❚▶]+$/.test((n.name || "").trim())) spoken.push(`a bare «${n.name.trim()}» in the tree`);
+			const nm = (n.name || "").trim();
+			// a heading that opens on a sign, and a text node that is nothing but signs (plain punctuation aside)
+			if (n.role === "heading" && /^[^\p{L}\p{N}¿¡«"'(]/u.test(nm)) spoken.push(`heading read as «${nm}»`);
+			if (/^(StaticText|text)$/.test(n.role) && nm && !/[\p{L}\p{N}]/u.test(nm) && !/^[.,;:·()«»"'¡!¿?—–-]+$/.test(nm)) spoken.push(`a bare «${nm}» in the tree`);
 			for (const c of n.children || []) walk(c);
 		};
 		walk(tree);

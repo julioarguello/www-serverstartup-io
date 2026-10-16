@@ -74,7 +74,7 @@
 .vision__code li::before { counter-increment: line; content: counter(line) "  "; color: color-mix(in srgb, var(--color-secondary) 60%, transparent); }
 /* token-guard: on */
 .vision__code li.is-active { font-weight: 700; }
-.vision__code li.is-active::after { content: " ▌"; }
+.vision__code li.is-active::after { content: " ▌"; content: " ▌" / ""; } /* seen, not read (#505): the plain value for browsers that predate `/ ""` */
 
 /* the sequence on the openings' one grammar (#558; the founder had approved 3.8 s and 5.2 s, then asked for
    every opening on one timing): the photograph alone to --beat-draw; then the machine's view builds as the

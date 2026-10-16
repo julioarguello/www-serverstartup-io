@@ -51,6 +51,7 @@
 }
 .ls__cmd::before {
 	content: "$ ";
+	content: "$ " / ""; /* seen, not read (#505): the plain value for browsers that predate `/ ""` */
 	color: var(--color-console-faint);
 }
 

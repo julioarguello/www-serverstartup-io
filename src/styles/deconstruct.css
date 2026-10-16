@@ -83,6 +83,7 @@
 
 .s-doc__section > ul > li::before {
 	content: "–";
+	content: "–" / ""; /* seen, not read (#505): the plain value for browsers that predate `/ ""` */
 	position: absolute;
 	left: 0;
 	color: var(--color-text-muted);

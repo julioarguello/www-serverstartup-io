@@ -322,6 +322,7 @@
 
 .s-inst__closer li::before {
 	content: "–\00a0";
+	content: "–\00a0" / ""; /* seen, not read (#505): the plain value for browsers that predate `/ ""` */
 }
 
 /* ═══ PANEL (#452) ═══

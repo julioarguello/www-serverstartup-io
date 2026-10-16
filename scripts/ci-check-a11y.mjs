@@ -1381,9 +1381,23 @@ console.log("── 2.2.2 nothing moves past 5 s unstoppable · 2.5.3 the name h
 			const st = document.createElement("style");
 			st.textContent = "@keyframes a11y-plant { 50% { opacity: 0; } } .a11y-plant { animation: a11y-plant 1s steps(1) infinite; }";
 			document.head.append(st);
-			document.body.insertAdjacentHTML("beforeend", '<a href="#" class="a11y-plant" aria-label="Foo">Bar</a>');
+			document.body.insertAdjacentHTML("beforeend", '<a href="#" class="a11y-plant" aria-label="Foo">Bar</a><h2 class="a11y-plant-h">Plant</h2>');
+			st.textContent += ' .a11y-plant-h::before { content: "~ "; }';
 		}, plant);
 		const labels = await page.evaluate(LABELS);
+		// decorative generated content must not be read: a heading named "~ …", a bare pause glyph (#505)
+		const tree = await page.accessibility.snapshot({ interestingOnly: false });
+		const spoken = [];
+		const walk = (n) => {
+			if (!n) return;
+			const nm = (n.name || "").trim();
+			// a heading that opens on a sign, and a text node that is nothing but signs (plain punctuation aside)
+			if (n.role === "heading" && /^[^\p{L}\p{N}¿¡«"'(]/u.test(nm)) spoken.push(`heading read as «${nm}»`);
+			if (/^(StaticText|text)$/.test(n.role) && nm && !/[\p{L}\p{N}]/u.test(nm) && !/^[.,;:·()«»"'¡!¿?—–-]+$/.test(nm)) spoken.push(`a bare «${nm}» in the tree`);
+			for (const c of n.children || []) walk(c);
+		};
+		walk(tree);
+		for (const x of spoken) labels.push(`decoration read aloud: ${x}`);
 		await page.waitForFunction(() => document.timeline.currentTime >= 6000, { polling: 200, timeout: 30000 });
 		if (await page.$(".s-hero .scene__pause-btn")) {
 			await page.click(".s-hero .scene__pause-btn");
@@ -1394,17 +1408,18 @@ console.log("── 2.2.2 nothing moves past 5 s unstoppable · 2.5.3 the name h
 		return { moving, labels };
 	};
 	const plant = await probe(browsers[0], "/en", true);
-	if (!plant.moving.some((m) => m.includes("a11y-plant")) || !plant.labels.some((l) => l.includes("Foo"))) {
-		console.error(`  ✗ positive control: a planted endless blink (${plant.moving.length ? "seen" : "MISSED"}) and a planted mismatched name (${plant.labels.length ? "seen" : "MISSED"}) — the probe is blind`);
+	const plantHeard = plant.labels.some((l) => l.includes("«~ Plant»"));
+	if (!plant.moving.some((m) => m.includes("a11y-plant")) || !plant.labels.some((l) => l.includes("Foo")) || !plantHeard) {
+		console.error(`  ✗ positive control: a planted endless blink (${plant.moving.length ? "seen" : "MISSED"}), a planted mismatched name (${plant.labels.some((l) => l.includes("Foo")) ? "seen" : "MISSED"}) and a planted tilde read aloud (${plantHeard ? "seen" : "MISSED"}) — the probe is blind`);
 		process.exit(2);
 	}
-	ok("positive control: a planted endless blink and a planted name without its label are both called");
+	ok("positive control: a planted endless blink, a name without its label and a tilde read aloud are all called");
 	const verticals = readSeed().content.services.filter((e) => e.locale !== "en").map((e) => entryPath("services", e));
 	const routes = ["/", "/en", "/quienes-somos", "/en/about-us", "/contacto", verticals[0]];
 	await inParallel(routes, async (route, lane, report) => {
 		const r = await probe(lane, route, false);
 		for (const m of r.moving) report.fail(route, `still running at 6 s with no way to stop it (2.2.2): ${m}`);
-		for (const l of r.labels) report.fail(route, `accessible name without its visible label (2.5.3): ${l}`);
+		for (const l of r.labels) report.fail(route, l.startsWith("decoration read aloud") ? `${l} (1.3.1: hide it with content: "…" / "")` : `accessible name without its visible label (2.5.3): ${l}`);
 		if (!r.moving.length && !r.labels.length) report.ok(`${route} — nothing moves past 6 s unstoppable, every name holds its label`);
 	});
 }

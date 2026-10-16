@@ -683,6 +683,10 @@ ul, ol { list-style: none; }
 main h2:not(.s-cta__heading):not(.ref-banner__title)::before,
 .ref-banner__title::before {
 	content: "~ ";
+	/* seen, not read: generated content enters the heading's accessible name, and the accessibility tree named
+	   every section "~ Cómo trabajamos" (WCAG-EM #505). The empty alternative after the slash keeps it
+	   out; a browser that predates the syntax drops this line and keeps the one above */
+	content: "~ " / "";
 	font-weight: inherit;
 }
 

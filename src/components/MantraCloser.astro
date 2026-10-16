@@ -182,8 +182,8 @@ const nouns = beats.map((b) => b.replace(/^(Un |One |Seis |Six )/, ""));
 	/* → and ∎ are drawn by CSS, not written in the DOM: they are not
 	   language, and the copy baseline freezes language (#453's rule for the
 	   area rows' arrow) */
-	.mantra__to::before { content: "→"; }
-	.mantra__qed::before { content: "∎"; }
+	.mantra__to::before { content: "→"; content: "→" / ""; }
+	.mantra__qed::before { content: "∎"; content: "∎" / ""; }
 
 	/* the steps between beats: upright, light, at the line's own size */
 	.mantra__to {

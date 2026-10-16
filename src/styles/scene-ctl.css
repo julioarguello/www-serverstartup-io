@@ -23,8 +23,10 @@
 }
 .scene__replay { font-size: 20px; line-height: 1; }
 .scene__replay::before { content: "↻"; }
-.scene__pause-btn::before { content: "❚❚"; }
-.scene__pause:checked + .scene__pause-btn::before { content: "▶"; }
+/* the glyphs are seen, not read — the input's aria-label names the control; without the empty alternative the
+   tree carried a bare "❚❚" after it (WCAG-EM #505). The first declaration is for browsers that predate `/ ""` */
+.scene__pause-btn::before { content: "❚❚"; content: "❚❚" / ""; }
+.scene__pause:checked + .scene__pause-btn::before { content: "▶"; content: "▶" / ""; }
 .scene__pause:focus-visible + .scene__pause-btn,
 .scene__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
 /* on hover devices the controls wait at 70 % until hovered or focused. Not lower: at rest the photograph

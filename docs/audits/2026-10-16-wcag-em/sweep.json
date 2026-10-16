@@ -1,0 +1,5165 @@
+{
+	"sha": "6709d0f9a798446a1deb542bec35240dcaf5ff5f",
+	"base": "http://localhost:8580",
+	"sample": [
+		{
+			"path": "/",
+			"why": "home: the carousel, its rail and pause, the two kicker lines",
+			"kind": "structured"
+		},
+		{
+			"path": "/en",
+			"why": "home, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/big-data-cloud-analytics",
+			"why": "vertical: canvas scene (the dusk), the mantra",
+			"kind": "structured"
+		},
+		{
+			"path": "/cdn-waf-seguridad-edge-cloudflare",
+			"why": "vertical: canvas scene (the radar), the visitor's echo, the reference list drawn on a canvas",
+			"kind": "structured"
+		},
+		{
+			"path": "/comercio-electronico",
+			"why": "vertical: the shop mock-up (cart instrument)",
+			"kind": "structured"
+		},
+		{
+			"path": "/desarrollo-greenfield",
+			"why": "vertical: SVG elevation drawn over a photograph",
+			"kind": "structured"
+		},
+		{
+			"path": "/inteligencia-artificial",
+			"why": "vertical: the machine's view, the pull-request instrument",
+			"kind": "structured"
+		},
+		{
+			"path": "/integracion-de-sistemas",
+			"why": "vertical: the bridge with live connector labels",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/systems-integration",
+			"why": "vertical, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/quienes-somos",
+			"why": "about: team photographs, the boot console",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/about-us",
+			"why": "about, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/contacto",
+			"why": "contact: the only page listing ways to reach the company",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/contact",
+			"why": "contact, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/referencias",
+			"why": "references: logo wall",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/references",
+			"why": "references, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/deconstruyendo",
+			"why": "deconstruyendo: the review panel and its chips, the gate count",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/deconstructing",
+			"why": "deconstructing, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/accesibilidad",
+			"why": "the accessibility statement and its channel (RD 1112/2018 art. 15)",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/accessibility",
+			"why": "accessibility statement, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/aviso-legal",
+			"why": "legal text: long Portable Text, tables of identity data",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/privacy-policy",
+			"why": "privacy policy, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/search?q=cloudflare",
+			"why": "search with results",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/search?q=zzzqqq",
+			"why": "search with no result, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/search",
+			"why": "search, empty",
+			"kind": "structured"
+		},
+		{
+			"path": "/no-existe",
+			"why": "404",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/no-such-page",
+			"why": "404, English",
+			"kind": "structured"
+		},
+		{
+			"path": "/en/big-data-cloud-analytics",
+			"why": "random 10 % (seed 6709d0f9)",
+			"kind": "random"
+		},
+		{
+			"path": "/en/e-commerce",
+			"why": "random 10 % (seed 6709d0f9)",
+			"kind": "random"
+		},
+		{
+			"path": "/en/greenfield-development",
+			"why": "random 10 % (seed 6709d0f9)",
+			"kind": "random"
+		}
+	],
+	"results": [
+		{
+			"path": "/",
+			"why": "home: the carousel, its rail and pause, the two kicker lines",
+			"kind": "structured",
+			"status": 200,
+			"title": "Ingeniería de software — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Ingeniería de software, de la arquitectura a producción",
+				"H2 Cómo trabajamos",
+				"H2 Partner oficial de Cloudflare",
+				"H3 CDN",
+				"H3 WAF y Zero Trust",
+				"H3 Workers",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "home-faro-limpio-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "home-puente-salida-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "ia-remolcador-aviles-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "gf-guggenheim-restaurado-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "home-almacen-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "bd-observatorio-entero-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [
+				"cloudflare → /cdn-waf-seguridad-edge-cloudflare | /es-es/"
+			],
+			"emptyLinks": [],
+			"nav": "/ /en /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /cdn-waf-seguridad-edge-cloudflare /integracion-de-sistemas /inteligencia-artificial /desarrollo-greenfield /comercio-electronico /big-data-cloud-analytics /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/ /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": [
+				{
+					"role": "button",
+					"current": null,
+					"name": "Nosotros",
+					"weight": "700",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "CDN y WAF",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Integración",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "IA",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Greenfield",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Comercio",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Big Data",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				}
+			],
+			"moving@6.5s_1440": [
+				{
+					"name": "site-header-edge",
+					"target": "site-header is-over-hero is-rotating",
+					"iterations": null,
+					"duration": 42000,
+					"inBandWithPause": false
+				},
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--home has-rail (+0x +6) «Ingeniería de software, de la arquitectu»",
+					"s-hero__deck (+0x +62) «CDN, WAF y seguridad edge→ Caché hasta e»",
+					"s-hero__stop-name (+7x +0) «integración»",
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "site-header-edge",
+					"target": "site-header is-over-hero is-rotating",
+					"iterations": null,
+					"duration": 42000,
+					"inBandWithPause": false
+				},
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero__deck (+22x +0) «CDN, WAF y seguridad edge→ Caché hasta e»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en",
+			"why": "home, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Software engineering — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Software engineering, from architecture to production",
+				"H2 How we work",
+				"H2 Official Cloudflare partner",
+				"H3 CDN",
+				"H3 WAF and Zero Trust",
+				"H3 Workers",
+				"H2 Let's talk, engineer to engineer.",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "home-faro-limpio-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "home-puente-salida-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "ia-remolcador-aviles-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "gf-guggenheim-restaurado-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "home-almacen-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "bd-observatorio-entero-2016.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [
+				"cloudflare → /en/cdn-waf-edge-security-cloudflare | /"
+			],
+			"emptyLinks": [],
+			"nav": "/en / /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/cdn-waf-edge-security-cloudflare /en/systems-integration /en/artificial-intelligence /en/greenfield-development /en/e-commerce /en/big-data-cloud-analytics /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/ /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": [
+				{
+					"role": "button",
+					"current": null,
+					"name": "About us",
+					"weight": "700",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "CDN & WAF",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Integration",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "AI",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Greenfield",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "E-commerce",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				},
+				{
+					"role": "button",
+					"current": null,
+					"name": "Big Data",
+					"weight": "500",
+					"deco": "none",
+					"dot": "106x3",
+					"color": "rgb(255, 255, 255)",
+					"opacity": "1"
+				}
+			],
+			"moving@6.5s_1440": [
+				{
+					"name": "site-header-edge",
+					"target": "site-header is-over-hero is-rotating",
+					"iterations": null,
+					"duration": 42000,
+					"inBandWithPause": false
+				},
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--home has-rail (+0x +6) «Software engineering, from architecture »",
+					"s-hero__deck (+0x +62) «CDN, WAF & Edge Security→ Caching down t»",
+					"s-hero__stop-name (+4x +0) «integration»",
+					"s-hero__stop-name (+15x +0) «e-commerce»",
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "site-header-edge",
+					"target": "site-header is-over-hero is-rotating",
+					"iterations": null,
+					"duration": 42000,
+					"inBandWithPause": false
+				},
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero__deck (+12x +0) «CDN, WAF & Edge Security→ Caching down t»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/big-data-cloud-analytics",
+			"why": "vertical: canvas scene (the dusk), the mantra",
+			"kind": "structured",
+			"status": 200,
+			"title": "Big Data & Cloud Analytics — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Big Data & Cloud Analytics",
+				"H2 dbt ≠ pipeline",
+				"H2 Sinergias entre lo analítico y lo operacional",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "bd-observatorio-entero.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [
+				{
+					"cls": "sky__night",
+					"hiddenFromAT": true,
+					"role": null,
+					"label": null
+				},
+				{
+					"cls": "sky__data",
+					"hiddenFromAT": true,
+					"role": null,
+					"label": null
+				}
+			],
+			"visibleButHidden": [
+				"s-hero__stage «» [canvas]",
+				"bq__gutter «1 2 3 4 5»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/big-data-cloud-analytics /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--sky is-placed is-play (+23x +0) «Big Data & Cloud Analytics Un flujo de d»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+76x +0) «/big-data-cloud-analytics»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/cdn-waf-seguridad-edge-cloudflare",
+			"why": "vertical: canvas scene (the radar), the visitor's echo, the reference list drawn on a canvas",
+			"kind": "structured",
+			"status": 200,
+			"title": "CDN, WAF y seguridad edge — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 CDN, WAF y seguridad edge",
+				"H2 WAF ≠ seguridad",
+				"H2 Quien lo configura, lo mantiene",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "home-faro-limpio.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "cdn-faro-perfil-660.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "cf-partner-network-stacked.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [
+				{
+					"cls": "radar__night",
+					"hiddenFromAT": true,
+					"role": null,
+					"label": null
+				},
+				{
+					"cls": "",
+					"hiddenFromAT": true,
+					"role": null,
+					"label": null
+				}
+			],
+			"visibleButHidden": [
+				"s-hero__stage «ORIGIN CDN WAF ACCESS ZERO TRUST 35 nm ·» [canvas]",
+				"svc-refs «» [canvas]"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [
+				"cloudflare → /es-es/ | /es-es/learning/access-management/castle-and-moat-network-security/"
+			],
+			"emptyLinks": [],
+			"nav": "/ /en/cdn-waf-edge-security-cloudflare /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--radar is-placed is-pl (+1818x +1442) «ORIGIN CDN WAF ACCESS ZERO TRUST 35 nm ·»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+153x +0) «/cdn-waf-seguridad-edge-cloudflare»",
+					"s-hero__stage (+665x +652) «ORIGIN CDN WAF ACCESS ZERO TRUST»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/comercio-electronico",
+			"why": "vertical: the shop mock-up (cart instrument)",
+			"kind": "structured",
+			"status": 200,
+			"title": "Comercio electrónico — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Comercio electrónico",
+				"H2 A medida ≠ acoplado",
+				"H2 Casos a los que tenemos cariño",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "ec-almacen-restaurado.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/e-commerce /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--store is-placed is-pl (+21x +0) «Comercio electrónico Más de veinte años »",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+42x +0) «/comercio-electronico»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/desarrollo-greenfield",
+			"why": "vertical: SVG elevation drawn over a photograph",
+			"kind": "structured",
+			"status": 200,
+			"title": "Desarrollo greenfield — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Desarrollo greenfield",
+				"H2 El código no es el producto",
+				"H2 Greenfield ≠ página en blanco",
+				"H2 La IA multiplica. El framework conduce.",
+				"H2 Tu deuda técnica es nuestro problema",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "gf-solar-bn.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "gf-guggenheim-restaurado.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"s-hero__stage «A B C D E F G H ±0,00 +50,00 50,00 L.H. »",
+				"elev__drawing «A B C D E F G H ±0,00 +50,00 50,00 L.H. »",
+				"jd__gutter «1 2 3 4 5 6 7 8 9 10»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/greenfield-development /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--elevation is-placed i (+21x +0) «A B C D E F G H ±0,00 +50,00 50,00 L.H. »",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+51x +0) «/desarrollo-greenfield»",
+					"s-hero__stage (+10x +122) «A B C D E F G H ±0,00 +50,00 50,00 L.H. »",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/inteligencia-artificial",
+			"why": "vertical: the machine's view, the pull-request instrument",
+			"kind": "structured",
+			"status": 200,
+			"title": "Inteligencia artificial — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Inteligencia artificial",
+				"H2 Generado ≠ entregado",
+				"H2 Firmamos el código",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "ia-remolcador-aviles.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "ia-remolcador-aviles.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"s-hero__stage «MATCH order = sap.read(id) stock = bq.qu»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/artificial-intelligence /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--vision is-playing is- (+42x +0) «MATCH TARGET SERVER STARTUP MISSION ASSI»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+67x +0) «/inteligencia-artificial»",
+					"s-hero__stage (+21x +142) «MATCH TARGET SERVER STARTUP MISSION ASSI»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/integracion-de-sistemas",
+			"why": "vertical: the bridge with live connector labels",
+			"kind": "structured",
+			"status": 200,
+			"title": "Integración de sistemas — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Integración de sistemas",
+				"H2 Conector ≠ Sistema integrado",
+				"H2 Ni PowerPoint ni copiar y pegar",
+				"H2 La IA acelera. El patrón manda.",
+				"H2 Quién lo construye, responde",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "int-puente-aviles.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "int-puente-trazo.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"s-hero__stage «REST SFTP JDBC Pub/Sub BigQuery SAP Comm»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/systems-integration /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--bridge is-playing is- (+58x +194) «REST SFTP JDBC Pub/Sub BigQuery SAP Comm»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+67x +0) «/integracion-de-sistemas»",
+					"s-hero__stage (+49x +178) «REST SFTP JDBC OAuth 2 Pub/Sub BigQuery»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/systems-integration",
+			"why": "vertical, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Systems Integration — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Systems Integration",
+				"H2 Connector ≠ Integrated system",
+				"H2 Not PowerPoint. Not copy-paste.",
+				"H2 AI speeds things up. Patterns call the shots.",
+				"H2 Who builds it, answers for it",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "int-puente-aviles.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "int-puente-trazo.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"s-hero__stage «REST SFTP Pub/Sub BigQuery SAP Commerce »"
+			],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /integracion-de-sistemas /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--bridge is-playing is- (+58x +194) «REST SFTP Pub/Sub BigQuery SAP Commerce »",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+58x +0) «/en/systems-integration»",
+					"s-hero__stage (+49x +183) «REST SFTP JDBC OAuth 2 Pub/Sub BigQuery »",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/quienes-somos",
+			"why": "about: team photographs, the boot console",
+			"kind": "structured",
+			"status": 200,
+			"title": "Quiénes somos — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Quiénes somos",
+				"H2 Historia",
+				"H3 EL NOMBRE",
+				"H3 EL CAMINO",
+				"H3 EL CUBO",
+				"H2 Quién responde del trabajo",
+				"H3 Daniel Sío",
+				"H3 Ignacio Ibaseta",
+				"H3 Julio Argüello",
+				"H2 Nuestros valores",
+				"H2 Con el deporte base",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image?href=%2F_astro%2Fdani.B9w-f5HB.jpg&w=260&h=",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image?href=%2F_astro%2Fnacho.G5NO3LpI.jpg&w=260&h",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image?href=%2F_astro%2Fjulio.Crq2HiLs.jpg&w=260&h",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "",
+					"src": "_image?href=%2F_astro%2Furdaneta-infantil.CYzqgPZL",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/about-us /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "s-boot-blink",
+					"target": "CODE",
+					"iterations": null,
+					"duration": 1100,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-boot (+71x +0) «org.apache.catalina.startup.Catalina.sta»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "s-boot-blink",
+					"target": "CODE",
+					"iterations": null,
+					"duration": 1100,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/about-us",
+			"why": "about, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "About us — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 About us",
+				"H2 History",
+				"H3 THE NAME",
+				"H3 THE ROAD",
+				"H3 THE CUBE",
+				"H2 Who answers for the work",
+				"H3 Daniel Sío",
+				"H3 Ignacio Ibaseta",
+				"H3 Julio Argüello",
+				"H2 Our values",
+				"H2 Backing grassroots sport",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image?href=%2F_astro%2Fdani.B9w-f5HB.jpg&w=260&h=",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image?href=%2F_astro%2Fnacho.G5NO3LpI.jpg&w=260&h",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image?href=%2F_astro%2Fjulio.Crq2HiLs.jpg&w=260&h",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "",
+					"src": "_image?href=%2F_astro%2Furdaneta-infantil.CYzqgPZL",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /quienes-somos /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "s-boot-blink",
+					"target": "CODE",
+					"iterations": null,
+					"duration": 1100,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-boot (+71x +0) «org.apache.catalina.startup.Catalina.sta»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "s-boot-blink",
+					"target": "CODE",
+					"iterations": null,
+					"duration": 1100,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/contacto",
+			"why": "contact: the only page listing ways to reach the company",
+			"kind": "structured",
+			"status": 200,
+			"title": "Hablemos — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Hablemos",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image?href=%2F_astro%2Fdani.B9w-f5HB.jpg&w=53&h=4",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image?href=%2F_astro%2Fnacho.G5NO3LpI.jpg&w=53&h=",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image?href=%2F_astro%2Fjulio.Crq2HiLs.jpg&w=53&h=",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/contact /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+8x +29) «.»",
+					"u-sr (+8x +29) «.»",
+					"u-sr (+8x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/contact",
+			"why": "contact, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Let's talk — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Let's talk",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image?href=%2F_astro%2Fdani.B9w-f5HB.jpg&w=53&h=4",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image?href=%2F_astro%2Fnacho.G5NO3LpI.jpg&w=53&h=",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image?href=%2F_astro%2Fjulio.Crq2HiLs.jpg&w=53&h=",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /contacto /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»",
+					"u-sr (+11x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+8x +29) «.»",
+					"u-sr (+8x +29) «.»",
+					"u-sr (+8x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/referencias",
+			"why": "references: logo wall",
+			"kind": "structured",
+			"status": 200,
+			"title": "Referencias — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Referencias",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"ls__cmd «ls -alh referencias/»",
+				"ls-row ls-row--dim «total 9»",
+				"ls-row ls-row--dim «drwxr-xr-x 2 serverstartup clientes 96B »",
+				"ls-row ls-row--dim «drwxr-xr-x 5 serverstartup serverstartup»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «5.5K»",
+				"ls-date «24 ene 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «5.4K»",
+				"ls-date «24 ene 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «8.7K»",
+				"ls-date «24 ene 2019»",
+				"ls-perms «-r--r--r--»",
+				"ls-owner «serverstartup»",
+				"ls-size «14K»",
+				"ls-date «24 ene 2019»",
+				"ls-perms «-r--r--r--»",
+				"ls-owner «serverstartup»",
+				"ls-size «5.2K»",
+				"ls-date «24 ene 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «6.6K»",
+				"ls-date «24 ene 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/references /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/references",
+			"why": "references, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "References — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 References",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"ls__cmd «ls -alh references/»",
+				"ls-row ls-row--dim «total 9»",
+				"ls-row ls-row--dim «drwxr-xr-x 2 serverstartup clients 96B J»",
+				"ls-row ls-row--dim «drwxr-xr-x 5 serverstartup serverstartup»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «5.5K»",
+				"ls-date «Jan 24 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «5.4K»",
+				"ls-date «Jan 24 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «8.7K»",
+				"ls-date «Jan 24 2019»",
+				"ls-perms «-r--r--r--»",
+				"ls-owner «serverstartup»",
+				"ls-size «14K»",
+				"ls-date «Jan 24 2019»",
+				"ls-perms «-r--r--r--»",
+				"ls-owner «serverstartup»",
+				"ls-size «5.2K»",
+				"ls-date «Jan 24 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»",
+				"ls-size «6.6K»",
+				"ls-date «Jan 24 2019»",
+				"ls-perms «-r-xr-xr-x»",
+				"ls-owner «serverstartup»"
+			],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /referencias /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/deconstruyendo",
+			"why": "deconstruyendo: the review panel and its chips, the gate count",
+			"kind": "structured",
+			"status": 200,
+			"title": "Deconstruyendo esta web — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Deconstruyendo esta web",
+				"H2 La arquitectura",
+				"H2 Contenido como código",
+				"H2 Los agentes",
+				"H2 Los números",
+				"H2 El taller, a la vista",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "El panel de EmDash editando esta misma página, con el título, el cuerpo y el estado de publicación a la vista.",
+					"src": "emdash-editor-deconstruyendo.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/deconstructing /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"s-doc (+51x +0) «Deconstruyendo esta web Si te cuentan có»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/deconstructing",
+			"why": "deconstructing, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Deconstructing this website — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Deconstructing this website",
+				"H2 The architecture",
+				"H2 Content as code",
+				"H2 The agents",
+				"H2 The numbers",
+				"H2 The workshop, in plain sight",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "The EmDash panel editing this very page, showing the title, the body and the publish state.",
+					"src": "emdash-editor-deconstruyendo.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /deconstruyendo /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+16x +0) «/en/deconstructing»",
+					"s-doc (+29x +0) «Deconstructing this website If someone t»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/accesibilidad",
+			"why": "the accessibility statement and its channel (RD 1112/2018 art. 15)",
+			"kind": "structured",
+			"status": 200,
+			"title": "Accesibilidad — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Accesibilidad",
+				"H2 Declaración de accesibilidad",
+				"H2 Cómo escribirnos",
+				"H2 Qué hacemos con lo que llega",
+				"H2 Sus datos",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/accessibility /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/accessibility",
+			"why": "accessibility statement, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Accessibility — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Accessibility",
+				"H2 Accessibility statement",
+				"H2 How to reach us",
+				"H2 What we do with it",
+				"H2 Your data",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /accesibilidad /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+7x +0) «/en/accessibility»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/aviso-legal",
+			"why": "legal text: long Portable Text, tables of identity data",
+			"kind": "structured",
+			"status": 200,
+			"title": "Aviso legal — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Aviso legal",
+				"H2 Datos identificativos",
+				"H2 Objeto y condiciones de uso",
+				"H2 Propiedad intelectual e industrial",
+				"H2 Responsabilidad",
+				"H2 Enlaces a otros sitios",
+				"H2 Protección de datos",
+				"H2 Legislación aplicable",
+				"H2 Hablemos de ingeniero a ingeniero.",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/legal-notice /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/privacy-policy",
+			"why": "privacy policy, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Privacy policy — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Privacy policy",
+				"H2 Data controller",
+				"H2 What we process",
+				"H2 Why we process it",
+				"H2 Legal basis",
+				"H2 Recipients",
+				"H2 International transfers",
+				"H2 Retention",
+				"H2 Your rights",
+				"H2 Cookies",
+				"H2 Changes to this policy",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /politica-de-privacidad /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+16x +0) «/en/privacy-policy»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/search?q=cloudflare",
+			"why": "search with results",
+			"kind": "structured",
+			"status": 200,
+			"title": "Buscar: cloudflare — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Buscar",
+				"H2 CDN, WAF y seguridad edge",
+				"H2 Integración de sistemas",
+				"H2 Deconstruyendo esta web",
+				"H2 Desarrollo greenfield",
+				"H2 Inteligencia artificial",
+				"H2 Política de privacidad",
+				"H2 Quiénes somos",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/search /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"sr-only (+151x +19) «Buscar artículos»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"sr-only (+151x +19) «Buscar artículos»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/search?q=zzzqqq",
+			"why": "search with no result, English",
+			"kind": "structured",
+			"status": 200,
+			"title": "Search: zzzqqq — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Search",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /search /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"sr-only (+141x +19) «Search articles»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"sr-only (+141x +19) «Search articles»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/search",
+			"why": "search, empty",
+			"kind": "structured",
+			"status": 200,
+			"title": "Buscar — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 Buscar",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/search /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"sr-only (+151x +19) «Buscar artículos»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"sr-only (+151x +19) «Buscar artículos»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/no-existe",
+			"why": "404",
+			"kind": "structured",
+			"status": 404,
+			"title": "Página no encontrada — Server Startup",
+			"lang": "es",
+			"langParts": [],
+			"headings": [
+				"H1 404 Página no encontrada",
+				"H2 referencias",
+				"H3 La casa",
+				"H3 Contacto"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"nf-console «stderr Exception in thread \"main\" io.ser»",
+				"P «al cubo se le han caído estas piezas — t»"
+			],
+			"labelInName": [
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Ir al inicio"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/ /en/404 /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial / /quienes-somos /referencias /contacto /deconstruyendo /comercio-electronico /integracion-de-sistemas /big-data-cloud-analytics /cdn-waf-seguridad-edge-cloudflare /desarrollo-greenfield /inteligencia-artificial /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"footer": "/referencias / /quienes-somos /deconstruyendo /referencias /contacto /partners/ /aviso-legal /politica-de-privacidad /accesibilidad",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/no-such-page",
+			"why": "404, English",
+			"kind": "structured",
+			"status": 404,
+			"title": "Page not found — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 404 Page not found",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"nf-console «stderr Exception in thread \"main\" io.ser»",
+				"P «the cube dropped these pieces — they lea»"
+			],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /404 /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": []
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/big-data-cloud-analytics",
+			"why": "random 10 % (seed 6709d0f9)",
+			"kind": "random",
+			"status": 200,
+			"title": "Big Data & Cloud Analytics — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Big Data & Cloud Analytics",
+				"H2 dbt ≠ pipeline",
+				"H2 Synergies between analytical and operational",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "bd-observatorio-entero.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [
+				{
+					"cls": "sky__night",
+					"hiddenFromAT": true,
+					"role": null,
+					"label": null
+				},
+				{
+					"cls": "sky__data",
+					"hiddenFromAT": true,
+					"role": null,
+					"label": null
+				}
+			],
+			"visibleButHidden": [
+				"s-hero__stage «» [canvas]",
+				"bq__gutter «1 2 3 4 5»"
+			],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /big-data-cloud-analytics /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--sky is-placed is-play (+23x +0) «Big Data & Cloud Analytics A data pipeli»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+100x +0) «/en/big-data-cloud-analytics»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/e-commerce",
+			"why": "random 10 % (seed 6709d0f9)",
+			"kind": "random",
+			"status": 200,
+			"title": "E-commerce — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 E-commerce",
+				"H2 Custom ≠ coupled",
+				"H2 Cases we're fond of",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "ec-almacen-restaurado.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»",
+				"cart__qty «1 ⌄»"
+			],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /comercio-electronico /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--store is-placed is-pl (+21x +0) «E-commerce Over twenty years inside SAP »",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		},
+		{
+			"path": "/en/greenfield-development",
+			"why": "random 10 % (seed 6709d0f9)",
+			"kind": "random",
+			"status": 200,
+			"title": "Greenfield development — Server Startup",
+			"lang": "en",
+			"langParts": [],
+			"headings": [
+				"H1 Greenfield development",
+				"H2 Code is not the product",
+				"H2 Greenfield ≠ blank page",
+				"H2 AI multiplies. The framework steers.",
+				"H2 Your technical debt is our problem",
+				"H2 Let's talk, engineer to engineer.",
+				"H2 references",
+				"H3 The house",
+				"H3 Contact"
+			],
+			"media": {
+				"video": 0,
+				"audio": 0,
+				"iframe": []
+			},
+			"images": [
+				{
+					"alt": "",
+					"src": "gf-solar-bn.webp",
+					"shown": true,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "",
+					"src": "gf-guggenheim-restaurado.webp",
+					"shown": false,
+					"hiddenFromAT": true
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp",
+					"shown": true,
+					"hiddenFromAT": false
+				}
+			],
+			"canvases": [],
+			"visibleButHidden": [
+				"s-hero__stage «A B C D E F G H ±0.00 +50.00 50.00 H.L. »",
+				"elev__drawing «A B C D E F G H ±0.00 +50.00 50.00 H.L. »",
+				"jd__gutter «1 2 3 4 5 6 7 8 9 10»"
+			],
+			"labelInName": [
+				{
+					"visible": "ES",
+					"name": "Switch to the Spanish version"
+				},
+				{
+					"visible": "~Server Startup",
+					"name": "Server Startup — Go to homepage"
+				}
+			],
+			"ambiguousLinks": [],
+			"emptyLinks": [],
+			"nav": "/en /desarrollo-greenfield /en/e-commerce /en/systems-integration /en/big-data-cloud-analytics /en/cdn-waf-edge-security-cloudflare /en/greenfield-development /en/artificial-intelligence /en /en/about-us /en/references /en/contact /en/deconstructing /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"footer": "/en/references / /en/about-us /en/deconstructing /en/references /en/contact /partners/ /en/legal-notice /en/privacy-policy /en/accessibility",
+			"rail": null,
+			"moving@6.5s_1440": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_1440": {
+				"overflowX": 0,
+				"clipped": [
+					"s-hero s-hero--scene s-hero--elevation is-placed i (+21x +0) «A B C D E F G H ±0.00 +50.00 50.00 H.L. »",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»",
+					"u-sr (+9x +40) «.»"
+				]
+			},
+			"moving@6.5s_390": [
+				{
+					"name": "brand-blink",
+					"target": "brand-cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				},
+				{
+					"name": "site-mark-blink",
+					"target": "site-mark__cursor",
+					"iterations": null,
+					"duration": 1200,
+					"inBandWithPause": false
+				}
+			],
+			"spacing_390": {
+				"overflowX": 0,
+				"clipped": [
+					"brand-path (+83x +0) «/en/greenfield-development»",
+					"s-hero__stage (+10x +93) «A B C D E F G H ±0.00 +50.00 50.00 H.L. »",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»",
+					"u-sr (+6x +29) «.»"
+				]
+			},
+			"landscapeOverflowX": 0
+		}
+	]
+}

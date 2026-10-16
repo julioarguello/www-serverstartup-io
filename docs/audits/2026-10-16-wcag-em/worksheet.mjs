@@ -4,11 +4,12 @@
  * to judge the criteria no machine decides. Writes `worksheet.json` beside it. It decides nothing — the
  * judgements are in README.md, marked as the preparer's, for the evaluator of record to confirm.
  *
- *   node docs/audits/2026-10-16-wcag-em/worksheet.mjs [base-url]   default :8787
+ *   node docs/audits/2026-10-16-wcag-em/worksheet.mjs [base-url] [sha]   default :8787, `git rev-parse HEAD`
  *
  * The accessibility tree (Playwright's ARIA snapshot) is a proxy for a screen reader's reading, not a
  * screen reader: it shows what is exposed and in which order, not how VoiceOver or TalkBack speak it.
  */
+import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,6 +17,7 @@ import { chromium } from "playwright";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BASE = (process.argv[2] || "http://localhost:8787").replace(/\/$/, "");
+const SHA = process.argv[3] || execSync("git rev-parse HEAD").toString().trim();
 const sample = JSON.parse(readFileSync(join(HERE, "sweep.json"), "utf8")).sample.map((s) => s.path);
 const READ = ["/", "/cdn-waf-seguridad-edge-cloudflare", "/contacto", "/accesibilidad", "/search?q=cloudflare"];
 
@@ -27,7 +29,7 @@ const ES = new Set("el la los las de del y que con para por una un es son se su 
 const SENSORY = /\b(arriba|abajo|a la (izquierda|derecha)|el (botón|bot[oó]n) (verde|rojo|azul|naranja)|redond|cuadrad|above|below|on the (left|right)|(green|red|blue|orange) button|round|square)\b/i;
 
 const browser = await chromium.launch();
-const out = { base: BASE, pages: {} };
+const out = { sha: SHA, base: BASE, pages: {} };
 for (const path of sample) {
 	const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
 	await page.goto(BASE + path, { waitUntil: "load", timeout: 60_000 });
@@ -51,7 +53,7 @@ for (const path of sample) {
 		const searchInfo = search ? { label: (search.querySelector("label")?.innerText || search.querySelector("input")?.getAttribute("aria-label") || "").trim(), placeholder: search.querySelector("input")?.placeholder, status: text(document.querySelector("main") || document.body).slice(0, 400) } : null;
 		return { lang, title: document.title, imgs, headings, links, englishInSpanish, sensory: senses, search: searchInfo };
 	}, { EN: [...EN], ES: [...ES], sensory: SENSORY.source });
-	if (READ.includes(path)) row.ariaTree = (await page.locator("body").ariaSnapshot()).split("\n").slice(0, 160).join("\n");
+	if (READ.includes(path)) row.ariaTree = await page.locator("body").ariaSnapshot();
 	out.pages[path] = row;
 	await page.close();
 	console.log(path);

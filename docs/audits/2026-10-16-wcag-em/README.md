@@ -24,7 +24,9 @@ node scripts/ci-check-engines.mjs http://localhost:8787                    # Web
 ```
 
 `sweep.json` beside this file is the raw output of the sweep for `6709d0f`; `worksheet.json`, of the worksheet
-script for `09cd7d8`.
+script for `09cd7d8` (its `sha` field says so). Its accessibility trees were cut at 160 lines when it ran: the
+order recorded reaches the footer landmark on every page read, not the footer's last link on `/` and the CDN
+page; the script no longer cuts them.
 
 ## Step 1 — Scope
 
@@ -74,7 +76,7 @@ pages for anyone who re-runs `sweep.mjs`.
 
 Methods: **CI** — a gate already blocking every change (cited, not re-run by hand) · **Script** — decided by
 `sweep.mjs` or a probe recorded below · **Person** — needs the evaluator of record. Status: ✅ pass ·
-🔧 fixed by this document's PR (and now gated) · ❌ non-conformance · ➖ not applicable · 👤 needs the
+🔧 fixed (#589 or #591) and now gated · ❌ non-conformance · ➖ not applicable · 👤 needs the
 evaluator.
 
 | SC | Lvl | Method | Result | Status |

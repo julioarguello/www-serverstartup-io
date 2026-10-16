@@ -70,14 +70,33 @@ process.on("unhandledRejection", blindOn);
    is not enough: two homes measured beside three verticals in one Chromium held the tail at its
    unanimated ink and the card at its static 660 px, while the same page alone animated (a93d377 found
    the same with Puppeteer). WebKit did not need it; one rule for every engine is simpler to trust. */
-async function withPage(profile, opts, fn) {
-	const browser = await profile.engine.launch();
+/* At most PAGES pages at once across the three profiles. Up to fifteen at a time (three profiles × two homes and
+   three lanes) took `wrangler dev` down twice in one CI job — its ProxyWorker drops the runtime under concurrent
+   load (cloudflare/workers-sdk#15317, #524) — and `ci-gate.mjs` reboots it only once. The a11y gate holds four
+   lanes against the same stack and survives; this holds the same number. */
+const PAGES = Math.max(1, Number(process.env.ENGINES_CONCURRENCY) || 4);
+let open = 0;
+const waiting = [];
+async function slot(fn) {
+	if (open >= PAGES) await new Promise((r) => waiting.push(r));
+	open++;
 	try {
-		const ctx = await browser.newContext({ ...devices[profile.device], ...opts });
-		return await fn(await ctx.newPage());
+		return await fn();
 	} finally {
-		await browser.close();
+		open--;
+		waiting.shift()?.();
 	}
+}
+async function withPage(profile, opts, fn) {
+	return slot(async () => {
+		const browser = await profile.engine.launch();
+		try {
+			const ctx = await browser.newContext({ ...devices[profile.device], ...opts });
+			return await fn(await ctx.newPage());
+		} finally {
+			await browser.close();
+		}
+	});
 }
 
 async function pool(items, n, fn) {

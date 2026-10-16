@@ -53,7 +53,12 @@ const VERTICALS = readSeed()
 	.map((e) => entryPath("services", e))
 	.sort();
 /* the openings' one clock, read where it is declared rather than restated */
-const END = Number(readFileSync(join(REPO, "src", "utils", "hero-art.ts"), "utf8").match(/SCENE_BEATS\s*=\s*\{[^}]*\bend:\s*(\d+)/)[1]);
+const BEATS = readFileSync(join(REPO, "src", "utils", "hero-art.ts"), "utf8").match(/SCENE_BEATS\s*=\s*\{([^}]*)\}/)[1];
+const beat = (name) => Number(BEATS.match(new RegExp(`\\b${name}:\\s*(\\d+)`))[1]);
+const END = beat("end");
+/* the instant the copy-overlap check reads: just into the payoff, when the drawings and their labels are all out
+   (the bridge is wired at drawn + 100, the elevation's photograph comes in at 5.6 s) */
+const LABELS_OUT = beat("drawn") + 500;
 const MARGIN = 4000;
 const LANES = 3;
 
@@ -186,8 +191,8 @@ async function vertical(page, route, plant) {
 		s.style.cssText = `position:fixed;left:${h.left + 4}px;top:${h.top + 4}px;color:#fff;z-index:9`;
 		document.querySelector(".s-hero__stage").append(s);
 	});
-	/* mid-animation: the drawing and its labels are out between the draw and the payoff */
-	await page.waitForTimeout(5000);
+	/* just into the payoff, the labels all out (LABELS_OUT, from the openings' clock) */
+	await page.waitForTimeout(LABELS_OUT);
 	const onCopy = (await page.evaluate(overlapsCopy)).map((m) => `${route}: scene text ${m} (keep it off the copy: withhold it)`);
 	const done = await page.waitForFunction(() => document.querySelector(".s-hero--scene").classList.contains("is-done"), null, { polling: 100, timeout: END + MARGIN })
 		.then(() => true, () => false);

@@ -46,6 +46,7 @@
 .elev__bub circle { fill: none; stroke: color-mix(in srgb, var(--color-secondary) 85%, transparent); stroke-width: 1px; vector-effect: non-scaling-stroke; }
 .elev__drawing text { fill: var(--color-secondary); font: 400 17px/1 var(--font-family-hud); font-stretch: 100%; letter-spacing: .06em; }
 .elev__bub text { text-anchor: middle; font-size: 16px; }
+.elev__bub.is-withheld { display: none; }
 .elev__drawing .elev__end { text-anchor: end; }
 .elev__drawing .elev__v { text-anchor: middle; }
 

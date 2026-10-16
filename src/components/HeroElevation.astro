@@ -53,6 +53,7 @@ const replayLabel = L("elev_replay", "Repetir la animación");
 <script>
 	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
+	import { copyRects, touches } from "../utils/scene-copy";
 	const hero = document.querySelector<HTMLElement>(".s-hero--elevation");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -98,7 +99,21 @@ const replayLabel = L("elev_replay", "Repetir la animación");
 			hero.style.setProperty("--ew", `${g.W}px`);
 			hero.style.setProperty("--efade-l", `${Math.round(0.14 * g.W)}px`);
 			hero.style.setProperty("--efade-b", narrow ? `${Math.round(0.12 * g.H)}px` : "0px");
+			withholdBubbles(narrow);
 			hero.classList.add("is-placed");
+		}
+		/* An axis bubble that would sit behind a line of the copy is withheld, as the bridge withholds a connector
+		   (#547): at 1440 × 900 D and E stood under the body's last line, faint under the left fade, from 3 to 6 s.
+		   On phones and tablets the copy is its own row and nothing is withheld */
+		function withholdBubbles(narrow: boolean) {
+			const bubs = [...hero!.querySelectorAll<SVGGElement>(".elev__bub")];
+			bubs.forEach((b) => b.classList.remove("is-withheld"));
+			if (narrow) return;
+			const copy = copyRects(hero!).map(({ rect }) => rect);
+			for (const b of bubs) {
+				const r = b.getBoundingClientRect();
+				if (copy.some((q) => touches(r, q, 8))) b.classList.add("is-withheld");
+			}
 		}
 
 		/* on the openings' clock (SCENE_BEATS, #553): the plot held to the draw beat, the elevation complete by the

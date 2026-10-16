@@ -550,7 +550,13 @@ reads it three times: the photograph; the same frame as a machine sees it; the m
   (a −0.3, b +2.1); the plot is built on the restored frame. The photographer's mark is painted out with
   the surrounding water's light (inpainted at an eighth of the size) and the ripples of the strip beside
   it: copied as they were, they left a darker patch.
-- **Open**: the left half of the drawing under the copy's veil.
+- **The axis bubbles keep off the copy** (#547): `layout()` measures the copy's lines and withholds every
+  bubble within 8 px of one, recomputed on resize — at 1440 × 900 and 1280 × 720, D and E had stood behind
+  the body's last line from 3 to 6 s. The copy's lines come from `src/utils/scene-copy.ts` (`copyRects`,
+  `touches`), shared with the bridge's connectors; the engines gate checks every opening mid-animation for
+  scene text on the copy.
+- **Open**: the axis *lines* of the drawing's left half still cross the body's right ends under the copy's
+  veil — lines, not labels, so the withholding above does not touch them.
 
 ### 4.9 The warehouse's stock and your order, the e-commerce vertical (#551)
 

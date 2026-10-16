@@ -53,7 +53,12 @@ const VERTICALS = readSeed()
 	.map((e) => entryPath("services", e))
 	.sort();
 /* the openings' one clock, read where it is declared rather than restated */
-const END = Number(readFileSync(join(REPO, "src", "utils", "hero-art.ts"), "utf8").match(/SCENE_BEATS\s*=\s*\{[^}]*\bend:\s*(\d+)/)[1]);
+const BEATS = readFileSync(join(REPO, "src", "utils", "hero-art.ts"), "utf8").match(/SCENE_BEATS\s*=\s*\{([^}]*)\}/)[1];
+const beat = (name) => Number(BEATS.match(new RegExp(`\\b${name}:\\s*(\\d+)`))[1]);
+const END = beat("end");
+/* the instant the copy-overlap check reads: just into the payoff, when the drawings and their labels are all out
+   (the bridge is wired at drawn + 100, the elevation's photograph comes in at 5.6 s) */
+const LABELS_OUT = beat("drawn") + 500;
 const MARGIN = 4000;
 const LANES = 3;
 
@@ -147,8 +152,29 @@ async function home(page, route) {
 	return { problems, tail0: tails[0] };
 }
 
+/* O — the scene's own text against the copy's lines, mid-animation: what is painted (opacity read up the whole
+   chain, so a label under a fade still counts) and not part of the copy, the epigraph or the controls. The copy's
+   selectors are restated here on purpose — a check that imported the scenes' own list would agree with them by
+   construction. At 1280 × 720 (Desktop Safari) the elevation's bubbles D and E stood behind the body (#547). */
+function overlapsCopy() {
+	const seen = (e) => { for (let x = e; x && x.nodeType === 1; x = x.parentElement) { const c = getComputedStyle(x); if (c.display === "none" || c.visibility === "hidden" || +c.opacity < 0.05) return false; } return true; };
+	const lines = (els) => els.flatMap((el) => [...el.childNodes].filter((n) => n.nodeType === 3 && n.textContent.trim()).flatMap((n) => { const r = document.createRange(); r.selectNodeContents(n); return [...r.getClientRects()].filter((q) => q.width > 2); }));
+	const band = document.querySelector(".s-hero--scene");
+	const COPY = "h1, .s-hero__copy, .s-hero__body, .scene__epi, .s-hero__epigraph, figure, blockquote, .scene__ctl, .btn";
+	const all = [...band.querySelectorAll("*")].filter((e) => [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()));
+	const copy = lines(all.filter((e) => e.closest(".s-hero__copy, h1") && seen(e)));
+	const btn = band.querySelector(".s-hero__copy .btn")?.getBoundingClientRect();
+	if (btn) copy.push(btn);
+	const out = [];
+	for (const e of all.filter((x) => !x.closest(COPY) && seen(x))) for (const a of lines([e])) for (const c of copy) {
+		const w = Math.min(a.right, c.right) - Math.max(a.left, c.left), h = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top);
+		if (w > 1 && h > 1) { out.push(`«${e.textContent.trim().slice(0, 20)}» on the copy at ${Math.round(a.left)},${Math.round(a.top)}`); break; }
+	}
+	return [...new Set(out)];
+}
+
 /** V — returns the problems found on one vertical, and how long its opening took. */
-async function vertical(page, route) {
+async function vertical(page, route, plant) {
 	await page.goto(`${BASE}${route}?engines=${Date.now()}`, { waitUntil: "load", timeout: 60_000 });
 	const started = await page.waitForFunction(() => {
 		const h = document.querySelector(".s-hero--scene");
@@ -158,10 +184,20 @@ async function vertical(page, route) {
 	if (!scene) return { problems: [`${route}: no opening scene on a vertical`] };
 	if (!started) return { problems: [`${route}: the opening never started (no is-playing 5 s after load)`] };
 	const t0 = await page.evaluate(() => performance.now());
+	if (plant) await page.evaluate(() => {
+		const h = document.querySelector(".s-hero--scene h1").getBoundingClientRect();
+		const s = document.createElement("span");
+		s.textContent = "PLANT";
+		s.style.cssText = `position:fixed;left:${h.left + 4}px;top:${h.top + 4}px;color:#fff;z-index:9`;
+		document.querySelector(".s-hero__stage").append(s);
+	});
+	/* just into the payoff, the labels all out (LABELS_OUT, from the openings' clock) */
+	await page.waitForTimeout(LABELS_OUT);
+	const onCopy = (await page.evaluate(overlapsCopy)).map((m) => `${route}: scene text ${m} (keep it off the copy: withhold it)`);
 	const done = await page.waitForFunction(() => document.querySelector(".s-hero--scene").classList.contains("is-done"), null, { polling: 100, timeout: END + MARGIN })
 		.then(() => true, () => false);
 	const took = Math.round((await page.evaluate(() => performance.now())) - t0);
-	return { problems: done ? [] : [`${route}: started but not is-done ${END + MARGIN} ms later`], took };
+	return { problems: [...onCopy, ...(done ? [] : [`${route}: started but not is-done ${END + MARGIN} ms later`])], took };
 }
 
 /** R — reduced motion, on one route: the end state at once, nothing running, no controls; on the home, the tail in
@@ -193,7 +229,7 @@ async function profileRun(p) {
 	const t0 = Date.now();
 	{
 		/* the plants: both must be called, or this profile is not measuring anything */
-		const [frozen, stalled] = await Promise.all([
+		const [frozen, stalled, covered] = await Promise.all([
 			withPage(p, {}, async (page) => {
 				await page.addInitScript(plantStyle(".ss-title__tail { animation: none !important; }"));
 				return (await home(page, "/")).problems;
@@ -202,9 +238,11 @@ async function profileRun(p) {
 				await page.route(/\/_astro\/Hero[A-Za-z]+\.astro_astro_type_script/, (r) => r.abort());
 				return (await vertical(page, VERTICALS[0])).problems;
 			}),
+			withPage(p, {}, async (page) => (await vertical(page, VERTICALS[0], true)).problems),
 		]);
-		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started"));
-		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"})` };
+		const onCopy = covered.some((m) => m.includes("PLANT"));
+		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy;
+		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"})` };
 
 		const [homes, verticals] = await Promise.all([
 			Promise.all(HOME.map((r) => withPage(p, {}, (page) => home(page, r)))),
@@ -230,11 +268,11 @@ for (const r of runs) {
 		console.error(`✗ BLIND ${r.blind}`);
 		continue;
 	}
-	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script)`);
+	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1)`);
 	const span = r.took.length ? `${Math.min(...r.took)}–${Math.max(...r.took)} ms` : "—";
 	if (!r.problems.length) {
 		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height, the rail's stops are buttons`);
-		console.log(`  ✓ ${VERTICALS.length} verticals start and come to rest (${span} from is-playing to is-done; budget ${END + MARGIN} ms)`);
+		console.log(`  ✓ ${VERTICALS.length} verticals start and come to rest (${span} from is-playing to is-done; budget ${END + MARGIN} ms), no scene text on the copy mid-animation`);
 		console.log(`  ✓ reduced motion — intended (#315): every opening starts at its end, the home holds its first frame, no pause shown`);
 	}
 	for (const m of r.problems) {

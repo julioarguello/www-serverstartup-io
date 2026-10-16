@@ -80,12 +80,12 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 <script>
 	import { SCENE_ROW, SCENE_BEATS } from "../utils/hero-art";
 	import { SceneClock } from "../utils/scene-clock";
+	import { copyRects } from "../utils/scene-copy";
 	const hero = document.querySelector<HTMLElement>(".s-hero--bridge");
 	if (hero) {
 		const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 		const stage = hero.querySelector<HTMLElement>(".s-hero__stage")!;
 		const bus = hero.querySelector<HTMLElement>(".bridge__bus")!;
-		const copy = hero.querySelector<HTMLElement>(".s-hero__copy")!;
 		const inner = hero.querySelector<HTMLElement>(".s-hero__inner")!;
 		const seal = hero.querySelector<SVGElement>(".scene__seal")!;
 		const pause = hero.querySelector<HTMLInputElement>(".scene__pause")!;
@@ -148,17 +148,7 @@ const replayLabel = L("bridge_replay", "Repetir la animación");
 		}
 		/* every line of the copy, padded, in the stage's pixels: nothing of the bridge may touch a letter */
 		function textBoxes(s: DOMRect): Box[] {
-			const out: Box[] = [];
-			const pad = (q: DOMRect, quote = false, button = false): Box => ({ l: q.left - s.left - 12, r: q.right - s.left + 12, t: q.top - s.top - 12, b: q.bottom - s.top + 14, quote, button });
-			for (const el of hero.querySelectorAll<HTMLElement>(".s-hero__copy h1, .s-hero__body p, .s-hero__epigraph p, .s-hero__epigraph figcaption")) {
-				const r = document.createRange();
-				r.selectNodeContents(el);
-				const quote = !!el.closest(".s-hero__epigraph");
-				for (const q of r.getClientRects()) if (q.width > 2) out.push(pad(q, quote));
-			}
-			const b = copy.querySelector<HTMLElement>(".btn")?.getBoundingClientRect();
-			if (b) out.push(pad(b, false, true));
-			return out;
+			return copyRects(hero!).map(({ rect: q, quote, button }) => ({ l: q.left - s.left - 12, r: q.right - s.left + 12, t: q.top - s.top - 12, b: q.bottom - s.top + 14, quote, button }));
 		}
 		function setGeo(g: Geo) {
 			geo = g;

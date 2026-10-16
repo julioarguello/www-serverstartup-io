@@ -1,0 +1,3230 @@
+{
+	"base": "http://localhost:8580",
+	"pages": {
+		"/": {
+			"lang": "es",
+			"title": "Ingeniería de software — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Ingeniería de software, de la arquitectura a producción",
+				"H2 Cómo trabajamos",
+				"H2 Partner oficial de Cloudflare",
+				"H3 CDN",
+				"H3 WAF y Zero Trust",
+				"H3 Workers",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "comercio electrónico",
+					"href": "/comercio-electronico",
+					"context": "Más de veinte años en comercio electrónico, integración de sistemas y datos."
+				},
+				{
+					"name": "integración de sistemas",
+					"href": "/integracion-de-sistemas",
+					"context": "Más de veinte años en comercio electrónico, integración de sistemas y datos."
+				},
+				{
+					"name": "datos",
+					"href": "/big-data-cloud-analytics",
+					"context": "Más de veinte años en comercio electrónico, integración de sistemas y datos."
+				},
+				{
+					"name": "Cloudflare",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "Partners oficiales de Cloudflare desde 2019."
+				},
+				{
+					"name": "Ver todas las referencias",
+					"href": "/referencias",
+					"context": "Ver todas las referencias"
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cloudflare",
+					"href": "https://www.cloudflare.com/es-es/",
+					"context": "Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2."
+				},
+				{
+					"name": "Descubre más sobre Cloudflare",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "Descubre más sobre Cloudflare"
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "getxo",
+				"status": "Ingeniería de software, de la arquitectura a producción Más de veinte años en comercio electrónico, integración de sistemas y datos. Partners oficiales de Cloudflare desde 2019. nosotros cdn y waf integración ia greenfield comercio big data Ver todas las referencias Cómo trabajamos Los mismos ingenieros, de principio a fin. Quien diseña tu sistema lo lleva a producción. Y cada mañana mira sus aler"
+			},
+			"ariaTree": "- link \"Saltar al contenido\":\n  - /url: \"#content\"\n- banner:\n  - button \"Abrir menú de navegación\"\n  - link \"~Server Startup\":\n    - /url: /\n  - checkbox \"Buscar en el sitio\"\n  - link \"EN — Cambiar a la versión en inglés\":\n    - /url: /en\n    - text: EN\n- main:\n  - region \"Introducción\":\n    - heading \"Ingeniería de software, de la arquitectura a producción\" [level=1]\n    - paragraph:\n      - text: Más de veinte años en\n      - link \"comercio electrónico\":\n        - /url: /comercio-electronico\n      - text: \",\"\n      - link \"integración de sistemas\":\n        - /url: /integracion-de-sistemas\n      - text: \"y\"\n      - link \"datos\":\n        - /url: /big-data-cloud-analytics\n      - text: .\n    - paragraph:\n      - text: Partners oficiales de\n      - link \"Cloudflare\":\n        - /url: /cdn-waf-seguridad-edge-cloudflare\n      - text: desde 2019.\n    - list\n    - group \"Fotogramas\":\n      - button \"Nosotros\"\n      - button \"CDN y WAF\"\n      - button \"Integración\"\n      - button \"IA\"\n      - button \"Greenfield\"\n      - button \"Comercio\"\n      - button \"Big Data\"\n    - checkbox \"Pausar la rotación de imágenes\"\n    - text: ❚❚\n  - region \"Empresas que confían en nosotros\":\n    - list:\n      - listitem:\n        - img \"Alcampo\"\n      - listitem:\n        - img \"Auchan\"\n      - listitem:\n        - img \"Forum Sport\"\n      - listitem:\n        - img \"Grupo Seidor\"\n      - listitem:\n        - img \"Inetum\"\n      - listitem:\n        - img \"Job&Talent\"\n      - listitem:\n        - img \"Punt Roma\"\n    - paragraph:\n      - link \"Ver todas las referencias\":\n        - /url: /referencias\n  - region \"~ Cómo trabajamos\":\n    - heading \"~ Cómo trabajamos\" [level=2]\n    - list:\n      - listitem:\n        - paragraph: Los mismos ingenieros, de principio a fin.\n        - paragraph: Quien diseña tu sistema lo lleva a producción. Y cada mañana mira sus alertas.\n      - listitem:\n        - paragraph: Primero el contrato.\n        - paragraph:\n          - text: Cada interfaz se acuerda y se versiona antes que el código que la cumple (\n          - emphasis: contract first\n          - text: ).\n      - listitem:\n        - paragraph: La configuración es código.\n        - paragraph:\n          - text: Permisos y entornos están en\n          - code: Terraform\n          - text: \", con historial y revisión. Nada vive solo en la cabeza de alguien.\"\n      - listitem:\n        - paragraph:\n          - text: Desarrollo guiado por especificación (\n          - code: SDD\n          - text: ).\n        - paragraph: Fijamos qué debe hacer y cómo se comprueba antes de generar una línea, con las reglas de tu negocio escritas y versionadas. Así el tiempo va donde rinde la experiencia, al diseño y a la revisión. Cuando un test falla, arreglamos el código, no el test.\n      - listitem:\n        - paragraph: Nada se despliega en rojo.\n        - paragraph:\n          - text: Cada cambio pasa tests, análisis estático y escaneo de seguridad en\n          - code: CI/CD\n          - text: antes de llegar a producción. Allí, trazas y métricas con\n          - code: OpenTelemetry\n          - text: .\n      - listitem:\n        - paragraph:\n          - text: Si un\n          - code: SaaS\n          - text: ya lo resuelve, no lo construimos.\n        - paragraph: Preferimos perder un proyecto a mantener software que sobra.\n      - listitem:\n        - paragraph: Dicho y hecho.\n        - paragraph: Lo que empezamos, lo terminamos. Cada día nos ocupamos de que el proyecto vaya bien, porque en él va nuestra palabra.\n  - complementary:\n    - paragraph:\n      - text: \"1\"\n      - link \"equipo\":\n        - /url: /quienes-somos\n      - text: . 6 verticales . Dicho y hecho .\n  - region \"Cloudflare Partner\":\n    - article:\n      - img \"Cloudflare Partner Network\"\n      - heading \"~ Partner oficial de Cloudflare\" [level=2]\n      - paragraph:\n        - text: Desplegamos y operamos\n        - link \"Cloudflare\":\n          - /url: https://www.cloudflare.com/es-es/\n        - text: \"para nuestros clientes, y esta misma web corre entera sobre su plataforma:\"\n        - code: Workers\n        - text: \",\"\n        - code: D1\n        - text: \"y\"\n        - code: R2\n        - text: .\n      - list:\n        - listitem:\n          - heading \"CDN\" [level=3]\n          - paragraph: Caché en el borde, purgada en cuanto publicas.\n        - listitem:\n          - heading \"WAF y Zero Trust\" [level=3]\n          - paragraph: Reglas escritas para tu tráfico y acceso sin VPN.\n        - listitem:\n          - heading \"Workers\" [level=3]\n          - paragraph: Lógica en el borde, sin servidores que mantener.\n      - link \"Descubre más sobre Cloudflare\":\n        - /url: /cdn-waf-seguridad-edge-cloudflare\n  - region \"Contacta con nosotros\":\n    - heading \"Hablemos de ingeniero a ingeniero.\" [level=2]\n    - paragraph: Trae el problema como esté. Te responde quien va a escribir el código.\n    - link \"Cuéntanos tu proyecto\":\n      - /url: /contacto\n- contentinfo:\n  - link \"Server Startup — Ir al inicio\":\n    - /url: /\n    - text: ~Server Startup\n  - paragraph: Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.\n  - navigation \"Enlaces del pie\":\n    - heading \"La casa\" [level=3]\n    - list:\n      - listitem:\n        - link \"Quiénes somos\":\n          - /url: /quienes-somos\n      - listitem:\n        - link \"Deconstruyendo esta web\":\n          - /url: /deconstruyendo\n      - listitem:\n        - link \"Referencias\":\n          - /url: /referencias\n    - heading \"Contacto\" [level=3]\n    - list:\n      - listitem:\n        - button \"Escríbenos\"\n    - text: Somos partners"
+		},
+		"/en": {
+			"lang": "en",
+			"title": "Software engineering — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Software engineering, from architecture to production",
+				"H2 How we work",
+				"H2 Official Cloudflare partner",
+				"H3 CDN",
+				"H3 WAF and Zero Trust",
+				"H3 Workers",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "e-commerce",
+					"href": "/en/e-commerce",
+					"context": "Over twenty years in e-commerce, systems integration and data."
+				},
+				{
+					"name": "systems integration",
+					"href": "/en/systems-integration",
+					"context": "Over twenty years in e-commerce, systems integration and data."
+				},
+				{
+					"name": "data",
+					"href": "/en/big-data-cloud-analytics",
+					"context": "Over twenty years in e-commerce, systems integration and data."
+				},
+				{
+					"name": "Cloudflare",
+					"href": "/en/cdn-waf-edge-security-cloudflare",
+					"context": "Official Cloudflare partners since 2019."
+				},
+				{
+					"name": "See all references",
+					"href": "/en/references",
+					"context": "See all references"
+				},
+				{
+					"name": "team",
+					"href": "/en/about-us",
+					"context": "1 team . 6 verticals . promise kept ."
+				},
+				{
+					"name": "Cloudflare",
+					"href": "https://www.cloudflare.com/",
+					"context": "We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2."
+				},
+				{
+					"name": "More about Cloudflare",
+					"href": "/en/cdn-waf-edge-security-cloudflare",
+					"context": "More about Cloudflare"
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "getxo",
+				"status": "Software engineering, from architecture to production Over twenty years in e-commerce, systems integration and data. Official Cloudflare partners since 2019. about us cdn & waf integration ai greenfield e-commerce big data See all references How we work The same engineers, start to finish. Whoever designs your system takes it to production. And checks its alerts every morning. Contract first. Ever"
+			}
+		},
+		"/big-data-cloud-analytics": {
+			"lang": "es",
+			"title": "Big Data & Cloud Analytics — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Big Data & Cloud Analytics",
+				"H2 dbt ≠ pipeline",
+				"H2 Sinergias entre lo analítico y lo operacional",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "medallion",
+					"href": "https://dataengineering.wiki/Concepts/Medallion+Architecture",
+					"context": "Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema, picos de campaña y fuentes de datos varia"
+				},
+				{
+					"name": "Hablemos de tus datos",
+					"href": "/contacto",
+					"context": "Hablemos de tus datos"
+				},
+				{
+					"name": "Joe Reis",
+					"href": "https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling",
+					"context": "— Joe Reis"
+				},
+				{
+					"name": "software serio",
+					"href": "/desarrollo-greenfield",
+					"context": "Nosotros la construimos como se construye el software serio. Cada transformación versionada en git, cada dato con su test, cada flujo con su"
+				},
+				{
+					"name": "dbt",
+					"href": "https://www.getdbt.com/",
+					"context": "La esencia es analítica, y las sinergias con lo operacional la multiplican. Usamos dbt a los dos lados del warehouse."
+				},
+				{
+					"name": "ELT",
+					"href": "https://www.getdbt.com/blog/extract-load-transform",
+					"context": "dbt es la T del ELT y lo tratamos como se trata el buen software, el patrón que el sector llama analytics engineering. Pero la herramienta e"
+				},
+				{
+					"name": "analytics engineering",
+					"href": "https://www.getdbt.com/what-is-analytics-engineering",
+					"context": "dbt es la T del ELT y lo tratamos como se trata el buen software, el patrón que el sector llama analytics engineering. Pero la herramienta e"
+				},
+				{
+					"name": "BigQuery",
+					"href": "https://cloud.google.com/bigquery",
+					"context": "Donde más hemos profundizado. En el cloud de Google, BigQuery como warehouse y dbt en las transformaciones."
+				},
+				{
+					"name": "definition of done",
+					"href": "https://scrumguides.org/scrum-guide.html#commitment-definition-of-done",
+					"context": "De la pizarra a la publicación. Nuestra definition of done nace en el blueprint, mucho antes del código. Diseño de la base de datos con el m"
+				},
+				{
+					"name": "modelado clásico del sector",
+					"href": "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/",
+					"context": "De la pizarra a la publicación. Nuestra definition of done nace en el blueprint, mucho antes del código. Diseño de la base de datos con el m"
+				},
+				{
+					"name": "medallion",
+					"href": "https://dataengineering.wiki/Concepts/Medallion+Architecture",
+					"context": "Arquitectura por capas. El patrón medallion separa el dato crudo del verificado, cada capa con su propósito y su control de acceso."
+				},
+				{
+					"name": "Terraform",
+					"href": "https://www.terraform.io/",
+					"context": "La infraestructura también es código. Terraform levanta los mismos datasets, permisos y entornos en desarrollo y en producción."
+				},
+				{
+					"name": "Pub/Sub",
+					"href": "https://cloud.google.com/pubsub",
+					"context": "Tiempo real cuando el negocio lo pide. Ingesta con Pub/Sub y Dataflow para los flujos que no pueden esperar al batch nocturno."
+				},
+				{
+					"name": "Dataflow",
+					"href": "https://cloud.google.com/dataflow",
+					"context": "Tiempo real cuando el negocio lo pide. Ingesta con Pub/Sub y Dataflow para los flujos que no pueden esperar al batch nocturno."
+				},
+				{
+					"name": "dbt Cloud",
+					"href": "https://docs.getdbt.com/docs/platform/about-platform/dbt-platform-features",
+					"context": "En lo analítico trabajamos con dbt Cloud sobre BigQuery. Y cuando la transformación nace en la capa operacional, sobre una base relacional c"
+				},
+				{
+					"name": "dbt Core",
+					"href": "https://github.com/dbt-labs/dbt-core",
+					"context": "En lo analítico trabajamos con dbt Cloud sobre BigQuery. Y cuando la transformación nace en la capa operacional, sobre una base relacional c"
+				},
+				{
+					"name": "adapter que mantiene Oracle",
+					"href": "https://github.com/oracle/dbt-oracle",
+					"context": "En lo analítico trabajamos con dbt Cloud sobre BigQuery. Y cuando la transformación nace en la capa operacional, sobre una base relacional c"
+				},
+				{
+					"name": "tu e-commerce",
+					"href": "/comercio-electronico",
+					"context": "Conectamos BigQuery con tu e-commerce, con tu ERP y con el edge."
+				},
+				{
+					"name": "ERP",
+					"href": "/integracion-de-sistemas",
+					"context": "Conectamos BigQuery con tu e-commerce, con tu ERP y con el edge."
+				},
+				{
+					"name": "edge",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "Conectamos BigQuery con tu e-commerce, con tu ERP y con el edge."
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "select-*",
+				"status": "Big Data & Cloud Analytics Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema, picos de campaña y fuentes de datos variables es otra historia. Arquitectura medallion y tests que se cuentan por miles. Hablemos de tus datos «Los modelos de datos evolucionan más despacio que el código, y el daño de un mal modelo es sigiloso. No sabrás que estás en peligr"
+			}
+		},
+		"/cdn-waf-seguridad-edge-cloudflare": {
+			"lang": "es",
+			"title": "CDN, WAF y seguridad edge — Server Startup",
+			"imgs": [
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "cf-partner-network-stacked.png"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 CDN, WAF y seguridad edge",
+				"H2 WAF ≠ seguridad",
+				"H2 Quien lo configura, lo mantiene",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "Cloudflare",
+					"href": "https://www.cloudflare.com/es-es/",
+					"context": "Partners oficiales de Cloudflare desde 2019. Auditoría, migración y operación de CDN, WAF y seguridad perimetral, sobre todo en comercio ele"
+				},
+				{
+					"name": "comercio electrónico",
+					"href": "/comercio-electronico",
+					"context": "Partners oficiales de Cloudflare desde 2019. Auditoría, migración y operación de CDN, WAF y seguridad perimetral, sobre todo en comercio ele"
+				},
+				{
+					"name": "Audita tu edge",
+					"href": "/contacto",
+					"context": "Audita tu edge"
+				},
+				{
+					"name": "Cloudflare",
+					"href": "https://www.cloudflare.com/es-es/learning/access-management/castle-and-moat-network-security/",
+					"context": "— Cloudflare"
+				},
+				{
+					"name": "Cloudflare Partner Network",
+					"href": "https://www.cloudflare.com/partners/",
+					"context": ""
+				},
+				{
+					"name": "Cloudflare",
+					"href": "https://www.cloudflare.com/es-es/",
+					"context": "Trabajamos con la plataforma de Cloudflare desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuenta"
+				},
+				{
+					"name": "Enterprise",
+					"href": "https://www.cloudflare.com/es-es/plans/enterprise/",
+					"context": "Trabajamos con la plataforma de Cloudflare desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuenta"
+				},
+				{
+					"name": "Business",
+					"href": "https://www.cloudflare.com/es-es/plans/business/",
+					"context": "Trabajamos con la plataforma de Cloudflare desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuenta"
+				},
+				{
+					"name": "Terraform",
+					"href": "https://developer.hashicorp.com/terraform",
+					"context": "Nosotros sabemos por qué está cada una, porque las escribimos, las versionamos con Terraform y las mantenemos en producción."
+				},
+				{
+					"name": "Deconstruyendo esta web",
+					"href": "/deconstruyendo",
+					"context": "Esta misma web corre sobre Workers, D1 y R2, detrás del mismo WAF que operamos para clientes. La desmontamos pieza a pieza en Deconstruyendo"
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "LaLiga",
+				"status": "ORIGIN CDN WAF ACCESS ZERO TRUST 35 nm · nominal range CDN, WAF y seguridad edge Partners oficiales de Cloudflare desde 2019. Auditoría, migración y operación de CDN, WAF y seguridad perimetral, sobre todo en comercio electrónico. Audita tu edge «Imaginemos que la red de una organización es un castillo, y el perímetro de red un foso. Una vez que se baja el puente levadizo y alguien lo cruza, puede"
+			},
+			"ariaTree": "- link \"Saltar al contenido\":\n  - /url: \"#content\"\n- banner:\n  - button \"Abrir menú de navegación\"\n  - link \"~Server Startup /cdn-waf-seguridad-edge-cloudflare\":\n    - /url: /\n  - checkbox \"Buscar en el sitio\"\n  - link \"EN — Cambiar a la versión en inglés\":\n    - /url: /en/cdn-waf-edge-security-cloudflare\n    - text: EN\n- main:\n  - region \"CDN, WAF y seguridad edge\":\n    - heading \"CDN, WAF y seguridad edge\" [level=1]\n    - paragraph:\n      - emphasis: Partners\n      - text: oficiales de\n      - link \"Cloudflare\":\n        - /url: https://www.cloudflare.com/es-es/\n        - code: Cloudflare\n      - text: desde 2019. Auditoría, migración y operación de\n      - code: CDN\n      - text: \",\"\n      - code: WAF\n      - text: y seguridad perimetral, sobre todo en\n      - link \"comercio electrónico\":\n        - /url: /comercio-electronico\n      - text: .\n    - link \"Audita tu edge\":\n      - /url: /contacto\n    - button \"Repetir la animación\": ↻\n    - checkbox \"Pausar el radar\"\n    - text: ❚❚\n    - figure \"— Cloudflare\":\n      - blockquote:\n        - paragraph: «Imaginemos que la red de una organización es un castillo, y el perímetro de red un foso. Una vez que se baja el puente levadizo y alguien lo cruza, puede moverse con libertad por el interior del castillo.»\n      - text: —\n      - link \"Cloudflare\":\n        - /url: https://www.cloudflare.com/es-es/learning/access-management/castle-and-moat-network-security/\n  - region \"WAF ≠ seguridad\":\n    - link \"Cloudflare Partner Network\":\n      - /url: https://www.cloudflare.com/partners/\n      - img \"Cloudflare Partner Network\"\n    - paragraph:\n      - text: Trabajamos con la plataforma de\n      - link \"Cloudflare\":\n        - /url: https://www.cloudflare.com/es-es/\n        - code: Cloudflare\n      - text: desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuentas\n      - link \"Enterprise\":\n        - /url: https://www.cloudflare.com/es-es/plans/enterprise/\n      - text: \"y\"\n      - link \"Business\":\n        - /url: https://www.cloudflare.com/es-es/plans/business/\n      - text: \", sobre todo para\"\n      - emphasis: retail\n      - text: y comercio electrónico.\n    - paragraph:\n      - code: Cloudflare\n      - text: está configurado. ¿Seguro de que está bien configurado? En muchas organizaciones nadie se atreve a tocar las reglas del\n      - code: WAF\n      - text: . Bloquean algo, seguro. Nadie recuerda qué.\n    - paragraph:\n      - text: Nosotros sabemos por qué está cada una, porque las escribimos, las versionamos con\n      - link \"Terraform\":\n        - /url: https://developer.hashicorp.com/terraform\n        - code: Terraform\n      - text: y las mantenemos en producción.\n    - heading \"~ WAF ≠ seguridad\" [level=2]\n    - paragraph:\n      - text: Un\n      - emphasis: firewall\n      - text: no es una estrategia de seguridad, sino una parte de ella. Configuramos\n      - code: Cloudflare\n      - text: como arquitectura, y cada interruptor de este panel tiene un porqué.\n    - group \"WAF ≠ seguridad\": Seguridad · serverstartup.io ACTIVO PoPs sirviendo tu web 300+ Workers · latencia al usuario <50 ms Plantillas genéricas 0 Reglas WAF a tu medida Ajustadas a tu superficie de ataque real. OWASP Top 10, DDoS, bots. Las plantillas genéricas, fuera. Caché y CDN Tu origen respira y los tiempos de respuesta se vuelven predecibles. También en la campaña de noviembre. Migraciones sin corte Desde Akamai o la CDN que toque, sin parar la tienda. Todo en Terraform La configuración entera como código, versionada y revisada. Nada depende de la memoria de nadie. Lógica junto al usuario Workers en más de 300 ciudades, a menos de 50 ms. Los primeros los pusimos en producción en 2018. Guardia diaria Alertas y comprobaciones que un ingeniero revisa cada mañana. El mismo que escribió tus reglas. Modo «lo montó alguien que ya no está» Desactivado desde 2019. Las reglas las escribimos y las mantenemos nosotros.\n    - heading \"~ Quien lo configura, lo mantiene\" [level=2]\n    - paragraph:\n      - text: No montamos\n      - code: Cloudflare\n      - text: y desaparecemos. Vigilamos el tráfico, ajustamos las reglas cuando cambian los patrones de ataque y damos la cara cuando algo se degrada.\n    - paragraph:\n      - text: Hemos montado\n      - code: Cloudflare\n      - text: \"para:\"\n    - paragraph:\n      - text: La plataforma no se acaba en el\n      - code: CDN\n      - text: y el\n      - code: WAF\n      - text: .\n      - code: Zero Trust\n      - text: \",\"\n      - code: Access\n      - text: \",\"\n      - code: Stream\n      - text: \",\"\n      - code: R2\n      - text: . Te ayudamos a decidir qué piezas encajan y cuáles no.\n    - paragraph:\n      - text: Esta misma web corre sobre\n      - code: Workers\n      - text: \",\"\n      - code: D1\n      - text: \"y\"\n      - code: R2\n      - text: \", detrás del mismo\"\n      - code: WAF\n      - text: que operamos para clientes. La desmontamos pieza a pieza en\n      - link \"Deconstruyendo esta web\":\n        - /url: /deconstruyendo\n      - text: .\n  - complementary:\n    - paragraph:\n      - text: \"1\"\n      - link \"equipo\":\n        - /url: /quienes-somos\n      - text: . 6 verticales . Dicho y hecho .\n  - region \"Contacta con nosotros\":\n    - heading \"Hablemos de ingeniero a ingeniero.\" [level=2]\n    - paragraph: Trae el problema como esté. Te responde quien va a escribir el código.\n    - link \"Cuéntanos tu proyecto\":\n      - /url: /contacto\n- contentinfo:\n  - region \"Empresas que confían en nosotros\":\n    - heading \"~ Referencias\" [level=2]:\n      - text: ~\n      - link \"Referencias\":\n        - /url: /referencias\n    - list:\n      - listitem:\n        - img \"Alcampo\"\n      - listitem:\n        - img \"Auchan\"\n      - listitem:\n        - img \"Forum Sport\"\n      - listitem:\n        - img \"Grupo Seidor\"\n      - listitem:\n        - img \"Inetum\"\n      - listitem:\n        - img \"Job&Talent\"\n      - listitem:\n        - img \"Punt Roma\"\n  - link \"Server Startup — Ir al inicio\":\n    - /url: /\n    - text: ~Server Startup\n  - paragraph: Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.\n  - navigation \"Enlaces del pie\":\n    - heading \"La casa\" [level=3]\n    - list:\n      - listitem:\n        - link \"Quiénes somos\":\n          - /url: /quienes-somos\n      - listitem:\n        - link \"Deconstruyendo esta web\":\n          - /url: /deconstruyendo\n      - listitem:\n        - link \"Referencias\":\n          - /url: /referencias\n    - heading \"Contacto\" [level=3]"
+		},
+		"/comercio-electronico": {
+			"lang": "es",
+			"title": "Comercio electrónico — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Comercio electrónico",
+				"H2 A medida ≠ acoplado",
+				"H2 Casos a los que tenemos cariño",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "SAP Commerce Cloud",
+					"href": "https://www.sap.com/spain/products/crm/commerce-cloud.html",
+					"context": "Más de veinte años dentro de SAP Commerce Cloud. Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del core, ajustada "
+				},
+				{
+					"name": "Audita tu e-commerce",
+					"href": "/contacto",
+					"context": "Audita tu e-commerce"
+				},
+				{
+					"name": "Ken Murphy",
+					"href": "https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf",
+					"context": "— Ken Murphy"
+				},
+				{
+					"name": "integración",
+					"href": "/integracion-de-sistemas",
+					"context": "No todas las plataformas se trabajan igual. SAP Commerce Cloud se parametriza y se extiende. Extender es lo fácil. Hacerlo con mesura, dejan"
+				},
+				{
+					"name": "Audita tu e-commerce",
+					"href": "/contacto",
+					"context": "Audita tu e-commerce"
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "carrito-abandonado",
+				"status": "Comercio electrónico Más de veinte años dentro de SAP Commerce Cloud. Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del core, ajustada al estándar, para que sobreviva versión tras versión, es lo que casi nadie hace. Y el rendimiento, nuestra especialidad. Audita tu e-commerce «…servir las compras de los clientes donde, cuando y como quieran ser servidos.» — Ken Murphy Ext"
+			}
+		},
+		"/desarrollo-greenfield": {
+			"lang": "es",
+			"title": "Desarrollo greenfield — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Desarrollo greenfield",
+				"H2 El código no es el producto",
+				"H2 Greenfield ≠ página en blanco",
+				"H2 La IA multiplica. El framework conduce.",
+				"H2 Tu deuda técnica es nuestro problema",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "Hablemos de tu proyecto",
+					"href": "/contacto",
+					"context": "Hablemos de tu proyecto"
+				},
+				{
+					"name": "Andrej Karpathy",
+					"href": "https://karpathy.bearblog.dev/year-in-review-2025/",
+					"context": "— Andrej Karpathy"
+				},
+				{
+					"name": "IA",
+					"href": "/inteligencia-artificial",
+					"context": "Y hoy pesa otro motivo. Con las capacidades que trae la IA, construir a medida sale a cuenta en casos donde antes se compraba por defecto."
+				},
+				{
+					"name": "Cloud Run",
+					"href": "https://cloud.google.com/run",
+					"context": "Python en Google Cloud. Servicios y funciones sobre Cloud Run y Cloud Functions, con el mismo andamiaje de entornos, credenciales y pruebas "
+				},
+				{
+					"name": "Cloud Functions",
+					"href": "https://cloud.google.com/functions",
+					"context": "Python en Google Cloud. Servicios y funciones sobre Cloud Run y Cloud Functions, con el mismo andamiaje de entornos, credenciales y pruebas "
+				},
+				{
+					"name": "integración",
+					"href": "/integracion-de-sistemas",
+					"context": "Quarkus y Camel sobre Docker. Arranque en milisegundos e integración de serie, listos para cualquier orquestador."
+				},
+				{
+					"name": "Karaf",
+					"href": "https://karaf.apache.org/",
+					"context": "Publicación en Karaf. Para las plataformas que viven en OSGi y despliegan por bundles sobre Karaf, sin parar el resto del sistema."
+				},
+				{
+					"name": "el vertical de IA",
+					"href": "/inteligencia-artificial",
+					"context": "Nuestros frameworks son el perímetro. El agente escribe dentro de esos raíles y un ingeniero firma cada línea que llega a main. El detalle, "
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "quarkus",
+				"status": "A B C D E F G H ±0,00 +50,00 50,00 L.H. PF1 ← → PF2 Desarrollo greenfield El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. SDLC completo, de la especificación a la observabilidad. Trabajamos contract first, con foco en estabilidad, seguridad y gobernanza. Hablemos de tu proyecto «[La IA] permite a prof"
+			}
+		},
+		"/inteligencia-artificial": {
+			"lang": "es",
+			"title": "Inteligencia artificial — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Inteligencia artificial",
+				"H2 Generado ≠ entregado",
+				"H2 Firmamos el código",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "Cuéntanos tu caso",
+					"href": "/contacto",
+					"context": "Cuéntanos tu caso"
+				},
+				{
+					"name": "Martin Fowler",
+					"href": "https://martinfowler.com/fragments/2026-09-08.html",
+					"context": "— Martin Fowler"
+				},
+				{
+					"name": "paradoja de Jevons",
+					"href": "https://news.northeastern.edu/2025/02/07/jevons-paradox-ai-future/",
+					"context": "Cuando generar código sale casi gratis, se genera muchísimo más software (paradoja de Jevons). Y todo ese software nuevo hay que integrarlo "
+				},
+				{
+					"name": "integrarlo",
+					"href": "/integracion-de-sistemas",
+					"context": "Cuando generar código sale casi gratis, se genera muchísimo más software (paradoja de Jevons). Y todo ese software nuevo hay que integrarlo "
+				},
+				{
+					"name": "asegurarlo",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "Cuando generar código sale casi gratis, se genera muchísimo más software (paradoja de Jevons). Y todo ese software nuevo hay que integrarlo "
+				},
+				{
+					"name": "SAP",
+					"href": "/comercio-electronico",
+					"context": "Un agente es IA que hace cosas, no solo responde. Y para ser útil necesita leer el pedido en SAP, comprobar el stock en BigQuery y escribir "
+				},
+				{
+					"name": "BigQuery",
+					"href": "/big-data-cloud-analytics",
+					"context": "Un agente es IA que hace cosas, no solo responde. Y para ser útil necesita leer el pedido en SAP, comprobar el stock en BigQuery y escribir "
+				},
+				{
+					"name": "Agents SDK",
+					"href": "https://developers.cloudflare.com/agents/",
+					"context": "Agentes con permisos acotados. Construidos sobre el Agents SDK, tocan solo lo que deben y siempre hay una persona que puede pararlos."
+				},
+				{
+					"name": "Workers AI",
+					"href": "https://developers.cloudflare.com/workers-ai/",
+					"context": "Inferencia en el borde. Clasificación y extracción de documentos con Workers AI, en la red de Cloudflare. El dato se procesa en tu propia cu"
+				},
+				{
+					"name": "Cloudflare",
+					"href": "https://www.cloudflare.com/es-es/",
+					"context": "Inferencia en el borde. Clasificación y extracción de documentos con Workers AI, en la red de Cloudflare. El dato se procesa en tu propia cu"
+				},
+				{
+					"name": "AI Gateway",
+					"href": "https://developers.cloudflare.com/ai-gateway/",
+					"context": "Tráfico de IA gobernado. Cada llamada a un modelo queda registrada y con techo de gasto en AI Gateway. Sabrás qué modelo respondió y cuánto "
+				},
+				{
+					"name": "Claude Code",
+					"href": "https://claude.com/claude-code",
+					"context": "Usamos IA a diario. Claude Code, Cursor, modelos abiertos en Workers AI. Y por usarla sabemos dónde falla."
+				},
+				{
+					"name": "Cursor",
+					"href": "https://cursor.com",
+					"context": "Usamos IA a diario. Claude Code, Cursor, modelos abiertos en Workers AI. Y por usarla sabemos dónde falla."
+				},
+				{
+					"name": "ley europea de IA",
+					"href": "https://artificialintelligenceact.eu/es/",
+					"context": "El que firma, da la cara. Desde agosto de 2026, además, la ley europea de IA exige supervisión humana con competencia y autoridad para corre"
+				},
+				{
+					"name": "Esta misma web",
+					"href": "/deconstruyendo",
+					"context": "Esta misma web se construye así, con agentes supervisados, pull request a pull request. Y si un chatbot no te resuelve nada, te diremos que "
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "alucinación",
+				"status": "MATCH order = sap.read(id) stock = bq.query(sku) await review(bridge) sign() Inteligencia artificial La IA es un medio, no un fin. La máquina hace el código repetitivo; nosotros ponemos la arquitectura y el criterio, del desarrollo a la operación — enfoque integral, perfil DevOps. El agente propone, el ingeniero dispone. Cuéntanos tu caso «Sostengo que las organizaciones que construyen y operan ag"
+			}
+		},
+		"/integracion-de-sistemas": {
+			"lang": "es",
+			"title": "Integración de sistemas — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Integración de sistemas",
+				"H2 Conector ≠ Sistema integrado",
+				"H2 Ni PowerPoint ni copiar y pegar",
+				"H2 La IA acelera. El patrón manda.",
+				"H2 Quién lo construye, responde",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "Hablemos de integración",
+					"href": "/contacto",
+					"context": "Hablemos de integración"
+				},
+				{
+					"name": "Gregor Hohpe y Bobby Woolf",
+					"href": "https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html",
+					"context": "— Gregor Hohpe y Bobby Woolf"
+				},
+				{
+					"name": "patrones de integración empresarial",
+					"href": "https://www.enterpriseintegrationpatterns.com/",
+					"context": "Mover datos de A a B es la parte fácil. El verdadero desafío de ingeniería es mantener la continuidad operativa en ecosistemas donde convive"
+				},
+				{
+					"name": "los analíticos",
+					"href": "/big-data-cloud-analytics",
+					"context": "Conectamos, además, los sistemas operacionales con los analíticos, cerrando el ciclo del dato."
+				},
+				{
+					"name": "IA",
+					"href": "/inteligencia-artificial",
+					"context": "Cada vez construimos más integración con IA. La diferencia entre acelerar y acumular deuda es el marco. Un agente sin restricciones resuelve"
+				},
+				{
+					"name": "spec-driven development",
+					"href": "https://github.com/github/spec-kit",
+					"context": "Nosotros practicamos spec-driven development. Primero la especificación (el contrato de datos, el patrón, la política de errores). Después e"
+				},
+				{
+					"name": "vertical de IA",
+					"href": "/inteligencia-artificial",
+					"context": "Nosotros practicamos spec-driven development. Primero la especificación (el contrato de datos, el patrón, la política de errores). Después e"
+				},
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "trazabilidad",
+				"status": "REST SFTP JDBC Pub/Sub BigQuery SAP Commerce Cloud Storage Cloud Run Vertex AI Ocado OSP Integración de sistemas No somos «arquitectos de PowerPoint»: lo que planificamos, lo ejecutamos. Sin exageraciones — lo objetivamente necesario y viable. Un guante, no un martillo, con homogeneidad, metodología, testabilidad y observabilidad absoluta. Hablemos de integración «Las aplicaciones interesantes rar"
+			}
+		},
+		"/en/systems-integration": {
+			"lang": "en",
+			"title": "Systems Integration — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Systems Integration",
+				"H2 Connector ≠ Integrated system",
+				"H2 Not PowerPoint. Not copy-paste.",
+				"H2 AI speeds things up. Patterns call the shots.",
+				"H2 Who builds it, answers for it",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "Let's talk integration",
+					"href": "/en/contact",
+					"context": "Let's talk integration"
+				},
+				{
+					"name": "Gregor Hohpe and Bobby Woolf",
+					"href": "https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html",
+					"context": "— Gregor Hohpe and Bobby Woolf"
+				},
+				{
+					"name": "enterprise integration patterns",
+					"href": "https://www.enterpriseintegrationpatterns.com/",
+					"context": "Moving data from A to B is the easy part. The real engineering challenge is maintaining operational continuity in ecosystems where your ERP,"
+				},
+				{
+					"name": "the analytical ones",
+					"href": "/en/big-data-cloud-analytics",
+					"context": "We also connect the operational systems with the analytical ones, closing the data loop."
+				},
+				{
+					"name": "AI",
+					"href": "/en/artificial-intelligence",
+					"context": "More and more of our integration work is built with AI. The difference between speed and debt is the frame. An unconstrained agent solves th"
+				},
+				{
+					"name": "spec-driven development",
+					"href": "https://github.com/github/spec-kit",
+					"context": "We practice spec-driven development. The specification comes first (data contract, pattern, error policy). Then the code, generated inside t"
+				},
+				{
+					"name": "AI vertical",
+					"href": "/en/artificial-intelligence",
+					"context": "We practice spec-driven development. The specification comes first (data contract, pattern, error policy). Then the code, generated inside t"
+				},
+				{
+					"name": "team",
+					"href": "/en/about-us",
+					"context": "1 team . 6 verticals . promise kept ."
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "traceability",
+				"status": "REST SFTP Pub/Sub BigQuery SAP Commerce Cloud Storage Cloud Run Vertex AI Ocado OSP Cloud Functions Systems Integration We're not “PowerPoint architects”: what we plan is what we ship. No overpromising — the objectively necessary and viable. A glove, not a hammer, with homogeneity, methodology, testability and absolute observability. Let's talk integration «Interesting applications rarely live in "
+			}
+		},
+		"/quienes-somos": {
+			"lang": "es",
+			"title": "Quiénes somos — Server Startup",
+			"imgs": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image"
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image"
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image"
+				},
+				{
+					"alt": "",
+					"src": "_image"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Quiénes somos",
+				"H2 Historia",
+				"H3 EL NOMBRE",
+				"H3 EL CAMINO",
+				"H3 EL CUBO",
+				"H2 Quién responde del trabajo",
+				"H3 Daniel Sío",
+				"H3 Ignacio Ibaseta",
+				"H3 Julio Argüello",
+				"H2 Nuestros valores",
+				"H2 Con el deporte base"
+			],
+			"links": [
+				{
+					"name": "SAP Commerce",
+					"href": "https://www.sap.com/products/crm/commerce-cloud.html",
+					"context": "Fundada en 2019, Server Startup debe efectivamente su nombre a la trinchera de hybris (ahora SAP Commerce). Muchas horas picando código en c"
+				},
+				{
+					"name": "Tomcat",
+					"href": "https://tomcat.apache.org/",
+					"context": "Fundada en 2019, Server Startup debe efectivamente su nombre a la trinchera de hybris (ahora SAP Commerce). Muchas horas picando código en c"
+				},
+				{
+					"name": "Cloudflare",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "Aquel mismo 2019 nos hicimos partner oficial de Cloudflare. Para 2022 el lema de la casa era “+ Calidad − Cantidad”: más criterio, menos vol"
+				},
+				{
+					"name": "e-commerce complejos",
+					"href": "/comercio-electronico",
+					"context": "Si el mensaje de Server Startup es la chispa vital, el rock'n'roll de nuestros inicios, el cubo canaliza hoy esa energía. Simboliza el salto"
+				},
+				{
+					"name": "Ocado",
+					"href": "https://www.ocadogroup.com/solutions/ocado-smart-platform",
+					"context": "Si el mensaje de Server Startup es la chispa vital, el rock'n'roll de nuestros inicios, el cubo canaliza hoy esa energía. Simboliza el salto"
+				},
+				{
+					"name": "middleware que conecta tu ERP con la tienda",
+					"href": "/integracion-de-sistemas",
+					"context": "Trabajamos junto a tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de "
+				},
+				{
+					"name": "WAF que para el tráfico malo",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "Trabajamos junto a tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de "
+				},
+				{
+					"name": "modelo de dbt que cierra las ventas del día",
+					"href": "/big-data-cloud-analytics",
+					"context": "Trabajamos junto a tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de "
+				},
+				{
+					"name": "Infantil masculino del Urdaneta. Campeón provincial de Bizkaia 2024/25",
+					"href": "https://www.instagram.com/p/DSflABTjB0P/",
+					"context": ""
+				},
+				{
+					"name": "el club en Instagram",
+					"href": "https://www.instagram.com/p/DSflABTjB0P/",
+					"context": "Infantil masculino del Urdaneta. Campeón provincial de Bizkaia 2024/25 y subcampeón 2025/26. Foto: el club en Instagram."
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "amigos",
+				"status": "Quiénes somos org.apache.catalina.startup.Catalina.start Server startup in [2019] ms Una señal de identidad. Una línea de log, para algunos familiar, que dice mucho más de nosotros que cualquier presentación corporativa. Historia EL NOMBRE Fundada en 2019, Server Startup debe efectivamente su nombre a la trinchera de hybris (ahora SAP Commerce). Muchas horas picando código en casa, aviones, hotele"
+			}
+		},
+		"/en/about-us": {
+			"lang": "en",
+			"title": "About us — Server Startup",
+			"imgs": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image"
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image"
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image"
+				},
+				{
+					"alt": "",
+					"src": "_image"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 About us",
+				"H2 History",
+				"H3 THE NAME",
+				"H3 THE ROAD",
+				"H3 THE CUBE",
+				"H2 Who answers for the work",
+				"H3 Daniel Sío",
+				"H3 Ignacio Ibaseta",
+				"H3 Julio Argüello",
+				"H2 Our values",
+				"H2 Backing grassroots sport"
+			],
+			"links": [
+				{
+					"name": "SAP Commerce",
+					"href": "https://www.sap.com/products/crm/commerce-cloud.html",
+					"context": "Founded in 2019, Server Startup owes its name to the hybris (now SAP Commerce) trenches. Long hours writing code at home, on planes, in hote"
+				},
+				{
+					"name": "Tomcat",
+					"href": "https://tomcat.apache.org/",
+					"context": "Founded in 2019, Server Startup owes its name to the hybris (now SAP Commerce) trenches. Long hours writing code at home, on planes, in hote"
+				},
+				{
+					"name": "Cloudflare",
+					"href": "/en/cdn-waf-edge-security-cloudflare",
+					"context": "That same 2019 we became an official Cloudflare partner. By 2022 the house motto was “+ Calidad − Cantidad”: more judgment, less volume. Bot"
+				},
+				{
+					"name": "complex e-commerce",
+					"href": "/en/e-commerce",
+					"context": "If that log line is the spark, the rock'n'roll of our beginnings, the cube channels that energy today. It marks the maturity leap from build"
+				},
+				{
+					"name": "Ocado",
+					"href": "https://www.ocadogroup.com/solutions/ocado-smart-platform",
+					"context": "If that log line is the spark, the rock'n'roll of our beginnings, the cube channels that energy today. It marks the maturity leap from build"
+				},
+				{
+					"name": "middleware wiring your ERP to the storefront",
+					"href": "/en/systems-integration",
+					"context": "We work alongside your team, not around it. The middleware wiring your ERP to the storefront, the WAF stopping bad traffic, the dbt model th"
+				},
+				{
+					"name": "WAF stopping bad traffic",
+					"href": "/en/cdn-waf-edge-security-cloudflare",
+					"context": "We work alongside your team, not around it. The middleware wiring your ERP to the storefront, the WAF stopping bad traffic, the dbt model th"
+				},
+				{
+					"name": "dbt model that closes the day's sales",
+					"href": "/en/big-data-cloud-analytics",
+					"context": "We work alongside your team, not around it. The middleware wiring your ERP to the storefront, the WAF stopping bad traffic, the dbt model th"
+				},
+				{
+					"name": "Urdaneta under-14 boys. Bizkaia provincial champions 2024/25 and runne",
+					"href": "https://www.instagram.com/p/DSflABTjB0P/",
+					"context": ""
+				},
+				{
+					"name": "the club on Instagram",
+					"href": "https://www.instagram.com/p/DSflABTjB0P/",
+					"context": "Urdaneta under-14 boys. Bizkaia provincial champions 2024/25 and runners-up 2025/26. Photo: the club on Instagram."
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [
+				"Daniel Sío E-commerce operations The soul of every project. Master of ceremonies, above all when they end in karaoke. He will get you up a mountain or lift your",
+				"The soul of every project. Master of ceremonies, above all when they end in karaoke. He will get you up a mountain or lift your mood. A good friend before a goo"
+			],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "friends",
+				"status": "About us org.apache.catalina.startup.Catalina.start Server startup in [2019] ms A sign of identity. A log line, familiar to some, that says more about us than any corporate deck. History THE NAME Founded in 2019, Server Startup owes its name to the hybris (now SAP Commerce) trenches. Long hours writing code at home, on planes, in hotels, on metro 3G. Sometimes even at the office... Watching that T"
+			}
+		},
+		"/contacto": {
+			"lang": "es",
+			"title": "Hablemos — Server Startup",
+			"imgs": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image"
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image"
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Hablemos"
+			],
+			"links": [
+				{
+					"name": "equipo",
+					"href": "/quienes-somos",
+					"context": "1 equipo . 6 verticales . dicho y hecho ."
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "formulario",
+				"status": "Hablemos Escríbenos. Te responde quien hace el trabajo. Si corre prisa, WhatsApp. Si puede esperar, email. Daniel Sío Operación de comercio electrónico Ignacio Ibaseta Infraestructura como código y plataforma de datos Julio Argüello Fundador · integración y arquitectura WhatsApp Teléfono Email Server Startup S.L. · Bizkaia · desde 2019. 1 equipo . 6 verticales . dicho y hecho ."
+			},
+			"ariaTree": "- link \"Saltar al contenido\":\n  - /url: \"#content\"\n- banner:\n  - button \"Abrir menú de navegación\"\n  - link \"~Server Startup /contacto\":\n    - /url: /\n  - checkbox \"Buscar en el sitio\"\n  - link \"EN — Cambiar a la versión en inglés\":\n    - /url: /en/contact\n    - text: EN\n- main:\n  - region \"Hablemos\":\n    - heading \"Hablemos\" [level=1]\n    - paragraph: Escríbenos. Te responde quien hace el trabajo.\n    - paragraph: Si corre prisa, WhatsApp. Si puede esperar, email.\n    - list:\n      - listitem:\n        - img \"Daniel Sío\"\n        - text: Daniel Sío Operación de comercio electrónico\n      - listitem:\n        - img \"Ignacio Ibaseta\"\n        - text: Ignacio Ibaseta Infraestructura como código y plataforma de datos\n      - listitem:\n        - img \"Julio Argüello\"\n        - text: Julio Argüello Fundador · integración y arquitectura\n    - list:\n      - listitem:\n        - button \"WhatsApp\"\n      - listitem:\n        - button \"Teléfono\"\n      - listitem:\n        - button \"Email\"\n    - paragraph: Server Startup S.L. · Bizkaia · desde 2019.\n  - complementary:\n    - paragraph:\n      - text: \"1\"\n      - link \"equipo\":\n        - /url: /quienes-somos\n      - text: . 6 verticales . Dicho y hecho .\n- contentinfo:\n  - region \"Empresas que confían en nosotros\":\n    - heading \"~ Referencias\" [level=2]:\n      - text: ~\n      - link \"Referencias\":\n        - /url: /referencias\n    - list:\n      - listitem:\n        - img \"Alcampo\"\n      - listitem:\n        - img \"Auchan\"\n      - listitem:\n        - img \"Forum Sport\"\n      - listitem:\n        - img \"Grupo Seidor\"\n      - listitem:\n        - img \"Inetum\"\n      - listitem:\n        - img \"Job&Talent\"\n      - listitem:\n        - img \"Punt Roma\"\n  - link \"Server Startup — Ir al inicio\":\n    - /url: /\n    - text: ~Server Startup\n  - paragraph: Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.\n  - navigation \"Enlaces del pie\":\n    - heading \"La casa\" [level=3]\n    - list:\n      - listitem:\n        - link \"Quiénes somos\":\n          - /url: /quienes-somos\n      - listitem:\n        - link \"Deconstruyendo esta web\":\n          - /url: /deconstruyendo\n      - listitem:\n        - link \"Referencias\":\n          - /url: /referencias\n    - heading \"Contacto\" [level=3]\n    - list:\n      - listitem:\n        - button \"Escríbenos\"\n    - link \"Cuéntanos tu proyecto\":\n      - /url: /contacto\n    - text: Somos partners\n    - link \"Cloudflare Partner Network\":\n      - /url: https://www.cloudflare.com/partners/\n      - img \"Cloudflare Partner Network\"\n  - 'img \"Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU\"'\n  - img \"Logotipo del Plan de Recuperación, Transformación y Resiliencia\"\n  - navigation \"Información legal\":\n    - text: © 2026 Server Startup, S.L.\n    - link \"Aviso legal\":\n      - /url: /aviso-legal\n    - link \"Política de privacidad\":\n      - /url: /politica-de-privacidad\n    - link \"Accesibilidad\":\n      - /url: /accesibilidad"
+		},
+		"/en/contact": {
+			"lang": "en",
+			"title": "Let's talk — Server Startup",
+			"imgs": [
+				{
+					"alt": "Daniel Sío",
+					"src": "_image"
+				},
+				{
+					"alt": "Ignacio Ibaseta",
+					"src": "_image"
+				},
+				{
+					"alt": "Julio Argüello",
+					"src": "_image"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Let's talk"
+			],
+			"links": [
+				{
+					"name": "team",
+					"href": "/en/about-us",
+					"context": "1 team . 6 verticals . promise kept ."
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "contact-form",
+				"status": "Let's talk Write to us. The people who do the work answer. If it's urgent, WhatsApp. If it can wait, email. Daniel Sío E-commerce operations Ignacio Ibaseta Infrastructure as code and the data platform Julio Argüello Founder · integration and architecture WhatsApp Teléfono Email Server Startup S.L. · Bizkaia, Spain · since 2019. 1 team . 6 verticals . promise kept ."
+			}
+		},
+		"/referencias": {
+			"lang": "es",
+			"title": "Referencias — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Referencias",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "nda",
+				"status": "Referencias ls -alh referencias/ total 9 drwxr-xr-x 2 serverstartup clientes 96B 24 ene 2019 . drwxr-xr-x 5 serverstartup serverstartup 160B 24 ene 2019 .. -r-xr-xr-x 1 serverstartup clientes 5.5K 24 ene 2019 -r-xr-xr-x 1 serverstartup clientes 5.4K 24 ene 2019 -r-xr-xr-x 1 serverstartup clientes 8.7K 24 ene 2019 -r--r--r-- 1 serverstartup colaboraciones 14K 24 ene 2019 -r--r--r-- 1 serverstartup "
+			}
+		},
+		"/en/references": {
+			"lang": "en",
+			"title": "References — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 References",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "nda",
+				"status": "References ls -alh references/ total 9 drwxr-xr-x 2 serverstartup clients 96B Jan 24 2019 . drwxr-xr-x 5 serverstartup serverstartup 160B Jan 24 2019 .. -r-xr-xr-x 1 serverstartup clients 5.5K Jan 24 2019 -r-xr-xr-x 1 serverstartup clients 5.4K Jan 24 2019 -r-xr-xr-x 1 serverstartup clients 8.7K Jan 24 2019 -r--r--r-- 1 serverstartup collaborations 14K Jan 24 2019 -r--r--r-- 1 serverstartup collab"
+			}
+		},
+		"/deconstruyendo": {
+			"lang": "es",
+			"title": "Deconstruyendo esta web — Server Startup",
+			"imgs": [
+				{
+					"alt": "El panel de EmDash editando esta misma página, con el título, el cuerpo y el estado de publicación a la vista.",
+					"src": "emdash-editor-deconstruyendo.webp"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Deconstruyendo esta web",
+				"H2 La arquitectura",
+				"H2 Contenido como código",
+				"H2 Los agentes",
+				"H2 Los números",
+				"H2 El taller, a la vista",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "el repositorio",
+					"href": "https://github.com/julioarguello/www-serverstartup-io",
+					"context": "El recorrido va hacia abajo, del punto de presencia que respondió a tu petición al commit que autorizó estas palabras. Cada capa se abre si "
+				},
+				{
+					"name": "Cloudflare Workers",
+					"href": "https://developers.cloudflare.com/workers/",
+					"context": "No hay servidores que cuidar, y eso es lo de menos. Importa dónde se fabricó la respuesta que estás leyendo: en el edge, sobre Cloudflare Wo"
+				},
+				{
+					"name": "EmDash",
+					"href": "https://blog.cloudflare.com/emdash-wordpress/",
+					"context": "Debajo, el CMS es EmDash, que Cloudflare publicó con licencia MIT como sucesor de WordPress, y no un servicio al que llamar por red: es la m"
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/workers/runtime-apis/cache/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://docs.astro.build/en/guides/on-demand-rendering/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://blog.cloudflare.com/astro-joins-cloudflare/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://blog.cloudflare.com/emdash-wordpress/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://blog.cloudflare.com/cloudflare-blog-uses-emdash/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/d1/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/r2/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/kv/",
+					"context": ""
+				},
+				{
+					"name": "seed/seed.json",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json",
+					"context": "Casi cada texto vive en seed/seed.json, y los cuerpos de los servicios en markdown: el nombre del fichero es el slug, el directorio es el id"
+				},
+				{
+					"name": "servicios",
+					"href": "/desarrollo-greenfield",
+					"context": "Casi cada texto vive en seed/seed.json, y los cuerpos de los servicios en markdown: el nombre del fichero es el slug, el directorio es el id"
+				},
+				{
+					"name": "integración continua",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/.github/workflows/ci.yml",
+					"context": "Casi cada texto vive en seed/seed.json, y los cuerpos de los servicios en markdown: el nombre del fichero es el slug, el directorio es el id"
+				},
+				{
+					"name": "26 rutas",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/tests/copy-baseline",
+					"context": "Copia que cambia sola: el texto renderizado de 26 rutas está congelado."
+				},
+				{
+					"name": "W3C",
+					"href": "https://validator.w3.org/nu/",
+					"context": "Accesibilidad y contraste: tabulador, reflujo a 320 píxeles y validación del W3C."
+				},
+				{
+					"name": "un fichero",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json",
+					"context": "Un número sin fecha es el peor sitio para la deriva, así que aquí hay dos clases y no se mezclan. El umbral vive en un fichero: 95 o más en "
+				},
+				{
+					"name": "contacto",
+					"href": "/contacto",
+					"context": "Las imágenes llevan la suya. El 27 de agosto de 2026, con emulación de móvil y sobre las mismas páginas antes y después: entre un 43 % y un "
+				},
+				{
+					"name": "Mira dentro",
+					"href": "https://github.com/julioarguello/www-serverstartup-io",
+					"context": "Código, semillas, comprobaciones y despliegues: está todo. Mira dentro y dinos si harías algo distinto."
+				},
+				{
+					"name": "dinos",
+					"href": "/contacto",
+					"context": "Código, semillas, comprobaciones y despliegues: está todo. Mira dentro y dinos si harías algo distinto."
+				},
+				{
+					"name": "src/worker.ts ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/src/worker.ts",
+					"context": "L5 el borde ×1 el worker que responde src/worker.ts ↗"
+				},
+				{
+					"name": "src/middleware.ts ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/src/middleware.ts",
+					"context": "L4 la puerta ×7 las cabeceras de seguridad src/middleware.ts ↗"
+				},
+				{
+					"name": "src/pages/ ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/src/pages",
+					"context": "L3 el render ×26 las rutas públicas src/pages/ ↗"
+				},
+				{
+					"name": "src/plugins/cache-purge.ts ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/src/plugins/cache-purge.ts",
+					"context": "L2 el CMS ×5 un plugin nuestro con la API de EmDash src/plugins/cache-purge.ts ↗"
+				},
+				{
+					"name": "wrangler.jsonc ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/wrangler.jsonc",
+					"context": "L1 los datos ×3 D1, R2 y KV wrangler.jsonc ↗"
+				},
+				{
+					"name": "seed/seed.json ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json",
+					"context": "L0 el origen ×43 el corpus entero seed/seed.json ↗"
+				},
+				{
+					"name": "Ver el repositorio →",
+					"href": "https://github.com/julioarguello/www-serverstartup-io",
+					"context": "Ver el repositorio →"
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [
+				"El recorrido va hacia abajo, del punto de presencia que respondió a tu petición al commit que autorizó estas palabras. Cada capa se abre si quieres el detalle, "
+			],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "node_modules",
+				"status": "Deconstruyendo esta web Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro. El recorrido va hacia abajo, del punto de presencia que respondió a tu petición al commit que autorizó estas palabras. Cada capa se abre si quieres el detalle, y todo lo que se afirma aquí está en el repositorio. La arquitectura No hay servidores que cuidar, y eso es lo de menos. Imp"
+			}
+		},
+		"/en/deconstructing": {
+			"lang": "en",
+			"title": "Deconstructing this website — Server Startup",
+			"imgs": [
+				{
+					"alt": "The EmDash panel editing this very page, showing the title, the body and the publish state.",
+					"src": "emdash-editor-deconstruyendo.webp"
+				},
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Deconstructing this website",
+				"H2 The architecture",
+				"H2 Content as code",
+				"H2 The agents",
+				"H2 The numbers",
+				"H2 The workshop, in plain sight",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "the repository",
+					"href": "https://github.com/julioarguello/www-serverstartup-io",
+					"context": "The tour runs downwards, from the point of presence that answered your request to the commit that authorised these words. Every layer opens "
+				},
+				{
+					"name": "Cloudflare Workers",
+					"href": "https://developers.cloudflare.com/workers/",
+					"context": "There are no servers to look after, and that is the least of it. What matters is where the response you are reading was made: at the edge, o"
+				},
+				{
+					"name": "EmDash",
+					"href": "https://blog.cloudflare.com/emdash-wordpress/",
+					"context": "Below that, the CMS is EmDash, which Cloudflare released under an MIT licence as a successor to WordPress, and not a service to call over th"
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/workers/runtime-apis/cache/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://docs.astro.build/en/guides/on-demand-rendering/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://blog.cloudflare.com/astro-joins-cloudflare/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://blog.cloudflare.com/emdash-wordpress/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://blog.cloudflare.com/cloudflare-blog-uses-emdash/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/d1/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/r2/",
+					"context": ""
+				},
+				{
+					"name": "",
+					"href": "https://developers.cloudflare.com/kv/",
+					"context": ""
+				},
+				{
+					"name": "seed/seed.json",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json",
+					"context": "Almost every text lives in seed/seed.json, with the service bodies in markdown: the filename is the slug, the directory is the locale. A reb"
+				},
+				{
+					"name": "service",
+					"href": "/en/greenfield-development",
+					"context": "Almost every text lives in seed/seed.json, with the service bodies in markdown: the filename is the slug, the directory is the locale. A reb"
+				},
+				{
+					"name": "continuous integration",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/.github/workflows/ci.yml",
+					"context": "Almost every text lives in seed/seed.json, with the service bodies in markdown: the filename is the slug, the directory is the locale. A reb"
+				},
+				{
+					"name": "26 routes",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/tests/copy-baseline",
+					"context": "Copy that changes by itself: the rendered text of 26 routes is frozen."
+				},
+				{
+					"name": "W3C",
+					"href": "https://validator.w3.org/nu/",
+					"context": "Accessibility and contrast: keyboard traversal, reflow at 320 pixels and W3C validation."
+				},
+				{
+					"name": "a file",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json",
+					"context": "An undated number is the worst possible place for drift, so there are two kinds here and they never mix. The threshold lives in a file: 95 o"
+				},
+				{
+					"name": "contact",
+					"href": "/en/contact",
+					"context": "The images carry a date of their own. On 27 August 2026, under mobile emulation, over the same pages before and after: between 43% and 60% f"
+				},
+				{
+					"name": "Look inside",
+					"href": "https://github.com/julioarguello/www-serverstartup-io",
+					"context": "Code, seeds, checks and deployments: it is all there. Look inside and tell us if you would do it differently."
+				},
+				{
+					"name": "tell us",
+					"href": "/en/contact",
+					"context": "Code, seeds, checks and deployments: it is all there. Look inside and tell us if you would do it differently."
+				},
+				{
+					"name": "src/worker.ts ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/src/worker.ts",
+					"context": "L5 the edge ×1 the worker that answers src/worker.ts ↗"
+				},
+				{
+					"name": "src/middleware.ts ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/src/middleware.ts",
+					"context": "L4 the door ×7 the security headers src/middleware.ts ↗"
+				},
+				{
+					"name": "src/pages/ ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/src/pages",
+					"context": "L3 the render ×26 the public routes src/pages/ ↗"
+				},
+				{
+					"name": "src/plugins/cache-purge.ts ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/src/plugins/cache-purge.ts",
+					"context": "L2 the CMS ×5 a plugin of ours on the EmDash API src/plugins/cache-purge.ts ↗"
+				},
+				{
+					"name": "wrangler.jsonc ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/wrangler.jsonc",
+					"context": "L1 the data ×3 D1, R2 and KV wrangler.jsonc ↗"
+				},
+				{
+					"name": "seed/seed.json ↗",
+					"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json",
+					"context": "L0 the origin ×43 the whole corpus seed/seed.json ↗"
+				},
+				{
+					"name": "View the repository →",
+					"href": "https://github.com/julioarguello/www-serverstartup-io",
+					"context": "View the repository →"
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [
+				"Below that, the CMS is EmDash, which Cloudflare released under an MIT licence as a successor to WordPress, and not a service to call over the network: it is the",
+				"L0 the origin seed.json · markdown What a person writes. Everything above derives from it."
+			],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "node_modules",
+				"status": "Deconstructing this website If someone tells you how they work and cannot show you the workshop, be suspicious. This is ours. The tour runs downwards, from the point of presence that answered your request to the commit that authorised these words. Every layer opens if you want the detail, and everything claimed here is in the repository. The architecture There are no servers to look after, and tha"
+			}
+		},
+		"/accesibilidad": {
+			"lang": "es",
+			"title": "Accesibilidad — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Accesibilidad",
+				"H2 Declaración de accesibilidad",
+				"H2 Cómo escribirnos",
+				"H2 Qué hacemos con lo que llega",
+				"H2 Sus datos",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "página de contacto",
+					"href": "/contacto",
+					"context": "Use la página de contacto y díganos que se trata de accesibilidad. Con eso basta."
+				},
+				{
+					"name": "política de privacidad",
+					"href": "/politica-de-privacidad",
+					"context": "Lo que nos escriba se trata conforme a la política de privacidad."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [
+				"Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación. Si encuentra una barrera, el canal está aquí abajo."
+			],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "getxo",
+				"status": "Accesibilidad Cómo avisarnos de una barrera de accesibilidad y en qué plazo respondemos. Declaración de accesibilidad Server Startup, S.L. se compromete a hacer accesible este sitio conforme al Real Decreto 1112/2018. Este sitio es parcialmente conforme con la norma UNE-EN 301549:2019, equivalente a las WCAG 2.1 en nivel AA. Parcialmente y no plenamente por una razón concreta: todavía no se ha hec"
+			},
+			"ariaTree": "- link \"Saltar al contenido\":\n  - /url: \"#content\"\n- banner:\n  - button \"Abrir menú de navegación\"\n  - link \"~Server Startup /accesibilidad\":\n    - /url: /\n  - checkbox \"Buscar en el sitio\"\n  - link \"EN — Cambiar a la versión en inglés\":\n    - /url: /en/accessibility\n    - text: EN\n- main:\n  - region \"Accesibilidad\":\n    - heading \"Accesibilidad\" [level=1]\n    - paragraph: Cómo avisarnos de una barrera de accesibilidad y en qué plazo respondemos.\n  - region \"Declaración de accesibilidad\":\n    - heading \"~ Declaración de accesibilidad\" [level=2]\n    - paragraph: Server Startup, S.L. se compromete a hacer accesible este sitio conforme al Real Decreto 1112/2018. Este sitio es parcialmente conforme con la norma UNE-EN 301549:2019, equivalente a las WCAG 2.1 en nivel AA.\n    - paragraph: \"Parcialmente y no plenamente por una razón concreta: todavía no se ha hecho una evaluación completa con la metodología WCAG-EM. En cada cambio se ejecutan comprobaciones automáticas —axe, recorrido por teclado, contraste medido sobre el fondo real y reflujo a 320 px— y hoy no señalan ninguna incidencia, pero eso es un suelo, no una conformidad. Cuando la evaluación esté hecha, esta declaración se actualizará con lo que encuentre.\"\n    - paragraph: Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación. Si encuentra una barrera, el canal está aquí abajo.\n    - paragraph: \"Este es el canal de accesibilidad del sitio: sirve para avisarnos de que algo aquí no es accesible, para pedirnos un contenido en un formato que sí lo sea, y para reclamar si lo que respondemos no le sirve.\"\n    - heading \"~ Cómo escribirnos\" [level=2]\n    - paragraph:\n      - text: Use la\n      - link \"página de contacto\":\n        - /url: /contacto\n      - text: y díganos que se trata de accesibilidad. Con eso basta.\n    - heading \"~ Qué hacemos con lo que llega\" [level=2]\n    - paragraph: Respondemos en un máximo de veinte días hábiles. Si la respuesta no le convence, puede reclamar y le contestaremos por escrito en un máximo de dos meses. Son los plazos que fija el Real Decreto 1112/2018 y los asumimos tal cual.\n    - heading \"~ Sus datos\" [level=2]\n    - paragraph:\n      - text: Lo que nos escriba se trata conforme a la\n      - link \"política de privacidad\":\n        - /url: /politica-de-privacidad\n      - text: .\n  - region \"Contacta con nosotros\":\n    - heading \"Hablemos de ingeniero a ingeniero.\" [level=2]\n    - paragraph: Trae el problema como esté. Te responde quien va a escribir el código.\n    - link \"Cuéntanos tu proyecto\":\n      - /url: /contacto\n- contentinfo:\n  - region \"Empresas que confían en nosotros\":\n    - heading \"~ Referencias\" [level=2]:\n      - text: ~\n      - link \"Referencias\":\n        - /url: /referencias\n    - list:\n      - listitem:\n        - img \"Alcampo\"\n      - listitem:\n        - img \"Auchan\"\n      - listitem:\n        - img \"Forum Sport\"\n      - listitem:\n        - img \"Grupo Seidor\"\n      - listitem:\n        - img \"Inetum\"\n      - listitem:\n        - img \"Job&Talent\"\n      - listitem:\n        - img \"Punt Roma\"\n  - link \"Server Startup — Ir al inicio\":\n    - /url: /\n    - text: ~Server Startup\n  - paragraph: Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.\n  - navigation \"Enlaces del pie\":\n    - heading \"La casa\" [level=3]\n    - list:\n      - listitem:\n        - link \"Quiénes somos\":\n          - /url: /quienes-somos\n      - listitem:\n        - link \"Deconstruyendo esta web\":\n          - /url: /deconstruyendo\n      - listitem:\n        - link \"Referencias\":\n          - /url: /referencias\n    - heading \"Contacto\" [level=3]\n    - list:\n      - listitem:\n        - button \"Escríbenos\"\n    - text: Somos partners\n    - link \"Cloudflare Partner Network\":\n      - /url: https://www.cloudflare.com/partners/\n      - img \"Cloudflare Partner Network\"\n  - 'img \"Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU\"'\n  - img \"Logotipo del Plan de Recuperación, Transformación y Resiliencia\"\n  - navigation \"Información legal\":\n    - text: © 2026 Server Startup, S.L.\n    - link \"Aviso legal\":\n      - /url: /aviso-legal\n    - link \"Política de privacidad\":\n      - /url: /politica-de-privacidad\n    - link \"Accesibilidad\":\n      - /url: /accesibilidad"
+		},
+		"/en/accessibility": {
+			"lang": "en",
+			"title": "Accessibility — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Accessibility",
+				"H2 Accessibility statement",
+				"H2 How to reach us",
+				"H2 What we do with it",
+				"H2 Your data",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "contact page",
+					"href": "/en/contact",
+					"context": "Use the contact page and say it is about accessibility. That is enough."
+				},
+				{
+					"name": "privacy policy",
+					"href": "/en/privacy-policy",
+					"context": "Whatever you write to us is handled according to the privacy policy."
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [
+				"Statement prepared on 3 September 2026 by self-assessment. If you hit a barrier, the channel is below."
+			],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "getxo",
+				"status": "Accessibility How to report an accessibility barrier and how quickly we answer. Accessibility statement Server Startup, S.L. is committed to making this site accessible under Spanish Royal Decree 1112/2018. This site is partially conformant with UNE-EN 301549:2019, which maps to WCAG 2.1 level AA. Partially, not fully, for a specific reason: no complete evaluation using the WCAG-EM methodology has"
+			}
+		},
+		"/aviso-legal": {
+			"lang": "es",
+			"title": "Aviso legal — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Aviso legal",
+				"H2 Datos identificativos",
+				"H2 Objeto y condiciones de uso",
+				"H2 Propiedad intelectual e industrial",
+				"H2 Responsabilidad",
+				"H2 Enlaces a otros sitios",
+				"H2 Protección de datos",
+				"H2 Legislación aplicable",
+				"H2 Hablemos de ingeniero a ingeniero."
+			],
+			"links": [
+				{
+					"name": "política de privacidad",
+					"href": "/politica-de-privacidad",
+					"context": "El tratamiento de datos personales se explica en la política de privacidad, accesible desde el pie de cualquier página."
+				},
+				{
+					"name": "Cuéntanos tu proyecto",
+					"href": "/contacto",
+					"context": "Cuéntanos tu proyecto"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "getxo",
+				"status": "Aviso legal Datos identificativos de Server Startup S.L., condiciones de uso del sitio y legislación aplicable. Este aviso legal recoge la información que la Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE), exige publicar de forma permanente, fácil, directa y gratuita. Datos identificativos Titular: SERVER STARTUP, S.L. NIF: B95944807. Domicilio socia"
+			}
+		},
+		"/en/privacy-policy": {
+			"lang": "en",
+			"title": "Privacy policy — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Privacy policy",
+				"H2 Data controller",
+				"H2 What we process",
+				"H2 Why we process it",
+				"H2 Legal basis",
+				"H2 Recipients",
+				"H2 International transfers",
+				"H2 Retention",
+				"H2 Your rights",
+				"H2 Cookies",
+				"H2 Changes to this policy"
+			],
+			"links": [
+				{
+					"name": "aepd.es",
+					"href": "https://www.aepd.es",
+					"context": "You may exercise your rights of access, rectification, erasure, restriction of processing, portability and objection by writing to the addre"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [
+				"You may exercise your rights of access, rectification, erasure, restriction of processing, portability and objection by writing to the address above. If you bel"
+			],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "getxo",
+				"status": "Privacy policy We process very little data, and we explain it in a few lines. This policy is governed by Regulation (EU) 2016/679 (GDPR) and by Spain's Organic Law 3/2018 (LOPDGDD). Data controller SERVER STARTUP, S.L. Tax ID B95944807. Address: C/ Los Fueros 11 — 48992 Getxo (Bizkaia). For anything concerning your data, write to legal@serverstartup.io. What we process Whatever you send us by emai"
+			}
+		},
+		"/search?q=cloudflare": {
+			"lang": "es",
+			"title": "Buscar: cloudflare — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Buscar",
+				"H2 CDN, WAF y seguridad edge",
+				"H2 Integración de sistemas",
+				"H2 Deconstruyendo esta web",
+				"H2 Desarrollo greenfield",
+				"H2 Inteligencia artificial",
+				"H2 Política de privacidad",
+				"H2 Quiénes somos"
+			],
+			"links": [
+				{
+					"name": "CDN, WAF y seguridad edge",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": "CDN, WAF y seguridad edge"
+				},
+				{
+					"name": "Integración de sistemas",
+					"href": "/integracion-de-sistemas",
+					"context": "Integración de sistemas"
+				},
+				{
+					"name": "Deconstruyendo esta web",
+					"href": "/deconstruyendo",
+					"context": "Deconstruyendo esta web"
+				},
+				{
+					"name": "Desarrollo greenfield",
+					"href": "/desarrollo-greenfield",
+					"context": "Desarrollo greenfield"
+				},
+				{
+					"name": "Inteligencia artificial",
+					"href": "/inteligencia-artificial",
+					"context": "Inteligencia artificial"
+				},
+				{
+					"name": "Política de privacidad",
+					"href": "/politica-de-privacidad",
+					"context": "Política de privacidad"
+				},
+				{
+					"name": "Quiénes somos",
+					"href": "/quienes-somos",
+					"context": "Quiénes somos"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "getxo",
+				"status": "Buscar Buscar artículos Buscar 7 resultado(s) para \"cloudflare\" CDN, WAF y seguridad edge Integración de sistemas Deconstruyendo esta web Desarrollo greenfield Inteligencia artificial Política de privacidad Quiénes somos"
+			},
+			"ariaTree": "- link \"Saltar al contenido\":\n  - /url: \"#content\"\n- banner:\n  - button \"Abrir menú de navegación\"\n  - link \"~Server Startup /search\":\n    - /url: /\n  - checkbox \"Buscar en el sitio\"\n  - link \"EN — Cambiar a la versión en inglés\":\n    - /url: /en/search\n    - text: EN\n- main:\n  - region \"Buscar\":\n    - heading \"Buscar\" [level=1]\n    - search:\n      - text: Buscar artículos\n      - searchbox \"Buscar artículos\": cloudflare\n      - button \"Buscar\"\n    - paragraph: 7 resultado(s) para \"cloudflare\"\n    - article:\n      - link \"~ CDN, WAF y seguridad edge\":\n        - /url: /cdn-waf-seguridad-edge-cloudflare\n        - heading \"~ CDN, WAF y seguridad edge\" [level=2]\n    - article:\n      - link \"~ Integración de sistemas\":\n        - /url: /integracion-de-sistemas\n        - heading \"~ Integración de sistemas\" [level=2]\n    - article:\n      - link \"~ Deconstruyendo esta web\":\n        - /url: /deconstruyendo\n        - heading \"~ Deconstruyendo esta web\" [level=2]\n    - article:\n      - link \"~ Desarrollo greenfield\":\n        - /url: /desarrollo-greenfield\n        - heading \"~ Desarrollo greenfield\" [level=2]\n    - article:\n      - link \"~ Inteligencia artificial\":\n        - /url: /inteligencia-artificial\n        - heading \"~ Inteligencia artificial\" [level=2]\n    - article:\n      - link \"~ Política de privacidad\":\n        - /url: /politica-de-privacidad\n        - heading \"~ Política de privacidad\" [level=2]\n    - article:\n      - link \"~ Quiénes somos\":\n        - /url: /quienes-somos\n        - heading \"~ Quiénes somos\" [level=2]\n- contentinfo:\n  - region \"Empresas que confían en nosotros\":\n    - heading \"~ Referencias\" [level=2]:\n      - text: ~\n      - link \"Referencias\":\n        - /url: /referencias\n    - list:\n      - listitem:\n        - img \"Alcampo\"\n      - listitem:\n        - img \"Auchan\"\n      - listitem:\n        - img \"Forum Sport\"\n      - listitem:\n        - img \"Grupo Seidor\"\n      - listitem:\n        - img \"Inetum\"\n      - listitem:\n        - img \"Job&Talent\"\n      - listitem:\n        - img \"Punt Roma\"\n  - link \"Server Startup — Ir al inicio\":\n    - /url: /\n    - text: ~Server Startup\n  - paragraph: Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.\n  - navigation \"Enlaces del pie\":\n    - heading \"La casa\" [level=3]\n    - list:\n      - listitem:\n        - link \"Quiénes somos\":\n          - /url: /quienes-somos\n      - listitem:\n        - link \"Deconstruyendo esta web\":\n          - /url: /deconstruyendo\n      - listitem:\n        - link \"Referencias\":\n          - /url: /referencias\n    - heading \"Contacto\" [level=3]\n    - list:\n      - listitem:\n        - button \"Escríbenos\"\n    - link \"Cuéntanos tu proyecto\":\n      - /url: /contacto\n    - text: Somos partners\n    - link \"Cloudflare Partner Network\":\n      - /url: https://www.cloudflare.com/partners/\n      - img \"Cloudflare Partner Network\"\n  - 'img \"Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU\"'\n  - img \"Logotipo del Plan de Recuperación, Transformación y Resiliencia\"\n  - navigation \"Información legal\":\n    - text: © 2026 Server Startup, S.L.\n    - link \"Aviso legal\":\n      - /url: /aviso-legal\n    - link \"Política de privacidad\":\n      - /url: /politica-de-privacidad\n    - link \"Accesibilidad\":\n      - /url: /accesibilidad"
+		},
+		"/en/search?q=zzzqqq": {
+			"lang": "en",
+			"title": "Search: zzzqqq — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Search"
+			],
+			"links": [],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "getxo",
+				"status": "Search Search articles Search No results for \"zzzqqq\""
+			}
+		},
+		"/search": {
+			"lang": "es",
+			"title": "Buscar — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Buscar"
+			],
+			"links": [],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "getxo",
+				"status": "Buscar Buscar artículos Buscar Introduce un término para buscar artículos."
+			}
+		},
+		"/no-existe": {
+			"lang": "es",
+			"title": "Página no encontrada — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "Emblema de la Unión Europea junto a la declaración: Financiado por la Unión Europea — NextGenerationEU",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logotipo del Plan de Recuperación, Transformación y Resiliencia",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 404 Página no encontrada"
+			],
+			"links": [
+				{
+					"name": "Volver al inicio",
+					"href": "/",
+					"context": "Volver al inicio"
+				},
+				{
+					"name": "Comercio electrónico",
+					"href": "/comercio-electronico",
+					"context": ""
+				},
+				{
+					"name": "Integración de sistemas",
+					"href": "/integracion-de-sistemas",
+					"context": ""
+				},
+				{
+					"name": "Big Data & Cloud Analytics",
+					"href": "/big-data-cloud-analytics",
+					"context": ""
+				},
+				{
+					"name": "CDN, WAF y seguridad edge",
+					"href": "/cdn-waf-seguridad-edge-cloudflare",
+					"context": ""
+				},
+				{
+					"name": "Desarrollo greenfield",
+					"href": "/desarrollo-greenfield",
+					"context": ""
+				},
+				{
+					"name": "Inteligencia artificial",
+					"href": "/inteligencia-artificial",
+					"context": ""
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Buscar en el sitio",
+				"placeholder": "getxo",
+				"status": "stderr Exception in thread \"main\" io.serverstartup.web.PageNotFoundException: /no-existe at io.serverstartup.edge.Router.resolve(Router.java:404) at io.serverstartup.edge.Router.dispatch(Router.java:118) at io.serverstartup.cms.ContentResolver.bySlug(ContentResolver.java:73) at io.serverstartup.render.PageRenderer.render(PageRenderer.java:41) at io.serverstartup.edge.Worker.fetch(Worker.java:12) ."
+			}
+		},
+		"/en/no-such-page": {
+			"lang": "en",
+			"title": "Page not found — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 404 Page not found"
+			],
+			"links": [
+				{
+					"name": "Back to home",
+					"href": "/en/",
+					"context": "Back to home"
+				},
+				{
+					"name": "E-commerce",
+					"href": "/en/e-commerce",
+					"context": ""
+				},
+				{
+					"name": "Systems Integration",
+					"href": "/en/systems-integration",
+					"context": ""
+				},
+				{
+					"name": "Big Data & Cloud Analytics",
+					"href": "/en/big-data-cloud-analytics",
+					"context": ""
+				},
+				{
+					"name": "CDN, WAF & Edge Security",
+					"href": "/en/cdn-waf-edge-security-cloudflare",
+					"context": ""
+				},
+				{
+					"name": "Greenfield development",
+					"href": "/en/greenfield-development",
+					"context": ""
+				},
+				{
+					"name": "Artificial Intelligence",
+					"href": "/en/artificial-intelligence",
+					"context": ""
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "getxo",
+				"status": "stderr Exception in thread \"main\" io.serverstartup.web.PageNotFoundException: /en/no-such-page at io.serverstartup.edge.Router.resolve(Router.java:404) at io.serverstartup.edge.Router.dispatch(Router.java:118) at io.serverstartup.cms.ContentResolver.bySlug(ContentResolver.java:73) at io.serverstartup.render.PageRenderer.render(PageRenderer.java:41) at io.serverstartup.edge.Worker.fetch(Worker.java"
+			}
+		},
+		"/en/big-data-cloud-analytics": {
+			"lang": "en",
+			"title": "Big Data & Cloud Analytics — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Big Data & Cloud Analytics",
+				"H2 dbt ≠ pipeline",
+				"H2 Synergies between analytical and operational",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "Medallion",
+					"href": "https://dataengineering.wiki/Concepts/Medallion+Architecture",
+					"context": "A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources"
+				},
+				{
+					"name": "Let's talk data",
+					"href": "/en/contact",
+					"context": "Let's talk data"
+				},
+				{
+					"name": "Joe Reis",
+					"href": "https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling",
+					"context": "— Joe Reis"
+				},
+				{
+					"name": "serious software",
+					"href": "/en/greenfield-development",
+					"context": "We build them the way serious software gets built. Every transformation versioned in git, every dataset tested, every flow wired to an alert"
+				},
+				{
+					"name": "dbt",
+					"href": "https://www.getdbt.com/",
+					"context": "The essence is analytical, and the synergies with the operational side multiply it. We run dbt on both sides of the warehouse."
+				},
+				{
+					"name": "ELT",
+					"href": "https://www.getdbt.com/blog/extract-load-transform",
+					"context": "dbt is the T in ELT, and we treat it the way good software gets treated, the pattern the industry calls analytics engineering. But the tool "
+				},
+				{
+					"name": "analytics engineering",
+					"href": "https://www.getdbt.com/what-is-analytics-engineering",
+					"context": "dbt is the T in ELT, and we treat it the way good software gets treated, the pattern the industry calls analytics engineering. But the tool "
+				},
+				{
+					"name": "BigQuery",
+					"href": "https://cloud.google.com/bigquery",
+					"context": "Google Cloud is where we've gone deepest. BigQuery as the warehouse, dbt for the transformations."
+				},
+				{
+					"name": "definition of done",
+					"href": "https://scrumguides.org/scrum-guide.html#commitment-definition-of-done",
+					"context": "From blueprint to publication. Our definition of done starts long before the code. Database design following the sector's classic modeling, "
+				},
+				{
+					"name": "sector's classic modeling",
+					"href": "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/",
+					"context": "From blueprint to publication. Our definition of done starts long before the code. Database design following the sector's classic modeling, "
+				},
+				{
+					"name": "medallion",
+					"href": "https://dataengineering.wiki/Concepts/Medallion+Architecture",
+					"context": "Layered architecture. The medallion pattern keeps raw and verified data apart, each layer with its purpose and its access control."
+				},
+				{
+					"name": "Terraform",
+					"href": "https://www.terraform.io/",
+					"context": "Infrastructure is code too. Terraform builds the same datasets, permissions and environments in development and in production."
+				},
+				{
+					"name": "Pub/Sub",
+					"href": "https://cloud.google.com/pubsub",
+					"context": "Real time when the business needs it. Ingestion on Pub/Sub and Dataflow for the flows that can't wait for the nightly batch."
+				},
+				{
+					"name": "Dataflow",
+					"href": "https://cloud.google.com/dataflow",
+					"context": "Real time when the business needs it. Ingestion on Pub/Sub and Dataflow for the flows that can't wait for the nightly batch."
+				},
+				{
+					"name": "dbt Cloud",
+					"href": "https://docs.getdbt.com/docs/platform/about-platform/dbt-platform-features",
+					"context": "On the analytical side we work with dbt Cloud on BigQuery. And when a transformation belongs in the operational layer, on a relational datab"
+				},
+				{
+					"name": "dbt Core",
+					"href": "https://github.com/dbt-labs/dbt-core",
+					"context": "On the analytical side we work with dbt Cloud on BigQuery. And when a transformation belongs in the operational layer, on a relational datab"
+				},
+				{
+					"name": "adapter Oracle maintains",
+					"href": "https://github.com/oracle/dbt-oracle",
+					"context": "On the analytical side we work with dbt Cloud on BigQuery. And when a transformation belongs in the operational layer, on a relational datab"
+				},
+				{
+					"name": "your e-commerce",
+					"href": "/en/e-commerce",
+					"context": "We connect BigQuery to your e-commerce, to your ERP, and to the edge."
+				},
+				{
+					"name": "ERP",
+					"href": "/en/systems-integration",
+					"context": "We connect BigQuery to your e-commerce, to your ERP, and to the edge."
+				},
+				{
+					"name": "edge",
+					"href": "/en/cdn-waf-edge-security-cloudflare",
+					"context": "We connect BigQuery to your e-commerce, to your ERP, and to the edge."
+				},
+				{
+					"name": "team",
+					"href": "/en/about-us",
+					"context": "1 team . 6 verticals . promise kept ."
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "select-*",
+				"status": "Big Data & Cloud Analytics A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources is another story. Medallion architecture, and tests that number in the thousands. Let's talk data «Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger unt"
+			}
+		},
+		"/en/e-commerce": {
+			"lang": "en",
+			"title": "E-commerce — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 E-commerce",
+				"H2 Custom ≠ coupled",
+				"H2 Cases we're fond of",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "SAP Commerce Cloud",
+					"href": "https://www.sap.com/products/crm/commerce-cloud.html",
+					"context": "Over twenty years inside SAP Commerce Cloud. Extending the platform is the easy part: doing it with every improvement decoupled from the cor"
+				},
+				{
+					"name": "Audit your e-commerce",
+					"href": "/en/contact",
+					"context": "Audit your e-commerce"
+				},
+				{
+					"name": "Ken Murphy",
+					"href": "https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf",
+					"context": "— Ken Murphy"
+				},
+				{
+					"name": "integration",
+					"href": "/en/systems-integration",
+					"context": "Not every platform is worked the same way. SAP Commerce Cloud is parameterized and extended. Extending is the easy part. Doing it with restr"
+				},
+				{
+					"name": "Audit your e-commerce",
+					"href": "/en/contact",
+					"context": "Audit your e-commerce"
+				},
+				{
+					"name": "team",
+					"href": "/en/about-us",
+					"context": "1 team . 6 verticals . promise kept ."
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "abandoned-cart",
+				"status": "E-commerce Over twenty years inside SAP Commerce Cloud. Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty. Audit your e-commerce «…serve customers' food missions wherever, whenever, and however they want to be served.» — Ken Murphy Ext"
+			}
+		},
+		"/en/greenfield-development": {
+			"lang": "en",
+			"title": "Greenfield development — Server Startup",
+			"imgs": [
+				{
+					"alt": "Alcampo",
+					"src": "ref-alcampo.png"
+				},
+				{
+					"alt": "Auchan",
+					"src": "ref-auchan.png"
+				},
+				{
+					"alt": "Forum Sport",
+					"src": "ref-forum-sport.png"
+				},
+				{
+					"alt": "Grupo Seidor",
+					"src": "colab-seidor.png"
+				},
+				{
+					"alt": "Inetum",
+					"src": "colab-inetum.png"
+				},
+				{
+					"alt": "Job&Talent",
+					"src": "ref-jobandtalent.png"
+				},
+				{
+					"alt": "Punt Roma",
+					"src": "ref-punt-roma.png"
+				},
+				{
+					"alt": "Cloudflare Partner Network",
+					"src": "logo-cloudflare-partner.png"
+				},
+				{
+					"alt": "European Union emblem beside the statement: Financiado por la Unión Europea — NextGenerationEU (Funded by the European Union — NextGenerationEU)",
+					"src": "eu-nextgenerationeu.webp"
+				},
+				{
+					"alt": "Logo of Spain's Plan de Recuperación, Transformación y Resiliencia (Recovery, Transformation and Resilience Plan)",
+					"src": "prtr.webp"
+				}
+			],
+			"headings": [
+				"H1 Greenfield development",
+				"H2 Code is not the product",
+				"H2 Greenfield ≠ blank page",
+				"H2 AI multiplies. The framework steers.",
+				"H2 Your technical debt is our problem",
+				"H2 Let's talk, engineer to engineer."
+			],
+			"links": [
+				{
+					"name": "Let's talk about your project",
+					"href": "/en/contact",
+					"context": "Let's talk about your project"
+				},
+				{
+					"name": "Andrej Karpathy",
+					"href": "https://karpathy.bearblog.dev/year-in-review-2025/",
+					"context": "— Andrej Karpathy"
+				},
+				{
+					"name": "AI",
+					"href": "/en/artificial-intelligence",
+					"context": "And there's a newer reason. With the capabilities AI brings, building custom now pays off in cases where buying used to be the default."
+				},
+				{
+					"name": "Cloud Run",
+					"href": "https://cloud.google.com/run",
+					"context": "Python on Google Cloud. Services and functions on Cloud Run and Cloud Functions, with the same scaffolding for environments, credentials and"
+				},
+				{
+					"name": "Cloud Functions",
+					"href": "https://cloud.google.com/functions",
+					"context": "Python on Google Cloud. Services and functions on Cloud Run and Cloud Functions, with the same scaffolding for environments, credentials and"
+				},
+				{
+					"name": "integration",
+					"href": "/en/systems-integration",
+					"context": "Quarkus and Camel on Docker. Millisecond startup, integration built in, ready for any orchestrator."
+				},
+				{
+					"name": "Karaf",
+					"href": "https://karaf.apache.org/",
+					"context": "Publishing to Karaf. For platforms that live on OSGi and deploy by bundles on Karaf, without stopping the rest of the system."
+				},
+				{
+					"name": "our AI vertical",
+					"href": "/en/artificial-intelligence",
+					"context": "Our frameworks are that perimeter. The agent writes inside the rails, and an engineer signs every line that reaches main. The full story is "
+				},
+				{
+					"name": "team",
+					"href": "/en/about-us",
+					"context": "1 team . 6 verticals . promise kept ."
+				},
+				{
+					"name": "Tell us about your project",
+					"href": "/en/contact",
+					"context": "Tell us about your project"
+				}
+			],
+			"englishInSpanish": [],
+			"sensory": [],
+			"search": {
+				"label": "Search the site",
+				"placeholder": "quarkus",
+				"status": "A B C D E F G H ±0.00 +50.00 50.00 H.L. VP1 ← → VP2 Greenfield development The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full SDLC, from specification to observability. We work contract first, focused on stability, security and governance. Let's talk about your project «[AI] empowers trained professionals to write a lot more … softwar"
+			}
+		}
+	}
+}

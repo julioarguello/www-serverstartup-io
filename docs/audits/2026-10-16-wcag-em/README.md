@@ -1,8 +1,9 @@
 # WCAG-EM evaluation — 2026-10-16
 
-> **Status: prepared, not yet signed.** Steps 1–3 are complete, and step 4 is complete for every success
-> criterion a machine or a script can decide. The criteria that need a person are listed in the
-> [worksheet](#worksheet-for-the-evaluator-of-record) with what to do. **Evaluator of record: pending.**
+> **Status: prepared, not yet signed.** Steps 1–3 are complete. Step 4 is complete for every success
+> criterion a machine or a script can decide, and the preparer has answered every row of the
+> [worksheet](#worksheet-for-the-evaluator-of-record) on recorded evidence (`worksheet.mjs`, `worksheet.json`);
+> what is left for a person is a real screen-reader pass and the signature. **Evaluator of record: pending.**
 > Until that person signs the worksheet, this is not a conformance claim and the accessibility statement
 > must not cite it as one (#506; #310 argues why).
 
@@ -17,11 +18,13 @@ report is made at 2.1 AA.
 ```bash
 rm -rf .wrangler && npx astro build && scripts/ci-local-stack.sh 8787
 node docs/audits/2026-10-16-wcag-em/sweep.mjs http://localhost:8787 <sha>   # steps 3 and 4 (scripted part) → sweep.json
+node docs/audits/2026-10-16-wcag-em/worksheet.mjs http://localhost:8787       # evidence for the worksheet → worksheet.json
 node scripts/ci-check-a11y.mjs http://localhost:8787                       # the CI gate, with the sections this evaluation added
 node scripts/ci-check-engines.mjs http://localhost:8787                    # WebKit and Android's Chromium, reduced motion
 ```
 
-`sweep.json` beside this file is the raw output of the first command for `6709d0f`.
+`sweep.json` beside this file is the raw output of the sweep for `6709d0f`; `worksheet.json`, of the worksheet
+script for `09cd7d8`.
 
 ## Step 1 — Scope
 
@@ -76,15 +79,15 @@ evaluator.
 
 | SC | Lvl | Method | Result | Status |
 | :-- | :-: | :-- | :-- | :-: |
-| 1.1.1 Non-text content | A | CI (axe) · Script · Person | Every `<img>` carries `alt`; scenes are decorative and hidden from assistive technology. **The CDN page's reference list is drawn on a `<canvas>` inside `aria-hidden`: the client names are readable on screen and absent for a screen reader.** The quality of each `alt` needs a person | ❌ / 👤 |
+| 1.1.1 Non-text content | A | CI (axe) · Script · Preparer | Every `<img>` carries `alt`; scenes are decorative and hidden from assistive technology. Logos carry their company's name, the funding marks a description, team photos the person's name; the Urdaneta photograph's empty `alt` is right — its caption beside it says all it shows. **The CDN page's reference list is drawn on a `<canvas>` inside `aria-hidden`: the names are readable on screen and absent for a screen reader** | ❌ |
 | 1.2.1 Audio-only and video-only | A | Script | No `<video>`, `<audio>` or `<iframe>` in the sample | ➖ |
 | 1.2.2 Captions (prerecorded) | A | Script | Same | ➖ |
 | 1.2.3 Audio description or alternative | A | Script | Same | ➖ |
 | 1.2.4 Captions (live) | AA | Script | Same | ➖ |
 | 1.2.5 Audio description | AA | Script | Same | ➖ |
-| 1.3.1 Info and relationships | A | CI (axe, html-validate, Nu) · Person | Structure validates; one `h1` per page (headings outline in `sweep.json`). Whether each structure matches its meaning needs a person | 👤 |
-| 1.3.2 Meaningful sequence | A | Person | Reading order through the bands' layers (copy, scene, controls) | 👤 |
-| 1.3.3 Sensory characteristics | A | Person | No instruction found relying on shape or position; confirm | 👤 |
+| 1.3.1 Info and relationships | A | CI (axe, html-validate, Nu) · Script · Preparer | Structure validates; one `h1` per page, headings nested in order. **Generated decoration was read aloud: every section heading as "~ …" and a bare "❚❚" after the pause** — now `content: "…" / ""`, gated | 🔧 |
+| 1.3.2 Meaningful sequence | A | Script (ARIA tree, a proxy) · Preparer | Read in a logical order on the five pages read: skip link, header, h1, lead, rail, pause, logos, sections, footer. A screen reader pass confirms it | ✅ / 👤 |
+| 1.3.3 Sensory characteristics | A | Script · Preparer | The only position words point the way the page reads ("el canal está aquí abajo" before the channel section); no instruction depends on shape, colour or place | ✅ |
 | 1.3.4 Orientation | AA | Script | Landscape phone: no horizontal overflow on any sampled page | ✅ |
 | 1.3.5 Identify input purpose | AA | Script | The only input is search, which collects nothing about the user | ➖ |
 | 1.4.1 Use of colour | A | Script · Person | The rail's current stop also changes weight (700 against 500); body links are underlined | ✅ |
@@ -95,7 +98,7 @@ evaluator.
 | 1.4.10 Reflow | AA | CI | 320 px on the widest routes, no horizontal scroll | ✅ |
 | 1.4.11 Non-text contrast | AA | Script → CI | **At rest, on a device with hover, the bands' pause read 1.68:1 (e-commerce) and 2.63–2.94:1 (three home frames, integration).** Rest opacity 35 % → 70 %: minimum 4.20:1 on every band and frame; a gate section now measures it | 🔧 |
 | 1.4.12 Text spacing | AA | Script | The four overrides applied at 1440 and 390: no visible text lost. What overflows is clipped by design and duplicated elsewhere: screen-reader-only text, decorative scene labels, the header's path ellipsis | ✅ |
-| 1.4.13 Content on hover or focus | AA | Script · Person | No custom hover content; the mantra's squares use native `title` | ✅ / 👤 |
+| 1.4.13 Content on hover or focus | AA | Script · Preparer | No custom hover content; the mantra's squares use native `title` | ✅ |
 | 2.1.1 Keyboard | A | CI | Every route traversed by keyboard | ✅ |
 | 2.1.2 No keyboard trap | A | CI | The menu traps and returns focus as intended; nothing else holds it | ✅ |
 | 2.1.4 Character key shortcuts | A | CI | The single-key search shortcut is scoped | ✅ |
@@ -104,23 +107,23 @@ evaluator.
 | 2.3.1 Three flashes | A | Script | Fastest periodic change: the bridge's chomp, 0.26 s per half cycle (under 2 per second); all others slower | ✅ |
 | 2.4.1 Bypass blocks | A | CI | Skip link reachable and visible on focus | ✅ |
 | 2.4.2 Page titled | A | Script | Every page titled; titles distinct except Big Data, identical in both locales (a brand name) | ✅ |
-| 2.4.3 Focus order | A | CI · Person | Reachability is gated; whether the order is logical needs a person | 👤 |
-| 2.4.4 Link purpose (in context) | A | Script · Person | One text, two targets: «Cloudflare» links the CDN page and cloudflare.com from different paragraphs | 👤 |
+| 2.4.3 Focus order | A | CI · Script (ARIA tree) · Preparer | Reachability gated; the tab order follows the reading order above | ✅ |
+| 2.4.4 Link purpose (in context) | A | Script · Preparer | Every link's purpose follows from its sentence. One borderline case: on the home, «Cloudflare» in "Partners oficiales de Cloudflare desde 2019" leads to the CDN page, not to cloudflare.com (the internal-first convention); the evaluator may want the link text to say so | ✅ / 👤 |
 | 2.4.5 Multiple ways | AA | Script | The menu and search | ✅ |
-| 2.4.6 Headings and labels | AA | Person | Whether each heading describes its section | 👤 |
+| 2.4.6 Headings and labels | AA | Script · Preparer | Every heading names its section; the closing CTA heading repeats by design | ✅ |
 | 2.4.7 Focus visible | AA | CI | Every focus visible and never obscured | ✅ |
 | 2.5.1 Pointer gestures | A | Script | Every control is a single tap; no path or multipoint gesture | ✅ |
 | 2.5.2 Pointer cancellation | A | Script | Every handler listens for `click` (the up-event) | ✅ |
 | 2.5.3 Label in name | A | Script → CI | **On English pages the switcher showed «ES» and was named "Switch to the Spanish version".** The name now starts with the label shown, in both locales; a gate section checks it | 🔧 |
 | 2.5.4 Motion actuation | A | Script | No device-motion feature | ➖ |
 | 3.1.1 Language of page | A | Script | `lang` matches the locale on every page | ✅ |
-| 3.1.2 Language of parts | AA | Person | No `lang` on parts; Spanish pages carry English technical terms and product names (excepted), confirm nothing longer | 👤 |
+| 3.1.2 Language of parts | AA | Script · Preparer | No English passage on the Spanish pages, only technical terms and product names, which are excepted | ✅ |
 | 3.2.1 On focus | A | CI · Person | Traversal never navigated on focus | ✅ |
 | 3.2.2 On input | A | Script | Search submits on Enter; nothing changes context on input | ✅ |
 | 3.2.3 Consistent navigation | AA | Script | One header and footer component on every page | ✅ |
-| 3.2.4 Consistent identification | AA | Script · Person | Same components, same names | ✅ / 👤 |
-| 3.3.1 Error identification | A | Person | Search's empty and no-result states | 👤 |
-| 3.3.2 Labels or instructions | A | CI (axe) · Person | Search has a label («Buscar artículos») — it searches pages too; confirm the wording | 👤 |
+| 3.2.4 Consistent identification | AA | Script · Preparer | One header, footer and control set; the same names on every page | ✅ |
+| 3.3.1 Error identification | A | Script · Preparer | No input is validated; search answers an empty query with an instruction and a miss with "No results for …" | ✅ |
+| 3.3.2 Labels or instructions | A | CI (axe) · Script · Preparer | Labelled «Buscar en el sitio». Copy, not conformance: the page still says "Buscar artículos" though it returns pages, and its placeholder reads «getxo» | ✅ |
 | 3.3.3 Error suggestion | AA | Script | No input is validated | ➖ |
 | 3.3.4 Error prevention (legal, financial, data) | AA | Script | No transaction or submission of data | ➖ |
 | 4.1.1 Parsing | A | CI (html-validate, Nu) | 0 errors | ✅ |
@@ -129,36 +132,40 @@ evaluator.
 
 ## Step 5 — Findings
 
-**Fixed by this document's PR, each with a gate:** 1.4.11 (the pause at rest), 2.2.2 (endless blinks, the
-header's edge), 2.5.3 (the switcher's name).
+**Fixed, each with a gate:** 1.4.11 (the pause at rest), 2.2.2 (endless blinks, the header's edge), 2.5.3
+(the switcher's name) — #589; 1.3.1 (decoration read aloud: the headings' tilde, the pause glyph) — with the
+worksheet's answers.
 
 **Non-conformance, for the statement under art. 15.2 a)** — "una explicación sobre aquellas partes del
 contenido que no sean accesibles y las razones de dicha inaccesibilidad":
 
 - 1.1.1 and 1.4.5 — the reference list on `/cdn-waf-seguridad-edge-cloudflare` and its English page is
   drawn on a canvas and hidden from assistive technology, so that the names stay out of the page's text
-  and of every crawler. Fixing it means giving up that, or dropping the list; it is the owner's decision,
-  not the evaluator's.
+  and of every crawler. **Decision (the owner, delegated 2026-10-16): keep the list as it is and declare it
+  under art. 15.2 a)** — the reason being that the names are deliberately kept out of indexable text. The
+  statement (#506) carries it; the other two ways out (the names as text, or no list) remain open.
+
+**Recommendations that are not non-conformances:** the search page's copy ("artículos", the «getxo»
+placeholder); the home's «Cloudflare» link text that leads to our own page.
 
 **Not decided here:** the 👤 rows, in the worksheet below.
 
 ## Worksheet for the evaluator of record
 
-On the sample above, with the local stack or the preview. Write the result and the date beside each line.
+Answered by the preparer on the evidence in `worksheet.json` (`worksheet.mjs`); each answer is in the matrix
+above. Confirm or overturn each, then sign.
 
-1. **Screen reader**, VoiceOver on macOS or iOS and TalkBack on Android, on `/`, one vertical, `/contacto`,
-   `/accesibilidad` and `/search?q=cloudflare`: everything readable on screen is reachable and makes sense
-   in the order it is read (1.3.1, 1.3.2, 2.4.3).
-2. **Images**: each `alt` says what the image is for, on `/quienes-somos`, `/referencias` and the home
-   (1.1.1). The 404's hidden sentence describes decoration only.
-3. **Headings and links**: each heading describes its section, and each link's purpose is clear from its
-   paragraph — «Cloudflare» in particular (2.4.4, 2.4.6).
-4. **Language**: no English passage longer than a term or a name on the Spanish pages (3.1.2).
-5. **Search**: the label's wording, and what the empty and no-result states say (3.3.1, 3.3.2).
-6. **Instructions and hover**: nothing relies on shape, position or colour alone; nothing appears on hover
-   that cannot be dismissed (1.3.3, 1.4.13).
-7. **Consistency**: the same component carries the same name across pages (3.2.4).
-8. **Sign**: name, date, the sample used, and the decision on the 1.1.1 / 1.4.5 non-conformance.
+1. **Screen reader** — *proxy done, the real pass is yours.* The accessibility tree of `/`, one vertical,
+   `/contacto`, `/accesibilidad` and `/search?q=cloudflare` reads in a logical order and exposes every
+   control by name. A tree is what a screen reader receives, not how VoiceOver or TalkBack speak it: one pass
+   with each, on those five pages, is what is left (1.3.1, 1.3.2, 2.4.3).
+2. **Images** — answered: 1.1.1 above.
+3. **Headings and links** — answered: 2.4.4, 2.4.6 above; one borderline link noted.
+4. **Language** — answered: 3.1.2 above.
+5. **Search** — answered: 3.3.1, 3.3.2 above; a copy recommendation.
+6. **Instructions and hover** — answered: 1.3.3, 1.4.13 above.
+7. **Consistency** — answered: 3.2.4 above.
+8. **Sign**: name, date, the screen readers used, and agreement with the answers above.
 
 ## Reference: measurements
 
@@ -168,6 +175,8 @@ On the sample above, with the local stack or the preview. Write the result and t
 - Measured 2026-10-16 against the same: running at 6 s with no way to stop them — `brand-blink` and
   `site-mark-blink` on every page, `s-boot-blink` on both about pages, `site-header-edge` on both homes
   after their pause was pressed.
+- Measured 2026-10-16 against `main` at `09cd7d8`: the accessibility tree read every section heading as
+  "~ …" (`main h2::before`) and a bare "❚❚" after the bands' pause; with `content: "…" / ""`, neither.
 - Measured 2026-10-16 against the same: `/en/*` switcher «ES» named "Switch to the Spanish version"; the
   Spanish one, «EN» named "Cambiar a la versión en inglés", contained its label only through the
   preposition "en".

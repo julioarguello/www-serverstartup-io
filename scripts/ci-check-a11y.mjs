@@ -1295,6 +1295,28 @@ console.log("── 1.4.11 the bands' pause at rest, on its photograph");
 		const page = await lane.newPage();
 		await page.setViewport({ width: 1440, height: 900 });
 		await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
+		// The rest state is a hover device's, and a CI runner has no pointer: `(hover: hover)` is false there
+		// and the control shows at full strength, so the state under test never rendered (#589's first run:
+		// the plant read 9.67:1). The site's own `(hover: hover)` rules for the control are copied out of
+		// their media block and applied as they are, on any runner — the value stays in scene-ctl.css.
+		const hoverRules = await page.evaluate(() => {
+			const out = [];
+			const walk = (list) => {
+				for (const r of list) {
+					if (r.type === CSSRule.MEDIA_RULE && /hover:\s*hover/.test(r.conditionText || r.media.mediaText)) {
+						for (const x of r.cssRules) if (x.selectorText && /scene__ctl/.test(x.selectorText) && !/:hover|:focus/.test(x.selectorText)) out.push(x.cssText);
+					} else if (r.type === CSSRule.MEDIA_RULE || r.type === CSSRule.SUPPORTS_RULE || r.type === CSSRule.LAYER_BLOCK_RULE) walk(r.cssRules);
+				}
+			};
+			for (const sh of document.styleSheets) {
+				try { walk(sh.cssRules); } catch { /* cross-origin sheet */ }
+			}
+			const st = document.createElement("style");
+			st.textContent = out.join("\n") + "\n.scene__ctl { transition: none !important; }";
+			document.head.append(st);
+			return out.length;
+		});
+		if (!hoverRules) throw new Error("1.4.11: no `(hover: hover)` rule for .scene__ctl found in the stylesheets — the rest state cannot be measured");
 		if (plant) await page.addStyleTag({ content: plant });
 		await page.mouse.move(2, 2);
 		if (frame === undefined) {
@@ -1316,7 +1338,7 @@ console.log("── 1.4.11 the bands' pause at rest, on its photograph");
 		return c;
 	};
 	// the plant: a control faded to 0.2 on the brightest photograph must be called
-	const planted = await measure(browsers[0], verticals.find((v) => /comercio/.test(v)) ?? verticals[0], { plant: "@media (hover: hover) { .scene__ctl { opacity: .2 !important; } }" });
+	const planted = await measure(browsers[0], verticals.find((v) => /comercio/.test(v)) ?? verticals[0], { plant: ".scene__ctl { opacity: .2 !important; }" });
 	if (planted >= CTL_MIN) {
 		console.error(`  ✗ positive control: a control at 0.2 opacity read ${planted.toFixed(2)}:1 — the probe is blind`);
 		process.exit(2);

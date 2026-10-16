@@ -19,12 +19,14 @@ const altLabel = altLocale.toUpperCase();
 const href = altPath ?? (altLocale === "en" ? "/en" : "/");
 
 const t = Astro.locals.t;
+// WCAG 2.5.3: the accessible name starts with the label on screen, so "click EN" reaches the link by voice;
+// the CMS phrase follows it (#505 — "Switch to the Spanish version" did not contain "ES")
 ---
 
 <a
 	href={href}
 	class="lang-switch"
-	aria-label={t("switch_language")}
+	aria-label={`${altLabel} — ${t("switch_language")}`}
 	hreflang={altLocale}
 >
 	{altLabel}

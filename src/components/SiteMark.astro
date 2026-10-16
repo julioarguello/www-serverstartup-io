@@ -87,7 +87,8 @@ const cube = { h: size, w: Math.round((size * 200) / 228) };
 		margin-left: 2px;
 		background: currentColor;
 		font-size: calc(var(--mark-size, 34px) * 0.45);
-		animation: site-mark-blink 1.2s steps(1) infinite;
+		/* four blinks, then lit: nothing blinks past 5 s (WCAG 2.2.2, #505) */
+		animation: site-mark-blink 1.2s steps(1) 4;
 	}
 
 	@keyframes site-mark-blink {

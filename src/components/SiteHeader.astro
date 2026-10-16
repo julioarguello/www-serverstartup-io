@@ -200,6 +200,11 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		animation: site-header-edge var(--hero-cycle) steps(1, end) infinite;
 		animation-delay: -0.5s;
 	}
+	/* the home's pause stops the edge with the band it follows, as the rail's stops already pin it (#505, 2.2.2):
+	   as specific as the rule above and after it, since its `animation` shorthand resets the play state */
+	:root:has(.s-hero .scene__pause:checked) .site-header.is-over-hero.is-rotating:not(.is-sticky):not(:has(.search-toggle:checked)) {
+		animation-play-state: paused;
+	}
 
 	@keyframes site-header-edge {
 		0% { border-bottom-color: var(--c1, var(--color-primary)); }
@@ -535,7 +540,8 @@ const cellB = isSection ? `color-mix(in srgb, ${accent} 18%, white)` : "#E3E7EB"
 		background: var(--bar-ink);
 		margin-left: 2px;
 		align-self: center;
-		animation: brand-blink 1.2s steps(1) infinite;
+		/* four blinks, then the cursor rests lit: WCAG 2.2.2 lets nothing blink past 5 s without a way to stop it (#505) */
+		animation: brand-blink 1.2s steps(1) 4;
 	}
 
 	@keyframes brand-blink {

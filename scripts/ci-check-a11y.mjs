@@ -18,7 +18,7 @@
 import puppeteer from "puppeteer";
 import { createRequire } from "node:module";
 import { availableParallelism } from "node:os";
-import { seedRoutes } from "./lib/seed-routes.mjs";
+import { entryPath, readSeed, seedRoutes } from "./lib/seed-routes.mjs";
 import { cdpDiagnosis, stackDiagnosis } from "./lib/stack-probe.mjs";
 
 const BASE = (process.argv[2] || "http://localhost:8787").replace(/\/$/, "");
@@ -1253,6 +1253,160 @@ console.log(`── image aspect ratio at 320px — ${ROUTES.length} routes`);
 	});
 	const checked = perRoute.reduce((a, b) => a + b, 0);
 	ok(`${checked} images across ${ROUTES.length} routes keep their ratio`);
+}
+
+// ── 8b. WCAG 1.4.11 — the bands' pause, at rest, on its photograph (#505) ──
+// On a device with hover the controls wait at reduced opacity until the band
+// is hovered or the control focused (scene-ctl.css). At rest the photograph
+// shows through the whole control, so its pause glyph is measured on pixels
+// against the control's own ground, on every band: at 35 % it read 1.68:1 on
+// e-commerce's warehouse (measured 2026-10-16, WCAG-EM #505), under the 3:1 a
+// component's identifying graphic owes. The home's control sits over a
+// different photograph in each frame, so every frame is pinned and measured.
+console.log("── 1.4.11 the bands' pause at rest, on its photograph");
+{
+	const CTL_MIN = 3;
+	const verticals = readSeed().content.services.filter((e) => e.locale !== "en").map((e) => entryPath("services", e));
+	const glyphContrast = async (b64) => {
+		const im = new Image();
+		im.src = "data:image/png;base64," + b64;
+		await im.decode();
+		const c = document.createElement("canvas");
+		c.width = im.width;
+		c.height = im.height;
+		const x = c.getContext("2d");
+		x.drawImage(im, 0, 0);
+		const L = ([r, g, b]) => {
+			const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+			return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+		};
+		const lum = (i, j) => L(x.getImageData(i, j, 1, 1).data);
+		// the glyph: the brightest pixels of the button's middle; its ground: just inside the border
+		const mid = [];
+		for (let i = 12; i < 28; i++) for (let j = 12; j < 28; j++) mid.push(lum(i, j));
+		const ground = [];
+		for (let i = 3; i < 7; i++) for (let j = 3; j < 7; j++) ground.push(lum(i, j));
+		mid.sort((m, n) => n - m);
+		const ink = mid.slice(0, 8).reduce((m, n) => m + n) / 8;
+		const g = ground.reduce((m, n) => m + n) / ground.length;
+		return (Math.max(ink, g) + 0.05) / (Math.min(ink, g) + 0.05);
+	};
+	const measure = async (lane, route, { frame, plant } = {}) => {
+		const page = await lane.newPage();
+		await page.setViewport({ width: 1440, height: 900 });
+		await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
+		// The rest state is a hover device's, and a CI runner has no pointer: `(hover: hover)` is false there
+		// and the control shows at full strength, so the state under test never rendered (#589's first run:
+		// the plant read 9.67:1). The site's own `(hover: hover)` rules for the control are copied out of
+		// their media block and applied as they are, on any runner — the value stays in scene-ctl.css.
+		const hoverRules = await page.evaluate(() => {
+			const out = [];
+			const walk = (list) => {
+				for (const r of list) {
+					if (r.type === CSSRule.MEDIA_RULE && /hover:\s*hover/.test(r.conditionText || r.media.mediaText)) {
+						for (const x of r.cssRules) if (x.selectorText && /scene__ctl/.test(x.selectorText) && !/:hover|:focus/.test(x.selectorText)) out.push(x.cssText);
+					} else if (r.type === CSSRule.MEDIA_RULE || r.type === CSSRule.SUPPORTS_RULE || r.type === CSSRule.LAYER_BLOCK_RULE) walk(r.cssRules);
+				}
+			};
+			for (const sh of document.styleSheets) {
+				try { walk(sh.cssRules); } catch { /* cross-origin sheet */ }
+			}
+			const st = document.createElement("style");
+			st.textContent = out.join("\n") + "\n.scene__ctl { transition: none !important; }";
+			document.head.append(st);
+			return out.length;
+		});
+		if (!hoverRules) throw new Error("1.4.11: no `(hover: hover)` rule for .scene__ctl found in the stylesheets — the rest state cannot be measured");
+		if (plant) await page.addStyleTag({ content: plant });
+		await page.mouse.move(2, 2);
+		if (frame === undefined) {
+			await page.waitForFunction(() => document.querySelector(".s-hero--scene")?.classList.contains("is-done"), { timeout: 20000 });
+		} else {
+			// the rail's own move (`.design-sync/verify/frame.cjs`): every animation of the band and the header pinned
+			await page.evaluate((t) => {
+				for (const a of [...document.querySelector(".s-hero").getAnimations({ subtree: true }), ...(document.querySelector(".site-header")?.getAnimations() ?? [])]) {
+					a.pause();
+					a.currentTime = t;
+				}
+			}, 42000 + frame * 6000 - 500 + 3000);
+		}
+		await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+		const box = await (await page.$(".scene__pause-btn")).boundingBox();
+		const shot = await page.screenshot({ clip: { x: box.x, y: box.y, width: 40, height: 40 }, encoding: "base64" });
+		const c = await page.evaluate(glyphContrast, shot);
+		await page.close();
+		return c;
+	};
+	// the plant: a control faded to 0.2 on the brightest photograph must be called
+	const planted = await measure(browsers[0], verticals.find((v) => /comercio/.test(v)) ?? verticals[0], { plant: ".scene__ctl { opacity: .2 !important; }" });
+	if (planted >= CTL_MIN) {
+		console.error(`  ✗ positive control: a control at 0.2 opacity read ${planted.toFixed(2)}:1 — the probe is blind`);
+		process.exit(2);
+	}
+	ok(`positive control: a control at 0.2 opacity read ${planted.toFixed(2)}:1 and is called`);
+	const cases = [...[0, 1, 2, 3, 4, 5, 6].map((frame) => ({ route: "/", frame })), ...verticals.map((route) => ({ route }))];
+	await inParallel(cases, async ({ route, frame }, lane, report) => {
+		const c = await measure(lane, route, { frame });
+		const where = frame === undefined ? `${route} at rest` : `${route} frame ${frame}`;
+		if (c < CTL_MIN) report.fail(route, `the pause at rest reads ${c.toFixed(2)}:1 on its photograph${frame === undefined ? "" : ` (frame ${frame})`}, under ${CTL_MIN}:1 (1.4.11)`);
+		else report.ok(`${where} — ${c.toFixed(2)}:1`);
+	});
+}
+
+// ── 8c. WCAG 2.2.2 and 2.5.3 — what still moves, and names that say what shows (#505) ──
+// 2.2.2: nothing may blink or move past 5 s without a way to stop it. The header's cursor, the mark's and
+// the about console's blinked forever, and the home's pause left the header's edge cycling (measured
+// 2026-10-16, WCAG-EM #505). At 6 s, anything still running must sit in a band whose pause stops it — so
+// the pause is pressed and nothing may run after. 2.5.3: a control's accessible name contains the label on
+// screen — "click ES" by voice found nothing on English pages, whose switcher was named "Switch to the
+// Spanish version".
+console.log("── 2.2.2 nothing moves past 5 s unstoppable · 2.5.3 the name holds the visible label");
+{
+	const MOVING = () => document.getAnimations().filter((a) => a.playState === "running").map((a) => {
+		const t = a.effect?.target;
+		const el = t?.nodeType === 1 ? t : null;
+		return `${a.animationName || a.constructor.name} on ${el ? String(el.className || el.tagName).slice(0, 40) : "a pseudo-element"}`;
+	});
+	const LABELS = () => {
+		const vis = (e) => (e.innerText || "").replace(/[^\p{L}\p{N}]+/gu, " ").trim().toLowerCase();
+		return [...document.querySelectorAll("a[aria-label], button[aria-label], [role=button][aria-label]")]
+			.filter((e) => e.getClientRects().length && vis(e) && !e.getAttribute("aria-label").replace(/[^\p{L}\p{N}]+/gu, " ").toLowerCase().includes(vis(e)))
+			.map((e) => `«${e.innerText.trim()}» named «${e.getAttribute("aria-label")}»`);
+	};
+	const probe = async (lane, route, plant) => {
+		const page = await lane.newPage();
+		await page.setViewport({ width: 1440, height: 900 });
+		await page.goto(BASE + route, { waitUntil: "networkidle2", timeout: 60000 });
+		if (plant) await page.evaluate((p) => {
+			const st = document.createElement("style");
+			st.textContent = "@keyframes a11y-plant { 50% { opacity: 0; } } .a11y-plant { animation: a11y-plant 1s steps(1) infinite; }";
+			document.head.append(st);
+			document.body.insertAdjacentHTML("beforeend", '<a href="#" class="a11y-plant" aria-label="Foo">Bar</a>');
+		}, plant);
+		const labels = await page.evaluate(LABELS);
+		await page.waitForFunction(() => document.timeline.currentTime >= 6000, { polling: 200, timeout: 30000 });
+		if (await page.$(".s-hero .scene__pause-btn")) {
+			await page.click(".s-hero .scene__pause-btn");
+			await new Promise((r) => setTimeout(r, 300));
+		}
+		const moving = await page.evaluate(MOVING);
+		await page.close();
+		return { moving, labels };
+	};
+	const plant = await probe(browsers[0], "/en", true);
+	if (!plant.moving.some((m) => m.includes("a11y-plant")) || !plant.labels.some((l) => l.includes("Foo"))) {
+		console.error(`  ✗ positive control: a planted endless blink (${plant.moving.length ? "seen" : "MISSED"}) and a planted mismatched name (${plant.labels.length ? "seen" : "MISSED"}) — the probe is blind`);
+		process.exit(2);
+	}
+	ok("positive control: a planted endless blink and a planted name without its label are both called");
+	const verticals = readSeed().content.services.filter((e) => e.locale !== "en").map((e) => entryPath("services", e));
+	const routes = ["/", "/en", "/quienes-somos", "/en/about-us", "/contacto", verticals[0]];
+	await inParallel(routes, async (route, lane, report) => {
+		const r = await probe(lane, route, false);
+		for (const m of r.moving) report.fail(route, `still running at 6 s with no way to stop it (2.2.2): ${m}`);
+		for (const l of r.labels) report.fail(route, `accessible name without its visible label (2.5.3): ${l}`);
+		if (!r.moving.length && !r.labels.length) report.ok(`${route} — nothing moves past 6 s unstoppable, every name holds its label`);
+	});
 }
 
 // ── 9. W3C Nu — the rules html-validate does not carry ─────────────────────

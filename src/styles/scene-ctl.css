@@ -27,9 +27,11 @@
 .scene__pause:checked + .scene__pause-btn::before { content: "▶"; }
 .scene__pause:focus-visible + .scene__pause-btn,
 .scene__replay:focus-visible { outline: 2px solid var(--color-secondary); outline-offset: 2px; }
-/* on hover devices the controls wait at 35 % until hovered or focused */
+/* on hover devices the controls wait at 70 % until hovered or focused. Not lower: at rest the photograph
+   shows through the whole control, and at 35 % its glyph read 1.68:1 on e-commerce's warehouse, under the
+   3:1 of WCAG 1.4.11 (#505); 70 % is the least that clears every band with margin (4.26:1 there) */
 @media (hover: hover) {
-	.scene__ctl { opacity: .35; transition: opacity .25s ease; }
+	.scene__ctl { opacity: .7; transition: opacity .25s ease; }
 	.s-hero:hover .scene__ctl,
 	.scene__ctl:focus-within { opacity: 1; }
 }

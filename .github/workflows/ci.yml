@@ -665,3 +665,19 @@ jobs:
             echo "| engines | WebKit iPhone + Desktop Safari, Chromium Pixel 7: the home's tail and card animate · every opening starts and rests · reduced motion starts at rest, no pause |"
             echo "| Lighthouse | perf >=95 · a11y 100 · bp 100 · seo 100 · one runner per URL |"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # #592: `report` is the one check main requires. It sees every job, so it is
+      # red exactly when one of them is. A job skipped by scope (a docs-only
+      # change) is not a failure.
+      - name: Verdict  # not-a-gate: turns the results above into the one required check
+        if: always()
+        env:
+          RESULTS: scope=${{ needs.scope.result }} static=${{ needs.static.result }} rendered=${{ needs.rendered.result }} a11y=${{ needs.a11y.result }} engines=${{ needs.engines.result }} perf=${{ needs.perf.result }}
+        run: |
+          red=0
+          for r in $RESULTS; do
+            case "${r#*=}" in
+              failure|cancelled) echo "::error::${r%%=*}: ${r#*=}"; red=1 ;;
+            esac
+          done
+          exit "$red"

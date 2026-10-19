@@ -4,6 +4,10 @@ Read this whole file before designing. It compiles every decision the founder (J
 on the site's openings since September 2026, with his own words where they settle a question. Quotes are
 in Spanish, as he said them. When this brief and your instinct disagree, this brief wins.
 
+> **Another page, another brief.** For `/deconstruyendo` (how the whole site is built, issue #535) read
+> `guidelines/deconstruyendo.md` and `guidelines/deconstruyendo-hechos.md`. That page is a redesign, not a
+> refinement; this brief's §2, §4 and §7 (palette, type, rejected patterns) still apply to it.
+
 ## 1. Who, for whom, and the job
 
 **Server Startup** (Getxo, Bizkaia; founded 2019) is a senior software-engineering boutique and an official

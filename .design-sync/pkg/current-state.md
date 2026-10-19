@@ -1,5 +1,8 @@
 # Start from the live site — refine, do not redesign
 
+> Applies to the home and the six vertical openings. `/deconstruyendo` is a redesign with its own brief:
+> `guidelines/deconstruyendo.md`.
+
 The founder wants the existing home and vertical openings REFINED, not replaced. Every design starts from
 the files in `guidelines/current/` and changes only what the list below asks for.
 

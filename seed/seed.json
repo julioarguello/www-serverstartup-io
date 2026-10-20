@@ -19003,6 +19003,36 @@
 				}
 			},
 			{
+				"id": "ref-dooers-sneakers",
+				"locale": "es",
+				"slug": "dooers-sneakers",
+				"status": "published",
+				"data": {
+					"title": "Dooers Sneakers",
+					"excerpt": "clientes · 8.9K",
+					"featured_image": {
+						"src": "/assets/ref-dooers-sneakers.png",
+						"alt": "Dooers Sneakers"
+					},
+					"featured": true
+				}
+			},
+			{
+				"id": "ref-toys-r-us",
+				"locale": "es",
+				"slug": "toys-r-us",
+				"status": "published",
+				"data": {
+					"title": "Toys“R”Us",
+					"excerpt": "clientes · 8.2K",
+					"featured_image": {
+						"src": "/assets/ref-toys-r-us.png",
+						"alt": "Toys“R”Us"
+					},
+					"featured": true
+				}
+			},
+			{
 				"id": "colab-inetum",
 				"locale": "es",
 				"slug": "inetum",

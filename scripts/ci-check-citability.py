@@ -58,9 +58,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# §13, plus the #266 amendment. Names that MAY appear in public material.
+# §13: names that MAY appear in public material. The last two clients joined
+# on the founder's decision of 2026-10-20 (#597).
 WHITELIST = {
     "alcampo", "auchan", "forum-sport", "punt-roma", "jobandtalent",
+    "dooers-sneakers", "toys-r-us",
     "inetum", "grupo-seidor",
 }
 # Neutral placeholders: a reference whose name must stay b64-at-rest.

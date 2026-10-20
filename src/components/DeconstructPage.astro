@@ -14,6 +14,7 @@ import { GROUP_ORDER, layerHtml } from "../utils/layers";
 import type { UiLabels } from "../utils/ui-labels";
 import DecModel from "./deconstruct/DecModel.astro";
 import DecPlate from "./deconstruct/DecPlate.astro";
+import SceneSeal from "./SceneSeal.astro";
 
 interface Props {
 	title: string;
@@ -41,6 +42,7 @@ const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.
 
 <div class="dc">
 	<section class="dc-hero" aria-labelledby="dc-title">
+		<SceneSeal />
 		<div class="container dc-hero__inner">
 			<h1 class="ss-title" id="dc-title">{head}{tail && " "}{tail && <span class="ss-title__tail">{tail}</span>}</h1>
 			{lead && <p class="dc-hero__lead" set:html={layerHtml(lead)} />}

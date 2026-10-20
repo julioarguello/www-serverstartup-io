@@ -23,9 +23,26 @@
 
 /* ── the opening: title, lead, the map ─────────────────────────────── */
 .dc-hero {
-	background: var(--color-ground-dark);
+	/* the verticals' band (hero-scene.css) and its seal, in the edge orange the page marks Cloudflare with. Not
+	   its haze: on a vertical the photograph covers the band's right side, here the map's small labels sit there */
+	--scene-c: var(--color-edge);
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	background-color: var(--color-ground-dark);
 	color: var(--color-secondary);
 	padding-block: var(--open-pad-top) var(--rhythm-section);
+}
+.dc-hero > .container,
+.dc-hero .dc-model { position: relative; z-index: 2; }
+/* where the panoramic map shows, the opening is one screen, as the verticals' band is: the title and lead
+   on top, the map fitted to what is left of the screen — by its height or its width, whichever binds — so it
+   never runs under the fold (founder, 2026-10-20: "no encaja con el hero de las otras secciones") */
+@media (min-width: 1101px) {
+	.dc-hero { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100svh; min-height: 640px; }
+	.dc-model { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin-top: var(--space-5); }
+	.dc-model__wrap { min-height: 0; width: 100%; container-type: size; }
+	.dc-model__art { width: min(100cqw, 100cqh * 1700 / 680); margin-inline: auto; }
 }
 .dc-hero h1 { color: var(--color-secondary); }
 /* From 768 px the opening h1 takes theme.css's one register (one line, sized by the longest
@@ -37,8 +54,8 @@
 .dc-hero__lead {
 	margin-top: var(--space-4);
 	font-size: var(--text-body);
-	line-height: 1.5;
-	color: var(--color-secondary);
+	line-height: 1.4;
+	color: var(--color-hero-ink-soft);
 	text-wrap: pretty;
 }
 .dc-model { margin-top: var(--space-6); }

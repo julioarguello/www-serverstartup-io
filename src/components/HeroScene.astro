@@ -1,4 +1,5 @@
 ---
+import SceneSeal from "./SceneSeal.astro";
 /**
  * HeroScene — the opening every vertical shares (#529, #531).
  *
@@ -62,7 +63,7 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 		<slot name="over" />
 	</div>
 	{/* the seal: the logo cube's outline and inner edges (CubeEmblem.astro draws the same path), one, large, in the section's colour */}
-	<svg class="scene__seal" viewBox="0 0 200 228" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" d="M100,14 186,64 186,164 100,214 14,164 14,64 Z M14,64 100,114 186,64 M100,114 100,214" /></svg>
+	<SceneSeal />
 	<div class="container s-hero__inner">
 		<div class="s-hero__copy">
 			<h1>{title}</h1>

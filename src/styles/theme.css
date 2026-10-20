@@ -248,6 +248,9 @@
 	   lighthouse cutout's edge pixels average to, which the band drifts toward */
 	--color-ground-dark: #232724;
 	--color-ground-haze: #A1ABAA;
+	/* the seal's place, declared once: its sheet, the photograph frames' default placement and every band that wears it read it */
+	--seal-left: -120px;
+	--seal-w: 460px;
 	--color-pacman: #FFD300;          /* the one Pac-Man on the integration bus (#538) */
 	--color-machine-red: #E0141E;     /* the Terminator's eye, where the AI scene's violet ends (#537) */
 	--color-elev-line: #6FD48A;       /* the greenfield elevation's lines: the section's green, lightened to read on the band (#547) */

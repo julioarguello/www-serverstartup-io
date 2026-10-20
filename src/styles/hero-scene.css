@@ -9,9 +9,6 @@
 	--beat-drawn: 4.5s;
 	/* the h1 sits where a centred 320 px block would put it: it never moves with the excerpt */
 	--scene-copy-ref: 320px;
-	/* the seal's place, declared once: its sheet and the photograph frames' default placement both read it */
-	--seal-left: -120px;
-	--seal-w: 460px;
 	position: relative;
 	isolation: isolate;
 	display: flex;

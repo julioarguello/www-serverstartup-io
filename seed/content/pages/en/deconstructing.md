@@ -1,5 +1,5 @@
 ---
-excerpt: "How it is built, layer by layer: from the `Cloudflare` network to the checks every change goes through. Every claim links to the file that proves it."
+excerpt: "This is how this website is built. It runs on `Cloudflare`, a network of data centres around the world, and every claim on this page links to the file that proves it."
 ---
 
 ## The workshop, open

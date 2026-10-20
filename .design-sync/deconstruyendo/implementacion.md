@@ -80,3 +80,10 @@ the CMS, and the layout.
 - **Credits page**: the bridge does not appear on /deconstruyendo; its «Aparece en» says so.
 - Facts that could only be verified on the deployed site are seeded with `status: pending` and
   stay hidden until checked there.
+- **Panoramic map (founder, 2026-10-20).** The EmDash window and «yo edito» moved left of the
+  stack, under Contenido; the Presentación window and «tú ves» moved right, under Red. The drawing
+  went from 1310 × 1044 to 1700 × 680 units, so the opening (title, lead, map) is about one screen
+  and the copy never sits on the drawing. The small drawing and the list take over at 1100 px, the
+  menu's boundary, where the panoramic labels would fall under 8 px. Rejected: the map, or the cube
+  alone, as art beside the copy at the verticals' h1 height. «Deconstruyendo esta web» fills the
+  column, so any art beside it lands under the title.

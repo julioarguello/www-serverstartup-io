@@ -23,9 +23,26 @@
 
 /* ── the opening: title, lead, the map ─────────────────────────────── */
 .dc-hero {
-	background: var(--color-ground-dark);
+	/* the verticals' band (hero-scene.css) and its seal, in the edge orange the page marks Cloudflare with. Not
+	   its haze: on a vertical the photograph covers the band's right side, here the map's small labels sit there */
+	--scene-c: var(--color-edge);
+	position: relative;
+	isolation: isolate;
+	overflow: clip;
+	background-color: var(--color-ground-dark);
 	color: var(--color-secondary);
 	padding-block: var(--open-pad-top) var(--rhythm-section);
+}
+.dc-hero > .container,
+.dc-hero .dc-model { position: relative; z-index: 2; }
+/* where the panoramic map shows, the opening is one screen, as the verticals' band is: the title and lead
+   on top, the map fitted to what is left of the screen — by its height or its width, whichever binds — so it
+   never runs under the fold (founder, 2026-10-20: "no encaja con el hero de las otras secciones") */
+@media (min-width: 1101px) {
+	.dc-hero { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100svh; min-height: 640px; }
+	.dc-model { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin-top: var(--space-4); }
+	.dc-model__wrap { min-height: 0; width: 100%; container-type: size; }
+	.dc-model__art { width: min(100cqw, 100cqh * 1710 / 682); margin-inline: auto; }
 }
 .dc-hero h1 { color: var(--color-secondary); }
 /* From 768 px the opening h1 takes theme.css's one register (one line, sized by the longest
@@ -33,38 +50,37 @@
 @media (max-width: 767px) {
 	.dc-hero h1 { font-size: clamp(34px, 10.4vw, 64px); line-height: 1.07; }
 }
-.dc-hero h1 .ss-title__tail { font-family: var(--font-signature, serif); font-style: italic; font-weight: 400; font-size: 1.13em; color: var(--color-brand-grey); }
+.dc-hero h1 .ss-title__tail { font-family: "CMU Serif", serif; font-style: italic; font-weight: 500; font-synthesis: none; letter-spacing: -.005em; word-spacing: -.08em; font-size: 1.13em; color: var(--color-brand-grey); }
 .dc-hero__lead {
 	margin-top: var(--space-4);
 	font-size: var(--text-body);
-	line-height: 1.5;
-	color: var(--color-secondary);
+	line-height: 1.4;
+	color: var(--color-hero-ink-soft);
 	text-wrap: pretty;
 }
 .dc-model { margin-top: var(--space-6); }
 /* token-guard: off — the map is the one figure wider than the column: an isometric drawing of the
    whole site needs the band's width to keep its labels legible (founder-approved in v5, #535) */
-.dc-model__wrap { position: relative; max-width: 1300px; margin-inline: auto; padding-inline: var(--space-3); }
-.dc-model .dc-model__sm { display: none; max-width: 280px; margin-inline: auto; }
+.dc-model__wrap { position: relative; max-width: 1700px; margin-inline: auto; padding-inline: var(--space-3); }
+.dc-model__art { position: relative; }
+.dc-model .dc-model__sm { display: none; width: calc(100% - 2 * var(--space-3)); max-width: 430px; margin-inline: auto; }
 /* token-guard: on */
 .dc-model svg { display: block; width: 100%; height: auto; }
 .dc-model__im { position: absolute; object-fit: cover; object-position: 50% 0; pointer-events: none; border-radius: 0 0 var(--radius) var(--radius); }
-.dc-model__cr {
-	margin-top: var(--space-2);
-	font-family: var(--font-family-mono);
-	font-size: 11px;
-	line-height: 16px;
-	color: var(--color-brand-grey);
-	text-align: center;
-}
-.dc-model__cr a { color: var(--color-brand-grey); text-decoration: underline; }
-.dc-model__cr code { font-family: inherit; }
 
 .dc-model .m-lk { cursor: pointer; }
 /* the shape lights up as well, but the ring is what says "focus" (2.4.7): the model sits on the dark ground, so the ring takes the edge orange */
 .dc-model .m-lk:focus-visible { outline: 2px solid var(--color-edge); outline-offset: 3px; }
-.dc-model .tb { fill: var(--color-console); stroke: var(--color-console-line); stroke-width: 1.5; transition: fill .25s, stroke .25s; }
-.dc-model .tg { fill: var(--color-border); stroke: transparent; stroke-width: 4; transition: fill .25s, stroke .25s; }
+/* the logo's dark plate is ink on paper; on the dark band ink vanishes, so it takes the console tone, one step up */
+.dc-model .tb { fill: var(--color-console); stroke: var(--color-brand-grey); stroke-width: 1.5; transition: fill .25s, stroke .25s; }
+/* token-guard: off — the logo's own plate and cell grey (LogoDie.astro): the stack is drawn as the mark,
+   and a theme token here would let a palette change repaint the brand */
+.dc-model .tg { fill: #ced4da; stroke: transparent; stroke-width: 4; transition: fill .25s, stroke .25s; }
+.dc-model .ft,
+.dc-model .fl,
+.dc-model .fr { fill: #ced4da; }
+.dc-model .who .mk-l { fill: #ced4da; }
+/* token-guard: on */
 .dc-model .m-lk.k.hv .tb,
 .dc-model .m-lk.k.on .tb,
 .dc-model .m-lk.k:focus-visible .tb { stroke: var(--color-edge); stroke-width: 4; fill: var(--color-console-bar); }
@@ -73,13 +89,11 @@
 .dc-model .m-lk.g:focus-visible .tg { stroke: var(--color-edge); fill: var(--color-light); }
 .dc-model .sl { transition: transform .4s cubic-bezier(.2, .8, .2, 1); }
 .dc-model .sl polygon { stroke: var(--color-primary); stroke-width: 4.5; stroke-linejoin: round; transition: fill .25s, stroke .25s; }
-.dc-model .ft { fill: var(--color-secondary); }
-.dc-model .fl { fill: var(--color-surface); }
-.dc-model .fr { fill: var(--color-surface-hover); }
 .dc-model .ln { fill: none; stroke: var(--color-primary); stroke-width: 4.5; stroke-linecap: round; transition: stroke .25s; }
-.dc-model .et { font-family: var(--font-family-mono); font-size: 13px; font-weight: 500; fill: var(--color-text-muted); transition: fill .25s; }
-.dc-model .m-lk.c.hv .sl,
-.dc-model .m-lk.c:focus-visible .sl { transform: translateX(-14px); }
+.dc-model .dc-model__sm .et { font-size: 9px; }
+.dc-model .dc-model__sm .cfl { font-size: 14px; }
+.dc-model .smn { font-family: var(--font-family); font-size: 17px; font-weight: 700; fill: var(--color-secondary); }
+.dc-model .et { font-family: var(--font-family-mono); font-size: 14px; font-weight: 500; fill: var(--color-ink-soft); transition: fill .25s; }
 .dc-model .m-lk.c.hv polygon,
 .dc-model .m-lk.c.hv .ln,
 .dc-model .m-lk.c:focus-visible polygon,
@@ -88,12 +102,17 @@
 .dc-model .m-lk.c.hv .et,
 .dc-model .m-lk.c.on .et { fill: var(--color-edge); }
 .dc-model .lbh { fill: transparent; }
-.dc-model .ld { stroke: var(--color-brand-grey); stroke-width: 1; stroke-dasharray: 1 4; stroke-linecap: round; transition: stroke .25s; }
+.dc-model .ld { stroke: var(--color-brand-grey); stroke-width: 2; stroke-linecap: round; transition: stroke .25s; }
 .dc-model .dt { fill: var(--color-ground-dark); stroke: var(--color-edge); stroke-width: 2; transition: fill .25s; }
 .dc-model .br { stroke: var(--color-edge); stroke-width: 2; }
-.dc-model .cfl { font-family: var(--font-family-mono); font-size: 14px; fill: var(--color-edge); }
+/* brand marks beside the names (utils/brand-icons.ts): one colour, the name's; Cloudflare's in its orange */
+.dc-model .bi { fill: var(--color-secondary); overflow: visible; }
+.dc-model .bi.cf { fill: var(--color-edge); }
+.dc-model .cfl { font-family: var(--font-family-mono); font-size: 16px; fill: var(--color-edge); }
 .dc-model .nm { font-family: var(--font-family); font-size: 22px; font-weight: 700; fill: var(--color-secondary); transition: fill .25s; }
-.dc-model .pm { font-family: var(--font-family-mono); font-size: 13px; fill: var(--color-brand-grey); }
+/* notes: the map renders at about 0.65 on a laptop, so they are drawn at 15 and in the hero's soft white
+   (11:1), not the brand grey at 13 that came out at 8 px (founder, 2026-10-20: "el contraste es pésimo") */
+.dc-model .pm { font-family: var(--font-family-mono); font-size: 15px; fill: var(--color-hero-ink-soft); }
 .dc-model .pm .cf { fill: var(--color-edge); }
 .dc-model .lb.hv .nm,
 .dc-model .lb.on .nm { fill: var(--color-edge); }
@@ -101,13 +120,13 @@
 .dc-model .lb.on .ld { stroke: var(--color-edge); stroke-dasharray: none; stroke-width: 1.5; }
 .dc-model .lb.hv .dt,
 .dc-model .lb.on .dt { fill: var(--color-edge); }
-.dc-model .ldw { fill: none; stroke: var(--color-brand-grey); stroke-width: 1; transition: stroke .25s; }
+.dc-model .ldw { fill: none; stroke: var(--color-brand-grey); stroke-width: 2; transition: stroke .25s; }
 .dc-model .lb.w.hv .ldw,
 .dc-model .lb.w.on .ldw { stroke: var(--color-edge); stroke-width: 1.5; }
 .dc-model .dk { fill: var(--color-ground-dark); stroke: var(--color-light); stroke-width: 2; transition: fill .25s, stroke .25s; }
 .dc-model .lb.w.hv .dk,
 .dc-model .lb.w.on .dk { fill: var(--color-edge); stroke: var(--color-edge); }
-.dc-model .qf { fill: none; stroke: var(--color-brand-grey); stroke-width: 1.5; stroke-dasharray: 6 6; transition: stroke .25s; }
+.dc-model .qf { fill: none; stroke: var(--color-brand-grey); stroke-width: 2; stroke-dasharray: 6 6; transition: stroke .25s; }
 .dc-model .qhit { fill: none; stroke: transparent; stroke-width: 24; pointer-events: stroke; }
 .dc-model .q.hv .qf,
 .dc-model .q.on .qf,
@@ -117,32 +136,37 @@
 .dc-model .wd1 { fill: var(--color-console-dot-1); }
 .dc-model .wd2 { fill: var(--color-console-dot-2); }
 .dc-model .wd3 { fill: var(--color-console-dot-3); }
-.dc-model .wpth { font-family: var(--font-family-mono); font-size: 11px; fill: var(--color-console-dim); }
-.dc-model .wol { fill: none; stroke: var(--color-console-line); stroke-width: 1.5; transition: stroke .2s, stroke-width .2s; }
+.dc-model .wpth { font-family: var(--font-family-mono); font-size: 13px; fill: var(--color-console-dim); }
+.dc-model .wol { fill: none; stroke: var(--color-brand-grey); stroke-width: 1.5; transition: stroke .2s, stroke-width .2s; }
 .dc-model .ap.hv .wol,
 .dc-model .ap:focus-visible .wol { stroke: var(--color-edge); stroke-width: 2; }
 .dc-model .ap.on .wol { stroke: var(--color-edge); stroke-width: 3; }
 .dc-model .ap .nm { font-size: 20px; }
-.dc-model .fa { fill: none; stroke: var(--color-edge); stroke-width: 2; }
+/* flows are neutral: orange marks what is lit, and an arrow is never lit (founder, 2026-10-20) */
+.dc-model .fa { fill: none; stroke: var(--color-light); stroke-width: 2; }
 .dc-model .ahw { fill: var(--color-light); }
+.dc-model .aho { fill: var(--color-edge); }
+.dc-model .ap:is(:hover, .hv, .on, :focus-visible) .fa,
+.dc-model .ap:is(:hover, .hv, .on, :focus-visible) .who .wa2 { stroke: var(--color-edge); marker-end: url(#dc-ah-on); }
+.dc-model .ap:is(:hover, .hv) .wol { stroke: var(--color-edge); stroke-width: 3; }
 .dc-model .who .ic { fill: var(--color-light); }
+.dc-model .who .mk-d { fill: var(--color-console); stroke: var(--color-brand-grey); stroke-width: 1; }
+.dc-model .who .mk-c { fill: none; stroke: var(--color-primary); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; }
 .dc-model .who .ico path,
 .dc-model .who .ico circle { fill: none; stroke: var(--color-primary); stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
-.dc-model .who.tu .ico circle { fill: var(--color-primary); }
-.dc-model .who .wa2 { fill: none; stroke: var(--color-light); stroke-width: 1.5; }
-.dc-model .who .wh { font-family: var(--font-family); font-size: 24px; font-weight: 600; fill: var(--color-secondary); }
-.dc-model .who .ws { font-family: var(--font-family); font-size: 14px; font-weight: 300; fill: var(--color-brand-grey); }
+.dc-model .who.tu .ico circle { fill: var(--color-primary); stroke: none; }
+.dc-model .who .wa2 { fill: none; stroke: var(--color-light); stroke-width: 2; }
+/* the two people in the drawing speak in the title's second voice, Computer Modern italic, so they stand
+   apart from the labels (founder, 2026-10-20: "me falta destacarlo… la fuente es la misma") */
+.dc-model .who .wh { font-family: "CMU Serif", serif; font-style: italic; font-weight: 500; font-synthesis: none; font-size: 32px; fill: var(--color-secondary); }
+.dc-model .who .ws { font-family: var(--font-family); font-size: 15px; font-weight: 400; fill: var(--color-hero-ink-soft); }
 .dc-model .who .wloc { font-family: var(--font-family-mono); font-size: 13px; fill: var(--color-edge); }
 
 .dc-asm .dc-model .s1 { animation: dc-sp .8s cubic-bezier(.2, .8, .2, 1) .1s both; }
 .dc-asm .dc-model .s2 { animation: dc-sp .8s cubic-bezier(.2, .8, .2, 1) .22s both; }
 .dc-asm .dc-model .s3 { animation: dc-sp .8s cubic-bezier(.2, .8, .2, 1) .34s both; }
 .dc-asm .dc-model .s4 { animation: dc-sp .8s cubic-bezier(.2, .8, .2, 1) .46s both; }
-.dc-asm .dc-model .tb,
-.dc-asm .dc-model .tg { animation: dc-fi .6s ease-out both; }
-.dc-asm .dc-model .who { animation: dc-fi .6s ease-out .9s both; }
 @keyframes dc-sp { from { opacity: 0; transform: translateY(-30px); } }
-@keyframes dc-fi { from { opacity: 0; } }
 
 /* the index under the map on phones */
 .dc-mlist { display: none; margin-top: var(--space-4); border-top: 1px solid var(--color-console-line); }
@@ -165,6 +189,13 @@
 .dc-mlist small { display: block; font-family: var(--font-family-mono); font-size: 12px; line-height: 16px; font-weight: 400; color: var(--color-brand-grey); }
 
 /* ── the spine: one stop per layer, sticky under the header ────────── */
+/* jumps from the spine and the map arrive at once: theme.css scrolls smoothly for the short jumps of other
+   pages, but here an index jump crosses up to ~9,000 px and the ride is only a wait (founder, 2026-10-20:
+   "no quiero esperar, yo quiero algo ligero") */
+html:has(.dc) { scroll-behavior: auto; }
+/* the spine's height, declared once for the anchors: links 6 + 16 + 6 px, its padding, its 1 px rule */
+.dc { --dc-spine-h: calc(2 * var(--space-2) + 29px); }
+@media (max-width: 1023px) { .dc { --dc-spine-h: 0px; } }
 .dc-spine { position: sticky; top: var(--header-h); z-index: 20; padding-block: var(--space-2); background: var(--color-secondary); border-bottom: 1px solid var(--color-border); }
 .dc-spine__in { display: flex; align-items: center; gap: var(--space-1); }
 .dc-spine a {
@@ -193,10 +224,14 @@
 .dc-grp { padding-top: var(--space-8); }
 .dc-grp p { font-family: var(--font-family-mono); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted); padding-bottom: var(--space-2); border-bottom: 2px solid var(--color-primary); }
 .dc-grp code.cf { text-transform: none; letter-spacing: 0; }
-.dc-pl { padding-block: var(--space-8) var(--space-5); scroll-margin-top: calc(var(--header-h) + var(--space-7)); }
-.dc-grp + .dc-pl { padding-top: var(--space-6); }
-.dc-pl__hd { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: var(--space-4); align-items: center; }
-.dc-pl__ic svg { display: block; width: 84px; height: 84px; }
+.dc-pl { --dc-pl-pad: var(--space-8); padding-block: var(--dc-pl-pad) var(--space-5); }
+/* a jump lands the plate's kicker one --space-4 under the header and the sticky spine, the padding above it
+   scrolled away, so the plate takes the screen (founder, 2026-10-20: "cada sección ocupase justo el above
+   the fold"). `main` outranks theme.css's `:target` margin, which loads later */
+main .dc-pl { scroll-margin-top: calc(var(--header-h) + var(--dc-spine-h) + var(--space-4) - var(--dc-pl-pad)); }
+.dc-grp + .dc-pl { --dc-pl-pad: var(--space-6); }
+.dc-pl__hd { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-4); align-items: center; }
+.dc-pl__ic svg { display: block; width: 64px; height: 64px; }
 .dc-pl__ic .iq { fill: none; stroke: var(--color-border); stroke-width: 1.5; stroke-dasharray: 3 3; }
 .dc-pl__ic .ib { fill: var(--color-console); }
 .dc-pl__ic .ig { fill: var(--color-border); }
@@ -208,9 +243,20 @@
 .dc-pl__ic .ib.on,
 .dc-pl__ic .ig.on { stroke: var(--color-edge); stroke-width: 2.5; }
 .dc-pl__k { font-family: var(--font-family-mono); font-size: 13px; color: var(--color-text-muted); }
-.dc-pl__lede { margin-top: var(--space-2); font-size: 19px; line-height: 28px; color: var(--color-ink-soft); text-wrap: pretty; }
+.dc-pl__lede { margin-top: var(--space-2); font-size: var(--text-body); line-height: 1.4; color: var(--color-ink-soft); text-wrap: pretty; }
 
-.dc-fig { margin-top: var(--space-5); background: var(--color-ground-dark); color: var(--color-secondary); border-radius: var(--radius); padding: var(--space-6) var(--space-5); }
+/* one paragraph under the subtitle, in the site's BLOCK chrome (the rule and the tint, as About's quotes) */
+.dc-pl__say {
+	margin-top: var(--space-4);
+	padding: var(--space-3) var(--space-4);
+	border-left: var(--block-rule) solid var(--color-primary);
+	background: var(--color-tint);
+	font-size: var(--text-body);
+	font-weight: 300;
+	line-height: 1.45;
+	text-wrap: pretty;
+}
+.dc-fig { margin-top: var(--space-5); background: var(--color-ground-dark); color: var(--color-secondary); border-radius: var(--radius); padding: var(--space-5); }
 .dc-flow { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); column-gap: var(--space-6); }
 .dc-flow.plain { column-gap: var(--space-3); }
 .dc-n {
@@ -237,11 +283,14 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-flow:not(.plain) .dc-n:not(:last-child)::before { content: ""; position: absolute; top: calc(50% - 4px); right: calc(-1 * var(--space-6) + 6px); border-left: 7px solid var(--color-brand-grey); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; }
 .dc-n em { position: absolute; top: calc(50% - 22px); right: calc(-1 * var(--space-6)); width: var(--space-6); text-align: center; font-style: normal; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-light); z-index: 1; }
 
-.dc-nums { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--space-5); margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--color-console-line); }
+.dc-nums { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--space-5); margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--color-console-line); }
 .dc-nums:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+/* under the photographs the figures need no rule: the space separates them */
+.dc-duo + .dc-nums { margin-top: var(--space-4); padding-top: 0; border-top: 0; }
 .dc-nm { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
 .dc-nm b { font-size: 56px; line-height: 56px; font-weight: 700; }
 .dc-nm span { font-size: 14px; line-height: 20px; color: var(--color-brand-grey); }
+.dc-nm--rings { grid-column: span 2; }
 .dc-lh { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .dc-lh div { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); }
 .dc-lh b { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; border: 3px solid var(--color-console-ok); border-radius: var(--radius-pill); font-size: 18px; font-weight: 700; }
@@ -259,42 +308,38 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-sw .v5 { background: var(--color-tail-ec); }
 .dc-sw .v6 { background: var(--color-tail-bd); }
 
-.dc-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-5); }
-.dc-duo img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); }
-.dc-cap { margin-top: var(--space-2); font-family: var(--font-family-mono); font-size: 11px; line-height: 16px; color: var(--color-text-muted); }
+.dc-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4); }
+.dc-duo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: cover; border-radius: var(--radius); }
+.dc-cap { margin-top: var(--space-2); font-size: 14px; line-height: 20px; color: var(--color-text-muted); }
 .dc-cap a { color: inherit; text-decoration: underline; }
 .dc-fig .dc-cap { color: var(--color-brand-grey); }
 .dc-shot { margin-top: var(--space-4); }
-.dc-shot img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--color-border); }
+.dc-shot img { display: block; width: 100%; height: auto; aspect-ratio: 21 / 8; object-fit: cover; object-position: 50% 0; border-radius: var(--radius); border: 1px solid var(--color-border); }
+/* each capture cut to the part the plate talks about */
+.dc-shot[data-f="red"] img { object-position: 50% 100%; }
+.dc-shot[data-f="entrega"] img,
+.dc-shot[data-f="contenido"] img { object-position: 50% 38%; }
+.dc-shot[data-f="calidad"] img { object-position: 50% 83%; }
 
 .dc-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
-.dc-links a {
-	display: inline-flex;
-	align-items: center;
-	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--color-primary);
-	border-radius: var(--radius);
-	font-size: 14px;
-	line-height: 20px;
-	font-weight: 500;
-	text-decoration: none;
-	color: var(--color-primary);
-}
-.dc-links a::after { content: " ↗" / ""; }
-.dc-links a:hover { background: var(--color-primary); color: var(--color-secondary); }
+/* the site's own ghost button (theme.css .btn-dark): one button family everywhere, square, 17/600 */
+.dc-links .btn::after { content: " ↗" / ""; }
 
 /* ── the ledger: every fact with the file that proves it ───────────── */
-.dc-more { margin-top: var(--space-4); border-top: 1px solid var(--color-primary); border-bottom: 1px solid var(--color-border); }
+.dc-more { margin-top: var(--space-4); }
 .dc-more > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; font-size: 15px; line-height: 20px; font-weight: 600; }
 .dc-more > summary::-webkit-details-marker { display: none; }
 .dc-more > summary::before { content: "+" / ""; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; width: var(--space-5); height: var(--space-5); border: 1px solid var(--color-primary); border-radius: var(--radius); font-family: var(--font-family-mono); font-size: 16px; font-weight: 400; }
 .dc-more[open] > summary::before { content: "−" / ""; }
 .dc-more > summary span { font-weight: 300; color: var(--color-text-muted); font-size: 14px; }
-.dc-led { padding-bottom: var(--space-4); }
-.dc-led li { padding: var(--space-3) 0; border-top: 1px solid var(--color-border); scroll-margin-top: calc(var(--header-h) + var(--space-8)); }
+.dc-led { list-style: none; padding-bottom: var(--space-4); }
+.dc-led li { display: grid; grid-template-columns: var(--space-7) minmax(0, 1fr); column-gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--color-border-soft); }
+.dc-led li > :not(.dc-led__n) { grid-column: 2; }
+.dc-led__n { grid-row: 1 / span 2; font-family: var(--font-family-mono); font-size: 14px; line-height: 24px; font-weight: 500; color: var(--color-text-muted); }
+main .dc-led li { scroll-margin-top: calc(var(--header-h) + var(--dc-spine-h) + var(--space-4)); }
 .dc-led li:target { background: var(--color-surface); }
 .dc-led p { font-size: 16px; line-height: 24px; text-wrap: pretty; }
-.dc-lk { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-top: var(--space-2); font-size: 13px; line-height: 18px; }
+.dc-lk { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-top: var(--space-2); font-size: 14px; line-height: 20px; }
 .dc-lk__r { font-family: var(--font-family-mono); font-size: 12px; text-decoration: none; border-bottom: 1px dashed var(--color-primary); overflow-wrap: anywhere; }
 .dc-lk__n { font-size: 12px; color: var(--color-text-muted); }
 .dc-lk__d a { text-decoration: underline; text-underline-offset: 3px; }
@@ -306,11 +351,14 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-close p:last-child a:hover { border-bottom-style: solid; }
 
 @media (max-width: 1023px) { .dc-spine { display: none; } }
-@media (max-width: 860px) {
-	/* the credit names the drawing's two windows; the small drawing has none */
-	.dc-model__wrap, .dc-model__cr { display: none; }
+/* the panoramic map is 1710 units wide: under 1100 px (the menu's and the openings' boundary) its labels
+   would fall under 8 px, so the small drawing and the list take over there */
+@media (max-width: 1100px) {
+	.dc-model__wrap { display: none; }
 	.dc-model .dc-model__sm,
 	.dc-mlist { display: block; }
+}
+@media (max-width: 860px) {
 	.dc-flow { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); }
 	.dc-n { min-height: 72px; padding-block: var(--space-2); }
 	.dc-flow:not(.plain) .dc-n:not(:last-child)::after { top: auto; bottom: calc(-1 * var(--space-5) + 4px); right: auto; left: var(--space-5); width: 1px; height: calc(var(--space-5) - 8px); }
@@ -319,24 +367,21 @@ a.dc-n:hover { background: var(--color-console-line); }
 	.dc-nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 720px) {
-	.dc-pl { padding-block: var(--space-6) var(--space-4); }
+	.dc-pl, .dc-grp + .dc-pl { --dc-pl-pad: var(--space-6); padding-block: var(--dc-pl-pad) var(--space-4); }
 	.dc-grp { padding-top: var(--space-6); }
-	.dc-pl__hd { grid-template-columns: 60px minmax(0, 1fr); gap: var(--space-3); }
-	.dc-pl__ic svg { width: 60px; height: 60px; }
-	.dc-pl__lede { font-size: 16px; line-height: 24px; }
+	.dc-pl__hd { grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-3); }
+	.dc-pl__ic svg { width: 48px; height: 48px; }
 	.dc-fig { padding: var(--space-4) var(--space-3); }
 	.dc-duo { grid-template-columns: minmax(0, 1fr); }
 	.dc-nm b { font-size: 44px; line-height: 48px; }
 }
 @media (max-width: 420px) {
 	.dc-nums { grid-template-columns: minmax(0, 1fr); }
+	.dc-nm--rings { grid-column: 1 / -1; }
 	.dc-lh { gap: var(--space-2); }
 	.dc-lh b { width: 56px; height: 56px; font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-	.dc-asm .dc-model .sl,
-	.dc-asm .dc-model .tb,
-	.dc-asm .dc-model .tg,
-	.dc-asm .dc-model .who { animation: none; }
+	.dc-asm .dc-model .sl { animation: none; }
 	.dc-model .m-lk.c.hv .sl { transform: none; }
 }

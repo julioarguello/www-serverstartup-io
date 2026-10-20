@@ -14,6 +14,7 @@ import { GROUP_ORDER, layerHtml } from "../utils/layers";
 import type { UiLabels } from "../utils/ui-labels";
 import DecModel from "./deconstruct/DecModel.astro";
 import DecPlate from "./deconstruct/DecPlate.astro";
+import SceneSeal from "./SceneSeal.astro";
 
 interface Props {
 	title: string;
@@ -41,6 +42,7 @@ const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.
 
 <div class="dc">
 	<section class="dc-hero" aria-labelledby="dc-title">
+		<SceneSeal />
 		<div class="container dc-hero__inner">
 			<h1 class="ss-title" id="dc-title">{head}{tail && " "}{tail && <span class="ss-title__tail">{tail}</span>}</h1>
 			{lead && <p class="dc-hero__lead" set:html={layerHtml(lead)} />}
@@ -66,7 +68,7 @@ const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.
 	{groups.map((g) => (
 		<>
 			<div class="dc-grp"><div class="container"><p set:html={layerHtml(groupLabel[g.key])} /></div></div>
-			{g.layers.map((l) => <DecPlate layer={l} labels={labels} repoUrl={repoUrl} />)}
+			{g.layers.map((l) => <DecPlate layer={l} num={layers.indexOf(l) + 1} labels={labels} repoUrl={repoUrl} />)}
 		</>
 	))}
 
@@ -128,10 +130,10 @@ const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.
 	if (loc && line) {
 		fetch("/api/whoami")
 			.then((r) => (r.ok ? r.json() : null))
-			.then((w: { city?: string; colo?: string } | null) => {
-				const parts = [w?.city, w?.colo].filter(Boolean);
-				if (!parts.length) return;
-				loc.textContent = parts.join(" · ");
+			.then((w: { city?: string } | null) => {
+				// the city alone: the pin already says where, and the data centre's code read as noise
+				if (!w?.city) return;
+				loc.textContent = w.city;
 				line.removeAttribute("visibility");
 			})
 			.catch(() => {});

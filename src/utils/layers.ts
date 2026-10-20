@@ -34,6 +34,8 @@ export type Layer = {
 	map_note?: string;
 	summary?: string;
 	lede?: string;
+	/** one short paragraph under the subtitle: what the layer does, as an engineer would tell a student */
+	intro?: string;
 	figure: LayerFigure;
 	nodes?: { title: string; note?: string; edge?: string; cloudflare?: boolean; fact?: string }[];
 	nodes_plain?: boolean;

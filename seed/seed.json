@@ -1446,17 +1446,6 @@
 						{
 							"_type": "block",
 							"style": "normal",
-							"_key": "model_credit",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ventanas: el editor de `EmDash`, captura de pantalla; la apertura de seguridad en el borde, con foto de Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es) · restaurada; mástiles retirados y encuadre ampliado con IA"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
 							"_key": "spine_aria",
 							"children": [
 								{
@@ -4179,17 +4168,6 @@
 								{
 									"_type": "span",
 									"text": "/"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "model_credit",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Windows: the `EmDash` editor, a screenshot; the edge-security opening, photo by Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en) · restored; masts removed and frame extended with AI"
 								}
 							]
 						},

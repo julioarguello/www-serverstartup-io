@@ -40,9 +40,9 @@
    never runs under the fold (founder, 2026-10-20: "no encaja con el hero de las otras secciones") */
 @media (min-width: 1101px) {
 	.dc-hero { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100svh; min-height: 640px; }
-	.dc-model { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin-top: var(--space-5); }
+	.dc-model { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin-top: var(--space-4); }
 	.dc-model__wrap { min-height: 0; width: 100%; container-type: size; }
-	.dc-model__art { width: min(100cqw, 100cqh * 1700 / 680); margin-inline: auto; }
+	.dc-model__art { width: min(100cqw, 100cqh * 1674 / 652); margin-inline: auto; }
 }
 .dc-hero h1 { color: var(--color-secondary); }
 /* From 768 px the opening h1 takes theme.css's one register (one line, sized by the longest
@@ -67,16 +67,6 @@
 /* token-guard: on */
 .dc-model svg { display: block; width: 100%; height: auto; }
 .dc-model__im { position: absolute; object-fit: cover; object-position: 50% 0; pointer-events: none; border-radius: 0 0 var(--radius) var(--radius); }
-.dc-model__cr {
-	margin-top: var(--space-2);
-	font-family: var(--font-family-mono);
-	font-size: 11px;
-	line-height: 16px;
-	color: var(--color-brand-grey);
-	text-align: center;
-}
-.dc-model__cr a { color: var(--color-brand-grey); text-decoration: underline; }
-.dc-model__cr code { font-family: inherit; }
 
 .dc-model .m-lk { cursor: pointer; }
 /* the shape lights up as well, but the ring is what says "focus" (2.4.7): the model sits on the dark ground, so the ring takes the edge orange */
@@ -317,11 +307,10 @@ main .dc-led li { scroll-margin-top: calc(var(--header-h) + var(--space-7) + var
 .dc-close p:last-child a:hover { border-bottom-style: solid; }
 
 @media (max-width: 1023px) { .dc-spine { display: none; } }
-/* the panoramic map is 1700 units wide: under 1100 px (the menu's and the openings' boundary) its labels
+/* the panoramic map is 1674 units wide: under 1100 px (the menu's and the openings' boundary) its labels
    would fall under 8 px, so the small drawing and the list take over there */
 @media (max-width: 1100px) {
-	/* the credit names the drawing's two windows; the small drawing has none */
-	.dc-model__wrap, .dc-model__cr { display: none; }
+	.dc-model__wrap { display: none; }
 	.dc-model .dc-model__sm,
 	.dc-mlist { display: block; }
 }

@@ -141,7 +141,8 @@
 .dc-model .ap:focus-visible .wol { stroke: var(--color-edge); stroke-width: 2; }
 .dc-model .ap.on .wol { stroke: var(--color-edge); stroke-width: 3; }
 .dc-model .ap .nm { font-size: 20px; }
-.dc-model .fa { fill: none; stroke: var(--color-edge); stroke-width: 2; }
+/* flows are neutral: orange marks what is lit, and an arrow is never lit (founder, 2026-10-20) */
+.dc-model .fa { fill: none; stroke: var(--color-light); stroke-width: 2; }
 .dc-model .ahw { fill: var(--color-light); }
 .dc-model .who .ic { fill: var(--color-light); }
 .dc-model .who .mk-d { fill: var(--color-console); stroke: var(--color-console-line); stroke-width: 1; }
@@ -187,6 +188,9 @@
 .dc-mlist small { display: block; font-family: var(--font-family-mono); font-size: 12px; line-height: 16px; font-weight: 400; color: var(--color-brand-grey); }
 
 /* ── the spine: one stop per layer, sticky under the header ────────── */
+/* the spine's height, declared once for the anchors: links 6 + 16 + 6 px, its padding, its 1 px rule */
+.dc { --dc-spine-h: calc(2 * var(--space-2) + 29px); }
+@media (max-width: 1023px) { .dc { --dc-spine-h: 0px; } }
 .dc-spine { position: sticky; top: var(--header-h); z-index: 20; padding-block: var(--space-2); background: var(--color-secondary); border-bottom: 1px solid var(--color-border); }
 .dc-spine__in { display: flex; align-items: center; gap: var(--space-1); }
 .dc-spine a {
@@ -215,14 +219,14 @@
 .dc-grp { padding-top: var(--space-8); }
 .dc-grp p { font-family: var(--font-family-mono); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted); padding-bottom: var(--space-2); border-bottom: 2px solid var(--color-primary); }
 .dc-grp code.cf { text-transform: none; letter-spacing: 0; }
-.dc-pl { padding-block: var(--space-8) var(--space-5); }
-/* a jump from the spine lands the plate's top under the header AND the sticky spine (~49 px, so --space-7
-   clears it). theme.css's `:target` margin (--space-6, for pages without a spine) has the same specificity
-   and loads later, so the selector carries `main`; it put the first plate of each group under the spine */
-main .dc-pl { scroll-margin-top: calc(var(--header-h) + var(--space-7)); }
-.dc-grp + .dc-pl { padding-top: var(--space-6); }
-.dc-pl__hd { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: var(--space-4); align-items: center; }
-.dc-pl__ic svg { display: block; width: 84px; height: 84px; }
+.dc-pl { --dc-pl-pad: var(--space-8); padding-block: var(--dc-pl-pad) var(--space-5); }
+/* a jump lands the plate's kicker one --space-4 under the header and the sticky spine, the padding above it
+   scrolled away, so the plate takes the screen (founder, 2026-10-20: "cada sección ocupase justo el above
+   the fold"). `main` outranks theme.css's `:target` margin, which loads later */
+main .dc-pl { scroll-margin-top: calc(var(--header-h) + var(--dc-spine-h) + var(--space-4) - var(--dc-pl-pad)); }
+.dc-grp + .dc-pl { --dc-pl-pad: var(--space-6); }
+.dc-pl__hd { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-4); align-items: center; }
+.dc-pl__ic svg { display: block; width: 64px; height: 64px; }
 .dc-pl__ic .iq { fill: none; stroke: var(--color-border); stroke-width: 1.5; stroke-dasharray: 3 3; }
 .dc-pl__ic .ib { fill: var(--color-console); }
 .dc-pl__ic .ig { fill: var(--color-border); }
@@ -236,7 +240,18 @@ main .dc-pl { scroll-margin-top: calc(var(--header-h) + var(--space-7)); }
 .dc-pl__k { font-family: var(--font-family-mono); font-size: 13px; color: var(--color-text-muted); }
 .dc-pl__lede { margin-top: var(--space-2); font-size: var(--text-body); line-height: 1.4; color: var(--color-ink-soft); text-wrap: pretty; }
 
-.dc-fig { margin-top: var(--space-5); background: var(--color-ground-dark); color: var(--color-secondary); border-radius: var(--radius); padding: var(--space-6) var(--space-5); }
+/* one paragraph under the subtitle, in the site's BLOCK chrome (the rule and the tint, as About's quotes) */
+.dc-pl__say {
+	margin-top: var(--space-4);
+	padding: var(--space-3) var(--space-4);
+	border-left: var(--block-rule) solid var(--color-primary);
+	background: var(--color-tint);
+	font-size: var(--text-body);
+	font-weight: 300;
+	line-height: 1.45;
+	text-wrap: pretty;
+}
+.dc-fig { margin-top: var(--space-5); background: var(--color-ground-dark); color: var(--color-secondary); border-radius: var(--radius); padding: var(--space-5); }
 .dc-flow { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); column-gap: var(--space-6); }
 .dc-flow.plain { column-gap: var(--space-3); }
 .dc-n {
@@ -263,11 +278,14 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-flow:not(.plain) .dc-n:not(:last-child)::before { content: ""; position: absolute; top: calc(50% - 4px); right: calc(-1 * var(--space-6) + 6px); border-left: 7px solid var(--color-brand-grey); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; }
 .dc-n em { position: absolute; top: calc(50% - 22px); right: calc(-1 * var(--space-6)); width: var(--space-6); text-align: center; font-style: normal; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-light); z-index: 1; }
 
-.dc-nums { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--space-5); margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--color-console-line); }
+.dc-nums { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--space-5); margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--color-console-line); }
 .dc-nums:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+/* under the photographs the figures need no rule: the space separates them */
+.dc-duo + .dc-nums { margin-top: var(--space-4); padding-top: 0; border-top: 0; }
 .dc-nm { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
 .dc-nm b { font-size: 56px; line-height: 56px; font-weight: 700; }
 .dc-nm span { font-size: 14px; line-height: 20px; color: var(--color-brand-grey); }
+.dc-nm--rings { grid-column: span 2; }
 .dc-lh { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .dc-lh div { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); }
 .dc-lh b { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; border: 3px solid var(--color-console-ok); border-radius: var(--radius-pill); font-size: 18px; font-weight: 700; }
@@ -285,28 +303,35 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-sw .v5 { background: var(--color-tail-ec); }
 .dc-sw .v6 { background: var(--color-tail-bd); }
 
-.dc-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-5); }
-.dc-duo img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); }
+.dc-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4); }
+.dc-duo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: cover; border-radius: var(--radius); }
 .dc-cap { margin-top: var(--space-2); font-size: 14px; line-height: 20px; color: var(--color-text-muted); }
 .dc-cap a { color: inherit; text-decoration: underline; }
 .dc-fig .dc-cap { color: var(--color-brand-grey); }
 .dc-shot { margin-top: var(--space-4); }
-.dc-shot img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--color-border); }
+.dc-shot img { display: block; width: 100%; height: auto; aspect-ratio: 21 / 8; object-fit: cover; object-position: 50% 0; border-radius: var(--radius); border: 1px solid var(--color-border); }
+/* each capture cut to the part the plate talks about */
+.dc-shot[data-f="red"] img { object-position: 50% 100%; }
+.dc-shot[data-f="entrega"] img,
+.dc-shot[data-f="contenido"] img { object-position: 50% 38%; }
+.dc-shot[data-f="calidad"] img { object-position: 50% 83%; }
 
 .dc-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
 /* the site's own ghost button (theme.css .btn-dark): one button family everywhere, square, 17/600 */
 .dc-links .btn::after { content: " ↗" / ""; }
 
 /* ── the ledger: every fact with the file that proves it ───────────── */
-.dc-more { margin-top: var(--space-4); border-top: 1px solid var(--color-primary); border-bottom: 1px solid var(--color-border); }
+.dc-more { margin-top: var(--space-4); }
 .dc-more > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; font-size: 15px; line-height: 20px; font-weight: 600; }
 .dc-more > summary::-webkit-details-marker { display: none; }
 .dc-more > summary::before { content: "+" / ""; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; width: var(--space-5); height: var(--space-5); border: 1px solid var(--color-primary); border-radius: var(--radius); font-family: var(--font-family-mono); font-size: 16px; font-weight: 400; }
 .dc-more[open] > summary::before { content: "−" / ""; }
 .dc-more > summary span { font-weight: 300; color: var(--color-text-muted); font-size: 14px; }
-.dc-led { padding-bottom: var(--space-4); }
-.dc-led li { padding: var(--space-3) 0; border-top: 1px solid var(--color-border); }
-main .dc-led li { scroll-margin-top: calc(var(--header-h) + var(--space-7) + var(--space-3)); }
+.dc-led { list-style: none; padding-bottom: var(--space-4); }
+.dc-led li { display: grid; grid-template-columns: var(--space-7) minmax(0, 1fr); column-gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--color-border-soft); }
+.dc-led li > :not(.dc-led__n) { grid-column: 2; }
+.dc-led__n { grid-row: 1 / span 2; font-family: var(--font-family-mono); font-size: 14px; line-height: 24px; font-weight: 500; color: var(--color-text-muted); }
+main .dc-led li { scroll-margin-top: calc(var(--header-h) + var(--dc-spine-h) + var(--space-4)); }
 .dc-led li:target { background: var(--color-surface); }
 .dc-led p { font-size: 16px; line-height: 24px; text-wrap: pretty; }
 .dc-lk { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-top: var(--space-2); font-size: 14px; line-height: 20px; }
@@ -337,16 +362,17 @@ main .dc-led li { scroll-margin-top: calc(var(--header-h) + var(--space-7) + var
 	.dc-nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 720px) {
-	.dc-pl { padding-block: var(--space-6) var(--space-4); }
+	.dc-pl, .dc-grp + .dc-pl { --dc-pl-pad: var(--space-6); padding-block: var(--dc-pl-pad) var(--space-4); }
 	.dc-grp { padding-top: var(--space-6); }
-	.dc-pl__hd { grid-template-columns: 60px minmax(0, 1fr); gap: var(--space-3); }
-	.dc-pl__ic svg { width: 60px; height: 60px; }
+	.dc-pl__hd { grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-3); }
+	.dc-pl__ic svg { width: 48px; height: 48px; }
 	.dc-fig { padding: var(--space-4) var(--space-3); }
 	.dc-duo { grid-template-columns: minmax(0, 1fr); }
 	.dc-nm b { font-size: 44px; line-height: 48px; }
 }
 @media (max-width: 420px) {
 	.dc-nums { grid-template-columns: minmax(0, 1fr); }
+	.dc-nm--rings { grid-column: 1 / -1; }
 	.dc-lh { gap: var(--space-2); }
 	.dc-lh b { width: 56px; height: 56px; font-size: 16px; }
 }

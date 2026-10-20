@@ -13,10 +13,12 @@ import type { UiLabels } from "../../utils/ui-labels";
 
 interface Props {
 	layer: Layer;
+	/** the plate's place on the page, 1-based: it numbers the ledger (1.1, 1.2…) */
+	num: number;
 	labels: UiLabels;
 	repoUrl: string;
 }
-const { layer, labels, repoUrl } = Astro.props;
+const { layer, num, labels, repoUrl } = Astro.props;
 const L = (k: string, fb: string) => labels.get("deconstruct_labels", k, fb);
 
 /* the icon is the map in miniature, the layer's own piece lit */
@@ -62,12 +64,7 @@ const hasFigure = nodes.length > 0 || numbers.length > 0 || rings.length > 0 || 
 			</div>
 		</header>
 
-		{layer.figure === "emdash" && layer.capture && (
-			<figure class="dc-shot">
-				<img src={layer.capture.src} alt={layer.capture.alt ?? ""} width={layer.capture.width} height={layer.capture.height} loading="lazy" decoding="async" />
-				{layer.capture_caption && <figcaption class="dc-cap" set:html={layerHtml(layer.capture_caption)} />}
-			</figure>
-		)}
+		{layer.intro && <p class="dc-pl__say" set:html={layerHtml(layer.intro)} />}
 
 		{hasFigure && (
 			<div class="dc-fig">
@@ -95,8 +92,10 @@ const hasFigure = nodes.length > 0 || numbers.length > 0 || rings.length > 0 || 
 						})}
 					</div>
 				)}
-				{numbers.length > 0 && (
-					<div class="dc-nums" style={`--n:${numbers.length}`}>
+				{/* figures and the Lighthouse rings share one row: the rings take two columns, so the quality plate's
+				    diagram stays one band high (founder, 2026-10-20: each plate fits the screen) */}
+				{(numbers.length > 0 || rings.length > 0) && (
+					<div class="dc-nums" style={`--n:${numbers.length + (rings.length > 0 ? 2 : 0)}`}>
 						{numbers.map((s) => (
 							<div class="dc-nm">
 								{s.kind === "swatches" ? (
@@ -110,21 +109,28 @@ const hasFigure = nodes.length > 0 || numbers.length > 0 || rings.length > 0 || 
 								<span set:html={layerHtml(s.label)} />
 							</div>
 						))}
-					</div>
-				)}
-				{rings.length > 0 && (
-					<div class="dc-nums" style="--n:1">
-						<div class="dc-nm">
-							<div class="dc-lh">
-								{rings.map((s) => (
-									<div><b>{s.value}</b><span set:html={layerHtml(s.label)} /></div>
-								))}
+						{rings.length > 0 && (
+							<div class="dc-nm dc-nm--rings">
+								<div class="dc-lh">
+									{rings.map((s) => (
+										<div><b>{s.value}</b><span set:html={layerHtml(s.label)} /></div>
+									))}
+								</div>
+								{layer.stats_note && <span set:html={layerHtml(layer.stats_note)} />}
 							</div>
-							{layer.stats_note && <span set:html={layerHtml(layer.stats_note)} />}
-						</div>
+						)}
 					</div>
 				)}
 			</div>
+		)}
+
+		{/* the capture comes after the diagram, cut short (deconstruct.css), so the title, the subtitle, the
+		    paragraph and the diagram are what a jump to the plate shows */}
+		{layer.capture && (
+			<figure class="dc-shot" data-f={layer.figure}>
+				<img src={layer.capture.src} alt={layer.capture.alt ?? ""} width={layer.capture.width} height={layer.capture.height} loading="lazy" decoding="async" />
+				{layer.capture_caption && <figcaption class="dc-cap" set:html={layerHtml(layer.capture_caption)} />}
+			</figure>
 		)}
 
 		{links.length > 0 && (
@@ -135,23 +141,18 @@ const hasFigure = nodes.length > 0 || numbers.length > 0 || rings.length > 0 || 
 			</div>
 		)}
 
-		{layer.figure !== "emdash" && layer.capture && (
-			<figure class="dc-shot">
-				<img src={layer.capture.src} alt={layer.capture.alt ?? ""} width={layer.capture.width} height={layer.capture.height} loading="lazy" decoding="async" />
-				{layer.capture_caption && <figcaption class="dc-cap" set:html={layerHtml(layer.capture_caption)} />}
-			</figure>
-		)}
-
 		{facts.length > 0 && (
 			<details class="dc-more">
 				<summary>{L("details", "Detalle y pruebas")} <span>{facts.length} {rowsLabel}</span></summary>
 				<ol class="dc-led">
-					{facts.map((f) => (
+					{facts.map((f, i) => (
 						<li id={f.key}>
+							{/* section.row, the plate's place on the page and the fact's in its list (founder: "1.1") */}
+							<b class="dc-led__n">{num}.{i + 1}</b>
 							<p set:html={layerHtml(f.text)} />
 							<div class="dc-lk">
 								{f.file && <a class="dc-lk__r" href={fileHref(f.file)} target="_blank" rel="noopener noreferrer">{f.file}</a>}
-								{!f.file && f.file_note && <span class="dc-lk__n">{L("no_file", "sin fichero")}: {f.file_note}</span>}
+								{!f.file && f.file_note && <span class="dc-lk__n">{L("no_file", "sin fichero")}: <Fragment set:html={layerHtml(f.file_note)} /></span>}
 								{f.docs && <span class="dc-lk__d" set:html={layerHtml(f.docs)} />}
 							</div>
 						</li>

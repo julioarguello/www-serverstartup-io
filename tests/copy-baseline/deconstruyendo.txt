@@ -49,7 +49,8 @@ Calidad
 CUATRO CAPAS, EN Cloudflare
 capa 1 · Cloudflare
 La red
-Un DNS firmado, TLS 1.3 y un dominio cuyo origen es el Worker.
+Cómo llega una visita hasta el Worker.
+Cuando escribes la dirección, responde el DNS de Cloudflare. La zona está firmada con DNSSEC, así que nadie puede suplantarla por el camino. La conexión se cifra como mínimo con TLS 1.3 y, en los navegadores que lo admiten, ni siquiera el nombre del sitio viaja en claro. Al final del camino no hay un servidor, sino un Worker.
 visitante
 abre una página
 DNSSEC
@@ -63,15 +64,18 @@ el origen
 El panel de Cloudflare de la zona: TLS 1.3 como mínimo y Encrypted Client Hello activado.
 Detalle y pruebas
 2 filas
+1.1
 El DNS es autoritativo en Cloudflare y la zona está firmada con DNSSEC.
 sin fichero: se comprueba en la API de la zona
 DNS en configuración completa · DNSSEC
+1.2
 TLS 1.3 es la versión mínima que acepta la zona. Encrypted Client Hello está activo. Los clientes que lo admiten reciben además el acuerdo de claves poscuántico que Cloudflare ofrece por defecto.
 sin fichero: se comprueba en la API de la zona
 TLS mínimo · Encrypted Client Hello · poscuántico
 capa 2 · Cloudflare
 La caché
-Un acierto no ejecuta el Worker.
+Qué se guarda en el borde y cuándo se borra.
+La caché de Cloudflare está delante del Worker: si una página ya está guardada, se entrega sin ejecutar nada. Solo se guardan las páginas que lo piden; el resto sale sin caché. Al publicar un cambio en el CMS se borran, por etiqueta, esa página y las que la incluyen en un listado.
 petición
 de un visitante
 Workers Cache
@@ -81,23 +85,29 @@ Workers
 renderiza
 Detalle y pruebas
 5 filas
+2.1
 Workers Cache está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.
 wrangler.jsonc
 Workers Cache
+2.2
 Una página renderizada solo se guarda en el borde si lo pide. Cualquier otra respuesta renderizada sale con no-store.
 src/middleware.ts
+2.3
 Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: caducan antes de una hora.
 src/plugins/cache-purge.ts
 última comprobación en verde, 2026-08-23 · purga
+2.4
 Lo compilado bajo /_astro/ lleva hash de contenido y se sirve con un año de max-age, immutable.
 public/_headers
 cabeceras de Static Assets
+2.5
 Las imágenes redimensionadas se guardan en la Cache API.
-sin fichero: en la dependencia `@astrojs/cloudflare`
+sin fichero: en la dependencia @astrojs/cloudflare
 Cache API
 capa 3 · Cloudflare
 Cómputo
-Un Worker y ningún servidor detrás.
+Dónde se ejecuta el código que genera cada página.
+Un solo Worker de Cloudflare genera cada página en el momento con Astro. Los ficheros que no cambian, como estilos, scripts e imágenes, se sirven sin ejecutarlo, y no hay ningún servidor detrás. Antes de responder, el Worker añade siete cabeceras de seguridad a cada página.
 Workers Static Assets
 los ficheros, sin Worker
 Workers
@@ -112,23 +122,29 @@ cabeceras de seguridad
 bindings
 Detalle y pruebas
 5 filas
+3.1
 Un solo Worker renderiza las páginas bajo demanda con Astro (SSR). Los ficheros compilados se sirven como Workers Static Assets sin ejecutarlo. No hay servidor detrás del Worker.
 astro.config.mjs
 Astro en Workers · Static Assets
+3.2
 El equipo que hace Astro trabaja en Cloudflare desde enero de 2026. Astro sigue con licencia MIT y gobierno abierto.
 sin fichero: lo cuenta el anuncio
 anuncio
+3.3
 Un middleware pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP no admite ningún script de terceros.
 src/middleware.ts
+3.4
 El Worker sabe la ciudad del visitante y qué centro de datos de Cloudflare respondió (request.cf). La apertura de seguridad en el borde los muestra.
 src/pages/api/whoami.ts
 request.cf
+3.5
 Los plugins del CMS pueden ejecutarse en su propio Dynamic Worker, sin red propia y con límites fijos de CPU, subpeticiones y tiempo. Todo lo que hacen pasa por un puente que comprueba las capacidades que declara cada uno.
 wrangler.jsonc
 Dynamic Workers · sandbox de plugins
 capa 4 · Cloudflare
 Datos
-Cuatro almacenes, cuatro trabajos.
+Dónde se guarda cada cosa.
+El contenido vive en D1, la base de datos SQLite de Cloudflare. Las sesiones de quien edita van en Workers KV; Images ajusta cada imagen a su hueco y la convierte a WebP, y R2 queda conectado para los medios que se suban desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.
 D1
 contenido
 Workers KV
@@ -140,46 +156,57 @@ medios del CMS
 Los bindings del Worker en el panel de Cloudflare. El sexto, ASSETS, lo añade el adaptador de Astro al compilar.
 Detalle y pruebas
 5 filas
+4.1
 D1 (SQLite) guarda el contenido, sus revisiones y los ajustes. Cada petición abre una sesión de D1.
 wrangler.jsonc
 D1 · sesiones
+4.2
 Workers KV guarda las sesiones de los editores.
 wrangler.jsonc
 Workers KV
+4.3
 El Worker pasa cada imagen al binding de Images, que la ajusta a su hueco y la convierte a WebP.
 wrangler.jsonc
 binding de Images
+4.4
 R2 está conectado como almacén de medios del CMS. Hoy cada imagen del sitio viaja con el código.
 wrangler.jsonc
 R2
+4.5
 Preview y producción tienen cada una su D1, su Workers KV y su R2.
 wrangler.jsonc
 DENTRO DEL WORKER
 dentro del Worker
 Presentación
-Ninguna petición a terceros.
-Cabo Peñas · Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restaurada; mástiles retirados y encuadre ampliado con IA
-Guggenheim · Sergio S.C · Wikimedia Commons · CC BY-SA 2.0 · restaurada; solar reconstruido con IA
+Cómo se dibuja lo que ves.
+La interfaz está hecha con Astro y una sola hoja de estilos: CI rechaza cualquier color, tamaño o espaciado escrito fuera de ella. Fuentes, scripts e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas combinan fotografías restauradas con un dibujo que se anima en el navegador.
+Cabo Peñas · Einaz80 · CC BY-SA 4.0
+Guggenheim · Sergio S.C · CC BY-SA 2.0
 0
 peticiones a terceros al cargar una página
 una hoja de estilos para todo
 Detalle y pruebas
 5 filas
+5.1
 Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
 src/styles/theme.css
+5.2
 Cargar una página no hace ninguna petición a terceros. Fuentes, scripts e imágenes son del propio sitio.
 src/middleware.ts
+5.3
 Cada vertical abre con una fotografía de Wikimedia Commons, restaurada y redibujada en parte, y una capa dibujada en vivo en el navegador. La capa se coloca según el texto medido, y su reloj se para a los ocho segundos: nada se repite.
 src/utils/hero-art.ts
+5.4
 Las fotografías se restauraron en local con SeedVR2. FLUX.2 [dev] (Black Forest Labs) en Workers AI retiró objetos, amplió encuadres y redibujó a partir de las fotografías. Cada prompt está en el repositorio.
 docs/design/hero-rotativo/photo_restore.py
 [FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
+5.5
 Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
 seed/seed.json
 dentro del Worker
 El CMS: EmDash
-El CMS de código abierto de Cloudflare, dentro del mismo Worker.
-El editor de EmDash, en el admin del sitio.
+Dónde se edita el contenido.
+EmDash es el CMS de código abierto de Cloudflare y corre dentro del mismo Worker que sirve la web. Desde su panel se editan páginas, servicios, menús y cada etiqueta de la interfaz, en español y en inglés. Al publicar, un plugin guardado en el repositorio borra de la caché lo que ha cambiado.
 editor
 con passkey
 EmDash
@@ -187,33 +214,42 @@ OAuth 2.1
 token
 agente de IA
 por MCP
+El editor de EmDash, en el admin del sitio.
 El anuncio
 Cloudflare lo usa en su blog
 El código
 La documentación
 Detalle y pruebas
 7 filas
+6.1
 EmDash, el CMS de código abierto (MIT) que Cloudflare anunció en abril de 2026, corre dentro del mismo Worker. Aún no ha llegado a la 1.0.
 package.json
 anuncio · código · documentación
+6.2
 Cloudflare publica su propio blog con EmDash.
 sin fichero: lo cuenta su blog
 el blog de Cloudflare
+6.3
 Cinco tipos de contenido: páginas, servicios, miembros, referencias y partners, con entradas de blog preparadas y vacías. Páginas y servicios tienen borradores; esos dos y miembros guardan revisiones. Los cuerpos son Portable Text.
 seed/seed.json
 documentación
+6.4
 Dos idiomas: páginas, servicios y miembros se publican en pares enlazados por translationOf.
 seed/seed.json
+6.5
 Menús, áreas de widgets, ajustes del sitio y taxonomías vienen del CMS. Cada etiqueta de la interfaz vive en un widget, no en una plantilla.
 src/utils/ui-labels.ts
+6.6
 La búsqueda es la de EmDash, sobre SQLite FTS5 con ranking bm25.
-sin fichero: en `EmDash`, migración 064
+sin fichero: en EmDash, migración 064
+6.7
 Un plugin guardado en el repositorio purga la caché al publicar. Declara content:read, porque sin él EmDash se salta sus hooks.
 astro.config.mjs
 TRANSVERSAL, DESDE EL TALLER
 transversal · desde el taller
 Entrega
-La preview se despliega sola; producción, a mano.
+Cómo llega un cambio a producción.
+Cada cambio entra por un pull request y pasa 24 pasos de comprobación sobre una copia local del sitio. Si todos pasan en la rama principal, la versión de pruebas se despliega sola con wrangler. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.
 pull request
 un cambio
 24 pasos
@@ -224,50 +260,61 @@ se despliega sola
 a mano
 producción
 la arranca el fundador
+La preview se despliega sola después de que pasen las puertas, en GitHub Actions.
 Las ejecuciones en GitHub Actions
 wrangler-action
-La preview se despliega sola después de que pasen las puertas, en GitHub Actions.
 Detalle y pruebas
 5 filas
+7.1
 El repositorio de trabajo es público, con todos sus commits.
 README.md
 el repositorio
+7.2
 Cada cambio que puede llegar a una página pasa 24 pasos que pueden fallar. Un test deriva ese número del workflow.
 .github/workflows/ci.yml
+7.3
 Las puertas ejecutan el sitio en local sobre workerd, el runtime de código abierto de Workers, con wrangler dev. Si wrangler se cae por un fallo suyo, la pila se reinicia una vez y el resumen lo dice.
 scripts/ci-local-stack.sh
 workerd
+7.4
 Cuando las puertas pasan en main, la preview se despliega sola con wrangler-action. Espera a las migraciones de D1, vuelve a sembrar tras ensayar el SQL en una base desechable y lanza una batería de humo.
 .github/workflows/deploy-preview.yml
 GitHub Actions · wrangler-action
+7.5
 Producción solo se despliega cuando el fundador lo arranca a mano, y una guarda se niega a sobrescribir una base de datos que tiene contenido.
 .github/workflows/deploy-production.yml
 transversal · desde el taller
 Contenido
-Cada frase, en un fichero versionado.
+Dónde está escrito cada texto.
+Todo el texto de la web está en un fichero versionado, seed/seed.json, en español y en inglés. En cada cambio, CI construye el sitio y llena con ese fichero una base de datos vacía, así que la web entera se puede rehacer desde cero en cualquier momento.
 seed/seed.json
 cada frase
 D1, vacía
 ×12 en paralelo
 el sitio
 ES ↔ EN
+La carpeta seed/ del repositorio público.
 seed/seed.json en GitHub
 Las páginas de servicio en Markdown
-La carpeta seed/ del repositorio público.
 Detalle y pruebas
 4 filas
+8.1
 Cada frase que renderiza el sitio vive en un fichero versionado, seed/seed.json. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.
 seed/seed.json
 ficheros semilla
+8.2
 En cada cambio que puede llegar a una página, CI compila el sitio y llena una base de datos vacía desde ese fichero, doce veces en paralelo.
 .github/workflows/ci.yml
+8.3
 Los slugs de servicio están traducidos, así que la URL del otro idioma nunca se adivina. hreflang y el selector de idioma leen el mismo valor resuelto.
 src/utils/alternate.ts
+8.4
 El sitemap se genera desde las colecciones del CMS.
 src/pages/sitemap.xml.ts
 transversal · en cada cambio
 Calidad
-Comprobaciones que se prueban a sí mismas.
+Qué se comprueba antes de publicar nada.
+Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran: así nunca aprueban por no haber mirado. Además, Lighthouse mide el rendimiento, el texto de 30 rutas está congelado y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.
 24
 pasos que pueden fallar
 30
@@ -281,25 +328,32 @@ buenas prácticas
 100
 SEO
 Lighthouse en 9 páginas, en CI contra una copia local, el 2026-10-16
+Las puertas de un cambio en main, todas en verde, el 2026-10-16.
 La ejecución del 2026-10-16
 lighthouserc.json
-Las puertas de un cambio en main, todas en verde, el 2026-10-16.
 Detalle y pruebas
 7 filas
+9.1
 Las comprobaciones de accesibilidad, motores, diseño, maquetación, textos, idiomas y nombres plantan el defecto que buscan, y tienen que cazarlo antes de dar verde.
 .github/workflows/ci.yml
+9.2
 Lighthouse en CI, contra una copia local, con la mediana de 3 pasadas en 9 páginas: rendimiento ≥95; accesibilidad, buenas prácticas y SEO, 100. Las nueve lo cumplieron el 2026-10-16.
 lighthouserc.json
 la ejecución
+9.3
 Accesibilidad: axe (WCAG 2.2 A+AA) y un recorrido con teclado en todas las rutas del sitio, más reflujo a 320 px. Donde hay texto sobre una fotografía, el contraste se mide en los píxeles renderizados.
 scripts/ci-check-a11y.mjs
+9.4
 Cada apertura se comprueba a mitad de animación y en reposo, con el motor de Safari (perfiles de iPhone y de escritorio) y el de Chrome (Pixel 7), también con movimiento reducido.
 scripts/ci-check-engines.mjs
+9.5
 El texto renderizado de 30 rutas está congelado. Cambiar una palabra falla hasta que el texto nuevo se captura a propósito, así que el cambio se ve en el diff del pull request.
 scripts/copy-baseline.mjs
+9.6
 Agentes de IA escriben la mayor parte del código bajo reglas escritas, y el fundador fusiona cada pull request.
 sin fichero: lo muestra el historial de fusiones
 el repositorio
+9.7
 Cada push se analiza en busca de secretos, y una guarda rechaza nombrar a clientes que no podemos nombrar.
 .github/workflows/ci.yml
 El taller, abierto

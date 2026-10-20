@@ -319,6 +319,11 @@
 					"type": "text"
 				},
 				{
+					"slug": "intro",
+					"label": "Explicación",
+					"type": "text"
+				},
+				{
 					"slug": "figure",
 					"label": "Figura",
 					"type": "select",
@@ -19025,7 +19030,8 @@
 					"short": "Red",
 					"map_note": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
 					"summary": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
-					"lede": "Un DNS firmado, TLS 1.3 y un dominio cuyo origen es el Worker.",
+					"lede": "Cómo llega una visita hasta el Worker.",
+					"intro": "Cuando escribes la dirección, responde el DNS de `Cloudflare`. La zona está firmada con `DNSSEC`, así que nadie puede suplantarla por el camino. La conexión se cifra como mínimo con TLS 1.3 y, en los navegadores que lo admiten, ni siquiera el nombre del sitio viaja en claro. Al final del camino no hay un servidor, sino un Worker.",
 					"figure": "red",
 					"nodes": [
 						{
@@ -19113,7 +19119,8 @@
 					"short": "Network",
 					"map_note": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
 					"summary": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
-					"lede": "A signed DNS zone, TLS 1.3, and a domain whose origin is the Worker.",
+					"lede": "How a visit reaches the Worker.",
+					"intro": "When you type the address, `Cloudflare`'s DNS answers. The zone is signed with `DNSSEC`, so nobody can spoof it along the way. The connection is encrypted with TLS 1.3 at the least, and in browsers that support it not even the site's name travels in the clear. At the end of the road there is no server, only a Worker.",
 					"figure": "red",
 					"nodes": [
 						{
@@ -19202,7 +19209,8 @@
 					"short": "Caché",
 					"map_note": "`Workers Cache` · purga por etiqueta",
 					"summary": "`Workers Cache`",
-					"lede": "Un acierto no ejecuta el Worker.",
+					"lede": "Qué se guarda en el borde y cuándo se borra.",
+					"intro": "La caché de `Cloudflare` está delante del Worker: si una página ya está guardada, se entrega sin ejecutar nada. Solo se guardan las páginas que lo piden; el resto sale sin caché. Al publicar un cambio en el CMS se borran, por etiqueta, esa página y las que la incluyen en un listado.",
 					"figure": "cache",
 					"nodes": [
 						{
@@ -19276,7 +19284,8 @@
 					"short": "Cache",
 					"map_note": "`Workers Cache` · purge by tag",
 					"summary": "`Workers Cache`",
-					"lede": "A hit does not run the Worker.",
+					"lede": "What is kept at the edge, and when it is cleared.",
+					"intro": "`Cloudflare`'s cache sits in front of the Worker: a page already stored is delivered without running anything. Only pages that ask for it are stored; everything else goes out uncached. Publishing a change in the CMS clears, by tag, that page and every page that lists it.",
 					"figure": "cache",
 					"nodes": [
 						{
@@ -19351,7 +19360,8 @@
 					"short": "Cómputo",
 					"map_note": "`Workers` · `Astro` · `Dynamic Workers`",
 					"summary": "`Workers` · `Static Assets` · `Dynamic Workers`",
-					"lede": "Un Worker y ningún servidor detrás.",
+					"lede": "Dónde se ejecuta el código que genera cada página.",
+					"intro": "Un solo Worker de `Cloudflare` genera cada página en el momento con `Astro`. Los ficheros que no cambian, como estilos, *scripts* e imágenes, se sirven sin ejecutarlo, y no hay ningún servidor detrás. Antes de responder, el Worker añade siete cabeceras de seguridad a cada página.",
 					"figure": "computo",
 					"nodes": [
 						{
@@ -19442,7 +19452,8 @@
 					"short": "Compute",
 					"map_note": "`Workers` · `Astro` · `Dynamic Workers`",
 					"summary": "`Workers` · `Static Assets` · `Dynamic Workers`",
-					"lede": "One Worker, and no server behind it.",
+					"lede": "Where the code that builds each page runs.",
+					"intro": "A single `Cloudflare` Worker builds each page on request with `Astro`. Files that never change, such as styles, scripts and images, are served without running it, and there is no server behind it. Before answering, the Worker adds seven security headers to every page.",
 					"figure": "computo",
 					"nodes": [
 						{
@@ -19534,7 +19545,8 @@
 					"short": "Datos",
 					"map_note": "`D1` · `Workers KV` · `Images` · `R2`",
 					"summary": "`D1` · `Workers KV` · `Images` · `R2`",
-					"lede": "Cuatro almacenes, cuatro trabajos.",
+					"lede": "Dónde se guarda cada cosa.",
+					"intro": "El contenido vive en `D1`, la base de datos `SQLite` de `Cloudflare`. Las sesiones de quien edita van en `Workers KV`; `Images` ajusta cada imagen a su hueco y la convierte a WebP, y `R2` queda conectado para los medios que se suban desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.",
 					"figure": "datos",
 					"nodes": [
 						{
@@ -19621,7 +19633,8 @@
 					"short": "Data",
 					"map_note": "`D1` · `Workers KV` · `Images` · `R2`",
 					"summary": "`D1` · `Workers KV` · `Images` · `R2`",
-					"lede": "Four stores, four jobs.",
+					"lede": "Where each thing is kept.",
+					"intro": "Content lives in `D1`, `Cloudflare`'s `SQLite` database. Editors' sessions go to `Workers KV`; `Images` fits each picture to its slot and turns it into WebP; and `R2` is wired up for media uploaded through the CMS. The preview and production share none of the four.",
 					"figure": "datos",
 					"nodes": [
 						{
@@ -19709,7 +19722,8 @@
 					"short": "EmDash",
 					"map_note": "el CMS · en el `Worker`",
 					"summary": "OAuth 2.1 · MCP · *passkeys*",
-					"lede": "El CMS de código abierto de `Cloudflare`, dentro del mismo Worker.",
+					"lede": "Dónde se edita el contenido.",
+					"intro": "`EmDash` es el CMS de código abierto de `Cloudflare` y corre dentro del mismo Worker que sirve la web. Desde su panel se editan páginas, servicios, menús y cada etiqueta de la interfaz, en español y en inglés. Al publicar, un *plugin* guardado en el repositorio borra de la caché lo que ha cambiado.",
 					"figure": "emdash",
 					"nodes": [
 						{
@@ -19833,7 +19847,8 @@
 					"short": "EmDash",
 					"map_note": "the CMS · inside the `Worker`",
 					"summary": "OAuth 2.1 · MCP · passkeys",
-					"lede": "The `Cloudflare` open-source CMS, inside the same Worker.",
+					"lede": "Where the content is edited.",
+					"intro": "`EmDash` is `Cloudflare`'s open-source CMS, and it runs inside the same Worker that serves the site. Its admin edits pages, services, menus and every interface label, in Spanish and English. On publishing, a plugin kept in the repository clears what changed from the cache.",
 					"figure": "emdash",
 					"nodes": [
 						{
@@ -19958,7 +19973,8 @@
 					"short": "Presentación",
 					"map_note": "`Astro` · en el `Worker`",
 					"summary": "`Astro` · una hoja · 0 terceros",
-					"lede": "Ninguna petición a terceros.",
+					"lede": "Cómo se dibuja lo que ves.",
+					"intro": "La interfaz está hecha con `Astro` y una sola hoja de estilos: CI rechaza cualquier color, tamaño o espaciado escrito fuera de ella. Fuentes, *scripts* e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas combinan fotografías restauradas con un dibujo que se anima en el navegador.",
 					"figure": "presentacion",
 					"stats": [
 						{
@@ -19980,7 +19996,7 @@
 								"height": 675
 							},
 							"alt": "La apertura de seguridad en el borde en reposo: el faro de Cabo Peñas con su perfil en naranja y el barrido del radar",
-							"caption": "Cabo Peñas · Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es) · restaurada; mástiles retirados y encuadre ampliado con IA"
+							"caption": "Cabo Peñas · Einaz80 · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es)"
 						},
 						{
 							"image": {
@@ -19989,7 +20005,7 @@
 								"height": 676
 							},
 							"alt": "La apertura de desarrollo greenfield en reposo: el museo Guggenheim de Bilbao desde la ría",
-							"caption": "Guggenheim · Sergio S.C · Wikimedia Commons · [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.es) · restaurada; solar reconstruido con IA"
+							"caption": "Guggenheim · Sergio S.C · [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.es)"
 						}
 					],
 					"facts": [
@@ -20040,7 +20056,8 @@
 					"short": "Presentation",
 					"map_note": "`Astro` · inside the `Worker`",
 					"summary": "`Astro` · one stylesheet · 0 third parties",
-					"lede": "No third-party requests.",
+					"lede": "How what you see is drawn.",
+					"intro": "The interface is built with `Astro` and a single stylesheet: CI rejects any colour, size or spacing written anywhere else. Fonts, scripts and images come from the site itself, asking nothing of third parties. The openings pair restored photographs with a drawing animated in the browser.",
 					"figure": "presentacion",
 					"stats": [
 						{
@@ -20062,7 +20079,7 @@
 								"height": 675
 							},
 							"alt": "The edge-security opening at rest: the Cabo Peñas lighthouse with its outline in orange and the radar sweep",
-							"caption": "Cabo Peñas · Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en) · restored; masts removed and frame extended with AI"
+							"caption": "Cabo Peñas · Einaz80 · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en)"
 						},
 						{
 							"image": {
@@ -20071,7 +20088,7 @@
 								"height": 676
 							},
 							"alt": "The greenfield development opening at rest: the Guggenheim Museum Bilbao seen from the estuary",
-							"caption": "Guggenheim · Sergio S.C · Wikimedia Commons · [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.en) · restored; empty plot rebuilt with AI"
+							"caption": "Guggenheim · Sergio S.C · [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.en)"
 						}
 					],
 					"facts": [
@@ -20123,7 +20140,8 @@
 					"short": "Contenido",
 					"map_note": "`seed.json` · ES ↔ EN",
 					"summary": "`seed.json` → `D1`",
-					"lede": "Cada frase, en un fichero versionado.",
+					"lede": "Dónde está escrito cada texto.",
+					"intro": "Todo el texto de la web está en un fichero versionado, `seed/seed.json`, en español y en inglés. En cada cambio, CI construye el sitio y llena con ese fichero una base de datos vacía, así que la web entera se puede rehacer desde cero en cualquier momento.",
 					"figure": "contenido",
 					"nodes": [
 						{
@@ -20195,7 +20213,8 @@
 					"short": "Content",
 					"map_note": "`seed.json` · ES ↔ EN",
 					"summary": "`seed.json` → `D1`",
-					"lede": "Every sentence, in a versioned file.",
+					"lede": "Where every text is written.",
+					"intro": "Every word on the site lives in one versioned file, `seed/seed.json`, in Spanish and English. On every change, CI builds the site and fills an empty database from that file, so the whole site can be rebuilt from scratch at any time.",
 					"figure": "contenido",
 					"nodes": [
 						{
@@ -20268,7 +20287,8 @@
 					"short": "Entrega",
 					"map_note": "`GitHub Actions` · `wrangler`",
 					"summary": "`wrangler` → *preview* · producción",
-					"lede": "La preview se despliega sola; producción, a mano.",
+					"lede": "Cómo llega un cambio a producción.",
+					"intro": "Cada cambio entra por un *pull request* y pasa 24 pasos de comprobación sobre una copia local del sitio. Si todos pasan en la rama principal, la versión de pruebas se despliega sola con `wrangler`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.",
 					"figure": "entrega",
 					"nodes": [
 						{
@@ -20356,7 +20376,8 @@
 					"short": "Delivery",
 					"map_note": "`GitHub Actions` · `wrangler`",
 					"summary": "`wrangler` → preview · production",
-					"lede": "The preview deploys itself; production goes out by hand.",
+					"lede": "How a change reaches production.",
+					"intro": "Every change comes in as a pull request and goes through 24 steps of checks against a local copy of the site. If they all pass on main, the preview deploys itself with `wrangler`. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.",
 					"figure": "entrega",
 					"nodes": [
 						{
@@ -20445,7 +20466,8 @@
 					"short": "Calidad",
 					"map_note": "24 pasos · Lighthouse · axe",
 					"summary": "24 pasos · Lighthouse · axe",
-					"lede": "Comprobaciones que se prueban a sí mismas.",
+					"lede": "Qué se comprueba antes de publicar nada.",
+					"intro": "Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran: así nunca aprueban por no haber mirado. Además, Lighthouse mide el rendimiento, el texto de 30 rutas está congelado y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.",
 					"figure": "calidad",
 					"stats": [
 						{
@@ -20549,7 +20571,8 @@
 					"short": "Quality",
 					"map_note": "24 steps · Lighthouse · axe",
 					"summary": "24 steps · Lighthouse · axe",
-					"lede": "Checks that prove themselves.",
+					"lede": "What is checked before anything is published.",
+					"intro": "The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it, so they never pass by not looking. Lighthouse also measures performance, the text of 30 routes is frozen, and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.",
 					"figure": "calidad",
 					"stats": [
 						{

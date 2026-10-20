@@ -68,7 +68,7 @@ const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.
 	{groups.map((g) => (
 		<>
 			<div class="dc-grp"><div class="container"><p set:html={layerHtml(groupLabel[g.key])} /></div></div>
-			{g.layers.map((l) => <DecPlate layer={l} labels={labels} repoUrl={repoUrl} />)}
+			{g.layers.map((l) => <DecPlate layer={l} num={layers.indexOf(l) + 1} labels={labels} repoUrl={repoUrl} />)}
 		</>
 	))}
 

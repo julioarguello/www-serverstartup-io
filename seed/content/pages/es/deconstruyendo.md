@@ -1,5 +1,5 @@
 ---
-excerpt: "Cómo está hecha, capa a capa: de la red de `Cloudflare` a las comprobaciones que pasa cada cambio. Cada afirmación enlaza al fichero que la prueba."
+excerpt: "Así está hecha esta web. Funciona sobre `Cloudflare`, una red de centros de datos repartidos por el mundo, y cada dato enlaza al fichero que lo demuestra."
 ---
 
 ## El taller, abierto

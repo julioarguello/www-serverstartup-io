@@ -3,7 +3,7 @@ Skip to content
 /en/deconstructing
 ES
 Deconstructing this website
-How it is built, layer by layer: from the Cloudflare network to the checks every change goes through. Every claim links to the file that proves it.
+This is how this website is built. It runs on Cloudflare, a network of data centres around the world, and every claim on this page links to the file that proves it.
 Quality
 24 steps · Lighthouse · axe
 04
@@ -26,12 +26,12 @@ GitHub Actions · wrangler
 /_emdash/admin
 EmDash
 the CMS · inside the Worker
-/
-Presentation
-Astro · inside the Worker
 I edit
 Server Startup:
 an editor or an AI agent
+/
+Presentation
+Astro · inside the Worker
 you see
 1
 Network
@@ -49,8 +49,8 @@ Quality
 FOUR LAYERS, ON Cloudflare
 layer 1 · Cloudflare
 The network
-How a visit reaches the Worker.
-When you type the address, Cloudflare's DNS answers. The zone is signed with DNSSEC, so nobody can spoof it along the way. The connection is encrypted with TLS 1.3 at the least, and in browsers that support it not even the site's name travels in the clear. At the end of the road there is no server, only a Worker.
+How a visit reaches this website.
+When you type the address, Cloudflare's DNS answers. The zone is signed with DNSSEC, a signature that lets anyone check the answer was not altered on the way. The connection is encrypted with TLS 1.3 at the least, and in browsers that support it not even the site's name travels in the clear. On the other side there is no server of our own: a Worker answers, a program Cloudflare runs in the data centre closest to the visitor.
 visitor
 opens a page
 DNSSEC
@@ -74,8 +74,8 @@ no file: checked in the zone's API
 Minimum TLS · Encrypted Client Hello · post-quantum
 layer 2 · Cloudflare
 The cache
-What is kept at the edge, and when it is cleared.
-Cloudflare's cache sits in front of the Worker: a page already stored is delivered without running anything. Only pages that ask for it are stored; everything else goes out uncached. Publishing a change in the CMS clears, by tag, that page and every page that lists it.
+Which pages are kept ready-made, and when they are cleared.
+In front of the Worker sits Cloudflare's cache, which keeps copies of pages in each data centre. If the page you ask for is already stored, it is delivered without running the Worker. Only pages that ask for it are stored, and publishing a change from the content management system (the CMS) clears, by tag, that page and every page that lists it.
 request
 from a visitor
 Workers Cache
@@ -107,7 +107,7 @@ Cache API
 layer 3 · Cloudflare
 Compute
 Where the code that builds each page runs.
-A single Cloudflare Worker builds each page on request with Astro. Files that never change, such as styles, scripts and images, are served without running it, and there is no server behind it. Before answering, the Worker adds seven security headers to every page.
+The whole site is produced by a single Worker with Astro, a framework that assembles each page at the moment it is requested. Files that never change, such as styles, scripts and images, are served directly, without running any code. There is no server behind it, and before answering the Worker adds seven security headers to every page.
 Workers Static Assets
 the files, no Worker
 Workers
@@ -144,7 +144,7 @@ Dynamic Workers · plugin sandbox
 layer 4 · Cloudflare
 Data
 Where each thing is kept.
-Content lives in D1, Cloudflare's SQLite database. Editors' sessions go to Workers KV; Images fits each picture to its slot and turns it into WebP; and R2 is wired up for media uploaded through the CMS. The preview and production share none of the four.
+The texts and their history live in D1, Cloudflare's SQLite database. Editors' sessions are kept in Workers KV, a key-value store; Images crops each picture to its slot and turns it into WebP; and R2, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four.
 D1
 content
 Workers KV
@@ -179,7 +179,7 @@ INSIDE THE WORKER
 inside the Worker
 Presentation
 How what you see is drawn.
-The interface is built with Astro and a single stylesheet: CI rejects any colour, size or spacing written anywhere else. Fonts, scripts and images come from the site itself, asking nothing of third parties. The openings pair restored photographs with a drawing animated in the browser.
+The interface is built with Astro and a single stylesheet. Fonts, scripts and images come from the site itself, asking nothing of third parties. The openings of each section pair restored photographs with a drawing animated in the browser.
 Cabo Peñas · Einaz80 · CC BY-SA 4.0
 Guggenheim · Sergio S.C · CC BY-SA 2.0
 0
@@ -206,7 +206,7 @@ seed/seed.json
 inside the Worker
 The CMS: EmDash
 Where the content is edited.
-EmDash is Cloudflare's open-source CMS, and it runs inside the same Worker that serves the site. Its admin edits pages, services, menus and every interface label, in Spanish and English. On publishing, a plugin kept in the repository clears what changed from the cache.
+The site's CMS is EmDash, Cloudflare's open-source content management system, and it runs inside the same Worker that serves the pages. Its admin edits pages, services, menus and every interface label, in Spanish and English. On publishing, a plugin kept in the repository clears what changed from the cache.
 editor
 with a passkey
 EmDash
@@ -249,7 +249,7 @@ ACROSS THE LAYERS, FROM THE WORKSHOP
 across the layers · from the workshop
 Delivery
 How a change reaches production.
-Every change comes in as a pull request and goes through 24 steps of checks against a local copy of the site. If they all pass on main, the preview deploys itself with wrangler. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.
+The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 24 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with wrangler, Cloudflare's deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.
 pull request
 one change
 24 steps
@@ -286,7 +286,7 @@ Production deploys only when the founder starts it by hand, and a guard refuses 
 across the layers · from the workshop
 Content
 Where every text is written.
-Every word on the site lives in one versioned file, seed/seed.json, in Spanish and English. On every change, CI builds the site and fills an empty database from that file, so the whole site can be rebuilt from scratch at any time.
+Every word on the site lives in one file in the repository, seed/seed.json, in Spanish and English. On every change, the CI builds the site and fills an empty database from that file, so the whole site can be rebuilt from scratch at any time.
 seed/seed.json
 every sentence
 D1, empty
@@ -314,7 +314,7 @@ src/pages/sitemap.xml.ts
 across the layers · on every change
 Quality
 What is checked before anything is published.
-The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it, so they never pass by not looking. Lighthouse also measures performance, the text of 30 routes is frozen, and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.
+The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it. Lighthouse, Google's tool that scores performance and accessibility, measures nine pages; the text of 30 routes is frozen; and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.
 24
 steps that can fail
 30

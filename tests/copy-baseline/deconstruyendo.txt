@@ -3,7 +3,7 @@ Saltar al contenido
 /deconstruyendo
 EN
 Deconstruyendo esta web
-Cómo está hecha, capa a capa: de la red de Cloudflare a las comprobaciones que pasa cada cambio. Cada afirmación enlaza al fichero que la prueba.
+Así está hecha esta web. Funciona sobre Cloudflare, una red de centros de datos repartidos por el mundo, y cada dato enlaza al fichero que lo demuestra.
 Calidad
 24 pasos · Lighthouse · axe
 04
@@ -26,12 +26,12 @@ GitHub Actions · wrangler
 /_emdash/admin
 EmDash
 el CMS · en el Worker
-/
-Presentación
-Astro · en el Worker
 yo edito
 Server Startup:
 editor o agente de IA
+/
+Presentación
+Astro · en el Worker
 tú ves
 1
 Red
@@ -49,8 +49,8 @@ Calidad
 CUATRO CAPAS, EN Cloudflare
 capa 1 · Cloudflare
 La red
-Cómo llega una visita hasta el Worker.
-Cuando escribes la dirección, responde el DNS de Cloudflare. La zona está firmada con DNSSEC, así que nadie puede suplantarla por el camino. La conexión se cifra como mínimo con TLS 1.3 y, en los navegadores que lo admiten, ni siquiera el nombre del sitio viaja en claro. Al final del camino no hay un servidor, sino un Worker.
+Cómo llega una visita hasta esta web.
+Cuando escribes la dirección, responde el DNS de Cloudflare. La zona está firmada con DNSSEC, una firma que permite comprobar que la respuesta no se ha alterado por el camino. La conexión se cifra como mínimo con TLS 1.3 y, en los navegadores que lo admiten, ni siquiera el nombre del sitio viaja en claro. Al otro lado no hay un servidor propio: responde un Worker, un programa que Cloudflare ejecuta en el centro de datos más cercano a quien visita.
 visitante
 abre una página
 DNSSEC
@@ -74,8 +74,8 @@ sin fichero: se comprueba en la API de la zona
 TLS mínimo · Encrypted Client Hello · poscuántico
 capa 2 · Cloudflare
 La caché
-Qué se guarda en el borde y cuándo se borra.
-La caché de Cloudflare está delante del Worker: si una página ya está guardada, se entrega sin ejecutar nada. Solo se guardan las páginas que lo piden; el resto sale sin caché. Al publicar un cambio en el CMS se borran, por etiqueta, esa página y las que la incluyen en un listado.
+Qué páginas se guardan ya hechas y cuándo se borran.
+Delante del Worker está la caché de Cloudflare, que guarda copias de las páginas en cada centro de datos. Si la página que pides ya está guardada, se entrega sin ejecutar el Worker. Solo se guardan las páginas que lo piden expresamente, y al publicar un cambio desde el gestor de contenidos (el CMS) se borran, por etiqueta, esa página y las que la incluyen en un listado.
 petición
 de un visitante
 Workers Cache
@@ -107,7 +107,7 @@ Cache API
 capa 3 · Cloudflare
 Cómputo
 Dónde se ejecuta el código que genera cada página.
-Un solo Worker de Cloudflare genera cada página en el momento con Astro. Los ficheros que no cambian, como estilos, scripts e imágenes, se sirven sin ejecutarlo, y no hay ningún servidor detrás. Antes de responder, el Worker añade siete cabeceras de seguridad a cada página.
+Toda la web la genera un solo Worker con Astro, un framework que monta cada página en el momento en que se pide. Los ficheros que no cambian, como estilos, scripts e imágenes, se sirven directamente, sin ejecutar código. No hay ningún servidor detrás, y antes de responder el Worker añade siete cabeceras de seguridad a cada página.
 Workers Static Assets
 los ficheros, sin Worker
 Workers
@@ -144,7 +144,7 @@ Dynamic Workers · sandbox de plugins
 capa 4 · Cloudflare
 Datos
 Dónde se guarda cada cosa.
-El contenido vive en D1, la base de datos SQLite de Cloudflare. Las sesiones de quien edita van en Workers KV; Images ajusta cada imagen a su hueco y la convierte a WebP, y R2 queda conectado para los medios que se suban desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.
+Los textos y su historial viven en D1, la base de datos SQLite de Cloudflare. Las sesiones de quien edita se guardan en Workers KV, un almacén de pares clave y valor; Images recorta cada imagen a su hueco y la convierte a WebP, y R2, el almacenamiento de ficheros, queda listo para lo que se suba desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.
 D1
 contenido
 Workers KV
@@ -179,7 +179,7 @@ DENTRO DEL WORKER
 dentro del Worker
 Presentación
 Cómo se dibuja lo que ves.
-La interfaz está hecha con Astro y una sola hoja de estilos: CI rechaza cualquier color, tamaño o espaciado escrito fuera de ella. Fuentes, scripts e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas combinan fotografías restauradas con un dibujo que se anima en el navegador.
+La interfaz está hecha con Astro y una sola hoja de estilos. Fuentes, scripts e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador.
 Cabo Peñas · Einaz80 · CC BY-SA 4.0
 Guggenheim · Sergio S.C · CC BY-SA 2.0
 0
@@ -206,7 +206,7 @@ seed/seed.json
 dentro del Worker
 El CMS: EmDash
 Dónde se edita el contenido.
-EmDash es el CMS de código abierto de Cloudflare y corre dentro del mismo Worker que sirve la web. Desde su panel se editan páginas, servicios, menús y cada etiqueta de la interfaz, en español y en inglés. Al publicar, un plugin guardado en el repositorio borra de la caché lo que ha cambiado.
+El CMS de esta web es EmDash, el gestor de contenidos de código abierto de Cloudflare, y corre dentro del mismo Worker que sirve las páginas. Desde su panel se editan páginas, servicios, menús y cada etiqueta de la interfaz, en español y en inglés. Al publicar, un plugin guardado en el repositorio borra de la caché lo que ha cambiado.
 editor
 con passkey
 EmDash
@@ -249,7 +249,7 @@ TRANSVERSAL, DESDE EL TALLER
 transversal · desde el taller
 Entrega
 Cómo llega un cambio a producción.
-Cada cambio entra por un pull request y pasa 24 pasos de comprobación sobre una copia local del sitio. Si todos pasan en la rama principal, la versión de pruebas se despliega sola con wrangler. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.
+El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un pull request, y pasa 24 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con wrangler, la herramienta de despliegue de Cloudflare. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.
 pull request
 un cambio
 24 pasos
@@ -286,7 +286,7 @@ Producción solo se despliega cuando el fundador lo arranca a mano, y una guarda
 transversal · desde el taller
 Contenido
 Dónde está escrito cada texto.
-Todo el texto de la web está en un fichero versionado, seed/seed.json, en español y en inglés. En cada cambio, CI construye el sitio y llena con ese fichero una base de datos vacía, así que la web entera se puede rehacer desde cero en cualquier momento.
+Todo el texto de la web está en un fichero del repositorio, seed/seed.json, en español y en inglés. En cada cambio, la integración continua construye el sitio y llena con ese fichero una base de datos vacía, así que la web entera se puede rehacer desde cero en cualquier momento.
 seed/seed.json
 cada frase
 D1, vacía
@@ -314,7 +314,7 @@ src/pages/sitemap.xml.ts
 transversal · en cada cambio
 Calidad
 Qué se comprueba antes de publicar nada.
-Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran: así nunca aprueban por no haber mirado. Además, Lighthouse mide el rendimiento, el texto de 30 rutas está congelado y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.
+Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran. Lighthouse, la herramienta de Google que puntúa rendimiento y accesibilidad, mide nueve páginas; el texto de 30 rutas está congelado, y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.
 24
 pasos que pueden fallar
 30

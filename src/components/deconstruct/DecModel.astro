@@ -86,17 +86,18 @@ const entr = by.entrega;
 	<div class="dc-model__wrap">
 		{/* the windows' screenshots are placed as % of this box, which is the drawing's own: no padding */}
 		<div class="dc-model__art">
-		<svg class="dc-model__lg" viewBox="-266 308 1674 682" role="group" aria-label={L("map_aria", "")}>
+		<svg class="dc-model__lg" viewBox="-266 308 1710 682" role="group" aria-label={L("map_aria", "")}>
 			<defs>
 				<marker id="dc-ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ahw" /></marker>
+				<marker id="dc-ah-on" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="aho" /></marker>
 			</defs>
 			{q && (
 				<a class="m-lk w q lb" href={href("calidad")} data-l={q.slug} aria-label={q.short}>
-					<path class="qf" d="M130,320 H1388 Q1404,320 1404,336 V969 Q1404,985 1388,985 H-246 Q-262,985 -262,969 V336 Q-262,320 -246,320 H-238" />
-					<path class="qhit" d="M-262,320 H1404 V985 H-262 Z" />
-					<svg class="bi" x="-226" y="310" width="22" height="22" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.lighthouse} /></svg>
-					<text class="nm" x="-198" y="328">{q.short}</text>
-					<text class="pm" x="-84" y="326">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
+					<path class="qf" d="M162,320 H1424 Q1440,320 1440,336 V969 Q1440,985 1424,985 H-246 Q-262,985 -262,969 V336 Q-262,320 -246,320 H-238" />
+					<path class="qhit" d="M-262,320 H1440 V985 H-262 Z" />
+					<svg class="bi" x="-246" y="300" width="40" height="40" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.lighthouse} /></svg>
+					<text class="nm" x="-196" y="328">{q.short}</text>
+					<text class="pm" x="-82" y="326">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
 				</a>
 			)}
 			{entr && (
@@ -120,8 +121,8 @@ const entr = by.entrega;
 					</g>
 				</a>
 			))}
-			<svg class="bi cf" x="946" y="499" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.cloudflare} /></svg>
-			<text class="cfl" x="976" y="516.0">{L("cloudflare", "Cloudflare")}</text>
+			<svg class="bi cf" x="946" y="490" width="40" height="40" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.cloudflare} /></svg>
+			<text class="cfl" x="994" y="516.0">{L("cloudflare", "Cloudflare")}</text>
 			<line class="br" x1="920" y1="542.0" x2="920" y2="758.0" />
 			{RIGHT.map((r) => by[r.f] && (
 				<a class="m-lk c lb" href={href(r.f)} data-l={by[r.f].slug} tabindex="-1" aria-hidden="true">
@@ -143,12 +144,12 @@ const entr = by.entrega;
 			)}
 			{entr && (
 				<a class="m-lk w k lb" href={href("entrega")} data-l={entr.slug} tabindex="-1" aria-hidden="true">
-					<rect class="lbh" x="46" y="342" width="370" height="56" />
-					<svg class="bi" x="258" y="355" width="22" height="22" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.github} /></svg>
-					<path class="ldw" d="M290,372 H380 L410,372" />
+					<rect class="lbh" x="40" y="342" width="376" height="62" />
+					<svg class="bi" x="46" y="346" width="40" height="40" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.github} /></svg>
+					<path class="ldw" d="M226,372 H380 L410,372" />
 					<circle class="dk" cx="410" cy="372" r="5" />
-					<text class="nm" x="250" y="373" text-anchor="end">{entr.short}</text>
-					<text class="pm" x="250" y="393" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<text class="nm" x="96" y="373">{entr.short}</text>
+					<text class="pm" x="96" y="395">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{emd && (
@@ -159,9 +160,21 @@ const entr = by.entrega;
 					<circle class="wd1" cx="42" cy="672" r="3.5" /><circle class="wd2" cx="53" cy="672" r="3.5" /><circle class="wd3" cx="64" cy="672" r="3.5" />
 					<text class="wpth" x="220" y="676" text-anchor="end">{L("win_cms", "/_emdash/admin")}</text>
 					<rect class="wol" x="30" y="660" width="200" height="150" rx="6" />
-					<svg class="bi" x="30" y="610" width="22" height="22" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.emdash} /></svg>
-					<text class="nm" x="58" y="628">{emd.short}</text>
-					<text class="pm" x="30" y="648">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<svg class="bi" x="30" y="600" width="40" height="40" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.emdash} /></svg>
+					<text class="nm" x="80" y="618">{emd.short}</text>
+					<text class="pm" x="80" y="641">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<path class="fa" d="M236,735 H392" marker-end="url(#dc-ah)" />
+					<g class="who yo">
+						{/* the logo in small, the size of every mark: the dark plate at +10 degrees behind the grey one */}
+						<g class="mark" transform="translate(-226 735)">
+							<rect class="mk-d" x="-20" y="-20" width="40" height="40" rx="7" transform="rotate(10)" />
+							<rect class="mk-l" x="-20" y="-20" width="40" height="40" rx="7" />
+							<path class="mk-c" d="M0,-16.7 L14.5,-8.4 L14.5,8.4 L0,16.7 L-14.5,8.4 L-14.5,-8.4 Z M-14.5,-8.4 L0,0 L14.5,-8.4 M0,0 V16.7 M-7.3,-12.6 L7.3,-4.2 M7.3,-12.6 L-7.3,-4.2 M-7.3,-4.2 V12.6 M-14.5,0 L0,8.4 M7.3,-4.2 V12.6 M14.5,0 L0,8.4" />
+						</g>
+						<text class="wh" x="-196" y="726">{L("who_edit", "yo edito")}</text>
+						{whoSub.map((line, i) => <text class="ws" x="-196" y={748 + i * 19}>{line}</text>)}
+						<path class="wa2" d="M2,735 H22" marker-end="url(#dc-ah)" />
+					</g>
 				</a>
 			)}
 			{pres && (
@@ -172,35 +185,23 @@ const entr = by.entrega;
 					<circle class="wd1" cx="958" cy="347" r="3.5" /><circle class="wd2" cx="969" cy="347" r="3.5" /><circle class="wd3" cx="980" cy="347" r="3.5" />
 					<text class="wpth" x="1136" y="351" text-anchor="end">{L("win_site", "/")}</text>
 					<rect class="wol" x="946" y="335" width="200" height="150" rx="6" />
-					<svg class="bi" x="1166" y="353" width="22" height="22" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.astro} /></svg>
-					<text class="nm" x="1194" y="371">{pres.short}</text>
-					<text class="pm" x="1166" y="391">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<svg class="bi" x="1166" y="340" width="40" height="40" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.astro} /></svg>
+					<text class="nm" x="1216" y="364">{pres.short}</text>
+					<text class="pm" x="1216" y="387">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					{/* the page leaves the network's slab straight for its window, above the bracket and its labels */}
+					<path class="fa" d="M806,530 L938,462" marker-end="url(#dc-ah)" />
+					<g class="who tu">
+						<path class="wa2" d="M1154,445 H1180" marker-end="url(#dc-ah)" />
+						<circle class="ic" cx="1208" cy="445" r="20" />
+						<g class="ico pin" transform="translate(1208 445) scale(1.1)"><path d="M0,10 C0,10 -8,2.5 -8,-2.5 C-8,-7 -4.4,-10.5 0,-10.5 C4.4,-10.5 8,-7 8,-2.5 C8,2.5 0,10 0,10 Z" /><circle cy="-2.7" r="2.8" /></g>
+						<text class="wh" x="1240" y="442">{L("who_see", "tú ves")}</text>
+						<text class="ws" x="1240" y="465" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
+					</g>
 				</a>
 			)}
-			<path class="fa" d="M236,735 H392" marker-end="url(#dc-ah)" />
-			{/* the page leaves the network's slab straight for its window, above the bracket and its labels */}
-			<path class="fa" d="M806,530 L938,462" marker-end="url(#dc-ah)" />
-			<g class="who yo">
-				{/* the logo in small: the dark plate at +10 degrees behind the grey one, the 2x2 cube in ink */}
-				<g class="mark" transform="translate(-32 735)">
-					<rect class="mk-d" x="-20" y="-20" width="40" height="40" rx="7" transform="rotate(10)" />
-					<rect class="mk-l" x="-20" y="-20" width="40" height="40" rx="7" />
-					<path class="mk-c" d="M0,-16.7 L14.5,-8.4 L14.5,8.4 L0,16.7 L-14.5,8.4 L-14.5,-8.4 Z M-14.5,-8.4 L0,0 L14.5,-8.4 M0,0 V16.7 M-7.3,-12.6 L7.3,-4.2 M7.3,-12.6 L-7.3,-4.2 M-7.3,-4.2 V12.6 M-14.5,0 L0,8.4 M7.3,-4.2 V12.6 M14.5,0 L0,8.4" />
-				</g>
-				<path class="wa2" d="M-6,735 H22" marker-end="url(#dc-ah)" />
-				<text class="wh" x="-62" y="726" text-anchor="end">{L("who_edit", "yo edito")}</text>
-				{whoSub.map((line, i) => <text class="ws" x="-62" y={746 + i * 18} text-anchor="end">{line}</text>)}
-			</g>
-			<g class="who tu">
-				<path class="wa2" d="M1154,445 H1186" marker-end="url(#dc-ah)" />
-				<circle class="ic" cx="1208" cy="445" r="18" />
-				<g class="ico pin" transform="translate(1208 445)"><path d="M0,10 C0,10 -8,2.5 -8,-2.5 C-8,-7 -4.4,-10.5 0,-10.5 C4.4,-10.5 8,-7 8,-2.5 C8,2.5 0,10 0,10 Z" /><circle cy="-2.7" r="2.8" /></g>
-				<text class="wh" x="1238" y="442">{L("who_see", "tú ves")}</text>
-				<text class="ws" x="1238" y="464" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
-			</g>
 		</svg>
-		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:17.742%;top:55.132%;width:11.828%;height:18.328%" />
-		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:72.461%;top:7.478%;width:11.828%;height:18.328%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:17.368%;top:55.132%;width:11.579%;height:18.328%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:70.936%;top:7.478%;width:11.579%;height:18.328%" />
 		</div>
 	</div>
 	<svg class="dc-model__sm" viewBox="0 0 430 300" aria-hidden="true">
@@ -215,8 +216,8 @@ const entr = by.entrega;
 			</g>
 		))}
 			{SM_LEGEND.filter((r) => by[r.f]).map((r) => <text class="et" transform={r.et} x="0" y="3.5" text-anchor="middle">{r.n}</text>)}
-		<svg class="bi cf" x="312" y="72" width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.cloudflare} /></svg>
-		<text class="cfl" x="338" y="88.0">{L("cloudflare", "Cloudflare")}</text>
+		<svg class="bi cf" x="306" y="70" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" d={BRAND_ICONS.cloudflare} /></svg>
+		<text class="cfl" x="334" y="88.0">{L("cloudflare", "Cloudflare")}</text>
 		<line class="br" x1="300" y1="98.0" x2="300" y2="202.0" />
 		{SM_LEGEND.filter((r) => by[r.f]).map((r) => (
 			<g>

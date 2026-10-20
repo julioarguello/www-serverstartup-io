@@ -63,7 +63,7 @@
    whole site needs the band's width to keep its labels legible (founder-approved in v5, #535) */
 .dc-model__wrap { position: relative; max-width: 1700px; margin-inline: auto; padding-inline: var(--space-3); }
 .dc-model__art { position: relative; }
-.dc-model .dc-model__sm { display: none; max-width: 280px; margin-inline: auto; }
+.dc-model .dc-model__sm { display: none; width: calc(100% - 2 * var(--space-3)); max-width: 430px; margin-inline: auto; }
 /* token-guard: on */
 .dc-model svg { display: block; width: 100%; height: auto; }
 .dc-model__im { position: absolute; object-fit: cover; object-position: 50% 0; pointer-events: none; border-radius: 0 0 var(--radius) var(--radius); }
@@ -90,6 +90,8 @@
 .dc-model .sl { transition: transform .4s cubic-bezier(.2, .8, .2, 1); }
 .dc-model .sl polygon { stroke: var(--color-primary); stroke-width: 4.5; stroke-linejoin: round; transition: fill .25s, stroke .25s; }
 .dc-model .ln { fill: none; stroke: var(--color-primary); stroke-width: 4.5; stroke-linecap: round; transition: stroke .25s; }
+.dc-model .dc-model__sm .et { font-size: 9px; }
+.dc-model .smn { font-family: var(--font-family); font-size: 17px; font-weight: 700; fill: var(--color-secondary); }
 .dc-model .et { font-family: var(--font-family-mono); font-size: 13px; font-weight: 500; fill: var(--color-text-muted); transition: fill .25s; }
 .dc-model .m-lk.c.hv .sl,
 .dc-model .m-lk.c:focus-visible .sl { transform: translateX(-14px); }

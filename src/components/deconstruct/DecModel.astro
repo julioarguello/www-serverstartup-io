@@ -57,6 +57,14 @@ const SM = [
 	{ s: "s3", ft: "156.0,72.5 246.6,124.8 156.0,177.1 65.4,124.8", fl: "65.4,124.8 156.0,177.1 156.0,200.9 65.4,148.6", fr: "156.0,177.1 246.6,124.8 246.6,148.6 156.0,200.9", ln: "M110.7,151.0 V174.7 M201.3,151.0 V174.7" },
 	{ s: "s4", ft: "156.0,45.9 246.6,98.2 156.0,150.5 65.4,98.2", fl: "65.4,98.2 156.0,150.5 156.0,174.2 65.4,121.9", fr: "156.0,150.5 246.6,98.2 246.6,121.9 156.0,174.2", ln: "M110.7,124.3 V148.1 M201.3,124.3 V148.1 M110.7,72.0 L201.3,124.3 M201.3,72.0 L110.7,124.3" },
 ];
+/* the small drawing's legend (phones and tablets): each slab's number on its face and its name on a leader,
+   the same reading as the map's right column (founder, 2026-10-20: "no hay ninguna alegoría a las capas") */
+const SM_LEGEND = [
+	{ f: "red", y: 110.0, et: "matrix(1,0.577,0,1,88.1,123.1)", n: "01" },
+	{ f: "cache", y: 136.7, et: "matrix(1,0.577,0,1,88.1,149.8)", n: "02" },
+	{ f: "computo", y: 163.3, et: "matrix(1,0.577,0,1,88.1,176.4)", n: "03" },
+	{ f: "datos", y: 190.0, et: "matrix(1,0.577,0,1,88.1,203.0)", n: "04" },
+];
 const groups: { key: string; label: string; layers: Layer[] }[] = [
 	{ key: "cloudflare", label: L("g_cloudflare", "Cuatro capas, en `Cloudflare`"), layers: layers.filter((l) => l.group === "cloudflare") },
 	{ key: "worker", label: L("g_worker", "Dentro del `Worker`"), layers: layers.filter((l) => l.group === "worker") },
@@ -189,7 +197,7 @@ const entr = by.entrega;
 		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:72.461%;top:7.478%;width:11.828%;height:18.328%" />
 		</div>
 	</div>
-	<svg class="dc-model__sm" viewBox="0 0 300 300" aria-hidden="true">
+	<svg class="dc-model__sm" viewBox="0 0 430 300" aria-hidden="true">
 		<rect class="tb" x="38" y="32" width="236" height="236" rx="21.2" transform="rotate(10 156 150)" />
 		<rect class="tg" x="38" y="32" width="236" height="236" rx="21.2" />
 		{SM.map((s) => (
@@ -198,6 +206,16 @@ const entr = by.entrega;
 				<polygon class="fl" points={s.fl} />
 				<polygon class="fr" points={s.fr} />
 				<path class="ln" d={s.ln} />
+			</g>
+		))}
+			{SM_LEGEND.filter((r) => by[r.f]).map((r) => <text class="et" transform={r.et} x="0" y="3.5" text-anchor="middle">{r.n}</text>)}
+		<text class="cfl" x="312" y="88.0">{L("cloudflare", "Cloudflare")}</text>
+		<line class="br" x1="300" y1="98.0" x2="300" y2="202.0" />
+		{SM_LEGEND.filter((r) => by[r.f]).map((r) => (
+			<g>
+				<line class="ld" x1="252.6" y1={r.y} x2="294" y2={r.y} />
+				<circle class="dt" cx="300" cy={r.y} r="4" />
+				<text class="smn" x="312" y={r.y + 5.5}>{plain(by[r.f].title)}</text>
 			</g>
 		))}
 	</svg>

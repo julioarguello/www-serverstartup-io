@@ -1,48 +1,40 @@
 ---
 /**
- * Deconstruyendo esta web — the site explained layer by layer (#161, #305).
- * Body in DeconstructDoc.astro; content from CMS page `deconstruyendo`,
- * instrument text from the manual_labels widget.
+ * Deconstruyendo esta web — how the site is built, layer by layer (#161, #305, #535).
+ * Body in DeconstructPage.astro; the page entry `deconstruyendo`, the `layers`
+ * collection and the `deconstruct_labels` widget carry every word.
  */
 import { getEmDashEntry, getSiteSettings } from "emdash";
 import { entryAlternatePath } from "../utils/alternate";
-import CubeEmblem from "../components/CubeEmblem.astro";
+import { excerptPlain } from "../utils/excerpt";
+import { getLayers } from "../utils/layers";
 import Base from "../layouts/Base.astro";
 import CtaGlobal from "../components/CtaGlobal.astro";
-import DeconstructDoc from "../components/DeconstructDoc.astro";
+import DeconstructPage from "../components/DeconstructPage.astro";
 import { getUiLabels } from "../utils/ui-labels";
 import type { SiteSettings } from "../types";
 
 const locale = Astro.currentLocale || "es";
 const { entry, cacheHint } = await getEmDashEntry("pages", "deconstruyendo", { locale });
 if (!entry) return Astro.rewrite("/404");
-// Stays in the page: ci-check-cache-hints.py allows cache.set only here or in
-// the middleware — a component call runs mid-stream, after the headers left.
+const { layers, cacheHint: layersHint } = await getLayers(locale);
+// Both stay in the page: ci-check-cache-hints.py allows cache.set only here or in the
+// middleware. Tags accumulate, so publishing the page or any layer purges this route.
 Astro.cache.set(cacheHint);
+Astro.cache.set(layersHint as typeof cacheHint);
 
 const { title, content, excerpt } = entry.data;
 const settings = await getSiteSettings() as SiteSettings;
 const labels = await getUiLabels(locale);
-const repoUrl = settings.repoUrl || "";
 // Slugs are translated across locales — resolve the counterpart via the CMS (#291)
 const altPath = await entryAlternatePath("pages", entry.data.id, "es");
-const accentColor = "var(--color-primary)";
 ---
 
-<Base title={title} description={excerpt || `${title} — Server Startup`} altPath={altPath}>
-	<section class="s-doc" aria-label={title}>
-		<div class="container s-doc__inner">
-			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="dec" size={104} />
-			<h1>{title}</h1>
-			<DeconstructDoc content={content as any[]} labels={labels} repoUrl={repoUrl} />
-		</div>
-	</section>
-
+<Base title={title} description={excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`} altPath={altPath}>
+	<DeconstructPage title={title} lead={excerpt || ""} content={(content as unknown[]) ?? []} layers={layers} labels={labels} repoUrl={settings.repoUrl || ""} />
 	<CtaGlobal />
 </Base>
 
-<style is:global define:vars={{ accentColor }}>
-	/* service.css first: the instruments' own chrome, then this page's rules */
-	@import "../styles/service.css";
+<style is:global>
 	@import "../styles/deconstruct.css";
 </style>

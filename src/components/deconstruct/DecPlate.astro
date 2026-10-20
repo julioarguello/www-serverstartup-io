@@ -1,0 +1,163 @@
+---
+/**
+ * One layer of /deconstruyendo (#535): the plate's header, its figure (a
+ * chain or grid of pieces, numbers, photographs), a real capture, the
+ * highlighted links, and the ledger — every fact with the repository file
+ * that proves it and the official documentation. All copy is the layer's
+ * own entry in the `layers` collection; facts still `pending` stay in the
+ * CMS until they are verified on the deployed site.
+ */
+import type { Layer, LayerFigure } from "../../utils/layers";
+import { layerHtml, shownFacts } from "../../utils/layers";
+import type { UiLabels } from "../../utils/ui-labels";
+
+interface Props {
+	layer: Layer;
+	labels: UiLabels;
+	repoUrl: string;
+}
+const { layer, labels, repoUrl } = Astro.props;
+const L = (k: string, fb: string) => labels.get("deconstruct_labels", k, fb);
+
+/* the icon is the map in miniature, the layer's own piece lit */
+const LIT: Record<LayerFigure, string> = {
+	red: "b49", cache: "b42", computo: "b31", datos: "b24",
+	emdash: "a15", presentacion: "a59", contenido: "ig", entrega: "ib", calidad: "iq",
+};
+const lit = LIT[layer.figure];
+const on = (id: string) => (lit === id ? " on" : "");
+
+const facts = shownFacts(layer);
+const shownKeys = new Set(facts.map((f) => f.key));
+const nodes = layer.nodes ?? [];
+const numbers = (layer.stats ?? []).filter((s) => s.kind !== "ring");
+const rings = (layer.stats ?? []).filter((s) => s.kind === "ring");
+const photos = layer.photos ?? [];
+const links = [...(layer.links ?? "").matchAll(/\[([^\]]+)\]\(([^)\s]+)\)/g)].map((m) => ({ label: m[1], href: m[2] }));
+const fileHref = (path: string) => `${repoUrl}/${path.endsWith("/") ? "tree" : "blob"}/main/${path.replace(/\/$/, "")}`;
+const rowsLabel = facts.length === 1 ? L("row", "fila") : L("rows", "filas");
+const hasFigure = nodes.length > 0 || numbers.length > 0 || rings.length > 0 || photos.length > 0;
+---
+
+<section class="dc-pl" id={layer.slug} data-l={layer.slug} aria-labelledby={`${layer.slug}-t`}>
+	<div class="container">
+		<header class="dc-pl__hd">
+			<div class="dc-pl__ic" aria-hidden="true">
+				<svg viewBox="0 0 84 84">
+					<rect class={`iq${on("iq")}`} x="2" y="2" width="80" height="80" rx="8" />
+					<rect class={`ib${on("ib")}`} x="14" y="14" width="56" height="56" rx="6" transform="rotate(-7 42 42) translate(-2.5 2)" />
+					<rect class={`ig${on("ig")}`} x="14" y="12" width="56" height="56" rx="6" />
+					<rect class={`iap${on("a15")}`} x="34" y="15" width="16" height="5" rx="1.5" />
+					<rect class={`ibr${on("b49")}`} x="24" y="49" width="36" height="5" rx="1.5" />
+					<rect class={`ibr${on("b42")}`} x="24" y="42" width="36" height="5" rx="1.5" />
+					<rect class={`ibr${on("b31")}`} x="24" y="31" width="36" height="5" rx="1.5" />
+					<rect class={`ibr${on("b24")}`} x="24" y="24" width="36" height="5" rx="1.5" />
+					<rect class={`iap${on("a59")}`} x="34" y="59" width="16" height="5" rx="1.5" />
+				</svg>
+			</div>
+			<div>
+				{layer.kicker && <p class="dc-pl__k" set:html={layerHtml(layer.kicker)} />}
+				<h2 id={`${layer.slug}-t`} set:html={layerHtml(layer.title)} />
+				{layer.lede && <p class="dc-pl__lede" set:html={layerHtml(layer.lede)} />}
+			</div>
+		</header>
+
+		{layer.figure === "emdash" && layer.capture && (
+			<figure class="dc-shot">
+				<img src={layer.capture.src} alt={layer.capture.alt ?? ""} width={layer.capture.width} height={layer.capture.height} loading="lazy" decoding="async" />
+				{layer.capture_caption && <figcaption class="dc-cap" set:html={layerHtml(layer.capture_caption)} />}
+			</figure>
+		)}
+
+		{hasFigure && (
+			<div class="dc-fig">
+				{photos.length > 0 && (
+					<div class="dc-duo">
+						{photos.map((p) => (
+							<figure>
+								<img src={p.image.src} alt={p.alt} width={p.image.width} height={p.image.height} loading="lazy" decoding="async" />
+								<figcaption class="dc-cap" set:html={layerHtml(p.caption)} />
+							</figure>
+						))}
+					</div>
+				)}
+				{nodes.length > 0 && (
+					<div class={`dc-flow${layer.nodes_plain ? " plain" : ""}`} style={`--n:${nodes.length}`}>
+						{nodes.map((n) => {
+							const Tag = n.fact && shownKeys.has(n.fact) ? "a" : "div";
+							return (
+								<Tag class={`dc-n${n.cloudflare ? " c" : ""}`} href={Tag === "a" ? `#${n.fact}` : undefined}>
+									<b set:html={layerHtml(n.title)} />
+									{n.note && <span set:html={layerHtml(n.note)} />}
+									{n.edge && <em>{n.edge}</em>}
+								</Tag>
+							);
+						})}
+					</div>
+				)}
+				{numbers.length > 0 && (
+					<div class="dc-nums" style={`--n:${numbers.length}`}>
+						{numbers.map((s) => (
+							<div class="dc-nm">
+								{s.kind === "swatches" ? (
+									<div class="dc-sw" aria-hidden="true">
+										<i class="c1" /><i class="c2" /><i class="c3" /><i class="c4" />
+										<i class="v1" /><i class="v2" /><i class="v3" /><i class="v4" /><i class="v5" /><i class="v6" />
+									</div>
+								) : (
+									<b>{s.value}</b>
+								)}
+								<span set:html={layerHtml(s.label)} />
+							</div>
+						))}
+					</div>
+				)}
+				{rings.length > 0 && (
+					<div class="dc-nums" style="--n:1">
+						<div class="dc-nm">
+							<div class="dc-lh">
+								{rings.map((s) => (
+									<div><b>{s.value}</b><span set:html={layerHtml(s.label)} /></div>
+								))}
+							</div>
+							{layer.stats_note && <span set:html={layerHtml(layer.stats_note)} />}
+						</div>
+					</div>
+				)}
+			</div>
+		)}
+
+		{links.length > 0 && (
+			<div class="dc-links">
+				{links.map((l) => (
+					<a href={l.href} target={/^https?:/.test(l.href) ? "_blank" : undefined} rel={/^https?:/.test(l.href) ? "noopener noreferrer" : undefined}>{l.label}</a>
+				))}
+			</div>
+		)}
+
+		{layer.figure !== "emdash" && layer.capture && (
+			<figure class="dc-shot">
+				<img src={layer.capture.src} alt={layer.capture.alt ?? ""} width={layer.capture.width} height={layer.capture.height} loading="lazy" decoding="async" />
+				{layer.capture_caption && <figcaption class="dc-cap" set:html={layerHtml(layer.capture_caption)} />}
+			</figure>
+		)}
+
+		{facts.length > 0 && (
+			<details class="dc-more">
+				<summary>{L("details", "Detalle y pruebas")} <span>{facts.length} {rowsLabel}</span></summary>
+				<ol class="dc-led">
+					{facts.map((f) => (
+						<li id={f.key}>
+							<p set:html={layerHtml(f.text)} />
+							<div class="dc-lk">
+								{f.file && <a class="dc-lk__r" href={fileHref(f.file)} target="_blank" rel="noopener noreferrer">{f.file}</a>}
+								{!f.file && f.file_note && <span class="dc-lk__n">{L("no_file", "sin fichero")}: {f.file_note}</span>}
+								{f.docs && <span class="dc-lk__d" set:html={layerHtml(f.docs)} />}
+							</div>
+						</li>
+					))}
+				</ol>
+			</details>
+		)}
+	</div>
+</section>

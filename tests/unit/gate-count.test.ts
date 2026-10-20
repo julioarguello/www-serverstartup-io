@@ -115,20 +115,6 @@ const gates = distinctGates(WORKFLOW);
 const summaryRows = [...WORKFLOW.matchAll(/^ *echo "\| (.+?) \| (.+?) \|"$/gm)]
 	.filter(([, gate]) => gate !== "Gate");
 
-const NUMBER_WORD: Record<number, { es: string; en: string }> = {
-	16: { es: "dieciséis", en: "sixteen" },
-	17: { es: "diecisiete", en: "seventeen" },
-	18: { es: "dieciocho", en: "eighteen" },
-	19: { es: "diecinueve", en: "nineteen" },
-	20: { es: "veinte", en: "twenty" },
-	// "veintiún", not "veintiuno": it stands before a masculine noun here.
-	21: { es: "veintiún", en: "twenty-one" },
-	22: { es: "veintidós", en: "twenty-two" },
-	23: { es: "veintitrés", en: "twenty-three" },
-	24: { es: "veinticuatro", en: "twenty-four" },
-	25: { es: "veinticinco", en: "twenty-five" },
-};
-
 describe("the workflow is the source of the count", () => {
 	/**
 	 * A scan that matches nothing would make every assertion below vacuously
@@ -269,35 +255,42 @@ describe("controls — the count can be wrong", () => {
 	});
 });
 
+/**
+ * Every string of the `layers` collection in one locale (#535): the page now
+ * says the number as a figure on the quality plate, in the map's note, in the
+ * index's summary and in the delivery fact, so the test reads all of them
+ * rather than one sentence that could move.
+ */
+function layerStrings(locale: string): string[] {
+	const seed = JSON.parse(read("seed", "seed.json"));
+	const out: string[] = [];
+	const walk = (v: unknown): void => {
+		if (typeof v === "string") out.push(v);
+		else if (Array.isArray(v)) v.forEach(walk);
+		else if (v && typeof v === "object") Object.values(v).forEach(walk);
+	};
+	for (const e of seed.content.layers ?? []) if (e.locale === locale) walk(e.data);
+	return out;
+}
+
+/** The number that precedes a noun, in every string that uses it: "24 pasos", "24 steps". */
+function numbersBefore(strings: string[], noun: string): number[] {
+	const re = new RegExp(`(\\d+)\\s+${noun}\\b`, "g");
+	return strings.flatMap((s) => [...s.matchAll(re)].map((m) => Number(m[1])));
+}
+
 describe("the public page says the same number", () => {
-	const word = NUMBER_WORD[gates.length];
-
-	it("has a word for this many gates", () => {
-		expect(word, `no Spanish/English word listed for ${gates.length} — extend NUMBER_WORD`).toBeDefined();
+	it("everywhere it says it, both locales", () => {
+		const es = numbersBefore(layerStrings("es"), "pasos");
+		const en = numbersBefore(layerStrings("en"), "steps");
+		// vacuum guard: a page that stopped saying the number at all would pass
+		expect(es.length, "no '<n> pasos' left in the ES layers").toBeGreaterThanOrEqual(3);
+		expect(en.length, "no '<n> steps' left in the EN layers").toBeGreaterThanOrEqual(3);
+		expect(new Set(es)).toEqual(new Set([gates.length]));
+		expect(new Set(en)).toEqual(new Set([gates.length]));
 	});
 
-	it("in the prose the site renders, both locales", () => {
-		const seed = read("seed", "seed.json");
-		expect(seed).toContain(`la rama pasa por ${word.es} pasos que pueden fallar`);
-		expect(seed).toContain(`the branch goes through ${word.en} steps that can fail`);
-	});
-
-	it("in the review panel's chips, both locales", () => {
-		const seed = read("seed", "seed.json");
-		expect(seed).toContain(`pasos que pueden fallar|${gates.length}`);
-		expect(seed).toContain(`steps that can fail|${gates.length}`);
-	});
-
-	/**
-	 * The markdown under `seed/content/pages/` is an authoring mirror and not
-	 * what renders (#500). It is checked anyway: a mirror that disagrees with
-	 * the seed is worse than no mirror, because the next person edits the file
-	 * the issue points them at and their change does nothing.
-	 */
-	it("in the authoring mirror, which is not what renders", () => {
-		expect(read("seed", "content", "pages", "es", "deconstruyendo.md"))
-			.toContain(`la rama pasa por ${word.es} pasos que pueden fallar`);
-		expect(read("seed", "content", "pages", "en", "deconstructing.md"))
-			.toContain(`the branch goes through ${word.en} steps that can fail`);
+	it("a planted wrong number is caught", () => {
+		expect(numbersBefore(["pasa 23 pasos que pueden fallar", "24 pasos · Lighthouse"], "pasos")).toEqual([23, 24]);
 	});
 });

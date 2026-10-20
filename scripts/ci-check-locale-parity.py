@@ -119,7 +119,38 @@ def check(content: dict) -> list[str]:
                     f"{collection}/{base}: field '{field}' has a value in "
                     f"'{loc}' ({other['id']}) and none in '{DEFAULT_LOCALE}'"
                 )
+            findings += repeater_gaps(collection, base, es["data"], other)
     return findings
+
+
+def is_repeater(value) -> bool:
+    """A list of plain rows (EmDash `repeater`), not Portable Text: PT blocks carry `_type`,
+    and a translation may legitimately split a paragraph that the original kept whole."""
+    return isinstance(value, list) and bool(value) and all(
+        isinstance(v, dict) and "_type" not in v for v in value)
+
+
+def repeater_gaps(collection: str, base: str, es_data: dict, other: dict) -> list[str]:
+    """#535: a repeater's rows are the same content in both locales — same count, and in each
+    row the same sub-fields filled. Field-level parity alone passes a fact that exists in
+    Spanish and was never written in English, because the field `facts` is filled in both."""
+    out: list[str] = []
+    loc = other.get("locale")
+    for field, es_rows in (es_data or {}).items():
+        other_rows = (other.get("data") or {}).get(field)
+        if not (is_repeater(es_rows) or is_repeater(other_rows)):
+            continue
+        es_rows, other_rows = es_rows or [], other_rows or []
+        if len(es_rows) != len(other_rows):
+            out.append(f"{collection}/{base}: '{field}' has {len(es_rows)} row(s) in "
+                       f"'{DEFAULT_LOCALE}' and {len(other_rows)} in '{loc}' ({other['id']})")
+            continue
+        for i, (a, b) in enumerate(zip(es_rows, other_rows)):
+            for sub in sorted(filled(a) ^ filled(b)):
+                where = DEFAULT_LOCALE if sub in filled(a) else loc
+                out.append(f"{collection}/{base}: '{field}' row {i + 1}, '{sub}' is filled "
+                           f"only in '{where}'")
+    return out
 
 
 def positive_control() -> None:
@@ -129,15 +160,22 @@ def positive_control() -> None:
             {"id": "w-one", "locale": "es", "data": {"title": "Uno", "url": "https://x"}},
             {"id": "w-one-en", "locale": "en", "data": {"title": "One", "url": None}},
             {"id": "w-loose-en", "locale": "en", "data": {"title": "Loose"}},
+            {"id": "w-rows", "locale": "es", "data": {"facts": [{"text": "a", "file": "x"}, {"text": "b"}]}},
+            {"id": "w-rows-en", "locale": "en", "data": {"facts": [{"text": "a"}]}},
+            {"id": "w-cell", "locale": "es", "data": {"facts": [{"text": "a", "file": "x"}]}},
+            {"id": "w-cell-en", "locale": "en", "data": {"facts": [{"text": "a"}]}},
         ]
     }
     found = check(planted)
     gap = any("field 'url'" in f for f in found)
     orphan = any("w-loose-en" in f for f in found)
-    if not (gap and orphan):
+    rows = any("w-rows" in f and "row(s)" in f for f in found)
+    cell = any("w-cell" in f and "'file' is filled only" in f for f in found)
+    if not (gap and orphan and rows and cell):
         print(
             "locale-parity: POSITIVE CONTROL FAILED — the checker did not find "
-            f"a planted defect (field gap: {gap}, unpairable entry: {orphan}).",
+            f"a planted defect (field gap: {gap}, unpairable entry: {orphan}, "
+            f"repeater rows: {rows}, repeater cell: {cell}).",
             file=sys.stderr,
         )
         print(
@@ -154,8 +192,9 @@ def positive_control() -> None:
         print("locale-parity: POSITIVE CONTROL FAILED — a clean pair reported a "
               "finding; the check is not usable.", file=sys.stderr)
         sys.exit(3)
-    print("locale-parity: positive control ok (a planted field gap and an "
-          "unpairable entry are both found, and a clean pair is not)")
+    print("locale-parity: positive control ok (a planted field gap, an unpairable "
+          "entry, a missing repeater row and a missing repeater cell are all found, "
+          "and a clean pair is not)")
 
 
 def main() -> int:

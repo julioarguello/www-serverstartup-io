@@ -20,7 +20,7 @@ FAIL=0
 TMP="${RUNNER_TEMP:-/tmp}/verify-deploy"
 mkdir -p "$TMP"
 
-# ── 1. Routes battery: 28 routes, both locales, status + title ──────────────
+# ── 1. Routes battery: 30 routes, both locales, status + title ──────────────
 ROUTES=(
 	"/|Ingeniería de software"
 	"/quienes-somos|Quiénes somos"
@@ -33,6 +33,8 @@ ROUTES=(
 	"/deconstruyendo|Deconstruyendo esta web"
 	"/politica-de-privacidad|Política de privacidad"
 	"/aviso-legal|Aviso legal"
+	# A sentence of the body, not the title: "Créditos" is the footer link on every page.
+	"/creditos|Cada derivado se distribuye con la misma licencia"
 	# The heading, not the title. "Accesibilidad" is also the footer link on
 	# every page, so a phrase built on it would pass with the wrong page
 	# served here — which is the one thing this column exists to catch.
@@ -50,6 +52,7 @@ ROUTES=(
 	"/en/deconstructing|Deconstructing this website"
 	"/en/privacy-policy|Privacy policy"
 	"/en/legal-notice|Legal notice"
+	"/en/credits|Every derivative is distributed under the same licence"
 	"/en/accessibility|Accessibility statement"
 	"/en/artificial-intelligence|Artificial Intelligence"
 	"/en/references|References"

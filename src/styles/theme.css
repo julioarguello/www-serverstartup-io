@@ -167,7 +167,6 @@
 	   it so it separates by ground instead of by a rule (founder #304) */
 	--color-edge: #F38020;
 	--color-tint-edge: color-mix(in srgb, var(--color-edge) 8%, transparent);
-	--color-surface-sheet: #FDFDFB;   /* paper of the assembly manual sheet */
 	--color-scrim: rgba(0, 0, 0, 0.3); /* behind a modal */
 
 	/* Ink at reduced weight. ONE step, not the four alphas the audit found
@@ -568,10 +567,11 @@ ul, ol { list-style: none; }
    its own smaller register (#420): a sentence that wraps by design. Blog posts
    are articles, not openings. */
 @media (min-width: 768px) {
-	.s-hero__inner, .s-doc__inner, .s-contact__inner, .legal-inner { container-type: inline-size; }
+	.s-hero__inner, .s-doc__inner, .dc-hero__inner, .s-contact__inner, .legal-inner { container-type: inline-size; }
 	.s-hero:not(.s-hero--home) .s-hero__inner > h1,
 	.s-hero:not(.s-hero--home) .s-hero__copy > h1,
 	.s-doc__inner > h1,
+	.dc-hero__inner > h1,
 	.s-contact__inner > h1,
 	.legal-inner > h1 {
 		font-size: min(72px, calc(100cqi / 14.48 * 0.985));

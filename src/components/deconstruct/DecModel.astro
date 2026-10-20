@@ -1,0 +1,207 @@
+---
+/**
+ * The map that opens /deconstruyendo (#535): the whole site as one isometric
+ * drawing. The four Cloudflare layers stacked in the middle, EmDash above
+ * them and the page below, content and delivery as the two tiles behind,
+ * quality around everything. Geometry is Claude Design's (delivery «B mapa
+ * v5»); every word comes from the `layers` collection or the
+ * `deconstruct_labels` widget. Each piece links to its plate, and the plate
+ * on screen lights its piece (script in DeconstructPage.astro).
+ */
+import type { Layer } from "../../utils/layers";
+import { CLOUDFLARE_PRODUCTS, layerHtml } from "../../utils/layers";
+import type { UiLabels } from "../../utils/ui-labels";
+
+interface Props {
+	layers: Layer[];
+	labels: UiLabels;
+}
+const { layers, labels } = Astro.props;
+const L = (k: string, fb: string) => labels.get("deconstruct_labels", k, fb);
+const by = Object.fromEntries(layers.map((l) => [l.figure, l]));
+const href = (f: string) => (by[f] ? `#${by[f].slug}` : undefined);
+
+/** markdown-lite → SVG text runs: `code` becomes a tspan, orange when it names a Cloudflare product. */
+function runs(s: string | undefined): { text: string; cf: boolean }[] {
+	if (!s) return [];
+	const out: { text: string; cf: boolean }[] = [];
+	for (const part of s.replace(/\*([^*]+)\*/g, "$1").split(/(`[^`]+`)/)) {
+		if (!part) continue;
+		const code = part.startsWith("`") && part.endsWith("`");
+		const text = code ? part.slice(1, -1) : part;
+		out.push({ text, cf: code && CLOUDFLARE_PRODUCTS.has(text) });
+	}
+	return out;
+}
+
+/** A title without its markdown-lite code marks, for SVG text and aria-labels. */
+const plain = (s: string) => s.replaceAll("\u0060", "");
+
+const SLABS = [
+	{ f: "red", s: "s1", n: "01", ft: "600.0,613.2 766.4,709.3 600.0,805.3 433.6,709.3", fl: "433.6,709.3 600.0,805.3 600.0,849.0 433.6,752.9", fr: "600.0,805.3 766.4,709.3 766.4,752.9 600.0,849.0", ln: "M516.8,757.3 V801.0 M683.2,757.3 V801.0", et: "matrix(1,0.577,0,1,475.2,755.1)" },
+	{ f: "cache", s: "s2", n: "02", ft: "600.0,564.3 766.4,660.4 600.0,756.5 433.6,660.4", fl: "433.6,660.4 600.0,756.5 600.0,800.1 433.6,704.1", fr: "600.0,756.5 766.4,660.4 766.4,704.1 600.0,800.1", ln: "M516.8,708.4 V752.1 M683.2,708.4 V752.1", et: "matrix(1,0.577,0,1,475.2,706.3)" },
+	{ f: "computo", s: "s3", n: "03", ft: "600.0,499.9 766.4,595.9 600.0,692.0 433.6,595.9", fl: "433.6,595.9 600.0,692.0 600.0,735.7 433.6,639.6", fr: "600.0,692.0 766.4,595.9 766.4,639.6 600.0,735.7", ln: "M516.8,644.0 V687.6 M683.2,644.0 V687.6", et: "matrix(1,0.577,0,1,475.2,641.8)" },
+	{ f: "datos", s: "s4", n: "04", ft: "600.0,451.0 766.4,547.1 600.0,643.1 433.6,547.1", fl: "433.6,547.1 600.0,643.1 600.0,686.8 433.6,590.7", fr: "600.0,643.1 766.4,547.1 766.4,590.7 600.0,686.8", ln: "M516.8,595.1 V638.8 M683.2,595.1 V638.8 M516.8,499.0 L683.2,595.1 M683.2,499.0 L516.8,595.1", et: "matrix(1,0.577,0,1,475.2,592.9)" },
+];
+/* the labels on the right, top to bottom: the slabs read bottom-up */
+const RIGHT = [
+	{ f: "datos", y: 542.9 },
+	{ f: "computo", y: 591.8 },
+	{ f: "cache", y: 656.2 },
+	{ f: "red", y: 705.1 },
+];
+const SM = [
+	{ s: "s1", ft: "156.0,133.3 231.5,176.9 156.0,220.5 80.5,176.9", fl: "80.5,176.9 156.0,220.5 156.0,240.3 80.5,196.7", fr: "156.0,220.5 231.5,176.9 231.5,196.7 156.0,240.3", ln: "M118.2,198.7 V218.5 M193.8,198.7 V218.5" },
+	{ s: "s2", ft: "156.0,111.1 231.5,154.7 156.0,198.3 80.5,154.7", fl: "80.5,154.7 156.0,198.3 156.0,218.1 80.5,174.5", fr: "156.0,198.3 231.5,154.7 231.5,174.5 156.0,218.1", ln: "M118.2,176.5 V196.3 M193.8,176.5 V196.3" },
+	{ s: "s3", ft: "156.0,81.9 231.5,125.5 156.0,169.1 80.5,125.5", fl: "80.5,125.5 156.0,169.1 156.0,188.9 80.5,145.3", fr: "156.0,169.1 231.5,125.5 231.5,145.3 156.0,188.9", ln: "M118.2,147.3 V167.1 M193.8,147.3 V167.1" },
+	{ s: "s4", ft: "156.0,59.7 231.5,103.3 156.0,146.9 80.5,103.3", fl: "80.5,103.3 156.0,146.9 156.0,166.7 80.5,123.1", fr: "156.0,146.9 231.5,103.3 231.5,123.1 156.0,166.7", ln: "M118.2,125.1 V144.9 M193.8,125.1 V144.9 M118.2,81.5 L193.8,125.1 M193.8,81.5 L118.2,125.1" },
+];
+const groups: { key: string; label: string; layers: Layer[] }[] = [
+	{ key: "cloudflare", label: L("g_cloudflare", "Cuatro capas, en `Cloudflare`"), layers: layers.filter((l) => l.group === "cloudflare") },
+	{ key: "worker", label: L("g_worker", "Dentro del `Worker`"), layers: layers.filter((l) => l.group === "worker") },
+	{ key: "taller", label: L("g_taller", "Transversal, desde el taller"), layers: layers.filter((l) => l.group === "taller") },
+];
+const q = by.calidad;
+const emd = by.emdash;
+const pres = by.presentacion;
+const cont = by.contenido;
+const entr = by.entrega;
+---
+
+<div class="dc-model">
+	<div class="dc-model__wrap">
+		<svg class="dc-model__lg" viewBox="-10 120 1310 1044" role="group" aria-label={L("map_aria", "")}>
+			<defs>
+				<marker id="dc-ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ahw" /></marker>
+			</defs>
+			{q && (
+				<a class="m-lk w q lb" href={href("calidad")} data-l={q.slug} aria-label={q.short}>
+					<path class="qf" d="M400,150 H1248 Q1264,150 1264,166 V1128 Q1264,1144 1248,1144 H52 Q36,1144 36,1128 V166 Q36,150 52,150 H60" />
+					<path class="qhit" d="M36,150 H1264 V1144 H36 Z" />
+					<text class="nm" x="72" y="158">{q.short}</text>
+					<text class="pm" x="186" y="156">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
+				</a>
+			)}
+			{entr && (
+				<a class="m-lk w k" href={href("entrega")} data-l={entr.slug} aria-label={entr.short}>
+					<rect class="tb" x="340" y="390" width="520" height="520" rx="46.8" transform="rotate(-7 600 650) translate(-18.2 15.6)" />
+				</a>
+			)}
+			{cont && (
+				<a class="m-lk w g" href={href("contenido")} data-l={cont.slug} aria-label={cont.short}>
+					<rect class="tg" x="340" y="390" width="520" height="520" rx="46.8" />
+				</a>
+			)}
+			{SLABS.map((s) => by[s.f] && (
+				<a class="m-lk c" href={href(s.f)} data-l={by[s.f].slug} aria-label={plain(by[s.f].title)}>
+					<g class={`sl ${s.s}`}>
+						<polygon class="ft" points={s.ft} />
+						<polygon class="fl" points={s.fl} />
+						<polygon class="fr" points={s.fr} />
+						<path class="ln" d={s.ln} />
+						<text class="et" transform={s.et} x="0" y="5" text-anchor="middle">{s.n}</text>
+					</g>
+				</a>
+			))}
+			<text class="cfl" x="946" y="522.9">{L("cloudflare", "Cloudflare")}</text>
+			<line class="br" x1="920" y1="548.9" x2="920" y2="751.1" />
+			{RIGHT.map((r) => by[r.f] && (
+				<a class="m-lk c lb" href={href(r.f)} data-l={by[r.f].slug} tabindex="-1" aria-hidden="true">
+					<rect class="lbh" x="766.4" y={r.y} width="479.6" height="50" />
+					<line class="ld" x1="778.4" y1={r.y + 26} x2="910" y2={r.y + 26} />
+					<circle class="dt" cx="920" cy={r.y + 26} r="5" />
+					<text class="nm" x="946" y={r.y + 27}>{plain(by[r.f].title)}</text>
+					<text class="pm" x="946" y={r.y + 47}>{runs(by[r.f].map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+				</a>
+			))}
+			{cont && (
+				<a class="m-lk w g lb" href={href("contenido")} data-l={cont.slug} tabindex="-1" aria-hidden="true">
+					<rect class="lbh" x="46" y="400" width="316" height="56" />
+					<path class="ldw" d="M260,430 H332 L362,430" />
+					<circle class="dk" cx="362" cy="430" r="5" />
+					<text class="nm" x="250" y="431" text-anchor="end">{cont.short}</text>
+					<text class="pm" x="250" y="451" text-anchor="end">{runs(cont.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+				</a>
+			)}
+			{entr && (
+				<a class="m-lk w k lb" href={href("entrega")} data-l={entr.slug} tabindex="-1" aria-hidden="true">
+					<rect class="lbh" x="46" y="680" width="280" height="56" />
+					<path class="ldw" d="M260,710 H296 L326,710" />
+					<circle class="dk" cx="326" cy="710" r="5" />
+					<text class="nm" x="250" y="711" text-anchor="end">{entr.short}</text>
+					<text class="pm" x="250" y="731" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+				</a>
+			)}
+			{emd && (
+				<a class="m-lk ap lb" href={href("emdash")} data-l={emd.slug} aria-label={emd.short}>
+					<rect class="wfr" x="500" y="196" width="200" height="150" rx="6" />
+					<rect class="wbar" x="500" y="196" width="200" height="24" rx="6" />
+					<rect class="wbar" x="500" y="212" width="200" height="8" />
+					<circle class="wd1" cx="512" cy="208" r="3.5" /><circle class="wd2" cx="523" cy="208" r="3.5" /><circle class="wd3" cx="534" cy="208" r="3.5" />
+					<text class="wpth" x="690" y="212" text-anchor="end">{L("win_cms", "/_emdash/admin")}</text>
+					<rect class="wol" x="500" y="196" width="200" height="150" rx="6" />
+					<text class="nm" x="720" y="272">{emd.short}</text>
+					<text class="pm" x="720" y="292">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+				</a>
+			)}
+			{pres && (
+				<a class="m-lk ap lb" href={href("presentacion")} data-l={pres.slug} aria-label={pres.short}>
+					<rect class="wfr" x="500" y="954" width="200" height="150" rx="6" />
+					<rect class="wbar" x="500" y="954" width="200" height="24" rx="6" />
+					<rect class="wbar" x="500" y="970" width="200" height="8" />
+					<circle class="wd1" cx="512" cy="966" r="3.5" /><circle class="wd2" cx="523" cy="966" r="3.5" /><circle class="wd3" cx="534" cy="966" r="3.5" />
+					<text class="wpth" x="690" y="970" text-anchor="end">{L("win_site", "/")}</text>
+					<rect class="wol" x="500" y="954" width="200" height="150" rx="6" />
+					<text class="nm" x="480" y="1030" text-anchor="end">{pres.short}</text>
+					<text class="pm" x="480" y="1050" text-anchor="end">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+				</a>
+			)}
+			<path class="fa" d="M600,350 V443" marker-end="url(#dc-ah)" />
+			<path class="fa" d="M600,857 V946" marker-end="url(#dc-ah)" />
+			<g class="who yo">
+				<circle class="ic" cx="438" cy="271" r="18" />
+				<g class="ico" transform="translate(438 271)"><path d="M-8,8 L-6,2 L5,-9 L9,-5 L-2,6 Z M3,-7 L7,-3" /></g>
+				<path class="wa2" d="M460,271 H492" marker-end="url(#dc-ah)" />
+				<text class="wh" x="408" y="269" text-anchor="end">{L("who_edit", "yo edito")}</text>
+				<text class="ws" x="408" y="289" text-anchor="end">{L("who_edit_sub", "Server Startup: editor o agente de IA")}</text>
+			</g>
+			<g class="who tu">
+				<path class="wa2" d="M708,1029 H740" marker-end="url(#dc-ah)" />
+				<circle class="ic" cx="762" cy="1029" r="18" />
+				<g class="ico" transform="translate(762 1029)"><path d="M-10,0 Q0,-8 10,0 Q0,8 -10,0 Z" /><circle r="3" /></g>
+				<text class="wh" x="792" y="1027">{L("who_see", "tú ves")}</text>
+				<text class="ws" x="792" y="1047" data-dc-whoami visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
+			</g>
+		</svg>
+		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:39.008%;top:9.579%;width:15.115%;height:11.973%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:39.008%;top:82.184%;width:15.115%;height:11.973%" />
+	</div>
+	<svg class="dc-model__sm" viewBox="0 0 300 300" aria-hidden="true">
+		<rect class="tb" x="38" y="32" width="236" height="236" rx="21.2" transform="rotate(-7 156 150) translate(-8.3 7.1)" />
+		<rect class="tg" x="38" y="32" width="236" height="236" rx="21.2" />
+		{SM.map((s) => (
+			<g class={`sl ${s.s}`}>
+				<polygon class="ft" points={s.ft} />
+				<polygon class="fl" points={s.fl} />
+				<polygon class="fr" points={s.fr} />
+				<path class="ln" d={s.ln} />
+			</g>
+		))}
+	</svg>
+	<div class="container">
+	<p class="dc-model__cr" set:html={layerHtml(L("model_credit", ""))} />
+	<nav class="dc-mlist" aria-label={L("map_list_aria", "Mapa de capas")}>
+		{groups.map((g) => g.layers.length > 0 && (
+			<>
+				<p class="dc-mlist__g" set:html={layerHtml(g.label)} />
+				{g.layers.map((l, i) => (
+					<a class={g.key === "cloudflare" ? "c" : undefined} href={`#${l.slug}`}>
+						<b>{g.key === "cloudflare" ? String(i + 1) : "·"}</b>
+						<span><Fragment set:html={layerHtml(l.title)} /><small set:html={layerHtml(l.summary)} /></span>
+					</a>
+				))}
+			</>
+		))}
+	</nav>
+	</div>
+</div>

@@ -13,9 +13,7 @@ WHERE
 @param
 @author
 @since
-# Brand wordmark (AssemblyManual header, SiteHeader prompt) and brand-name image alts
-SERVERSTARTUP
-.io
+# Brand wordmark (SiteHeader prompt) and brand-name image alts
 Server Startup
 ~Server Startup
 Cloudflare Partner Network

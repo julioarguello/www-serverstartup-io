@@ -3,173 +3,307 @@ Skip to content
 /en/deconstructing
 ES
 Deconstructing this website
-If someone tells you how they work and cannot show you the workshop, be suspicious. This is ours.
-The tour runs downwards, from the point of presence that answered your request to the commit that authorised these words. Every layer opens if you want the detail, and everything claimed here is in the repository.
-The architecture
-There are no servers to look after, and that is the least of it. What matters is where the response you are reading was made: at the edge, on Cloudflare Workers. Cache sits in front, and on a hit the code never runs.
-Below that, the CMS is EmDash, which Cloudflare released under an MIT licence as a successor to WordPress, and not a service to call over the network: it is the same application, served by the same worker. And at the bottom of the descent there is no database, there is a text file in Git.
-L5
-the edge
-Workers · cache in front
-A hit returns the page without running any code.
-The Workers cache sits in front of the worker, so a hit answers without running anything. Nothing is cached by default: a page only gets in if it asks to. Once in it lasts an hour, and publishing purges it by tag.
-L4
-the door
-middleware
-Decides what may be cached and adds the security headers.
-One middleware for every response: it resolves the locale, loads the accessibility labels, decides the cache policy and stamps seven security headers. The editing panel is excluded, because it brings its own.
-L3
-the render
-Astro SSR
-Builds the HTML in the same worker that took the request.
-26 public routes, 24 components and 12 stylesheets, on Astro on-demand rendering — Astro has been part of Cloudflare since January 2026. Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404. The width and the sizes of every image are declared by the template, not by the file: the template knows the slot it has to fill, and the file does not.
-L2
-the CMS
+How it is built, layer by layer: from the Cloudflare network to the checks every change goes through. Every claim links to the file that proves it.
+Quality
+24 steps · Lighthouse · axe
+01
+02
+03
+04
+Cloudflare
+Data
+D1 · Workers KV · Images · R2
+Compute
+Workers · Astro · Dynamic Workers
+The cache
+Workers Cache · purge by tag
+The network
+DNSSEC · TLS 1.3 · Custom Domains
+Content
+seed.json · ES ↔ EN
+Delivery
+GitHub Actions · wrangler
+/_emdash/admin
 EmDash
-Runs inside the same worker: no external service to call.
-EmDash is not a service you subscribe to: it is the CMS Cloudflare released in April 2026 under an MIT licence as a successor to WordPress, and has run its own blog since 12 August. Here it injects 183 routes under /_emdash into this very application, with 7 collections and 43 entries: same script, same bindings, no network call. Third-party plugins are the deliberate exception, running in a separate isolate through Worker Loader, with no way out to the internet.
-The panel, editing this page. It runs in the same worker that just served it to you.
-L1
-the data
-D1 · R2 · KV
-Content, images and sessions, at the edge.
-Content in D1, files in R2 and sessions in KV. Static assets never come through here: the asset layer serves them without ever waking the worker.
-L0
+the CMS · inside the Worker
+/
+Presentation
+Astro · inside the Worker
+I edit
+Server Startup: an editor or an AI agent
+you see
+from Getxo · MAD
+Windows: the EmDash editor, a screenshot; the edge-security opening, photo by Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restored; masts removed and frame extended with AI
+1
+Network
+2
+Cache
+3
+Compute
+4
+Data
+EmDash
+Presentation
+Content
+Delivery
+Quality
+FOUR LAYERS, ON Cloudflare
+layer 1 · Cloudflare
+The network
+A signed DNS zone, TLS 1.3, and a domain whose origin is the Worker.
+visitor
+opens a page
+DNSSEC
+signed zone
+TLS 1.3
+Encrypted Client Hello
+Custom Domains
+automatic certificate
+Workers
 the origin
-seed.json · markdown
-What a person writes. Everything above derives from it.
-A text file in Git, plus the service bodies in markdown. The whole site comes out of it in a rebuild from nothing, which is what continuous integration does before every merge.
-The request comes in at the top. What a person writes lives at the bottom, which is why that is the layer reviewed by hand.
-Content as code
-Almost every text lives in seed/seed.json, with the service bodies in markdown: the filename is the slug, the directory is the locale. A rebuild from nothing remakes the whole site, and continuous integration checks that before every merge.
-Caching inherits the discipline: a page is cached only if it asks to be, and publishing purges it by tag. One gap is worth saying out loud: menus and site settings emit no event, so a one-hour TTL is what bounds their staleness.
-➜ serverstartup.io rebuild --from-nothing
-✓ database created, empty
-✓ seeds applied: 43 entries, two locales
-✓ frozen copy: 26 routes
-✓ rendered copy: matches the frozen baseline
-╰─ done. The rebuild is the proof, and it runs before every merge.
-The agents
-A model writing the first draft is neither impressive nor mysterious. What decides whether this is serious is who has authority over what.
-The agent proposes and cannot merge. The checks refuse and cannot write: their credential is read-only. The human can do both, which is why the human is the only one who can be wrong by name. The small print: the agent not merging is a written rule, not a lock on the server.
-Before a person is asked anything, the branch goes through twenty-three steps that can fail. They refuse what a reading by eye does not catch:
-A guard is only worth having if it can fail, and one that finds nothing looks like one that cannot. The most delicate ones carry a positive control that blows them up the moment they stop looking. The last door is not automatic either: production is deployed by hand.
-agent/draft → main
-Open
-−
-publish without anyone reading it
-+
-Non-citable names: a client who must not appear in a public repository.
-+
-Copy outside the CMS: a label that exists in one locale only, or a sentence burnt into a template.
-+
-Colours outside the system: a literal or a new width, which is how seven different measures come back.
-+
-Caching in the wrong place: a call placed after the headers have gone, which caches nothing and looks like it does.
-+
-Copy that changes by itself: the rendered text of 26 routes is frozen.
-+
-Images that ask for themselves: an absolute URL to our own domain, which cannot work on Cloudflare and looks perfectly fine locally.
-+
-Accessibility and contrast: keyboard traversal, reflow at 320 pixels and W3C validation.
-All checks have passed — quality-gates / gates
-✓ gitleaks
-✓ citability
-✓ astro check
-✓ seed schema
-✓ CMS text
-✓ design tokens
-✓ cache hints
-✓ unit tests
-✓ build
-✓ boot the stack
-✓ html-validate
-✓ frozen copy
-✓ headers
-✓ image hrefs
-✓ accessibility
-✓ Lighthouse
-✔ Approved
-Signed-off-by: julio.arguello
-Merge pull request
-The numbers
-An undated number is the worst possible place for drift, so there are two kinds here and they never mix. The threshold lives in a file: 95 or more for performance, 100 for accessibility, best practices and SEO, over the median of three runs under mobile emulation.
-The measurement carries its date. On 24 August 2026, against the production build: 100 in all four categories across all five addresses, with the largest content painted in under 1.6 seconds. Each figure is a median, and the bound is the worst of the five.
-The images carry a date of their own. On 27 August 2026, under mobile emulation, over the same pages before and after: between 43% and 60% fewer image bytes, depending on the page and the width. The saving does not come from compressing harder but from no longer sending the original file: every image is asked for at the size of the slot it has to fill, and on contact that slot is a 53-pixel avatar for a 1200-pixel portrait.
-Thresholds · continuous integration
-REQUIRED
+The zone's Cloudflare dashboard: TLS 1.3 as the minimum, and Encrypted Client Hello on.
+Detail and proof
+2 rows
+DNS is authoritative on Cloudflare, and the zone is signed with DNSSEC.
+no file: checked in the zone's API
+DNS full setup · DNSSEC
+TLS 1.3 is the minimum version the zone accepts. Encrypted Client Hello is on. Clients that support it also get the post-quantum key agreement Cloudflare offers by default.
+no file: checked in the zone's API
+Minimum TLS · Encrypted Client Hello · post-quantum
+layer 2 · Cloudflare
+The cache
+A hit does not run the Worker.
+request
+from a visitor
+Workers Cache
+tiered
+MISS
+Workers
+renders
+Detail and proof
+5 rows
+Workers Cache sits in front of the Worker and is tiered by default: a hit does not run the Worker.
+wrangler.jsonc
+Workers Cache
+A rendered page is cached at the edge only if it opts in. Every other rendered response is sent no-store.
+src/middleware.ts
+Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they expire within the hour.
+src/plugins/cache-purge.ts
+last green check, 2026-08-23 · purge
+Build output under /_astro/ is content-hashed and served with a one-year, immutable max-age.
+public/_headers
+Static Assets headers
+Resized images are kept in the Cache API.
+no file: in the `@astrojs/cloudflare` dependency
+Cache API
+layer 3 · Cloudflare
+Compute
+One Worker, and no server behind it.
+Workers Static Assets
+the files, no Worker
+Workers
+Astro and EmDash
+Dynamic Workers
+plugins, kept apart
+0
+servers behind the Worker
+7
+security headers
+6
+bindings
+Detail and proof
+5 rows
+One Worker renders the pages on demand with Astro (SSR). The built files are served as Workers Static Assets without running it. There is no server behind the Worker.
+astro.config.mjs
+Astro on Workers · Static Assets
+The team that makes Astro has worked at Cloudflare since January 2026. Astro remains MIT-licensed and openly governed.
+no file: per the announcement
+announcement
+One middleware stamps 7 security headers on every page the Worker renders. The CSP admits no third-party script.
+src/middleware.ts
+The Worker knows the visitor's city and which Cloudflare data centre answered (request.cf). The edge-security opening shows them.
+src/pages/api/whoami.ts
+request.cf
+CMS plugins can run in their own Dynamic Worker, with no network of their own and fixed CPU, subrequest and time limits. Everything they do passes through a bridge that checks the capabilities each one declares.
+wrangler.jsonc
+Dynamic Workers · plugin sandbox
+layer 4 · Cloudflare
+Data
+Four stores, four jobs.
+D1
+content
+Workers KV
+sessions
+Images
+WebP
+R2
+CMS media
+The Worker bindings in the Cloudflare dashboard. The sixth, ASSETS, is added by the Astro adapter at build time.
+Detail and proof
+5 rows
+D1 (SQLite) holds the content, its revisions and the settings. Each request opens a D1 session.
+wrangler.jsonc
+D1 · sessions
+Workers KV holds the editors' sessions.
+wrangler.jsonc
+Workers KV
+The Worker hands each image to the Images binding, which resizes it to its slot and converts it to WebP.
+wrangler.jsonc
+Images binding
+R2 is wired as the CMS media store. Today every image on the site ships with the code.
+wrangler.jsonc
+R2
+Preview and production each have their own D1, Workers KV and R2.
+wrangler.jsonc
+INSIDE THE WORKER
+inside the Worker
+The CMS: EmDash
+The Cloudflare open-source CMS, inside the same Worker.
+The EmDash editor, in the site's admin.
+editor
+with a passkey
+EmDash
+OAuth 2.1
+token
+AI agent
+over MCP
+The announcement
+Cloudflare runs its blog on it
+The code
+The documentation
+Detail and proof
+7 rows
+EmDash, the open-source (MIT) CMS that Cloudflare announced in April 2026, runs inside the same Worker. It is still pre-1.0.
+package.json
+announcement · code · documentation
+Cloudflare runs its own blog on EmDash.
+no file: per its blog
+the Cloudflare blog
+Five content types: pages, services, members, references and partners, with blog posts ready and empty. Pages and services have drafts; those two and members keep revisions. Bodies are Portable Text.
+seed/seed.json
+documentation
+Two languages: pages, services and members are published in pairs linked by translationOf.
+seed/seed.json
+Menus, widget areas, site settings and taxonomies come from the CMS. Every interface label lives in a widget, not in a template.
+src/utils/ui-labels.ts
+Search comes from EmDash, on SQLite FTS5 with bm25 ranking.
+no file: in `EmDash`, migration 064
+A plugin kept in the repository purges the cache on publish. It declares content:read, because without it EmDash skips its hooks.
+astro.config.mjs
+inside the Worker
+Presentation
+No third-party requests.
+Cabo Peñas · Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restored; masts removed and frame extended with AI
+Guggenheim · Sergio S.C · Wikimedia Commons · CC BY-SA 2.0 · restored; empty plot rebuilt with AI
+0
+third-party requests when a page loads
+one stylesheet for everything
+Detail and proof
+4 rows
+One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.
+src/styles/theme.css
+Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.
+src/middleware.ts
+Each vertical opens with a Wikimedia Commons photograph, restored and partly redrawn, and a layer drawn live in the browser. The layer is placed against the measured text, and its clock stops at eight seconds: nothing loops.
+src/utils/hero-art.ts
+The photographs were restored locally with SeedVR2. FLUX.2 [dev] (Black Forest Labs) on Workers AI removed objects, extended frames and redrew from the photographs. Every prompt is in the repository.
+docs/design/hero-rotativo/photo_restore.py
+[FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
+ACROSS THE LAYERS, FROM THE WORKSHOP
+across the layers · from the workshop
+Content
+Every sentence, in a versioned file.
+seed/seed.json
+every sentence
+D1, empty
+×12 in parallel
+the site
+ES ↔ EN
+seed/seed.json on GitHub
+The service pages in Markdown
+The seed/ folder of the public repository.
+Detail and proof
+4 rows
+Every sentence the site renders lives in one versioned file, seed/seed.json. The service pages are written in Markdown, and the CMS converts them into that file. A test keeps the two word for word, and a CI gate rejects copy typed into a template.
+seed/seed.json
+seed files
+On every change that can reach a page, CI builds the site and fills an empty database from that file, twelve times in parallel.
+.github/workflows/ci.yml
+Service slugs are translated, so the other language's URL is never guessed. hreflang and the language switcher read the same resolved value.
+src/utils/alternate.ts
+The sitemap is generated from the CMS collections.
+src/pages/sitemap.xml.ts
+across the layers · from the workshop
+Delivery
+The preview deploys itself; production goes out by hand.
+pull request
+one change
+24 steps
+on workerd
+green
+preview
+deploys itself
+by hand
+production
+started by the founder
+The runs on GitHub Actions
+wrangler-action
+The preview deploys itself once the gates pass, on GitHub Actions.
+Detail and proof
+5 rows
+The working repository is public, with all its commits.
+README.md
+the repository
+Every change that can reach a page passes 24 steps that can fail. A test derives that number from the workflow.
+.github/workflows/ci.yml
+The gates run the site locally on workerd, the open-source runtime behind Workers, through wrangler dev. If wrangler itself crashes, the stack restarts once and the summary says so.
+scripts/ci-local-stack.sh
+workerd
+When the gates pass on main, the preview deploys itself with wrangler-action. It waits for the D1 migrations, reseeds after rehearsing the SQL on a throwaway database, and runs a smoke battery.
+.github/workflows/deploy-preview.yml
+GitHub Actions · wrangler-action
+Production deploys only when the founder starts it by hand, and a guard refuses to overwrite a database that holds content.
+.github/workflows/deploy-production.yml
+across the layers · on every change
+Quality
+Checks that prove themselves.
+24
+steps that can fail
+30
+routes with frozen text
+≥95
 performance
-95 or more
+100
 accessibility
 100
 best practices
 100
 SEO
-100
-routes with frozen copy
-26
-steps that can fail
-23
-The workshop, in plain sight
-The repository is public and syncs on every change to the main branch, whole history, unfiltered. Publishing like that has a cost: that is why the non-citable-names guard exists.
-Code, seeds, checks and deployments: it is all there. Look inside and tell us if you would do it differently.
-SERVERSTARTUP.io
-assembly manual · ES/EN · sheet 1 of 1
-PARTS INCLUDED
-L5
-the edge
-×1
-the worker that answers
-src/worker.ts ↗
-L4
-the door
-×7
-the security headers
-src/middleware.ts ↗
-L3
-the render
-×26
-the public routes
-src/pages/ ↗
-L2
-the CMS
-×5
-a plugin of ours on the EmDash API
-src/plugins/cache-purge.ts ↗
-L1
-the data
-×3
-D1, R2 and KV
-wrangler.jsonc ↗
-L0
-the origin
-×43
-the whole corpus
-seed/seed.json ↗
-—
-the engineers
-—
-not included: already there
-ASSEMBLY
-01
-write the seeds
-02
-the skill sets the voice
-03
-the agent drafts
-04
-human review ✋
-05
-pull request and merge
-06
-deploy to the edge
-⚠ Warnings
-Do not assemble without step 04. The agent drafts, the human signs.
-Step 03 never merges. Ever.
-ℹ Assembly data
-Assembly time: three weeks, in odd hours.
-Hardware included: no parts left over.
-View the repository →
+Lighthouse on 9 pages, in CI against a local copy, on 2026-10-16
+The 2026-10-16 run
+lighthouserc.json
+The gates for a change on main, all green, on 2026-10-16.
+Detail and proof
+7 rows
+The accessibility, engine, design, layout, copy, language and naming checks plant the defect they hunt, and must catch it before they report green.
+.github/workflows/ci.yml
+Lighthouse in CI, against a local copy, takes the median of 3 runs on 9 pages: performance ≥95; accessibility, best practices and SEO, 100. All nine met it on 2026-10-16.
+lighthouserc.json
+the run
+Accessibility: axe (WCAG 2.2 A+AA) and a keyboard pass on every route of the site, plus reflow at 320 px. Where text sits on a photograph, contrast is measured on the rendered pixels.
+scripts/ci-check-a11y.mjs
+Each opening is checked mid-animation and at rest, in Safari's engine (iPhone and desktop profiles) and Chrome's (Pixel 7), with reduced motion too.
+scripts/ci-check-engines.mjs
+The rendered text of 30 routes is frozen. Changing a word fails until the new text is deliberately re-captured, so the change shows in the pull request's diff.
+scripts/copy-baseline.mjs
+AI agents write most of the code under written rules, and the founder merges every pull request.
+no file: shown by the merge history
+the repository
+Every push is scanned for secrets, and a guard rejects naming clients we may not name.
+.github/workflows/ci.yml
+The workshop, open
+If someone tells you how they work and cannot show you the workshop, be wary. This is ours: code, content, checks and deployments.
+See the repository
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project
@@ -187,3 +321,4 @@ we are partners
 Legal notice
 Privacy policy
 Accessibility
+Credits

@@ -325,13 +325,13 @@ const OPENING_ROUTES = [
 	// no service page opens with a plate since #556: Big Data, the last one, opens with a scene like the other five
 	{ route: "/quienes-somos", opening: ".s-hero" },
 	{ route: "/contacto", opening: ".s-contact" },
-	{ route: "/deconstruyendo", opening: ".s-doc" },
+	{ route: "/deconstruyendo", opening: ".dc-hero" },
 	{ route: "/referencias", opening: ".s-hero" },
 	{ route: "/politica-de-privacidad", opening: ".legal" },
 	{ route: "/en", opening: ".s-hero", photographic: true },
 	{ route: "/en/about-us", opening: ".s-hero" },
 	{ route: "/en/contact", opening: ".s-contact" },
-	{ route: "/en/deconstructing", opening: ".s-doc" },
+	{ route: "/en/deconstructing", opening: ".dc-hero" },
 	{ route: "/en/references", opening: ".s-hero" },
 	{ route: "/en/privacy-policy", opening: ".legal" },
 	// the band-less page types, out of every route list until #570

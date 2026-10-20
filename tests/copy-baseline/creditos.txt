@@ -1,0 +1,31 @@
+Saltar al contenido
+~Server Startup
+/creditos
+EN
+Créditos
+Quién hizo las fotografías de las aperturas, con qué licencia y qué les cambiamos.
+Las aperturas de los verticales usan fotografías de Wikimedia Commons con licencia Creative Commons BY-SA. Las restauramos y, en algunos casos, las modificamos con inteligencia artificial. Aquí está cada autor, su licencia, lo que cambiamos y dónde aparece. Cada derivado se distribuye con la misma licencia que su original. Los prompts que se usaron están en el repositorio.
+Fotografías
+El faro de Cabo Peñas. «Cape Penas Lighthouse.jpg», de Einaz80, Wikimedia Commons, licencia CC BY-SA 4.0. Restaurada. Retirados el mástil, las antenas, los cables, la torre meteorológica y los cobertizos, y ampliado el encuadre hacia la izquierda con IA (FLUX.2 [dev] en Workers AI): el brezo y la costa de ese lado no son de la fotografía. El perfil dibujado sobre el faro deriva de ella. Aparece en: la portada; «CDN, WAF y seguridad edge»; «Deconstruyendo esta web».
+El Puente de Bizkaia. «Bizkaia zubia - Puente Bizkaia.jpg», de Ebaki, Wikimedia Commons, licencia CC BY-SA 4.0. Restaurada. En «Integración de sistemas», el puente y el cielo se retiraron con IA y el puente se redibujó como alzado a partir de sus propios bordes. La popa del petrolero se rotuló SERVER STARTUP / AVILÉS / YULO 11062024. Aparece en: la portada; «Integración de sistemas»; «Inteligencia artificial».
+El museo Guggenheim de Bilbao. «Museo Guggenheim Bilbao, Bilbao. (23811575351).jpg», de Sergio S.C, Wikimedia Commons, licencia CC BY-SA 2.0. Restaurada y sin la marca del fotógrafo. El solar vacío es una reconstrucción con IA, no una fotografía anterior a 1997, y el alzado del museo se redibujó con IA a partir de la fotografía. Aparece en: la portada; «Desarrollo greenfield»; «Deconstruyendo esta web».
+El almacén automatizado. «Ocado warehouse bots.jpg», de Techwords, Wikimedia Commons, licencia CC BY-SA 4.0. Restaurada y sin la marca del operador en los robots. En la portada, el encuadre se amplió hacia la izquierda con IA. Aparece en: la portada; «Comercio electrónico».
+Las cúpulas del Observatorio del Teide. «Teide Observatory 2018 077.jpg», de Mike Peel, Wikimedia Commons, licencia CC BY-SA 4.0. Restaurada y sin el logotipo del operador en dos puertas. Aparece en: la portada; «Big Data & Cloud Analytics».
+Hablemos de ingeniero a ingeniero.
+Trae el problema como esté. Te responde quien va a escribir el código.
+Cuéntanos tu proyecto
+referencias
+~Server Startup
+Backend, integración, datos y edge. Los mismos ingenieros senior de principio a fin, desde Getxo, desde 2019.
+La casa
+Quiénes somos
+Deconstruyendo esta web
+Referencias
+Contacto
+Escríbenos
+somos partners
+© 2026 Server Startup, S.L.
+Aviso legal
+Política de privacidad
+Accesibilidad
+Créditos

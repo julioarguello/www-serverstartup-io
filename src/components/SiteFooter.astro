@@ -51,6 +51,8 @@ interface Props {
 	legalNoticeLabel: string;
 	privacyLabel: string;
 	accessibilityLabel: string;
+	/** #535: CC BY-SA attribution for the openings' photographs, reachable from every page. */
+	creditsLabel: string;
 	contactTitle: string;
 	aboutUsLabel: string;
 	manualLabel: string;
@@ -74,6 +76,7 @@ const {
 	legalNoticeLabel,
 	privacyLabel,
 	accessibilityLabel,
+	creditsLabel,
 	contactTitle,
 	aboutUsLabel,
 	manualLabel,
@@ -94,6 +97,7 @@ const privacySlug = en ? "privacy-policy" : "politica-de-privacidad";
 // #507: RD 1112/2018 art. 10 wants the accessibility channel findable, and the
 // legal row is where a reader already looks for the duties a site owes them.
 const accessibilitySlug = en ? "accessibility" : "accesibilidad";
+const creditsSlug = en ? "credits" : "creditos";
 const referencesSlug = locale === "en" ? "references" : "referencias";
 
 // One shape for the partner marks, whether they come from the CMS or from the
@@ -218,6 +222,7 @@ const partnerMarks = (partnerLogos.length > 0
 			<a href={`${localePrefix}/${legalSlug}`}>{legalNoticeLabel}</a>
 			<a href={`${localePrefix}/${privacySlug}`}>{privacyLabel}</a>
 			<a href={`${localePrefix}/${accessibilitySlug}`}>{accessibilityLabel}</a>
+			<a href={`${localePrefix}/${creditsSlug}`}>{creditsLabel}</a>
 		</nav>
 	</div>
 </footer>

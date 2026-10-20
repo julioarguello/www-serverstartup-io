@@ -42,6 +42,7 @@ All editorial text lives in EmDash CMS. Templates contain only layout, CSS, and 
 | `posts` | `title`, `excerpt`, `content` (PT), `featured_image` | drafts, revisions, search, bylines |
 | `members` | `title`, `excerpt`, `featured_image`, `content` (PT) | — |
 | `partners` | `title`, `featured_image`, `content` (PT) | — |
+| `layers` | `title`, `position`, `group`, `figure`, `short`, `lede`, repeaters `nodes`, `stats`, `photos`, `facts` (each fact: `text`, `file`, `docs`, `status`) | — (only /deconstruyendo reads it, §4.14) |
 
 ### 2.3 Taxonomies
 
@@ -787,6 +788,44 @@ responde quien hace el trabajo»); the photographs and each person's caption car
 reader or crawler is shown, and the JSON-LD — because the count once reached every route through a
 single widget. Its control plants every shape the copy actually used and, beside them, every number
 that must pass (the mantra, the verticals, the years, «tres semanas»).
+
+### 4.14 /deconstruyendo: the site explained by its layers (#535)
+
+The page explains the whole site from the foundations up: four `Cloudflare` layers (network,
+cache, compute, data), what runs inside the Worker (EmDash, presentation), and what crosses
+them from the workshop (content as code, delivery, quality). The copy lives in the CMS, not in
+the template, in one `layers` entry per layer and locale (ES + EN, `translationOf`), loaded from
+`seed/seed.json` like every other collection.
+
+| Piece | Where |
+|:------|:------|
+| Types, order, markdown-lite render | `src/utils/layers.ts` (`getLayers`, `layerHtml`, `shownFacts`) |
+| Page shell: opening, map, spine, closing | `src/components/DeconstructPage.astro` |
+| The isometric map (desktop) and the grouped list (phone) | `src/components/deconstruct/DecModel.astro` |
+| One plate per layer: icon, figure, links, the facts ledger | `src/components/deconstruct/DecPlate.astro` |
+| UI strings | `deconstruct_labels` blocks in `ui_labels_es/en` |
+| Styles | `src/styles/deconstruct.css` (`dc-` prefix, theme tokens only) |
+
+Decisions:
+
+- **Every fact names its file.** A fact's `file` (and every repository link in the seed) is
+  checked against `git ls-files` by `scripts/ci-check-cited-files.py`: renaming a cited file
+  fails CI by name instead of sending a reader to GitHub's 404. A fact with `status: pending`
+  stays in the CMS and is not shown until it is verified on the deployed site.
+- **Numbers are derived, not remembered.** The gate count is checked against `ci.yml`
+  (`tests/unit/gate-count.test.ts`), the frozen routes against `tests/copy-baseline/`, and the
+  Lighthouse rings against `lighthouserc.json` (`tests/unit/deconstruct-claims.test.ts`).
+- **Cloudflare products render in orange, ours in ink.** `CLOUDFLARE_PRODUCTS` in `layers.ts`
+  is the one list of names that get `<code class="cf">`; a product the copy starts to name
+  goes there.
+- **Repeater sub-fields cannot hold Portable Text** (EmDash 0.34), so plate text is
+  markdown-lite rendered by `excerptHtml`, the same as service excerpts.
+- **Locale parity covers repeaters**: `ci-check-locale-parity.py` compares row counts and the
+  sub-fields filled in each row, so an EN plate cannot silently lose a fact.
+- **The map is a `role="group"`, not an image**: it holds links to each plate, and an image's
+  children are presentational (axe `nested-interactive`).
+- Photographs shown on the page carry their CC BY-SA attribution in the caption; the full
+  list is the credits page, `/creditos` · `/en/credits`.
 
 ## 5. SEO
 

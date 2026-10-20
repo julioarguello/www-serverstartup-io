@@ -68,3 +68,16 @@ reference/server-startup-design.fig  # same
                                     # outlines and the foundry's own name table
 .design-sync/pkg/fonts/*.woff2      # Alexandria, JetBrains Mono, Inconsolata and Saira, the
                                     # same: outlines and name tables, no prose
+
+# ── Claude Design sync (#535): the /deconstruyendo brief and its approved delivery ──
+.design-sync/current/deconstruyendo/*      # what the brief handed the design agent: the
+                                           # EmDash editor on our own page, the Vizcaya Bridge
+                                           # photograph and its derivatives (Commons, CC BY-SA,
+                                           # the stern lettered SERVER STARTUP), and captures of
+                                           # our own GitHub repository and Cloudflare settings
+                                           # (resource names of this site only). Each viewed;
+                                           # no EXIF, XMP or text chunk (checked 2026-10-20).
+.design-sync/delivery/deconstruyendo/img/* # the same images as returned in the approved
+                                           # delivery, plus two openings of this site captured
+                                           # from the preview; the JPEGs' one header text is the
+                                           # encoder tag `Lavc61.19.100` (checked 2026-10-20).

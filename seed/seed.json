@@ -259,6 +259,251 @@
 					"type": "boolean"
 				}
 			]
+		},
+		{
+			"slug": "layers",
+			"label": "Capas de Deconstruyendo",
+			"labelSingular": "Capa",
+			"supports": [
+				"revisions"
+			],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Título",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "position",
+					"label": "Posición",
+					"type": "integer",
+					"required": true
+				},
+				{
+					"slug": "group",
+					"label": "Grupo",
+					"type": "select",
+					"validation": {
+						"options": [
+							"cloudflare",
+							"worker",
+							"taller"
+						]
+					}
+				},
+				{
+					"slug": "kicker",
+					"label": "Antetítulo (markdown ligero)",
+					"type": "string"
+				},
+				{
+					"slug": "short",
+					"label": "Nombre en el índice",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "map_note",
+					"label": "Nota en el mapa (markdown ligero)",
+					"type": "string"
+				},
+				{
+					"slug": "summary",
+					"label": "Resumen en la lista del móvil (markdown ligero)",
+					"type": "string"
+				},
+				{
+					"slug": "lede",
+					"label": "Entradilla",
+					"type": "text"
+				},
+				{
+					"slug": "figure",
+					"label": "Figura",
+					"type": "select",
+					"validation": {
+						"options": [
+							"red",
+							"cache",
+							"computo",
+							"datos",
+							"emdash",
+							"presentacion",
+							"contenido",
+							"entrega",
+							"calidad"
+						]
+					}
+				},
+				{
+					"slug": "nodes",
+					"label": "Piezas de la figura",
+					"type": "repeater",
+					"validation": {
+						"subFields": [
+							{
+								"slug": "title",
+								"label": "Nombre",
+								"type": "string",
+								"required": true
+							},
+							{
+								"slug": "note",
+								"label": "Nota",
+								"type": "string"
+							},
+							{
+								"slug": "cloudflare",
+								"label": "Es de Cloudflare",
+								"type": "boolean"
+							},
+							{
+								"slug": "edge",
+								"label": "Etiqueta de la flecha que sale de esta pieza",
+								"type": "string"
+							},
+							{
+								"slug": "fact",
+								"label": "Hecho al que apunta (clave)",
+								"type": "string"
+							}
+						]
+					}
+				},
+				{
+					"slug": "nodes_plain",
+					"label": "Piezas sin flechas",
+					"type": "boolean"
+				},
+				{
+					"slug": "stats",
+					"label": "Cifras",
+					"type": "repeater",
+					"validation": {
+						"subFields": [
+							{
+								"slug": "value",
+								"label": "Valor",
+								"type": "string"
+							},
+							{
+								"slug": "label",
+								"label": "Qué mide",
+								"type": "string",
+								"required": true
+							},
+							{
+								"slug": "kind",
+								"label": "Cómo se dibuja",
+								"type": "select",
+								"options": [
+									"number",
+									"ring",
+									"swatches"
+								]
+							}
+						]
+					}
+				},
+				{
+					"slug": "stats_note",
+					"label": "Nota bajo las cifras (markdown ligero)",
+					"type": "text"
+				},
+				{
+					"slug": "photos",
+					"label": "Fotografías",
+					"type": "repeater",
+					"validation": {
+						"subFields": [
+							{
+								"slug": "image",
+								"label": "Imagen",
+								"type": "image",
+								"required": true
+							},
+							{
+								"slug": "alt",
+								"label": "Texto alternativo",
+								"type": "string",
+								"required": true
+							},
+							{
+								"slug": "caption",
+								"label": "Crédito y cambios (markdown ligero)",
+								"type": "text",
+								"required": true
+							}
+						]
+					}
+				},
+				{
+					"slug": "capture",
+					"label": "Captura",
+					"type": "image"
+				},
+				{
+					"slug": "capture_caption",
+					"label": "Pie de la captura (markdown ligero)",
+					"type": "text"
+				},
+				{
+					"slug": "links",
+					"label": "Enlaces destacados (markdown ligero)",
+					"type": "text"
+				},
+				{
+					"slug": "facts",
+					"label": "Hechos",
+					"type": "repeater",
+					"validation": {
+						"subFields": [
+							{
+								"slug": "key",
+								"label": "Clave (ancla)",
+								"type": "string",
+								"required": true
+							},
+							{
+								"slug": "text",
+								"label": "Texto (markdown ligero)",
+								"type": "text",
+								"required": true
+							},
+							{
+								"slug": "file",
+								"label": "Fichero del repositorio que lo prueba",
+								"type": "string"
+							},
+							{
+								"slug": "file_note",
+								"label": "Si no hay fichero: dónde se comprueba",
+								"type": "string"
+							},
+							{
+								"slug": "docs",
+								"label": "Documentación oficial (markdown ligero)",
+								"type": "text"
+							},
+							{
+								"slug": "status",
+								"label": "Estado",
+								"type": "select",
+								"options": [
+									"ok",
+									"pending"
+								]
+							},
+							{
+								"slug": "pending_note",
+								"label": "Qué falta para confirmarlo",
+								"type": "string"
+							}
+						]
+					}
+				}
+			]
 		}
 	],
 	"taxonomies": [
@@ -1097,426 +1342,8 @@
 				},
 				{
 					"type": "content",
-					"title": "manual_labels",
+					"title": "deconstruct_labels",
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d5",
-							"children": [
-								{
-									"_type": "span",
-									"text": "La [caché de `Workers`](https://developers.cloudflare.com/workers/runtime-apis/cache/) se sienta delante del `worker`, así que un acierto responde sin ejecutar nada. Por defecto no se cachea: una página solo entra si ella misma lo pide. Cuando entra dura una hora, y al publicar se purga por etiquetas."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d4",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Un único *middleware* para todas las respuestas: resuelve el idioma, carga las etiquetas de accesibilidad, decide la política de caché y estampa siete cabeceras de seguridad. El panel de edición queda fuera, porque trae las suyas."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d3",
-							"children": [
-								{
-									"_type": "span",
-									"text": "26 rutas públicas, 24 componentes y 12 hojas de estilo, con [render bajo demanda](https://docs.astro.build/en/guides/on-demand-rendering/) de `Astro`, que también es de Cloudflare [desde enero de 2026](https://blog.cloudflare.com/astro-joins-cloudflare/). Los idiomas no se separan por prefijo sino por *slug* traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404. El ancho y el `sizes` de cada imagen los declara la plantilla, no el fichero: la plantilla sabe en qué hueco va a caber, y el fichero no."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "[`EmDash`](https://blog.cloudflare.com/emdash-wordpress/) no es un servicio contratado: es el CMS que Cloudflare publicó en abril de 2026 con licencia MIT como sucesor de WordPress, y que usa en [su propio blog](https://blog.cloudflare.com/cloudflare-blog-uses-emdash/) desde el 12 de agosto. Aquí inyecta 183 rutas bajo `/_emdash` en esta misma aplicación, con 7 colecciones y 43 entradas: mismo *script*, mismos enlaces de recursos, ninguna llamada de red. Los *plugins* de terceros son la excepción deliberada, y corren en un aislado aparte con [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/), sin salida a internet."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d1",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El contenido en [`D1`](https://developers.cloudflare.com/d1/), los ficheros en [`R2`](https://developers.cloudflare.com/r2/) y las sesiones en [`KV`](https://developers.cloudflare.com/kv/). Los estáticos no pasan por aquí: los sirve la capa de recursos sin llegar a despertar al `worker`."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d0",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Un fichero de texto en Git, más los cuerpos de los servicios en `markdown`. De ahí sale la web entera en una reconstrucción desde cero, que es lo que hace la integración continua antes de cada fusión."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_shot_alt",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El panel de EmDash editando esta misma página, con el título, el cuerpo y el estado de publicación a la vista."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_shot_caption",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El panel, editando esta página. Corre en el mismo worker que acaba de servírtela."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_rows",
-							"children": [
-								{
-									"_type": "span",
-									"text": "L5|el borde|Workers · caché delante|Un acierto devuelve la página sin ejecutar código.;L4|la puerta|middleware|Decide qué se cachea y añade las cabeceras de seguridad.;L3|el render|Astro SSR|Construye el HTML en el mismo `worker` que recibió la petición.;L2|el CMS|EmDash|Corre dentro del mismo `worker`: no hay servicio externo al que llamar.;L1|los datos|D1 · R2 · KV|Contenido, imágenes y sesiones, en el `edge`.;L0|el origen|seed.json · markdown|Lo que escribe una persona. Todo lo de encima se deriva de aquí."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_caption",
-							"children": [
-								{
-									"_type": "span",
-									"text": "La petición entra por arriba. Abajo vive lo que escribe una persona, y por eso es la capa que se revisa a mano."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_host",
-							"children": [
-								{
-									"_type": "span",
-									"text": "serverstartup.io"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_cmd",
-							"children": [
-								{
-									"_type": "span",
-									"text": "reconstruir --desde-cero"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_lines",
-							"children": [
-								{
-									"_type": "span",
-									"text": "base de datos creada, vacía;semillas aplicadas: 43 entradas, dos idiomas;copia congelada: 26 rutas;copia renderizada: coincide con la congelada"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_log",
-							"children": [
-								{
-									"_type": "span",
-									"text": "listo. La reconstrucción es la prueba, y corre antes de cada fusión."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "agent/draft → main"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_chip",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Open"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_del",
-							"children": [
-								{
-									"_type": "span",
-									"text": "publicar sin que nadie lo lea"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_checks_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "All checks have passed — quality-gates / gates"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_checks",
-							"children": [
-								{
-									"_type": "span",
-									"text": "gitleaks;citabilidad;astro check;esquema de semillas;textos del CMS;tokens de diseño;pistas de caché;tests unitarios;construcción;arranque de la pila;html-validate;copia congelada;cabeceras;hrefs de imagen;accesibilidad;Lighthouse"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_approved",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Approved"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_signoff",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Signed-off-by: julio.arguello"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_merge",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Merge pull request"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "nm_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Umbrales · integración continua"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "nm_status",
-							"children": [
-								{
-									"_type": "span",
-									"text": "EXIGIDO"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "nm_tiles",
-							"children": [
-								{
-									"_type": "span",
-									"text": "rendimiento|95 o más;accesibilidad|100;buenas prácticas|100;SEO|100;rutas con copia congelada|26;pasos que pueden fallar|23"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_header",
-							"children": [
-								{
-									"_type": "span",
-									"text": "manual de montaje · ES/EN · hoja 1 de 1"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_parts_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "PIEZAS INCLUIDAS"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_parts",
-							"children": [
-								{
-									"_type": "span",
-									"text": "L5|el borde|×1|el `worker` que responde|src/worker.ts;L4|la puerta|×7|las cabeceras de seguridad|src/middleware.ts;L3|el render|×26|las rutas públicas|src/pages/;L2|el CMS|×5|un *plugin* nuestro con la API de `EmDash`|src/plugins/cache-purge.ts;L1|los datos|×3|`D1`, `R2` y `KV`|wrangler.jsonc;L0|el origen|×43|el corpus entero|seed/seed.json;—|los ingenieros|—|no incluidos: ya estaban|"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_steps_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "MONTAJE"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_steps",
-							"children": [
-								{
-									"_type": "span",
-									"text": "01,escribe las semillas;02,la skill fija la voz;03,el agente redacta;04,revisión humana ✋;05,pull request y merge;06,deploy al edge"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_warn_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "⚠ Advertencias"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_warn_1",
-							"children": [
-								{
-									"_type": "span",
-									"text": "No montar sin el paso 04. El agente redacta, el humano firma."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_warn_2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "El paso 03 nunca hace merge. Nunca."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_data_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "ℹ Datos de montaje"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_data_1",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Tiempo de montaje: tres semanas a ratos."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_data_2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Tornillería incluida: no sobra ninguna pieza."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_repo_soon",
-							"children": [
-								{
-									"_type": "span",
-									"text": "enlace al repositorio, en breve"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_repo_label",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ver el repositorio"
-								}
-							]
-						},
 						{
 							"_type": "block",
 							"style": "normal",
@@ -1525,6 +1352,204 @@
 								{
 									"_type": "span",
 									"text": "Deconstruyendo esta web"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "map_aria",
+							"children": [
+								{
+									"_type": "span",
+									"text": "El mapa de esta web. Arriba, EmDash, donde se edita; en el centro, las cuatro capas de Cloudflare: datos, cómputo, caché y red; abajo, la página que ves. Detrás, el contenido y la entrega; alrededor, la calidad."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cloudflare",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cloudflare"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_edit",
+							"children": [
+								{
+									"_type": "span",
+									"text": "yo edito"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_edit_sub",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Server Startup: editor o agente de IA"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_see",
+							"children": [
+								{
+									"_type": "span",
+									"text": "tú ves"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_see_from",
+							"children": [
+								{
+									"_type": "span",
+									"text": "desde"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "win_cms",
+							"children": [
+								{
+									"_type": "span",
+									"text": "/_emdash/admin"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "win_site",
+							"children": [
+								{
+									"_type": "span",
+									"text": "/"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "model_credit",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Ventanas: el editor de `EmDash`, captura de pantalla; la apertura de seguridad en el borde, con foto de Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es) · restaurada; mástiles retirados y encuadre ampliado con IA"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "spine_aria",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Capas"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "map_list_aria",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Mapa de capas"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "g_cloudflare",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cuatro capas, en `Cloudflare`"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "g_worker",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Dentro del `Worker`"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "g_taller",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Transversal, desde el taller"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "details",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Detalle y pruebas"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "row",
+							"children": [
+								{
+									"_type": "span",
+									"text": "fila"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "rows",
+							"children": [
+								{
+									"_type": "span",
+									"text": "filas"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "no_file",
+							"children": [
+								{
+									"_type": "span",
+									"text": "sin fichero"
 								}
 							]
 						}
@@ -2545,13 +2570,23 @@
 							"_type": "block",
 							"_key": "team_title",
 							"style": "normal",
-							"children": [{ "_type": "span", "text": "El equipo" }]
+							"children": [
+								{
+									"_type": "span",
+									"text": "El equipo"
+								}
+							]
 						},
 						{
 							"_type": "block",
 							"_key": "accessibility",
 							"style": "normal",
-							"children": [{ "_type": "span", "text": "Accesibilidad" }]
+							"children": [
+								{
+									"_type": "span",
+									"text": "Accesibilidad"
+								}
+							]
 						},
 						{
 							"_type": "block",
@@ -2572,6 +2607,17 @@
 								{
 									"_type": "span",
 									"text": "Ver todas las referencias"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "credits",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Créditos"
 								}
 							]
 						}
@@ -4035,426 +4081,8 @@
 				},
 				{
 					"type": "content",
-					"title": "manual_labels",
+					"title": "deconstruct_labels",
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d5",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The [`Workers` cache](https://developers.cloudflare.com/workers/runtime-apis/cache/) sits in front of the `worker`, so a hit answers without running anything. Nothing is cached by default: a page only gets in if it asks to. Once in it lasts an hour, and publishing purges it by tag."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d4",
-							"children": [
-								{
-									"_type": "span",
-									"text": "One *middleware* for every response: it resolves the locale, loads the accessibility labels, decides the cache policy and stamps seven security headers. The editing panel is excluded, because it brings its own."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d3",
-							"children": [
-								{
-									"_type": "span",
-									"text": "26 public routes, 24 components and 12 stylesheets, on `Astro` [on-demand rendering](https://docs.astro.build/en/guides/on-demand-rendering/) — Astro has been part of Cloudflare [since January 2026](https://blog.cloudflare.com/astro-joins-cloudflare/). Locales are not separated by prefix but by translated slug, so the alternate route is resolved against the CMS and never guessed: guessing it returns a 404. The width and the `sizes` of every image are declared by the template, not by the file: the template knows the slot it has to fill, and the file does not."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "[`EmDash`](https://blog.cloudflare.com/emdash-wordpress/) is not a service you subscribe to: it is the CMS Cloudflare released in April 2026 under an MIT licence as a successor to WordPress, and has run [its own blog](https://blog.cloudflare.com/cloudflare-blog-uses-emdash/) since 12 August. Here it injects 183 routes under `/_emdash` into this very application, with 7 collections and 43 entries: same *script*, same bindings, no network call. Third-party *plugins* are the deliberate exception, running in a separate isolate through [Worker Loader](https://developers.cloudflare.com/workers/runtime-apis/bindings/worker-loader/), with no way out to the internet."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d1",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Content in [`D1`](https://developers.cloudflare.com/d1/), files in [`R2`](https://developers.cloudflare.com/r2/) and sessions in [`KV`](https://developers.cloudflare.com/kv/). Static assets never come through here: the asset layer serves them without ever waking the `worker`."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_d0",
-							"children": [
-								{
-									"_type": "span",
-									"text": "A text file in Git, plus the service bodies in `markdown`. The whole site comes out of it in a rebuild from nothing, which is what continuous integration does before every merge."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_shot_alt",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The EmDash panel editing this very page, showing the title, the body and the publish state."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_shot_caption",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The panel, editing this page. It runs in the same worker that just served it to you."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_rows",
-							"children": [
-								{
-									"_type": "span",
-									"text": "L5|the edge|Workers · cache in front|A hit returns the page without running any code.;L4|the door|middleware|Decides what may be cached and adds the security headers.;L3|the render|Astro SSR|Builds the HTML in the same `worker` that took the request.;L2|the CMS|EmDash|Runs inside the same `worker`: no external service to call.;L1|the data|D1 · R2 · KV|Content, images and sessions, at the `edge`.;L0|the origin|seed.json · markdown|What a person writes. Everything above derives from it."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "ly_caption",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The request comes in at the top. What a person writes lives at the bottom, which is why that is the layer reviewed by hand."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_host",
-							"children": [
-								{
-									"_type": "span",
-									"text": "serverstartup.io"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_cmd",
-							"children": [
-								{
-									"_type": "span",
-									"text": "rebuild --from-nothing"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_lines",
-							"children": [
-								{
-									"_type": "span",
-									"text": "database created, empty;seeds applied: 43 entries, two locales;frozen copy: 26 routes;rendered copy: matches the frozen baseline"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "tm_log",
-							"children": [
-								{
-									"_type": "span",
-									"text": "done. The rebuild is the proof, and it runs before every merge."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "agent/draft → main"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_chip",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Open"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_del",
-							"children": [
-								{
-									"_type": "span",
-									"text": "publish without anyone reading it"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_checks_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "All checks have passed — quality-gates / gates"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_checks",
-							"children": [
-								{
-									"_type": "span",
-									"text": "gitleaks;citability;astro check;seed schema;CMS text;design tokens;cache hints;unit tests;build;boot the stack;html-validate;frozen copy;headers;image hrefs;accessibility;Lighthouse"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_approved",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Approved"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_signoff",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Signed-off-by: julio.arguello"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "rv_merge",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Merge pull request"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "nm_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Thresholds · continuous integration"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "nm_status",
-							"children": [
-								{
-									"_type": "span",
-									"text": "REQUIRED"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "nm_tiles",
-							"children": [
-								{
-									"_type": "span",
-									"text": "performance|95 or more;accessibility|100;best practices|100;SEO|100;routes with frozen copy|26;steps that can fail|23"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_header",
-							"children": [
-								{
-									"_type": "span",
-									"text": "assembly manual · ES/EN · sheet 1 of 1"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_parts_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "PARTS INCLUDED"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_parts",
-							"children": [
-								{
-									"_type": "span",
-									"text": "L5|the edge|×1|the `worker` that answers|src/worker.ts;L4|the door|×7|the security headers|src/middleware.ts;L3|the render|×26|the public routes|src/pages/;L2|the CMS|×5|a *plugin* of ours on the `EmDash` API|src/plugins/cache-purge.ts;L1|the data|×3|`D1`, `R2` and `KV`|wrangler.jsonc;L0|the origin|×43|the whole corpus|seed/seed.json;—|the engineers|—|not included: already there|"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_steps_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "ASSEMBLY"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_steps",
-							"children": [
-								{
-									"_type": "span",
-									"text": "01,write the seeds;02,the skill sets the voice;03,the agent drafts;04,human review ✋;05,pull request and merge;06,deploy to the edge"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_warn_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "⚠ Warnings"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_warn_1",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Do not assemble without step 04. The agent drafts, the human signs."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_warn_2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Step 03 never merges. Ever."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_data_title",
-							"children": [
-								{
-									"_type": "span",
-									"text": "ℹ Assembly data"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_data_1",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Assembly time: three weeks, in odd hours."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_data_2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Hardware included: no parts left over."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_repo_soon",
-							"children": [
-								{
-									"_type": "span",
-									"text": "repository link, coming shortly"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "mn_repo_label",
-							"children": [
-								{
-									"_type": "span",
-									"text": "View the repository"
-								}
-							]
-						},
 						{
 							"_type": "block",
 							"style": "normal",
@@ -4463,6 +4091,204 @@
 								{
 									"_type": "span",
 									"text": "Deconstructing this website"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "map_aria",
+							"children": [
+								{
+									"_type": "span",
+									"text": "The map of this website. At the top, EmDash, where it is edited; in the middle, the four Cloudflare layers: data, compute, cache and network; at the bottom, the page you see. Behind them, content and delivery; around everything, quality."
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "cloudflare",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Cloudflare"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_edit",
+							"children": [
+								{
+									"_type": "span",
+									"text": "I edit"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_edit_sub",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Server Startup: an editor or an AI agent"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_see",
+							"children": [
+								{
+									"_type": "span",
+									"text": "you see"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "who_see_from",
+							"children": [
+								{
+									"_type": "span",
+									"text": "from"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "win_cms",
+							"children": [
+								{
+									"_type": "span",
+									"text": "/_emdash/admin"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "win_site",
+							"children": [
+								{
+									"_type": "span",
+									"text": "/"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "model_credit",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Windows: the `EmDash` editor, a screenshot; the edge-security opening, photo by Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en) · restored; masts removed and frame extended with AI"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "spine_aria",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Layers"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "map_list_aria",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Map of the layers"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "g_cloudflare",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Four layers, on `Cloudflare`"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "g_worker",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Inside the `Worker`"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "g_taller",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Across the layers, from the workshop"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "details",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Detail and proof"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "row",
+							"children": [
+								{
+									"_type": "span",
+									"text": "row"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "rows",
+							"children": [
+								{
+									"_type": "span",
+									"text": "rows"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "no_file",
+							"children": [
+								{
+									"_type": "span",
+									"text": "no file"
 								}
 							]
 						}
@@ -5482,13 +5308,23 @@
 							"_type": "block",
 							"_key": "team_title",
 							"style": "normal",
-							"children": [{ "_type": "span", "text": "The team" }]
+							"children": [
+								{
+									"_type": "span",
+									"text": "The team"
+								}
+							]
 						},
 						{
 							"_type": "block",
 							"_key": "accessibility",
 							"style": "normal",
-							"children": [{ "_type": "span", "text": "Accessibility" }]
+							"children": [
+								{
+									"_type": "span",
+									"text": "Accessibility"
+								}
+							]
 						},
 						{
 							"_type": "block",
@@ -5509,6 +5345,17 @@
 								{
 									"_type": "span",
 									"text": "See all references"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"_key": "credits",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Credits"
 								}
 							]
 						}
@@ -17456,758 +17303,56 @@
 				"status": "published",
 				"data": {
 					"title": "Deconstruyendo esta web",
-					"excerpt": "Cómo está montada esta web, capa por capa: del punto de presencia que respondió a tu petición al *commit* que autorizó estas palabras. Con los umbrales y las mediciones a la vista.",
+					"excerpt": "Cómo está hecha, capa a capa: de la red de `Cloudflare` a las comprobaciones que pasa cada cambio. Cada afirmación enlaza al fichero que la prueba.",
 					"content": [
 						{
 							"_type": "block",
-							"_key": "k1",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k0",
-									"text": "Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k6",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "k3",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2",
-									"text": "El recorrido va hacia abajo, del punto de presencia que respondió a tu petición al *commit* que autorizó estas palabras. Cada capa se abre si quieres el detalle, y todo lo que se afirma aquí está en ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k4",
-									"text": "el repositorio",
-									"marks": [
-										"k3"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k5",
-									"text": ".",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k8",
+							"_key": "dc1",
 							"style": "h2",
 							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "k7",
-									"text": "La arquitectura",
+									"_key": "dc1s",
+									"text": "El taller, abierto",
 									"marks": []
 								}
 							]
 						},
 						{
 							"_type": "block",
-							"_key": "kf",
+							"_key": "dc2",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "dc2s",
+									"text": "Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro: código, contenido, comprobaciones y despliegues.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "dc3",
 							"style": "normal",
 							"markDefs": [
 								{
-									"_key": "kc",
+									"_key": "dc3l",
 									"_type": "link",
-									"href": "https://developers.cloudflare.com/workers/"
+									"href": "https://github.com/julioarguello/www-serverstartup-io",
+									"blank": true
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "k9",
-									"text": "No hay servidores que cuidar, y eso es lo de menos. Importa dónde se fabricó la respuesta que estás leyendo: en el ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ka",
-									"text": "edge",
+									"_key": "dc3s",
+									"text": "Ver el repositorio",
 									"marks": [
-										"code"
+										"dc3l"
 									]
-								},
-								{
-									"_type": "span",
-									"_key": "kb",
-									"text": ", sobre ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kd",
-									"text": "`Cloudflare Workers`",
-									"marks": [
-										"kc"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "ke",
-									"text": ". Delante hay caché, y cuando acierta el código ni se ejecuta.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "km",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "kh",
-									"_type": "link",
-									"href": "https://blog.cloudflare.com/emdash-wordpress/"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kg",
-									"text": "Debajo, el CMS es ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ki",
-									"text": "`EmDash`",
-									"marks": [
-										"kh"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kj",
-									"text": ", que Cloudflare publicó con licencia MIT como sucesor de WordPress, y no un servicio al que llamar por red: es la misma aplicación, servida por el mismo ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kk",
-									"text": "worker",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kl",
-									"text": ". Y al final del descenso no hay base de datos, hay un fichero de texto en Git.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "ko",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kn",
-									"text": "Contenido como código",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k11",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "kq",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json"
-								},
-								{
-									"_key": "kt",
-									"_type": "link",
-									"href": "/desarrollo-greenfield"
-								},
-								{
-									"_key": "ky",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/.github/workflows/ci.yml"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kp",
-									"text": "Casi cada texto vive en ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kr",
-									"text": "`seed/seed.json`",
-									"marks": [
-										"kq"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "ks",
-									"text": ", y los cuerpos de los ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ku",
-									"text": "servicios",
-									"marks": [
-										"kt"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kv",
-									"text": " en ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kw",
-									"text": "markdown",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kx",
-									"text": ": el nombre del fichero es el *slug*, el directorio es el idioma. Una reconstrucción desde cero rehace la web entera, y eso lo comprueba la ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kz",
-									"text": "integración continua",
-									"marks": [
-										"ky"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k10",
-									"text": " antes de cada fusión.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k15",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k12",
-									"text": "La caché hereda la disciplina: una página solo se cachea si lo pide, y al publicar se purga por etiquetas. Queda un hueco y conviene decirlo: los menús y los ajustes no emiten evento, así que su desfase lo acota el ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k13",
-									"text": "TTL",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k14",
-									"text": " de una hora.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k17",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k16",
-									"text": "Los agentes",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1b",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k18",
-									"text": "Que un modelo redacte el primer borrador no tiene mérito ni misterio. Lo que decide si esto es serio es ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k19",
-									"text": "quién tiene autoridad para qué",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1a",
-									"text": ".",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1d",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1c",
-									"text": "El agente propone y no fusiona. Las comprobaciones rechazan y no escriben: su credencial es de solo lectura. La persona puede las dos cosas, y por eso es la única que puede equivocarse con nombre y apellidos. La letra pequeña: que el agente no fusione es una regla escrita, no un candado del servidor.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1f",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1e",
-									"text": "Antes de preguntarle nada a una persona, la rama pasa por veintitrés pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1i",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1g",
-									"text": "Nombres no citables:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1h",
-									"text": " un cliente que no puede salir en un repositorio público.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1l",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1j",
-									"text": "Textos fuera del CMS:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1k",
-									"text": " una etiqueta que solo existe en un idioma, o una frase escrita a fuego en la plantilla.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1o",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1m",
-									"text": "Colores fuera del sistema:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1n",
-									"text": " un literal o una anchura nueva, que es como vuelven las siete medidas distintas.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1r",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1p",
-									"text": "Caché en el sitio equivocado:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1q",
-									"text": " una llamada puesta donde las cabeceras ya se han ido, que no cachea nada y lo parece.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1x",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [
-								{
-									"_key": "k1u",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/tests/copy-baseline"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1s",
-									"text": "Copia que cambia sola:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1t",
-									"text": " el texto renderizado de ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k1v",
-									"text": "26 rutas",
-									"marks": [
-										"k1u"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1w",
-									"text": " está congelado.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k412a",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k412b",
-									"text": "Imágenes que se piden a sí mismas:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k412c",
-									"text": " una URL absoluta a nuestro propio dominio, que en Cloudflare no puede funcionar y en local no se nota.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k23",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [
-								{
-									"_key": "k20",
-									"_type": "link",
-									"href": "https://validator.w3.org/nu/"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1y",
-									"text": "Accesibilidad y contraste:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1z",
-									"text": " tabulador, reflujo a 320 píxeles y validación del ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k21",
-									"text": "W3C",
-									"marks": [
-										"k20"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k22",
-									"text": ".",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k25",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k24",
-									"text": "Un guardia solo vale si puede fallar, y uno que no encuentra nada se ve igual que uno que no puede. Los más delicados llevan un control positivo que los revienta si dejan de mirar. La última puerta tampoco es automática: producción se despliega a mano.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k27",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k26",
-									"text": "Los números",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2c",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "k29",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k28",
-									"text": "Un número sin fecha es el peor sitio para la deriva, así que aquí hay dos clases y no se mezclan. El umbral vive en ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2a",
-									"text": "un fichero",
-									"marks": [
-										"k29"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2b",
-									"text": ": 95 o más en rendimiento, cien en accesibilidad, buenas prácticas y SEO, sobre la mediana de tres pasadas con emulación móvil.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2e",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2d",
-									"text": "La medición lleva su fecha. El 24 de agosto de 2026, sobre la construcción de producción: cien en las cuatro categorías y en las cinco direcciones, con el mayor contenido pintado por debajo de 1,6 segundos. Es la mediana de cada una, y la cota es la peor de las cinco.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "kimgblk",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "kimglnk",
-									"_type": "link",
-									"href": "/contacto"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kimga",
-									"text": "Las imágenes llevan la suya. El 27 de agosto de 2026, con emulación de móvil y sobre las mismas páginas antes y después: entre un 43 % y un 60 % menos de bytes de imagen, según la página y el ancho. El ahorro no sale de comprimir más, sino de dejar de mandar el fichero original: cada imagen se pide del tamaño del hueco donde va a caber, y en ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kimgb",
-									"text": "contacto",
-									"marks": ["kimglnk"]
-								},
-								{
-									"_type": "span",
-									"_key": "kimgc",
-									"text": " ese hueco es un avatar de 53 píxeles para un retrato de 1200.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2g",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2f",
-									"text": "El taller, a la vista",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2i",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2h",
-									"text": "El repositorio es público y se sincroniza con cada cambio en la rama principal, con la historia entera y sin filtrar. Publicar así tiene un coste: por eso existe el guardia de nombres no citables.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2q",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "k2k",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io"
-								},
-								{
-									"_key": "k2n",
-									"_type": "link",
-									"href": "/contacto"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2j",
-									"text": "Código, semillas, comprobaciones y despliegues: está todo. ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2l",
-									"text": "Mira dentro",
-									"marks": [
-										"k2k"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2m",
-									"text": " y ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2o",
-									"text": "dinos",
-									"marks": [
-										"k2n"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2p",
-									"text": " si harías algo distinto.",
-									"marks": []
 								}
 							]
 						}
@@ -18219,767 +17364,65 @@
 				"id": "page-deconstructing",
 				"slug": "deconstructing",
 				"status": "published",
-				"locale": "en",
-				"translationOf": "page-deconstruyendo",
 				"data": {
 					"title": "Deconstructing this website",
-					"excerpt": "How this website is built, layer by layer: from the point of presence that answered your request to the commit that authorised these words. Thresholds and measurements in plain sight.",
+					"excerpt": "How it is built, layer by layer: from the `Cloudflare` network to the checks every change goes through. Every claim links to the file that proves it.",
 					"content": [
 						{
 							"_type": "block",
-							"_key": "k1",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k0",
-									"text": "If someone tells you how they work and cannot show you the workshop, be suspicious. This is ours.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k6",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "k3",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2",
-									"text": "The tour runs downwards, from the point of presence that answered your request to the commit that authorised these words. Every layer opens if you want the detail, and everything claimed here is in ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k4",
-									"text": "the repository",
-									"marks": [
-										"k3"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k5",
-									"text": ".",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k8",
+							"_key": "dc1",
 							"style": "h2",
 							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "k7",
-									"text": "The architecture",
+									"_key": "dc1s",
+									"text": "The workshop, open",
 									"marks": []
 								}
 							]
 						},
 						{
 							"_type": "block",
-							"_key": "kf",
+							"_key": "dc2",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "dc2s",
+									"text": "If someone tells you how they work and cannot show you the workshop, be wary. This is ours: code, content, checks and deployments.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "dc3",
 							"style": "normal",
 							"markDefs": [
 								{
-									"_key": "kc",
+									"_key": "dc3l",
 									"_type": "link",
-									"href": "https://developers.cloudflare.com/workers/"
+									"href": "https://github.com/julioarguello/www-serverstartup-io",
+									"blank": true
 								}
 							],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "k9",
-									"text": "There are no servers to look after, and that is the least of it. What matters is where the response you are reading was made: at the ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ka",
-									"text": "edge",
+									"_key": "dc3s",
+									"text": "See the repository",
 									"marks": [
-										"code"
+										"dc3l"
 									]
-								},
-								{
-									"_type": "span",
-									"_key": "kb",
-									"text": ", on ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kd",
-									"text": "`Cloudflare Workers`",
-									"marks": [
-										"kc"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "ke",
-									"text": ". Cache sits in front, and on a hit the code never runs.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "km",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "kh",
-									"_type": "link",
-									"href": "https://blog.cloudflare.com/emdash-wordpress/"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kg",
-									"text": "Below that, the CMS is ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ki",
-									"text": "`EmDash`",
-									"marks": [
-										"kh"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kj",
-									"text": ", which Cloudflare released under an MIT licence as a successor to WordPress, and not a service to call over the network: it is the same application, served by the same ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kk",
-									"text": "worker",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kl",
-									"text": ". And at the bottom of the descent there is no database, there is a text file in Git.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "ko",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kn",
-									"text": "Content as code",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k11",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "kq",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json"
-								},
-								{
-									"_key": "kt",
-									"_type": "link",
-									"href": "/en/greenfield-development"
-								},
-								{
-									"_key": "ky",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/.github/workflows/ci.yml"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kp",
-									"text": "Almost every text lives in ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kr",
-									"text": "`seed/seed.json`",
-									"marks": [
-										"kq"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "ks",
-									"text": ", with the ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ku",
-									"text": "service",
-									"marks": [
-										"kt"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kv",
-									"text": " bodies in ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kw",
-									"text": "markdown",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kx",
-									"text": ": the filename is the slug, the directory is the locale. A rebuild from nothing remakes the whole site, and ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kz",
-									"text": "continuous integration",
-									"marks": [
-										"ky"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k10",
-									"text": " checks that before every merge.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k15",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k12",
-									"text": "Caching inherits the discipline: a page is cached only if it asks to be, and publishing purges it by tag. One gap is worth saying out loud: menus and site settings emit no event, so a one-hour ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k13",
-									"text": "TTL",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k14",
-									"text": " is what bounds their staleness.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k17",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k16",
-									"text": "The agents",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1b",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k18",
-									"text": "A model writing the first draft is neither impressive nor mysterious. What decides whether this is serious is ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k19",
-									"text": "who has authority over what",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1a",
-									"text": ".",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1d",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1c",
-									"text": "The agent proposes and cannot merge. The checks refuse and cannot write: their credential is read-only. The human can do both, which is why the human is the only one who can be wrong by name. The small print: the agent not merging is a written rule, not a lock on the server.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1f",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1e",
-									"text": "Before a person is asked anything, the branch goes through twenty-three steps that can fail. They refuse what a reading by eye does not catch:",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1i",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1g",
-									"text": "Non-citable names:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1h",
-									"text": " a client who must not appear in a public repository.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1l",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1j",
-									"text": "Copy outside the CMS:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1k",
-									"text": " a label that exists in one locale only, or a sentence burnt into a template.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1o",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1m",
-									"text": "Colours outside the system:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1n",
-									"text": " a literal or a new width, which is how seven different measures come back.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1r",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1p",
-									"text": "Caching in the wrong place:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1q",
-									"text": " a call placed after the headers have gone, which caches nothing and looks like it does.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1x",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [
-								{
-									"_key": "k1u",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/tree/main/tests/copy-baseline"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1s",
-									"text": "Copy that changes by itself:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1t",
-									"text": " the rendered text of ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k1v",
-									"text": "26 routes",
-									"marks": [
-										"k1u"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1w",
-									"text": " is frozen.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k412d",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k412e",
-									"text": "Images that ask for themselves:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k412f",
-									"text": " an absolute URL to our own domain, which cannot work on Cloudflare and looks perfectly fine locally.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k23",
-							"style": "normal",
-							"listItem": "bullet",
-							"level": 1,
-							"markDefs": [
-								{
-									"_key": "k20",
-									"_type": "link",
-									"href": "https://validator.w3.org/nu/"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1y",
-									"text": "Accessibility and contrast:",
-									"marks": [
-										"strong"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k1z",
-									"text": " keyboard traversal, reflow at 320 pixels and ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k21",
-									"text": "W3C",
-									"marks": [
-										"k20"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k22",
-									"text": " validation.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k25",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k24",
-									"text": "A guard is only worth having if it can fail, and one that finds nothing looks like one that cannot. The most delicate ones carry a positive control that blows them up the moment they stop looking. The last door is not automatic either: production is deployed by hand.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k27",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k26",
-									"text": "The numbers",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2c",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "k29",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k28",
-									"text": "An undated number is the worst possible place for drift, so there are two kinds here and they never mix. The threshold lives in ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2a",
-									"text": "a file",
-									"marks": [
-										"k29"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2b",
-									"text": ": 95 or more for performance, 100 for accessibility, best practices and SEO, over the median of three runs under mobile emulation.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2e",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2d",
-									"text": "The measurement carries its date. On 24 August 2026, against the production build: 100 in all four categories across all five addresses, with the largest content painted in under 1.6 seconds. Each figure is a median, and the bound is the worst of the five.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "kimgblk",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "kimglnk",
-									"_type": "link",
-									"href": "/en/contact"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kimga",
-									"text": "The images carry a date of their own. On 27 August 2026, under mobile emulation, over the same pages before and after: between 43% and 60% fewer image bytes, depending on the page and the width. The saving does not come from compressing harder but from no longer sending the original file: every image is asked for at the size of the slot it has to fill, and on ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "kimgb",
-									"text": "contact",
-									"marks": ["kimglnk"]
-								},
-								{
-									"_type": "span",
-									"_key": "kimgc",
-									"text": " that slot is a 53-pixel avatar for a 1200-pixel portrait.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2g",
-							"style": "h2",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2f",
-									"text": "The workshop, in plain sight",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2i",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2h",
-									"text": "The repository is public and syncs on every change to the main branch, whole history, unfiltered. Publishing like that has a cost: that is why the non-citable-names guard exists.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k2q",
-							"style": "normal",
-							"markDefs": [
-								{
-									"_key": "k2k",
-									"_type": "link",
-									"href": "https://github.com/julioarguello/www-serverstartup-io"
-								},
-								{
-									"_key": "k2n",
-									"_type": "link",
-									"href": "/en/contact"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k2j",
-									"text": "Code, seeds, checks and deployments: it is all there. ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2l",
-									"text": "Look inside",
-									"marks": [
-										"k2k"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2m",
-									"text": " and ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2o",
-									"text": "tell us",
-									"marks": [
-										"k2n"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2p",
-									"text": " if you would do it differently.",
-									"marks": []
 								}
 							]
 						}
 					]
-				}
+				},
+				"locale": "en",
+				"translationOf": "page-deconstruyendo"
 			},
 			{
 				"id": "page-aviso-legal",
@@ -19713,6 +18156,773 @@
 						}
 					]
 				}
+			},
+			{
+				"id": "page-creditos",
+				"slug": "creditos",
+				"status": "published",
+				"data": {
+					"title": "Créditos",
+					"excerpt": "Quién hizo las fotografías de las aperturas, con qué licencia y qué les cambiamos.",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "cr0",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr0l3",
+									"_type": "link",
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/docs/design/hero-rotativo/flux-prompts.md",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr0s0",
+									"text": "Las aperturas de los verticales usan fotografías de Wikimedia Commons con licencia Creative Commons BY-SA. Las restauramos y, en algunos casos, las modificamos con inteligencia artificial. Aquí está cada autor, su licencia, lo que cambiamos y dónde aparece. Cada derivado se distribuye con la misma licencia que su original. Los ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr0s1",
+									"text": "prompts",
+									"marks": [
+										"em"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr0s2",
+									"text": " que se usaron están en ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr0s3",
+									"text": "el repositorio",
+									"marks": [
+										"cr0l3"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr0s4",
+									"text": ".",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr1",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr1s",
+									"text": "Fotografías",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr2",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr2l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr2l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.es",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr2s0",
+									"text": "El faro de Cabo Peñas",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s1",
+									"text": ". «Cape Penas Lighthouse.jpg», de Einaz80, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr2l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s3",
+									"text": ", licencia ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr2l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s5",
+									"text": ". Restaurada. Retirados el mástil, las antenas, los cables, la torre meteorológica y los cobertizos, y ampliado el encuadre hacia la izquierda con IA (FLUX.2 [dev] en Workers AI): el brezo y la costa de ese lado no son de la fotografía. El perfil dibujado sobre el faro deriva de ella. Aparece en: la portada; «CDN, WAF y seguridad edge»; «Deconstruyendo esta web».",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr3",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr3l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Bizkaia_zubia_-_Puente_Bizkaia.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr3l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.es",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr3s0",
+									"text": "El Puente de Bizkaia",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s1",
+									"text": ". «Bizkaia zubia - Puente Bizkaia.jpg», de Ebaki, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr3l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s3",
+									"text": ", licencia ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr3l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s5",
+									"text": ". Restaurada. En «Integración de sistemas», el puente y el cielo se retiraron con IA y el puente se redibujó como alzado a partir de sus propios bordes. La popa del petrolero se rotuló SERVER STARTUP / AVILÉS / YULO 11062024. Aparece en: la portada; «Integración de sistemas»; «Inteligencia artificial».",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr4",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr4l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Museo_Guggenheim_Bilbao,_Bilbao._(23811575351).jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr4l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/2.0/deed.es",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr4s0",
+									"text": "El museo Guggenheim de Bilbao",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s1",
+									"text": ". «Museo Guggenheim Bilbao, Bilbao. (23811575351).jpg», de Sergio S.C, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr4l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s3",
+									"text": ", licencia ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s4",
+									"text": "CC BY-SA 2.0",
+									"marks": [
+										"cr4l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s5",
+									"text": ". Restaurada y sin la marca del fotógrafo. El solar vacío es una reconstrucción con IA, no una fotografía anterior a 1997, y el alzado del museo se redibujó con IA a partir de la fotografía. Aparece en: la portada; «Desarrollo greenfield»; «Deconstruyendo esta web».",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr5",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr5l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Ocado_warehouse_bots.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr5l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.es",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr5s0",
+									"text": "El almacén automatizado",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s1",
+									"text": ". «Ocado warehouse bots.jpg», de Techwords, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr5l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s3",
+									"text": ", licencia ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr5l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s5",
+									"text": ". Restaurada y sin la marca del operador en los robots. En la portada, el encuadre se amplió hacia la izquierda con IA. Aparece en: la portada; «Comercio electrónico».",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr6",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr6l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Teide_Observatory_2018_077.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr6l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.es",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr6s0",
+									"text": "Las cúpulas del Observatorio del Teide",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s1",
+									"text": ". «Teide Observatory 2018 077.jpg», de Mike Peel, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr6l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s3",
+									"text": ", licencia ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr6l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s5",
+									"text": ". Restaurada y sin el logotipo del operador en dos puertas. Aparece en: la portada; «Big Data & Cloud Analytics».",
+									"marks": []
+								}
+							]
+						}
+					]
+				},
+				"locale": "es"
+			},
+			{
+				"id": "page-creditos-en",
+				"slug": "credits",
+				"status": "published",
+				"locale": "en",
+				"translationOf": "page-creditos",
+				"data": {
+					"title": "Credits",
+					"excerpt": "Who took the photographs in the openings, under which licence, and what we changed.",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "cr0",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr0l1",
+									"_type": "link",
+									"href": "https://github.com/julioarguello/www-serverstartup-io/blob/main/docs/design/hero-rotativo/flux-prompts.md",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr0s0",
+									"text": "The vertical openings use photographs from Wikimedia Commons under Creative Commons BY-SA licences. We restored them and, in some cases, changed them with artificial intelligence. Here is each author, the licence, what we changed and where the photograph appears. Every derivative is distributed under the same licence as its original. The prompts we used are in ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr0s1",
+									"text": "the repository",
+									"marks": [
+										"cr0l1"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr0s2",
+									"text": ".",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr1",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr1s",
+									"text": "Photographs",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr2",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr2l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Cape_Penas_Lighthouse.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr2l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr2s0",
+									"text": "The Cabo Peñas lighthouse",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s1",
+									"text": ". “Cape Penas Lighthouse.jpg”, by Einaz80, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr2l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s3",
+									"text": ", licence ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr2l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr2s5",
+									"text": ". Restored. The mast, antennas, wires, weather tower and sheds were removed, and the frame was extended to the left with AI (FLUX.2 [dev] on Workers AI): the heath and coast on that side are not in the photograph. The profile drawn over the lighthouse derives from it. Appears on: the home page; “CDN, WAF & Edge Security”; “Deconstructing this website”.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr3",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr3l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Bizkaia_zubia_-_Puente_Bizkaia.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr3l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr3s0",
+									"text": "The Vizcaya Bridge",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s1",
+									"text": ". “Bizkaia zubia - Puente Bizkaia.jpg”, by Ebaki, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr3l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s3",
+									"text": ", licence ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr3l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr3s5",
+									"text": ". Restored. On “Systems Integration”, the bridge and the sky were removed with AI and the bridge was redrawn as an elevation from its own edges. The tanker's stern was relettered SERVER STARTUP / AVILÉS / YULO 11062024. Appears on: the home page; “Systems Integration”; “Artificial Intelligence”.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr4",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr4l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Museo_Guggenheim_Bilbao,_Bilbao._(23811575351).jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr4l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/2.0/deed.en",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr4s0",
+									"text": "The Guggenheim Museum Bilbao",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s1",
+									"text": ". “Museo Guggenheim Bilbao, Bilbao. (23811575351).jpg”, by Sergio S.C, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr4l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s3",
+									"text": ", licence ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s4",
+									"text": "CC BY-SA 2.0",
+									"marks": [
+										"cr4l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr4s5",
+									"text": ". Restored, with the photographer's mark removed. The empty plot is an AI reconstruction, not a photograph from before 1997, and the museum's elevation was redrawn with AI from the photograph. Appears on: the home page; “Greenfield development”; “Deconstructing this website”.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr5",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr5l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Ocado_warehouse_bots.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr5l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr5s0",
+									"text": "The automated warehouse",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s1",
+									"text": ". “Ocado warehouse bots.jpg”, by Techwords, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr5l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s3",
+									"text": ", licence ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr5l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr5s5",
+									"text": ". Restored, with the operator's mark removed from the robots. On the home page, the frame was extended to the left with AI. Appears on: the home page; “E-commerce”.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "cr6",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_key": "cr6l2",
+									"_type": "link",
+									"href": "https://commons.wikimedia.org/wiki/File:Teide_Observatory_2018_077.jpg",
+									"blank": true
+								},
+								{
+									"_key": "cr6l4",
+									"_type": "link",
+									"href": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+									"blank": true
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "cr6s0",
+									"text": "The Teide Observatory domes",
+									"marks": [
+										"strong"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s1",
+									"text": ". “Teide Observatory 2018 077.jpg”, by Mike Peel, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s2",
+									"text": "Wikimedia Commons",
+									"marks": [
+										"cr6l2"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s3",
+									"text": ", licence ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s4",
+									"text": "CC BY-SA 4.0",
+									"marks": [
+										"cr6l4"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "cr6s5",
+									"text": ". Restored, with the operator's logo removed from two doors. Appears on: the home page; “Big Data & Cloud Analytics”.",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"posts": [],
@@ -19821,6 +19031,1637 @@
 					},
 					"featured": true
 				}
+			}
+		],
+		"layers": [
+			{
+				"id": "layer-red",
+				"slug": "red",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "La red",
+					"position": 1,
+					"group": "cloudflare",
+					"kicker": "capa 1 · `Cloudflare`",
+					"short": "Red",
+					"map_note": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
+					"summary": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
+					"lede": "Un DNS firmado, TLS 1.3 y un dominio cuyo origen es el Worker.",
+					"figure": "red",
+					"nodes": [
+						{
+							"title": "visitante",
+							"note": "abre una página",
+							"cloudflare": false,
+							"fact": "h1-1"
+						},
+						{
+							"title": "DNSSEC",
+							"note": "zona firmada",
+							"cloudflare": true,
+							"fact": "h1-1"
+						},
+						{
+							"title": "TLS 1.3",
+							"note": "Encrypted Client Hello",
+							"cloudflare": true,
+							"fact": "h1-2"
+						},
+						{
+							"title": "Custom Domains",
+							"note": "certificado automático",
+							"cloudflare": true,
+							"fact": "h1-4"
+						},
+						{
+							"title": "Workers",
+							"note": "el origen",
+							"cloudflare": true,
+							"fact": "h3-1"
+						}
+					],
+					"facts": [
+						{
+							"key": "h1-1",
+							"text": "El DNS es autoritativo en `Cloudflare` y la zona está firmada con [`DNSSEC`](https://developers.cloudflare.com/dns/dnssec/).",
+							"file_note": "se comprueba en la API de la zona",
+							"docs": "[DNS en configuración completa](https://developers.cloudflare.com/dns/zone-setups/full-setup/) · [DNSSEC](https://developers.cloudflare.com/dns/dnssec/)",
+							"status": "ok"
+						},
+						{
+							"key": "h1-2",
+							"text": "TLS 1.3 es la versión mínima que acepta la zona. [`Encrypted Client Hello`](https://developers.cloudflare.com/ssl/edge-certificates/ech/) está activo. Los clientes que lo admiten reciben además el acuerdo de claves poscuántico que `Cloudflare` ofrece por defecto.",
+							"file_note": "se comprueba en la API de la zona",
+							"docs": "[TLS mínimo](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/) · [Encrypted Client Hello](https://developers.cloudflare.com/ssl/edge-certificates/ech/) · [poscuántico](https://developers.cloudflare.com/ssl/post-quantum-cryptography/)",
+							"status": "ok"
+						},
+						{
+							"key": "h1-3",
+							"text": "[`Always Use HTTPS`](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) redirige el HTTP plano en el borde. La aplicación envía HSTS con un año de max-age, includeSubDomains y preload.",
+							"file": "src/middleware.ts",
+							"docs": "[Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) · [HSTS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)",
+							"status": "pending",
+							"pending_note": "cuando se verifique el HSTS de la zona en el dominio que sirve la página"
+						},
+						{
+							"key": "h1-4",
+							"text": "Cada dominio es un [`Custom Domain`](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/): el Worker es el origen y no hay servidor detrás. El certificado se emite y se renueva solo.",
+							"file": "wrangler.jsonc",
+							"docs": "[Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)",
+							"status": "pending",
+							"pending_note": "cuando los dominios definitivos estén conectados"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/cloudflare-tls.webp",
+						"alt": "Panel de Cloudflare: versión mínima de TLS 1.3, TLS 1.3 activado y Encrypted Client Hello activado",
+						"width": 1680,
+						"height": 935
+					},
+					"capture_caption": "El panel de `Cloudflare` de la zona: TLS 1.3 como mínimo y *Encrypted Client Hello* activado."
+				}
+			},
+			{
+				"id": "layer-red-en",
+				"slug": "network",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "The network",
+					"position": 1,
+					"group": "cloudflare",
+					"kicker": "layer 1 · `Cloudflare`",
+					"short": "Network",
+					"map_note": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
+					"summary": "`DNSSEC` · TLS 1.3 · `Custom Domains`",
+					"lede": "A signed DNS zone, TLS 1.3, and a domain whose origin is the Worker.",
+					"figure": "red",
+					"nodes": [
+						{
+							"title": "visitor",
+							"note": "opens a page",
+							"cloudflare": false,
+							"fact": "h1-1"
+						},
+						{
+							"title": "DNSSEC",
+							"note": "signed zone",
+							"cloudflare": true,
+							"fact": "h1-1"
+						},
+						{
+							"title": "TLS 1.3",
+							"note": "Encrypted Client Hello",
+							"cloudflare": true,
+							"fact": "h1-2"
+						},
+						{
+							"title": "Custom Domains",
+							"note": "automatic certificate",
+							"cloudflare": true,
+							"fact": "h1-4"
+						},
+						{
+							"title": "Workers",
+							"note": "the origin",
+							"cloudflare": true,
+							"fact": "h3-1"
+						}
+					],
+					"facts": [
+						{
+							"key": "h1-1",
+							"text": "DNS is authoritative on `Cloudflare`, and the zone is signed with [`DNSSEC`](https://developers.cloudflare.com/dns/dnssec/).",
+							"file_note": "checked in the zone's API",
+							"docs": "[DNS full setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/) · [DNSSEC](https://developers.cloudflare.com/dns/dnssec/)",
+							"status": "ok"
+						},
+						{
+							"key": "h1-2",
+							"text": "TLS 1.3 is the minimum version the zone accepts. [`Encrypted Client Hello`](https://developers.cloudflare.com/ssl/edge-certificates/ech/) is on. Clients that support it also get the post-quantum key agreement `Cloudflare` offers by default.",
+							"file_note": "checked in the zone's API",
+							"docs": "[Minimum TLS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/) · [Encrypted Client Hello](https://developers.cloudflare.com/ssl/edge-certificates/ech/) · [post-quantum](https://developers.cloudflare.com/ssl/post-quantum-cryptography/)",
+							"status": "ok"
+						},
+						{
+							"key": "h1-3",
+							"text": "[`Always Use HTTPS`](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) redirects plain HTTP at the edge. The app sends HSTS with a one-year max-age, includeSubDomains and preload.",
+							"file": "src/middleware.ts",
+							"docs": "[Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) · [HSTS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)",
+							"status": "pending",
+							"pending_note": "once the zone's HSTS setting is verified on the domain that serves the page"
+						},
+						{
+							"key": "h1-4",
+							"text": "Each domain is a [`Custom Domain`](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/): the Worker is the origin and there is no server behind it. The certificate is issued and renewed automatically.",
+							"file": "wrangler.jsonc",
+							"docs": "[Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)",
+							"status": "pending",
+							"pending_note": "once the final domains are attached"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/cloudflare-tls.webp",
+						"alt": "Cloudflare dashboard: minimum TLS version 1.3, TLS 1.3 on and Encrypted Client Hello on",
+						"width": 1680,
+						"height": 935
+					},
+					"capture_caption": "The zone's `Cloudflare` dashboard: TLS 1.3 as the minimum, and Encrypted Client Hello on."
+				},
+				"translationOf": "layer-red"
+			},
+			{
+				"id": "layer-cache",
+				"slug": "cache",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "La caché",
+					"position": 2,
+					"group": "cloudflare",
+					"kicker": "capa 2 · `Cloudflare`",
+					"short": "Caché",
+					"map_note": "`Workers Cache` · purga por etiqueta",
+					"summary": "`Workers Cache`",
+					"lede": "Un acierto no ejecuta el Worker.",
+					"figure": "cache",
+					"nodes": [
+						{
+							"title": "petición",
+							"note": "de un visitante",
+							"cloudflare": false,
+							"fact": "h2-1"
+						},
+						{
+							"title": "Workers Cache",
+							"note": "escalonada",
+							"cloudflare": true,
+							"fact": "h2-1",
+							"edge": "MISS"
+						},
+						{
+							"title": "Workers",
+							"note": "renderiza",
+							"cloudflare": true,
+							"fact": "h2-2"
+						}
+					],
+					"facts": [
+						{
+							"key": "h2-1",
+							"text": "[`Workers Cache`](https://developers.cloudflare.com/workers/cache/) está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.",
+							"file": "wrangler.jsonc",
+							"docs": "[Workers Cache](https://developers.cloudflare.com/workers/cache/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-2",
+							"text": "Una página renderizada solo se guarda en el borde si lo pide. Cualquier otra respuesta renderizada sale con `no-store`.",
+							"file": "src/middleware.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h2-3",
+							"text": "Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: caducan antes de una hora.",
+							"file": "src/plugins/cache-purge.ts",
+							"docs": "[última comprobación en verde, 2026-08-23](https://github.com/julioarguello/www-serverstartup-io/actions/runs/32654856970) · [purga](https://developers.cloudflare.com/workers/cache/purge/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-4",
+							"text": "Lo compilado bajo `/_astro/` lleva *hash* de contenido y se sirve con un año de max-age, immutable.",
+							"file": "public/_headers",
+							"docs": "[cabeceras de Static Assets](https://developers.cloudflare.com/workers/static-assets/headers/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-5",
+							"text": "Las imágenes redimensionadas se guardan en la [`Cache API`](https://developers.cloudflare.com/workers/runtime-apis/cache/).",
+							"file_note": "en la dependencia `@astrojs/cloudflare`",
+							"docs": "[Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/)",
+							"status": "ok"
+						}
+					]
+				}
+			},
+			{
+				"id": "layer-cache-en",
+				"slug": "cache",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "The cache",
+					"position": 2,
+					"group": "cloudflare",
+					"kicker": "layer 2 · `Cloudflare`",
+					"short": "Cache",
+					"map_note": "`Workers Cache` · purge by tag",
+					"summary": "`Workers Cache`",
+					"lede": "A hit does not run the Worker.",
+					"figure": "cache",
+					"nodes": [
+						{
+							"title": "request",
+							"note": "from a visitor",
+							"cloudflare": false,
+							"fact": "h2-1"
+						},
+						{
+							"title": "Workers Cache",
+							"note": "tiered",
+							"cloudflare": true,
+							"fact": "h2-1",
+							"edge": "MISS"
+						},
+						{
+							"title": "Workers",
+							"note": "renders",
+							"cloudflare": true,
+							"fact": "h2-2"
+						}
+					],
+					"facts": [
+						{
+							"key": "h2-1",
+							"text": "[`Workers Cache`](https://developers.cloudflare.com/workers/cache/) sits in front of the Worker and is tiered by default: a hit does not run the Worker.",
+							"file": "wrangler.jsonc",
+							"docs": "[Workers Cache](https://developers.cloudflare.com/workers/cache/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-2",
+							"text": "A rendered page is cached at the edge only if it opts in. Every other rendered response is sent `no-store`.",
+							"file": "src/middleware.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h2-3",
+							"text": "Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they expire within the hour.",
+							"file": "src/plugins/cache-purge.ts",
+							"docs": "[last green check, 2026-08-23](https://github.com/julioarguello/www-serverstartup-io/actions/runs/32654856970) · [purge](https://developers.cloudflare.com/workers/cache/purge/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-4",
+							"text": "Build output under `/_astro/` is content-hashed and served with a one-year, immutable max-age.",
+							"file": "public/_headers",
+							"docs": "[Static Assets headers](https://developers.cloudflare.com/workers/static-assets/headers/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-5",
+							"text": "Resized images are kept in the [`Cache API`](https://developers.cloudflare.com/workers/runtime-apis/cache/).",
+							"file_note": "in the `@astrojs/cloudflare` dependency",
+							"docs": "[Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/)",
+							"status": "ok"
+						}
+					]
+				},
+				"translationOf": "layer-cache"
+			},
+			{
+				"id": "layer-computo",
+				"slug": "computo",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Cómputo",
+					"position": 3,
+					"group": "cloudflare",
+					"kicker": "capa 3 · `Cloudflare`",
+					"short": "Cómputo",
+					"map_note": "`Workers` · `Astro` · `Dynamic Workers`",
+					"summary": "`Workers` · `Static Assets` · `Dynamic Workers`",
+					"lede": "Un Worker y ningún servidor detrás.",
+					"figure": "computo",
+					"nodes": [
+						{
+							"title": "Workers Static Assets",
+							"note": "los ficheros, sin Worker",
+							"cloudflare": true,
+							"fact": "h3-1"
+						},
+						{
+							"title": "Workers",
+							"note": "Astro y EmDash",
+							"cloudflare": true,
+							"fact": "h3-1"
+						},
+						{
+							"title": "Dynamic Workers",
+							"note": "plugins aparte",
+							"cloudflare": true,
+							"fact": "h3-5"
+						}
+					],
+					"stats": [
+						{
+							"value": "0",
+							"label": "servidores detrás del Worker",
+							"kind": "number"
+						},
+						{
+							"value": "7",
+							"label": "cabeceras de seguridad",
+							"kind": "number"
+						},
+						{
+							"value": "6",
+							"label": "*bindings*",
+							"kind": "number"
+						}
+					],
+					"facts": [
+						{
+							"key": "h3-1",
+							"text": "Un solo [`Worker`](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/) renderiza las páginas bajo demanda con `Astro` (SSR). Los ficheros compilados se sirven como [`Workers Static Assets`](https://developers.cloudflare.com/workers/static-assets/) sin ejecutarlo. No hay servidor detrás del Worker.",
+							"file": "astro.config.mjs",
+							"docs": "[Astro en Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/) · [Static Assets](https://developers.cloudflare.com/workers/static-assets/)",
+							"status": "ok"
+						},
+						{
+							"key": "h3-2",
+							"text": "El equipo que hace `Astro` trabaja en `Cloudflare` desde enero de 2026. `Astro` sigue con licencia MIT y gobierno abierto.",
+							"file_note": "lo cuenta el anuncio",
+							"docs": "[anuncio](https://blog.cloudflare.com/astro-joins-cloudflare/)",
+							"status": "ok"
+						},
+						{
+							"key": "h3-3",
+							"text": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP no admite ningún *script* de terceros.",
+							"file": "src/middleware.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h3-4",
+							"text": "El Worker sabe la ciudad del visitante y qué centro de datos de `Cloudflare` respondió (`request.cf`). La apertura de seguridad en el borde los muestra.",
+							"file": "src/pages/api/whoami.ts",
+							"docs": "[request.cf](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties)",
+							"status": "ok"
+						},
+						{
+							"key": "h3-5",
+							"text": "Los *plugins* del CMS pueden ejecutarse en su propio [`Dynamic Worker`](https://developers.cloudflare.com/dynamic-workers/), sin red propia y con límites fijos de CPU, subpeticiones y tiempo. Todo lo que hacen pasa por un puente que comprueba las capacidades que declara cada uno.",
+							"file": "wrangler.jsonc",
+							"docs": "[Dynamic Workers](https://developers.cloudflare.com/dynamic-workers/) · [sandbox de plugins](https://docs.emdashcms.com/deployment/plugin-sandbox/)",
+							"status": "ok"
+						}
+					],
+					"nodes_plain": true
+				}
+			},
+			{
+				"id": "layer-computo-en",
+				"slug": "compute",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "Compute",
+					"position": 3,
+					"group": "cloudflare",
+					"kicker": "layer 3 · `Cloudflare`",
+					"short": "Compute",
+					"map_note": "`Workers` · `Astro` · `Dynamic Workers`",
+					"summary": "`Workers` · `Static Assets` · `Dynamic Workers`",
+					"lede": "One Worker, and no server behind it.",
+					"figure": "computo",
+					"nodes": [
+						{
+							"title": "Workers Static Assets",
+							"note": "the files, no Worker",
+							"cloudflare": true,
+							"fact": "h3-1"
+						},
+						{
+							"title": "Workers",
+							"note": "Astro and EmDash",
+							"cloudflare": true,
+							"fact": "h3-1"
+						},
+						{
+							"title": "Dynamic Workers",
+							"note": "plugins, kept apart",
+							"cloudflare": true,
+							"fact": "h3-5"
+						}
+					],
+					"stats": [
+						{
+							"value": "0",
+							"label": "servers behind the Worker",
+							"kind": "number"
+						},
+						{
+							"value": "7",
+							"label": "security headers",
+							"kind": "number"
+						},
+						{
+							"value": "6",
+							"label": "bindings",
+							"kind": "number"
+						}
+					],
+					"facts": [
+						{
+							"key": "h3-1",
+							"text": "One [`Worker`](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/) renders the pages on demand with `Astro` (SSR). The built files are served as [`Workers Static Assets`](https://developers.cloudflare.com/workers/static-assets/) without running it. There is no server behind the Worker.",
+							"file": "astro.config.mjs",
+							"docs": "[Astro on Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/) · [Static Assets](https://developers.cloudflare.com/workers/static-assets/)",
+							"status": "ok"
+						},
+						{
+							"key": "h3-2",
+							"text": "The team that makes `Astro` has worked at `Cloudflare` since January 2026. `Astro` remains MIT-licensed and openly governed.",
+							"file_note": "per the announcement",
+							"docs": "[announcement](https://blog.cloudflare.com/astro-joins-cloudflare/)",
+							"status": "ok"
+						},
+						{
+							"key": "h3-3",
+							"text": "One middleware stamps 7 security headers on every page the Worker renders. The CSP admits no third-party script.",
+							"file": "src/middleware.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h3-4",
+							"text": "The Worker knows the visitor's city and which `Cloudflare` data centre answered (`request.cf`). The edge-security opening shows them.",
+							"file": "src/pages/api/whoami.ts",
+							"docs": "[request.cf](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties)",
+							"status": "ok"
+						},
+						{
+							"key": "h3-5",
+							"text": "CMS plugins can run in their own [`Dynamic Worker`](https://developers.cloudflare.com/dynamic-workers/), with no network of their own and fixed CPU, subrequest and time limits. Everything they do passes through a bridge that checks the capabilities each one declares.",
+							"file": "wrangler.jsonc",
+							"docs": "[Dynamic Workers](https://developers.cloudflare.com/dynamic-workers/) · [plugin sandbox](https://docs.emdashcms.com/deployment/plugin-sandbox/)",
+							"status": "ok"
+						}
+					],
+					"nodes_plain": true
+				},
+				"translationOf": "layer-computo"
+			},
+			{
+				"id": "layer-datos",
+				"slug": "datos",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Datos",
+					"position": 4,
+					"group": "cloudflare",
+					"kicker": "capa 4 · `Cloudflare`",
+					"short": "Datos",
+					"map_note": "`D1` · `Workers KV` · `Images` · `R2`",
+					"summary": "`D1` · `Workers KV` · `Images` · `R2`",
+					"lede": "Cuatro almacenes, cuatro trabajos.",
+					"figure": "datos",
+					"nodes": [
+						{
+							"title": "D1",
+							"note": "contenido",
+							"cloudflare": true,
+							"fact": "h4-1"
+						},
+						{
+							"title": "Workers KV",
+							"note": "sesiones",
+							"cloudflare": true,
+							"fact": "h4-2"
+						},
+						{
+							"title": "Images",
+							"note": "WebP",
+							"cloudflare": true,
+							"fact": "h4-3"
+						},
+						{
+							"title": "R2",
+							"note": "medios del CMS",
+							"cloudflare": true,
+							"fact": "h4-4"
+						}
+					],
+					"facts": [
+						{
+							"key": "h4-1",
+							"text": "[`D1`](https://developers.cloudflare.com/d1/) (`SQLite`) guarda el contenido, sus revisiones y los ajustes. Cada petición abre una sesión de `D1`.",
+							"file": "wrangler.jsonc",
+							"docs": "[D1](https://developers.cloudflare.com/d1/) · [sesiones](https://developers.cloudflare.com/d1/worker-api/d1-database/#withsession)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-2",
+							"text": "[`Workers KV`](https://developers.cloudflare.com/kv/) guarda las sesiones de los editores.",
+							"file": "wrangler.jsonc",
+							"docs": "[Workers KV](https://developers.cloudflare.com/kv/)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-3",
+							"text": "El Worker pasa cada imagen al *binding* de [`Images`](https://developers.cloudflare.com/images/optimization/binding/), que la ajusta a su hueco y la convierte a WebP.",
+							"file": "wrangler.jsonc",
+							"docs": "[binding de Images](https://developers.cloudflare.com/images/optimization/binding/)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-4",
+							"text": "[`R2`](https://developers.cloudflare.com/r2/) está conectado como almacén de medios del CMS. Hoy cada imagen del sitio viaja con el código.",
+							"file": "wrangler.jsonc",
+							"docs": "[R2](https://developers.cloudflare.com/r2/)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-5",
+							"text": "Preview y producción tienen cada una su `D1`, su `Workers KV` y su `R2`.",
+							"file": "wrangler.jsonc",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/cloudflare-bindings.webp",
+						"alt": "Panel de Cloudflare: los bindings del Worker de producción, D1, Images, Dynamic Workers, R2 y KV",
+						"width": 1680,
+						"height": 692
+					},
+					"capture_caption": "Los *bindings* del `Worker` en el panel de `Cloudflare`. El sexto, `ASSETS`, lo añade el adaptador de `Astro` al compilar.",
+					"nodes_plain": true
+				}
+			},
+			{
+				"id": "layer-datos-en",
+				"slug": "data",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "Data",
+					"position": 4,
+					"group": "cloudflare",
+					"kicker": "layer 4 · `Cloudflare`",
+					"short": "Data",
+					"map_note": "`D1` · `Workers KV` · `Images` · `R2`",
+					"summary": "`D1` · `Workers KV` · `Images` · `R2`",
+					"lede": "Four stores, four jobs.",
+					"figure": "datos",
+					"nodes": [
+						{
+							"title": "D1",
+							"note": "content",
+							"cloudflare": true,
+							"fact": "h4-1"
+						},
+						{
+							"title": "Workers KV",
+							"note": "sessions",
+							"cloudflare": true,
+							"fact": "h4-2"
+						},
+						{
+							"title": "Images",
+							"note": "WebP",
+							"cloudflare": true,
+							"fact": "h4-3"
+						},
+						{
+							"title": "R2",
+							"note": "CMS media",
+							"cloudflare": true,
+							"fact": "h4-4"
+						}
+					],
+					"facts": [
+						{
+							"key": "h4-1",
+							"text": "[`D1`](https://developers.cloudflare.com/d1/) (`SQLite`) holds the content, its revisions and the settings. Each request opens a `D1` session.",
+							"file": "wrangler.jsonc",
+							"docs": "[D1](https://developers.cloudflare.com/d1/) · [sessions](https://developers.cloudflare.com/d1/worker-api/d1-database/#withsession)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-2",
+							"text": "[`Workers KV`](https://developers.cloudflare.com/kv/) holds the editors' sessions.",
+							"file": "wrangler.jsonc",
+							"docs": "[Workers KV](https://developers.cloudflare.com/kv/)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-3",
+							"text": "The Worker hands each image to the [`Images`](https://developers.cloudflare.com/images/optimization/binding/) binding, which resizes it to its slot and converts it to WebP.",
+							"file": "wrangler.jsonc",
+							"docs": "[Images binding](https://developers.cloudflare.com/images/optimization/binding/)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-4",
+							"text": "[`R2`](https://developers.cloudflare.com/r2/) is wired as the CMS media store. Today every image on the site ships with the code.",
+							"file": "wrangler.jsonc",
+							"docs": "[R2](https://developers.cloudflare.com/r2/)",
+							"status": "ok"
+						},
+						{
+							"key": "h4-5",
+							"text": "Preview and production each have their own `D1`, `Workers KV` and `R2`.",
+							"file": "wrangler.jsonc",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/cloudflare-bindings.webp",
+						"alt": "Cloudflare dashboard: the production Worker's bindings, D1, Images, Dynamic Workers, R2 and KV",
+						"width": 1680,
+						"height": 692
+					},
+					"capture_caption": "The `Worker` bindings in the `Cloudflare` dashboard. The sixth, `ASSETS`, is added by the `Astro` adapter at build time.",
+					"nodes_plain": true
+				},
+				"translationOf": "layer-datos"
+			},
+			{
+				"id": "layer-emdash",
+				"slug": "emdash",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "El CMS: `EmDash`",
+					"position": 5,
+					"group": "worker",
+					"kicker": "dentro del `Worker`",
+					"short": "EmDash",
+					"map_note": "el CMS · en el `Worker`",
+					"summary": "OAuth 2.1 · MCP · *passkeys*",
+					"lede": "El CMS de código abierto de `Cloudflare`, dentro del mismo Worker.",
+					"figure": "emdash",
+					"nodes": [
+						{
+							"title": "editor",
+							"note": "con passkey",
+							"cloudflare": false,
+							"fact": "h5-7"
+						},
+						{
+							"title": "EmDash",
+							"note": "OAuth 2.1",
+							"cloudflare": false,
+							"fact": "h5-8",
+							"edge": "token"
+						},
+						{
+							"title": "agente de IA",
+							"note": "por MCP",
+							"cloudflare": false,
+							"fact": "h5-8"
+						}
+					],
+					"links": "[El anuncio](https://blog.cloudflare.com/emdash-wordpress/) · [Cloudflare lo usa en su blog](https://blog.cloudflare.com/cloudflare-blog-uses-emdash/) · [El código](https://github.com/emdash-cms/emdash) · [La documentación](https://docs.emdashcms.com)",
+					"facts": [
+						{
+							"key": "h5-1",
+							"text": "`EmDash`, el CMS de código abierto (MIT) que `Cloudflare` anunció en abril de 2026, corre dentro del mismo Worker. Aún no ha llegado a la 1.0.",
+							"file": "package.json",
+							"docs": "[anuncio](https://blog.cloudflare.com/emdash-wordpress/) · [código](https://github.com/emdash-cms/emdash) · [documentación](https://docs.emdashcms.com)",
+							"status": "ok"
+						},
+						{
+							"key": "h5-2",
+							"text": "`Cloudflare` publica su propio blog con `EmDash`.",
+							"file_note": "lo cuenta su blog",
+							"docs": "[el blog de Cloudflare](https://blog.cloudflare.com/cloudflare-blog-uses-emdash/)",
+							"status": "ok"
+						},
+						{
+							"key": "h5-3",
+							"text": "Cinco tipos de contenido: páginas, servicios, miembros, referencias y *partners*, con entradas de blog preparadas y vacías. Páginas y servicios tienen borradores; esos dos y miembros guardan revisiones. Los cuerpos son Portable Text.",
+							"file": "seed/seed.json",
+							"docs": "[documentación](https://docs.emdashcms.com)",
+							"status": "ok"
+						},
+						{
+							"key": "h5-4",
+							"text": "Dos idiomas: páginas, servicios y miembros se publican en pares enlazados por `translationOf`.",
+							"file": "seed/seed.json",
+							"status": "ok"
+						},
+						{
+							"key": "h5-5",
+							"text": "Menús, áreas de *widgets*, ajustes del sitio y taxonomías vienen del CMS. Cada etiqueta de la interfaz vive en un *widget*, no en una plantilla.",
+							"file": "src/utils/ui-labels.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h5-6",
+							"text": "La búsqueda es la de `EmDash`, sobre `SQLite` FTS5 con ranking bm25.",
+							"file_note": "en `EmDash`, migración 064",
+							"status": "ok"
+						},
+						{
+							"key": "h5-7",
+							"text": "El admin admite editores solo con *passkey* (WebAuthn): no hay contraseña que guardar ni que filtrar.",
+							"file_note": "lo responde `/_emdash/api/auth/mode`",
+							"docs": "[autenticación](https://docs.emdashcms.com/guides/authentication/)",
+							"status": "pending",
+							"pending_note": "cuando se confirme en el admin desplegado"
+						},
+						{
+							"key": "h5-8",
+							"text": "`EmDash` es también un servidor de autorización OAuth (perfil OAuth 2.1: código + PKCE, registro dinámico de clientes). Por eso un agente de IA puede trabajar en el contenido a través de su servidor MCP, con un token que concede un editor.",
+							"file_note": "lo responden los endpoints del admin",
+							"docs": "[servidor MCP](https://docs.emdashcms.com/reference/mcp-server/) · [herramientas de IA](https://docs.emdashcms.com/guides/ai-tools/)",
+							"status": "pending",
+							"pending_note": "cuando se confirme en el admin desplegado"
+						},
+						{
+							"key": "h5-9",
+							"text": "La línea de comandos `emdash` inicia sesión con el flujo de dispositivo de OAuth (RFC 8628).",
+							"file_note": "lo responde `/_emdash/.well-known/auth`",
+							"docs": "[servidor MCP](https://docs.emdashcms.com/reference/mcp-server/)",
+							"status": "pending",
+							"pending_note": "cuando se confirme en el admin desplegado"
+						},
+						{
+							"key": "h5-10",
+							"text": "Un *plugin* guardado en el repositorio purga la caché al publicar. Declara `content:read`, porque sin él `EmDash` se salta sus *hooks*.",
+							"file": "astro.config.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h5-11",
+							"text": "Los editores reciben enlaces de vista previa de sus borradores.",
+							"file": "astro.config.mjs",
+							"status": "pending",
+							"pending_note": "cuando se confirme en el admin desplegado"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/emdash-editor.webp",
+						"alt": "El editor de EmDash con la página Deconstruyendo esta web abierta",
+						"width": 1440,
+						"height": 905
+					},
+					"capture_caption": "El editor de `EmDash`, en el admin del sitio."
+				}
+			},
+			{
+				"id": "layer-emdash-en",
+				"slug": "emdash",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "The CMS: `EmDash`",
+					"position": 5,
+					"group": "worker",
+					"kicker": "inside the `Worker`",
+					"short": "EmDash",
+					"map_note": "the CMS · inside the `Worker`",
+					"summary": "OAuth 2.1 · MCP · passkeys",
+					"lede": "The `Cloudflare` open-source CMS, inside the same Worker.",
+					"figure": "emdash",
+					"nodes": [
+						{
+							"title": "editor",
+							"note": "with a passkey",
+							"cloudflare": false,
+							"fact": "h5-7"
+						},
+						{
+							"title": "EmDash",
+							"note": "OAuth 2.1",
+							"cloudflare": false,
+							"fact": "h5-8",
+							"edge": "token"
+						},
+						{
+							"title": "AI agent",
+							"note": "over MCP",
+							"cloudflare": false,
+							"fact": "h5-8"
+						}
+					],
+					"links": "[The announcement](https://blog.cloudflare.com/emdash-wordpress/) · [Cloudflare runs its blog on it](https://blog.cloudflare.com/cloudflare-blog-uses-emdash/) · [The code](https://github.com/emdash-cms/emdash) · [The documentation](https://docs.emdashcms.com)",
+					"facts": [
+						{
+							"key": "h5-1",
+							"text": "`EmDash`, the open-source (MIT) CMS that `Cloudflare` announced in April 2026, runs inside the same Worker. It is still pre-1.0.",
+							"file": "package.json",
+							"docs": "[announcement](https://blog.cloudflare.com/emdash-wordpress/) · [code](https://github.com/emdash-cms/emdash) · [documentation](https://docs.emdashcms.com)",
+							"status": "ok"
+						},
+						{
+							"key": "h5-2",
+							"text": "`Cloudflare` runs its own blog on `EmDash`.",
+							"file_note": "per its blog",
+							"docs": "[the Cloudflare blog](https://blog.cloudflare.com/cloudflare-blog-uses-emdash/)",
+							"status": "ok"
+						},
+						{
+							"key": "h5-3",
+							"text": "Five content types: pages, services, members, references and partners, with blog posts ready and empty. Pages and services have drafts; those two and members keep revisions. Bodies are Portable Text.",
+							"file": "seed/seed.json",
+							"docs": "[documentation](https://docs.emdashcms.com)",
+							"status": "ok"
+						},
+						{
+							"key": "h5-4",
+							"text": "Two languages: pages, services and members are published in pairs linked by `translationOf`.",
+							"file": "seed/seed.json",
+							"status": "ok"
+						},
+						{
+							"key": "h5-5",
+							"text": "Menus, widget areas, site settings and taxonomies come from the CMS. Every interface label lives in a widget, not in a template.",
+							"file": "src/utils/ui-labels.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h5-6",
+							"text": "Search comes from `EmDash`, on `SQLite` FTS5 with bm25 ranking.",
+							"file_note": "in `EmDash`, migration 064",
+							"status": "ok"
+						},
+						{
+							"key": "h5-7",
+							"text": "The admin admits editors by passkey (WebAuthn) only: there is no password to store or leak.",
+							"file_note": "answered by `/_emdash/api/auth/mode`",
+							"docs": "[authentication](https://docs.emdashcms.com/guides/authentication/)",
+							"status": "pending",
+							"pending_note": "once confirmed on the deployed admin"
+						},
+						{
+							"key": "h5-8",
+							"text": "`EmDash` is also an OAuth authorization server (the OAuth 2.1 profile: code + PKCE, dynamic client registration). So an AI agent can work on the content through its MCP server, with a token an editor grants.",
+							"file_note": "answered by the admin's endpoints",
+							"docs": "[MCP server](https://docs.emdashcms.com/reference/mcp-server/) · [AI tools](https://docs.emdashcms.com/guides/ai-tools/)",
+							"status": "pending",
+							"pending_note": "once confirmed on the deployed admin"
+						},
+						{
+							"key": "h5-9",
+							"text": "The `emdash` command line signs in with the OAuth device flow (RFC 8628).",
+							"file_note": "answered by `/_emdash/.well-known/auth`",
+							"docs": "[MCP server](https://docs.emdashcms.com/reference/mcp-server/)",
+							"status": "pending",
+							"pending_note": "once confirmed on the deployed admin"
+						},
+						{
+							"key": "h5-10",
+							"text": "A plugin kept in the repository purges the cache on publish. It declares `content:read`, because without it `EmDash` skips its hooks.",
+							"file": "astro.config.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h5-11",
+							"text": "Editors get preview links to their drafts.",
+							"file": "astro.config.mjs",
+							"status": "pending",
+							"pending_note": "once confirmed on the deployed admin"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/emdash-editor.webp",
+						"alt": "The EmDash editor with the Deconstructing this website page open",
+						"width": 1440,
+						"height": 905
+					},
+					"capture_caption": "The `EmDash` editor, in the site's admin."
+				},
+				"translationOf": "layer-emdash"
+			},
+			{
+				"id": "layer-presentacion",
+				"slug": "presentacion",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Presentación",
+					"position": 6,
+					"group": "worker",
+					"kicker": "dentro del `Worker`",
+					"short": "Presentación",
+					"map_note": "`Astro` · en el `Worker`",
+					"summary": "`Astro` · una hoja · 0 terceros",
+					"lede": "Ninguna petición a terceros.",
+					"figure": "presentacion",
+					"stats": [
+						{
+							"value": "0",
+							"label": "peticiones a terceros al cargar una página",
+							"kind": "number"
+						},
+						{
+							"value": "",
+							"label": "una hoja de estilos para todo",
+							"kind": "swatches"
+						}
+					],
+					"photos": [
+						{
+							"image": {
+								"src": "/assets/deconstruyendo/apertura-cdn.webp",
+								"width": 1080,
+								"height": 675
+							},
+							"alt": "La apertura de seguridad en el borde en reposo: el faro de Cabo Peñas con su perfil en naranja y el barrido del radar",
+							"caption": "Cabo Peñas · Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es) · restaurada; mástiles retirados y encuadre ampliado con IA"
+						},
+						{
+							"image": {
+								"src": "/assets/deconstruyendo/apertura-gf.webp",
+								"width": 1080,
+								"height": 676
+							},
+							"alt": "La apertura de desarrollo greenfield en reposo: el museo Guggenheim de Bilbao desde la ría",
+							"caption": "Guggenheim · Sergio S.C · Wikimedia Commons · [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.es) · restaurada; solar reconstruido con IA"
+						}
+					],
+					"facts": [
+						{
+							"key": "h7-1",
+							"text": "Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.",
+							"file": "src/styles/theme.css",
+							"status": "ok"
+						},
+						{
+							"key": "h7-2",
+							"text": "Cargar una página no hace ninguna petición a terceros. Fuentes, *scripts* e imágenes son del propio sitio.",
+							"file": "src/middleware.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h7-3",
+							"text": "Cada vertical abre con una fotografía de Wikimedia Commons, restaurada y redibujada en parte, y una capa dibujada en vivo en el navegador. La capa se coloca según el texto medido, y su reloj se para a los ocho segundos: nada se repite.",
+							"file": "src/utils/hero-art.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h7-4",
+							"text": "Las fotografías se restauraron en local con SeedVR2. FLUX.2 [dev] (Black Forest Labs) en [`Workers AI`](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/) retiró objetos, amplió encuadres y redibujó a partir de las fotografías. Cada *prompt* está en el repositorio.",
+							"file": "docs/design/hero-rotativo/photo_restore.py",
+							"docs": "[FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)",
+							"status": "ok"
+						},
+						{
+							"key": "h7-5",
+							"text": "Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.",
+							"status": "ok",
+							"file": "seed/seed.json"
+						}
+					]
+				}
+			},
+			{
+				"id": "layer-presentacion-en",
+				"slug": "presentation",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "Presentation",
+					"position": 6,
+					"group": "worker",
+					"kicker": "inside the `Worker`",
+					"short": "Presentation",
+					"map_note": "`Astro` · inside the `Worker`",
+					"summary": "`Astro` · one stylesheet · 0 third parties",
+					"lede": "No third-party requests.",
+					"figure": "presentacion",
+					"stats": [
+						{
+							"value": "0",
+							"label": "third-party requests when a page loads",
+							"kind": "number"
+						},
+						{
+							"value": "",
+							"label": "one stylesheet for everything",
+							"kind": "swatches"
+						}
+					],
+					"photos": [
+						{
+							"image": {
+								"src": "/assets/deconstruyendo/apertura-cdn.webp",
+								"width": 1080,
+								"height": 675
+							},
+							"alt": "The edge-security opening at rest: the Cabo Peñas lighthouse with its outline in orange and the radar sweep",
+							"caption": "Cabo Peñas · Einaz80 · Wikimedia Commons · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en) · restored; masts removed and frame extended with AI"
+						},
+						{
+							"image": {
+								"src": "/assets/deconstruyendo/apertura-gf.webp",
+								"width": 1080,
+								"height": 676
+							},
+							"alt": "The greenfield development opening at rest: the Guggenheim Museum Bilbao seen from the estuary",
+							"caption": "Guggenheim · Sergio S.C · Wikimedia Commons · [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.en) · restored; empty plot rebuilt with AI"
+						}
+					],
+					"facts": [
+						{
+							"key": "h7-1",
+							"text": "One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.",
+							"file": "src/styles/theme.css",
+							"status": "ok"
+						},
+						{
+							"key": "h7-2",
+							"text": "Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.",
+							"file": "src/middleware.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h7-3",
+							"text": "Each vertical opens with a Wikimedia Commons photograph, restored and partly redrawn, and a layer drawn live in the browser. The layer is placed against the measured text, and its clock stops at eight seconds: nothing loops.",
+							"file": "src/utils/hero-art.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h7-4",
+							"text": "The photographs were restored locally with SeedVR2. FLUX.2 [dev] (Black Forest Labs) on [`Workers AI`](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/) removed objects, extended frames and redrew from the photographs. Every prompt is in the repository.",
+							"file": "docs/design/hero-rotativo/photo_restore.py",
+							"docs": "[FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)",
+							"status": "ok"
+						},
+						{
+							"key": "h7-5",
+							"text": "The photographs are CC BY-SA, and the site credits them with the changes stated.",
+							"status": "ok",
+							"file": "seed/seed.json"
+						}
+					]
+				},
+				"translationOf": "layer-presentacion"
+			},
+			{
+				"id": "layer-contenido",
+				"slug": "contenido",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Contenido",
+					"position": 7,
+					"group": "taller",
+					"kicker": "transversal · desde el taller",
+					"short": "Contenido",
+					"map_note": "`seed.json` · ES ↔ EN",
+					"summary": "`seed.json` → `D1`",
+					"lede": "Cada frase, en un fichero versionado.",
+					"figure": "contenido",
+					"nodes": [
+						{
+							"title": "seed/seed.json",
+							"note": "cada frase",
+							"cloudflare": false,
+							"fact": "h6-1"
+						},
+						{
+							"title": "D1, vacía",
+							"note": "×12 en paralelo",
+							"cloudflare": true,
+							"fact": "h6-2"
+						},
+						{
+							"title": "el sitio",
+							"note": "ES ↔ EN",
+							"cloudflare": false,
+							"fact": "h6-3"
+						}
+					],
+					"links": "[seed/seed.json en GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json) · [Las páginas de servicio en Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)",
+					"facts": [
+						{
+							"key": "h6-1",
+							"text": "Cada frase que renderiza el sitio vive en un fichero versionado, `seed/seed.json`. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.",
+							"file": "seed/seed.json",
+							"docs": "[ficheros semilla](https://docs.emdashcms.com/themes/seed-files/)",
+							"status": "ok"
+						},
+						{
+							"key": "h6-2",
+							"text": "En cada cambio que puede llegar a una página, CI compila el sitio y llena una base de datos vacía desde ese fichero, doce veces en paralelo.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						},
+						{
+							"key": "h6-3",
+							"text": "Los *slugs* de servicio están traducidos, así que la URL del otro idioma nunca se adivina. hreflang y el selector de idioma leen el mismo valor resuelto.",
+							"file": "src/utils/alternate.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h6-4",
+							"text": "El sitemap se genera desde las colecciones del CMS.",
+							"file": "src/pages/sitemap.xml.ts",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/github-seed.webp",
+						"alt": "La carpeta seed del repositorio en GitHub, con seed.json y la carpeta content",
+						"width": 1680,
+						"height": 1167
+					},
+					"capture_caption": "La carpeta `seed/` del repositorio público."
+				}
+			},
+			{
+				"id": "layer-contenido-en",
+				"slug": "site-content",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "Content",
+					"position": 7,
+					"group": "taller",
+					"kicker": "across the layers · from the workshop",
+					"short": "Content",
+					"map_note": "`seed.json` · ES ↔ EN",
+					"summary": "`seed.json` → `D1`",
+					"lede": "Every sentence, in a versioned file.",
+					"figure": "contenido",
+					"nodes": [
+						{
+							"title": "seed/seed.json",
+							"note": "every sentence",
+							"cloudflare": false,
+							"fact": "h6-1"
+						},
+						{
+							"title": "D1, empty",
+							"note": "×12 in parallel",
+							"cloudflare": true,
+							"fact": "h6-2"
+						},
+						{
+							"title": "the site",
+							"note": "ES ↔ EN",
+							"cloudflare": false,
+							"fact": "h6-3"
+						}
+					],
+					"links": "[seed/seed.json on GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json) · [The service pages in Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)",
+					"facts": [
+						{
+							"key": "h6-1",
+							"text": "Every sentence the site renders lives in one versioned file, `seed/seed.json`. The service pages are written in Markdown, and the CMS converts them into that file. A test keeps the two word for word, and a CI gate rejects copy typed into a template.",
+							"file": "seed/seed.json",
+							"docs": "[seed files](https://docs.emdashcms.com/themes/seed-files/)",
+							"status": "ok"
+						},
+						{
+							"key": "h6-2",
+							"text": "On every change that can reach a page, CI builds the site and fills an empty database from that file, twelve times in parallel.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						},
+						{
+							"key": "h6-3",
+							"text": "Service slugs are translated, so the other language's URL is never guessed. hreflang and the language switcher read the same resolved value.",
+							"file": "src/utils/alternate.ts",
+							"status": "ok"
+						},
+						{
+							"key": "h6-4",
+							"text": "The sitemap is generated from the CMS collections.",
+							"file": "src/pages/sitemap.xml.ts",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/github-seed.webp",
+						"alt": "The repository's seed folder on GitHub, with seed.json and the content folder",
+						"width": 1680,
+						"height": 1167
+					},
+					"capture_caption": "The `seed/` folder of the public repository."
+				},
+				"translationOf": "layer-contenido"
+			},
+			{
+				"id": "layer-entrega",
+				"slug": "entrega",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Entrega",
+					"position": 8,
+					"group": "taller",
+					"kicker": "transversal · desde el taller",
+					"short": "Entrega",
+					"map_note": "`GitHub Actions` · `wrangler`",
+					"summary": "`wrangler` → *preview* · producción",
+					"lede": "La preview se despliega sola; producción, a mano.",
+					"figure": "entrega",
+					"nodes": [
+						{
+							"title": "pull request",
+							"note": "un cambio",
+							"cloudflare": false,
+							"fact": "h8-2"
+						},
+						{
+							"title": "24 pasos",
+							"note": "sobre workerd",
+							"cloudflare": true,
+							"fact": "h8-2",
+							"edge": "verde"
+						},
+						{
+							"title": "preview",
+							"note": "se despliega sola",
+							"cloudflare": false,
+							"fact": "h8-4",
+							"edge": "a mano"
+						},
+						{
+							"title": "producción",
+							"note": "la arranca el fundador",
+							"cloudflare": false,
+							"fact": "h8-5"
+						}
+					],
+					"links": "[Las ejecuciones en GitHub Actions](https://github.com/julioarguello/www-serverstartup-io/actions) · [wrangler-action](https://github.com/cloudflare/wrangler-action)",
+					"facts": [
+						{
+							"key": "h8-1",
+							"text": "El repositorio de trabajo es público, con todos sus *commits*.",
+							"file": "README.md",
+							"docs": "[el repositorio](https://github.com/julioarguello/www-serverstartup-io)",
+							"status": "ok"
+						},
+						{
+							"key": "h8-2",
+							"text": "Cada cambio que puede llegar a una página pasa 24 pasos que pueden fallar. Un test deriva ese número del *workflow*.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						},
+						{
+							"key": "h8-3",
+							"text": "Las puertas ejecutan el sitio en local sobre [`workerd`](https://github.com/cloudflare/workerd), el runtime de código abierto de `Workers`, con `wrangler` `dev`. Si `wrangler` se cae por un fallo suyo, la pila se reinicia una vez y el resumen lo dice.",
+							"file": "scripts/ci-local-stack.sh",
+							"docs": "[workerd](https://github.com/cloudflare/workerd)",
+							"status": "ok"
+						},
+						{
+							"key": "h8-4",
+							"text": "Cuando las puertas pasan en main, la preview se despliega sola con `wrangler-action`. Espera a las migraciones de `D1`, vuelve a sembrar tras ensayar el SQL en una base desechable y lanza una batería de humo.",
+							"file": ".github/workflows/deploy-preview.yml",
+							"docs": "[GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/) · [wrangler-action](https://github.com/cloudflare/wrangler-action)",
+							"status": "ok"
+						},
+						{
+							"key": "h8-5",
+							"text": "Producción solo se despliega cuando el fundador lo arranca a mano, y una guarda se niega a sobrescribir una base de datos que tiene contenido.",
+							"file": ".github/workflows/deploy-production.yml",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/github-deploy-preview.webp",
+						"alt": "Una ejecución de deploy-preview en GitHub Actions: deploy y verify en verde",
+						"width": 1680,
+						"height": 1167
+					},
+					"capture_caption": "La *preview* se despliega sola después de que pasen las puertas, en `GitHub Actions`."
+				}
+			},
+			{
+				"id": "layer-entrega-en",
+				"slug": "delivery",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "Delivery",
+					"position": 8,
+					"group": "taller",
+					"kicker": "across the layers · from the workshop",
+					"short": "Delivery",
+					"map_note": "`GitHub Actions` · `wrangler`",
+					"summary": "`wrangler` → preview · production",
+					"lede": "The preview deploys itself; production goes out by hand.",
+					"figure": "entrega",
+					"nodes": [
+						{
+							"title": "pull request",
+							"note": "one change",
+							"cloudflare": false,
+							"fact": "h8-2"
+						},
+						{
+							"title": "24 steps",
+							"note": "on workerd",
+							"cloudflare": true,
+							"fact": "h8-2",
+							"edge": "green"
+						},
+						{
+							"title": "preview",
+							"note": "deploys itself",
+							"cloudflare": false,
+							"fact": "h8-4",
+							"edge": "by hand"
+						},
+						{
+							"title": "production",
+							"note": "started by the founder",
+							"cloudflare": false,
+							"fact": "h8-5"
+						}
+					],
+					"links": "[The runs on GitHub Actions](https://github.com/julioarguello/www-serverstartup-io/actions) · [wrangler-action](https://github.com/cloudflare/wrangler-action)",
+					"facts": [
+						{
+							"key": "h8-1",
+							"text": "The working repository is public, with all its commits.",
+							"file": "README.md",
+							"docs": "[the repository](https://github.com/julioarguello/www-serverstartup-io)",
+							"status": "ok"
+						},
+						{
+							"key": "h8-2",
+							"text": "Every change that can reach a page passes 24 steps that can fail. A test derives that number from the workflow.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						},
+						{
+							"key": "h8-3",
+							"text": "The gates run the site locally on [`workerd`](https://github.com/cloudflare/workerd), the open-source runtime behind `Workers`, through `wrangler` `dev`. If `wrangler` itself crashes, the stack restarts once and the summary says so.",
+							"file": "scripts/ci-local-stack.sh",
+							"docs": "[workerd](https://github.com/cloudflare/workerd)",
+							"status": "ok"
+						},
+						{
+							"key": "h8-4",
+							"text": "When the gates pass on main, the preview deploys itself with `wrangler-action`. It waits for the `D1` migrations, reseeds after rehearsing the SQL on a throwaway database, and runs a smoke battery.",
+							"file": ".github/workflows/deploy-preview.yml",
+							"docs": "[GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/) · [wrangler-action](https://github.com/cloudflare/wrangler-action)",
+							"status": "ok"
+						},
+						{
+							"key": "h8-5",
+							"text": "Production deploys only when the founder starts it by hand, and a guard refuses to overwrite a database that holds content.",
+							"file": ".github/workflows/deploy-production.yml",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/github-deploy-preview.webp",
+						"alt": "A deploy-preview run on GitHub Actions: deploy and verify green",
+						"width": 1680,
+						"height": 1167
+					},
+					"capture_caption": "The preview deploys itself once the gates pass, on `GitHub Actions`."
+				},
+				"translationOf": "layer-entrega"
+			},
+			{
+				"id": "layer-calidad",
+				"slug": "calidad",
+				"status": "published",
+				"locale": "es",
+				"data": {
+					"title": "Calidad",
+					"position": 9,
+					"group": "taller",
+					"kicker": "transversal · en cada cambio",
+					"short": "Calidad",
+					"map_note": "24 pasos · Lighthouse · axe",
+					"summary": "24 pasos · Lighthouse · axe",
+					"lede": "Comprobaciones que se prueban a sí mismas.",
+					"figure": "calidad",
+					"stats": [
+						{
+							"value": "24",
+							"label": "pasos que pueden fallar",
+							"kind": "number"
+						},
+						{
+							"value": "30",
+							"label": "rutas con el texto congelado",
+							"kind": "number"
+						},
+						{
+							"value": "≥95",
+							"label": "rendimiento",
+							"kind": "ring"
+						},
+						{
+							"value": "100",
+							"label": "accesibilidad",
+							"kind": "ring"
+						},
+						{
+							"value": "100",
+							"label": "buenas prácticas",
+							"kind": "ring"
+						},
+						{
+							"value": "100",
+							"label": "SEO",
+							"kind": "ring"
+						}
+					],
+					"stats_note": "Lighthouse en 9 páginas, en CI contra una copia local, el 2026-10-16",
+					"links": "[La ejecución del 2026-10-16](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508) · [lighthouserc.json](https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json)",
+					"facts": [
+						{
+							"key": "h9-1",
+							"text": "Las comprobaciones de accesibilidad, motores, diseño, maquetación, textos, idiomas y nombres plantan el defecto que buscan, y tienen que cazarlo antes de dar verde.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						},
+						{
+							"key": "h9-2",
+							"text": "Lighthouse en CI, contra una copia local, con la mediana de 3 pasadas en 9 páginas: rendimiento ≥95; accesibilidad, buenas prácticas y SEO, 100. Las nueve lo cumplieron el 2026-10-16.",
+							"file": "lighthouserc.json",
+							"docs": "[la ejecución](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508)",
+							"status": "ok"
+						},
+						{
+							"key": "h9-3",
+							"text": "Accesibilidad: axe (WCAG 2.2 A+AA) y un recorrido con teclado en todas las rutas del sitio, más reflujo a 320 px. Donde hay texto sobre una fotografía, el contraste se mide en los píxeles renderizados.",
+							"file": "scripts/ci-check-a11y.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h9-4",
+							"text": "Cada apertura se comprueba a mitad de animación y en reposo, con el motor de Safari (perfiles de iPhone y de escritorio) y el de Chrome (Pixel 7), también con movimiento reducido.",
+							"file": "scripts/ci-check-engines.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h9-5",
+							"text": "El texto renderizado de 30 rutas está congelado. Cambiar una palabra falla hasta que el texto nuevo se captura a propósito, así que el cambio se ve en el diff del *pull request*.",
+							"file": "scripts/copy-baseline.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h9-6",
+							"text": "Agentes de IA escriben la mayor parte del código bajo reglas escritas, y el fundador fusiona cada *pull request*.",
+							"file_note": "lo muestra el historial de fusiones",
+							"docs": "[el repositorio](https://github.com/julioarguello/www-serverstartup-io)",
+							"status": "ok"
+						},
+						{
+							"key": "h9-7",
+							"text": "Cada *push* se analiza en busca de secretos, y una guarda rechaza nombrar a clientes que no podemos nombrar.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/github-quality-gates.webp",
+						"alt": "Una ejecución de quality-gates en GitHub Actions con todos los trabajos en verde",
+						"width": 1680,
+						"height": 1167
+					},
+					"capture_caption": "Las puertas de un cambio en `main`, todas en verde, el 2026-10-16."
+				}
+			},
+			{
+				"id": "layer-calidad-en",
+				"slug": "quality",
+				"status": "published",
+				"locale": "en",
+				"data": {
+					"title": "Quality",
+					"position": 9,
+					"group": "taller",
+					"kicker": "across the layers · on every change",
+					"short": "Quality",
+					"map_note": "24 steps · Lighthouse · axe",
+					"summary": "24 steps · Lighthouse · axe",
+					"lede": "Checks that prove themselves.",
+					"figure": "calidad",
+					"stats": [
+						{
+							"value": "24",
+							"label": "steps that can fail",
+							"kind": "number"
+						},
+						{
+							"value": "30",
+							"label": "routes with frozen text",
+							"kind": "number"
+						},
+						{
+							"value": "≥95",
+							"label": "performance",
+							"kind": "ring"
+						},
+						{
+							"value": "100",
+							"label": "accessibility",
+							"kind": "ring"
+						},
+						{
+							"value": "100",
+							"label": "best practices",
+							"kind": "ring"
+						},
+						{
+							"value": "100",
+							"label": "SEO",
+							"kind": "ring"
+						}
+					],
+					"stats_note": "Lighthouse on 9 pages, in CI against a local copy, on 2026-10-16",
+					"links": "[The 2026-10-16 run](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508) · [lighthouserc.json](https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json)",
+					"facts": [
+						{
+							"key": "h9-1",
+							"text": "The accessibility, engine, design, layout, copy, language and naming checks plant the defect they hunt, and must catch it before they report green.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						},
+						{
+							"key": "h9-2",
+							"text": "Lighthouse in CI, against a local copy, takes the median of 3 runs on 9 pages: performance ≥95; accessibility, best practices and SEO, 100. All nine met it on 2026-10-16.",
+							"file": "lighthouserc.json",
+							"docs": "[the run](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508)",
+							"status": "ok"
+						},
+						{
+							"key": "h9-3",
+							"text": "Accessibility: axe (WCAG 2.2 A+AA) and a keyboard pass on every route of the site, plus reflow at 320 px. Where text sits on a photograph, contrast is measured on the rendered pixels.",
+							"file": "scripts/ci-check-a11y.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h9-4",
+							"text": "Each opening is checked mid-animation and at rest, in Safari's engine (iPhone and desktop profiles) and Chrome's (Pixel 7), with reduced motion too.",
+							"file": "scripts/ci-check-engines.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h9-5",
+							"text": "The rendered text of 30 routes is frozen. Changing a word fails until the new text is deliberately re-captured, so the change shows in the pull request's diff.",
+							"file": "scripts/copy-baseline.mjs",
+							"status": "ok"
+						},
+						{
+							"key": "h9-6",
+							"text": "AI agents write most of the code under written rules, and the founder merges every pull request.",
+							"file_note": "shown by the merge history",
+							"docs": "[the repository](https://github.com/julioarguello/www-serverstartup-io)",
+							"status": "ok"
+						},
+						{
+							"key": "h9-7",
+							"text": "Every push is scanned for secrets, and a guard rejects naming clients we may not name.",
+							"file": ".github/workflows/ci.yml",
+							"status": "ok"
+						}
+					],
+					"capture": {
+						"src": "/assets/deconstruyendo/github-quality-gates.webp",
+						"alt": "A quality-gates run on GitHub Actions with every job green",
+						"width": 1680,
+						"height": 1167
+					},
+					"capture_caption": "The gates for a change on `main`, all green, on 2026-10-16."
+				},
+				"translationOf": "layer-calidad"
 			}
 		],
 		"partners": [

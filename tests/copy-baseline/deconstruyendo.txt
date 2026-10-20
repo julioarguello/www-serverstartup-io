@@ -3,173 +3,308 @@ Saltar al contenido
 /deconstruyendo
 EN
 Deconstruyendo esta web
-Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro.
-El recorrido va hacia abajo, del punto de presencia que respondió a tu petición al commit que autorizó estas palabras. Cada capa se abre si quieres el detalle, y todo lo que se afirma aquí está en el repositorio.
-La arquitectura
-No hay servidores que cuidar, y eso es lo de menos. Importa dónde se fabricó la respuesta que estás leyendo: en el edge, sobre Cloudflare Workers. Delante hay caché, y cuando acierta el código ni se ejecuta.
-Debajo, el CMS es EmDash, que Cloudflare publicó con licencia MIT como sucesor de WordPress, y no un servicio al que llamar por red: es la misma aplicación, servida por el mismo worker. Y al final del descenso no hay base de datos, hay un fichero de texto en Git.
-L5
-el borde
-Workers · caché delante
-Un acierto devuelve la página sin ejecutar código.
-La caché de Workers se sienta delante del worker, así que un acierto responde sin ejecutar nada. Por defecto no se cachea: una página solo entra si ella misma lo pide. Cuando entra dura una hora, y al publicar se purga por etiquetas.
-L4
-la puerta
-middleware
-Decide qué se cachea y añade las cabeceras de seguridad.
-Un único middleware para todas las respuestas: resuelve el idioma, carga las etiquetas de accesibilidad, decide la política de caché y estampa siete cabeceras de seguridad. El panel de edición queda fuera, porque trae las suyas.
-L3
-el render
-Astro SSR
-Construye el HTML en el mismo worker que recibió la petición.
-26 rutas públicas, 24 componentes y 12 hojas de estilo, con render bajo demanda de Astro, que también es de Cloudflare desde enero de 2026. Los idiomas no se separan por prefijo sino por slug traducido, así que la ruta alterna se resuelve contra el CMS y nunca se adivina: adivinarla devuelve un 404. El ancho y el sizes de cada imagen los declara la plantilla, no el fichero: la plantilla sabe en qué hueco va a caber, y el fichero no.
-L2
-el CMS
+Cómo está hecha, capa a capa: de la red de Cloudflare a las comprobaciones que pasa cada cambio. Cada afirmación enlaza al fichero que la prueba.
+Calidad
+24 pasos · Lighthouse · axe
+01
+02
+03
+04
+Cloudflare
+Datos
+D1 · Workers KV · Images · R2
+Cómputo
+Workers · Astro · Dynamic Workers
+La caché
+Workers Cache · purga por etiqueta
+La red
+DNSSEC · TLS 1.3 · Custom Domains
+Contenido
+seed.json · ES ↔ EN
+Entrega
+GitHub Actions · wrangler
+/_emdash/admin
 EmDash
-Corre dentro del mismo worker: no hay servicio externo al que llamar.
-EmDash no es un servicio contratado: es el CMS que Cloudflare publicó en abril de 2026 con licencia MIT como sucesor de WordPress, y que usa en su propio blog desde el 12 de agosto. Aquí inyecta 183 rutas bajo /_emdash en esta misma aplicación, con 7 colecciones y 43 entradas: mismo script, mismos enlaces de recursos, ninguna llamada de red. Los plugins de terceros son la excepción deliberada, y corren en un aislado aparte con Worker Loader, sin salida a internet.
-El panel, editando esta página. Corre en el mismo worker que acaba de servírtela.
-L1
-los datos
-D1 · R2 · KV
-Contenido, imágenes y sesiones, en el edge.
-El contenido en D1, los ficheros en R2 y las sesiones en KV. Los estáticos no pasan por aquí: los sirve la capa de recursos sin llegar a despertar al worker.
-L0
+el CMS · en el Worker
+/
+Presentación
+Astro · en el Worker
+yo edito
+Server Startup: editor o agente de IA
+tú ves
+Ventanas: el editor de EmDash, captura de pantalla; la apertura de seguridad en el borde, con foto de Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restaurada; mástiles retirados y encuadre ampliado con IA
+1
+Red
+2
+Caché
+3
+Cómputo
+4
+Datos
+EmDash
+Presentación
+Contenido
+Entrega
+Calidad
+CUATRO CAPAS, EN Cloudflare
+capa 1 · Cloudflare
+La red
+Un DNS firmado, TLS 1.3 y un dominio cuyo origen es el Worker.
+visitante
+abre una página
+DNSSEC
+zona firmada
+TLS 1.3
+Encrypted Client Hello
+Custom Domains
+certificado automático
+Workers
 el origen
-seed.json · markdown
-Lo que escribe una persona. Todo lo de encima se deriva de aquí.
-Un fichero de texto en Git, más los cuerpos de los servicios en markdown. De ahí sale la web entera en una reconstrucción desde cero, que es lo que hace la integración continua antes de cada fusión.
-La petición entra por arriba. Abajo vive lo que escribe una persona, y por eso es la capa que se revisa a mano.
-Contenido como código
-Casi cada texto vive en seed/seed.json, y los cuerpos de los servicios en markdown: el nombre del fichero es el slug, el directorio es el idioma. Una reconstrucción desde cero rehace la web entera, y eso lo comprueba la integración continua antes de cada fusión.
-La caché hereda la disciplina: una página solo se cachea si lo pide, y al publicar se purga por etiquetas. Queda un hueco y conviene decirlo: los menús y los ajustes no emiten evento, así que su desfase lo acota el TTL de una hora.
-➜ serverstartup.io reconstruir --desde-cero
-✓ base de datos creada, vacía
-✓ semillas aplicadas: 43 entradas, dos idiomas
-✓ copia congelada: 26 rutas
-✓ copia renderizada: coincide con la congelada
-╰─ listo. La reconstrucción es la prueba, y corre antes de cada fusión.
-Los agentes
-Que un modelo redacte el primer borrador no tiene mérito ni misterio. Lo que decide si esto es serio es quién tiene autoridad para qué.
-El agente propone y no fusiona. Las comprobaciones rechazan y no escriben: su credencial es de solo lectura. La persona puede las dos cosas, y por eso es la única que puede equivocarse con nombre y apellidos. La letra pequeña: que el agente no fusione es una regla escrita, no un candado del servidor.
-Antes de preguntarle nada a una persona, la rama pasa por veintitrés pasos que pueden fallar. Se niegan a dejar pasar lo que una revisión a ojo no ve:
-Un guardia solo vale si puede fallar, y uno que no encuentra nada se ve igual que uno que no puede. Los más delicados llevan un control positivo que los revienta si dejan de mirar. La última puerta tampoco es automática: producción se despliega a mano.
-agent/draft → main
-Open
-−
-publicar sin que nadie lo lea
-+
-Nombres no citables: un cliente que no puede salir en un repositorio público.
-+
-Textos fuera del CMS: una etiqueta que solo existe en un idioma, o una frase escrita a fuego en la plantilla.
-+
-Colores fuera del sistema: un literal o una anchura nueva, que es como vuelven las siete medidas distintas.
-+
-Caché en el sitio equivocado: una llamada puesta donde las cabeceras ya se han ido, que no cachea nada y lo parece.
-+
-Copia que cambia sola: el texto renderizado de 26 rutas está congelado.
-+
-Imágenes que se piden a sí mismas: una URL absoluta a nuestro propio dominio, que en Cloudflare no puede funcionar y en local no se nota.
-+
-Accesibilidad y contraste: tabulador, reflujo a 320 píxeles y validación del W3C.
-All checks have passed — quality-gates / gates
-✓ gitleaks
-✓ citabilidad
-✓ astro check
-✓ esquema de semillas
-✓ textos del CMS
-✓ tokens de diseño
-✓ pistas de caché
-✓ tests unitarios
-✓ construcción
-✓ arranque de la pila
-✓ html-validate
-✓ copia congelada
-✓ cabeceras
-✓ hrefs de imagen
-✓ accesibilidad
-✓ Lighthouse
-✔ Approved
-Signed-off-by: julio.arguello
-Merge pull request
-Los números
-Un número sin fecha es el peor sitio para la deriva, así que aquí hay dos clases y no se mezclan. El umbral vive en un fichero: 95 o más en rendimiento, cien en accesibilidad, buenas prácticas y SEO, sobre la mediana de tres pasadas con emulación móvil.
-La medición lleva su fecha. El 24 de agosto de 2026, sobre la construcción de producción: cien en las cuatro categorías y en las cinco direcciones, con el mayor contenido pintado por debajo de 1,6 segundos. Es la mediana de cada una, y la cota es la peor de las cinco.
-Las imágenes llevan la suya. El 27 de agosto de 2026, con emulación de móvil y sobre las mismas páginas antes y después: entre un 43 % y un 60 % menos de bytes de imagen, según la página y el ancho. El ahorro no sale de comprimir más, sino de dejar de mandar el fichero original: cada imagen se pide del tamaño del hueco donde va a caber, y en contacto ese hueco es un avatar de 53 píxeles para un retrato de 1200.
-Umbrales · integración continua
-EXIGIDO
+El panel de Cloudflare de la zona: TLS 1.3 como mínimo y Encrypted Client Hello activado.
+Detalle y pruebas
+2 filas
+El DNS es autoritativo en Cloudflare y la zona está firmada con DNSSEC.
+sin fichero: se comprueba en la API de la zona
+DNS en configuración completa · DNSSEC
+TLS 1.3 es la versión mínima que acepta la zona. Encrypted Client Hello está activo. Los clientes que lo admiten reciben además el acuerdo de claves poscuántico que Cloudflare ofrece por defecto.
+sin fichero: se comprueba en la API de la zona
+TLS mínimo · Encrypted Client Hello · poscuántico
+capa 2 · Cloudflare
+La caché
+Un acierto no ejecuta el Worker.
+petición
+de un visitante
+Workers Cache
+escalonada
+MISS
+Workers
+renderiza
+Detalle y pruebas
+5 filas
+Workers Cache está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.
+wrangler.jsonc
+Workers Cache
+Una página renderizada solo se guarda en el borde si lo pide. Cualquier otra respuesta renderizada sale con no-store.
+src/middleware.ts
+Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: caducan antes de una hora.
+src/plugins/cache-purge.ts
+última comprobación en verde, 2026-08-23 · purga
+Lo compilado bajo /_astro/ lleva hash de contenido y se sirve con un año de max-age, immutable.
+public/_headers
+cabeceras de Static Assets
+Las imágenes redimensionadas se guardan en la Cache API.
+sin fichero: en la dependencia `@astrojs/cloudflare`
+Cache API
+capa 3 · Cloudflare
+Cómputo
+Un Worker y ningún servidor detrás.
+Workers Static Assets
+los ficheros, sin Worker
+Workers
+Astro y EmDash
+Dynamic Workers
+plugins aparte
+0
+servidores detrás del Worker
+7
+cabeceras de seguridad
+6
+bindings
+Detalle y pruebas
+5 filas
+Un solo Worker renderiza las páginas bajo demanda con Astro (SSR). Los ficheros compilados se sirven como Workers Static Assets sin ejecutarlo. No hay servidor detrás del Worker.
+astro.config.mjs
+Astro en Workers · Static Assets
+El equipo que hace Astro trabaja en Cloudflare desde enero de 2026. Astro sigue con licencia MIT y gobierno abierto.
+sin fichero: lo cuenta el anuncio
+anuncio
+Un middleware pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP no admite ningún script de terceros.
+src/middleware.ts
+El Worker sabe la ciudad del visitante y qué centro de datos de Cloudflare respondió (request.cf). La apertura de seguridad en el borde los muestra.
+src/pages/api/whoami.ts
+request.cf
+Los plugins del CMS pueden ejecutarse en su propio Dynamic Worker, sin red propia y con límites fijos de CPU, subpeticiones y tiempo. Todo lo que hacen pasa por un puente que comprueba las capacidades que declara cada uno.
+wrangler.jsonc
+Dynamic Workers · sandbox de plugins
+capa 4 · Cloudflare
+Datos
+Cuatro almacenes, cuatro trabajos.
+D1
+contenido
+Workers KV
+sesiones
+Images
+WebP
+R2
+medios del CMS
+Los bindings del Worker en el panel de Cloudflare. El sexto, ASSETS, lo añade el adaptador de Astro al compilar.
+Detalle y pruebas
+5 filas
+D1 (SQLite) guarda el contenido, sus revisiones y los ajustes. Cada petición abre una sesión de D1.
+wrangler.jsonc
+D1 · sesiones
+Workers KV guarda las sesiones de los editores.
+wrangler.jsonc
+Workers KV
+El Worker pasa cada imagen al binding de Images, que la ajusta a su hueco y la convierte a WebP.
+wrangler.jsonc
+binding de Images
+R2 está conectado como almacén de medios del CMS. Hoy cada imagen del sitio viaja con el código.
+wrangler.jsonc
+R2
+Preview y producción tienen cada una su D1, su Workers KV y su R2.
+wrangler.jsonc
+DENTRO DEL WORKER
+dentro del Worker
+El CMS: EmDash
+El CMS de código abierto de Cloudflare, dentro del mismo Worker.
+El editor de EmDash, en el admin del sitio.
+editor
+con passkey
+EmDash
+OAuth 2.1
+token
+agente de IA
+por MCP
+El anuncio
+Cloudflare lo usa en su blog
+El código
+La documentación
+Detalle y pruebas
+7 filas
+EmDash, el CMS de código abierto (MIT) que Cloudflare anunció en abril de 2026, corre dentro del mismo Worker. Aún no ha llegado a la 1.0.
+package.json
+anuncio · código · documentación
+Cloudflare publica su propio blog con EmDash.
+sin fichero: lo cuenta su blog
+el blog de Cloudflare
+Cinco tipos de contenido: páginas, servicios, miembros, referencias y partners, con entradas de blog preparadas y vacías. Páginas y servicios tienen borradores; esos dos y miembros guardan revisiones. Los cuerpos son Portable Text.
+seed/seed.json
+documentación
+Dos idiomas: páginas, servicios y miembros se publican en pares enlazados por translationOf.
+seed/seed.json
+Menús, áreas de widgets, ajustes del sitio y taxonomías vienen del CMS. Cada etiqueta de la interfaz vive en un widget, no en una plantilla.
+src/utils/ui-labels.ts
+La búsqueda es la de EmDash, sobre SQLite FTS5 con ranking bm25.
+sin fichero: en `EmDash`, migración 064
+Un plugin guardado en el repositorio purga la caché al publicar. Declara content:read, porque sin él EmDash se salta sus hooks.
+astro.config.mjs
+dentro del Worker
+Presentación
+Ninguna petición a terceros.
+Cabo Peñas · Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restaurada; mástiles retirados y encuadre ampliado con IA
+Guggenheim · Sergio S.C · Wikimedia Commons · CC BY-SA 2.0 · restaurada; solar reconstruido con IA
+0
+peticiones a terceros al cargar una página
+una hoja de estilos para todo
+Detalle y pruebas
+5 filas
+Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
+src/styles/theme.css
+Cargar una página no hace ninguna petición a terceros. Fuentes, scripts e imágenes son del propio sitio.
+src/middleware.ts
+Cada vertical abre con una fotografía de Wikimedia Commons, restaurada y redibujada en parte, y una capa dibujada en vivo en el navegador. La capa se coloca según el texto medido, y su reloj se para a los ocho segundos: nada se repite.
+src/utils/hero-art.ts
+Las fotografías se restauraron en local con SeedVR2. FLUX.2 [dev] (Black Forest Labs) en Workers AI retiró objetos, amplió encuadres y redibujó a partir de las fotografías. Cada prompt está en el repositorio.
+docs/design/hero-rotativo/photo_restore.py
+[FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
+Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
+seed/seed.json
+TRANSVERSAL, DESDE EL TALLER
+transversal · desde el taller
+Contenido
+Cada frase, en un fichero versionado.
+seed/seed.json
+cada frase
+D1, vacía
+×12 en paralelo
+el sitio
+ES ↔ EN
+seed/seed.json en GitHub
+Las páginas de servicio en Markdown
+La carpeta seed/ del repositorio público.
+Detalle y pruebas
+4 filas
+Cada frase que renderiza el sitio vive en un fichero versionado, seed/seed.json. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.
+seed/seed.json
+ficheros semilla
+En cada cambio que puede llegar a una página, CI compila el sitio y llena una base de datos vacía desde ese fichero, doce veces en paralelo.
+.github/workflows/ci.yml
+Los slugs de servicio están traducidos, así que la URL del otro idioma nunca se adivina. hreflang y el selector de idioma leen el mismo valor resuelto.
+src/utils/alternate.ts
+El sitemap se genera desde las colecciones del CMS.
+src/pages/sitemap.xml.ts
+transversal · desde el taller
+Entrega
+La preview se despliega sola; producción, a mano.
+pull request
+un cambio
+24 pasos
+sobre workerd
+verde
+preview
+se despliega sola
+a mano
+producción
+la arranca el fundador
+Las ejecuciones en GitHub Actions
+wrangler-action
+La preview se despliega sola después de que pasen las puertas, en GitHub Actions.
+Detalle y pruebas
+5 filas
+El repositorio de trabajo es público, con todos sus commits.
+README.md
+el repositorio
+Cada cambio que puede llegar a una página pasa 24 pasos que pueden fallar. Un test deriva ese número del workflow.
+.github/workflows/ci.yml
+Las puertas ejecutan el sitio en local sobre workerd, el runtime de código abierto de Workers, con wrangler dev. Si wrangler se cae por un fallo suyo, la pila se reinicia una vez y el resumen lo dice.
+scripts/ci-local-stack.sh
+workerd
+Cuando las puertas pasan en main, la preview se despliega sola con wrangler-action. Espera a las migraciones de D1, vuelve a sembrar tras ensayar el SQL en una base desechable y lanza una batería de humo.
+.github/workflows/deploy-preview.yml
+GitHub Actions · wrangler-action
+Producción solo se despliega cuando el fundador lo arranca a mano, y una guarda se niega a sobrescribir una base de datos que tiene contenido.
+.github/workflows/deploy-production.yml
+transversal · en cada cambio
+Calidad
+Comprobaciones que se prueban a sí mismas.
+24
+pasos que pueden fallar
+30
+rutas con el texto congelado
+≥95
 rendimiento
-95 o más
+100
 accesibilidad
 100
 buenas prácticas
 100
 SEO
-100
-rutas con copia congelada
-26
-pasos que pueden fallar
-23
-El taller, a la vista
-El repositorio es público y se sincroniza con cada cambio en la rama principal, con la historia entera y sin filtrar. Publicar así tiene un coste: por eso existe el guardia de nombres no citables.
-Código, semillas, comprobaciones y despliegues: está todo. Mira dentro y dinos si harías algo distinto.
-SERVERSTARTUP.io
-manual de montaje · ES/EN · hoja 1 de 1
-PIEZAS INCLUIDAS
-L5
-el borde
-×1
-el worker que responde
-src/worker.ts ↗
-L4
-la puerta
-×7
-las cabeceras de seguridad
-src/middleware.ts ↗
-L3
-el render
-×26
-las rutas públicas
-src/pages/ ↗
-L2
-el CMS
-×5
-un plugin nuestro con la API de EmDash
-src/plugins/cache-purge.ts ↗
-L1
-los datos
-×3
-D1, R2 y KV
-wrangler.jsonc ↗
-L0
-el origen
-×43
-el corpus entero
-seed/seed.json ↗
-—
-los ingenieros
-—
-no incluidos: ya estaban
-MONTAJE
-01
-escribe las semillas
-02
-la skill fija la voz
-03
-el agente redacta
-04
-revisión humana ✋
-05
-pull request y merge
-06
-deploy al edge
-⚠ Advertencias
-No montar sin el paso 04. El agente redacta, el humano firma.
-El paso 03 nunca hace merge. Nunca.
-ℹ Datos de montaje
-Tiempo de montaje: tres semanas a ratos.
-Tornillería incluida: no sobra ninguna pieza.
-Ver el repositorio →
+Lighthouse en 9 páginas, en CI contra una copia local, el 2026-10-16
+La ejecución del 2026-10-16
+lighthouserc.json
+Las puertas de un cambio en main, todas en verde, el 2026-10-16.
+Detalle y pruebas
+7 filas
+Las comprobaciones de accesibilidad, motores, diseño, maquetación, textos, idiomas y nombres plantan el defecto que buscan, y tienen que cazarlo antes de dar verde.
+.github/workflows/ci.yml
+Lighthouse en CI, contra una copia local, con la mediana de 3 pasadas en 9 páginas: rendimiento ≥95; accesibilidad, buenas prácticas y SEO, 100. Las nueve lo cumplieron el 2026-10-16.
+lighthouserc.json
+la ejecución
+Accesibilidad: axe (WCAG 2.2 A+AA) y un recorrido con teclado en todas las rutas del sitio, más reflujo a 320 px. Donde hay texto sobre una fotografía, el contraste se mide en los píxeles renderizados.
+scripts/ci-check-a11y.mjs
+Cada apertura se comprueba a mitad de animación y en reposo, con el motor de Safari (perfiles de iPhone y de escritorio) y el de Chrome (Pixel 7), también con movimiento reducido.
+scripts/ci-check-engines.mjs
+El texto renderizado de 30 rutas está congelado. Cambiar una palabra falla hasta que el texto nuevo se captura a propósito, así que el cambio se ve en el diff del pull request.
+scripts/copy-baseline.mjs
+Agentes de IA escriben la mayor parte del código bajo reglas escritas, y el fundador fusiona cada pull request.
+sin fichero: lo muestra el historial de fusiones
+el repositorio
+Cada push se analiza en busca de secretos, y una guarda rechaza nombrar a clientes que no podemos nombrar.
+.github/workflows/ci.yml
+El taller, abierto
+Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro: código, contenido, comprobaciones y despliegues.
+Ver el repositorio
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto
@@ -187,3 +322,4 @@ somos partners
 Aviso legal
 Política de privacidad
 Accesibilidad
+Créditos

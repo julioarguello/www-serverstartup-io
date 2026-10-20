@@ -6,8 +6,8 @@ bridge alone (Canny on the original, kept inside the mask the bridge was removed
 the sky, only the tower legs below it), redrawn "keeping every line exactly where it is", seed 11,
 2016 x 1344, the photograph's own frame. Its towers land within 7 px of the photograph's. Nothing is
 invented: an earlier prompt asked for the gondola, and FLUX drew one where the photograph has none
-(founder, 2026-10-02: "la barcaza te la has inventado"). FLUX's output is not committed; the sketch
-and the prompt are in the issue. Steps:
+(founder, 2026-10-02: "la barcaza te la has inventado"). FLUX's output is not committed; the prompt,
+model and seed are call 6 in flux-prompts.md. Steps:
 
 1. ink to alpha: dark ink on white paper, a = clip((0.90 - grey) / 0.45, 0, 1);
 2. tinted close to the section's red (#EC4A3A against #EA4335): the bridge and its connectors read

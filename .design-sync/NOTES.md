@@ -34,3 +34,13 @@
   **Times Italic**, not Computer Modern — the CMU 500 italic face it asked for failed to load from the preview host
   and `font-synthesis: none` sent it to the system serif. Contrast numbers taken on the delivery are therefore
   Times numbers; the site's are measured on the real face.
+- **Incremental upload without the converter (2026-10-19, #535).** Guidelines and images can go straight
+  through DesignSync: `finalize_plan` with `localDir` = `.design-sync`, then `write_files` with `localPath`
+  per file (`pkg/x.md` → `guidelines/x.md`, `current/...` → `guidelines/current/...`). Edit
+  `guidelines/index.md` by hand when you add a guideline. Before overwriting a guideline, `get_file` it and
+  compare it with origin/main: it may have been edited inside Claude Design.
+- **The project belongs to the founder's second Anthropic account** (`julio.arguello`). A session logged in
+  with the other account gets `project not found` and an empty `list_projects`. Artifacts published from
+  one account are invisible from the other.
+- **The repository is public: the brief and the facts file must never carry operational or security
+  findings.** `deconstruyendo/hallazgos-operativos.md` is excluded through `info/exclude`.

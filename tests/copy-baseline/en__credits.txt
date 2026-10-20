@@ -1,0 +1,31 @@
+Skip to content
+~Server Startup
+/en/credits
+ES
+Credits
+Who took the photographs in the openings, under which licence, and what we changed.
+The vertical openings use photographs from Wikimedia Commons under Creative Commons BY-SA licences. We restored them and, in some cases, changed them with artificial intelligence. Here is each author, the licence, what we changed and where the photograph appears. Every derivative is distributed under the same licence as its original. The prompts we used are in the repository.
+Photographs
+The Cabo Peñas lighthouse. “Cape Penas Lighthouse.jpg”, by Einaz80, Wikimedia Commons, licence CC BY-SA 4.0. Restored. The mast, antennas, wires, weather tower and sheds were removed, and the frame was extended to the left with AI (FLUX.2 [dev] on Workers AI): the heath and coast on that side are not in the photograph. The profile drawn over the lighthouse derives from it. Appears on: the home page; “CDN, WAF & Edge Security”; “Deconstructing this website”.
+The Vizcaya Bridge. “Bizkaia zubia - Puente Bizkaia.jpg”, by Ebaki, Wikimedia Commons, licence CC BY-SA 4.0. Restored. On “Systems Integration”, the bridge and the sky were removed with AI and the bridge was redrawn as an elevation from its own edges. The tanker's stern was relettered SERVER STARTUP / AVILÉS / YULO 11062024. Appears on: the home page; “Systems Integration”; “Artificial Intelligence”.
+The Guggenheim Museum Bilbao. “Museo Guggenheim Bilbao, Bilbao. (23811575351).jpg”, by Sergio S.C, Wikimedia Commons, licence CC BY-SA 2.0. Restored, with the photographer's mark removed. The empty plot is an AI reconstruction, not a photograph from before 1997, and the museum's elevation was redrawn with AI from the photograph. Appears on: the home page; “Greenfield development”; “Deconstructing this website”.
+The automated warehouse. “Ocado warehouse bots.jpg”, by Techwords, Wikimedia Commons, licence CC BY-SA 4.0. Restored, with the operator's mark removed from the robots. On the home page, the frame was extended to the left with AI. Appears on: the home page; “E-commerce”.
+The Teide Observatory domes. “Teide Observatory 2018 077.jpg”, by Mike Peel, Wikimedia Commons, licence CC BY-SA 4.0. Restored, with the operator's logo removed from two doors. Appears on: the home page; “Big Data & Cloud Analytics”.
+Let's talk, engineer to engineer.
+Bring the problem as it is. You'll hear back from the person who'll write the code.
+Tell us about your project
+references
+~Server Startup
+Backend, integration, data and edge. The same senior engineers from start to finish, from Getxo, since 2019.
+The house
+About us
+Deconstructing this website
+References
+Contact
+Email us
+we are partners
+© 2026 Server Startup, S.L.
+Legal notice
+Privacy policy
+Accessibility
+Credits

@@ -1,0 +1,139 @@
+---
+/**
+ * /deconstruyendo and /en/deconstructing (#535): how this site is built,
+ * from its foundations up, quality last. The design is Claude Design's
+ * delivery «B mapa v5» (.design-sync/delivery/deconstruyendo/), approved by
+ * the founder on 2026-10-20. The page entry carries the title, the lead and
+ * the closing; every layer is an entry of the `layers` collection; the
+ * chrome's words live in the `deconstruct_labels` widget. The routes fetch
+ * all three, because cache.set must run in page frontmatter.
+ */
+import { PortableText } from "emdash/ui";
+import type { Layer } from "../utils/layers";
+import { GROUP_ORDER, layerHtml } from "../utils/layers";
+import type { UiLabels } from "../utils/ui-labels";
+import DecModel from "./deconstruct/DecModel.astro";
+import DecPlate from "./deconstruct/DecPlate.astro";
+
+interface Props {
+	title: string;
+	lead: string;
+	content: unknown[];
+	layers: Layer[];
+	labels: UiLabels;
+	repoUrl: string;
+}
+const { title, lead, content, layers, labels, repoUrl } = Astro.props;
+const L = (k: string, fb: string) => labels.get("deconstruct_labels", k, fb);
+
+// Two voices, as on the openings: the first word in the house face, the rest in Computer Modern italic.
+const space = title.indexOf(" ");
+const head = space === -1 ? title : title.slice(0, space);
+const tail = space === -1 ? "" : title.slice(space + 1);
+
+const groupLabel: Record<string, string> = {
+	cloudflare: L("g_cloudflare", "Cuatro capas, en `Cloudflare`"),
+	worker: L("g_worker", "Dentro del `Worker`"),
+	taller: L("g_taller", "Transversal, desde el taller"),
+};
+const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.group === g) })).filter((g) => g.layers.length);
+---
+
+<div class="dc">
+	<section class="dc-hero" aria-labelledby="dc-title">
+		<div class="container dc-hero__inner">
+			<h1 class="ss-title" id="dc-title">{head}{tail && " "}{tail && <span class="ss-title__tail">{tail}</span>}</h1>
+			{lead && <p class="dc-hero__lead" set:html={layerHtml(lead)} />}
+		</div>
+		<DecModel layers={layers} labels={labels} />
+	</section>
+
+	<nav class="dc-spine" aria-label={L("spine_aria", "Capas")}>
+		<div class="container dc-spine__in">
+			{groups.map((g, gi) => (
+				<>
+					{gi > 0 && <span class="dc-spine__sep" aria-hidden="true" />}
+					{g.layers.map((l, i) => (
+						<a class={g.key === "cloudflare" ? "cf" : undefined} href={`#${l.slug}`} data-l={l.slug}>
+							{g.key === "cloudflare" && <b>{i + 1}</b>}{l.short}
+						</a>
+					))}
+				</>
+			))}
+		</div>
+	</nav>
+
+	{groups.map((g) => (
+		<>
+			<div class="dc-grp"><div class="container"><p set:html={layerHtml(groupLabel[g.key])} /></div></div>
+			{g.layers.map((l) => <DecPlate layer={l} labels={labels} repoUrl={repoUrl} />)}
+		</>
+	))}
+
+	{content.length > 0 && (
+		<section class="dc-close">
+			<div class="container s-content">
+				<PortableText value={content as any} />
+			</div>
+		</section>
+	)}
+</div>
+
+<script>
+	// One controller for the map and the spine: whichever plate is under the
+	// reading line lights its piece. Native scroll only — nothing is hijacked.
+	const root = document.documentElement;
+	if (!matchMedia("(prefers-reduced-motion: reduce)").matches) root.classList.add("dc-asm");
+
+	const openHash = () => {
+		const id = decodeURIComponent(location.hash.slice(1));
+		if (!id) return;
+		const el = document.getElementById(id);
+		const d = el?.closest("details");
+		if (el && d && !d.open) {
+			d.open = true;
+			requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+		}
+	};
+	addEventListener("hashchange", openHash);
+	openHash();
+
+	const plates = [...document.querySelectorAll<HTMLElement>(".dc-pl")];
+	const cells = [...document.querySelectorAll<HTMLElement>(".dc-spine a[data-l], .dc-model .m-lk[data-l]")];
+	const set = (slug: string) =>
+		cells.forEach((c) => {
+			const on = c.dataset.l === slug;
+			c.classList.toggle("on", on);
+			if (c.closest(".dc-spine")) on ? c.setAttribute("aria-current", "true") : c.removeAttribute("aria-current");
+		});
+	// hover on the map lights the piece and its label together
+	document.querySelectorAll<HTMLElement>(".dc-model .m-lk[data-l]").forEach((a) => {
+		const same = () => cells.filter((c) => c.closest(".dc-model") && c.dataset.l === a.dataset.l);
+		a.addEventListener("pointerenter", () => same().forEach((c) => c.classList.add("hv")));
+		a.addEventListener("pointerleave", () => same().forEach((c) => c.classList.remove("hv")));
+	});
+	if ("IntersectionObserver" in window) {
+		const io = new IntersectionObserver(
+			(es) => es.forEach((e) => e.isIntersecting && set((e.target as HTMLElement).dataset.l ?? "")),
+			{ rootMargin: "-30% 0px -65% 0px" },
+		);
+		plates.forEach((p) => io.observe(p));
+		const hero = document.querySelector(".dc-hero");
+		if (hero) new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && set("")), { rootMargin: "-30% 0px -65% 0px" }).observe(hero);
+	}
+
+	// "tú ves, desde <ciudad · centro de datos>": the same echo the edge-security opening uses.
+	const loc = document.querySelector<SVGTSpanElement>("[data-dc-loc]");
+	const line = document.querySelector<SVGTextElement>("[data-dc-whoami]");
+	if (loc && line) {
+		fetch("/api/whoami")
+			.then((r) => (r.ok ? r.json() : null))
+			.then((w: { city?: string; colo?: string } | null) => {
+				const parts = [w?.city, w?.colo].filter(Boolean);
+				if (!parts.length) return;
+				loc.textContent = parts.join(" · ");
+				line.removeAttribute("visibility");
+			})
+			.catch(() => {});
+	}
+</script>

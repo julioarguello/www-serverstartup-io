@@ -166,6 +166,15 @@ jobs:
         # gate here saw it for a month (#489).
         run: python3 scripts/ci-check-locale-parity.py
 
+      - name: Cited files exist (every file the site cites is tracked)
+        # #535: /deconstruyendo states how the site is built and cites, for
+        # every fact, the file that proves it. A rename that leaves a citation
+        # behind sends the reader to GitHub's 404 and changes no rendered word,
+        # so neither the copy baseline nor any rendered gate would see it. Runs
+        # on every pull request, docs-only included: renaming a cited doc is
+        # exactly a docs-only change.
+        run: python3 scripts/ci-check-cited-files.py
+
       - name: Design tokens (colour, radius and shadow live in theme.css)
         if: needs.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-design-tokens.py
@@ -256,7 +265,8 @@ jobs:
                    /desarrollo-greenfield:jd \
                    /deconstruyendo:manual /en/deconstructing:manual-en \
                    /politica-de-privacidad:legal /en/privacy-policy:legal-en \
-                   /referencias:refs /en/references:refs-en; do
+                   /referencias:refs /en/references:refs-en \
+                   /creditos:credits /en/credits:credits-en; do
             url="${r%%:*}"; name="${r##*:}"
             curl -sf "http://localhost:8787$url" -o "/tmp/html/$name.html"
           done
@@ -625,7 +635,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 23 steps that can fail"
+            echo "## Quality gates — 24 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -633,8 +643,8 @@ jobs:
               echo "> ⏭️ **This pull request changes no file that reaches the"
               echo "> rendered site**, so the steps that measure a rendered"
               echo "> page were skipped (#497). The ones that read file"
-              echo "> content ran: gitleaks, citability, and the CSS source"
-              echo "> budget — which reads a document, and is the reason this"
+              echo "> content ran: gitleaks, citability, cited files and the"
+              echo "> CSS source budget — which reads a document, and is why this"
               echo "> is a scope check and not \`paths-ignore\`. Every step"
               echo "> above runs on push to \`main\`, without exception."
               echo ""
@@ -647,13 +657,14 @@ jobs:
             echo "| seed schema | seed.json validates |"
             echo "| cms-text | labels resolve ES+EN, 0 hardcoded copy |"
             echo "| locale parity | a field filled in one locale is filled in the other |"
+            echo "| cited files | every file and repository link the seed cites is tracked |"
             echo "| design tokens | colour, radius, shadow and width from theme.css |"
             echo "| CSS source budget | the stylesheets stay under budget, and the doc that prints the figure agrees |"
             echo "| cache hints | cache.set only where headers still open |"
             echo "| unit tests | every vitest suite in tests/unit |"
             echo "| build | astro build succeeds |"
             echo "| local stack | boots and serves, seeded from seed.json |"
-            echo "| html-validate | 0 problems, 19 templates |"
+            echo "| html-validate | 0 problems, 21 templates |"
             echo "| rendered copy | every seed route matches its baseline · menu links match the seed |"
             echo "| security headers | full #164 suite |"
             echo "| image hrefs | every /_image href is a path, never a URL |"

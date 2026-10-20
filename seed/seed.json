@@ -1362,7 +1362,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "El mapa de esta web. Arriba, EmDash, donde se edita; en el centro, las cuatro capas de Cloudflare: datos, cómputo, caché y red; abajo, la página que ves. Detrás, el contenido y la entrega; alrededor, la calidad."
+									"text": "El mapa de esta web. En el centro, las cuatro capas de Cloudflare, de arriba abajo: red, caché, cómputo y datos. A la izquierda, EmDash, donde se edita, escribe en los datos; a la derecha, la página que ves, servida desde la red. Detrás, la entrega y el contenido; alrededor, la calidad."
 								}
 							]
 						},
@@ -4090,7 +4090,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "The map of this website. At the top, EmDash, where it is edited; in the middle, the four Cloudflare layers: data, compute, cache and network; at the bottom, the page you see. Behind them, content and delivery; around everything, quality."
+									"text": "The map of this website. In the middle, the four Cloudflare layers, top to bottom: network, cache, compute and data. On the left, EmDash, where it is edited, writes to the data; on the right, the page you see, served from the network. Behind them, delivery and content; around everything, quality."
 								}
 							]
 						},
@@ -19703,7 +19703,7 @@
 				"locale": "es",
 				"data": {
 					"title": "El CMS: `EmDash`",
-					"position": 5,
+					"position": 6,
 					"group": "worker",
 					"kicker": "dentro del `Worker`",
 					"short": "EmDash",
@@ -19827,7 +19827,7 @@
 				"locale": "en",
 				"data": {
 					"title": "The CMS: `EmDash`",
-					"position": 5,
+					"position": 6,
 					"group": "worker",
 					"kicker": "inside the `Worker`",
 					"short": "EmDash",
@@ -19952,7 +19952,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Presentación",
-					"position": 6,
+					"position": 5,
 					"group": "worker",
 					"kicker": "dentro del `Worker`",
 					"short": "Presentación",
@@ -20034,7 +20034,7 @@
 				"locale": "en",
 				"data": {
 					"title": "Presentation",
-					"position": 6,
+					"position": 5,
 					"group": "worker",
 					"kicker": "inside the `Worker`",
 					"short": "Presentation",
@@ -20117,7 +20117,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Contenido",
-					"position": 7,
+					"position": 8,
 					"group": "taller",
 					"kicker": "transversal · desde el taller",
 					"short": "Contenido",
@@ -20189,7 +20189,7 @@
 				"locale": "en",
 				"data": {
 					"title": "Content",
-					"position": 7,
+					"position": 8,
 					"group": "taller",
 					"kicker": "across the layers · from the workshop",
 					"short": "Content",
@@ -20262,7 +20262,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Entrega",
-					"position": 8,
+					"position": 7,
 					"group": "taller",
 					"kicker": "transversal · desde el taller",
 					"short": "Entrega",
@@ -20350,7 +20350,7 @@
 				"locale": "en",
 				"data": {
 					"title": "Delivery",
-					"position": 8,
+					"position": 7,
 					"group": "taller",
 					"kicker": "across the layers · from the workshop",
 					"short": "Delivery",

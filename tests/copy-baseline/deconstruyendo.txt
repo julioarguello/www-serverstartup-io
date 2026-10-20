@@ -6,19 +6,19 @@ Deconstruyendo esta web
 Cómo está hecha, capa a capa: de la red de Cloudflare a las comprobaciones que pasa cada cambio. Cada afirmación enlaza al fichero que la prueba.
 Calidad
 24 pasos · Lighthouse · axe
-01
-02
-03
 04
+03
+02
+01
 Cloudflare
-Datos
-D1 · Workers KV · Images · R2
-Cómputo
-Workers · Astro · Dynamic Workers
-La caché
-Workers Cache · purga por etiqueta
 La red
 DNSSEC · TLS 1.3 · Custom Domains
+La caché
+Workers Cache · purga por etiqueta
+Cómputo
+Workers · Astro · Dynamic Workers
+Datos
+D1 · Workers KV · Images · R2
 Contenido
 seed.json · ES ↔ EN
 Entrega
@@ -41,10 +41,10 @@ Caché
 Cómputo
 4
 Datos
-EmDash
 Presentación
-Contenido
+EmDash
 Entrega
+Contenido
 Calidad
 CUATRO CAPAS, EN Cloudflare
 capa 1 · Cloudflare
@@ -156,6 +156,27 @@ Preview y producción tienen cada una su D1, su Workers KV y su R2.
 wrangler.jsonc
 DENTRO DEL WORKER
 dentro del Worker
+Presentación
+Ninguna petición a terceros.
+Cabo Peñas · Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restaurada; mástiles retirados y encuadre ampliado con IA
+Guggenheim · Sergio S.C · Wikimedia Commons · CC BY-SA 2.0 · restaurada; solar reconstruido con IA
+0
+peticiones a terceros al cargar una página
+una hoja de estilos para todo
+Detalle y pruebas
+5 filas
+Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
+src/styles/theme.css
+Cargar una página no hace ninguna petición a terceros. Fuentes, scripts e imágenes son del propio sitio.
+src/middleware.ts
+Cada vertical abre con una fotografía de Wikimedia Commons, restaurada y redibujada en parte, y una capa dibujada en vivo en el navegador. La capa se coloca según el texto medido, y su reloj se para a los ocho segundos: nada se repite.
+src/utils/hero-art.ts
+Las fotografías se restauraron en local con SeedVR2. FLUX.2 [dev] (Black Forest Labs) en Workers AI retiró objetos, amplió encuadres y redibujó a partir de las fotografías. Cada prompt está en el repositorio.
+docs/design/hero-rotativo/photo_restore.py
+[FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
+Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
+seed/seed.json
+dentro del Worker
 El CMS: EmDash
 El CMS de código abierto de Cloudflare, dentro del mismo Worker.
 El editor de EmDash, en el admin del sitio.
@@ -189,51 +210,7 @@ La búsqueda es la de EmDash, sobre SQLite FTS5 con ranking bm25.
 sin fichero: en `EmDash`, migración 064
 Un plugin guardado en el repositorio purga la caché al publicar. Declara content:read, porque sin él EmDash se salta sus hooks.
 astro.config.mjs
-dentro del Worker
-Presentación
-Ninguna petición a terceros.
-Cabo Peñas · Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restaurada; mástiles retirados y encuadre ampliado con IA
-Guggenheim · Sergio S.C · Wikimedia Commons · CC BY-SA 2.0 · restaurada; solar reconstruido con IA
-0
-peticiones a terceros al cargar una página
-una hoja de estilos para todo
-Detalle y pruebas
-5 filas
-Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
-src/styles/theme.css
-Cargar una página no hace ninguna petición a terceros. Fuentes, scripts e imágenes son del propio sitio.
-src/middleware.ts
-Cada vertical abre con una fotografía de Wikimedia Commons, restaurada y redibujada en parte, y una capa dibujada en vivo en el navegador. La capa se coloca según el texto medido, y su reloj se para a los ocho segundos: nada se repite.
-src/utils/hero-art.ts
-Las fotografías se restauraron en local con SeedVR2. FLUX.2 [dev] (Black Forest Labs) en Workers AI retiró objetos, amplió encuadres y redibujó a partir de las fotografías. Cada prompt está en el repositorio.
-docs/design/hero-rotativo/photo_restore.py
-[FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
-Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
-seed/seed.json
 TRANSVERSAL, DESDE EL TALLER
-transversal · desde el taller
-Contenido
-Cada frase, en un fichero versionado.
-seed/seed.json
-cada frase
-D1, vacía
-×12 en paralelo
-el sitio
-ES ↔ EN
-seed/seed.json en GitHub
-Las páginas de servicio en Markdown
-La carpeta seed/ del repositorio público.
-Detalle y pruebas
-4 filas
-Cada frase que renderiza el sitio vive en un fichero versionado, seed/seed.json. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.
-seed/seed.json
-ficheros semilla
-En cada cambio que puede llegar a una página, CI compila el sitio y llena una base de datos vacía desde ese fichero, doce veces en paralelo.
-.github/workflows/ci.yml
-Los slugs de servicio están traducidos, así que la URL del otro idioma nunca se adivina. hreflang y el selector de idioma leen el mismo valor resuelto.
-src/utils/alternate.ts
-El sitemap se genera desde las colecciones del CMS.
-src/pages/sitemap.xml.ts
 transversal · desde el taller
 Entrega
 La preview se despliega sola; producción, a mano.
@@ -265,6 +242,29 @@ Cuando las puertas pasan en main, la preview se despliega sola con wrangler-acti
 GitHub Actions · wrangler-action
 Producción solo se despliega cuando el fundador lo arranca a mano, y una guarda se niega a sobrescribir una base de datos que tiene contenido.
 .github/workflows/deploy-production.yml
+transversal · desde el taller
+Contenido
+Cada frase, en un fichero versionado.
+seed/seed.json
+cada frase
+D1, vacía
+×12 en paralelo
+el sitio
+ES ↔ EN
+seed/seed.json en GitHub
+Las páginas de servicio en Markdown
+La carpeta seed/ del repositorio público.
+Detalle y pruebas
+4 filas
+Cada frase que renderiza el sitio vive en un fichero versionado, seed/seed.json. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.
+seed/seed.json
+ficheros semilla
+En cada cambio que puede llegar a una página, CI compila el sitio y llena una base de datos vacía desde ese fichero, doce veces en paralelo.
+.github/workflows/ci.yml
+Los slugs de servicio están traducidos, así que la URL del otro idioma nunca se adivina. hreflang y el selector de idioma leen el mismo valor resuelto.
+src/utils/alternate.ts
+El sitemap se genera desde las colecciones del CMS.
+src/pages/sitemap.xml.ts
 transversal · en cada cambio
 Calidad
 Comprobaciones que se prueban a sí mismas.

@@ -38,17 +38,18 @@ function runs(s: string | undefined): { text: string; cf: boolean }[] {
 const plain = (s: string) => s.replaceAll("\u0060", "");
 
 const SLABS = [
-	{ f: "red", s: "s1", n: "01", ft: "600.0,613.2 766.4,709.3 600.0,805.3 433.6,709.3", fl: "433.6,709.3 600.0,805.3 600.0,849.0 433.6,752.9", fr: "600.0,805.3 766.4,709.3 766.4,752.9 600.0,849.0", ln: "M516.8,757.3 V801.0 M683.2,757.3 V801.0", et: "matrix(1,0.577,0,1,475.2,755.1)" },
-	{ f: "cache", s: "s2", n: "02", ft: "600.0,564.3 766.4,660.4 600.0,756.5 433.6,660.4", fl: "433.6,660.4 600.0,756.5 600.0,800.1 433.6,704.1", fr: "600.0,756.5 766.4,660.4 766.4,704.1 600.0,800.1", ln: "M516.8,708.4 V752.1 M683.2,708.4 V752.1", et: "matrix(1,0.577,0,1,475.2,706.3)" },
-	{ f: "computo", s: "s3", n: "03", ft: "600.0,499.9 766.4,595.9 600.0,692.0 433.6,595.9", fl: "433.6,595.9 600.0,692.0 600.0,735.7 433.6,639.6", fr: "600.0,692.0 766.4,595.9 766.4,639.6 600.0,735.7", ln: "M516.8,644.0 V687.6 M683.2,644.0 V687.6", et: "matrix(1,0.577,0,1,475.2,641.8)" },
-	{ f: "datos", s: "s4", n: "04", ft: "600.0,451.0 766.4,547.1 600.0,643.1 433.6,547.1", fl: "433.6,547.1 600.0,643.1 600.0,686.8 433.6,590.7", fr: "600.0,643.1 766.4,547.1 766.4,590.7 600.0,686.8", ln: "M516.8,595.1 V638.8 M683.2,595.1 V638.8 M516.8,499.0 L683.2,595.1 M683.2,499.0 L516.8,595.1", et: "matrix(1,0.577,0,1,475.2,592.9)" },
+	{ f: "datos", s: "s1", n: "04", ft: "600.0,613.2 766.4,709.3 600.0,805.3 433.6,709.3", fl: "433.6,709.3 600.0,805.3 600.0,849.0 433.6,752.9", fr: "600.0,805.3 766.4,709.3 766.4,752.9 600.0,849.0", ln: "M516.8,757.3 V801.0 M683.2,757.3 V801.0", et: "matrix(1,0.577,0,1,475.2,755.1)" },
+	{ f: "computo", s: "s2", n: "03", ft: "600.0,564.3 766.4,660.4 600.0,756.5 433.6,660.4", fl: "433.6,660.4 600.0,756.5 600.0,800.1 433.6,704.1", fr: "600.0,756.5 766.4,660.4 766.4,704.1 600.0,800.1", ln: "M516.8,708.4 V752.1 M683.2,708.4 V752.1", et: "matrix(1,0.577,0,1,475.2,706.3)" },
+	{ f: "cache", s: "s3", n: "02", ft: "600.0,499.9 766.4,595.9 600.0,692.0 433.6,595.9", fl: "433.6,595.9 600.0,692.0 600.0,735.7 433.6,639.6", fr: "600.0,692.0 766.4,595.9 766.4,639.6 600.0,735.7", ln: "M516.8,644.0 V687.6 M683.2,644.0 V687.6", et: "matrix(1,0.577,0,1,475.2,641.8)" },
+	{ f: "red", s: "s4", n: "01", ft: "600.0,451.0 766.4,547.1 600.0,643.1 433.6,547.1", fl: "433.6,547.1 600.0,643.1 600.0,686.8 433.6,590.7", fr: "600.0,643.1 766.4,547.1 766.4,590.7 600.0,686.8", ln: "M516.8,595.1 V638.8 M683.2,595.1 V638.8 M516.8,499.0 L683.2,595.1 M683.2,499.0 L516.8,595.1", et: "matrix(1,0.577,0,1,475.2,592.9)" },
 ];
-/* the labels on the right, top to bottom: the slabs read bottom-up */
+/* the labels on the right, top to bottom, as the slabs stack: the network on top, the data at the base
+   (founder, 2026-10-20: "la primera la red, y abajo los datos") */
 const RIGHT = [
-	{ f: "datos", y: 542.9 },
-	{ f: "computo", y: 591.8 },
-	{ f: "cache", y: 656.2 },
-	{ f: "red", y: 705.1 },
+	{ f: "red", y: 542.9 },
+	{ f: "cache", y: 591.8 },
+	{ f: "computo", y: 656.2 },
+	{ f: "datos", y: 705.1 },
 ];
 const SM = [
 	{ s: "s1", ft: "156.0,133.3 231.5,176.9 156.0,220.5 80.5,176.9", fl: "80.5,176.9 156.0,220.5 156.0,240.3 80.5,196.7", fr: "156.0,220.5 231.5,176.9 231.5,196.7 156.0,240.3", ln: "M118.2,198.7 V218.5 M193.8,198.7 V218.5" },
@@ -76,16 +77,16 @@ const entr = by.entrega;
 	<div class="dc-model__wrap">
 		{/* the windows' screenshots are placed as % of this box, which is the drawing's own: no padding */}
 		<div class="dc-model__art">
-		<svg class="dc-model__lg" viewBox="-266 338 1674 652" role="group" aria-label={L("map_aria", "")}>
+		<svg class="dc-model__lg" viewBox="-266 308 1674 682" role="group" aria-label={L("map_aria", "")}>
 			<defs>
 				<marker id="dc-ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ahw" /></marker>
 			</defs>
 			{q && (
 				<a class="m-lk w q lb" href={href("calidad")} data-l={q.slug} aria-label={q.short}>
-					<path class="qf" d="M102,350 H1388 Q1404,350 1404,366 V969 Q1404,985 1388,985 H-246 Q-262,985 -262,969 V366 Q-262,350 -246,350 H-238" />
-					<path class="qhit" d="M-262,350 H1404 V985 H-262 Z" />
-					<text class="nm" x="-226" y="358">{q.short}</text>
-					<text class="pm" x="-112" y="356">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
+					<path class="qf" d="M102,320 H1388 Q1404,320 1404,336 V969 Q1404,985 1388,985 H-246 Q-262,985 -262,969 V336 Q-262,320 -246,320 H-238" />
+					<path class="qhit" d="M-262,320 H1404 V985 H-262 Z" />
+					<text class="nm" x="-226" y="328">{q.short}</text>
+					<text class="pm" x="-112" y="326">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
 				</a>
 			)}
 			{entr && (
@@ -122,65 +123,66 @@ const entr = by.entrega;
 			))}
 			{cont && (
 				<a class="m-lk w g lb" href={href("contenido")} data-l={cont.slug} tabindex="-1" aria-hidden="true">
-					<rect class="lbh" x="46" y="400" width="316" height="56" />
-					<path class="ldw" d="M260,430 H332 L362,430" />
-					<circle class="dk" cx="362" cy="430" r="5" />
-					<text class="nm" x="250" y="431" text-anchor="end">{cont.short}</text>
-					<text class="pm" x="250" y="451" text-anchor="end">{runs(cont.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="lbh" x="46" y="850" width="316" height="56" />
+					<path class="ldw" d="M260,880 H332 L362,880" />
+					<circle class="dk" cx="362" cy="880" r="5" />
+					<text class="nm" x="250" y="881" text-anchor="end">{cont.short}</text>
+					<text class="pm" x="250" y="901" text-anchor="end">{runs(cont.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{entr && (
 				<a class="m-lk w k lb" href={href("entrega")} data-l={entr.slug} tabindex="-1" aria-hidden="true">
-					<rect class="lbh" x="46" y="750" width="290" height="56" />
-					<path class="ldw" d="M260,780 H306 L336,780" />
-					<circle class="dk" cx="336" cy="780" r="5" />
-					<text class="nm" x="250" y="781" text-anchor="end">{entr.short}</text>
-					<text class="pm" x="250" y="801" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="lbh" x="46" y="440" width="260" height="56" />
+					<path class="ldw" d="M260,470 H272 L302,470" />
+					<circle class="dk" cx="302" cy="470" r="5" />
+					<text class="nm" x="250" y="471" text-anchor="end">{entr.short}</text>
+					<text class="pm" x="250" y="491" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{emd && (
 				<a class="m-lk ap lb" href={href("emdash")} data-l={emd.slug} aria-label={emd.short}>
-					<rect class="wfr" x="30" y="500" width="200" height="150" rx="6" />
-					<rect class="wbar" x="30" y="500" width="200" height="24" rx="6" />
-					<rect class="wbar" x="30" y="516" width="200" height="8" />
-					<circle class="wd1" cx="42" cy="512" r="3.5" /><circle class="wd2" cx="53" cy="512" r="3.5" /><circle class="wd3" cx="64" cy="512" r="3.5" />
-					<text class="wpth" x="220" y="516" text-anchor="end">{L("win_cms", "/_emdash/admin")}</text>
-					<rect class="wol" x="30" y="500" width="200" height="150" rx="6" />
-					<text class="nm" x="30" y="678">{emd.short}</text>
-					<text class="pm" x="30" y="698">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="wfr" x="30" y="660" width="200" height="150" rx="6" />
+					<rect class="wbar" x="30" y="660" width="200" height="24" rx="6" />
+					<rect class="wbar" x="30" y="676" width="200" height="8" />
+					<circle class="wd1" cx="42" cy="672" r="3.5" /><circle class="wd2" cx="53" cy="672" r="3.5" /><circle class="wd3" cx="64" cy="672" r="3.5" />
+					<text class="wpth" x="220" y="676" text-anchor="end">{L("win_cms", "/_emdash/admin")}</text>
+					<rect class="wol" x="30" y="660" width="200" height="150" rx="6" />
+					<text class="nm" x="30" y="628">{emd.short}</text>
+					<text class="pm" x="30" y="648">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{pres && (
 				<a class="m-lk ap lb" href={href("presentacion")} data-l={pres.slug} aria-label={pres.short}>
-					<rect class="wfr" x="946" y="790" width="200" height="150" rx="6" />
-					<rect class="wbar" x="946" y="790" width="200" height="24" rx="6" />
-					<rect class="wbar" x="946" y="806" width="200" height="8" />
-					<circle class="wd1" cx="958" cy="802" r="3.5" /><circle class="wd2" cx="969" cy="802" r="3.5" /><circle class="wd3" cx="980" cy="802" r="3.5" />
-					<text class="wpth" x="1136" y="806" text-anchor="end">{L("win_site", "/")}</text>
-					<rect class="wol" x="946" y="790" width="200" height="150" rx="6" />
-					<text class="nm" x="1166" y="826">{pres.short}</text>
-					<text class="pm" x="1166" y="846">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="wfr" x="946" y="335" width="200" height="150" rx="6" />
+					<rect class="wbar" x="946" y="335" width="200" height="24" rx="6" />
+					<rect class="wbar" x="946" y="351" width="200" height="8" />
+					<circle class="wd1" cx="958" cy="347" r="3.5" /><circle class="wd2" cx="969" cy="347" r="3.5" /><circle class="wd3" cx="980" cy="347" r="3.5" />
+					<text class="wpth" x="1136" y="351" text-anchor="end">{L("win_site", "/")}</text>
+					<rect class="wol" x="946" y="335" width="200" height="150" rx="6" />
+					<text class="nm" x="1166" y="371">{pres.short}</text>
+					<text class="pm" x="1166" y="391">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
-			<path class="fa" d="M236,575 H425" marker-end="url(#dc-ah)" />
-			<path class="fa" d="M774,815 H938" marker-end="url(#dc-ah)" />
+			<path class="fa" d="M236,735 H425" marker-end="url(#dc-ah)" />
+			{/* the page leaves from the network's slab, round the stack, up to its window */}
+			<path class="fa" d="M774,535 H896 V430 H938" marker-end="url(#dc-ah)" />
 			<g class="who yo">
-				<circle class="ic" cx="-32" cy="575" r="18" />
-				<g class="ico" transform="translate(-32 575)"><path d="M-8,8 L-6,2 L5,-9 L9,-5 L-2,6 Z M3,-7 L7,-3" /></g>
-				<path class="wa2" d="M-10,575 H22" marker-end="url(#dc-ah)" />
-				<text class="wh" x="-62" y="563" text-anchor="end">{L("who_edit", "yo edito")}</text>
-				{whoSub.map((line, i) => <text class="ws" x="-62" y={583 + i * 18} text-anchor="end">{line}</text>)}
+				<circle class="ic" cx="-32" cy="735" r="18" />
+				<g class="ico" transform="translate(-32 735)"><path d="M-8,8 L-6,2 L5,-9 L9,-5 L-2,6 Z M3,-7 L7,-3" /></g>
+				<path class="wa2" d="M-10,735 H22" marker-end="url(#dc-ah)" />
+				<text class="wh" x="-62" y="723" text-anchor="end">{L("who_edit", "yo edito")}</text>
+				{whoSub.map((line, i) => <text class="ws" x="-62" y={743 + i * 18} text-anchor="end">{line}</text>)}
 			</g>
 			<g class="who tu">
-				<path class="wa2" d="M1154,900 H1186" marker-end="url(#dc-ah)" />
-				<circle class="ic" cx="1208" cy="900" r="18" />
-				<g class="ico" transform="translate(1208 900)"><path d="M-10,0 Q0,-8 10,0 Q0,8 -10,0 Z" /><circle r="3" /></g>
-				<text class="wh" x="1238" y="898">{L("who_see", "tú ves")}</text>
-				<text class="ws" x="1238" y="918" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
+				<path class="wa2" d="M1154,445 H1186" marker-end="url(#dc-ah)" />
+				<circle class="ic" cx="1208" cy="445" r="18" />
+				<g class="ico" transform="translate(1208 445)"><path d="M-10,0 Q0,-8 10,0 Q0,8 -10,0 Z" /><circle r="3" /></g>
+				<text class="wh" x="1238" y="443">{L("who_see", "tú ves")}</text>
+				<text class="ws" x="1238" y="463" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
 			</g>
 		</svg>
-		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:17.742%;top:28.528%;width:11.828%;height:19.172%" />
-		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:72.461%;top:73.006%;width:11.828%;height:19.172%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:17.742%;top:55.132%;width:11.828%;height:18.328%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:72.461%;top:7.478%;width:11.828%;height:18.328%" />
 		</div>
 	</div>
 	<svg class="dc-model__sm" viewBox="0 0 300 300" aria-hidden="true">

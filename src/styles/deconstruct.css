@@ -42,7 +42,7 @@
 	.dc-hero { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100svh; min-height: 640px; }
 	.dc-model { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin-top: var(--space-4); }
 	.dc-model__wrap { min-height: 0; width: 100%; container-type: size; }
-	.dc-model__art { width: min(100cqw, 100cqh * 1674 / 652); margin-inline: auto; }
+	.dc-model__art { width: min(100cqw, 100cqh * 1674 / 682); margin-inline: auto; }
 }
 .dc-hero h1 { color: var(--color-secondary); }
 /* From 768 px the opening h1 takes theme.css's one register (one line, sized by the longest

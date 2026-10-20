@@ -279,6 +279,19 @@ function numbersBefore(strings: string[], noun: string): number[] {
 	return strings.flatMap((s) => [...s.matchAll(re)].map((m) => Number(m[1])));
 }
 
+describe("the README badge says the same number (#600)", () => {
+	const readme = read("README.md");
+
+	it("both the badge's text and its image carry the count", () => {
+		const alt = readme.match(/\[!\[quality gates: (\d+)\]/);
+		const img = readme.match(/img\.shields\.io\/badge\/quality_gates-(\d+)-/);
+		expect(alt, "no quality gates badge in README.md").not.toBeNull();
+		expect(img, "the badge's image does not carry a count").not.toBeNull();
+		expect(Number(alt![1])).toBe(gates.length);
+		expect(Number(img![1])).toBe(gates.length);
+	});
+});
+
 describe("the public page says the same number", () => {
 	it("everywhere it says it, both locales", () => {
 		const es = numbersBefore(layerStrings("es"), "pasos");

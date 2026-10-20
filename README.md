@@ -1,12 +1,13 @@
 # serverstartup.io
 
-<!-- Each badge is live (CI status, versions read from package.json) or held to its source by
-     tests/unit/readme-badges.test.ts: the gate count, the Lighthouse thresholds, the axe scope, the CSP. -->
+<!-- Every badge is live; none is edited by hand. CI status and versions come from GitHub and
+     package.json; the gate count, Lighthouse thresholds, WCAG level and CSP are derived from their
+     owners by scripts/badges.mjs and published on the `badges` branch by .github/workflows/badges.yml. -->
 [![quality-gates](https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain)
-[![quality gates: 24](https://img.shields.io/badge/quality_gates-24-brightgreen)](.github/workflows/ci.yml)
-[![Lighthouse: perf ≥95 · a11y 100 · best practices 100 · SEO 100](https://img.shields.io/badge/Lighthouse-perf_%E2%89%A595_%C2%B7_a11y_100_%C2%B7_best_practices_100_%C2%B7_SEO_100-F44B21?logo=lighthouse&logoColor=white)](lighthouserc.json)
-[![accessibility: axe · WCAG 2.2 AA · every route](https://img.shields.io/badge/accessibility-axe_%C2%B7_WCAG_2.2_AA_%C2%B7_every_route-brightgreen)](scripts/ci-check-a11y.mjs)
-[![CSP: default-src 'self'](https://img.shields.io/badge/CSP-default--src_%27self%27-brightgreen)](src/middleware.ts)
+[![quality gates](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Fgates.json)](.github/workflows/ci.yml)
+[![Lighthouse thresholds](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Flighthouse.json)](lighthouserc.json)
+[![accessibility checks](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Faccessibility.json)](scripts/ci-check-a11y.mjs)
+[![Content Security Policy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Fcsp.json)](src/middleware.ts)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare_Workers-F38020?logo=cloudflareworkers&logoColor=white)](https://developers.cloudflare.com/workers/)
 [![astro](https://img.shields.io/github/package-json/dependency-version/julioarguello/www-serverstartup-io/astro?logo=astro&logoColor=white&color=BC52EE)](https://astro.build)
 [![EmDash](https://img.shields.io/github/package-json/dependency-version/julioarguello/www-serverstartup-io/emdash?label=EmDash&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCc+PHBhdGggZmlsbD0nd2hpdGUnIGZpbGwtcnVsZT0nZXZlbm9kZCcgZD0nTTQuMzcgMWgxNS4yNkEzLjM3IDMuMzcgMCAwIDEgMjMgNC4zN3YxNS4yNkEzLjM3IDMuMzcgMCAwIDEgMTkuNjMgMjNINC4zN0EzLjM3IDMuMzcgMCAwIDEgMSAxOS42M1Y0LjM3QTMuMzcgMy4zNyAwIDAgMSA0LjM3IDFaTTQuMzcgMi45MkExLjQ1IDEuNDUgMCAwIDAgMi45MiA0LjM3djE1LjI2YzAgLjguNjUgMS40NSAxLjQ1IDEuNDVoMTUuMjZjLjggMCAxLjQ1LS42NSAxLjQ1LTEuNDVWNC4zN2MwLS44LS42NS0xLjQ1LTEuNDUtMS40NVpNNS43NiAxMC44OGgxMi42djIuMUg1Ljc2WicvPjwvc3ZnPg==&color=1E1E1E)](https://github.com/emdash-cms/emdash)

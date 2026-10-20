@@ -25,3 +25,14 @@ export function teamPhoto(src?: string): ImageMetadata | undefined {
 	const file = src.split("/").pop();
 	return photos[`../../public/assets/team/${file}`]?.default;
 }
+
+/**
+ * The square face crop beside a photograph (`julio.jpg` → `julio-face.jpg`),
+ * for slots too small to show a whole 4:3 scene: Contacto's avatars (#596).
+ * Undefined when the repo has no crop, so the caller falls back to the photo.
+ */
+export function teamFace(src?: string): ImageMetadata | undefined {
+	if (!src) return undefined;
+	const file = src.split("/").pop()?.replace(/\.jpg$/, "-face.jpg");
+	return photos[`../../public/assets/team/${file}`]?.default;
+}

@@ -15,7 +15,7 @@
 import { Image as AstroImage } from "astro:assets";
 import type { MediaValue } from "emdash";
 import { Image } from "emdash/ui";
-import { teamPhoto } from "../lib/team-photos";
+import { teamFace, teamPhoto } from "../lib/team-photos";
 import { IMAGE_QUALITY } from "../lib/images";
 
 interface Props {
@@ -24,10 +24,13 @@ interface Props {
 	width: number;
 	height: number;
 	sizes: string;
+	/** Prefer the square face crop where the repo has one (#596). */
+	face?: boolean;
 }
 
-const { image, alt, width, height, sizes } = Astro.props;
-const photo = teamPhoto(typeof image === "string" ? image : image?.src);
+const { image, alt, width, height, sizes, face = false } = Astro.props;
+const src = typeof image === "string" ? image : image?.src;
+const photo = (face && teamFace(src)) || teamPhoto(src);
 ---
 
 {

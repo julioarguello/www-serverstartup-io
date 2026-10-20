@@ -50,7 +50,7 @@
 @media (max-width: 767px) {
 	.dc-hero h1 { font-size: clamp(34px, 10.4vw, 64px); line-height: 1.07; }
 }
-.dc-hero h1 .ss-title__tail { font-family: var(--font-signature, serif); font-style: italic; font-weight: 400; font-size: 1.13em; color: var(--color-brand-grey); }
+.dc-hero h1 .ss-title__tail { font-family: "CMU Serif", serif; font-style: italic; font-weight: 500; font-synthesis: none; letter-spacing: -.005em; word-spacing: -.08em; font-size: 1.13em; color: var(--color-brand-grey); }
 .dc-hero__lead {
 	margin-top: var(--space-4);
 	font-size: var(--text-body);
@@ -71,8 +71,16 @@
 .dc-model .m-lk { cursor: pointer; }
 /* the shape lights up as well, but the ring is what says "focus" (2.4.7): the model sits on the dark ground, so the ring takes the edge orange */
 .dc-model .m-lk:focus-visible { outline: 2px solid var(--color-edge); outline-offset: 3px; }
+/* the logo's dark plate is ink on paper; on the dark band ink vanishes, so it takes the console tone, one step up */
 .dc-model .tb { fill: var(--color-console); stroke: var(--color-console-line); stroke-width: 1.5; transition: fill .25s, stroke .25s; }
-.dc-model .tg { fill: var(--color-border); stroke: transparent; stroke-width: 4; transition: fill .25s, stroke .25s; }
+/* token-guard: off — the logo's own plate and cell grey (LogoDie.astro): the stack is drawn as the mark,
+   and a theme token here would let a palette change repaint the brand */
+.dc-model .tg { fill: #ced4da; stroke: transparent; stroke-width: 4; transition: fill .25s, stroke .25s; }
+.dc-model .ft,
+.dc-model .fl,
+.dc-model .fr { fill: #ced4da; }
+.dc-model .who .mk-l { fill: #ced4da; }
+/* token-guard: on */
 .dc-model .m-lk.k.hv .tb,
 .dc-model .m-lk.k.on .tb,
 .dc-model .m-lk.k:focus-visible .tb { stroke: var(--color-edge); stroke-width: 4; fill: var(--color-console-bar); }
@@ -81,9 +89,6 @@
 .dc-model .m-lk.g:focus-visible .tg { stroke: var(--color-edge); fill: var(--color-light); }
 .dc-model .sl { transition: transform .4s cubic-bezier(.2, .8, .2, 1); }
 .dc-model .sl polygon { stroke: var(--color-primary); stroke-width: 4.5; stroke-linejoin: round; transition: fill .25s, stroke .25s; }
-.dc-model .ft { fill: var(--color-secondary); }
-.dc-model .fl { fill: var(--color-surface); }
-.dc-model .fr { fill: var(--color-surface-hover); }
 .dc-model .ln { fill: none; stroke: var(--color-primary); stroke-width: 4.5; stroke-linecap: round; transition: stroke .25s; }
 .dc-model .et { font-family: var(--font-family-mono); font-size: 13px; font-weight: 500; fill: var(--color-text-muted); transition: fill .25s; }
 .dc-model .m-lk.c.hv .sl,
@@ -134,11 +139,15 @@
 .dc-model .fa { fill: none; stroke: var(--color-edge); stroke-width: 2; }
 .dc-model .ahw { fill: var(--color-light); }
 .dc-model .who .ic { fill: var(--color-light); }
+.dc-model .who .mk-d { fill: var(--color-console); stroke: var(--color-console-line); stroke-width: 1; }
+.dc-model .who .mk-c { fill: none; stroke: var(--color-primary); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; }
 .dc-model .who .ico path,
 .dc-model .who .ico circle { fill: none; stroke: var(--color-primary); stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
-.dc-model .who.tu .ico circle { fill: var(--color-primary); }
+.dc-model .who.tu .ico circle { fill: var(--color-primary); stroke: none; }
 .dc-model .who .wa2 { fill: none; stroke: var(--color-light); stroke-width: 1.5; }
-.dc-model .who .wh { font-family: var(--font-family); font-size: 24px; font-weight: 600; fill: var(--color-secondary); }
+/* the two people in the drawing speak in the title's second voice, Computer Modern italic, so they stand
+   apart from the labels (founder, 2026-10-20: "me falta destacarlo… la fuente es la misma") */
+.dc-model .who .wh { font-family: "CMU Serif", serif; font-style: italic; font-weight: 500; font-synthesis: none; font-size: 32px; fill: var(--color-secondary); }
 .dc-model .who .ws { font-family: var(--font-family); font-size: 14px; font-weight: 300; fill: var(--color-brand-grey); }
 .dc-model .who .wloc { font-family: var(--font-family-mono); font-size: 13px; fill: var(--color-edge); }
 

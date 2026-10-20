@@ -38,24 +38,24 @@ function runs(s: string | undefined): { text: string; cf: boolean }[] {
 const plain = (s: string) => s.replaceAll("\u0060", "");
 
 const SLABS = [
-	{ f: "datos", s: "s1", n: "04", ft: "600.0,613.2 766.4,709.3 600.0,805.3 433.6,709.3", fl: "433.6,709.3 600.0,805.3 600.0,849.0 433.6,752.9", fr: "600.0,805.3 766.4,709.3 766.4,752.9 600.0,849.0", ln: "M516.8,757.3 V801.0 M683.2,757.3 V801.0", et: "matrix(1,0.577,0,1,475.2,755.1)" },
-	{ f: "computo", s: "s2", n: "03", ft: "600.0,564.3 766.4,660.4 600.0,756.5 433.6,660.4", fl: "433.6,660.4 600.0,756.5 600.0,800.1 433.6,704.1", fr: "600.0,756.5 766.4,660.4 766.4,704.1 600.0,800.1", ln: "M516.8,708.4 V752.1 M683.2,708.4 V752.1", et: "matrix(1,0.577,0,1,475.2,706.3)" },
-	{ f: "cache", s: "s3", n: "02", ft: "600.0,499.9 766.4,595.9 600.0,692.0 433.6,595.9", fl: "433.6,595.9 600.0,692.0 600.0,735.7 433.6,639.6", fr: "600.0,692.0 766.4,595.9 766.4,639.6 600.0,735.7", ln: "M516.8,644.0 V687.6 M683.2,644.0 V687.6", et: "matrix(1,0.577,0,1,475.2,641.8)" },
-	{ f: "red", s: "s4", n: "01", ft: "600.0,451.0 766.4,547.1 600.0,643.1 433.6,547.1", fl: "433.6,547.1 600.0,643.1 600.0,686.8 433.6,590.7", fr: "600.0,643.1 766.4,547.1 766.4,590.7 600.0,686.8", ln: "M516.8,595.1 V638.8 M683.2,595.1 V638.8 M516.8,499.0 L683.2,595.1 M683.2,499.0 L516.8,595.1", et: "matrix(1,0.577,0,1,475.2,592.9)" },
+	{ f: "datos", s: "s1", n: "04", ft: "600.0,596.5 799.7,711.8 600.0,827.1 400.3,711.8", fl: "400.3,711.8 600.0,827.1 600.0,879.5 400.3,764.2", fr: "600.0,827.1 799.7,711.8 799.7,764.2 600.0,879.5", ln: "M500.2,769.4 V821.9 M699.8,769.4 V821.9", et: "matrix(1,0.577,0,1,450.2,766.8)" },
+	{ f: "computo", s: "s2", n: "03", ft: "600.0,537.8 799.7,653.1 600.0,768.4 400.3,653.1", fl: "400.3,653.1 600.0,768.4 600.0,820.8 400.3,705.6", fr: "600.0,768.4 799.7,653.1 799.7,705.6 600.0,820.8", ln: "M500.2,710.8 V763.2 M699.8,710.8 V763.2", et: "matrix(1,0.577,0,1,450.2,708.2)" },
+	{ f: "cache", s: "s3", n: "02", ft: "600.0,479.2 799.7,594.4 600.0,709.7 400.3,594.4", fl: "400.3,594.4 600.0,709.7 600.0,762.2 400.3,646.9", fr: "600.0,709.7 799.7,594.4 799.7,646.9 600.0,762.2", ln: "M500.2,652.1 V704.5 M699.8,652.1 V704.5", et: "matrix(1,0.577,0,1,450.2,649.5)" },
+	{ f: "red", s: "s4", n: "01", ft: "600.0,420.5 799.7,535.8 600.0,651.0 400.3,535.8", fl: "400.3,535.8 600.0,651.0 600.0,703.5 400.3,588.2", fr: "600.0,651.0 799.7,535.8 799.7,588.2 600.0,703.5", ln: "M500.2,593.4 V645.8 M699.8,593.4 V645.8 M500.2,478.1 L699.8,593.4 M699.8,478.1 L500.2,593.4", et: "matrix(1,0.577,0,1,450.2,590.8)" },
 ];
 /* the labels on the right, top to bottom, as the slabs stack: the network on top, the data at the base
    (founder, 2026-10-20: "la primera la red, y abajo los datos") */
 const RIGHT = [
-	{ f: "red", y: 542.9 },
-	{ f: "cache", y: 591.8 },
-	{ f: "computo", y: 656.2 },
-	{ f: "datos", y: 705.1 },
+	{ f: "red", y: 536.0 },
+	{ f: "cache", y: 594.7 },
+	{ f: "computo", y: 653.3 },
+	{ f: "datos", y: 712.0 },
 ];
 const SM = [
-	{ s: "s1", ft: "156.0,133.3 231.5,176.9 156.0,220.5 80.5,176.9", fl: "80.5,176.9 156.0,220.5 156.0,240.3 80.5,196.7", fr: "156.0,220.5 231.5,176.9 231.5,196.7 156.0,240.3", ln: "M118.2,198.7 V218.5 M193.8,198.7 V218.5" },
-	{ s: "s2", ft: "156.0,111.1 231.5,154.7 156.0,198.3 80.5,154.7", fl: "80.5,154.7 156.0,198.3 156.0,218.1 80.5,174.5", fr: "156.0,198.3 231.5,154.7 231.5,174.5 156.0,218.1", ln: "M118.2,176.5 V196.3 M193.8,176.5 V196.3" },
-	{ s: "s3", ft: "156.0,81.9 231.5,125.5 156.0,169.1 80.5,125.5", fl: "80.5,125.5 156.0,169.1 156.0,188.9 80.5,145.3", fr: "156.0,169.1 231.5,125.5 231.5,145.3 156.0,188.9", ln: "M118.2,147.3 V167.1 M193.8,147.3 V167.1" },
-	{ s: "s4", ft: "156.0,59.7 231.5,103.3 156.0,146.9 80.5,103.3", fl: "80.5,103.3 156.0,146.9 156.0,166.7 80.5,123.1", fr: "156.0,146.9 231.5,103.3 231.5,123.1 156.0,166.7", ln: "M118.2,125.1 V144.9 M193.8,125.1 V144.9 M118.2,81.5 L193.8,125.1 M193.8,81.5 L118.2,125.1" },
+	{ s: "s1", ft: "156.0,125.8 246.6,178.1 156.0,230.4 65.4,178.1", fl: "65.4,178.1 156.0,230.4 156.0,254.1 65.4,201.8", fr: "156.0,230.4 246.6,178.1 246.6,201.8 156.0,254.1", ln: "M110.7,204.2 V228.0 M201.3,204.2 V228.0" },
+	{ s: "s2", ft: "156.0,99.1 246.6,151.4 156.0,203.7 65.4,151.4", fl: "65.4,151.4 156.0,203.7 156.0,227.5 65.4,175.2", fr: "156.0,203.7 246.6,151.4 246.6,175.2 156.0,227.5", ln: "M110.7,177.6 V201.4 M201.3,177.6 V201.4" },
+	{ s: "s3", ft: "156.0,72.5 246.6,124.8 156.0,177.1 65.4,124.8", fl: "65.4,124.8 156.0,177.1 156.0,200.9 65.4,148.6", fr: "156.0,177.1 246.6,124.8 246.6,148.6 156.0,200.9", ln: "M110.7,151.0 V174.7 M201.3,151.0 V174.7" },
+	{ s: "s4", ft: "156.0,45.9 246.6,98.2 156.0,150.5 65.4,98.2", fl: "65.4,98.2 156.0,150.5 156.0,174.2 65.4,121.9", fr: "156.0,150.5 246.6,98.2 246.6,121.9 156.0,174.2", ln: "M110.7,124.3 V148.1 M201.3,124.3 V148.1 M110.7,72.0 L201.3,124.3 M201.3,72.0 L110.7,124.3" },
 ];
 const groups: { key: string; label: string; layers: Layer[] }[] = [
 	{ key: "cloudflare", label: L("g_cloudflare", "Cuatro capas, en `Cloudflare`"), layers: layers.filter((l) => l.group === "cloudflare") },
@@ -91,7 +91,7 @@ const entr = by.entrega;
 			)}
 			{entr && (
 				<a class="m-lk w k" href={href("entrega")} data-l={entr.slug} aria-label={entr.short}>
-					<rect class="tb" x="340" y="390" width="520" height="520" rx="46.8" transform="rotate(-7 600 650) translate(-18.2 15.6)" />
+					<rect class="tb" x="340" y="390" width="520" height="520" rx="46.8" transform="rotate(10 600 650)" />
 				</a>
 			)}
 			{cont && (
@@ -110,12 +110,12 @@ const entr = by.entrega;
 					</g>
 				</a>
 			))}
-			<text class="cfl" x="946" y="522.9">{L("cloudflare", "Cloudflare")}</text>
-			<line class="br" x1="920" y1="548.9" x2="920" y2="751.1" />
+			<text class="cfl" x="946" y="516.0">{L("cloudflare", "Cloudflare")}</text>
+			<line class="br" x1="920" y1="542.0" x2="920" y2="758.0" />
 			{RIGHT.map((r) => by[r.f] && (
 				<a class="m-lk c lb" href={href(r.f)} data-l={by[r.f].slug} tabindex="-1" aria-hidden="true">
-					<rect class="lbh" x="766.4" y={r.y} width="479.6" height="50" />
-					<line class="ld" x1="778.4" y1={r.y + 26} x2="910" y2={r.y + 26} />
+					<rect class="lbh" x="799.7" y={r.y} width="446.3" height="50" />
+					<line class="ld" x1="811.7" y1={r.y + 26} x2="910" y2={r.y + 26} />
 					<circle class="dt" cx="920" cy={r.y + 26} r="5" />
 					<text class="nm" x="946" y={r.y + 27}>{plain(by[r.f].title)}</text>
 					<text class="pm" x="946" y={r.y + 47}>{runs(by[r.f].map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
@@ -132,11 +132,11 @@ const entr = by.entrega;
 			)}
 			{entr && (
 				<a class="m-lk w k lb" href={href("entrega")} data-l={entr.slug} tabindex="-1" aria-hidden="true">
-					<rect class="lbh" x="46" y="440" width="260" height="56" />
-					<path class="ldw" d="M260,470 H272 L302,470" />
-					<circle class="dk" cx="302" cy="470" r="5" />
-					<text class="nm" x="250" y="471" text-anchor="end">{entr.short}</text>
-					<text class="pm" x="250" y="491" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="lbh" x="46" y="342" width="370" height="56" />
+					<path class="ldw" d="M260,372 H380 L410,372" />
+					<circle class="dk" cx="410" cy="372" r="5" />
+					<text class="nm" x="250" y="373" text-anchor="end">{entr.short}</text>
+					<text class="pm" x="250" y="393" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{emd && (
@@ -163,22 +163,26 @@ const entr = by.entrega;
 					<text class="pm" x="1166" y="391">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
-			<path class="fa" d="M236,735 H425" marker-end="url(#dc-ah)" />
+			<path class="fa" d="M236,735 H392" marker-end="url(#dc-ah)" />
 			{/* the page leaves from the network's slab, round the stack, up to its window */}
-			<path class="fa" d="M774,535 H896 V430 H938" marker-end="url(#dc-ah)" />
+			<path class="fa" d="M806,545 H896 V430 H938" marker-end="url(#dc-ah)" />
 			<g class="who yo">
-				<circle class="ic" cx="-32" cy="735" r="18" />
-				<g class="ico" transform="translate(-32 735)"><path d="M-8,8 L-6,2 L5,-9 L9,-5 L-2,6 Z M3,-7 L7,-3" /></g>
-				<path class="wa2" d="M-10,735 H22" marker-end="url(#dc-ah)" />
-				<text class="wh" x="-62" y="723" text-anchor="end">{L("who_edit", "yo edito")}</text>
-				{whoSub.map((line, i) => <text class="ws" x="-62" y={743 + i * 18} text-anchor="end">{line}</text>)}
+				{/* the logo in small: the dark plate at +10 degrees behind the grey one, the 2x2 cube in ink */}
+				<g class="mark" transform="translate(-32 735)">
+					<rect class="mk-d" x="-20" y="-20" width="40" height="40" rx="7" transform="rotate(10)" />
+					<rect class="mk-l" x="-20" y="-20" width="40" height="40" rx="7" />
+					<path class="mk-c" d="M0,-16.7 L14.5,-8.4 L14.5,8.4 L0,16.7 L-14.5,8.4 L-14.5,-8.4 Z M-14.5,-8.4 L0,0 L14.5,-8.4 M0,0 V16.7 M-7.3,-12.6 L7.3,-4.2 M7.3,-12.6 L-7.3,-4.2 M-7.3,-4.2 V12.6 M-14.5,0 L0,8.4 M7.3,-4.2 V12.6 M14.5,0 L0,8.4" />
+				</g>
+				<path class="wa2" d="M-6,735 H22" marker-end="url(#dc-ah)" />
+				<text class="wh" x="-62" y="726" text-anchor="end">{L("who_edit", "yo edito")}</text>
+				{whoSub.map((line, i) => <text class="ws" x="-62" y={746 + i * 18} text-anchor="end">{line}</text>)}
 			</g>
 			<g class="who tu">
 				<path class="wa2" d="M1154,445 H1186" marker-end="url(#dc-ah)" />
 				<circle class="ic" cx="1208" cy="445" r="18" />
-				<g class="ico" transform="translate(1208 445)"><path d="M-10,0 Q0,-8 10,0 Q0,8 -10,0 Z" /><circle r="3" /></g>
-				<text class="wh" x="1238" y="443">{L("who_see", "tú ves")}</text>
-				<text class="ws" x="1238" y="463" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
+				<g class="ico pin" transform="translate(1208 445)"><path d="M0,10 C0,10 -8,2.5 -8,-2.5 C-8,-7 -4.4,-10.5 0,-10.5 C4.4,-10.5 8,-7 8,-2.5 C8,2.5 0,10 0,10 Z" /><circle cy="-2.7" r="2.8" /></g>
+				<text class="wh" x="1238" y="442">{L("who_see", "tú ves")}</text>
+				<text class="ws" x="1238" y="464" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
 			</g>
 		</svg>
 		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:17.742%;top:55.132%;width:11.828%;height:18.328%" />
@@ -186,7 +190,7 @@ const entr = by.entrega;
 		</div>
 	</div>
 	<svg class="dc-model__sm" viewBox="0 0 300 300" aria-hidden="true">
-		<rect class="tb" x="38" y="32" width="236" height="236" rx="21.2" transform="rotate(-7 156 150) translate(-8.3 7.1)" />
+		<rect class="tb" x="38" y="32" width="236" height="236" rx="21.2" transform="rotate(10 156 150)" />
 		<rect class="tg" x="38" y="32" width="236" height="236" rx="21.2" />
 		{SM.map((s) => (
 			<g class={`sl ${s.s}`}>

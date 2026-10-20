@@ -130,10 +130,10 @@ const groups = GROUP_ORDER.map((g) => ({ key: g, layers: layers.filter((l) => l.
 	if (loc && line) {
 		fetch("/api/whoami")
 			.then((r) => (r.ok ? r.json() : null))
-			.then((w: { city?: string; colo?: string } | null) => {
-				const parts = [w?.city, w?.colo].filter(Boolean);
-				if (!parts.length) return;
-				loc.textContent = parts.join(" · ");
+			.then((w: { city?: string } | null) => {
+				// the city alone: the pin already says where, and the data centre's code read as noise
+				if (!w?.city) return;
+				loc.textContent = w.city;
 				line.removeAttribute("visibility");
 			})
 			.catch(() => {});

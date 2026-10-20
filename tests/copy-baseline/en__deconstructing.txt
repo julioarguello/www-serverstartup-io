@@ -199,7 +199,7 @@ Guggenheim · Sergio S.C · Wikimedia Commons · CC BY-SA 2.0 · restored; empty
 third-party requests when a page loads
 one stylesheet for everything
 Detail and proof
-4 rows
+5 rows
 One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.
 src/styles/theme.css
 Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.
@@ -209,6 +209,8 @@ src/utils/hero-art.ts
 The photographs were restored locally with SeedVR2. FLUX.2 [dev] (Black Forest Labs) on Workers AI removed objects, extended frames and redrew from the photographs. Every prompt is in the repository.
 docs/design/hero-rotativo/photo_restore.py
 [FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
+The photographs are CC BY-SA, and the site credits them with the changes stated.
+seed/seed.json
 ACROSS THE LAYERS, FROM THE WORKSHOP
 across the layers · from the workshop
 Content

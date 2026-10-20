@@ -20043,9 +20043,8 @@
 						{
 							"key": "h7-5",
 							"text": "Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.",
-							"file_note": "todavía sin fichero",
-							"status": "pending",
-							"pending_note": "cuando exista /creditos: hoy es una carencia de licencia, no solo de texto"
+							"status": "ok",
+							"file": "seed/seed.json"
 						}
 					]
 				}
@@ -20126,9 +20125,8 @@
 						{
 							"key": "h7-5",
 							"text": "The photographs are CC BY-SA, and the site credits them with the changes stated.",
-							"file_note": "no file yet",
-							"status": "pending",
-							"pending_note": "once the credits page exists: today this is a licence gap, not just missing copy"
+							"status": "ok",
+							"file": "seed/seed.json"
 						}
 					]
 				},

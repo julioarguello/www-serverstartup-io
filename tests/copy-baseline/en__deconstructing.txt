@@ -30,7 +30,8 @@ the CMS · inside the Worker
 Presentation
 Astro · inside the Worker
 I edit
-Server Startup: an editor or an AI agent
+Server Startup:
+an editor or an AI agent
 you see
 Windows: the EmDash editor, a screenshot; the edge-security opening, photo by Einaz80 · Wikimedia Commons · CC BY-SA 4.0 · restored; masts removed and frame extended with AI
 1

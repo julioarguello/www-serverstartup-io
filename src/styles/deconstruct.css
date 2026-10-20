@@ -44,7 +44,8 @@
 .dc-model { margin-top: var(--space-6); }
 /* token-guard: off — the map is the one figure wider than the column: an isometric drawing of the
    whole site needs the band's width to keep its labels legible (founder-approved in v5, #535) */
-.dc-model__wrap { position: relative; max-width: 1300px; margin-inline: auto; padding-inline: var(--space-3); }
+.dc-model__wrap { position: relative; max-width: 1700px; margin-inline: auto; padding-inline: var(--space-3); }
+.dc-model__art { position: relative; }
 .dc-model .dc-model__sm { display: none; max-width: 280px; margin-inline: auto; }
 /* token-guard: on */
 .dc-model svg { display: block; width: 100%; height: auto; }
@@ -193,7 +194,11 @@
 .dc-grp { padding-top: var(--space-8); }
 .dc-grp p { font-family: var(--font-family-mono); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted); padding-bottom: var(--space-2); border-bottom: 2px solid var(--color-primary); }
 .dc-grp code.cf { text-transform: none; letter-spacing: 0; }
-.dc-pl { padding-block: var(--space-8) var(--space-5); scroll-margin-top: calc(var(--header-h) + var(--space-7)); }
+.dc-pl { padding-block: var(--space-8) var(--space-5); }
+/* a jump from the spine lands the plate's top under the header AND the sticky spine (~49 px, so --space-7
+   clears it). theme.css's `:target` margin (--space-6, for pages without a spine) has the same specificity
+   and loads later, so the selector carries `main`; it put the first plate of each group under the spine */
+main .dc-pl { scroll-margin-top: calc(var(--header-h) + var(--space-7)); }
 .dc-grp + .dc-pl { padding-top: var(--space-6); }
 .dc-pl__hd { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: var(--space-4); align-items: center; }
 .dc-pl__ic svg { display: block; width: 84px; height: 84px; }
@@ -208,7 +213,7 @@
 .dc-pl__ic .ib.on,
 .dc-pl__ic .ig.on { stroke: var(--color-edge); stroke-width: 2.5; }
 .dc-pl__k { font-family: var(--font-family-mono); font-size: 13px; color: var(--color-text-muted); }
-.dc-pl__lede { margin-top: var(--space-2); font-size: 19px; line-height: 28px; color: var(--color-ink-soft); text-wrap: pretty; }
+.dc-pl__lede { margin-top: var(--space-2); font-size: var(--text-body); line-height: 1.4; color: var(--color-ink-soft); text-wrap: pretty; }
 
 .dc-fig { margin-top: var(--space-5); background: var(--color-ground-dark); color: var(--color-secondary); border-radius: var(--radius); padding: var(--space-6) var(--space-5); }
 .dc-flow { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); column-gap: var(--space-6); }
@@ -261,27 +266,15 @@ a.dc-n:hover { background: var(--color-console-line); }
 
 .dc-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-bottom: var(--space-5); }
 .dc-duo img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); }
-.dc-cap { margin-top: var(--space-2); font-family: var(--font-family-mono); font-size: 11px; line-height: 16px; color: var(--color-text-muted); }
+.dc-cap { margin-top: var(--space-2); font-size: 14px; line-height: 20px; color: var(--color-text-muted); }
 .dc-cap a { color: inherit; text-decoration: underline; }
 .dc-fig .dc-cap { color: var(--color-brand-grey); }
 .dc-shot { margin-top: var(--space-4); }
 .dc-shot img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--color-border); }
 
 .dc-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
-.dc-links a {
-	display: inline-flex;
-	align-items: center;
-	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--color-primary);
-	border-radius: var(--radius);
-	font-size: 14px;
-	line-height: 20px;
-	font-weight: 500;
-	text-decoration: none;
-	color: var(--color-primary);
-}
-.dc-links a::after { content: " ↗" / ""; }
-.dc-links a:hover { background: var(--color-primary); color: var(--color-secondary); }
+/* the site's own ghost button (theme.css .btn-dark): one button family everywhere, square, 17/600 */
+.dc-links .btn::after { content: " ↗" / ""; }
 
 /* ── the ledger: every fact with the file that proves it ───────────── */
 .dc-more { margin-top: var(--space-4); border-top: 1px solid var(--color-primary); border-bottom: 1px solid var(--color-border); }
@@ -291,10 +284,11 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-more[open] > summary::before { content: "−" / ""; }
 .dc-more > summary span { font-weight: 300; color: var(--color-text-muted); font-size: 14px; }
 .dc-led { padding-bottom: var(--space-4); }
-.dc-led li { padding: var(--space-3) 0; border-top: 1px solid var(--color-border); scroll-margin-top: calc(var(--header-h) + var(--space-8)); }
+.dc-led li { padding: var(--space-3) 0; border-top: 1px solid var(--color-border); }
+main .dc-led li { scroll-margin-top: calc(var(--header-h) + var(--space-7) + var(--space-3)); }
 .dc-led li:target { background: var(--color-surface); }
 .dc-led p { font-size: 16px; line-height: 24px; text-wrap: pretty; }
-.dc-lk { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-top: var(--space-2); font-size: 13px; line-height: 18px; }
+.dc-lk { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin-top: var(--space-2); font-size: 14px; line-height: 20px; }
 .dc-lk__r { font-family: var(--font-family-mono); font-size: 12px; text-decoration: none; border-bottom: 1px dashed var(--color-primary); overflow-wrap: anywhere; }
 .dc-lk__n { font-size: 12px; color: var(--color-text-muted); }
 .dc-lk__d a { text-decoration: underline; text-underline-offset: 3px; }
@@ -306,11 +300,15 @@ a.dc-n:hover { background: var(--color-console-line); }
 .dc-close p:last-child a:hover { border-bottom-style: solid; }
 
 @media (max-width: 1023px) { .dc-spine { display: none; } }
-@media (max-width: 860px) {
+/* the panoramic map is 1700 units wide: under 1100 px (the menu's and the openings' boundary) its labels
+   would fall under 8 px, so the small drawing and the list take over there */
+@media (max-width: 1100px) {
 	/* the credit names the drawing's two windows; the small drawing has none */
 	.dc-model__wrap, .dc-model__cr { display: none; }
 	.dc-model .dc-model__sm,
 	.dc-mlist { display: block; }
+}
+@media (max-width: 860px) {
 	.dc-flow { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); }
 	.dc-n { min-height: 72px; padding-block: var(--space-2); }
 	.dc-flow:not(.plain) .dc-n:not(:last-child)::after { top: auto; bottom: calc(-1 * var(--space-5) + 4px); right: auto; left: var(--space-5); width: 1px; height: calc(var(--space-5) - 8px); }
@@ -323,7 +321,6 @@ a.dc-n:hover { background: var(--color-console-line); }
 	.dc-grp { padding-top: var(--space-6); }
 	.dc-pl__hd { grid-template-columns: 60px minmax(0, 1fr); gap: var(--space-3); }
 	.dc-pl__ic svg { width: 60px; height: 60px; }
-	.dc-pl__lede { font-size: 16px; line-height: 24px; }
 	.dc-fig { padding: var(--space-4) var(--space-3); }
 	.dc-duo { grid-template-columns: minmax(0, 1fr); }
 	.dc-nm b { font-size: 44px; line-height: 48px; }

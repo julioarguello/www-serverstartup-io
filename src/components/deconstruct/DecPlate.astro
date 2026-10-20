@@ -130,7 +130,7 @@ const hasFigure = nodes.length > 0 || numbers.length > 0 || rings.length > 0 || 
 		{links.length > 0 && (
 			<div class="dc-links">
 				{links.map((l) => (
-					<a href={l.href} target={/^https?:/.test(l.href) ? "_blank" : undefined} rel={/^https?:/.test(l.href) ? "noopener noreferrer" : undefined}>{l.label}</a>
+					<a class="btn btn-dark" href={l.href} target={/^https?:/.test(l.href) ? "_blank" : undefined} rel={/^https?:/.test(l.href) ? "noopener noreferrer" : undefined}>{l.label}</a>
 				))}
 			</div>
 		)}

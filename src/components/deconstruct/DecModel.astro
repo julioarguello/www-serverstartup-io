@@ -61,6 +61,10 @@ const groups: { key: string; label: string; layers: Layer[] }[] = [
 	{ key: "worker", label: L("g_worker", "Dentro del `Worker`"), layers: layers.filter((l) => l.group === "worker") },
 	{ key: "taller", label: L("g_taller", "Transversal, desde el taller"), layers: layers.filter((l) => l.group === "taller") },
 ];
+/* the editor's subtitle, two lines split after its colon: on one line it ran past the map's left edge */
+const whoSubRaw = L("who_edit_sub", "Server Startup: editor o agente de IA");
+const colon = whoSubRaw.indexOf(": ");
+const whoSub = colon === -1 ? [whoSubRaw] : [whoSubRaw.slice(0, colon + 1), whoSubRaw.slice(colon + 2)];
 const q = by.calidad;
 const emd = by.emdash;
 const pres = by.presentacion;
@@ -70,16 +74,18 @@ const entr = by.entrega;
 
 <div class="dc-model">
 	<div class="dc-model__wrap">
-		<svg class="dc-model__lg" viewBox="-10 120 1310 1044" role="group" aria-label={L("map_aria", "")}>
+		{/* the windows' screenshots are placed as % of this box, which is the drawing's own: no padding */}
+		<div class="dc-model__art">
+		<svg class="dc-model__lg" viewBox="-280 320 1700 680" role="group" aria-label={L("map_aria", "")}>
 			<defs>
 				<marker id="dc-ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ahw" /></marker>
 			</defs>
 			{q && (
 				<a class="m-lk w q lb" href={href("calidad")} data-l={q.slug} aria-label={q.short}>
-					<path class="qf" d="M400,150 H1248 Q1264,150 1264,166 V1128 Q1264,1144 1248,1144 H52 Q36,1144 36,1128 V166 Q36,150 52,150 H60" />
-					<path class="qhit" d="M36,150 H1264 V1144 H36 Z" />
-					<text class="nm" x="72" y="158">{q.short}</text>
-					<text class="pm" x="186" y="156">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
+					<path class="qf" d="M102,350 H1388 Q1404,350 1404,366 V969 Q1404,985 1388,985 H-246 Q-262,985 -262,969 V366 Q-262,350 -246,350 H-238" />
+					<path class="qhit" d="M-262,350 H1404 V985 H-262 Z" />
+					<text class="nm" x="-226" y="358">{q.short}</text>
+					<text class="pm" x="-112" y="356">{runs(q.map_note).map((r) => <tspan class={r.cf ? "cf" : undefined}>{r.text}</tspan>)}</text>
 				</a>
 			)}
 			{entr && (
@@ -125,56 +131,57 @@ const entr = by.entrega;
 			)}
 			{entr && (
 				<a class="m-lk w k lb" href={href("entrega")} data-l={entr.slug} tabindex="-1" aria-hidden="true">
-					<rect class="lbh" x="46" y="680" width="280" height="56" />
-					<path class="ldw" d="M260,710 H296 L326,710" />
-					<circle class="dk" cx="326" cy="710" r="5" />
-					<text class="nm" x="250" y="711" text-anchor="end">{entr.short}</text>
-					<text class="pm" x="250" y="731" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="lbh" x="46" y="750" width="290" height="56" />
+					<path class="ldw" d="M260,780 H306 L336,780" />
+					<circle class="dk" cx="336" cy="780" r="5" />
+					<text class="nm" x="250" y="781" text-anchor="end">{entr.short}</text>
+					<text class="pm" x="250" y="801" text-anchor="end">{runs(entr.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{emd && (
 				<a class="m-lk ap lb" href={href("emdash")} data-l={emd.slug} aria-label={emd.short}>
-					<rect class="wfr" x="500" y="196" width="200" height="150" rx="6" />
-					<rect class="wbar" x="500" y="196" width="200" height="24" rx="6" />
-					<rect class="wbar" x="500" y="212" width="200" height="8" />
-					<circle class="wd1" cx="512" cy="208" r="3.5" /><circle class="wd2" cx="523" cy="208" r="3.5" /><circle class="wd3" cx="534" cy="208" r="3.5" />
-					<text class="wpth" x="690" y="212" text-anchor="end">{L("win_cms", "/_emdash/admin")}</text>
-					<rect class="wol" x="500" y="196" width="200" height="150" rx="6" />
-					<text class="nm" x="720" y="272">{emd.short}</text>
-					<text class="pm" x="720" y="292">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="wfr" x="30" y="500" width="200" height="150" rx="6" />
+					<rect class="wbar" x="30" y="500" width="200" height="24" rx="6" />
+					<rect class="wbar" x="30" y="516" width="200" height="8" />
+					<circle class="wd1" cx="42" cy="512" r="3.5" /><circle class="wd2" cx="53" cy="512" r="3.5" /><circle class="wd3" cx="64" cy="512" r="3.5" />
+					<text class="wpth" x="220" y="516" text-anchor="end">{L("win_cms", "/_emdash/admin")}</text>
+					<rect class="wol" x="30" y="500" width="200" height="150" rx="6" />
+					<text class="nm" x="30" y="678">{emd.short}</text>
+					<text class="pm" x="30" y="698">{runs(emd.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
 			{pres && (
 				<a class="m-lk ap lb" href={href("presentacion")} data-l={pres.slug} aria-label={pres.short}>
-					<rect class="wfr" x="500" y="954" width="200" height="150" rx="6" />
-					<rect class="wbar" x="500" y="954" width="200" height="24" rx="6" />
-					<rect class="wbar" x="500" y="970" width="200" height="8" />
-					<circle class="wd1" cx="512" cy="966" r="3.5" /><circle class="wd2" cx="523" cy="966" r="3.5" /><circle class="wd3" cx="534" cy="966" r="3.5" />
-					<text class="wpth" x="690" y="970" text-anchor="end">{L("win_site", "/")}</text>
-					<rect class="wol" x="500" y="954" width="200" height="150" rx="6" />
-					<text class="nm" x="480" y="1030" text-anchor="end">{pres.short}</text>
-					<text class="pm" x="480" y="1050" text-anchor="end">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
+					<rect class="wfr" x="946" y="790" width="200" height="150" rx="6" />
+					<rect class="wbar" x="946" y="790" width="200" height="24" rx="6" />
+					<rect class="wbar" x="946" y="806" width="200" height="8" />
+					<circle class="wd1" cx="958" cy="802" r="3.5" /><circle class="wd2" cx="969" cy="802" r="3.5" /><circle class="wd3" cx="980" cy="802" r="3.5" />
+					<text class="wpth" x="1136" y="806" text-anchor="end">{L("win_site", "/")}</text>
+					<rect class="wol" x="946" y="790" width="200" height="150" rx="6" />
+					<text class="nm" x="1166" y="826">{pres.short}</text>
+					<text class="pm" x="1166" y="846">{runs(pres.map_note).map((x) => <tspan class={x.cf ? "cf" : undefined}>{x.text}</tspan>)}</text>
 				</a>
 			)}
-			<path class="fa" d="M600,350 V443" marker-end="url(#dc-ah)" />
-			<path class="fa" d="M600,857 V946" marker-end="url(#dc-ah)" />
+			<path class="fa" d="M236,575 H425" marker-end="url(#dc-ah)" />
+			<path class="fa" d="M774,815 H938" marker-end="url(#dc-ah)" />
 			<g class="who yo">
-				<circle class="ic" cx="438" cy="271" r="18" />
-				<g class="ico" transform="translate(438 271)"><path d="M-8,8 L-6,2 L5,-9 L9,-5 L-2,6 Z M3,-7 L7,-3" /></g>
-				<path class="wa2" d="M460,271 H492" marker-end="url(#dc-ah)" />
-				<text class="wh" x="408" y="269" text-anchor="end">{L("who_edit", "yo edito")}</text>
-				<text class="ws" x="408" y="289" text-anchor="end">{L("who_edit_sub", "Server Startup: editor o agente de IA")}</text>
+				<circle class="ic" cx="-32" cy="575" r="18" />
+				<g class="ico" transform="translate(-32 575)"><path d="M-8,8 L-6,2 L5,-9 L9,-5 L-2,6 Z M3,-7 L7,-3" /></g>
+				<path class="wa2" d="M-10,575 H22" marker-end="url(#dc-ah)" />
+				<text class="wh" x="-62" y="563" text-anchor="end">{L("who_edit", "yo edito")}</text>
+				{whoSub.map((line, i) => <text class="ws" x="-62" y={583 + i * 18} text-anchor="end">{line}</text>)}
 			</g>
 			<g class="who tu">
-				<path class="wa2" d="M708,1029 H740" marker-end="url(#dc-ah)" />
-				<circle class="ic" cx="762" cy="1029" r="18" />
-				<g class="ico" transform="translate(762 1029)"><path d="M-10,0 Q0,-8 10,0 Q0,8 -10,0 Z" /><circle r="3" /></g>
-				<text class="wh" x="792" y="1027">{L("who_see", "tú ves")}</text>
-				<text class="ws" x="792" y="1047" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
+				<path class="wa2" d="M1154,900 H1186" marker-end="url(#dc-ah)" />
+				<circle class="ic" cx="1208" cy="900" r="18" />
+				<g class="ico" transform="translate(1208 900)"><path d="M-10,0 Q0,-8 10,0 Q0,8 -10,0 Z" /><circle r="3" /></g>
+				<text class="wh" x="1238" y="898">{L("who_see", "tú ves")}</text>
+				<text class="ws" x="1238" y="918" data-dc-whoami data-volatile visibility="hidden">{L("who_see_from", "desde")} <tspan class="wloc" data-dc-loc></tspan></text>
 			</g>
 		</svg>
-		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:39.008%;top:9.579%;width:15.115%;height:11.973%" />
-		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:39.008%;top:82.184%;width:15.115%;height:11.973%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/emdash-editor.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:18.294%;top:30%;width:11.647%;height:18.382%" />
+		<img class="dc-model__im" src="/assets/deconstruyendo/apertura-cdn.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="left:72.176%;top:72.647%;width:11.647%;height:18.382%" />
+		</div>
 	</div>
 	<svg class="dc-model__sm" viewBox="0 0 300 300" aria-hidden="true">
 		<rect class="tb" x="38" y="32" width="236" height="236" rx="21.2" transform="rotate(-7 156 150) translate(-8.3 7.1)" />

@@ -43,4 +43,5 @@
   with the other account gets `project not found` and an empty `list_projects`. Artifacts published from
   one account are invisible from the other.
 - **The repository is public: the brief and the facts file must never carry operational or security
-  findings.** `deconstruyendo/hallazgos-operativos.md` is excluded through `info/exclude`.
+  findings.** They live in the local private KB, `docs/company/private/hallazgos-operativos-535.md`,
+  which git ignores; never in this repository.

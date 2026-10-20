@@ -157,4 +157,4 @@ Struck: "the marketplace is wired" (nothing installed; bundles load from an empt
   go in" (main has no branch protection); "every response" for the headers (static assets skip the
   middleware).
 
-Operational findings live outside the repository: `.design-sync/deconstruyendo/hallazgos-operativos.md` is excluded from git, because the repository is public.
+Operational findings live outside the repository, because it is public: in the local private KB, `docs/company/private/hallazgos-operativos-535.md`, which git ignores.

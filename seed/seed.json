@@ -20222,10 +20222,10 @@
 						}
 					],
 					"capture": {
-						"src": "/assets/deconstruyendo/github-seed.webp",
+						"src": "/assets/deconstruyendo/github-seed-v2.webp",
 						"alt": "La carpeta seed del repositorio en GitHub, con seed.json y la carpeta content",
 						"width": 1680,
-						"height": 1167
+						"height": 1168
 					},
 					"capture_caption": "La carpeta `seed/` del repositorio público."
 				}
@@ -20295,10 +20295,10 @@
 						}
 					],
 					"capture": {
-						"src": "/assets/deconstruyendo/github-seed.webp",
+						"src": "/assets/deconstruyendo/github-seed-v2.webp",
 						"alt": "The repository's seed folder on GitHub, with seed.json and the content folder",
 						"width": 1680,
-						"height": 1167
+						"height": 1168
 					},
 					"capture_caption": "The `seed/` folder of the public repository."
 				},

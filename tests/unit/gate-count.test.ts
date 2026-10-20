@@ -39,37 +39,16 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { distinctGates, gateNames, stepNames } from "../../scripts/lib/gates.mjs";
+import { computeBadges } from "../../scripts/badges.mjs";
 
 const ROOT = join(import.meta.dirname, "..", "..");
 const read = (...p: string[]) => readFileSync(join(ROOT, ...p), "utf8");
 
 const WORKFLOW = read(".github", "workflows", "ci.yml");
 
-/**
- * Steps are matched by their indentation, which is the file's own convention:
- * six spaces, `- name:`. A regex over YAML is a fair trade here only because
- * the alternative — a parser — would still have to be told which steps are
- * gates, and because a parse that silently finds nothing is guarded below.
- */
-const STEP = /^ {6}- name: (.+)$/gm;
-
 /** A job header: two spaces, a name, a colon, nothing else on the line. */
 const JOB = /^ {2}([a-z][a-z0-9_-]*):$/gm;
-
-/** Every `- name:` in the file, in order, whether or not it is a gate. */
-export function stepNames(workflow: string): string[] {
-	return [...workflow.matchAll(STEP)].map((m) => m[1].trim());
-}
-
-/** The subset that can refuse a branch: no `# not-a-gate:` marker. */
-export function gateNames(workflow: string): string[] {
-	return stepNames(workflow).filter((name) => !name.includes("# not-a-gate:"));
-}
-
-/** Gate names counted once, however many runners they happen on. */
-export function distinctGates(workflow: string): string[] {
-	return [...new Set(gateNames(workflow))];
-}
 
 /**
  * Gate names grouped by the job they appear in, so a name repeated ACROSS jobs
@@ -278,6 +257,12 @@ function numbersBefore(strings: string[], noun: string): number[] {
 	const re = new RegExp(`(\\d+)\\s+${noun}\\b`, "g");
 	return strings.flatMap((s) => [...s.matchAll(re)].map((m) => Number(m[1])));
 }
+
+describe("the README badge publishes the same number (#600)", () => {
+	it("scripts/badges.mjs counts the gates this test counts", () => {
+		expect(computeBadges(ROOT).gates.message).toBe(String(gates.length));
+	});
+});
 
 describe("the public page says the same number", () => {
 	it("everywhere it says it, both locales", () => {

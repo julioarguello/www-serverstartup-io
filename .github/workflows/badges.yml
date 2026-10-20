@@ -1,0 +1,60 @@
+name: badges
+
+# The README's badges, kept current with no hand edits (#600). After every
+# green quality-gates run on main, scripts/badges.mjs derives each value from
+# the file that owns it (ci.yml, lighthouserc.json, the a11y gate, the
+# middleware) and this job publishes the shields.io endpoint files on the
+# `badges` branch, which the README's badges read. A value the script cannot
+# derive fails the job; nothing is published from a guess.
+#
+# The branch holds one commit, replaced only when a value changes. A push made
+# with GITHUB_TOKEN starts no workflow, so this cannot loop.
+on:
+  workflow_run:
+    workflows: [quality-gates]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: badges
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Derive the badges from their owners
+        run: node scripts/badges.mjs "$RUNNER_TEMP/badges"
+      - name: Publish them on the badges branch, if any value changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          out="$RUNNER_TEMP/badges"
+          if git ls-remote --exit-code --heads "$remote" badges >/dev/null 2>&1; then
+            git clone --quiet --depth 1 --branch badges "$remote" "$RUNNER_TEMP/current"
+            if diff -rq --exclude=.git "$out" "$RUNNER_TEMP/current" >/dev/null; then
+              echo "badges unchanged — nothing to publish"
+              exit 0
+            fi
+          fi
+          cd "$out"
+          git init --quiet --initial-branch=badges
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet -m "badges: from ${GITHUB_SHA::7}"
+          git push --quiet --force "$remote" badges
+          echo "badges published:"; for f in *.json; do echo "  $f"; done

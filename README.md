@@ -1,5 +1,17 @@
 # serverstartup.io
 
+<!-- Every badge is live; none is edited by hand. CI status and versions come from GitHub and
+     package.json; the gate count, Lighthouse thresholds, WCAG level and CSP are derived from their
+     owners by scripts/badges.mjs and published on the `badges` branch by .github/workflows/badges.yml. -->
+[![quality-gates](https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/julioarguello/www-serverstartup-io/actions/workflows/ci.yml?query=branch%3Amain)
+[![quality gates](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Fgates.json)](.github/workflows/ci.yml)
+[![Lighthouse thresholds](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Flighthouse.json)](lighthouserc.json)
+[![accessibility checks](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Faccessibility.json)](scripts/ci-check-a11y.mjs)
+[![Content Security Policy](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjulioarguello%2Fwww-serverstartup-io%2Fbadges%2Fcsp.json)](src/middleware.ts)
+[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare_Workers-F38020?logo=cloudflareworkers&logoColor=white)](https://developers.cloudflare.com/workers/)
+[![astro](https://img.shields.io/github/package-json/dependency-version/julioarguello/www-serverstartup-io/astro?logo=astro&logoColor=white&color=BC52EE)](https://astro.build)
+[![EmDash](https://img.shields.io/github/package-json/dependency-version/julioarguello/www-serverstartup-io/emdash?label=EmDash&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCc+PHBhdGggZmlsbD0nd2hpdGUnIGZpbGwtcnVsZT0nZXZlbm9kZCcgZD0nTTQuMzcgMWgxNS4yNkEzLjM3IDMuMzcgMCAwIDEgMjMgNC4zN3YxNS4yNkEzLjM3IDMuMzcgMCAwIDEgMTkuNjMgMjNINC4zN0EzLjM3IDMuMzcgMCAwIDEgMSAxOS42M1Y0LjM3QTMuMzcgMy4zNyAwIDAgMSA0LjM3IDFaTTQuMzcgMi45MkExLjQ1IDEuNDUgMCAwIDAgMi45MiA0LjM3djE1LjI2YzAgLjguNjUgMS40NSAxLjQ1IDEuNDVoMTUuMjZjLjggMCAxLjQ1LS42NSAxLjQ1LTEuNDVWNC4zN2MwLS44LS42NS0xLjQ1LTEuNDUtMS40NVpNNS43NiAxMC44OGgxMi42djIuMUg1Ljc2WicvPjwvc3ZnPg==&color=1E1E1E)](https://github.com/emdash-cms/emdash)
+
 The website of [Server Startup](https://serverstartup.io) — senior engineers
 in Getxo doing e-commerce, systems integration, data platforms, edge security,
 greenfield development and AI. One team. Six verticals. Promise kept.

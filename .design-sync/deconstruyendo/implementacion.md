@@ -60,3 +60,23 @@ the CMS, and the layout.
 4. Build the credits page.
 5. Add the `cited-files` gate with its planted case, then run the full local gate set.
 6. Open a PR from a worktree off origin/main and verify on the preview.
+
+## What shipped, where it departs from the plan (2026-10-20)
+
+- **No Portable Text in repeaters.** EmDash 0.34 repeater sub-fields are scalar, image or select
+  only. Plate text and fact text are markdown-lite rendered by `excerptHtml`, as service
+  excerpts are. No `facts` collection was needed: the repeater holds the facts.
+- **The map is `role="group"`**, not `role="img"`: it holds links to the plates, and axe reports an
+  image's children as nested interactive controls. Its links take an edge-orange focus ring;
+  the shape highlight is only an extra.
+- **The phone has its own list**, labelled `map_list_aria` and distinct from the sticky spine's
+  `spine_aria`: two navigation landmarks may not share a name.
+- **EN anchor `site-content`**, not `content`: `#content` is the skip link's target on every page.
+  html-validate (`no-dup-id`) is what catches the next collision.
+- **The opening h1 joins theme.css's one-line register** at 768 px and above (`.dc-hero__inner`);
+  below that it keeps its own clamp so «Deconstruyendo» fits 360 px.
+- **The model credit hides with the large drawing** (≤860 px): it names two windows the small
+  drawing does not have.
+- **Credits page**: the bridge does not appear on /deconstruyendo; its «Aparece en» says so.
+- Facts that could only be verified on the deployed site are seeded with `status: pending` and
+  stay hidden until checked there.

@@ -106,6 +106,9 @@
 .dc-model .ld { stroke: var(--color-brand-grey); stroke-width: 1; stroke-dasharray: 1 4; stroke-linecap: round; transition: stroke .25s; }
 .dc-model .dt { fill: var(--color-ground-dark); stroke: var(--color-edge); stroke-width: 2; transition: fill .25s; }
 .dc-model .br { stroke: var(--color-edge); stroke-width: 2; }
+/* brand marks beside the names (utils/brand-icons.ts): one colour, the name's; Cloudflare's in its orange */
+.dc-model .bi { fill: var(--color-secondary); overflow: visible; }
+.dc-model .bi.cf { fill: var(--color-edge); }
 .dc-model .cfl { font-family: var(--font-family-mono); font-size: 14px; fill: var(--color-edge); }
 .dc-model .nm { font-family: var(--font-family); font-size: 22px; font-weight: 700; fill: var(--color-secondary); transition: fill .25s; }
 .dc-model .pm { font-family: var(--font-family-mono); font-size: 13px; fill: var(--color-brand-grey); }

@@ -824,8 +824,14 @@ Decisions:
   sub-fields filled in each row, so an EN plate cannot silently lose a fact.
 - **The map is a `role="group"`, not an image**: it holds links to each plate, and an image's
   children are presentational (axe `nested-interactive`).
-- Photographs shown on the page carry their CC BY-SA attribution in the caption; the full
-  list is the credits page, `/creditos` · `/en/credits`.
+- **Photographs are attributed on the credits page** (`/creditos` · `/en/credits`), linked from
+  every footer, as every vertical's are; the map carries no caption line (it cost the one-screen
+  opening its room, and CC BY-SA 4.0 §3(a)(2) admits a link to a resource holding the attribution).
+- **Brand marks beside names, never in their place** (`src/utils/brand-icons.ts`): Cloudflare,
+  GitHub, Lighthouse and Astro from Simple Icons (CC0, version pinned in the file), EmDash's from
+  its admin's own `LogoIcon`. Path data in the page, so the «0 third-party requests» claim holds;
+  one colour each, the name's, Cloudflare's in its orange. A tool with no public mark (D1, R2, KV,
+  axe) gets none rather than an invented one.
 
 ## 5. SEO
 

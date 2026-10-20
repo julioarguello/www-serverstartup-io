@@ -107,7 +107,9 @@ the cut-out (`cdn-faro-restaurado*`) is retired. The photograph is not NASA's an
 | `home-almacen.webp` (and `-720`, `-2016`, `-3024`) | The warehouse further away, for the home (#560): the whole photograph, ceiling included, the operator's marks painted out as `ocado.py` does, extended to the left — the grid and its robots there are FLUX.2 [dev]'s continuation, aligned to the photograph by an affine fit and cut along the seam where the two differ least — restored with SeedVR2 3B (`home_voyage.py`) | [Techwords, Wikimedia Commons, "Ocado warehouse bots.jpg"](https://commons.wikimedia.org/wiki/File:Ocado_warehouse_bots.jpg) | CC BY-SA 4.0 |
 
 CC BY-SA asks for attribution where the work is used and share-alike on derivatives. The
-drawing is a derivative; this table is the attribution until the site has a credits page.
+drawing is a derivative; the site's credits page (`/creditos`, `/en/credits`, a `pages` entry in
+`seed/seed.json`) carries the attribution for every photograph it shows, and this table the
+provenance of each file.
 
 **Green is the one honest problem.** Deep sky has no green: the eye's response and the filters
 observatories map to RGB conspire against it, and there is not one green nebula in the archive.

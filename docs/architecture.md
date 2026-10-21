@@ -861,10 +861,21 @@ All schemas use CMS data — no hardcoded strings. Validate with [Google Rich Re
 
 ## 6. Analytics
 
-- **Cloudflare Web Analytics** via **Zaraz** (edge-injected, zero client-side JS)
-- Configured in Cloudflare Dashboard → Zaraz → Third-party tools
-- No code in `Base.astro` — Zaraz auto-injects on all proxied pages
-- Extensible: GA4, Meta Pixel, etc. can be added via dashboard without code changes
+**None is deployed** (verified 2026-10-21 against `main`: no `zaraz`,
+`cloudflareinsights` or `beacon.min.js` in `src/`, `public/` or `worker/`).
+Until 2026-10-21 this section described Zaraz as configured; it never was (#309).
+
+- **What the site promises today**: the published privacy text says the site runs
+  no analytics and sets no cookie requiring consent (`seed/seed.json`, privacy page,
+  ES and EN). That sentence is the contract — switching any tool on means
+  rewriting it in the same change.
+- **The intended path** (#309, behind #162): Cloudflare Web Analytics through
+  **Zaraz**, enabled in the dashboard on the proxied zone. Zaraz injects
+  `/cdn-cgi/zaraz/i.js` from the same origin, so `script-src 'self'`
+  (`src/middleware.ts`) should cover it — verify on the deployed page, not by
+  reasoning.
+- **What would change the legal footing**: any Zaraz tool that sets cookies or
+  profiles (GA4, Meta Pixel). That is a compliance decision, not a switch.
 
 ## 7. Media & Video Strategy
 

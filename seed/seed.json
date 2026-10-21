@@ -17850,7 +17850,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Parcialmente y no plenamente por una razón concreta: todavía no se ha hecho una evaluación completa con la metodología WCAG-EM. En cada cambio se ejecutan comprobaciones automáticas —axe, recorrido por teclado, contraste medido sobre el fondo real y reflujo a 320 px— y hoy no señalan ninguna incidencia, pero eso es un suelo, no una conformidad. Cuando la evaluación esté hecha, esta declaración se actualizará con lo que encuentre."
+									"text": "Parcialmente y no plenamente por dos razones concretas. La primera: la evaluación con la metodología WCAG-EM está hecha solo en su parte automática. En cada cambio se ejecutan comprobaciones —axe, recorrido por teclado, contraste medido sobre el fondo real y reflujo a 320 px—, pero eso es un suelo, no una conformidad: falta la revisión manual con lector de pantalla, que ninguna herramienta sustituye. La segunda es un contenido que no es accesible, y lo es a propósito."
 								}
 							]
 						},
@@ -17860,7 +17860,37 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación. Si encuentra una barrera, el canal está aquí abajo."
+									"text": "En la página de ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"text": "CDN y WAF",
+									"marks": [
+										"c"
+									]
+								},
+								{
+									"_type": "span",
+									"text": ", la lista de referencias se dibuja como imagen y un lector de pantalla no la lee (criterios 1.1.1 y 1.4.5 de las WCAG). Es una decisión: esos nombres se mantienen fuera del texto de la página y de los buscadores. Si necesita la lista, pídala por el canal que se describe abajo y se la enviamos.",
+									"marks": []
+								}
+							],
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "c",
+									"href": "/cdn-waf-seguridad-edge-cloudflare"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación y revisada el 21 de octubre de 2026 con la parte automática de la evaluación. Si encuentra una barrera, el canal está aquí abajo."
 								}
 							]
 						},
@@ -18013,7 +18043,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Partially, not fully, for a specific reason: no complete evaluation using the WCAG-EM methodology has been carried out yet. Automated checks run on every change — axe, a keyboard sweep, contrast measured against the rendered ground, and reflow at 320px — and today they report nothing, but that is a floor, not conformance. This statement will be updated with whatever the evaluation finds."
+									"text": "Partially, not fully, for two specific reasons. First, the evaluation using the WCAG-EM methodology has been carried out only in its automated part. Checks run on every change — axe, a keyboard sweep, contrast measured against the rendered ground, and reflow at 320px — but that is a floor, not conformance: the manual review with a screen reader, which no tool replaces, is still to come. Second, one piece of content is not accessible, and that is on purpose."
 								}
 							]
 						},
@@ -18023,7 +18053,37 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Statement prepared on 3 September 2026 by self-assessment. If you hit a barrier, the channel is below."
+									"text": "On the ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"text": "CDN and WAF",
+									"marks": [
+										"c"
+									]
+								},
+								{
+									"_type": "span",
+									"text": " page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines. If you need the list, ask for it through the channel described below and we will send it to you.",
+									"marks": []
+								}
+							],
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "c",
+									"href": "/en/cdn-waf-edge-security-cloudflare"
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"children": [
+								{
+									"_type": "span",
+									"text": "Statement prepared on 3 September 2026 by self-assessment, and revised on 21 October 2026 with the evaluation's automated part. If you hit a barrier, the channel is below."
 								}
 							]
 						},

@@ -7,7 +7,8 @@
 > build (`scripts/ci-local-stack.sh 8787`) off `main` at `b4dc729`.
 >
 > This is the visual half of the benchmark whose copy half is
-> [`../company/07-web-benchmark.md`](../company/07-web-benchmark.md) (2026-08-02).
+> `07-web-benchmark.md` in the company knowledge base (2026-08-02), which is
+> private and not part of this repository.
 
 ## Why this file exists
 

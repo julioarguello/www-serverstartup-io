@@ -7,6 +7,8 @@ data.db
 data.db-shm
 data.db-wal
 .env
+# Wrangler's local secrets file — scripts/cf-env.py puts CLOUDFLARE_API_TOKEN in it (#620)
+.dev.vars
 .wrangler
 .stream.env
 .venv
@@ -14,8 +16,11 @@ data.db-wal
 .DS_Store
 docs/company/
 
-# Python bytecode from local scripts
+# Python bytecode and tool caches from local scripts
 __pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 
 # Lighthouse CI raw reports: 25 MB per run locally, and since #399 CI does not
 # keep its own either — uploadArtifacts is off there, because 219 uploads of

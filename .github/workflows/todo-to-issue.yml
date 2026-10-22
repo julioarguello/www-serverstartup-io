@@ -1,7 +1,7 @@
 name: track-tech-debt
 
 # The reader for the inline debt vocabulary of docs/rules/dev-tech-debt.md §1
-# (#396): FIXME/TODO/HACK(tech-debt) markers become labelled issues, and the
+# (#396): the three scoped debt markers become labelled issues, and the
 # issue closes again when the marker leaves the code. Until this existed,
 # /dev-review §7 wrote markers that nothing ever read.
 #
@@ -39,11 +39,11 @@ jobs:
           # leaves its issue open forever (dev-tech-debt.md §3).
           CLOSE_ISSUES: true
           # Mirrors the severity table of dev-tech-debt.md §1. Matching is by
-          # NAME, so the "(tech-debt)" suffix the rule mandates is a convention
-          # for whoever reads the code, not a filter the scanner applies —
-          # which is exactly why that rule forbids writing a bare marker for
-          # debt. The four labels did not exist in the repo; the action created
-          # them on its first run, as documented.
+          # NAME, so the name is the filter: each identifier carries the
+          # "(tech-debt)" scope, and a marker without it files nothing (#620).
+          # Configured bare until then, which is how the three issues below got
+          # filed from prose. The four labels did not exist in the repo; the
+          # action created them on its first run, as documented.
           #
           # Prose warning, learned the hard way: this scanner reads its own
           # workflow file. The first version of this comment spelled the three
@@ -66,6 +66,6 @@ jobs:
           # this note does. The pattern needs whitespace before it and whitespace or a
           # colon after it; either shape denies it one.
           IDENTIFIERS: >
-            [{"name": "FIXME", "labels": ["tech-debt", "priority:medium"]},
-             {"name": "TODO",  "labels": ["tech-debt", "priority:low"]},
-             {"name": "HACK",  "labels": ["tech-debt", "priority:workaround"]}]
+            [{"name": "FIXME(tech-debt)", "labels": ["tech-debt", "priority:medium"]},
+             {"name": "TODO(tech-debt)",  "labels": ["tech-debt", "priority:low"]},
+             {"name": "HACK(tech-debt)",  "labels": ["tech-debt", "priority:workaround"]}]

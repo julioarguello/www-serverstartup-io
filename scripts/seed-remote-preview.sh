@@ -9,7 +9,8 @@
 #      _emdash_migrations was the first casualty), and a whole-db .dump writes
 #      sqlite_schema for the FTS5 virtual tables, which D1 rejects. Schema is
 #      migrations' job, not ours — we only move content.
-#      (_emdash_migrations, _cf_METADATA, sqlite_% and FTS shadows excluded.)
+#      (_emdash_migrations, _cf_METADATA, sqlite_% and FTS shadows excluded;
+#      so are the identity tables and EmDash's own emdash:* options, #612.)
 #   3. Append FTS 'rebuild' inserts (regenerated from sqlite_master, never
 #      speculative — a rebuild for a missing table rolls back the whole file).
 #   4. Rehearse the SQL on a COPY of the local sqlite BEFORE touching remote.
@@ -218,20 +219,61 @@ else
 	echo "rehearsal-only: skipping the remote schema read (it would reach the remote)"
 fi
 
+# Who may log in is not content (#612). The seed CLI writes no row to any of
+# these tables (measured on a fresh `emdash seed`, 2026-10-22), so a refresh
+# that replaced them could only delete: every reseed took the administrator,
+# their passkeys and every token with it, and the setup wizard reopened to
+# whoever reached it first (#610). The refresh leaves them as the remote has
+# them; the populated rehearsal below proves it with a plant.
+IDENTITY_TABLES="users credentials auth_tokens auth_challenges oauth_accounts allowed_domains _emdash_api_tokens _emdash_oauth_clients _emdash_oauth_tokens _emdash_authorization_codes _emdash_device_codes"
+# The seed owns these tables, and their rows may point at a user (SET NULL):
+# a byline linked to an account, a comment by one. They are replaced like any
+# other content. Every OTHER table with a foreign key into `users` must be in
+# IDENTITY_TABLES, or the script refuses: an EmDash upgrade that adds an
+# identity table would otherwise be wiped on every reseed with no gate failing.
+USER_LINKED_CONTENT="_emdash_bylines _emdash_comments"
+# `options` has two kinds of owner: the seed writes the site:* settings (and
+# byline_fields_version, which versions the byline tables it also replaces);
+# EmDash writes its runtime state under three namespaces, emdash:* (setup
+# among it), system:* (the scheduler heartbeat) and plugin:* (plugin settings).
+# Only the seed's rows are deleted and re-inserted.
+SEED_OPTIONS="\"name\" NOT LIKE 'emdash:%' AND \"name\" NOT LIKE 'system:%' AND \"name\" NOT LIKE 'plugin:%'"
+for t in $IDENTITY_TABLES; do
+	n=$(sqlite3 "$D1_DB" "SELECT count(*) FROM \"$t\";")
+	[ "$n" = "0" ] || {
+		echo "ERROR: local table $t holds $n row(s), and identity tables are never sent." >&2
+		echo "  If seed.json now writes them, the seed owns $t: take it out of IDENTITY_TABLES." >&2
+		exit 3; }
+done
+UNCLASSIFIED=$(sqlite3 "$D1_DB" "
+  SELECT group_concat(name, ' ') FROM (
+    SELECT DISTINCT m.name FROM sqlite_master m, pragma_foreign_key_list(m.name) f
+     WHERE m.type = 'table' AND f.\"table\" = 'users' AND m.name <> 'users')" )
+for t in $UNCLASSIFIED; do
+	case " $IDENTITY_TABLES $USER_LINKED_CONTENT " in
+		*" $t "*) : ;;
+		*) echo "ERROR: $t points at users but is neither identity nor seed content." >&2
+		   echo "  Decide which it is and add it to IDENTITY_TABLES or USER_LINKED_CONTENT." >&2
+		   exit 3 ;;
+	esac
+done
+
 # FK-topological order, computed from the schema itself (the 0.34 migrations
 # added FKs — e.g. every ec_* table references revisions — and sqlite_master
 # order is arbitrary: the 2026-08-23 07:21 deploy died on it). DELETE runs
 # children-first, INSERT parents-first (the same list reversed). Self-refs
 # (taxonomies, comments) are ignored as edges: a full-table DELETE clears
 # parent and child rows in one statement.
-python3 - "$D1_DB" > "$WORK/tables.topo" <<'PYEOF'
+python3 - "$D1_DB" $IDENTITY_TABLES > "$WORK/tables.topo" <<'PYEOF'
 import sqlite3, sys
 db = sqlite3.connect(sys.argv[1])
+keep = set(sys.argv[2:])
 tables = [r[0] for r in db.execute(
     "SELECT name FROM sqlite_master WHERE type='table'"
     " AND name NOT LIKE '\\_emdash\\_fts\\_%' ESCAPE '\\'"
     " AND name NOT LIKE 'sqlite_%'"
-    " AND name NOT IN ('_cf_METADATA','_emdash_migrations')")]
+    " AND name NOT IN ('_cf_METADATA','_emdash_migrations')")
+    if r[0] not in keep]
 parents = {t: set() for t in tables}
 for t in tables:
     for row in db.execute(f'PRAGMA foreign_key_list("{t}")'):
@@ -250,7 +292,11 @@ PYEOF
 
 # children-first DELETEs…
 while read -r t; do
-	echo "DELETE FROM \"$t\";" >> "$SQL"
+	if [ "$t" = "options" ]; then
+		echo "DELETE FROM \"$t\" WHERE $SEED_OPTIONS;" >> "$SQL"
+	else
+		echo "DELETE FROM \"$t\";" >> "$SQL"
+	fi
 done < "$WORK/tables.topo"
 # …then parents-first INSERTs (same order reversed)
 tail -r "$WORK/tables.topo" 2>/dev/null > "$WORK/tables.rev" || tac "$WORK/tables.topo" > "$WORK/tables.rev"
@@ -266,10 +312,21 @@ while read -r t; do
 	# version (3.28 prints the table name bare, later ones may not).
 	COLS=$(sqlite3 "$D1_DB" "SELECT group_concat('\"' || name || '\"', ',') FROM pragma_table_info('$t');")
 	EXPR=$(sqlite3 "$D1_DB" "SELECT group_concat('quote(\"' || name || '\")', ' || '','' || ') FROM pragma_table_info('$t');")
+	WHERE=""
+	[ "$t" = "options" ] && WHERE=" WHERE $SEED_OPTIONS"
 	sqlite3 -noheader "$D1_DB" \
-	  "SELECT 'INSERT INTO \"$t\"($COLS) VALUES(' || $EXPR || ');' FROM \"$t\";" >> "$SQL"
+	  "SELECT 'INSERT INTO \"$t\"($COLS) VALUES(' || $EXPR || ');' FROM \"$t\"$WHERE;" >> "$SQL"
 done < "$WORK/tables.rev"
 sqlite3 "$D1_DB" "SELECT 'INSERT INTO ' || name || '(' || name || ') VALUES(''rebuild'');' FROM sqlite_master WHERE sql LIKE 'CREATE VIRTUAL TABLE%';" >> "$SQL"
+
+# The whole list, not the two tables the plant below happens to touch: no
+# statement in the file may name an identity table (#612).
+for t in $IDENTITY_TABLES; do
+	if grep -qE "^(DELETE FROM|INSERT INTO) \"$t\"" "$SQL"; then
+		echo "ERROR: the refresh writes identity table $t; it must leave it to the remote." >&2
+		exit 3
+	fi
+done
 
 # Rehearse on a copy of the local database (schema present, data replaced).
 # trusted_schema=ON: the pages FTS triggers write into the virtual table on
@@ -338,7 +395,32 @@ sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" -cmd "PRAGMA foreign_keys=ON;" "$
 # row, stands where a POPULATED remote stands, and is what actually fails
 # when the order regresses (the 2026-08-23 07:21 class).
 sqlite3 "$D1_DB" ".backup '$WORK/rehearsal-populated.sqlite'"
+# Plant (#612): an administrator with a passkey, the setup flag (asserted by
+# value, so a local copy of the key cannot stand in for it) and a system:*
+# runtime option, which the refresh must keep; beside them a byline and a site
+# option the seed owns but does not carry, which it must still remove. That
+# last pair is the control: a refresh that wrote nothing at all would keep
+# everything and pass the first four.
+sqlite3 -bail -cmd "PRAGMA foreign_keys=ON;" "$WORK/rehearsal-populated.sqlite" "
+  INSERT INTO users(id, email, role) VALUES('plant-admin', 'plant@invalid', 50);
+  INSERT INTO credentials(id, user_id, public_key, device_type) VALUES('plant-cred', 'plant-admin', x'00', 'singleDevice');
+  INSERT OR REPLACE INTO options(name, value) VALUES('emdash:setup_complete', 'plant-flag');
+  INSERT INTO options(name, value) VALUES('system:plant', 'plant-runtime');
+  INSERT INTO _emdash_bylines(id, slug, display_name) VALUES('plant-byline', 'plant-byline', 'Plant');
+  INSERT INTO options(name, value) VALUES('site:plant', '\"plant\"');"
 sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" -cmd "PRAGMA foreign_keys=ON;" "$WORK/rehearsal-populated.sqlite" < "$SQL"
+PLANT=$(sqlite3 "$WORK/rehearsal-populated.sqlite" "SELECT
+  (SELECT count(*) FROM users WHERE id = 'plant-admin') ||
+  (SELECT count(*) FROM credentials WHERE id = 'plant-cred') ||
+  (SELECT count(*) FROM options WHERE name = 'emdash:setup_complete' AND value = 'plant-flag') ||
+  (SELECT count(*) FROM options WHERE name = 'system:plant') ||
+  (SELECT count(*) FROM _emdash_bylines WHERE id = 'plant-byline') ||
+  (SELECT count(*) FROM options WHERE name = 'site:plant');")
+[ "$PLANT" = "111100" ] || {
+	echo "ERROR: the refresh does not separate who logs in from what the seed owns." >&2
+	echo "  admin, passkey, setup flag, runtime option, planted byline, planted site option: $PLANT (want 111100)" >&2
+	exit 3; }
+echo "identity kept: a planted admin, passkey, setup flag and runtime option survived; the seed's own rows were replaced"
 PAGES_POP=$(sqlite3 "$WORK/rehearsal-populated.sqlite" "SELECT count(*) FROM ec_pages;")
 [ "$PAGES_POP" -gt 0 ] || { echo "ERROR: populated rehearsal produced 0 pages" >&2; exit 1; }
 PAGES_LOCAL=$(sqlite3 "$WORK/rehearsal.sqlite" "SELECT count(*) FROM ec_pages;")

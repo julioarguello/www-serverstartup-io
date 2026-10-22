@@ -1107,6 +1107,29 @@ PR → quality-gates green → merge to main
   **refuses** unless the database is empty or the operator typed the
   confirmation string (#358). Per-table counts are printed before anything is
   written, allowed or refused.
+- **A reseed replaces content, never the people who edit it** (#612). The seed
+  CLI writes no row to the identity tables (`users`, `credentials`,
+  `auth_tokens`, `auth_challenges`, `oauth_accounts`, `allowed_domains`,
+  `_emdash_api_tokens`, `_emdash_oauth_clients`, `_emdash_oauth_tokens`,
+  `_emdash_authorization_codes`, `_emdash_device_codes`), so the refresh leaves
+  them as the remote has them. In `options` it moves only the seed's rows: it
+  leaves EmDash's three runtime namespaces alone, `emdash:*` (where
+  `emdash:setup_complete` lives), `system:*` and `plugin:*`. Until #612, every
+  reseed deleted the administrator and reopened the setup wizard to whoever
+  reached it first (#610).
+  - **Who refuses what:** the script refuses if the local database holds rows in
+    an identity table, which would be silently dropped. It refuses if a table
+    with a foreign key into `users` is classified neither as identity nor as
+    seed content (`_emdash_bylines`, `_emdash_comments`), so an EmDash upgrade
+    that adds an identity table fails the run instead of being wiped. And it
+    refuses if any generated statement names an identity table.
+  - **What the populated rehearsal proves:** it plants an admin, a passkey, the
+    setup flag (checked by value) and a `system:` option, beside a byline and a
+    `site:` option the seed does not carry. The first four must survive and the
+    last two must go. The `rendered` CI job runs the same rehearsal at PR time.
+  - **Still replaced, deliberately:** everything else, including `media`,
+    `audit_logs` and `_emdash_redirects`. A byline linked to an account comes
+    back unlinked, because the seed owns bylines.
 - **Three rehearsals, and what each one stands for** (#326, #484). Collection
   tables (`ec_*`) are not migration-managed — EmDash creates them from the
   collections declared in `seed.json` — so they drift from the remote in two

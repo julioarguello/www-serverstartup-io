@@ -290,6 +290,16 @@ jobs:
         shell: node scripts/ci-gate.mjs bash -e {0}
         run: scripts/ci-check-headers.sh http://localhost:8787
 
+      - name: Remote reseed keeps the administrator (rehearsal, no remote)
+        # #612. The deploy reseed used to delete every user, passkey and the
+        # setup flag, which reopened the CMS setup wizard to anyone (#610). The
+        # script now plants an admin in its populated rehearsal and refuses
+        # unless that admin survives while the seed's own rows are replaced.
+        # Here it runs offline at PR time, so the regression fails before merge
+        # instead of on the next deploy.
+        shell: node scripts/ci-gate.mjs bash -e {0}
+        run: scripts/seed-remote-preview.sh pr-rehearsal --rehearsal-only
+
       - name: Image URLs (href is a path, transform names a quality)
         # #412. The step above proves the transform ANSWERS; this one reads what
         # was asked for. An absolute /_image href sends the endpoint down its
@@ -635,7 +645,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 24 steps that can fail"
+            echo "## Quality gates — 25 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -667,6 +677,7 @@ jobs:
             echo "| html-validate | 0 problems, 21 templates |"
             echo "| rendered copy | every seed route matches its baseline · menu links match the seed |"
             echo "| security headers | full #164 suite |"
+            echo "| reseed rehearsal | a planted admin, passkey and setup flag survive the remote refresh; the seed's own rows are replaced |"
             echo "| image hrefs | every /_image href is a path, never a URL |"
             echo "| team copy | no count of people, in text, meta or JSON-LD |"
             echo "| var() resolution | every var() resolves, and the template-fed ones carry a fallback |"

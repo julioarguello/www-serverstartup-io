@@ -35,6 +35,12 @@ src/assets/*.webp          # the sponsorship photograph. It moved out of public/
                            # unaccounted binary until someone says otherwise.
 public/assets/team/*.jpg   # team photographs
 public/fonts/*.woff2       # Computer Modern subset for the mantra (#295)
+src/assets/fonts/*.woff2   # the site and admin web fonts (#629): Google Fonts' own files,
+                           # byte-identical to fonts.gstatic.com (versions in the README
+                           # beside them). MEASURED 2026-10-22 with fontTools: their name
+                           # tables hold 73 distinct strings across all 19 files — family,
+                           # style, version and foundry IDs (Alexandria, JetBrains Mono,
+                           # Noto Sans), nothing else.
 
 # ── design evidence: screenshots taken to review a change ──────────────────
 docs/design/screenshots/**/*.png   # rendered pages, captured for review in #156/#161

@@ -58,7 +58,7 @@
 }
 
 /* The three symbols the brand's own devices print, cut from the real faces.
-   Google's `latin` subset — which is what the fonts API downloads — carries
+   Google's `latin` subset — which is what src/assets/fonts carries — holds
    neither U+2260 nor the two arrows, so with #450 shipping Alexandria and
    JetBrains Mono for the first time, the ≠ in the twelve equation headings
    ("A medida ≠ acoplado") would have arrived in Courier New: same size, half

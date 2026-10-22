@@ -7,6 +7,7 @@
  * `fonts: false`. Either one coming back reintroduces the network into the
  * build, and nothing else would notice until the next timeout.
  */
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -41,6 +42,22 @@ describe("the build reads its fonts from src/assets/fonts", () => {
 
 	it("answers every variable the site and the admin read", () => {
 		expect(fonts.map((f) => f.cssVariable).sort()).toEqual(["--font-emdash", "--font-mono", "--font-sans"]);
+	});
+
+	it("preloads by weight and style only — local files carry no subset", () => {
+		// The local provider tags no face with a subset, so a `subset` in a
+		// preload filter matches nothing and Astro drops the link without a word.
+		// Base.astro's `subset: "latin"` did exactly that; the preload is worth
+		// up to 0.1 of Lighthouse perf on the first screen (see Base.astro).
+		const astroFiles = execFileSync("git", ["ls-files", "src/**/*.astro"], { cwd: ROOT, encoding: "utf8" })
+			.split("\n")
+			.filter(Boolean);
+		const withPreload = astroFiles.filter((f) => /<Font[^>]*\bpreload=/.test(readFileSync(join(ROOT, f), "utf8")));
+		expect(withPreload.length).toBeGreaterThan(0);
+		const subsetFiltered = withPreload.filter((f) =>
+			/<Font[^>]*\bpreload=\{[^}]*\bsubset:/.test(readFileSync(join(ROOT, f), "utf8").replace(/\n/g, " ")),
+		);
+		expect(subsetFiltered).toEqual([]);
 	});
 
 	it("names only files that exist", () => {

@@ -186,7 +186,7 @@ Guggenheim · Sergio S.C · CC BY-SA 2.0
 third-party requests when a page loads
 one stylesheet for everything
 Detail and proof
-5 rows
+6 rows
 5.1
 One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.
 src/styles/theme.css
@@ -194,13 +194,17 @@ src/styles/theme.css
 Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.
 src/middleware.ts
 5.3
+The fonts live in the repository, so building the site does not depend on Google Fonts. Cloudflare Fonts does not apply: it only rewrites links to Google Fonts, and there are none here.
+src/assets/fonts/README.md
+Cloudflare Fonts
+5.4
 Each vertical opens with a Wikimedia Commons photograph, restored and partly redrawn, and a layer drawn live in the browser. The layer is placed against the measured text, and its clock stops at eight seconds: nothing loops.
 src/utils/hero-art.ts
-5.4
+5.5
 The photographs were restored locally with SeedVR2. FLUX.2 [dev] (Black Forest Labs) on Workers AI removed objects, extended frames and redrew from the photographs. Every prompt is in the repository.
 docs/design/hero-rotativo/photo_restore.py
 [FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
-5.5
+5.6
 The photographs are CC BY-SA, and the site credits them with the changes stated.
 seed/seed.json
 inside the Worker

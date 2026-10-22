@@ -66,7 +66,7 @@ export const fonts = [
 		provider: fontProviders.local(),
 		name: "Noto Sans",
 		cssVariable: "--font-emdash",
-		fallbacks: ["sans-serif"],
+		fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"], // EmDash's own list
 		options: {
 			variants: ["italic", "normal"].flatMap((style) =>
 				Object.keys(RANGE).map((subset) => ({

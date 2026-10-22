@@ -11,7 +11,7 @@ origin — `/_astro/fonts/…`, under a `font-src 'self'` CSP.
 | :--- | :--- | :--- | :--- | :--- |
 | Alexandria | the site's sans (`--font-sans`) | `alexandria-latin.woff2` — variable, 300–700 | v6 | [OFL 1.1](OFL-alexandria.txt) |
 | JetBrains Mono | code and consoles (`--font-mono`) | `jetbrains-mono-latin.woff2`, `-latin-italic.woff2` — variable, 400–500 | v24 | [OFL 1.1](OFL-jetbrains-mono.txt) |
-| Noto Sans | the EmDash admin (`--font-emdash`) | `noto-sans-<script>[-italic].woff2` — variable, 100–900, eight scripts | v42 | [OFL 1.1](OFL-noto-sans.txt) |
+| Noto Sans | the EmDash admin (`--font-emdash`) | `noto-sans-<script>[-italic].woff2` — variable, 100–900, one file per script and style | v42 | [OFL 1.1](OFL-noto-sans.txt) |
 
 Each file is byte-identical to the one Google Fonts serves for that family,
 script and style — the files Astro's Google provider used to download on every

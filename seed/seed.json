@@ -20100,7 +20100,7 @@
 						},
 						{
 							"key": "h7-6",
-							"text": "Las fuentes están en el repositorio, así que construir la web no depende de `Google Fonts`. [`Cloudflare Fonts`](https://developers.cloudflare.com/speed/optimization/content/fonts/) se descartó: solo reescribe los enlaces a `Google Fonts` y, donde no puede actuar, las vuelve a pedir a Google.",
+							"text": "Las fuentes están en el repositorio, así que construir la web no depende de `Google Fonts`. [`Cloudflare Fonts`](https://developers.cloudflare.com/speed/optimization/content/fonts/) no aplica: solo reescribe los enlaces a `Google Fonts`, y aquí no hay ninguno.",
 							"file": "src/assets/fonts/README.md",
 							"docs": "[Cloudflare Fonts](https://developers.cloudflare.com/speed/optimization/content/fonts/)",
 							"status": "ok"
@@ -20190,7 +20190,7 @@
 						},
 						{
 							"key": "h7-6",
-							"text": "The fonts live in the repository, so building the site does not depend on `Google Fonts`. [`Cloudflare Fonts`](https://developers.cloudflare.com/speed/optimization/content/fonts/) was set aside: it only rewrites links to `Google Fonts`, and where it cannot act it asks Google for them again.",
+							"text": "The fonts live in the repository, so building the site does not depend on `Google Fonts`. [`Cloudflare Fonts`](https://developers.cloudflare.com/speed/optimization/content/fonts/) does not apply: it only rewrites links to `Google Fonts`, and there are none here.",
 							"file": "src/assets/fonts/README.md",
 							"docs": "[Cloudflare Fonts](https://developers.cloudflare.com/speed/optimization/content/fonts/)",
 							"status": "ok"

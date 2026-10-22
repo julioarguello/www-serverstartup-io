@@ -841,9 +841,28 @@ Decisions:
 - **Open Graph + Twitter Card** meta tags (title, description, image, URL, type)
 - **hreflang** tags with absolute URLs and `x-default` — alternate URLs resolved from the CMS `translationOf` group via `src/utils/alternate.ts` (#291: slugs are translated, so the `/en` prefix swap is only valid for locale-invariant routes). The same resolved value feeds the `LanguageSwitcher`; contract verified by `scripts/hreflang-sweep.py`
 - **RSS autodiscovery** `<link>` in `<head>`
-- **`@astrojs/sitemap`** with i18n-aware sitemap
+- **Sitemap**: `src/pages/sitemap.xml.ts` (#329), one flat `<urlset>` built from the CMS pages and services in both locales. It replaced `@astrojs/sitemap`, which cannot see CMS routes
 - **`robots.txt`** with sitemap reference
 - **Article meta** — `publishedTime`, `modifiedTime` for blog posts via `getSeoMeta()`
+- **The admin's SEO panel drives the service pages** (#624). Services have
+  `seo` in `supports`, so each entry gets a panel in the admin: title,
+  description, image, canonical and noindex, stored in `_emdash_seo`.
+  - **What reads it:** `src/utils/entry-seo.ts` (`entryHead`) lays what the
+    editor filled over the page's own defaults, in `[slug].astro` and
+    `en/[slug].astro`, the JSON-LD included.
+    - Only a filled field overrides.
+    - An empty one keeps Base's title suffix, the origin canonical, the
+      excerpt as description and the site's OG image.
+  - **Noindex:** a noindexed entry also leaves `src/pages/sitemap.xml.ts`.
+  - **The URL model:** the services collection declares `urlPattern: "/{slug}"`.
+    EmDash then builds its URLs as the site serves them: the bare slug in ES
+    and `/en/<slug>` in EN, because its sitemap child localizes through Astro's
+    i18n config. Its `/sitemap-services.xml` lists the same 12 URLs as ours
+    instead of 12 `/services/…` 404s. Its admin "view" links and slug-rename
+    redirects stop pointing at 404s too.
+  - **Where the values live:** the panel's values are in D1 only, and the
+    seed cannot carry them. Preview reseeds replace them, because
+    `_emdash_seo` is seed-owned content.
 
 ### 5.2 JSON-LD Structured Data
 

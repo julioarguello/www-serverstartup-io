@@ -23,6 +23,7 @@ import HeroStore from "../../components/HeroStore.astro";
 import HeroSky from "../../components/HeroSky.astro";
 import HeroVision from "../../components/HeroVision.astro";
 import type { CacheHint } from "emdash";
+import { entryHead } from "../../utils/entry-seo";
 import type { SiteSettings } from "../../types";
 
 const { slug } = Astro.params;
@@ -77,18 +78,28 @@ const isQuote = (b: any) => b?._type === "block" && b?.style === "blockquote";
 const leadQuotes = heroScene ? blocks.findIndex((b) => !isQuote(b)) : 0;
 const heroQuote = leadQuotes !== 0 ? blocks.slice(0, leadQuotes === -1 ? blocks.length : leadQuotes) : null;
 const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
+// #624: what the admin's SEO panel set for this entry, over the page's defaults.
+const head = entryHead(entry, {
+	title,
+	description: excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`,
+	siteUrl: Astro.site?.origin ?? Astro.url.origin,
+	path: Astro.url.pathname,
+});
 ---
 
 <Base
-	title={title}
-	description={excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`}
+	title={head.title}
+	description={head.description}
+	image={head.image}
+	canonical={head.canonical}
+	robots={head.robots}
 	altPath={altPath}
 	heroOverlay={heroArt !== null}
 >
 	<script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd({
 		siteUrl: Astro.site?.origin!,
 		name: title,
-		description: excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`,
+		description: head.description,
 		slug: slug!,
 		locale,
 	}))} />

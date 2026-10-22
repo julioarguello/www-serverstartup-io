@@ -80,6 +80,7 @@
 			"slug": "services",
 			"label": "Servicios",
 			"labelSingular": "Servicio",
+			"urlPattern": "/{slug}",
 			"supports": [
 				"drafts",
 				"revisions",

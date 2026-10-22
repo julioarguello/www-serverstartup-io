@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ci-scope.sh — does this change reach the RENDERED SITE? (#497)
 #
-# `quality-gates` runs 24 steps. Measured on #495, a one-line markdown edit:
+# `quality-gates` runs 25 steps. Measured on #495, a one-line markdown edit:
 # 614 s, of which 443 s were axe and Lighthouse measuring a rendered page the
 # diff cannot have touched. This decides which half of the battery to run.
 #

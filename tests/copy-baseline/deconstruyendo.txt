@@ -5,7 +5,7 @@ EN
 Deconstruyendo esta web
 Así está hecha esta web. Funciona sobre Cloudflare, una red de centros de datos repartidos por el mundo, y cada dato enlaza al fichero que lo demuestra.
 Calidad
-24 pasos · Lighthouse · axe
+25 pasos · Lighthouse · axe
 04
 03
 02
@@ -249,10 +249,10 @@ TRANSVERSAL, DESDE EL TALLER
 transversal · desde el taller
 Entrega
 Cómo llega un cambio a producción.
-El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un pull request, y pasa 24 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con wrangler, la herramienta de despliegue de Cloudflare. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.
+El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un pull request, y pasa 25 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con wrangler, la herramienta de despliegue de Cloudflare. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.
 pull request
 un cambio
-24 pasos
+25 pasos
 sobre workerd
 verde
 preview
@@ -270,7 +270,7 @@ El repositorio de trabajo es público, con todos sus commits.
 README.md
 el repositorio
 7.2
-Cada cambio que puede llegar a una página pasa 24 pasos que pueden fallar. Un test deriva ese número del workflow.
+Cada cambio que puede llegar a una página pasa 25 pasos que pueden fallar. Un test deriva ese número del workflow.
 .github/workflows/ci.yml
 7.3
 Las puertas ejecutan el sitio en local sobre workerd, el runtime de código abierto de Workers, con wrangler dev. Si wrangler se cae por un fallo suyo, la pila se reinicia una vez y el resumen lo dice.
@@ -315,7 +315,7 @@ transversal · en cada cambio
 Calidad
 Qué se comprueba antes de publicar nada.
 Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran. Lighthouse, la herramienta de Google que puntúa rendimiento y accesibilidad, mide nueve páginas; el texto de 30 rutas está congelado, y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.
-24
+25
 pasos que pueden fallar
 30
 rutas con el texto congelado

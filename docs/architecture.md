@@ -1107,6 +1107,20 @@ PR → quality-gates green → merge to main
   **refuses** unless the database is empty or the operator typed the
   confirmation string (#358). Per-table counts are printed before anything is
   written, allowed or refused.
+- **A reseed replaces content, never the people who edit it** (#612). The seed
+  CLI writes no row to the identity tables (`users`, `credentials`,
+  `auth_tokens`, `auth_challenges`, `oauth_accounts`, `allowed_domains`,
+  `_emdash_api_tokens`, `_emdash_oauth_*`, `_emdash_authorization_codes`,
+  `_emdash_device_codes`), so the refresh leaves them as the remote has them.
+  In `options` it moves only the seed's half (everything outside `emdash:*`);
+  EmDash's own runtime state, `emdash:setup_complete` among it, stays. Until
+  #612 every reseed deleted the administrator and reopened the setup wizard to
+  whoever reached it first (#610). The populated rehearsal plants an admin, a
+  passkey and the setup flag beside a byline and a site option the seed does
+  not carry, and refuses unless the first three survive and the last two go.
+  The script also refuses if the local database holds rows in an identity
+  table, because those would be silently dropped. The `rendered` CI job runs
+  the same rehearsal at PR time.
 - **Three rehearsals, and what each one stands for** (#326, #484). Collection
   tables (`ec_*`) are not migration-managed — EmDash creates them from the
   collections declared in `seed.json` — so they drift from the remote in two

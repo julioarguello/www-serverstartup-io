@@ -12,7 +12,7 @@
 | **Storage** | Cloudflare R2 (`MEDIA` binding) | CMS images and uploads |
 | **Video** | Cloudflare Stream | Video hosting with adaptive bitrate |
 | **Hosting** | Cloudflare Workers | SSR runtime |
-| **Fonts** | Google Fonts (Alexandria, JetBrains Mono) | Astro font provider |
+| **Fonts** | Alexandria, JetBrains Mono — Google Fonts files kept in `src/assets/fonts/` | Astro local font provider; the build fetches nothing (#629) |
 | **Sitemap** | `@astrojs/sitemap` | Automatic sitemap generation |
 | **Plugins** | `@emdash-cms/plugin-forms`, `plugin-webhook-notifier` | Form handling, notifications |
 

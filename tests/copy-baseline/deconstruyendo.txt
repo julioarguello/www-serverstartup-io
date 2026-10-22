@@ -186,7 +186,7 @@ Guggenheim · Sergio S.C · CC BY-SA 2.0
 peticiones a terceros al cargar una página
 una hoja de estilos para todo
 Detalle y pruebas
-5 filas
+6 filas
 5.1
 Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
 src/styles/theme.css
@@ -194,13 +194,17 @@ src/styles/theme.css
 Cargar una página no hace ninguna petición a terceros. Fuentes, scripts e imágenes son del propio sitio.
 src/middleware.ts
 5.3
+Las fuentes están en el repositorio, así que construir la web no depende de Google Fonts. Cloudflare Fonts no aplica: solo reescribe los enlaces a Google Fonts, y aquí no hay ninguno.
+src/assets/fonts/README.md
+Cloudflare Fonts
+5.4
 Cada vertical abre con una fotografía de Wikimedia Commons, restaurada y redibujada en parte, y una capa dibujada en vivo en el navegador. La capa se coloca según el texto medido, y su reloj se para a los ocho segundos: nada se repite.
 src/utils/hero-art.ts
-5.4
+5.5
 Las fotografías se restauraron en local con SeedVR2. FLUX.2 [dev] (Black Forest Labs) en Workers AI retiró objetos, amplió encuadres y redibujó a partir de las fotografías. Cada prompt está en el repositorio.
 docs/design/hero-rotativo/photo_restore.py
 [FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
-5.5
+5.6
 Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
 seed/seed.json
 dentro del Worker

@@ -83,8 +83,9 @@ is ink on paper, and the vertical's colour appears on hover, focus and
 
 ## Typography
 
-Both faces load through Astro's fonts API (`astro.config.mjs`, Google provider,
-self-optimised at build). The `<Font>` components render in `Base.astro` — they
+Both faces load through Astro's fonts API, read from `src/assets/fonts/` by the
+local provider (`families.mjs` there): Google Fonts' own files, kept in the
+repository since #629 so the build needs no network. The `<Font>` components render in `Base.astro` — they
 were configured but rendered nowhere until #450, so the site shipped neither
 face and fell back to the OS default on every route.
 

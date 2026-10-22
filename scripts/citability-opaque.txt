@@ -43,21 +43,6 @@ docs/design/hero-rotativo/previews/*.jpg   # captures of the built hero (#413). 
                                            # the CMS already publishes on / and on the
                                            # verticals — no client appears on either page.
 
-# ── the legacy archive (#324 (a) is undecided; these are the reasons today) ─
-reference/legacy/media/**   # logo masters, animations and history renders — imagery
-reference/figma-extract/images/**   # Figma image fills, content-addressed, no filenames
-reference/figma-extract/all-frames/*.png   # frame renders — pixels
-reference/figma-extract/renders/*.png      # the same frames as raster
-reference/figma-extract/thumbnail.png      # canvas thumbnail
-reference/figma-extract/renders/*.pdf   # MEASURED 2026-08-25: type is converted to
-                                        # outlines, so there is no text to read. A whole
-                                        # frame decodes to 29 ToUnicode CMap entries and
-                                        # no recoverable word — verified with a positive
-                                        # control over "Cloudflare", "Server", "Startup",
-                                        # "seguridad": zero hits after CMap decoding.
-reference/figma-extract/canvas.fig   # Figma's own binary format (kiwi), no public parser
-reference/server-startup-design.fig  # same
-
 # ── Claude Design sync (#580): the live site as handed to the design agent ──
 .design-sync/current/screens/*.jpg  # screenshots of the preview's openings, taken with
                                     # Puppeteer and encoded by ffmpeg: pixels of pages that

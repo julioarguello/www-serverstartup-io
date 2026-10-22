@@ -974,7 +974,7 @@ Videos are hosted on **Cloudflare Stream** — a managed platform with automatic
 | **Account** | Server Startup (`d70cd71aecc76f94c73d7a6f3cc1265d`) |
 | **Pricing** | ~$5/1000 min stored + $1/1000 min delivered |
 | **Upload** | Dashboard UI or API (`CF_STREAM_TOKEN` in `.env`) |
-| **Registry** | `reference/legacy/media/STREAM-VIDEOS.md` |
+| **Registry** | [`docs/reference/stream-videos.md`](reference/stream-videos.md) |
 
 #### Upload via API
 
@@ -1317,8 +1317,10 @@ PR → quality-gates green → merge to main
   and an unaccounted opaque file fails the build, so the blind spot cannot grow
   back quietly. The Figma renders are on that list with a measurement rather
   than an assumption — their type is converted to outlines, so a whole frame
-  decodes to 29 ToUnicode CMap entries and no recoverable word. What survives
-  in `reference/` at all is a separate decision (#324).
+  decodes to 29 ToUnicode CMap entries and no recoverable word. The archive
+  itself then left the tree (#324): nothing built, tested or deployed read it.
+  The Stream registry, the one page still consulted, moved to
+  `docs/reference/`; every other file is in history at `9ea73d1`.
 - **Menu check** (`copy-baseline.mjs`, #384): the frozen-copy baselines read
   `document.body.innerText`, which is the *rendered* text, and the menu lives
   in a `<dialog>` closed at rest — so the baseline of all 26 routes is

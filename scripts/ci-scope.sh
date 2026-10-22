@@ -32,7 +32,7 @@ set -uo pipefail
 # Paths that cannot change a rendered page. Everything else reaches the site.
 # Anchored at the start of the path; `docs/` covers `docs/design-system.md`
 # precisely because the gate that reads it is not gated by this script.
-INERT_PREFIXES=("docs/" "reference/")
+INERT_PREFIXES=("docs/")
 INERT_EXACT=("README.md" "CONTRIBUTING.md" "SECURITY.md" "AGENTS.md" "CLAUDE.md")
 
 is_inert() { # $1 = path — true only when this file cannot reach the site
@@ -72,7 +72,6 @@ self_test() {
 	check false "docs only"            "docs/production-cutover.md"
 	check false "the budget doc"       "docs/design-system.md"
 	check false "root markdown"        "README.md" "CONTRIBUTING.md"
-	check false "legacy archive"       "reference/legacy/README.md"
 	check true  "a template"           "src/pages/index.astro"
 	check true  "the seed"             "seed/seed.json"
 	check true  "a gate script"        "scripts/ci-check-layout.mjs"

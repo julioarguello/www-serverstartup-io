@@ -119,9 +119,10 @@ def scan(pattern: str, files: list[str]) -> list[str]:
 # Two answers, applied in order:
 #   1. READ what can be read. OOXML documents (.docx and friends) are ZIP
 #      containers holding XML; the text comes out with the standard library
-#      alone. That is the 12 WordPress exports — including the legacy site's
-#      own clients-and-references page, which is exactly where a non-citable
-#      name would sit.
+#      alone. That was written for the 12 WordPress exports — the legacy
+#      site's own clients-and-references page among them, exactly where a
+#      non-citable name would sit. They left the tree with reference/ (#324);
+#      the reader stays for the next document anyone commits.
 #   2. ACCOUNT for the rest. Anything still opaque must match a glob in
 #      scripts/citability-opaque.txt with a written reason. An opaque file
 #      nobody accounted for fails the gate, so the blind spot cannot grow back

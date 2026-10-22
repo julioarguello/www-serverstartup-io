@@ -4,6 +4,7 @@
 > **Fecha**: 2026-04-30
 > **Scope**: Todos los frames Figma (`reference/server-startup-design.fig`) vs. implementación Astro/EmDash
 > **Tag**: `v0.9.21`
+> **Sources**: the `reference/` files cited below left the tree in #324 — `git show 9ea73d1:reference/<file>` recovers any of them.
 >
 > **Historical record — read the ✅ column as "true on 2026-04-30", not as
 > "true today".** Several rows below tick tokens that no longer exist: the five

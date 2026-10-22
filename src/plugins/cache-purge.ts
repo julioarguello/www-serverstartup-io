@@ -21,19 +21,29 @@
  * 1-hour edge TTL set in src/middleware.ts, not by this plugin.
  */
 
-type ContentHookPayload = {
-	content: Record<string, unknown>;
-	collection: string;
-	isNew?: boolean;
-};
+import type { ContentDeleteEvent, ContentHookEvent, ContentPublishStateChangeEvent } from "emdash";
+
+/**
+ * Every content event this plugin handles. EmDash's own types, not local
+ * copies: a hand-written payload type is what hid the delete event's shape
+ * (`{ id, collection }`, no `content`) until #625 — the next shape change
+ * now fails `astro check` instead of purging nothing.
+ */
+type ContentEvent = ContentHookEvent | ContentPublishStateChangeEvent | ContentDeleteEvent;
+
+/** The tags to purge for one event: the collection, and the entry's own id. */
+export function purgeTags(event: ContentEvent): string[] {
+	const raw = "content" in event ? event.content?.id : event.id;
+	const id = raw == null ? "" : String(raw);
+	return [event.collection, id].filter(Boolean);
+}
 
 type PluginContext = {
 	log?: { info?: (msg: string) => void; error?: (msg: string) => void };
 };
 
-async function purgeEntry(payload: ContentHookPayload, ctx?: PluginContext): Promise<void> {
-	const id = payload.content?.id == null ? "" : String(payload.content.id);
-	const tags = [payload.collection, id].filter(Boolean);
+async function purgeEntry(event: ContentEvent, ctx?: PluginContext): Promise<void> {
+	const tags = purgeTags(event);
 	if (tags.length === 0) return;
 	const { cache } = await import("cloudflare:workers");
 	if (typeof cache?.purge !== "function") {
@@ -72,8 +82,8 @@ export default {
 		// not stay stale until the TTL. Draft saves purge nothing.
 		"content:afterSave": {
 			...hook,
-			handler: async (payload: ContentHookPayload & { content: { status?: unknown } }, ctx?: PluginContext) => {
-				if (payload.content?.status === "published") await purgeEntry(payload, ctx);
+			handler: async (event: ContentHookEvent, ctx?: PluginContext) => {
+				if (event.content?.status === "published") await purgeEntry(event, ctx);
 			},
 		},
 		"content:afterPublish": hook,

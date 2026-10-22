@@ -15010,7 +15010,7 @@
 				"status": "published",
 				"data": {
 					"title": "Ignacio Ibaseta",
-					"excerpt": "Infraestructura como código y plataforma de datos",
+					"excerpt": "Ingeniero senior",
 					"content": [
 						{
 							"_type": "block",
@@ -15037,7 +15037,7 @@
 				"status": "published",
 				"data": {
 					"title": "Daniel Sío",
-					"excerpt": "Operación de comercio electrónico",
+					"excerpt": "Ingeniero senior",
 					"content": [
 						{
 							"_type": "block",
@@ -15093,7 +15093,7 @@
 				"translationOf": "member-ignacio",
 				"data": {
 					"title": "Ignacio Ibaseta",
-					"excerpt": "Infrastructure as code and the data platform",
+					"excerpt": "Senior engineer",
 					"content": [
 						{
 							"_type": "block",
@@ -15121,7 +15121,7 @@
 				"translationOf": "member-daniel",
 				"data": {
 					"title": "Daniel Sío",
-					"excerpt": "E-commerce operations",
+					"excerpt": "Senior engineer",
 					"content": [
 						{
 							"_type": "block",

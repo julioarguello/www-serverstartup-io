@@ -154,17 +154,26 @@ closed for everyone, the owner included. That is why the secret comes first.
    It must print `404`. If it prints `200`, the commit promoted in step 2
    predates #610. Stop and promote a newer one.
 
-2. **Set the secret, one value per environment.** Run these from the
-   repository root, so wrangler finds `wrangler.jsonc`. Each
-   `wrangler secret put` deploys a new version of the worker with the code
-   that is already live.
+2. **Set the secret, one value per environment.** Run this from the
+   repository root, so wrangler finds `wrangler.jsonc`.
+   - **Why the account line:** the laptop's wrangler login reaches more than
+     one Cloudflare account, and `wrangler.jsonc` names none. Without
+     `CLOUDFLARE_ACCOUNT_ID`, `wrangler secret put` stops and asks for one.
+     The ID is already in `.env` as `CF_ACCOUNT_ID`.
+   - **What `secret put` does:** it deploys a new version of the worker, with
+     the code that is already live.
 
    ```bash
-   openssl rand -hex 32          # production value: keep it in the password manager
-   npx wrangler secret put SETUP_GATE_TOKEN --env production   # paste it
-   openssl rand -hex 32          # preview value: a different one
-   npx wrangler secret put SETUP_GATE_TOKEN --env preview      # paste it
+   set -a && . ./.env && set +a
+   export CLOUDFLARE_ACCOUNT_ID="$CF_ACCOUNT_ID"
+
+   TOKEN=$(openssl rand -hex 32) && echo "$TOKEN"   # copy it to the password manager
+   printf '%s' "$TOKEN" | npx wrangler secret put SETUP_GATE_TOKEN --env production
+   npx wrangler secret list --env production        # must list SETUP_GATE_TOKEN
    ```
+
+   For preview, run the same block again with `--env preview`. A new `TOKEN`
+   gives preview a value of its own.
 
 3. **Check whether setup is needed at all.** The answer looks like
    `{"success":true,"data":{"needsSetup":true,…}}`:
@@ -173,12 +182,17 @@ closed for everyone, the owner included. That is why the secret comes first.
    curl -s https://www.serverstartup.dev/_emdash/api/setup/status
    ```
 
-4. **If `needsSetup` is `true`, claim it.** Paste
-   `https://www.serverstartup.dev/_emdash/admin/setup?setup_token=<the production secret>`
-   into the address bar of the browser that will hold the passkey. The worker
-   sets a one-hour cookie and drops the token from the URL. Finish the wizard
-   there. Do the same on `https://preview.serverstartup.dev` with the preview
-   secret.
+4. **If `needsSetup` is `true`, claim it.** In the same shell, print the
+   claim URL:
+
+   ```bash
+   echo "https://www.serverstartup.dev/_emdash/admin/setup?setup_token=$TOKEN"
+   ```
+
+   Paste it into the address bar of the browser that will hold the passkey.
+   The worker sets a one-hour cookie and drops the token from the URL. Finish
+   the wizard there. For preview, use `https://preview.serverstartup.dev` and
+   the preview `TOKEN`.
 
 **Continue when** `status` answers `"needsSetup":false` on both hosts. Since
 #612, the reseed that every preview deploy runs no longer deletes the
@@ -186,8 +200,8 @@ administrator. Production deploys do not reseed unless `seed_d1` is set. So
 this is needed once per database, not once per deploy.
 
 **Rollback**: if the wrong browser or passkey claimed the CMS, delete the
-administrator and the setup flag. Passkeys go with the user. Then repeat
-step 4:
+administrator and the setup flag, in a shell that has step 2's account line.
+Passkeys go with the user. Then repeat step 4:
 
 ```bash
 npx wrangler d1 execute www-serverstartup-io --env production --remote \

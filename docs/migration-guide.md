@@ -124,9 +124,11 @@ wrangler r2 bucket create www-serverstartup-io
 npx emdash auth secret
 wrangler secret put EMDASH_AUTH_SECRET
 
-# 4. Secreto que abre el setup wizard (#610), uno por entorno
-openssl rand -hex 32
-wrangler secret put SETUP_GATE_TOKEN
+# 4. Secreto que abre el setup wizard (#610), uno por entorno. La sesión de
+#    wrangler alcanza varias cuentas: sin CLOUDFLARE_ACCOUNT_ID pregunta cuál.
+set -a && . ./.env && set +a && export CLOUDFLARE_ACCOUNT_ID="$CF_ACCOUNT_ID"
+TOKEN=$(openssl rand -hex 32) && echo "$TOKEN"   # guárdalo
+printf '%s' "$TOKEN" | npx wrangler secret put SETUP_GATE_TOKEN --env production
 
 # 5. Desplegar
 npm run deploy

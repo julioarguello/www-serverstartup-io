@@ -10,7 +10,8 @@
 
 ## Not verified
 
-<!-- Gates that were skipped, and why. Anything changed but not exercised.
+<!-- The list the Process checklist's last box asks for — write it here, once.
+     Gates that were skipped, and why. Anything changed but not exercised.
      A reviewer with nothing here assumes everything was checked. -->
 
 ---

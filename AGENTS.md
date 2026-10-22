@@ -44,14 +44,14 @@ local command, target, in the order CI runs them. Run them before opening a PR
 One convention worth knowing before you add anything to `scripts/`:
 
 > **A check that finds no problems and a check that _cannot_ find problems
-> print the same green line.** Every gate here plants the exact defect it
+> print the same green line.** Every guard in `scripts/ci-check-*` plants the exact defect it
 > hunts, in a fixture it owns, and refuses to report anything if it no longer
 > finds it. Fixtures live in temporary directories and in-memory strings —
 > never in the repository tree, because a canary in the tree trips the guard it
 > exists to prove.
 >
 > A blind guard exits **3**, distinct from exit 1 meaning *it found something*.
-> Every gate here does. They are opposite problems — one says you broke a rule, the
+> Every one of them does. They are opposite problems — one says you broke a rule, the
 > other says the rule can no longer be checked — and a run that confuses them
 > sends the next person hunting for a violation that is not there.
 

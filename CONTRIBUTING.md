@@ -155,7 +155,9 @@ reproducible with the scripts in [`scripts/`](scripts/):
 
 The order is the order CI runs them in. **`Secrets` is the one gate with no local
 command** — it is a GitHub Action over the full history, so it cannot be reproduced
-from a working tree; everything else runs here first.
+from a working tree; everything else runs here first. The browser gates use the
+Chrome that `npm ci` installs, except **Engines**, which needs WebKit too:
+`npx playwright install --with-deps webkit chromium-headless-shell`, as CI does.
 
 | Gate | Local command | Target |
 | :--- | :--- | :--- |

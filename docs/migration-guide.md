@@ -51,13 +51,14 @@ Astro pages (SSR en cada request)
 - El dev server usa el **emulador D1 de Wrangler** (en `.wrangler/state/`)
 - Los datos son **efímeros** — si borras `.wrangler/state/`, se pierden
 - Al arrancar por primera vez, aparece el **setup wizard** en `/_emdash/admin`
+- Desde #610 las rutas del wizard responden **404** salvo que el worker tenga `SETUP_GATE_TOKEN`: en local, ponlo en `.dev.vars` (ignorado por git) y abre `/_emdash/admin/setup?setup_token=<valor>`. Para trabajar sin crear administrador, `POST /_emdash/api/auth/dev-bypass` sigue disponible en desarrollo
 - En el wizard: selecciona **"Apply seed with content"** para cargar el contenido del `seed.json`
 - Todo el contenido real está definido en `seed/seed.json` (versionado en Git)
 
 ### Producción (Cloudflare)
 - D1 real + R2 real → datos **persistentes**
 - El contenido se importa una sola vez via:
-  1. Setup wizard al desplegar por primera vez
+  1. Setup wizard al desplegar por primera vez (con el secreto `SETUP_GATE_TOKEN`; ver `docs/production-cutover.md` §2)
   2. O vía CLI: `npx emdash content create ...`
 - Los cambios de contenido se hacen desde `/_emdash/admin`
 

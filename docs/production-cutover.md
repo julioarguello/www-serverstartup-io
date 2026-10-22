@@ -129,6 +129,36 @@ worse outage than the WordPress site it replaced.
 **Rollback**: none required. Nothing public has changed; the old site is still
 serving `www.serverstartup.io`. A bad deploy can simply be re-run.
 
+### Then: claim the CMS administrator (#610)
+
+A database with no administrator registers the first passkey that completes
+the EmDash setup wizard as the owner of the CMS. The worker keeps the setup
+routes closed (404) unless the request proves knowledge of the environment's
+`SETUP_GATE_TOKEN` secret, and with no secret set they stay closed for
+everyone, the owner included. So the secret comes first, on every environment
+that may ever be reset:
+
+```bash
+openssl rand -hex 32          # keep it in the password manager
+npx wrangler secret put SETUP_GATE_TOKEN --env production   # paste it
+npx wrangler secret put SETUP_GATE_TOKEN --env preview      # its own value
+```
+
+Then check whether setup is needed at all:
+
+```bash
+curl -s https://www.serverstartup.dev/_emdash/api/setup/status
+```
+
+If it answers `"needsSetup":true`, open
+`https://www.serverstartup.dev/_emdash/admin/setup?setup_token=<the secret>` in
+the browser that will hold the passkey. The worker sets a one-hour cookie and
+drops the token from the URL; finish the wizard there.
+
+**Continue when** `status` answers `"needsSetup":false`. A reseed no longer
+deletes the administrator (#612), so this is needed once per database, not once
+per deploy.
+
 ---
 
 ## 3. Attach the custom domains

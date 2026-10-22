@@ -1350,3 +1350,16 @@ PR → quality-gates green → merge to main
 - Use environment variables or config files for secrets
 - See `docs/security/mcp-token-exposure.md`
 
+- **The CMS setup wizard is closed by the worker** (#610). While a database
+  has no administrator, EmDash registers the first passkey that completes
+  `/_emdash/admin/setup` as the owner, and it has no setup token of its own.
+  `src/utils/setup-gate.ts`, wired at the top of `src/middleware.ts`, answers
+  404 on the wizard page and on every `/_emdash/api/setup*` route unless the
+  request carries the cookie granted by
+  `/_emdash/admin/setup?setup_token=<SETUP_GATE_TOKEN>`. That is a
+  per-environment Worker secret, and with none set the routes stay closed.
+  `/_emdash/api/setup/status` stays open, because the admin reads it to choose
+  between login and setup. Cloudflare Access (#226) is the native layer and
+  stays the long-term answer; the account holding the workers has no Zero
+  Trust today. Procedure: `docs/production-cutover.md` §2, "claim the CMS
+  administrator".

@@ -1,6 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 import { getEmDashCollection } from "emdash";
 import { loadAriaLabels, type TFunction } from "./i18n/ui";
+import { isSetupPath, setupGate } from "./utils/setup-gate";
 
 /**
  * Request-scoped i18n middleware.
@@ -81,7 +82,28 @@ function applyHeaders(response: Response, patch: [string, string][]): Response {
 	}
 }
 
-export const onRequest = defineMiddleware(async ({ locals, currentLocale, url, cache }, next) => {
+export const onRequest = defineMiddleware(async ({ locals, currentLocale, url, cache, request }, next) => {
+	// #610: nobody completes the CMS setup wizard without this environment's
+	// SETUP_GATE_TOKEN. Imported here, not at the top: the module exists only
+	// on the Workers runtime, and only setup paths ever reach this line.
+	if (isSetupPath(url.pathname)) {
+		const { env } = await import("cloudflare:workers");
+		const verdict = await setupGate({
+			url,
+			cookieHeader: request.headers.get("cookie"),
+			secret: env.SETUP_GATE_TOKEN,
+		});
+		if (verdict.kind === "deny") {
+			return new Response("Not found", { status: 404, headers: { "Cache-Control": "no-store" } });
+		}
+		if (verdict.kind === "grant") {
+			return new Response(null, {
+				status: 302,
+				headers: { Location: verdict.location, "Set-Cookie": verdict.cookie, "Cache-Control": "no-store" },
+			});
+		}
+	}
+
 	const locale = currentLocale || "es";
 	const t = await loadAriaLabels(locale);
 	locals.t = t;

@@ -21,10 +21,10 @@ El equipo justo: cada ingeniero aporta, sin relleno. Llevan años trabajando jun
 Pocos clientes a la vez, por elección. Máxima implicación, y ningún junior aprendiendo con tu presupuesto.
 Trabajamos junto a tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de dbt que cierra las ventas del día. Ese es nuestro sitio.
 Daniel Sío
-Operación de comercio electrónico
+Ingeniero senior
 El alma de cada proyecto. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo. Buen amigo antes que buen ingeniero. Y muy buen ingeniero.
 Ignacio Ibaseta
-Infraestructura como código y plataforma de datos
+Ingeniero senior
 El Pepito Grillo de cada proyecto. Te avisa de cada curva antes de tomarla y por eso llega siempre el primero. Incansable. Mecánica fina, cero averías y muchos kilómetros juntos.
 Julio Argüello
 Fundador · integración y arquitectura

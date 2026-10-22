@@ -140,6 +140,23 @@ else
 	echo "  FAIL /pages/<unknown> — HTTP $code (expected 404)" >&2; FAIL=1
 fi
 
+# #610: the routes that can create the first CMS administrator are closed to a
+# request without the gate cookie — on the deployed worker, which is the only
+# place the middleware wiring and the Workers env meet. status stays open: it
+# is the control, proving the 404s come from the gate and not a dead /_emdash.
+echo "── CMS setup gate"
+for spec in "POST /_emdash/api/setup 404" "POST /_emdash/api/setup/admin 404" \
+	"GET /_emdash/admin/setup 404" "GET /_emdash/api/auth/oauth/github 404" \
+	"GET /_emdash/api/setup/status 200"; do
+	read -r method path want <<<"$spec"
+	code=$(curl -s -o /dev/null -w "%{http_code}" -X "$method" "$BASE$path")
+	if [ "$code" = "$want" ]; then
+		echo "  ok   $method $path → $code"
+	else
+		echo "  FAIL $method $path — HTTP $code (expected $want)" >&2; FAIL=1
+	fi
+done
+
 # ── 2. Security headers + security.txt (the #164 suite) ─────────────────────
 echo "── security headers"
 "$(dirname "$0")/ci-check-headers.sh" "$BASE" || FAIL=1

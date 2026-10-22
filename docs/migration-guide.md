@@ -51,13 +51,14 @@ Astro pages (SSR en cada request)
 - El dev server usa el **emulador D1 de Wrangler** (en `.wrangler/state/`)
 - Los datos son **efímeros** — si borras `.wrangler/state/`, se pierden
 - Al arrancar por primera vez, aparece el **setup wizard** en `/_emdash/admin`
+- Las rutas del wizard responden **404** salvo que la petición presente el secreto del entorno, `SETUP_GATE_TOKEN` (#610). En local: ponlo en `.dev.vars` (ignorado por git), reinicia el servidor y abre `/_emdash/admin/setup?setup_token=<valor>`. `auth/dev-bypass` crea un administrador de desarrollo para sesiones de API por script, pero no completa el alta: el panel de una base nueva sigue necesitando el token
 - En el wizard: selecciona **"Apply seed with content"** para cargar el contenido del `seed.json`
 - Todo el contenido real está definido en `seed/seed.json` (versionado en Git)
 
 ### Producción (Cloudflare)
 - D1 real + R2 real → datos **persistentes**
 - El contenido se importa una sola vez via:
-  1. Setup wizard al desplegar por primera vez
+  1. Setup wizard al desplegar por primera vez, con el secreto `SETUP_GATE_TOKEN` (ver [Then: claim the CMS administrator](production-cutover.md#then-claim-the-cms-administrator-610))
   2. O vía CLI: `npx emdash content create ...`
 - Los cambios de contenido se hacen desde `/_emdash/admin`
 
@@ -84,8 +85,9 @@ rm -rf .wrangler/state
 # 2. Arrancar dev server (creará DB nueva)
 npx emdash dev
 
-# 3. Abrir el setup wizard en el navegador
-# → http://localhost:4321/_emdash/admin
+# 3. Abrir el setup wizard en el navegador (#610: antes, en .dev.vars,
+#    SETUP_GATE_TOKEN=<valor>; sin él, el wizard responde 404)
+# → http://localhost:4321/_emdash/admin/setup?setup_token=<valor>
 # → Seleccionar "Apply seed with content" 
 # → Crear cuenta admin con passkey
 
@@ -122,11 +124,16 @@ wrangler r2 bucket create www-serverstartup-io
 npx emdash auth secret
 wrangler secret put EMDASH_AUTH_SECRET
 
-# 4. Desplegar
+# 4. Secreto que abre el setup wizard (#610), uno por entorno
+openssl rand -hex 32
+wrangler secret put SETUP_GATE_TOKEN
+
+# 5. Desplegar
 npm run deploy
 
-# 5. Completar setup wizard en producción
-# → https://www.serverstartup.io/_emdash/admin
+# 6. Completar setup wizard en producción
+# → https://www.serverstartup.io/_emdash/admin/setup?setup_token=<valor>
+#   (procedimiento completo: production-cutover.md, "Then: claim the CMS administrator")
 ```
 
 ## Comandos útiles

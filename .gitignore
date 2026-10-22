@@ -9,6 +9,8 @@ data.db-wal
 .env
 .wrangler
 .stream.env
+# wrangler dev reads Worker secrets from here (SETUP_GATE_TOKEN, #610)
+.dev.vars*
 .venv
 .vscode
 .DS_Store

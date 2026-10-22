@@ -129,6 +129,74 @@ worse outage than the WordPress site it replaced.
 **Rollback**: none required. Nothing public has changed; the old site is still
 serving `www.serverstartup.io`. A bad deploy can simply be re-run.
 
+### Then: claim the CMS administrator (#610)
+
+EmDash, the CMS behind `/_emdash/admin`, has no administrator on a new or
+reset database. Until one exists, it hands the whole CMS to the first caller
+who finishes setup, through either of two paths:
+
+- **The setup wizard.** It registers a passkey: a login credential stored on
+  the device, used instead of a password.
+- **An OAuth login.** The site configures no OAuth provider, but if one were
+  added, this path would be open too.
+
+The worker closes both paths with a 404 unless the request proves it knows
+the environment's `SETUP_GATE_TOKEN` secret. With no secret set, they stay
+closed for everyone, the owner included. That is why the secret comes first.
+
+1. **Confirm the deployed worker carries the gate.** Production is promoted by
+   hand and can run an older commit:
+
+   ```bash
+   curl -s -o /dev/null -w '%{http_code}\n' https://www.serverstartup.dev/_emdash/admin/setup
+   ```
+
+   It must print `404`. If it prints `200`, the commit promoted in step 2
+   predates #610. Stop and promote a newer one.
+
+2. **Set the secret, one value per environment.** Run these from the
+   repository root, so wrangler finds `wrangler.jsonc`. Each
+   `wrangler secret put` deploys a new version of the worker with the code
+   that is already live.
+
+   ```bash
+   openssl rand -hex 32          # production value: keep it in the password manager
+   npx wrangler secret put SETUP_GATE_TOKEN --env production   # paste it
+   openssl rand -hex 32          # preview value: a different one
+   npx wrangler secret put SETUP_GATE_TOKEN --env preview      # paste it
+   ```
+
+3. **Check whether setup is needed at all.** The answer looks like
+   `{"success":true,"data":{"needsSetup":true,…}}`:
+
+   ```bash
+   curl -s https://www.serverstartup.dev/_emdash/api/setup/status
+   ```
+
+4. **If `needsSetup` is `true`, claim it.** Paste
+   `https://www.serverstartup.dev/_emdash/admin/setup?setup_token=<the production secret>`
+   into the address bar of the browser that will hold the passkey. The worker
+   sets a one-hour cookie and drops the token from the URL. Finish the wizard
+   there. Do the same on `https://preview.serverstartup.dev` with the preview
+   secret.
+
+**Continue when** `status` answers `"needsSetup":false` on both hosts. Since
+#612, the reseed that every preview deploy runs no longer deletes the
+administrator. Production deploys do not reseed unless `seed_d1` is set. So
+this is needed once per database, not once per deploy.
+
+**Rollback**: if the wrong browser or passkey claimed the CMS, delete the
+administrator and the setup flag. Passkeys go with the user. Then repeat
+step 4:
+
+```bash
+npx wrangler d1 execute www-serverstartup-io --env production --remote \
+  --command "DELETE FROM users; DELETE FROM options WHERE name = 'emdash:setup_complete';"
+```
+
+To close the wizard again without claiming it, run
+`npx wrangler secret delete SETUP_GATE_TOKEN --env production`.
+
 ---
 
 ## 3. Attach the custom domains

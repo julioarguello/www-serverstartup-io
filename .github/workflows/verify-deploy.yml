@@ -26,6 +26,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The route list this judges must be the deployed commit's. Called from
+          # deploy-preview, the github context is the caller's workflow_run, whose
+          # default ref is main's newest commit, not the one that was built (#620).
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Smoke battery (routes, headers, discovery, Nu)
         run: scripts/verify-deploy.sh "${{ inputs.base_url }}"

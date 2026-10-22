@@ -12,15 +12,12 @@
 		"preview": "astro preview",
 		"deploy": "astro build && wrangler deploy",
 		"typecheck": "astro check",
-		"bootstrap": "emdash init && emdash seed",
-		"seed": "emdash seed",
 		"test": "vitest run"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^14.2.3",
 		"@astrojs/react": "^6.0.4",
 		"@emdash-cms/cloudflare": "^0.34.0",
-		"@emdash-cms/plugin-forms": "^0.2.5",
 		"@emdash-cms/plugin-webhook-notifier": "^0.2.0",
 		"@tiptap/extension-collaboration": "^3.22.4",
 		"@tiptap/y-tiptap": "^3.0.3",

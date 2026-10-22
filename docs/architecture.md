@@ -14,7 +14,7 @@
 | **Hosting** | Cloudflare Workers | SSR runtime |
 | **Fonts** | Alexandria, JetBrains Mono — Google Fonts files kept in `src/assets/fonts/` | Astro local font provider; the build fetches nothing (#629) |
 | **Sitemap** | `@astrojs/sitemap` | Automatic sitemap generation |
-| **Plugins** | `@emdash-cms/plugin-forms`, `plugin-webhook-notifier` | Form handling, notifications |
+| **Plugins** | `cache-purge` (in-repo, #357), `plugin-webhook-notifier` (sandboxed) | Purge-on-publish, notifications. No forms plugin and no marketplace (#626): nothing used them, and the marketplace let any admin install third-party code |
 
 ## 2. Content Architecture
 

@@ -7,28 +7,39 @@ site, writing plugins, driving the CLI. Useful, and **not ours**.
 
 | | |
 | :--- | :--- |
-| Source | The EmDash starter skeleton this project was created from |
-| Imported | **2026-04-21**, commit `c8f0df1` — authored by `cloudflare[bot]`, subject *"source repo import"* |
-| EmDash at import | **0.6.0** (`package.json` at that commit) |
-| Modified since | **No.** Two commits only: the import and the #325 move. `git log` does not follow renames across a directory, so check one file — `git log --follow -- vendor/emdash-skills/emdash-cli/SKILL.md` |
+| Source | [emdash-cms/emdash](https://github.com/emdash-cms/emdash) `skills/` — `building-emdash-site`, `creating-plugins`, `emdash-cli` |
+| Version | tag **`emdash@0.34.0`**, commit `4c3edad` — the version `package.json` installs (#616) |
+| First import | 2026-04-21, commit `c8f0df1` by `cloudflare[bot]`: the `blog-cloudflare` template's `.agents/skills` at 0.6.0, moved here in `7980f6a` (#391) |
+| Modified here | **No.** Every file is byte-identical to the tag; only this README is ours |
 
-## Read it with the version gap in mind
+Reproduce or verify — the blob hashes must match the tag's tree:
 
-This project runs **EmDash 0.34.0**. These files were written for **0.6.0** and
-have not been revised in the twenty-eight minor versions since. Where they
-describe a CLI flag, a hook signature or a config key, check it against the
-installed package before believing it — `node_modules/emdash/` is the authority,
-not this directory.
+```bash
+gh api "repos/emdash-cms/emdash/git/trees/emdash@0.34.0:skills?recursive=1" \
+  --jq '.tree[] | select(.type=="blob") | "\(.sha) \(.path)"' \
+  | grep -E ' (building-emdash-site|creating-plugins|emdash-cli)/'
+```
 
-One consequence of the move: `building-emdash-site/SKILL.md` sends you to the
-plugin skill "in `.agents/skills/creating-plugins/`", a path that no longer
-exists. It is `vendor/emdash-skills/creating-plugins/`, one directory over. The
-file is a snapshot and is not edited to say so — that is what this paragraph is
-for.
+## Keep it at the installed version
 
-Where they explain a *concept* — how Portable Text blocks are shaped, how
-plugins hook into the admin UI, how the seed corpus relates to collections —
-they have aged much better, and that is what they are kept for.
+Refresh this directory **in the same PR that changes the `emdash` version**,
+from the same tag. From 1.x on, upstream publishes the pack as
+[emdash-cms/skills](https://github.com/emdash-cms/skills), installed with
+`npx skills add emdash-cms/skills`; that tool writes to `.claude/skills` or
+`.agents/skills`, neither of which this repository uses, so copy the three
+directories here instead. 1.x also adds `upgrading-emdash` and two WordPress
+migration skills — add them then, if they apply.
+
+## Two things the 0.34.0 text gets wrong for this project
+
+- It tells you the seed is inlined into the build and applied on the first
+  request, and stops documenting `emdash seed`. The command still exists in the
+  0.34.0 CLI and this project depends on it to seed the local D1 — see
+  `CONTRIBUTING.md`. (1.x documents it again.)
+- `building-emdash-site/SKILL.md` sends you to the plugin skill "in
+  `.agents/skills/creating-plugins/`". Here it is
+  `vendor/emdash-skills/creating-plugins/`. The file is upstream's and is not
+  edited to say so — that is what this paragraph is for.
 
 ## Why it is not called `.agents`
 

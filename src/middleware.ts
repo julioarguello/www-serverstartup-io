@@ -1,7 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 import { getEmDashCollection } from "emdash";
 import { loadAriaLabels, type TFunction } from "./i18n/ui";
-import { isSetupPath, setupGate } from "./utils/setup-gate";
+import { isGatedPath, setupGate } from "./utils/setup-gate";
 
 /**
  * Request-scoped i18n middleware.
@@ -83,10 +83,10 @@ function applyHeaders(response: Response, patch: [string, string][]): Response {
 }
 
 export const onRequest = defineMiddleware(async ({ locals, currentLocale, url, cache, request }, next) => {
-	// #610: nobody completes the CMS setup wizard without this environment's
+	// #610: nobody becomes the first CMS administrator without this environment's
 	// SETUP_GATE_TOKEN. Imported here, not at the top: the module exists only
-	// on the Workers runtime, and only setup paths ever reach this line.
-	if (isSetupPath(url.pathname)) {
+	// on the Workers runtime, and only gated paths ever reach this line.
+	if (isGatedPath(url.pathname)) {
 		const { env } = await import("cloudflare:workers");
 		const verdict = await setupGate({
 			url,

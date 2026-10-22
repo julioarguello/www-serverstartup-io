@@ -1333,7 +1333,11 @@ PR → quality-gates green → merge to main
   decodes to 29 ToUnicode CMap entries and no recoverable word. The archive
   itself then left the tree (#324): nothing built, tested or deployed read it.
   The Stream registry, the one page still consulted, moved to
-  `docs/reference/`; every other file is in history at `9ea73d1`.
+  `docs/reference/`; every other file is in history at `9ea73d1`. **History
+  is not rewritten** (founder, 2026-10-22). The archive's blobs stay reachable
+  in the public mirror's history. Removing them would take a forced mirror sync
+  (`mirror.yml` is unforced by design) and a rebase of every open branch and
+  worktree, which is not worth it for files that were already public.
 - **Menu check** (`copy-baseline.mjs`, #384): the frozen-copy baselines read
   `document.body.innerText`, which is the *rendered* text, and the menu lives
   in a `<dialog>` closed at rest — so the baseline of all 26 routes is

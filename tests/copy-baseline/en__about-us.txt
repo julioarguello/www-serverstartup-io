@@ -11,7 +11,7 @@ Founded in 2019, Server Startup owes its name to the hybris (now SAP Commerce) t
 Server for backend specialization. We like the guts and the complex logic.
 And Startup as philosophy: technology changes every year, and we change with it. We are no longer a startup, of course (then again, the Pont Neuf, New York City and the Camp Nou were not exactly built yesterday...) but we keep the nerve and excitement of day one.
 THE ROAD
-The project started as freelance work in 2017. In January 2019 it became a company, from Getxo. Today it is held up by senior engineers, each with twenty-plus years in production.
+The project started as freelance work in 2017. In January 2019 it became a company, from Getxo. Today the work is done by senior engineers, each with twenty-plus years in production.
 That same 2019 we became an official Cloudflare partner. By 2022 the house motto was “+ Calidad − Cantidad”: more judgment, less volume. Both still stand.
 THE CUBE
 The cube comes from the grid of Ocado's robotic warehouse: robots on a grid where every order has to come out exact. Integrating with that platform was our step up, after years building complex e-commerce.

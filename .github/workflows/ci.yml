@@ -467,8 +467,38 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
 
+      # The browsers come from the cache above; WebKit's system libraries come
+      # from apt, which no cache restores. Twice in 30 runs apt stalled after
+      # "Reading package lists..." and the job sat until its 20-minute timeout
+      # (#631). So the apt half is bounded three ways: apt's own network
+      # timeouts; `timeout` run AS ROOT — the apt-get Playwright spawns is
+      # root, and an unprivileged `timeout` cannot signal it (measured in
+      # ubuntu:24.04: the stalled apt-get outlived the kill holding the dpkg
+      # lock, and the retry failed on that lock in under a second); and before
+      # the one retry, any surviving apt-get is killed and dpkg recovered.
       - name: Install WebKit and Chromium for Playwright  # not-a-gate: browser and system-library install, not a check
-        run: npx playwright install --with-deps webkit chromium-headless-shell
+        timeout-minutes: 10
+        env:
+          PW_BROWSERS: webkit chromium-headless-shell
+          APT_LIMIT: 240
+        run: |
+          # shellcheck disable=SC2086  # PW_BROWSERS is a word list on purpose
+          npx playwright install $PW_BROWSERS
+          printf 'Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "3";\n' \
+            | sudo tee /etc/apt/apt.conf.d/99-ci-bounded >/dev/null
+          for attempt in 1 2; do
+            rc=0
+            # shellcheck disable=SC2086
+            sudo env "PATH=$PATH" timeout -k 15 "$APT_LIMIT" npx playwright install-deps $PW_BROWSERS || rc=$?
+            [ "$rc" = 0 ] && exit 0
+            case "$rc" in
+              124|137) echo "::warning::system libraries, attempt $attempt: no answer within ${APT_LIMIT}s" ;;
+              *) echo "::warning::system libraries, attempt $attempt: exit $rc" ;;
+            esac
+            sudo pkill -KILL -x apt-get || true
+            sudo dpkg --configure -a || true
+          done
+          exit 1
 
       - name: Build
         run: npx astro build
@@ -491,6 +521,11 @@ jobs:
     if: needs.scope.outputs.site == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # Scoped and pinned — the bare `lhci` on npm is a placeholder that exits 0
+      # having measured nothing (#305). Declared once: the cache key below and
+      # both commands read it, so a bump cannot leave one of them behind.
+      LHCI: "@lhci/cli@0.15.1"
     strategy:
       # One URL going red must not cancel the measurement of the other four:
       # the useful output of this job is WHICH page regressed.
@@ -552,6 +587,16 @@ jobs:
       - name: Boot seeded local stack
         run: scripts/ci-local-stack.sh 8787
 
+      # Every shard used to install the CLI from the registry before measuring
+      # (~10 s, a fresh install's deprecation warnings in the log): setup-node's
+      # npm cache is saved by whichever job misses first, never a perf shard.
+      # npx keeps what it installs under ~/.npm/_npx, keyed by the spec (#631).
+      - name: Restore the Lighthouse CI CLI  # not-a-gate: a cache lookup, not a check
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm/_npx
+          key: lhci-${{ runner.os }}-${{ runner.arch }}-${{ env.LHCI }}
+
       - name: Shard the Lighthouse config to this URL  # not-a-gate: writes a config, asserts nothing
         # The assertions, the run count and the Chrome flags stay in
         # lighthouserc.json — only `collect.url` narrows. A shard that invented
@@ -563,17 +608,16 @@ jobs:
       - name: Lighthouse assertions (perf>=95, a11y/bp/seo=100)
         id: lighthouse
         # The two commands treosh/lighthouse-ci-action@v12 ran inside, against
-        # the @lhci/cli it pinned (^0.15.1), so the measurement is the one it
-        # took: `collect` reads numberOfRuns from the config exactly as the
-        # action did. Scoped and pinned — the bare `lhci` on npm is a
-        # placeholder that exits 0 having measured nothing (#305). No report
+        # the @lhci/cli it pinned (^0.15.1, now `env.LHCI`), so the measurement
+        # is the one it took: `collect` reads numberOfRuns from the config
+        # exactly as the action did. No report
         # upload, as before (#399): the assertions gate the build and name the
         # failing category in the log, and the record that survives is the
         # summary committed under docs/audits/ (#305).
         shell: node scripts/ci-gate.mjs bash -e {0}
         run: |
-          npx -y @lhci/cli@0.15.1 collect --config=lighthouserc.shard.json
-          npx -y @lhci/cli@0.15.1 assert --config=lighthouserc.shard.json
+          npx -y "$LHCI" collect --config=lighthouserc.shard.json
+          npx -y "$LHCI" assert --config=lighthouserc.shard.json
 
       # What a failure that survived the wrapper above was. A null score with
       # CHROME_INTERSTITIAL_ERROR is a dead stack, not a performance finding

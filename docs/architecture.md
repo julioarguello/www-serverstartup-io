@@ -1061,6 +1061,16 @@ because no provider was configured.
 - **Build**: `npm run build` → `dist/`
 - **Dev**: `npx emdash dev` (runs migrations, seeds, generates types)
 - **Admin**: `http://localhost:4321/_emdash/admin`
+- **Worker entry** (`src/worker.ts`, #623): EmDash's own Cloudflare entry, the
+  Astro handler plus a `scheduled()` handler. On Cloudflare, EmDash installs no
+  in-process timer, so without it nothing time-driven runs: scheduled
+  publishing, plugin cron, and the cleanup of expired passkey challenges,
+  tokens and abandoned uploads. `wrangler.jsonc` declares the Cron Triggers
+  once at the top level, and every environment inherits them (checked in
+  `dist/server/wrangler.json` for the default, preview and production builds):
+  `*/2` drives the media-usage lane and `*/5` the general lane. `wrangler dev
+  --test-scheduled` does not reach it, because the adapter's build is
+  `no_bundle`; the proof is a scheduled event in `wrangler tail` on preview.
 
 ### 10.1 D1 Seeding (CRITICAL)
 

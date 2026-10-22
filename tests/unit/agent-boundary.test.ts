@@ -15,7 +15,7 @@
  * failure mode the project already documents for worktrees.
  *
  * So the boundary is asserted here rather than trusted. This is a unit test
- * and not a sixteenth CI step on purpose: the step count is quoted in the
+ * and not one more CI step on purpose: the step count is quoted in the
  * public copy on /deconstruyendo, and `npm test` already runs on every PR.
  *
  * Existence is resolved against `git ls-files`, never against the filesystem.
@@ -97,6 +97,28 @@ describe("AGENTS.md is a public guide, not a private index", () => {
 		// reads as guidance.
 		const absent = ["worker/", "Dockerfile", "docker-compose", "application.properties"];
 		expect(absent.filter((needle) => agents.includes(needle))).toEqual([]);
+	});
+});
+
+/**
+ * Claude Code reads `AGENTS.md` only while no `CLAUDE.md` exists in the working
+ * directory or above it (code.claude.com/docs/en/memory, `claude-md-or-agents-md`).
+ * Every maintainer session used to carry an untracked, generated `CLAUDE.md`, so
+ * the guide above never reached Claude here (#618). The tracked one exists only
+ * to import it — anything else in it would be read by Claude alone, and anything
+ * private would be a path no clone has.
+ */
+describe("CLAUDE.md is tracked and hands Claude the same guide", () => {
+	it("is in the index, so no untracked generated file can take its place", () => {
+		expect(trackedPaths().has("CLAUDE.md")).toBe(true);
+	});
+
+	it("imports AGENTS.md and nothing else", () => {
+		const lines = readFileSync(join(ROOT, "CLAUDE.md"), "utf8")
+			.split("\n")
+			.map((l) => l.trim())
+			.filter(Boolean);
+		expect(lines).toEqual(["@AGENTS.md"]);
 	});
 });
 

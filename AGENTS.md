@@ -31,11 +31,11 @@ every page redirects to `/404`.
 
 The seed recipe and the query that tells you which database has the content are
 in [`CONTRIBUTING.md`](CONTRIBUTING.md); the clean rebuild after a schema change
-is in [`docs/architecture.md`](docs/architecture.md) §10.1.
+is `scripts/preview.sh [PORT] reseed`.
 
 ## The quality bar
 
-Fifteen CI steps can fail a PR. All but one run locally too — the exception is
+Every CI gate can fail a PR, and all but one run locally too — the exception is
 the secret scan, a GitHub Action over the full history, which a working tree
 cannot reproduce. [`CONTRIBUTING.md`](CONTRIBUTING.md) has the table: gate,
 local command, target, in the order CI runs them. Run them before opening a PR
@@ -44,14 +44,14 @@ local command, target, in the order CI runs them. Run them before opening a PR
 One convention worth knowing before you add anything to `scripts/`:
 
 > **A check that finds no problems and a check that _cannot_ find problems
-> print the same green line.** Every gate here plants the exact defect it
+> print the same green line.** Every guard in `scripts/ci-check-*` plants the exact defect it
 > hunts, in a fixture it owns, and refuses to report anything if it no longer
 > finds it. Fixtures live in temporary directories and in-memory strings —
 > never in the repository tree, because a canary in the tree trips the guard it
 > exists to prove.
 >
 > A blind guard exits **3**, distinct from exit 1 meaning *it found something*.
-> All seven do. They are opposite problems — one says you broke a rule, the
+> Every one of them does. They are opposite problems — one says you broke a rule, the
 > other says the rule can no longer be checked — and a run that confuses them
 > sends the next person hunting for a violation that is not there.
 
@@ -70,8 +70,9 @@ Slugs are *translated*, not prefixed, so an alternate URL is never derived by
 sticking `/en` in front of a path — that guess 404s. `src/utils/alternate.ts`
 is the single place that resolves them.
 
-**Colour, radius, shadow and width come from `src/styles/theme.css`.** A
-literal anywhere else fails the build. When a component deliberately imitates
+**Colour, radius, shadow, width and spacing come from `src/styles/theme.css`.**
+A literal anywhere else fails the build — a px spacing value that is a rung of
+the `--space-*` scale included. When a component deliberately imitates
 foreign chrome — a cart, a BigQuery console, a GitHub PR — fence it with
 `/* token-guard: off — reason */ … /* token-guard: on */` and say why.
 
@@ -86,7 +87,7 @@ wrongly and made a legitimate edit look like a policy breach.
 
 1. **Machine-readable public copy** — the `/referencias` logos, the `references`
    collection, JSON-LD, anything a crawler reads. Only clients already published
-   on the site, which is the whitelist at `scripts/ci-check-citability.py:62`.
+   on the site, which is the `WHITELIST` in `scripts/ci-check-citability.py`.
    `check_whitelist()` enforces it on every PR.
 2. **The `<canvas>` closers** — the `Hemos montado X para:` lists on the vertical
    pages. These carry names that are **not** publicly citable. They are drawn

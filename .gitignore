@@ -36,3 +36,8 @@ docs/design/hero-rotativo/.cache/
 # from .design-sync/ — both regenerated on every sync. .design-sync/ itself is tracked.
 .ds-sync/
 ds-bundle/
+
+# Local design sources (#324): the figma-audit skill reads a .fig from reference/.
+# The archive that lived there left the public tree; a design file dropped in now
+# stays on the machine that has it.
+/reference/

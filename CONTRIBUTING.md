@@ -52,8 +52,10 @@ D1_DB=$(find .wrangler -name "*.sqlite" -path "*/d1/*" -not -name "metadata.sqli
 npx emdash seed seed/seed.json -d "$D1_DB"
 ```
 
-Clean rebuild after schema changes, and the reasoning behind the recipe:
-[`docs/architecture.md`](docs/architecture.md) §10.1.
+Clean rebuild after schema changes: `scripts/preview.sh [PORT] reseed`. It stops
+the server, wipes `.wrangler` and `data.db`, boots once so EmDash creates the
+database, seeds it, and boots again — the seeder skips entries that already
+exist, so text edits in `seed/seed.json` need this, not a plain reseed.
 
 Two local gotchas worth knowing before they cost you an hour:
 
@@ -162,7 +164,10 @@ from a working tree; everything else runs here first.
 | Types | `npm run typecheck` | 0 errors, 0 warnings |
 | Seed schema | `npx emdash seed seed/seed.json --validate` | valid |
 | CMS text | `python3 scripts/ci-check-cms-text.py` | labels resolve in both locales; 0 hardcoded copy |
-| Design tokens | `python3 scripts/ci-check-design-tokens.py` | colour, radius, shadow and width declared only in `theme.css` |
+| Locale parity | `python3 scripts/ci-check-locale-parity.py` | a field filled in one locale is filled in both |
+| Cited files | `python3 scripts/ci-check-cited-files.py` | every repository file the site cites is tracked |
+| Design tokens | `python3 scripts/ci-check-design-tokens.py` | colour, radius, shadow, width and on-scale spacing declared only in `theme.css` |
+| CSS budget | `python3 scripts/ci-check-css-budget.py` | CSS source within the budget `docs/design-system.md` states, and the figure printed beside it current |
 | Cache hints | `python3 scripts/ci-check-cache-hints.py` | `cache.set()` only where it reaches the headers |
 | Unit tests | `npm test` | every suite in `tests/unit/` |
 | Build | `npm run build` | completes |
@@ -172,7 +177,11 @@ from a working tree; everything else runs here first.
 | Headers | `scripts/ci-check-headers.sh http://localhost:8787` | full suite present |
 | Image URLs | `python3 scripts/ci-check-image-hrefs.py http://localhost:8787` | every `/_image` href is a path — an absolute one cannot work on Workers (#407) — and every transform names a quality, or the binding encodes near-losslessly (#409) |
 | Team copy | `python3 scripts/ci-check-team-copy.py http://localhost:8787` | the site describes the team and never counts it: no numeral before a word for people, no "team of N" / "we are N", in text, attributes (meta, alt, aria-label) or JSON-LD (#575) |
+| `var()` | `node scripts/ci-check-var-resolves.mjs http://localhost:8787` | every `var()` resolves; the template-fed ones carry a fallback |
+| Layout | `node scripts/ci-check-layout.mjs http://localhost:8787` | rows stay equal, ROWs draw no box, no copy printed twice, the footer holds its line and measure |
+| Hero frames | `node scripts/ci-check-hero-frames.mjs http://localhost:8787` | no per-pixel effect re-run per frame; the steady frame under the long-task line |
 | Accessibility | `node scripts/ci-check-a11y.mjs http://localhost:8787` | axe sample, keyboard traversal, focus trap, WCAG 2.1.4, reflow at 320px |
+| Engines | `node scripts/ci-check-engines.mjs http://localhost:8787` | WebKit (iPhone, Desktop Safari) and Chromium (Pixel 7), reduced motion included |
 | Lighthouse | `lighthouserc.json` assertions | perf ≥ 95; a11y, BP, SEO = 100 |
 
 Not a PR gate, but the same family:

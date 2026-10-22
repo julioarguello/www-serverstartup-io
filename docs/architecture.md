@@ -1228,10 +1228,11 @@ PR → quality-gates green → merge to main
   is private, tracked where the other is excluded, and referenced by nothing.
   It is now `vendor/emdash-skills/`, beside the other external code, with a
   README recording where it came from. It arrived as the 0.6.0 template's
-  copy and sat there for twenty-eight minor versions, still naming plugin
-  capabilities (`read:content`) the runtime no longer accepts. Since #616 it
-  is upstream's `skills/` at the tag of the installed version, and it moves
-  in the same PR as any `emdash` version change.
+  copy and sat there for twenty-eight minor versions, still teaching plugin
+  capability names (`read:content`) that 0.34 accepts only as deprecated
+  aliases and that publishing rejects. Since #616 it is upstream's `skills/`
+  at the tag of the installed version, and a unit test
+  (`vendor-emdash-skills.test.ts`) fails when the two drift apart.
 - **A stack that dies mid-run says so** (`scripts/lib/stack-probe.mjs`, #390).
   A `wrangler dev` session died in the middle of a gate run on 2026-08-25. Every
   guard reported honestly what it saw — a navigation timeout on one route, then

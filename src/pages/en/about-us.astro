@@ -27,11 +27,13 @@ Astro.cache.set(cacheHint);
 
 const { title, content, excerpt } = entry.data;
 
-const { entries: members } = await getEmDashCollection("members", {
+const { entries: members, cacheHint: membersHint } = await getEmDashCollection("members", {
 	limit: 50,
 	orderBy: { title: "asc" },
 	locale,
 });
+// The team cards render members, so a member save must purge this page too (#625).
+Astro.cache.set(membersHint);
 
 
 // Split content on h2 boundaries: hero (before 1st h2), history (1st h2 + its

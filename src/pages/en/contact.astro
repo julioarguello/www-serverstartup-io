@@ -29,11 +29,13 @@ const settings = await getSiteSettings() as SiteSettings;
 
 // Team faces come from the members collection (owned by the About page work,
 // #263) — photo when uploaded, initial-letter placeholder meanwhile.
-const { entries: members } = await getEmDashCollection("members", {
+const { entries: members, cacheHint: membersHint } = await getEmDashCollection("members", {
 	limit: 50,
 	orderBy: { title: "asc" },
 	locale,
 });
+// The team cards render members, so a member save must purge this page too (#625).
+Astro.cache.set(membersHint);
 
 // Content convention: the LAST block is the identity colophon rendered under
 // the contact methods ("Server Startup S.L. · …"); everything before it is

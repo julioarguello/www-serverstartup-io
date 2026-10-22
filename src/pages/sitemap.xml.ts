@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getEmDashCollection } from "emdash";
+import { getContentSeo, getEmDashCollection, getEmDashEntry } from "emdash";
 
 /**
  * sitemap.xml — every public URL, derived from the CMS (#329).
@@ -77,31 +77,18 @@ import { getEmDashCollection } from "emdash";
  * `noindex` (#335) and are not CMS entries, so they never enter this list;
  * that is by construction rather than by filter, which is the sturdier kind.
  *
- * ── A route collision, deliberately kept ────────────────────────────────
+ * ── EmDash's own sitemaps ───────────────────────────────────────────────
  *
- * EmDash injects its own `/sitemap.xml`, so Astro warns that the route is
- * defined twice and that "a collision will result in a hard error in following
- * versions". The project's own page wins today, and that is what we want,
- * because the built-in one is generic and wrong for this site's routing —
- * measured, not assumed:
- *
- *   /services/artificial-intelligence   ← the site serves /en/artificial-intelligence
- *   /services/inteligencia-artificial   ← the site serves /inteligencia-artificial
- *
- * It builds from each collection's `url_pattern`, prefixes the collection
- * name, ignores locale entirely, and declared only `services` — no `pages`, so
- * no home, no Quiénes somos, no legal notice. Twelve URLs, all 404.
- *
- * There is no option to switch it off. So instead of leaning on undocumented
- * precedence, the smoke battery asserts the OUTCOME: `/sitemap.xml` must be a
- * `<urlset>` (ours) and not a `<sitemapindex>` (theirs). If Astro ever flips
- * precedence, or turns the warning into the promised hard error, a guard says
- * so instead of a crawler discovering it months later.
- *
- * EmDash's `/sitemap-services.xml` child still answers, with those same wrong
- * URLs. Nothing links to it and nothing declares it, so it is unreachable by
- * anything but a guess — noted here so the next person does not rediscover it
- * as a mystery.
+ * EmDash 0.34 injects `/sitemap.xml` only when the site has no
+ * `src/pages/sitemap.xml.*` (`hasUserDefinedPublicRoute` in its
+ * `integration/routes.ts`), so this file replaces it outright: there is no
+ * route collision. Its per-collection child, `/sitemap-services.xml`, is
+ * still injected. It builds each URL from the collection's `urlPattern`,
+ * localized to Astro's i18n config. Until #624 services had no pattern, so the
+ * child listed `/services/<slug>`, twelve 404s. With `/{slug}` it lists the
+ * same service URLs as this file. Nothing declares it; robots.txt points here.
+ * The smoke battery still asserts that `/sitemap.xml` is a `<urlset>` (ours),
+ * so a change in that precedence is caught by a guard, not by a crawler.
  *
  * ── Limits ───────────────────────────────────────────────────────────────
  *
@@ -163,6 +150,14 @@ export const GET: APIRoute = async ({ site, url }) => {
 			const { entries } = await getEmDashCollection(collection, { locale });
 			for (const entry of (entries ?? []) as unknown as Entry[]) {
 				const slug = entry.slug ?? entry.id;
+				// #624: an entry the editor marked noindex in the SEO panel stays out,
+				// or verify-deploy's "every <loc> is indexable" check fails on it.
+				// List rows carry no `seo`, so services, the one collection with a
+				// panel, are read one by one: about a dozen reads, cached at the edge.
+				if (collection === "services") {
+					const { entry: full } = await getEmDashEntry(collection, slug, { locale });
+					if (full && getContentSeo(full)?.noIndex) continue;
+				}
 				urls.push({
 					loc: origin + entryPath(collection, slug, locale),
 					lastmod: lastModOf(entry),

@@ -4,7 +4,7 @@ EN
 Ingeniería de software,
 de la arquitectura a producción
 Más de veinte años en comercio electrónico, integración de sistemas y datos.
-Partners oficiales de Cloudflare desde 2019.
+Server Startup es socio oficial de Cloudflare desde 2019.
 CDN, WAF y seguridad edge
 Integración de sistemas
 Inteligencia artificial
@@ -62,7 +62,7 @@ Deconstruyendo esta web
 Referencias
 Contacto
 Escríbenos
-somos partners
+socio oficial de
 © 2026 Server Startup, S.L.
 Aviso legal
 Política de privacidad

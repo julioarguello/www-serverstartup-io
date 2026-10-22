@@ -5,7 +5,7 @@ ES
 Software engineering,
 from architecture to production
 Over twenty years in e-commerce, systems integration and data.
-Official Cloudflare partners since 2019.
+Server Startup has been an official Cloudflare partner since 2019.
 CDN, WAF & Edge Security
 Systems Integration
 Artificial Intelligence
@@ -63,7 +63,7 @@ Deconstructing this website
 References
 Contact
 Email us
-we are partners
+official partner of
 © 2026 Server Startup, S.L.
 Legal notice
 Privacy policy

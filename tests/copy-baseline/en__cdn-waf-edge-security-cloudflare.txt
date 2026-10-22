@@ -9,11 +9,11 @@ ACCESS
 ZERO TRUST
 35 nm · nominal range
 CDN, WAF & Edge Security
-Official Cloudflare partners since 2019. We audit, migrate and run CDN, WAF and edge security, mostly for e-commerce.
+Server Startup has been an official Cloudflare partner since 2019. We audit, migrate and run CDN, WAF and edge security, mostly for e-commerce.
 Audit your edge
 «Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.»
 — Cloudflare
-We've worked with the Cloudflare platform since 2017, two years before becoming an official partner. We audit, migrate and tune Enterprise and Business accounts, mostly for retail and e-commerce.
+We've worked with the Cloudflare platform since 2017, two years before Server Startup became an official partner. We audit, migrate and tune Enterprise and Business accounts, mostly for retail and e-commerce.
 Your Cloudflare is configured. Are you sure it's configured right? In many organizations nobody dares touch the WAF rules. They block something. Nobody remembers what.
 We know why each rule is there, because we wrote them, we version them with Terraform, and we keep them running in production.
 WAF ≠ security
@@ -65,7 +65,7 @@ Deconstructing this website
 References
 Contact
 Email us
-we are partners
+official partner of
 © 2026 Server Startup, S.L.
 Legal notice
 Privacy policy

@@ -2512,7 +2512,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Somos partners"
+									"text": "Socio oficial de"
 								}
 							]
 						},
@@ -5239,7 +5239,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We are partners"
+									"text": "Official partner of"
 								}
 							]
 						},
@@ -6947,7 +6947,7 @@
 				"status": "published",
 				"data": {
 					"title": "CDN, WAF y seguridad edge",
-					"excerpt": "*Partners* oficiales de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en [comercio electrónico](/comercio-electronico).",
+					"excerpt": "Server Startup es socio oficial de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en [comercio electrónico](/comercio-electronico).",
 					"cta_label": "Audita tu edge",
 					"content": [
 						{
@@ -7015,7 +7015,7 @@
 								{
 									"_type": "span",
 									"_key": "k3",
-									"text": " desde 2017, dos años antes de hacernos socios oficiales. Auditamos, migramos y optimizamos cuentas ",
+									"text": " desde 2017, dos años antes de que Server Startup se hiciera socio oficial. Auditamos, migramos y optimizamos cuentas ",
 									"marks": []
 								},
 								{
@@ -10590,7 +10590,7 @@
 				"translationOf": "svc-cdn",
 				"data": {
 					"title": "CDN, WAF & Edge Security",
-					"excerpt": "Official [`Cloudflare`](https://www.cloudflare.com/) partners since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce).",
+					"excerpt": "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce).",
 					"cta_label": "Audit your edge",
 					"content": [
 						{
@@ -10658,7 +10658,7 @@
 								{
 									"_type": "span",
 									"_key": "k3",
-									"text": " platform since 2017, two years before becoming an official partner. We audit, migrate and tune ",
+									"text": " platform since 2017, two years before Server Startup became an official partner. We audit, migrate and tune ",
 									"marks": []
 								},
 								{
@@ -15150,7 +15150,7 @@
 				"status": "published",
 				"data": {
 					"title": "Ingeniería de software, de la arquitectura a producción",
-					"excerpt": "Partners oficiales de Cloudflare desde 2019. Siempre los mismos ingenieros senior: quien diseña tu arquitectura escribe el código. Un equipo. Seis verticales. Dicho y hecho.",
+					"excerpt": "Server Startup, socio oficial de Cloudflare desde 2019. Siempre los mismos ingenieros senior: quien diseña tu arquitectura escribe el código. Un equipo. Seis verticales. Dicho y hecho.",
 					"content": [
 						{
 							"_type": "block",
@@ -15227,7 +15227,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Partners oficiales de "
+									"text": "Server Startup es socio oficial de "
 								},
 								{
 									"_type": "span",
@@ -16275,7 +16275,7 @@
 				"translationOf": "page-home",
 				"data": {
 					"title": "Software engineering, from architecture to production",
-					"excerpt": "Official Cloudflare partners since 2019. Always the same senior engineers: whoever designs your architecture writes the code. One team. Six verticals. Promise kept.",
+					"excerpt": "Server Startup, an official Cloudflare partner since 2019. Always the same senior engineers: whoever designs your architecture writes the code. One team. Six verticals. Promise kept.",
 					"content": [
 						{
 							"_type": "block",
@@ -16352,7 +16352,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Official "
+									"text": "Server Startup has been an official "
 								},
 								{
 									"_type": "span",
@@ -16363,7 +16363,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " partners since 2019."
+									"text": " partner since 2019."
 								}
 							]
 						},

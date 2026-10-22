@@ -1,11 +1,11 @@
 ---
 cta_label: "Audit your edge"
-excerpt: "Official [`Cloudflare`](https://www.cloudflare.com/) partners since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce)."
+excerpt: "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce)."
 ---
 
 > «Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.» [Cloudflare](https://www.cloudflare.com/learning/access-management/castle-and-moat-network-security/)
 
-We've worked with the [`Cloudflare`](https://www.cloudflare.com/) platform since 2017, two years before becoming an official partner. We audit, migrate and tune [Enterprise](https://www.cloudflare.com/plans/enterprise/) and [Business](https://www.cloudflare.com/plans/business/) accounts, mostly for retail and e-commerce.
+We've worked with the [`Cloudflare`](https://www.cloudflare.com/) platform since 2017, two years before Server Startup became an official partner. We audit, migrate and tune [Enterprise](https://www.cloudflare.com/plans/enterprise/) and [Business](https://www.cloudflare.com/plans/business/) accounts, mostly for retail and e-commerce.
 
 Your `Cloudflare` is configured. Are you sure it's configured right? In many organizations nobody dares touch the `WAF` rules. They block something. Nobody remembers what.
 

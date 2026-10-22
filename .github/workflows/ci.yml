@@ -467,19 +467,35 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
 
-      # The browsers come from the cache above; `--with-deps` still runs apt for
-      # WebKit's system libraries, which no cache restores. Twice in 30 runs apt
-      # stalled after "Reading package lists..." and the job sat until its
-      # 20-minute timeout (#631). Bounded instead: a stall fails in minutes and
-      # gets one more try, after dpkg finishes whatever the killed run left open.
+      # The browsers come from the cache above; WebKit's system libraries come
+      # from apt, which no cache restores. Twice in 30 runs apt stalled after
+      # "Reading package lists..." and the job sat until its 20-minute timeout
+      # (#631). So the apt half is bounded three ways: apt's own network
+      # timeouts; `timeout` run AS ROOT — the apt-get Playwright spawns is
+      # root, and an unprivileged `timeout` cannot signal it (measured in
+      # ubuntu:24.04: the stalled apt-get outlived the kill holding the dpkg
+      # lock, and the retry failed on that lock in under a second); and before
+      # the one retry, any surviving apt-get is killed and dpkg recovered.
       - name: Install WebKit and Chromium for Playwright  # not-a-gate: browser and system-library install, not a check
-        timeout-minutes: 9
+        timeout-minutes: 10
+        env:
+          PW_BROWSERS: webkit chromium-headless-shell
+          APT_LIMIT: 240
         run: |
+          # shellcheck disable=SC2086  # PW_BROWSERS is a word list on purpose
+          npx playwright install $PW_BROWSERS
+          printf 'Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "3";\n' \
+            | sudo tee /etc/apt/apt.conf.d/99-ci-bounded >/dev/null
           for attempt in 1 2; do
-            if timeout -k 15 240 npx playwright install --with-deps webkit chromium-headless-shell; then
-              exit 0
-            fi
-            echo "::warning::playwright install attempt $attempt did not finish within 4 minutes"
+            rc=0
+            # shellcheck disable=SC2086
+            sudo env "PATH=$PATH" timeout -k 15 "$APT_LIMIT" npx playwright install-deps $PW_BROWSERS || rc=$?
+            [ "$rc" = 0 ] && exit 0
+            case "$rc" in
+              124|137) echo "::warning::system libraries, attempt $attempt: no answer within ${APT_LIMIT}s" ;;
+              *) echo "::warning::system libraries, attempt $attempt: exit $rc" ;;
+            esac
+            sudo pkill -KILL -x apt-get || true
             sudo dpkg --configure -a || true
           done
           exit 1

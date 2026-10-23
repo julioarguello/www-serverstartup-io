@@ -36,7 +36,7 @@ SQL="$WORK/seed.sql"
 : > "$SQL"
 # $WORK survives between runs outside CI (/tmp/preview-seed), and a repair
 # from a previous run describes a remote that has since been repaired (#488).
-rm -f "$WORK/repair.sql"
+rm -f "$WORK/repair.sql" "$WORK/remote-mu.txt"
 
 # FK-safe bulk replace. The 0.34 schema carries FOREIGN KEYs between system
 # tables, and this file's DELETE order comes from sqlite_master, not from the
@@ -183,6 +183,22 @@ if [ "$REHEARSAL_ONLY" = "0" ]; then
 		tail -10 "$WORK/remote-schema.err" >&2
 		exit 3
 	fi
+	# EmDash 1.x media-usage capture triggers (#627) are named by a digest of
+	# the collection ID, so the remote's names are not the local ones: read them.
+	if ! npx wrangler d1 execute "$D1_NAME" --remote --json -y --command \
+		"SELECT name FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';" \
+		> "$WORK/remote-mu.json" 2> "$WORK/remote-mu.err"; then
+		echo "ERROR: could not read the remote's media-usage triggers of '$D1_NAME'." >&2
+		tail -10 "$WORK/remote-mu.err" >&2
+		exit 3
+	fi
+	python3 - "$WORK/remote-mu.json" > "$WORK/remote-mu.txt" <<'PYEOF'
+import json, sys
+doc = json.load(open(sys.argv[1]))
+rows = doc[0]["results"] if isinstance(doc, list) else doc["result"][0]["results"]
+for r in rows:
+    print(r["name"])
+PYEOF
 	python3 - "$WORK/remote-schema.json" > "$WORK/remote-schema.sql" <<'PYEOF'
 import json, sys
 doc = json.load(open(sys.argv[1]))
@@ -225,7 +241,7 @@ fi
 # their passkeys and every token with it, and the setup wizard reopened to
 # whoever reached it first (#610). The refresh leaves them as the remote has
 # them; the populated rehearsal below proves it with a plant.
-IDENTITY_TABLES="users credentials auth_tokens auth_challenges oauth_accounts allowed_domains _emdash_api_tokens _emdash_oauth_clients _emdash_oauth_tokens _emdash_authorization_codes _emdash_device_codes"
+IDENTITY_TABLES="users credentials auth_tokens auth_challenges oauth_accounts allowed_domains _emdash_api_tokens _emdash_oauth_clients _emdash_oauth_tokens _emdash_authorization_codes _emdash_device_codes _emdash_entry_locks"
 # The seed owns these tables, and their rows may point at a user (SET NULL):
 # a byline linked to an account, a comment by one. They are replaced like any
 # other content. Every OTHER table with a foreign key into `users` must be in
@@ -290,6 +306,20 @@ while len(order) < len(tables):
 print("\n".join(order))
 PYEOF
 
+# EmDash 1.x media-usage capture triggers (#627). The worker creates one trio
+# per collection (`emdash_mu_<digest>_{ai,au,ad}`), each aborting with "media
+# usage capture inactive" unless `_emdash_media_usage_index_status` holds its
+# collection's row. A refresh replaces that table, the collections and the
+# content, so the triggers on the target would fire against rows that are
+# gone, and their names embed collection IDs this file replaces. Every one is
+# dropped first: the local names, and outside --rehearsal-only the remote's.
+# `IF EXISTS` makes a name a target lacks a no-op. They come back at the end
+# from the local schema, matching the collection IDs just inserted.
+MU_TRIGGERS=$(sqlite3 "$D1_DB" "SELECT name FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';")
+for trig in $MU_TRIGGERS $(cat "$WORK/remote-mu.txt" 2>/dev/null); do
+	echo "DROP TRIGGER IF EXISTS \"$trig\";" >> "$SQL"
+done
+
 # children-first DELETEs…
 while read -r t; do
 	if [ "$t" = "options" ]; then
@@ -318,6 +348,9 @@ while read -r t; do
 	  "SELECT 'INSERT INTO \"$t\"($COLS) VALUES(' || $EXPR || ');' FROM \"$t\"$WHERE;" >> "$SQL"
 done < "$WORK/tables.rev"
 sqlite3 "$D1_DB" "SELECT 'INSERT INTO ' || name || '(' || name || ') VALUES(''rebuild'');' FROM sqlite_master WHERE sql LIKE 'CREATE VIRTUAL TABLE%';" >> "$SQL"
+# …and the media-usage capture triggers come back, after the inserts so the
+# refresh itself enqueues no media-usage work (#627).
+sqlite3 "$D1_DB" "SELECT sql || ';' FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';" >> "$SQL"
 
 # The whole list, not the two tables the plant below happens to touch: no
 # statement in the file may name an identity table (#612).
@@ -421,6 +454,21 @@ PLANT=$(sqlite3 "$WORK/rehearsal-populated.sqlite" "SELECT
 	echo "  admin, passkey, setup flag, runtime option, planted byline, planted site option: $PLANT (want 111100)" >&2
 	exit 3; }
 echo "identity kept: a planted admin, passkey, setup flag and runtime option survived; the seed's own rows were replaced"
+
+# The media-usage triggers (#627): as many on the refreshed copy as locally —
+# none dropped and left missing, which would silently stop media-usage capture —
+# and a write that fires one must succeed, which it does not while a trigger
+# still names a collection ID the refresh replaced ("media usage capture
+# inactive", the failure that found this).
+MU_LOCAL=$(sqlite3 "$D1_DB" "SELECT count(*) FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';")
+MU_POP=$(sqlite3 "$WORK/rehearsal-populated.sqlite" "SELECT count(*) FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';")
+[ "$MU_POP" = "$MU_LOCAL" ] || {
+	echo "ERROR: media-usage triggers after the refresh: $MU_POP, locally: $MU_LOCAL." >&2; exit 3; }
+sqlite3 -bail -cmd "PRAGMA trusted_schema=ON;" "$WORK/rehearsal-populated.sqlite" \
+	"UPDATE ec_pages SET updated_at = updated_at WHERE rowid = (SELECT min(rowid) FROM ec_pages);" \
+	> "$WORK/mu-write.log" 2>&1 || {
+	echo "ERROR: a content write fails after the refresh:" >&2; cat "$WORK/mu-write.log" >&2; exit 3; }
+echo "media-usage triggers: $MU_POP recreated from local, and a content write that fires them succeeds"
 PAGES_POP=$(sqlite3 "$WORK/rehearsal-populated.sqlite" "SELECT count(*) FROM ec_pages;")
 [ "$PAGES_POP" -gt 0 ] || { echo "ERROR: populated rehearsal produced 0 pages" >&2; exit 1; }
 PAGES_LOCAL=$(sqlite3 "$WORK/rehearsal.sqlite" "SELECT count(*) FROM ec_pages;")

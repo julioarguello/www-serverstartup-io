@@ -37,7 +37,14 @@ export WRANGLER_LOG_PATH="$DEBUG_LOG"
 # knows when the site works for one that does not.
 wait_http() { # $1 = required status regex ("200" strict, "[0-9]{3}" any response)
 	for _ in $(seq 1 60); do
-		if curl -s -o /dev/null -w "%{http_code}" "http://localhost:$PORT/" | grep -qE "^$1$"; then
+		# The code is read before it is matched, not piped: on a fresh D1, EmDash
+		# 1.x answers the first request (which builds the schema) with a status
+		# and then aborts the body (curl exit 18), and under pipefail that failed
+		# the whole probe although the server had answered (#627).
+		# `000` is curl's "no answer at all" and must never count as a response —
+		# "[0-9]{3}" would otherwise match it while the server is still starting.
+		code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:$PORT/" || true)
+		if [ "$code" != "000" ] && printf '%s' "$code" | grep -qE "^$1$"; then
 			return 0
 		fi
 		# A dead server and a slow one look identical from the port. wrangler

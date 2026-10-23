@@ -1078,16 +1078,17 @@ because no provider was configured.
 
 - **Platform**: Cloudflare Workers
 - **Build**: `npm run build` → `dist/`
-- **Dev**: `npx emdash dev` (runs migrations, seeds, generates types)
+- **Dev**: `npm run dev` (`astro dev`; EmDash builds the schema on the first request, `npx emdash seed` loads content). EmDash 1.x removed `emdash dev` (#627)
 - **Admin**: `http://localhost:4321/_emdash/admin`
 - **Worker entry** (`src/worker.ts`, #623): EmDash's own Cloudflare entry, the
   Astro handler plus a `scheduled()` handler. On Cloudflare, EmDash installs no
   in-process timer, so without it nothing time-driven runs: scheduled
   publishing, plugin cron, and the cleanup of expired passkey challenges,
-  tokens and abandoned uploads. `wrangler.jsonc` declares the Cron Triggers
-  once at the top level, and every environment inherits them (checked in
+  tokens and abandoned uploads. `wrangler.jsonc` declares the Cron Trigger
+  once at the top level, and every environment inherits it (checked in
   `dist/server/wrangler.json` for the default, preview and production builds):
-  `*/2` drives the media-usage lane and `*/5` the general lane. `wrangler dev
+  `*/5`. EmDash 1.x has one lane (#627); the `*/2` media-usage lane of 0.34 is
+  gone, and a second expression would run the same lane twice. `wrangler dev
   --test-scheduled` does not reach it, because the adapter's build is
   `no_bundle`; the proof is a scheduled event in `wrangler tail` on preview.
 
@@ -1140,7 +1141,8 @@ PR → quality-gates green → merge to main
   CLI writes no row to the identity tables (`users`, `credentials`,
   `auth_tokens`, `auth_challenges`, `oauth_accounts`, `allowed_domains`,
   `_emdash_api_tokens`, `_emdash_oauth_clients`, `_emdash_oauth_tokens`,
-  `_emdash_authorization_codes`, `_emdash_device_codes`), so the refresh leaves
+  `_emdash_authorization_codes`, `_emdash_device_codes`, and since EmDash 1.x
+  `_emdash_entry_locks`, who is editing what), so the refresh leaves
   them as the remote has them. In `options` it moves only the seed's rows: it
   leaves EmDash's three runtime namespaces alone, `emdash:*` (where
   `emdash:setup_complete` lives), `system:*` and `plugin:*`. Until #612, every

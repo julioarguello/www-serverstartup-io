@@ -65,7 +65,7 @@ keeps us honest.
 
 ```bash
 npm install
-npx emdash dev          # dev server + admin at /_emdash/admin
+npm run dev             # astro dev + admin at /_emdash/admin
 ```
 
 The dev server creates its local database on first boot. To load the real

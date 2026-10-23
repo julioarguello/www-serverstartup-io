@@ -105,6 +105,10 @@ export default defineConfig({
 			],
 			sandboxed: [webhookNotifier],
 			sandboxRunner: sandbox(),
+			// #627: since 0.39 a sandbox runner switches the plugin registry ON by
+			// default, which lets any admin install third-party code — the surface
+			// #636 removed with the marketplace. Off, explicitly.
+			registry: false,
 		}),
 	],
 	// Read from src/assets/fonts at build time — no network (#629).

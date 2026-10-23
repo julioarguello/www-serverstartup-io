@@ -8,11 +8,12 @@
 	// skips the worker entirely). Cacheability is default-deny in
 	// src/middleware.ts; purge-on-publish in src/plugins/cache-purge.ts (#357).
 	"cache": { "enabled": true },
-	// #623: Cron Triggers drive the scheduled() handler that src/worker.ts takes
-	// from @emdash-cms/cloudflare/worker. */2 is the media-usage lane; any other
-	// expression runs the general lane (scheduled publishing, plugin cron,
-	// cleanup of expired challenges, tokens and uploads).
-	"triggers": { "crons": ["*/2 * * * *", "*/5 * * * *"] },
+	// #623: a Cron Trigger drives the scheduled() handler that src/worker.ts
+	// takes from @emdash-cms/cloudflare/worker: scheduled publishing, plugin
+	// cron, cleanup of expired challenges, tokens and uploads. One expression:
+	// EmDash 1.x removed the separate */2 media-usage lane (#627), and a second
+	// cron would run the same general lane twice.
+	"triggers": { "crons": ["*/5 * * * *"] },
 	"d1_databases": [
 		{
 			"binding": "DB",

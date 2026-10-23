@@ -20,7 +20,7 @@ restated for a specific case.
 
 ```bash
 npm install
-npx emdash dev         # dev server on :4321, admin at /_emdash/admin
+npm run dev            # astro dev on :4321, admin at /_emdash/admin
 ```
 
 The first boot creates the local D1 database and runs the CMS migrations. It

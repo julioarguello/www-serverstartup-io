@@ -40,7 +40,7 @@ Prerequisites: Node 22 (what CI runs) and npm.
 
 ```bash
 npm install
-npx emdash dev          # dev server at :4321, admin at /_emdash/admin
+npm run dev             # astro dev at :4321, admin at /_emdash/admin
 ```
 
 The first boot creates a local D1 database (Wrangler's emulator) and runs the

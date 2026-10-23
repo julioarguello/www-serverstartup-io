@@ -14,7 +14,7 @@ Llevamos más de veinte años dentro de `hybris` y `SAP Commerce Cloud`. No vend
 ## A medida ≠ acoplado
 
 - **SAP Commerce Cloud.** Se parametriza y se extiende. Catálogos, precios, promociones, Solr. Sabemos dónde no tocar.
-- **Ocado Smart Platform.** Sistema de terceros. Reglas de presentación, sustitutos y catálogos cifrados, todo desde la capa de integración.
+- **Ocado Smart Platform.** Sistema de terceros. Reglas de presentación, sustitutos y datos cifrados, todo desde la capa de integración.
 - **Extensiones desacopladas.** Tu lógica a medida, fuera del núcleo. La plataforma sube de versión y tus mejoras siguen funcionando.
 - **Black Friday.** Caché en el borde y pre-renderizado selectivo. La arquitectura aguanta el pico real.
 - **Paso por caja.** El `WAF` lo configura el mismo equipo que conoce tu catálogo.

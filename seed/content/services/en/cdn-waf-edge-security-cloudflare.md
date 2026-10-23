@@ -20,7 +20,7 @@ A firewall is one part of security. The other is knowing why each rule is there,
 - **Zero-downtime migrations.** From Akamai or whatever you run today, without stopping the store.
 - **Everything in `Terraform`.** The whole configuration as code, versioned and reviewed. Nothing depends on anyone's memory.
 - **Logic next to the user.** `Workers`: we put the first ones into production in 2018, and this whole site runs on them.
-- **Daily WAF report.** Every day you get what the `WAF` stopped, which rule fired and what we changed. And the traffic, security and origin-health alerts are watched by whoever wrote your rules.
+- **Daily WAF report.** Every day you get what the `WAF` stopped, which rule fired and what we changed. And traffic, security and origin-health alerts.
 
 ## Whoever configures it, maintains it
 

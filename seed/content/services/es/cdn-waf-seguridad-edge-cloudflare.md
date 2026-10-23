@@ -20,7 +20,7 @@ Un *firewall* es una parte de la seguridad. La otra es saber por qué está cada
 - **Migraciones sin corte.** Desde Akamai o la `CDN` que toque, sin parar la tienda.
 - **Todo en `Terraform`.** La configuración entera como código, versionada y revisada. Nada depende de la memoria de nadie.
 - **Lógica junto al usuario.** `Workers`: los primeros los pusimos en producción en 2018, y esta web corre entera sobre ellos.
-- **Informe diario del WAF.** Cada día recibes qué ha parado el `WAF`, qué regla saltó y qué hemos cambiado. Y las alertas de tráfico, seguridad y salud del origen las vigila quien escribió tus reglas.
+- **Informe diario del WAF.** Cada día recibes qué ha parado el `WAF`, qué regla saltó y qué hemos cambiado. Y alertas de tráfico, seguridad y salud del origen.
 
 ## Quien lo configura, lo mantiene
 

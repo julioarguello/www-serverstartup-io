@@ -37,7 +37,7 @@ La configuración entera como código, versionada y revisada. Nada depende de la
 Lógica junto al usuario
 Workers: los primeros los pusimos en producción en 2018, y esta web corre entera sobre ellos.
 Informe diario del WAF
-Cada día recibes qué ha parado el WAF, qué regla saltó y qué hemos cambiado. Y las alertas de tráfico, seguridad y salud del origen las vigila quien escribió tus reglas.
+Cada día recibes qué ha parado el WAF, qué regla saltó y qué hemos cambiado. Y alertas de tráfico, seguridad y salud del origen.
 Modo «lo montó alguien que ya no está»
 Desactivado desde 2019. Las reglas las escribimos y las mantenemos nosotros.
 Quien lo configura, lo mantiene

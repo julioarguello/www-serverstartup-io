@@ -18,7 +18,7 @@ SAP Commerce Cloud
 Se parametriza y se extiende. Catálogos, precios, promociones, Solr. Sabemos dónde no tocar.
 1 ⌄
 Ocado Smart Platform
-Sistema de terceros. Reglas de presentación, sustitutos y catálogos cifrados, todo desde la capa de integración.
+Sistema de terceros. Reglas de presentación, sustitutos y datos cifrados, todo desde la capa de integración.
 1 ⌄
 Extensiones desacopladas
 Tu lógica a medida, fuera del núcleo. La plataforma sube de versión y tus mejoras siguen funcionando.

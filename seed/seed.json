@@ -6577,7 +6577,7 @@
 								{
 									"_type": "span",
 									"_key": "kn",
-									"text": " Sistema de terceros. Reglas de presentación, sustitutos y catálogos cifrados, todo desde la capa de integración.",
+									"text": " Sistema de terceros. Reglas de presentación, sustitutos y datos cifrados, todo desde la capa de integración.",
 									"marks": []
 								}
 							]
@@ -7301,7 +7301,7 @@
 								{
 									"_type": "span",
 									"_key": "k1b",
-									"text": " Cada día recibes qué ha parado el `WAF`, qué regla saltó y qué hemos cambiado. Y las alertas de tráfico, seguridad y salud del origen las vigila quien escribió tus reglas.",
+									"text": " Cada día recibes qué ha parado el `WAF`, qué regla saltó y qué hemos cambiado. Y alertas de tráfico, seguridad y salud del origen.",
 									"marks": []
 								}
 							]
@@ -10866,7 +10866,7 @@
 								{
 									"_type": "span",
 									"_key": "k1a",
-									"text": " Every day you get what the `WAF` stopped, which rule fired and what we changed. And the traffic, security and origin-health alerts are watched by whoever wrote your rules.",
+									"text": " Every day you get what the `WAF` stopped, which rule fired and what we changed. And traffic, security and origin-health alerts.",
 									"marks": []
 								}
 							]

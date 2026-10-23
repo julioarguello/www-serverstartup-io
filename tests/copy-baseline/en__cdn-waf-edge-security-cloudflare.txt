@@ -37,7 +37,7 @@ The whole configuration as code, versioned and reviewed. Nothing depends on anyo
 Logic next to the user
 Workers: we put the first ones into production in 2018, and this whole site runs on them.
 Daily WAF report
-Every day you get what the WAF stopped, which rule fired and what we changed. And the traffic, security and origin-health alerts are watched by whoever wrote your rules.
+Every day you get what the WAF stopped, which rule fired and what we changed. And traffic, security and origin-health alerts.
 «Set up by someone who left» mode
 Off since 2019. We wrote the rules and we maintain them.
 Whoever configures it, maintains it

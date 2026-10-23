@@ -1,5 +1,5 @@
 ---
-cta_label: "Audit your edge"
+cta_label: "Let's review your Cloudflare"
 excerpt: "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce)."
 ---
 
@@ -13,23 +13,23 @@ We know why each rule is there, because we wrote them, we version them with [`Te
 
 ## WAF ≠ security
 
-A firewall is not a security strategy, it's one part of it. We configure `Cloudflare` as architecture, and every switch on this panel is there for a reason.
+A firewall is one part of security. The other is knowing why each rule is there, who changed it and what it stopped today. We configure `Cloudflare` as architecture, and every switch on this panel is there for a reason.
 
-- **`WAF` rules, tuned to you.** Matched to your actual attack surface. OWASP Top 10, DDoS, bots. No generic templates.
-- **Cache and `CDN`.** Your origin breathes and response times become predictable. Black Friday included.
+- **`WAF` rules, each with a reason.** `Cloudflare`'s managed rules as the base, tuned to your actual attack surface, with your business rules on top. OWASP Top 10, DDoS, bots.
+- **Cache and `CDN`.** The cache takes the traffic before it reaches your origin, and response times become predictable. Black Friday included.
 - **Zero-downtime migrations.** From Akamai or whatever you run today, without stopping the store.
 - **Everything in `Terraform`.** The whole configuration as code, versioned and reviewed. Nothing depends on anyone's memory.
-- **Logic next to the user.** `Workers` in 300+ cities, under 50 ms away. We shipped our first ones in 2018.
-- **Daily watch.** Alerts and checks an engineer reviews every morning. The same engineer who wrote your rules.
+- **Logic next to the user.** `Workers`: we put the first ones into production in 2018, and this whole site runs on them.
+- **Daily WAF report.** Every day you get what the `WAF` stopped, which rule fired and what we changed. And the traffic, security and origin-health alerts are watched by whoever wrote your rules.
 
 ## Whoever configures it, maintains it
 
-We don't set up `Cloudflare` and disappear. We watch the traffic, adjust rules as attack patterns change, and answer personally when something degrades.
+Once we set up `Cloudflare`, we keep running it: we watch the traffic, adjust rules as attack patterns change, and answer when something degrades.
 
 We've deployed `Cloudflare` for:
 
 > b64:QWxjYW1wbywgRG9vZXJzIFNuZWFrZXJzLCBGb3J1bSBTcG9ydCwgSm9iJlRhbGVudCwgUHVudCBSb21hLCBUb3lz4oCcUuKAnVVzLA==
 
-The platform doesn't end at `CDN` and `WAF`. `Zero Trust`, `Access`, `Stream`, `R2`. We help you decide which pieces fit, and which don't.
+The platform doesn't end at `CDN` and `WAF`. `Zero Trust`, `Access` or `Stream` can come later; we help you decide which pieces fit, and which don't.
 
-This very site runs on `Workers`, `D1` and `R2`, behind the same `WAF` we run for clients. We take it apart, piece by piece, in [Deconstructing this website](/en/deconstructing).
+This very site runs on `Workers`, `D1` and `R2`. We take it apart, piece by piece, in [Deconstructing this website](/en/deconstructing).

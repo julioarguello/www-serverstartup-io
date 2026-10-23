@@ -358,7 +358,7 @@ Agentes de IA escriben la mayor parte del código bajo reglas escritas, y el fun
 sin fichero: lo muestra el historial de fusiones
 el repositorio
 9.7
-Cada push se analiza en busca de secretos, y una guarda rechaza nombrar a clientes que no podemos nombrar.
+Cada push se analiza en busca de secretos, y una guarda rechaza cualquier nombre de cliente que no esté publicado en Referencias.
 .github/workflows/ci.yml
 El taller, abierto
 Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro: código, contenido, comprobaciones y despliegues.

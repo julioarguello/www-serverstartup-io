@@ -1,6 +1,6 @@
 ---
 cta_label: "Let's talk about your project"
-excerpt: "The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full `SDLC`, from specification to observability. We work contract first, focused on stability, security and governance."
+excerpt: "What no commercial product covers, built to last. The full lifecycle, from specification to observability, contract first. And still in production years after the demo."
 ---
 
 > «[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.» [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
@@ -9,7 +9,7 @@ Some needs no commercial product covers. A pricing engine that only exists in yo
 
 And there's a newer reason. With the capabilities [AI](/en/artificial-intelligence) brings, building custom now pays off in cases where buying used to be the default.
 
-Fair warning first, though. If a `SaaS` solves it, we'll say so and we won't build it. We'd rather lose a project than maintain one that shouldn't exist.
+Fair warning first, though. If a `SaaS` solves it, we'll say so and we won't build it.
 
 ## Code is not the product
 
@@ -18,7 +18,7 @@ The product is the system still running years after the demo. The discipline beh
 Four rules, none of them optional.
 
 - **`Java` without nostalgia.** [Spring Boot](https://spring.io/projects/spring-boot) or [Quarkus](https://quarkus.io/) on `Java` 21. *Virtual threads*, *records* and *pattern matching*. Code that scales without tricks.
-- **The contract comes before the code.** The `API` is agreed in writing (*Contract First*, `OpenAPI`), with `OAuth 2.0` and `mTLS` in the design, not in a patch.
+- **The contract comes before the code.** The `API` is agreed in writing (`OpenAPI`), with `OAuth 2.0` and `mTLS` in the design, not in a patch.
 - **`CI/CD` is governance.** Tests, static analysis and security checks gate every deploy. You always know what runs on your servers, and why.
 - **Security gets compiled in.** Fine-grained access control in the code, and [Cloudflare](https://www.cloudflare.com/)'s [`WAF`](/en/cdn-waf-edge-security-cloudflare) in front.
 
@@ -32,7 +32,7 @@ We never start from zero, and we don't let an AI do it either. For every technol
 
 You feel the difference on the second service. It reads like the first, deploys the same way, and anyone on the team can run it. Boring on purpose.
 
-## AI multiplies. The framework steers.
+## With AI, the framework comes first
 
 Maybe *greenfield* is where AI pays off most. It is certainly where it derails first. On a blank page, an agent delivers in hours what used to take weeks. Without a frame, every one of those hours is fresh debt.
 
@@ -40,4 +40,4 @@ Our *frameworks* are that perimeter. The agent writes inside the rails, and an e
 
 ## Your technical debt is our problem
 
-Whoever designs the system deploys it and answers for its stability. The same senior engineers, from first *commit* to operations. We don't hand over and vanish. We walk the transition with you, and the knowledge stays in your house, not ours.
+From the first *commit* to operations, the same senior engineers. And when it is time to hand it over, we walk the transition with you and write everything down: the knowledge stays in your house.

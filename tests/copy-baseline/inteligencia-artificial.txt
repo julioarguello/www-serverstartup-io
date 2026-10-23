@@ -3,14 +3,14 @@ Saltar al contenido
 /inteligencia-artificial
 EN
 Inteligencia artificial
-La IA es un medio, no un fin. La máquina hace el código repetitivo; nosotros ponemos la arquitectura y el criterio, del desarrollo a la operación — enfoque integral, perfil DevOps. El agente propone, el ingeniero dispone.
+La máquina escribe el código repetitivo. Nosotros ponemos la arquitectura, los datos de los que tira y el criterio, y firmamos cada línea antes de que llegue a producción. El agente propone, el ingeniero dispone.
 Cuéntanos tu caso
 «Sostengo que las organizaciones que construyen y operan agentes son responsables de todo lo que esos agentes hacen, tanto si ese comportamiento es intencionado como si es emergente.»
 «Podemos delegar muchas cosas, pero no los criterios de aceptación: en algún momento hay una petición humana y un juicio humano sobre si esa petición se ejecutó correctamente.»
 — Martin Fowler
-Usamos la IA de dos maneras. Como herramienta, para construir con más calidad y menos horas lo que ya sabíamos construir. Y como pieza del sistema, para resolver lo que hace poco no era posible. En los dos casos es un medio, no un fin.
+Usamos la IA de dos maneras. Como herramienta, para construir con más calidad y menos horas lo que ya sabíamos construir. Y como pieza del sistema, para resolver lo que hace poco no era posible.
 Cuando generar código sale casi gratis, se genera muchísimo más software (paradoja de Jevons). Y todo ese software nuevo hay que integrarlo y asegurarlo dentro de sistemas que ya existían. Es la parte de más valor del trabajo, y la que hacemos desde 2019.
-El código repetitivo lo hace la máquina. Nuestro tiempo va al criterio y la responsabilidad, y un equipo pequeño entrega hoy lo que antes pedía uno grande.
+El código repetitivo lo hace la máquina. Nuestro tiempo va al criterio y a responder de lo que llega a producción.
 Generado ≠ entregado
 Un agente es IA que hace cosas, no solo responde. Y para ser útil necesita leer el pedido en SAP, comprobar el stock en BigQuery y escribir el resultado donde tu equipo trabaja de verdad. Ese cableado es lo nuestro.
 Nuestro flujo es el de este pull request. El agente propone; el ingeniero revisa, aprueba y firma. Siempre con permisos mínimos y cada acción registrada.
@@ -21,7 +21,7 @@ git push --force origin main
 +
 Agentes con permisos acotados. Construidos sobre el Agents SDK, tocan solo lo que deben y siempre hay una persona que puede pararlos.
 +
-Inferencia en el borde. Clasificación y extracción de documentos con Workers AI, en la red de Cloudflare. El dato se procesa en tu propia cuenta, no en el SaaS de IA de un tercero.
+Inferencia en el borde. Clasificación y extracción de documentos con Workers AI, en la red de Cloudflare, dentro de tu cuenta: el proveedor que ya sirve tu web, sin sumar otro.
 +
 Tráfico de IA gobernado. Cada llamada a un modelo queda registrada y con techo de gasto en AI Gateway. Sabrás qué modelo respondió y cuánto costó.
 +
@@ -36,7 +36,7 @@ Firmamos el código
 Usamos IA a diario. Claude Code, Cursor, modelos abiertos en Workers AI. Y por usarla sabemos dónde falla.
 La queja más repetida del sector es el código «casi correcto, pero no del todo». Ese «casi», en el cálculo de una promoción o en el stock que ve la tienda, es un incidente.
 Por eso trabajamos con la seguridad por delante. Los agentes usan credenciales de mínimo privilegio, trabajan en entornos separados de producción y nada llega a main sin revisión humana.
-El que firma, da la cara. Desde agosto de 2026, además, la ley europea de IA exige supervisión humana con competencia y autoridad para corregir o parar un sistema de alto riesgo. Nosotros ya trabajamos así.
+La ley europea de IA exige supervisión humana con competencia y autoridad para corregir o parar un sistema de alto riesgo. Nosotros ya trabajamos así.
 Aquí no vas a encontrar un producto de IA. No lo tenemos y no lo fingimos. Tenemos un método hecho de reglas y protocolos versionados que dirigen a los agentes, distribuible y auditable.
 Esta misma web se construye así, con agentes supervisados, pull request a pull request. Y si un chatbot no te resuelve nada, te diremos que no lo pongas.
 1

@@ -1,6 +1,6 @@
 ---
 cta_label: "Let's talk data"
-excerpt: "A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources is another story. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, and tests that number in the thousands."
+excerpt: "1,646 tests across 111 `dbt` models on `BigQuery`: data that fails one never reaches `gold`. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard."
 ---
 
 > «Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.» [Joe Reis](https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling)
@@ -9,22 +9,20 @@ Anyone can stand up a pipeline in an afternoon. A platform that survives years o
 
 We build them the way [serious software](/en/greenfield-development) gets built. Every transformation versioned in `git`, every dataset tested, every flow wired to an alert.
 
-The essence is analytical, and the synergies with the operational side multiply it. We run [`dbt`](https://www.getdbt.com/) on both sides of the *warehouse*.
+Our strength is analytics, and we run [`dbt`](https://www.getdbt.com/) on both sides: in the *warehouse* and in the operational database.
 
 ## dbt ≠ pipeline
 
 `dbt` is the T in [`ELT`](https://www.getdbt.com/blog/extract-load-transform), and we treat it the way good software gets treated, the pattern the industry calls [*analytics engineering*](https://www.getdbt.com/what-is-analytics-engineering). But the tool is only one piece: ingestion, orchestration and monitoring live elsewhere, and our value is building and running the whole set.
 
 - **Google Cloud is where we've gone deepest**. [`BigQuery`](https://cloud.google.com/bigquery) as the *warehouse*, `dbt` for the transformations.
-- **From blueprint to publication**. Our [*definition of done*](https://scrumguides.org/scrum-guide.html#commitment-definition-of-done) starts long before the code. Database design following the [sector's classic modeling](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/), standard naming, homogenization and normalization of the data. It is more analysis than development, and it is where reliability is won.
-- **Testing is the part most teams skip**. On our platforms tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load. Data that fails never reaches *gold*.
+- **From whiteboard to publication**. Our [*definition of done*](https://scrumguides.org/scrum-guide.html#commitment-definition-of-done) starts long before the code. Database design following the [sector's classic modeling](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/), standard naming, homogenization and normalization of the data. It is more analysis than development, and it is where reliability is won.
+- **Testing is the part most teams skip**. On our platforms tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load.
 - **Layered architecture**. The [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture) pattern keeps raw and verified data apart, each layer with its purpose and its access control.
 - **Infrastructure is code too**. [`Terraform`](https://www.terraform.io/) builds the same datasets, permissions and environments in development and in production.
-- **Real time when the business needs it**. Ingestion on [`Pub/Sub`](https://cloud.google.com/pubsub) and [`Dataflow`](https://cloud.google.com/dataflow) for the flows that can't wait for the nightly *batch*.
+- **Real time when the business needs it**. Ingestion on [`Pub/Sub`](https://cloud.google.com/pubsub) and [`Dataflow`](https://cloud.google.com/dataflow) for the flows that can't wait for the nightly load.
 
-## Synergies between analytical and operational
-
-> "One way of working for two divergent worlds."
+## dbt on both sides: BigQuery and Oracle
 
 On the analytical side we work with [`dbt Cloud`](https://docs.getdbt.com/docs/platform/about-platform/dbt-platform-features) on `BigQuery`. And when a transformation belongs in the operational layer, on a relational database like `Oracle`, we manage it with [`dbt Core`](https://github.com/dbt-labs/dbt-core) and the [adapter Oracle maintains](https://github.com/oracle/dbt-oracle) (plus our own improvements, as obvious as they were necessary...).
 

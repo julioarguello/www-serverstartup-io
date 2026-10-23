@@ -159,12 +159,10 @@ describe("controls — the check can fail", () => {
 		const planted = structuredClone(seed.content) as Record<string, SeedEntry[]>;
 		const entry = planted.services.find((e) => e.slug === "desarrollo-greenfield" && e.locale === "es");
 		const block = entry!.data.content!.find((b) =>
-			(b.children ?? []).some((c) => (c.text ?? "").includes("Los mismos ingenieros")),
+			(b.children ?? []).some((c) => (c.text ?? "").includes("los mismos ingenieros")),
 		);
-		block!.children![0].text = block!.children![0].text!.replace(
-			"Los mismos ingenieros",
-			"Los mismos cuatro ingenieros",
-		);
+		const span = block!.children!.find((c) => (c.text ?? "").includes("los mismos ingenieros"))!;
+		span.text = span.text!.replace("los mismos ingenieros", "los mismos cuatro ingenieros");
 		const drift = driftedFiles([one!], planted);
 		expect(drift).toHaveLength(1);
 		expect(drift[0]).toContain("cuatro ingenieros");

@@ -7,19 +7,19 @@ org.apache.catalina.startup.Catalina.start Server startup in [2019] ms
 Una señal de identidad. Una línea de log, para algunos familiar, que dice mucho más de nosotros que cualquier presentación corporativa.
 Historia
 EL NOMBRE
-Fundada en 2019, Server Startup debe efectivamente su nombre a la trinchera de hybris (ahora SAP Commerce). Muchas horas picando código en casa, aviones, hoteles o tirando de 3G en el metro. A veces, incluso en la oficina... En ese contexto, ver aparecer ese mensaje de Tomcat era puro rock'n'roll. Un chute de adrenalina al ver que el sistema levanta.
-Somos Server por especialización en backend. Nos gustan las tripas, la lógica compleja y afrontar retos. El rigor y la optimización.
+Fundada en 2019, Server Startup debe su nombre a la trinchera de hybris (ahora SAP Commerce). Muchas horas picando código en casa, aviones, hoteles o tirando de 3G en el metro. A veces, incluso en la oficina... En ese contexto, ver aparecer ese mensaje de Tomcat era puro rock'n'roll. Un chute de adrenalina al ver que el sistema levanta.
+Somos Server por especialización en backend. Nos gustan las tripas y la lógica compleja.
 Y Startup por filosofía. Porque en este sector el mundo no para y hay que adaptarse y evolucionar continuamente. Claro que ya no somos una startup (tampoco el Pont Neuf de París, la ciudad de Nueva York o el Camp Nou se construyeron precisamente ayer...) pero conservamos la entereza e ilusión del primer día.
 EL CAMINO
 El proyecto arrancó por cuenta propia en 2017. En enero de 2019 se convirtió en sociedad, desde Getxo. Hoy la sostienen ingenieros senior con más de veinte años de producción cada uno.
-Aquel mismo 2019 nos hicimos partner oficial de Cloudflare. Para 2022 el lema de la casa era “+ Calidad − Cantidad”: más criterio, menos volumen. Las dos cosas siguen en vigor.
+Aquel mismo 2019 nos hicimos socio oficial de Cloudflare. Para 2022 el lema de la casa era “+ Calidad − Cantidad”: más criterio, menos volumen. Las dos cosas siguen en vigor.
 EL CUBO
 Si el mensaje de Server Startup es la chispa vital, el rock'n'roll de nuestros inicios, el cubo canaliza hoy esa energía. Simboliza el salto de madurez que dimos al pasar de implantar e-commerce complejos a integrar plataformas de exigencia extrema como Ocado. Sus famosas colmenas (hives), donde miles de robots optimizan el picking al milímetro, son un referente de modernidad y eficiencia logística.
 Nuestro logo nace de esa retícula. Símbolo de la precisión, el rigor, la escalabilidad y la búsqueda de sinergias que rigen nuestro día a día. Un espejo en el que mirarnos. Es el mismo cubo que te acompaña por todo este sitio.
 Quién responde del trabajo
 El equipo justo: cada ingeniero aporta, sin relleno. Llevan años trabajando juntos, los mismos de principio a fin.
 Pocos clientes a la vez, por elección. Máxima implicación, y ningún junior aprendiendo con tu presupuesto.
-Trabajamos junto a tu equipo, no desde fuera. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de dbt que cierra las ventas del día. Ese es nuestro sitio.
+Trabajamos junto a tu equipo. El middleware que conecta tu ERP con la tienda, el WAF que para el tráfico malo, el modelo de dbt que cierra las ventas del día. Ese es nuestro sitio.
 Daniel Sío
 Ingeniero senior
 El alma de cada proyecto. Maestro de ceremonias, sobre todo si acaban en karaoke. Lo mismo te sube un monte que el ánimo. Buen amigo antes que buen ingeniero. Y muy buen ingeniero.
@@ -30,12 +30,12 @@ Julio Argüello
 Fundador · integración y arquitectura
 Dile que algo no se puede hacer y tienes su atención. Encuentra la manera, con más tiempo o menos presupuesto; a medias es lo único que no le sale. Rema todo el día y no se pierde un atardecer con su tripulación, la de casa.
 Nuestros valores
-Pocas cosas, bien hechas.
+Solo lo que dominamos.
 Preferimos decir que no a entregar tarde. Si un proyecto no encaja con lo que dominamos, te lo decimos en la primera reunión.
 Sin inversores. Sin deuda. Sin prisa.
 La empresa se sostiene con su trabajo, y eso nos permite elegir proyectos complejos y relaciones largas.
 Certeza antes que velocidad.
-Preferimos una arquitectura resiliente hoy que deuda técnica mañana.
+Una arquitectura que aguanta hoy cuesta menos que la deuda técnica de mañana.
 La responsabilidad no se delega.
 Quien diseña el sistema lo entrega y responde por él.
 Independencia técnica.

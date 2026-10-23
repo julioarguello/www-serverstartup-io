@@ -17,13 +17,13 @@ L.H.
 PF1 ←
 → PF2
 Desarrollo greenfield
-El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. SDLC completo, de la especificación a la observabilidad. Trabajamos contract first, con foco en estabilidad, seguridad y gobernanza.
+Lo que ningún producto comercial cubre, construido para durar. Ciclo de vida completo, de la especificación a la observabilidad, con el contrato primero. Y en producción años después de la demo.
 Hablemos de tu proyecto
 «[La IA] permite a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.»
 — Andrej Karpathy
 Hay necesidades que ningún producto comercial cubre. Un motor de precios que solo existe en tu negocio, una web que no cabe en ninguna plantilla (esta misma, sin ir más lejos). Para eso siempre ha existido el desarrollo greenfield.
 Y hoy pesa otro motivo. Con las capacidades que trae la IA, construir a medida sale a cuenta en casos donde antes se compraba por defecto.
-La advertencia, por delante. Si un SaaS te lo resuelve, te lo decimos y no lo construimos. Preferimos perder un proyecto antes que mantener uno que sobra.
+La advertencia, por delante. Si un SaaS te lo resuelve, te lo decimos y no lo construimos.
 El código no es el producto
 El producto es el sistema que sigue en producción años después de la demo. La disciplina que lo consigue es siempre la misma, esté la IA por medio o no.
 MotorDeNegocio.java — greenfield
@@ -42,7 +42,7 @@ Java 21 · 0 warnings
 * Cuatro reglas y ninguna es opcional.
 *
 * @param pila Java sin nostalgia. Spring Boot o Quarkus sobre Java 21. Virtual threads, records y pattern matching. Código que escala sin trucos.
-* @param contrato El contrato antes que el código. La API se pacta por escrito (Contract First, OpenAPI) y las credenciales (OAuth 2.0, mTLS) entran en el diseño, no en el parche.
+* @param contrato El contrato antes que el código. La API se pacta por escrito (OpenAPI) y las credenciales (OAuth 2.0, mTLS) entran en el diseño, no en el parche.
 * @param gobernanza El CI/CD es la gobernanza. Tests, análisis estático y validación de seguridad delante de cada despliegue. Siempre sabes qué corre en tus servidores y por qué.
 * @param seguridad La seguridad se compila. Control de acceso granular en el código y el WAF de Cloudflare delante.
 * @author los mismos ingenieros, de principio a fin
@@ -55,11 +55,11 @@ Python en Google Cloud. Servicios y funciones sobre Cloud Run y Cloud Functions,
 Quarkus y Camel sobre Docker. Arranque en milisegundos e integración de serie, listos para cualquier orquestador.
 Publicación en Karaf. Para las plataformas que viven en OSGi y despliegan por bundles sobre Karaf, sin parar el resto del sistema.
 La ventaja se nota en el segundo servicio. Se lee como el primero, se despliega igual y lo opera cualquiera del equipo. Aburrido a propósito.
-La IA multiplica. El framework conduce.
+Con IA, el framework va primero
 Puede que el greenfield sea donde más rinde la IA. Seguro que es donde antes descarrila. Sobre una página en blanco, un agente entrega en horas lo que costaba semanas. Sin marco, cada una de esas horas es deuda nueva.
 Nuestros frameworks son el perímetro. El agente escribe dentro de esos raíles y un ingeniero firma cada línea que llega a main. El detalle, en el vertical de IA.
 Tu deuda técnica es nuestro problema
-Quien diseña el sistema lo despliega y responde por su estabilidad. Los mismos ingenieros senior, del primer commit a la operación. No entregamos y desaparecemos. Acompañamos la transición y el conocimiento se queda en tu casa, no en la nuestra.
+Del primer commit a la operación, los mismos ingenieros senior. Y cuando toca traspasarlo, acompañamos la transición y lo dejamos todo escrito: el conocimiento se queda en tu casa.
 1
 equipo
 .

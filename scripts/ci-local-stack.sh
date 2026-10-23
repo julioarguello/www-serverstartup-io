@@ -70,6 +70,26 @@ npx wrangler dev --port "$PORT" >"$LOG" 2>&1 &
 WRANGLER_PID=$!
 wait_http "[0-9]{3}"
 
+# Who listens on $PORT, one PID per line; empty means free. `lsof` where it
+# exists (macOS, the hosted runner). The Playwright image the `engines` job runs
+# in has none (#646), so Linux without it reads /proc instead. Neither available
+# is an error: answering "free" because the question could not be asked lets an
+# orphan keep the port while the script reports it clear — what the lsof-only
+# version did inside that image, measured for #646.
+listeners() {
+	if command -v lsof >/dev/null 2>&1; then
+		# `|| true` is load-bearing: lsof exits 1 when it finds nothing, and under
+		# `set -euo pipefail` that failing pipeline kills the script through the
+		# assignment — silently, and precisely in the SUCCESS case (port free).
+		lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | sort -u || true
+	elif [ -r /proc/net/tcp ]; then
+		node scripts/lib/port-listeners.mjs "$PORT"
+	else
+		echo "ERROR: cannot tell who listens on $PORT: no lsof and no /proc/net/tcp" >&2
+		return 1
+	fi
+}
+
 # 2. Seed with the server DOWN (FTS-corruption rule).
 #
 # The supervisor dies FIRST, then its children. wrangler supervises its
@@ -108,25 +128,6 @@ wait_http "[0-9]{3}"
 # forever — and `pkill` then reports nothing to kill, which reads like success.
 # `dev --port $PORT` matches both and is still port-scoped, so it cannot reach
 # another project's stack.
-# Who listens on $PORT, one PID per line; empty means free. `lsof` where it
-# exists (macOS, the hosted runner). The Playwright image the `engines` job runs
-# in has none (#646), so Linux without it reads /proc instead. Neither available
-# is an error: answering "free" because the question could not be asked is how
-# an orphan kept the port while the script reported it clear.
-listeners() {
-	if command -v lsof >/dev/null 2>&1; then
-		# `|| true` is load-bearing: lsof exits 1 when it finds nothing, and under
-		# `set -euo pipefail` that failing pipeline kills the script through the
-		# assignment — silently, and precisely in the SUCCESS case (port free).
-		lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | sort -u || true
-	elif [ -r /proc/net/tcp ]; then
-		node scripts/lib/port-listeners.mjs "$PORT"
-	else
-		echo "ERROR: cannot tell who listens on $PORT: no lsof and no /proc/net/tcp" >&2
-		return 1
-	fi
-}
-
 stop_stack() {
 	local holders pid
 	pkill -TERM -f "dev --port $PORT" 2>/dev/null || true

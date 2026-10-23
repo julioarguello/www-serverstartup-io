@@ -225,7 +225,7 @@ async function profileRun(p) {
 	try {
 		await (await p.engine.launch()).close();
 	} catch (e) {
-		return { p, blind: `${p.name}: the engine did not launch — ${String(e.message).split("\n")[0]} (npx playwright install --with-deps webkit chromium-headless-shell)` };
+		return { p, blind: `${p.name}: the engine did not launch — ${String(e.message).split("\n")[0]} (locally: npx playwright install --with-deps webkit chromium-headless-shell; in CI the Playwright image carries them, so check its tag against package.json)` };
 	}
 	const t0 = Date.now();
 	{

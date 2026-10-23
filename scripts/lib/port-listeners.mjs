@@ -59,34 +59,44 @@ export function holders(inodes, procRoot = "/proc") {
 	return [...pids].sort((a, b) => a - b);
 }
 
+/**
+ * The answer for `port` under `procRoot`: `code` 0 with the holders' PIDs, 2 when
+ * /proc cannot be read, 3 when a socket listens but no readable process holds it.
+ */
+export function inspect(port, procRoot = "/proc") {
+	const inodes = new Set();
+	for (const table of ["tcp", "tcp6"]) {
+		let text;
+		try {
+			text = readFileSync(`${procRoot}/net/${table}`, "utf8");
+		} catch (e) {
+			// tcp6 is absent on a kernel without IPv6; tcp absent means no /proc at all.
+			if (table === "tcp6") continue;
+			return { code: 2, pids: [], message: `cannot read ${procRoot}/net/tcp: ${e.message}` };
+		}
+		for (const inode of listeningInodes(text, port)) inodes.add(inode);
+	}
+	const pids = holders(inodes, procRoot);
+	if (inodes.size > 0 && pids.length === 0) {
+		return {
+			code: 3,
+			pids,
+			message: `${inodes.size} socket(s) listen on ${port} but no readable process holds them`,
+		};
+	}
+	return { code: 0, pids };
+}
+
 function main(argv) {
 	const port = Number(argv[2]);
 	if (!Number.isInteger(port) || port <= 0 || port > 65535) {
 		console.error("usage: port-listeners.mjs <port>");
 		return 2;
 	}
-	const inodes = new Set();
-	for (const table of ["/proc/net/tcp", "/proc/net/tcp6"]) {
-		let text;
-		try {
-			text = readFileSync(table, "utf8");
-		} catch (e) {
-			// tcp6 is absent on a kernel without IPv6; tcp absent means no /proc at all.
-			if (table.endsWith("tcp6")) continue;
-			console.error(`ERROR: cannot read ${table}: ${e.message}`);
-			return 2;
-		}
-		for (const inode of listeningInodes(text, port)) inodes.add(inode);
-	}
-	const pids = holders(inodes);
-	if (inodes.size > 0 && pids.length === 0) {
-		console.error(
-			`ERROR: ${inodes.size} socket(s) listen on ${port} but no readable process holds them`,
-		);
-		return 3;
-	}
+	const { code, pids, message } = inspect(port);
+	if (message) console.error(`ERROR: ${message}`);
 	for (const pid of pids) console.log(pid);
-	return 0;
+	return code;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

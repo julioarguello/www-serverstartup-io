@@ -453,11 +453,11 @@ jobs:
 
       # The image ships Node 24. The stack is built and seeded on 22 everywhere
       # else, and native modules (better-sqlite3) load only on the ABI they were
-      # built for.
+      # built for. No `cache: npm`: its key is shared with the hosted jobs and
+      # `~/.npm` resolves elsewhere in here (see the next step).
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-          cache: npm
 
       # An entry of its own, node_modules only. actions/cache stores each path
       # relative to the workspace (toolkit cacheUtils.resolvePaths), and `~` is

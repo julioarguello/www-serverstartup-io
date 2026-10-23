@@ -5,9 +5,12 @@
  * The tcp6 row is the real one from that image, 2026-10-23, with a Node server
  * on :8787 (`::`, port 0x2253). The tcp rows follow the same layout.
  */
-import { describe, expect, it } from "vitest";
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterAll, describe, expect, it } from "vitest";
 
-import { listeningInodes } from "../../scripts/lib/port-listeners.mjs";
+import { inspect, listeningInodes } from "../../scripts/lib/port-listeners.mjs";
 
 const TCP6 = [
 	"  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode",
@@ -39,5 +42,51 @@ describe("listeningInodes", () => {
 	it("finds nothing on a free port, and ignores inode 0", () => {
 		expect(listeningInodes(TCP, 9999).size).toBe(0);
 		expect(listeningInodes(TCP, 8788).size).toBe(0);
+	});
+});
+
+/**
+ * A /proc of its own: the tables above, and one process whose descriptor links
+ * point at `socket:[inode]` — readlink returns the target text, which is all
+ * holders() reads, so a plain symlink stands in for the kernel's.
+ */
+function fakeProc(holderInode: string | null) {
+	const root = mkdtempSync(join(tmpdir(), "proc-"));
+	mkdirSync(join(root, "net"));
+	writeFileSync(join(root, "net", "tcp"), TCP);
+	writeFileSync(join(root, "net", "tcp6"), TCP6);
+	mkdirSync(join(root, "4321", "fd"), { recursive: true });
+	symlinkSync("pipe:[1]", join(root, "4321", "fd", "0"));
+	if (holderInode) symlinkSync(`socket:[${holderInode}]`, join(root, "4321", "fd", "3"));
+	mkdirSync(join(root, "self")); // not a PID: skipped
+	return root;
+}
+
+describe("inspect", () => {
+	const roots: string[] = [];
+	const proc = (inode: string | null) => {
+		const r = fakeProc(inode);
+		roots.push(r);
+		return r;
+	};
+	afterAll(() => roots.forEach((r) => rmSync(r, { recursive: true, force: true })));
+
+	it("names the process holding the listening socket", () => {
+		expect(inspect(8787, proc("4242"))).toEqual({ code: 0, pids: [4321] });
+	});
+
+	it("answers free only when nothing listens", () => {
+		expect(inspect(9999, proc(null))).toEqual({ code: 0, pids: [] });
+	});
+
+	it("refuses to answer free when a socket listens and its holder is unreadable", () => {
+		const r = inspect(8787, proc(null));
+		expect(r.code).toBe(3);
+		expect(r.pids).toEqual([]);
+	});
+
+	it("refuses when there is no /proc to read", () => {
+		const r = inspect(8787, join(tmpdir(), "no-such-proc"));
+		expect(r.code).toBe(2);
 	});
 });

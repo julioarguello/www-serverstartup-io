@@ -226,7 +226,7 @@ The documentation
 Detail and proof
 7 rows
 6.1
-EmDash, the open-source (MIT) CMS that Cloudflare announced in April 2026, runs inside the same Worker. It is still pre-1.0.
+EmDash, the open-source (MIT) CMS that Cloudflare announced in April 2026, runs inside the same Worker.
 package.json
 announcement · code · documentation
 6.2

@@ -42,7 +42,9 @@ wait_200() {
 
 kill_port() { lsof -ti ":$PORT" 2>/dev/null | xargs kill -9 2>/dev/null || true; }
 
-start_server() { nohup npx -y emdash dev -p "$PORT" > "$LOG" 2>&1 & }
+# `emdash dev` is gone in EmDash 1.x (#627); `astro dev` serves the site and
+# EmDash builds the schema on the first request. Seeding stays `emdash seed`.
+start_server() { nohup npx astro dev --port "$PORT" > "$LOG" 2>&1 & }
 
 fail() { echo "preview FAILED — last log lines ($LOG):"; tail -5 "$LOG"; exit 1; }
 

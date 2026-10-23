@@ -38,7 +38,7 @@
 
 ```
 seed.json (schema + contenido)
-    ↓  npx emdash dev (aplica seed al arrancar DB nueva)
+    ↓  npm run dev (astro dev; EmDash crea el esquema en la primera petición)
     ↓  o setup wizard (primera vez)
 D1 (Wrangler emulator en local, Cloudflare D1 en producción)
     ↓  getEmDashCollection / getEmDashEntry
@@ -83,7 +83,7 @@ El `seed.json` define **todo**: schema + contenido inicial.
 rm -rf .wrangler/state
 
 # 2. Arrancar dev server (creará DB nueva)
-npx emdash dev
+npm run dev
 
 # 3. Abrir el setup wizard en el navegador (#610: antes, en .dev.vars,
 #    SETUP_GATE_TOKEN=<valor>; sin él, el wizard responde 404)
@@ -120,9 +120,10 @@ wrangler r2 bucket create www-serverstartup-io
 
 # 2. Actualizar wrangler.jsonc con el database_id real
 
-# 3. Generar auth secret y añadirlo como variable de entorno
-npx emdash auth secret
-wrangler secret put EMDASH_AUTH_SECRET
+# 3. Clave que cifra los secretos de los plugins (EmDash 1.x; `emdash auth
+#    secret` y EMDASH_AUTH_SECRET eran de la 0.34 y ya no existen)
+npx emdash secrets generate
+wrangler secret put EMDASH_ENCRYPTION_KEY
 
 # 4. Secreto que abre el setup wizard (#610), uno por entorno. La sesión de
 #    wrangler alcanza varias cuentas: sin CLOUDFLARE_ACCOUNT_ID pregunta cuál.
@@ -141,7 +142,7 @@ npm run deploy
 ## Comandos útiles
 
 ```bash
-npx emdash dev                           # Arrancar dev server
+npm run dev                              # Arrancar dev server (astro dev)
 npx emdash seed seed/seed.json --validate # Validar seed
 npx emdash types                         # Regenerar tipos TypeScript
 npx emdash content list services         # Listar servicios (requiere server corriendo)

@@ -818,7 +818,7 @@ Decisions:
 - **Cloudflare products render in orange, ours in ink.** `CLOUDFLARE_PRODUCTS` in `layers.ts`
   is the one list of names that get `<code class="cf">`; a product the copy starts to name
   goes there.
-- **Repeater sub-fields cannot hold Portable Text** (EmDash 0.34), so plate text is
+- **Repeater sub-fields cannot hold Portable Text** (EmDash 1.3.1, as in 0.34), so plate text is
   markdown-lite rendered by `excerptHtml`, the same as service excerpts.
 - **Locale parity covers repeaters**: `ci-check-locale-parity.py` compares row counts and the
   sub-fields filled in each row, so an EN plate cannot silently lose a fact.
@@ -1068,7 +1068,7 @@ because no provider was configured.
   silently). It purges tags `[collection, id]` on afterSave-when-published,
   afterPublish, afterUnpublish, afterDelete and afterRestore — so purging an
   entry also evicts the pages that merely embed it.
-- **Known gap**: menus and site settings emit no publish hook in EmDash 0.34,
+- **Known gap**: menus and site settings emit no publish hook in EmDash 1.3.1 (nor 0.34),
   so their staleness is bounded by the 1h TTL rather than purged.
 - **Verification**: `cf-cache-status` on a real preview deploy — `wrangler dev`
   strips the CDN headers and the local emulator implements no purge at all.
@@ -1078,16 +1078,19 @@ because no provider was configured.
 
 - **Platform**: Cloudflare Workers
 - **Build**: `npm run build` → `dist/`
-- **Dev**: `npx emdash dev` (runs migrations, seeds, generates types)
+- **Dev**: `npm run dev` (`astro dev`). EmDash builds the schema and writes
+  its generated types when the server starts; `npx emdash seed` loads content.
+  EmDash 1.x has no `emdash dev` (#627).
 - **Admin**: `http://localhost:4321/_emdash/admin`
 - **Worker entry** (`src/worker.ts`, #623): EmDash's own Cloudflare entry, the
   Astro handler plus a `scheduled()` handler. On Cloudflare, EmDash installs no
   in-process timer, so without it nothing time-driven runs: scheduled
   publishing, plugin cron, and the cleanup of expired passkey challenges,
-  tokens and abandoned uploads. `wrangler.jsonc` declares the Cron Triggers
-  once at the top level, and every environment inherits them (checked in
+  tokens and abandoned uploads. `wrangler.jsonc` declares the Cron Trigger
+  once at the top level, and every environment inherits it (checked in
   `dist/server/wrangler.json` for the default, preview and production builds):
-  `*/2` drives the media-usage lane and `*/5` the general lane. `wrangler dev
+  `*/5`. EmDash 1.x has one lane (#627); the `*/2` media-usage lane of 0.34 is
+  gone, and a second expression would run the same lane twice. `wrangler dev
   --test-scheduled` does not reach it, because the adapter's build is
   `no_bundle`; the proof is a scheduled event in `wrangler tail` on preview.
 
@@ -1140,7 +1143,8 @@ PR → quality-gates green → merge to main
   CLI writes no row to the identity tables (`users`, `credentials`,
   `auth_tokens`, `auth_challenges`, `oauth_accounts`, `allowed_domains`,
   `_emdash_api_tokens`, `_emdash_oauth_clients`, `_emdash_oauth_tokens`,
-  `_emdash_authorization_codes`, `_emdash_device_codes`), so the refresh leaves
+  `_emdash_authorization_codes`, `_emdash_device_codes`, and since EmDash 1.x
+  `_emdash_entry_locks`, who is editing what), so the refresh leaves
   them as the remote has them. In `options` it moves only the seed's rows: it
   leaves EmDash's three runtime namespaces alone, `emdash:*` (where
   `emdash:setup_complete` lives), `system:*` and `plugin:*`. Until #612, every
@@ -1156,6 +1160,15 @@ PR → quality-gates green → merge to main
     setup flag (checked by value) and a `system:` option, beside a byline and a
     `site:` option the seed does not carry. The first four must survive and the
     last two must go. The `rendered` CI job runs the same rehearsal at PR time.
+  - **Media-usage triggers (EmDash 1.x, #627):** the worker creates
+    `emdash_mu_<digest>_{ai,au,ad}` triggers per collection, the digest taken
+    over the collection ID. Each aborts a content write ("media usage capture
+    inactive") unless `_emdash_media_usage_index_status` holds its
+    collection's row. The refresh replaces those rows and the collection IDs,
+    so it drops every such trigger first (the local names, and outside
+    `--rehearsal-only` the remote's, read beside its schema), then recreates
+    them at the end from the local schema. The rehearsal then requires the
+    trigger count to match local, and a content write to succeed.
   - **Still replaced, deliberately:** everything else, including `media`,
     `audit_logs` and `_emdash_redirects`. A byline linked to an account comes
     back unlinked, because the seed owns bylines.

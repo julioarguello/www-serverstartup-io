@@ -3,13 +3,15 @@ dist
 .astro
 uploads
 data.db
-# sqlite WAL companions: `emdash dev` leaves them behind on every run
+# sqlite WAL companions: a local `emdash seed` into data.db leaves them behind
 data.db-shm
 data.db-wal
 .env
 # Wrangler's local secrets file — scripts/cf-env.py puts CLOUDFLARE_API_TOKEN in it (#620)
 .dev.vars
 .wrangler
+# EmDash 1.x writes its migration manifest here on every build (#627)
+.emdash/
 .stream.env
 # wrangler dev reads Worker secrets from here (SETUP_GATE_TOKEN, #610)
 .dev.vars*

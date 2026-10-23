@@ -8,7 +8,7 @@ site, writing plugins, driving the CLI. Useful, and **not ours**.
 | | |
 | :--- | :--- |
 | Source | [emdash-cms/emdash](https://github.com/emdash-cms/emdash) `skills/` — `building-emdash-site`, `creating-plugins`, `emdash-cli` |
-| Version | tag **`emdash@0.34.0`**, commit `4c3edad` (#616) — must equal the `emdash` version in `package-lock.json`; `tests/unit/vendor-emdash-skills.test.ts` fails otherwise |
+| Version | tag **`emdash@1.3.1`**, commit `12a1793` (#627; previously `emdash@0.34.0`, #616) — must equal the `emdash` version in `package-lock.json`; `tests/unit/vendor-emdash-skills.test.ts` fails otherwise |
 | First import | 2026-04-21, commit `c8f0df1` by `cloudflare[bot]`: the `blog-cloudflare` template's `.agents/skills` at 0.6.0, moved here in `7980f6a` (#391) |
 | Modified here | **No.** Every file is byte-identical to the tag; only this README is ours |
 
@@ -16,7 +16,7 @@ Verify — prints nothing when every blob matches the tag's tree:
 
 ```bash
 diff \
-  <(gh api "repos/emdash-cms/emdash/git/trees/emdash@0.34.0:skills?recursive=1" \
+  <(gh api "repos/emdash-cms/emdash/git/trees/emdash@1.3.1:skills?recursive=1" \
       --jq '.tree[] | select(.type=="blob") | "\(.sha) \(.path)"' \
     | grep -E ' (building-emdash-site|creating-plugins|emdash-cli)/' | sort -k2) \
   <(git ls-tree -r HEAD vendor/emdash-skills | grep -v README.md \
@@ -32,19 +32,20 @@ tags carry it too. Upstream also mirrors the pack to
 `npx skills add emdash-cms/skills`, but that repository has no tags, so a copy
 from it cannot be pinned or verified as above; and the tool writes to
 `.claude/skills` or `.agents/skills`, neither of which this repository uses.
-1.x also adds `upgrading-emdash` and two WordPress migration skills — add them
-then, if they apply.
+At 1.3.1 upstream `skills/` holds ten skills. Only these three are vendored, by
+decision (#627): `upgrading-emdash` is used from the updater itself, the two
+`wordpress-*` skills do not apply (no WordPress source), and
+`adversarial-reviewer`, `agent-browser`, `ux-acceptance-coordinator` and
+`writing-emdash-docs` are about working on EmDash, not with it.
 
-## Two things the 0.34.0 text gets wrong for this project
+## One thing the upstream text gets wrong for this project
 
-- It tells you the seed is inlined into the build and applied on the first
-  request, and stops documenting `emdash seed`. The command still exists in the
-  0.34.0 CLI and this project depends on it to seed the local D1 — see
-  `CONTRIBUTING.md`. (1.x documents it again.)
-- `building-emdash-site/SKILL.md` sends you to the plugin skill "in
-  `.agents/skills/creating-plugins/`". Here it is
-  `vendor/emdash-skills/creating-plugins/`. The file is upstream's and is not
-  edited to say so — that is what this paragraph is for.
+`building-emdash-site/SKILL.md` sends you to the plugin skill "in
+`.agents/skills/creating-plugins/`". Here it is
+`vendor/emdash-skills/creating-plugins/`. The file is upstream's and is not
+edited to say so — that is what this paragraph is for. (The 0.34.0 text also
+stopped documenting `emdash seed`; 1.x documents it again, in
+`emdash-cli/SKILL.md`.)
 
 ## Why it is not called `.agents`
 

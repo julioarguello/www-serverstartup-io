@@ -72,7 +72,7 @@ zone" (a partner-granted plan, `price: 0`; the reader cannot check it).
 
 | # | Claim | State | Gate | Proof | Link |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | EmDash, the open-source (MIT) CMS that Cloudflare announced in April 2026, runs inside the same Worker. It is still pre-1.0 | RUN/EDIT | OK | `package.json:28` (0.34.0); `node_modules/emdash/LICENSE` "Copyright 2026 Cloudflare Inc." | https://blog.cloudflare.com/emdash-wordpress/ · https://github.com/emdash-cms/emdash · https://docs.emdashcms.com |
+| 5.1 | EmDash, the open-source (MIT) CMS that Cloudflare announced in April 2026, runs inside the same Worker | RUN/EDIT | OK | `package.json` (emdash 1.3.1, #627); `node_modules/emdash/LICENSE` "Copyright 2026 Cloudflare Inc." | https://blog.cloudflare.com/emdash-wordpress/ · https://github.com/emdash-cms/emdash · https://docs.emdashcms.com |
 | 5.2 | Cloudflare runs its own blog on EmDash | — | OK | the post | https://blog.cloudflare.com/cloudflare-blog-uses-emdash/ |
 | 5.3 | Five content types: pages, services, members, references and partners, with posts ready and empty. Pages and services have drafts; those two and members keep revisions. Bodies are Portable Text | EDIT | OK | `seed/seed.json` (leave out `elementor_library`, an import leftover) | https://docs.emdashcms.com |
 | 5.4 | Two languages: pages, services and members are published in pairs linked by `translationOf` | RUN/EDIT | OK | seed; `src/utils/alternate.ts` | — |

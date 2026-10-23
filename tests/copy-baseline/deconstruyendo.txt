@@ -226,7 +226,7 @@ La documentación
 Detalle y pruebas
 7 filas
 6.1
-EmDash, el CMS de código abierto (MIT) que Cloudflare anunció en abril de 2026, corre dentro del mismo Worker. Aún no ha llegado a la 1.0.
+EmDash, el CMS de código abierto (MIT) que Cloudflare anunció en abril de 2026, corre dentro del mismo Worker.
 package.json
 anuncio · código · documentación
 6.2

@@ -70,6 +70,26 @@ npx wrangler dev --port "$PORT" >"$LOG" 2>&1 &
 WRANGLER_PID=$!
 wait_http "[0-9]{3}"
 
+# Who listens on $PORT, one PID per line; empty means free. `lsof` where it
+# exists (macOS, the hosted runner). The Playwright image the `engines` job runs
+# in has none (#646), so Linux without it reads /proc instead. Neither available
+# is an error: answering "free" because the question could not be asked lets an
+# orphan keep the port while the script reports it clear — what the lsof-only
+# version did inside that image, measured for #646.
+listeners() {
+	if command -v lsof >/dev/null 2>&1; then
+		# `|| true` is load-bearing: lsof exits 1 when it finds nothing, and under
+		# `set -euo pipefail` that failing pipeline kills the script through the
+		# assignment — silently, and precisely in the SUCCESS case (port free).
+		lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | sort -u || true
+	elif [ -r /proc/net/tcp ]; then
+		node scripts/lib/port-listeners.mjs "$PORT"
+	else
+		echo "ERROR: cannot tell who listens on $PORT: no lsof and no /proc/net/tcp" >&2
+		return 1
+	fi
+}
+
 # 2. Seed with the server DOWN (FTS-corruption rule).
 #
 # The supervisor dies FIRST, then its children. wrangler supervises its
@@ -116,10 +136,7 @@ stop_stack() {
 	# orphan and stays dead once killed. `xargs -r` is a GNU extension BSD xargs
 	# lacks, so iterate instead.
 	for _ in $(seq 1 45); do
-		# `|| true` is load-bearing: lsof exits 1 when it finds nothing, and under
-		# `set -euo pipefail` that failing pipeline kills the script through the
-		# assignment — silently, and precisely in the SUCCESS case (port free).
-		holders="$(lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | sort -u || true)"
+		holders="$(listeners)"
 		if [ -z "$holders" ]; then
 			return 0
 		fi
@@ -130,7 +147,7 @@ stop_stack() {
 	done
 	# Observed fact and where to look — never a guessed cause.
 	echo "ERROR: port $PORT still has a listener 30s after stopping the stack" >&2
-	lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >&2 || true
+	listeners >&2 || true
 	ps -eo pid=,ppid=,etime=,comm= | grep -iE "workerd|wrangler" >&2 || true
 	return 1
 }

@@ -12,7 +12,7 @@ Somos Server por especialización en backend. Nos gustan las tripas y la lógica
 Y Startup por filosofía. Porque en este sector el mundo no para y hay que adaptarse y evolucionar continuamente. Claro que ya no somos una startup (tampoco el Pont Neuf de París, la ciudad de Nueva York o el Camp Nou se construyeron precisamente ayer...) pero conservamos la entereza e ilusión del primer día.
 EL CAMINO
 El proyecto arrancó por cuenta propia en 2017. En enero de 2019 se convirtió en sociedad, desde Getxo. Hoy la sostienen ingenieros senior con más de veinte años de producción cada uno.
-Aquel mismo 2019 nos hicimos socio oficial de Cloudflare. Para 2022 el lema de la casa era “+ Calidad − Cantidad”: más criterio, menos volumen. Las dos cosas siguen en vigor.
+Aquel mismo 2019 nos hicimos socio oficial de Cloudflare. Para 2022 el lema de la casa era «+ Calidad − Cantidad»: más criterio, menos volumen. Las dos cosas siguen en vigor.
 EL CUBO
 Si el mensaje de Server Startup es la chispa vital, el rock'n'roll de nuestros inicios, el cubo canaliza hoy esa energía. Simboliza el salto de madurez que dimos al pasar de implantar e-commerce complejos a integrar plataformas de exigencia extrema como Ocado. Sus famosas colmenas (hives), donde miles de robots optimizan el picking al milímetro, son un referente de modernidad y eficiencia logística.
 Nuestro logo nace de esa retícula. Símbolo de la precisión, el rigor, la escalabilidad y la búsqueda de sinergias que rigen nuestro día a día. Un espejo en el que mirarnos. Es el mismo cubo que te acompaña por todo este sitio.

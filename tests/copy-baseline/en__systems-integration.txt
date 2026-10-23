@@ -5,13 +5,13 @@ ES
 Systems Integration
 Your ERP, your storefront and your warehouse, wired together with enterprise integration patterns (EIP) on Apache Camel. Every flow inherits the same template, and when one breaks, the trace already says where, when and why.
 Let's talk integration
-«Interesting applications rarely live in isolation.»
+“Interesting applications rarely live in isolation.”
 — Gregor Hohpe and Bobby Woolf
 Your ERP, your SaaS platforms and the legacy systems nobody dares touch have to keep running while we connect them: that is operational continuity. We approach every flow with enterprise integration patterns (EIP) and one rule: every message leaves a trail. If a flow fails, the trace says where and why before it impacts the business.
 We also connect the operational systems with the analytical ones, so what happens in the store reaches the data with no manual steps.
 Connector ≠ Integrated system
 ➜ serverstartup.io integrate --erp --storefront --warehouse
-✓ eip patterns & orchestration — Complex routing with Apache Camel, deployed on Karaf (OSGi isolation) or Quarkus. We implement idempotent consumers with no "black boxes." When a connector doesn't exist, we write it. We maintain our own Camel component for the Pebble template engine.
+✓ eip patterns & orchestration — Complex routing with Apache Camel, deployed on Karaf (OSGi isolation) or Quarkus. We implement idempotent consumers with no “black boxes.” When a connector doesn't exist, we write it. We maintain our own Camel component for the Pebble template engine.
 ✓ async messaging & events — Fault-tolerant backbones using ActiveMQ Artemis, or managed services like Google Cloud Pub/Sub and Cloudflare Queues.
 ✓ serverless compute — Elastic integration logic using Google Cloud Run or directly at the edge with Cloudflare Workers.
 ✓ data engineering & etl — Heavy data movement with Apache Hop or Talend for batch processing, and unified pipelines using Google Cloud Dataflow.
@@ -30,7 +30,7 @@ AI speeds things up. Patterns call the shots.
 More and more of our integration work is built with AI. The difference between speed and debt is the frame. An unconstrained agent solves the same problem a different way each time, and that bill arrives with the first incident.
 We practice spec-driven development. The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Each flow reads like the one before it. It's why our AI vertical starts with the systems.
 What a duplicated order costs
-"Your integration works... except when it matters."
+“Your integration works... except when it matters.”
 Stock doesn't match, orders duplicate, and nobody quite knows why.
 The senior team that designs the topology on the whiteboard is the exact same one that writes the code, fine-tunes the brokers and answers when something breaks. We know the business as well as the implementation: we know what a duplicated order costs mid-campaign.
 If it breaks, we don't open a ticket: we fix it.

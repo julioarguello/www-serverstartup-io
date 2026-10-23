@@ -2787,7 +2787,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()\" because \"page\" is null"
+									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()” because “page” is null"
 								}
 							]
 						},
@@ -4441,7 +4441,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "«Set up by someone who left» mode"
+									"text": "“Set up by someone who left” mode"
 								}
 							]
 						},
@@ -5515,7 +5515,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()\" because \"page\" is null"
+									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()” because “page” is null"
 								}
 							]
 						},
@@ -9961,7 +9961,7 @@
 								{
 									"_type": "span",
 									"_key": "eqa0",
-									"text": "«…serve customers' food missions wherever, whenever, and however they want to be served.» ",
+									"text": "“…serve customers' food missions wherever, whenever, and however they want to be served.” ",
 									"marks": []
 								},
 								{
@@ -10477,7 +10477,7 @@
 								{
 									"_type": "span",
 									"_key": "k1u",
-									"text": " rules. Nobody will tell you \"let me check with the other team\".",
+									"text": " rules. Nobody will tell you “let me check with the other team”.",
 									"marks": []
 								}
 							]
@@ -10512,7 +10512,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "«Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.» "
+									"text": "“Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.” "
 								},
 								{
 									"_type": "span",
@@ -11145,7 +11145,7 @@
 								{
 									"_type": "span",
 									"_key": "bqa0",
-									"text": "«Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.» ",
+									"text": "“Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.” ",
 									"marks": []
 								},
 								{
@@ -11869,7 +11869,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "«Interesting applications rarely live in isolation.» "
+									"text": "“Interesting applications rarely live in isolation.” "
 								},
 								{
 									"_type": "span",
@@ -12128,7 +12128,7 @@
 								{
 									"_type": "span",
 									"_key": "k12",
-									"text": ". We implement idempotent consumers with no \"black boxes.\" When a connector doesn't exist, we write it. We maintain our own Camel component for the ",
+									"text": ". We implement idempotent consumers with no “black boxes.” When a connector doesn't exist, we write it. We maintain our own Camel component for the ",
 									"marks": []
 								},
 								{
@@ -12707,7 +12707,7 @@
 								{
 									"_type": "span",
 									"_key": "k3e",
-									"text": "\"Your integration works... except when it matters.\"",
+									"text": "“Your integration works... except when it matters.”",
 									"marks": []
 								}
 							]
@@ -12812,7 +12812,7 @@
 								{
 									"_type": "span",
 									"_key": "gqa0",
-									"text": "«[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.» ",
+									"text": "“[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.” ",
 									"marks": []
 								},
 								{
@@ -14167,7 +14167,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "«I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.» ",
+									"text": "“I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.” ",
 									"marks": []
 								},
 								{
@@ -14195,7 +14195,7 @@
 								{
 									"_type": "span",
 									"_key": "k4",
-									"text": "«We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.» ",
+									"text": "“We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.” ",
 									"marks": []
 								},
 								{
@@ -14668,7 +14668,7 @@
 								{
 									"_type": "span",
 									"_key": "k1v",
-									"text": "The industry's most repeated complaint is code that is almost right, but not quite. On a promotion calculation or a stock feed, \"almost\" is an incident.",
+									"text": "The industry's most repeated complaint is code that is almost right, but not quite. On a promotion calculation or a stock feed, “almost” is an incident.",
 									"marks": []
 								}
 							]
@@ -15373,7 +15373,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "“+ Calidad − Cantidad”",
+									"text": "«+ Calidad − Cantidad»",
 									"marks": [
 										"strong"
 									]
@@ -17667,7 +17667,7 @@
 								},
 								{
 									"_type": "span",
-									"text": ", la lista de referencias se dibuja como imagen y un lector de pantalla no la lee (criterios 1.1.1 y 1.4.5 de las WCAG). Es una decisión: esos nombres se mantienen fuera del texto de la página y de los buscadores. Si necesitas la lista, pídela por el canal que se describe abajo y te la enviamos.",
+									"text": ", la lista de referencias se dibuja como imagen y un lector de pantalla no la lee (criterios 1.1.1 y 1.4.5 de las WCAG). Es una decisión: esos nombres se mantienen fuera del texto de la página y de los buscadores, y esa lista no se ofrece en ningún otro formato.",
 									"marks": []
 								}
 							],
@@ -17860,7 +17860,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines. If you need the list, ask for it through the channel described below and we will send it to you.",
+									"text": " page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines, and the list is not offered in any other format.",
 									"marks": []
 								}
 							],

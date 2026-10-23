@@ -3,7 +3,7 @@ cta_label: "Let's talk about your project"
 excerpt: "What no commercial product covers, built to last. The full lifecycle, from specification to observability, contract first. And still in production years after the demo."
 ---
 
-> «[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.» [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
+> “[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.” [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
 
 Some needs no commercial product covers. A pricing engine that only exists in your business, a website no template fits (this one, for instance). That's what *greenfield* development has always been for.
 

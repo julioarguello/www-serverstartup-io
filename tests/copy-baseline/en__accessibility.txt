@@ -7,7 +7,7 @@ How to report an accessibility barrier and how quickly we answer.
 Accessibility statement
 Server Startup, S.L. is committed to making this site accessible under Spanish Royal Decree 1112/2018. This site is partially conformant with UNE-EN 301549:2019, which maps to WCAG 2.1 level AA.
 Partially, not fully, for two specific reasons. First, the evaluation using the WCAG-EM methodology has been carried out only in its automated part. Checks run on every change — axe, a keyboard sweep, contrast measured against the rendered ground, and reflow at 320px — but that is a floor, not conformance: the manual review with a screen reader, which no tool replaces, is still to come. Second, one piece of content is not accessible, and that is on purpose.
-On the CDN and WAF page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines. If you need the list, ask for it through the channel described below and we will send it to you.
+On the CDN and WAF page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines, and the list is not offered in any other format.
 Statement prepared on 3 September 2026 by self-assessment, and revised on 21 October 2026 with the evaluation's automated part. If you hit a barrier, the channel is below.
 This is the site's accessibility channel: use it to tell us something here is not accessible, to ask for content in a format that is, or to escalate if what we answer does not help.
 How to reach us

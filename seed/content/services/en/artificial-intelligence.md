@@ -4,9 +4,9 @@ excerpt: "The machine writes the repetitive code. We bring the architecture, the
 # evidence traceability in issue 270 and docs/company/04-services-business-model.md
 ---
 
-> «I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.» [Martin Fowler](https://martinfowler.com/fragments/2026-09-08.html)
+> “I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.” [Martin Fowler](https://martinfowler.com/fragments/2026-09-08.html)
 
-> «We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.» [Martin Fowler](https://martinfowler.com/fragments/2026-07-13.html)
+> “We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.” [Martin Fowler](https://martinfowler.com/fragments/2026-07-13.html)
 
 We use AI in two ways. As a tool, to build with more quality and fewer hours what we already knew how to build. And as a system component, to solve what was not possible until recently.
 
@@ -29,7 +29,7 @@ Our workflow is this very pull request. The agent proposes; the engineer reviews
 
 We use AI every day. [`Claude Code`](https://claude.com/claude-code), [`Cursor`](https://cursor.com), open models on `Workers AI`. Using it is how we know where it fails.
 
-The industry's most repeated complaint is code that is almost right, but not quite. On a promotion calculation or a stock feed, "almost" is an incident.
+The industry's most repeated complaint is code that is almost right, but not quite. On a promotion calculation or a stock feed, “almost” is an incident.
 
 So we lead with security. Agents run on least-privilege credentials, work in environments separated from production, and nothing reaches `main` without human review.
 

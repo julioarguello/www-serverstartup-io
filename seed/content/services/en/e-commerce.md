@@ -3,7 +3,7 @@ cta_label: "Let's review your store"
 excerpt: "Over twenty years inside `hybris`, now [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Every improvement stays decoupled from the core and close to the standard, so the next upgrade doesn't cost you a quarter."
 ---
 
-> «…serve customers' food missions wherever, whenever, and however they want to be served.» [Ken Murphy](https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf)
+> “…serve customers' food missions wherever, whenever, and however they want to be served.” [Ken Murphy](https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf)
 
 Extending a commerce platform looks quick… a custom development here, a patch there, and a few years in, the version upgrade the vendor calls routine costs you a quarter. That is what we avoid.
 
@@ -30,4 +30,4 @@ The ones that come to mind when someone asks what we do.
 - **`S/4HANA` and POS interfaces.** Orders, prices and returns squaring between the web, the store and the ERP.
 - **Cross-docking and fulfillment.** From the web order to picking and the delivery promise, with substitutes when a product runs out.
 
-The team working on your platform also builds your data `pipeline` and writes your `WAF` rules. Nobody will tell you "let me check with the other team".
+The team working on your platform also builds your data `pipeline` and writes your `WAF` rules. Nobody will tell you “let me check with the other team”.

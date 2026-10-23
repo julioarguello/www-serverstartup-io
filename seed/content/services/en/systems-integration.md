@@ -3,7 +3,7 @@ cta_label: "Let's talk integration"
 excerpt: "Your `ERP`, your storefront and your warehouse, wired together with enterprise integration patterns (`EIP`) on `Apache Camel`. Every flow inherits the same template, and when one breaks, the trace already says where, when and why."
 ---
 
-> «Interesting applications rarely live in isolation.» [Gregor Hohpe and Bobby Woolf](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html)
+> “Interesting applications rarely live in isolation.” [Gregor Hohpe and Bobby Woolf](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Introduction.html)
 
 Your `ERP`, your `SaaS` platforms and the *legacy* systems nobody dares touch have to keep running while we connect them: that is **operational continuity**. We approach every flow with [enterprise integration patterns](https://www.enterpriseintegrationpatterns.com/) (`EIP`) and one rule: every message leaves a trail. If a flow fails, the trace says *where* and *why* before it impacts the business.
 
@@ -13,7 +13,7 @@ We also connect the operational systems with [the analytical ones](/en/big-data-
 
 A simple point-to-point *script* is fragile. Integration done properly **decouples the systems**: it routes, transforms on the fly and isolates failures. If the `ERP` goes down, orders wait in a queue and are processed when it returns. Zero data loss.
 
-- **`EIP` Patterns & Orchestration**: Complex routing with [Apache Camel](https://camel.apache.org/), deployed on [Karaf](https://karaf.apache.org/) (`OSGi` isolation) or [Quarkus](https://camel.apache.org/camel-quarkus/). We implement idempotent consumers with no "black boxes." When a connector doesn't exist, we write it. We maintain our own Camel component for the [Pebble](https://pebbletemplates.io/) template engine.
+- **`EIP` Patterns & Orchestration**: Complex routing with [Apache Camel](https://camel.apache.org/), deployed on [Karaf](https://karaf.apache.org/) (`OSGi` isolation) or [Quarkus](https://camel.apache.org/camel-quarkus/). We implement idempotent consumers with no “black boxes.” When a connector doesn't exist, we write it. We maintain our own Camel component for the [Pebble](https://pebbletemplates.io/) template engine.
 - **Async Messaging & Events**: Fault-tolerant *backbones* using [ActiveMQ Artemis](https://activemq.apache.org/components/artemis/), or managed services like [Google Cloud Pub/Sub](https://cloud.google.com/pubsub) and [Cloudflare Queues](https://developers.cloudflare.com/queues/).
 - **`Serverless` Compute**: Elastic integration logic using [Google Cloud Run](https://cloud.google.com/run) or directly at the edge with [Cloudflare Workers](https://workers.cloudflare.com/).
 - **Data Engineering & `ETL`**: Heavy data movement with [Apache Hop](https://hop.apache.org/) or [Talend](https://www.talend.com/) for *batch* processing, and unified pipelines using [Google Cloud Dataflow](https://cloud.google.com/dataflow).
@@ -33,7 +33,7 @@ We practice [*spec-driven development*](https://github.com/github/spec-kit). The
 
 ## What a duplicated order costs
 
-> "Your integration works... except when it matters."
+> “Your integration works... except when it matters.”
  
 Stock doesn't match, orders duplicate, and nobody quite knows why.
 

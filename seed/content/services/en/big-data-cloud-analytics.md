@@ -3,7 +3,7 @@ cta_label: "Let's talk data"
 excerpt: "1,646 tests across 111 `dbt` models on `BigQuery`: data that fails one never reaches `gold`. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard."
 ---
 
-> «Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.» [Joe Reis](https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling)
+> “Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.” [Joe Reis](https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling)
 
 Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.
 

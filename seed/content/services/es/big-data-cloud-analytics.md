@@ -1,6 +1,6 @@
 ---
 cta_label: "Hablemos de tus datos"
-excerpt: "1.646 tests sobre 111 modelos `dbt` en `BigQuery`. Si un dato no los pasa, no llega a la capa *gold*. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando."
+excerpt: "En proyectos con más de cien modelos `dbt` en `BigQuery`, los tests pasan del millar. Si un dato no los pasa, no llega a la capa *gold*. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando."
 ---
 
 > «Los modelos de datos evolucionan más despacio que el código, y el daño de un mal modelo es sigiloso. No sabrás que estás en peligro hasta que sea demasiado tarde. Así que tómate el tiempo de hacer las cosas bien. Ve despacio para ir más rápido y más seguro a largo plazo.» [Joe Reis](https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling)
@@ -17,7 +17,7 @@ Nuestro fuerte es lo analítico, y usamos [`dbt`](https://www.getdbt.com/) a los
 
 - **Donde más hemos profundizado**. En la nube de Google, [`BigQuery`](https://cloud.google.com/bigquery) como *warehouse* y `dbt` en las transformaciones.
 - **De la pizarra a la publicación**. Lo que damos por terminado (nuestra [*definition of done*](https://scrumguides.org/scrum-guide.html#commitment-definition-of-done)) se decide mucho antes del código, al diseñar la base de datos con el [modelado clásico del sector](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/), nomenclatura estándar, homogeneización y normalización del dato. Es más análisis que desarrollo, y es donde se gana la fiabilidad.
-- **El testeo es la parte que casi todo el mundo se salta**. En nuestras plataformas los tests se cuentan por miles. *Unit tests* que corren antes de publicar y *data tests* que se ejecutan cada día, con cada carga.
+- **El testeo es la parte que casi todo el mundo se salta**. En los proyectos grandes, los tests se cuentan por miles. *Unit tests* que corren antes de publicar y *data tests* que se ejecutan cada día, con cada carga.
 - **Arquitectura por capas**. El patrón [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture) separa el dato crudo del verificado, cada capa con su propósito y su control de acceso.
 - **La infraestructura también es código**. [`Terraform`](https://www.terraform.io/) levanta los mismos *datasets*, permisos y entornos en desarrollo y en producción.
 - **Tiempo real cuando el negocio lo pide**. Ingesta con [`Pub/Sub`](https://cloud.google.com/pubsub) y [`Dataflow`](https://cloud.google.com/dataflow) para los flujos que no pueden esperar a la carga nocturna.

@@ -1,6 +1,6 @@
 ---
 cta_label: "Let's talk data"
-excerpt: "1,646 tests across 111 `dbt` models on `BigQuery`. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard."
+excerpt: "In projects with over a hundred `dbt` models on `BigQuery`, tests run into the thousands. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard."
 ---
 
 > “Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.” [Joe Reis](https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling)
@@ -17,7 +17,7 @@ Our strength is analytics, and we run [`dbt`](https://www.getdbt.com/) on both s
 
 - **Google Cloud is where we've gone deepest**. [`BigQuery`](https://cloud.google.com/bigquery) as the *warehouse*, `dbt` for the transformations.
 - **From whiteboard to publication**. Our [*definition of done*](https://scrumguides.org/scrum-guide.html#commitment-definition-of-done) starts long before the code. Database design following the [sector's classic modeling](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/), standard naming, homogenization and normalization of the data. It is more analysis than development, and it is where reliability is won.
-- **Testing is the part most teams skip**. On our platforms tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load.
+- **Testing is the part most teams skip**. On large projects, tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load.
 - **Layered architecture**. The [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture) pattern keeps raw and verified data apart, each layer with its purpose and its access control.
 - **Infrastructure is code too**. [`Terraform`](https://www.terraform.io/) builds the same datasets, permissions and environments in development and in production.
 - **Real time when the business needs it**. Ingestion on [`Pub/Sub`](https://cloud.google.com/pubsub) and [`Dataflow`](https://cloud.google.com/dataflow) for the flows that can't wait for the nightly load.

@@ -3,7 +3,7 @@ Skip to content
 /en/big-data-cloud-analytics
 ES
 Big Data & Cloud Analytics
-1,646 tests across 111 dbt models on BigQuery. Data that fails them never reaches the gold layer. Medallion architecture, from ingestion to the dashboard.
+In projects with over a hundred dbt models on BigQuery, tests run into the thousands. Data that fails them never reaches the gold layer. Medallion architecture, from ingestion to the dashboard.
 Let's talk data
 “Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.”
 — Joe Reis
@@ -24,7 +24,7 @@ Save ▾ Schedule Share
 SELECT metric, lineage, last_run
 FROM `gold.business_metrics`
 WHERE reliable = TRUE;
--- guaranteed by 1,646 tests across 111 dbt models
+-- in one project: 1,646 tests across 111 dbt models
 ✓ Query complete (1.4 s) · every metric's lineage, from ingestion to analysis
 Row metric lineage last_run
 1 daily_sales complete 4 min ago
@@ -33,7 +33,7 @@ Row metric lineage last_run
 Data that doesn't add up never reaches gold. That's the governance.
 Google Cloud is where we've gone deepest. BigQuery as the warehouse, dbt for the transformations.
 From whiteboard to publication. Our definition of done starts long before the code. Database design following the sector's classic modeling, standard naming, homogenization and normalization of the data. It is more analysis than development, and it is where reliability is won.
-Testing is the part most teams skip. On our platforms tests number in the thousands. Unit tests run before anything ships, and data tests run every day, with every load.
+Testing is the part most teams skip. On large projects, tests number in the thousands. Unit tests run before anything ships, and data tests run every day, with every load.
 Layered architecture. The medallion pattern keeps raw and verified data apart, each layer with its purpose and its access control.
 Infrastructure is code too. Terraform builds the same datasets, permissions and environments in development and in production.
 Real time when the business needs it. Ingestion on Pub/Sub and Dataflow for the flows that can't wait for the nightly load.

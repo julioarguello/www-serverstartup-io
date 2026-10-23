@@ -1625,7 +1625,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "-- lo garantizan 1.646 tests sobre 111 modelos dbt"
+									"text": "-- en un proyecto: 1.646 tests sobre 111 modelos dbt"
 								}
 							]
 						},
@@ -4353,7 +4353,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "-- guaranteed by 1,646 tests across 111 dbt models"
+									"text": "-- in one project: 1,646 tests across 111 dbt models"
 								}
 							]
 						},
@@ -6371,7 +6371,7 @@
 				"status": "published",
 				"data": {
 					"title": "Comercio electrónico",
-					"excerpt": "Más de veinte años dentro de `hybris`, hoy [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Cada mejora va desacoplada del núcleo y ajustada al estándar, para que la siguiente subida de versión no cueste un trimestre.",
+					"excerpt": "Más de quince años dentro de `hybris`, hoy [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Cada mejora va desacoplada del núcleo y ajustada al estándar, para que la siguiente subida de versión no cueste un trimestre.",
 					"cta_label": "Revisemos tu tienda online",
 					"content": [
 						{
@@ -6487,7 +6487,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": "Llevamos más de veinte años dentro de ",
+									"text": "Llevamos más de quince años dentro de ",
 									"marks": []
 								},
 								{
@@ -7561,7 +7561,7 @@
 				"status": "published",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "1.646 tests sobre 111 modelos `dbt` en `BigQuery`. Si un dato no los pasa, no llega a la capa *gold*. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando.",
+					"excerpt": "En proyectos con más de cien modelos `dbt` en `BigQuery`, los tests pasan del millar. Si un dato no los pasa, no llega a la capa *gold*. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando.",
 					"cta_label": "Hablemos de tus datos",
 					"content": [
 						{
@@ -7903,7 +7903,7 @@
 								{
 									"_type": "span",
 									"_key": "k17",
-									"text": ". En nuestras plataformas los tests se cuentan por miles. *Unit tests* que corren antes de publicar y *data tests* que se ejecutan cada día, con cada carga.",
+									"text": ". En los proyectos grandes, los tests se cuentan por miles. *Unit tests* que corren antes de publicar y *data tests* que se ejecutan cada día, con cada carga.",
 									"marks": []
 								}
 							]
@@ -9182,7 +9182,7 @@
 								{
 									"_type": "span",
 									"_key": "k3m",
-									"text": "Si se rompe, no abrimos un *ticket*: ",
+									"text": "Si se rompe, ",
 									"marks": []
 								},
 								{
@@ -9196,7 +9196,7 @@
 								{
 									"_type": "span",
 									"_key": "k3o",
-									"text": ".",
+									"text": ", y queda escrito qué pasó y qué cambiamos.",
 									"marks": []
 								}
 							]
@@ -9929,7 +9929,7 @@
 				"translationOf": "svc-ecommerce",
 				"data": {
 					"title": "E-commerce",
-					"excerpt": "Over twenty years inside `hybris`, now [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Every improvement stays decoupled from the core and close to the standard, so the next upgrade doesn't cost you a quarter.",
+					"excerpt": "Over fifteen years inside `hybris`, now [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Every improvement stays decoupled from the core and close to the standard, so the next upgrade doesn't cost you a quarter.",
 					"cta_label": "Let's review your store",
 					"content": [
 						{
@@ -10045,7 +10045,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": "We've spent over twenty years inside ",
+									"text": "We've spent over fifteen years inside ",
 									"marks": []
 								},
 								{
@@ -11113,7 +11113,7 @@
 				"translationOf": "svc-bigdata",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "1,646 tests across 111 `dbt` models on `BigQuery`. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard.",
+					"excerpt": "In projects with over a hundred `dbt` models on `BigQuery`, tests run into the thousands. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard.",
 					"cta_label": "Let's talk data",
 					"content": [
 						{
@@ -11455,7 +11455,7 @@
 								{
 									"_type": "span",
 									"_key": "k17",
-									"text": ". On our platforms tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load.",
+									"text": ". On large projects, tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load.",
 									"marks": []
 								}
 							]
@@ -12735,7 +12735,7 @@
 								{
 									"_type": "span",
 									"_key": "k3m",
-									"text": "If it breaks, we don't open a *ticket*: ",
+									"text": "If it breaks, ",
 									"marks": []
 								},
 								{
@@ -12749,7 +12749,7 @@
 								{
 									"_type": "span",
 									"_key": "k3o",
-									"text": ".",
+									"text": ", and what happened and what we changed gets written down.",
 									"marks": []
 								}
 							]

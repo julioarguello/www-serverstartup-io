@@ -3,7 +3,7 @@ Saltar al contenido
 /big-data-cloud-analytics
 EN
 Big Data & Cloud Analytics
-1.646 tests sobre 111 modelos dbt en BigQuery. Si un dato no los pasa, no llega a la capa gold. Arquitectura medallion, de la ingesta al cuadro de mando.
+En proyectos con más de cien modelos dbt en BigQuery, los tests pasan del millar. Si un dato no los pasa, no llega a la capa gold. Arquitectura medallion, de la ingesta al cuadro de mando.
 Hablemos de tus datos
 «Los modelos de datos evolucionan más despacio que el código, y el daño de un mal modelo es sigiloso. No sabrás que estás en peligro hasta que sea demasiado tarde. Así que tómate el tiempo de hacer las cosas bien. Ve despacio para ir más rápido y más seguro a largo plazo.»
 — Joe Reis
@@ -24,7 +24,7 @@ Guardar ▾ Programar Compartir
 SELECT metrica, linaje, ultima_ejecucion
 FROM `gold.metricas_de_negocio`
 WHERE fiable = TRUE;
--- lo garantizan 1.646 tests sobre 111 modelos dbt
+-- en un proyecto: 1.646 tests sobre 111 modelos dbt
 ✓ Consulta completada (1,4 s) · el linaje de cada métrica, de la ingesta al análisis
 Fila metrica linaje ultima_ejecucion
 1 ventas_del_dia completo hace 4 min
@@ -33,7 +33,7 @@ Fila metrica linaje ultima_ejecucion
 El dato que no cuadra no llega a gold. Ahí está el gobierno.
 Donde más hemos profundizado. En la nube de Google, BigQuery como warehouse y dbt en las transformaciones.
 De la pizarra a la publicación. Lo que damos por terminado (nuestra definition of done) se decide mucho antes del código, al diseñar la base de datos con el modelado clásico del sector, nomenclatura estándar, homogeneización y normalización del dato. Es más análisis que desarrollo, y es donde se gana la fiabilidad.
-El testeo es la parte que casi todo el mundo se salta. En nuestras plataformas los tests se cuentan por miles. Unit tests que corren antes de publicar y data tests que se ejecutan cada día, con cada carga.
+El testeo es la parte que casi todo el mundo se salta. En los proyectos grandes, los tests se cuentan por miles. Unit tests que corren antes de publicar y data tests que se ejecutan cada día, con cada carga.
 Arquitectura por capas. El patrón medallion separa el dato crudo del verificado, cada capa con su propósito y su control de acceso.
 La infraestructura también es código. Terraform levanta los mismos datasets, permisos y entornos en desarrollo y en producción.
 Tiempo real cuando el negocio lo pide. Ingesta con Pub/Sub y Dataflow para los flujos que no pueden esperar a la carga nocturna.

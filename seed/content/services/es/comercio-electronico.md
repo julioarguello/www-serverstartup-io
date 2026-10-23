@@ -1,6 +1,6 @@
 ---
 cta_label: "Revisemos tu tienda online"
-excerpt: "Más de veinte años dentro de `hybris`, hoy [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Cada mejora va desacoplada del núcleo y ajustada al estándar, para que la siguiente subida de versión no cueste un trimestre."
+excerpt: "Más de quince años dentro de `hybris`, hoy [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Cada mejora va desacoplada del núcleo y ajustada al estándar, para que la siguiente subida de versión no cueste un trimestre."
 ---
 
 > «…servir las compras de los clientes donde, cuando y como quieran ser servidos.» [Ken Murphy](https://www.tescoplc.com/media/tdqcjq35/tesco-plc-preliminary-results-2526-analyst-call-transcript.pdf)
@@ -9,7 +9,7 @@ Extender una plataforma de comercio parece rápido… un desarrollo a medida aqu
 
 No todas las plataformas se trabajan igual. `SAP Commerce Cloud` se parametriza y se extiende, y lo que cuenta es extender con mesura: cada mejora desacoplada del núcleo, para que sobreviva a la siguiente subida de versión. Con `Ocado Smart Platform` el oficio está en el diálogo: todo lo hecho a medida vive fuera, en un *middleware* de [integración](/integracion-de-sistemas) que habla con la plataforma.
 
-Llevamos más de veinte años dentro de `hybris` y `SAP Commerce Cloud`. No vendemos licencias. El rendimiento es nuestra especialidad: catálogo, buscador y paso por caja se dimensionan para el pico real, no para la media.
+Llevamos más de quince años dentro de `hybris` y `SAP Commerce Cloud`. No vendemos licencias. El rendimiento es nuestra especialidad: catálogo, buscador y paso por caja se dimensionan para el pico real, no para la media.
 
 ## A medida ≠ acoplado
 

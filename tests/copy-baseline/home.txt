@@ -3,7 +3,7 @@ Saltar al contenido
 EN
 Ingeniería de software,
 de la arquitectura a producción
-Más de veinte años de oficio en los sistemas de la distribución: comercio electrónico, integración de sistemas y datos.
+Veinte años en la distribución: comercio electrónico, integración y datos.
 Server Startup es socio oficial de Cloudflare desde 2019.
 CDN, WAF y seguridad edge
 Integración de sistemas
@@ -32,8 +32,8 @@ Nada se despliega en rojo.
 Cada cambio pasa tests, análisis estático y escaneo de seguridad en CI/CD antes de llegar a producción, y allí deja trazas y métricas en OpenTelemetry.
 Si un SaaS ya lo resuelve, no lo construimos.
 Preferimos perder un proyecto a mantener software que sobra.
-Un método para las seis.
-Contrato primero, configuración versionada y reglas escritas que también siguen los agentes. Así cubrimos seis verticales sin improvisar en ninguna.
+Un método para los seis.
+El mismo contrato, la misma configuración en Terraform y las mismas reglas escritas, que siguen también los agentes de IA. Así ningún vertical empieza de cero.
 1
 equipo
 .
@@ -45,9 +45,9 @@ dicho y hecho
 Socio oficial de Cloudflare
 Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.
 CDN
-Caché hasta el HTML en el borde, para que el pico de campaña no llegue a tu origen.
+Caché hasta el HTML en el borde: en plena campaña, a tu origen solo llega lo que no se puede cachear.
 WAF
-Las reglas gestionadas de Cloudflare como base y, encima, las de tu tráfico, cada una con su porqué.
+Las reglas gestionadas de Cloudflare como base y, encima, las que pide tu tráfico, versionadas en Terraform.
 Workers
 Lógica en el borde, versionada y probada como el resto del código.
 Cómo operamos CDN y WAF

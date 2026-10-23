@@ -1216,7 +1216,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Un método para las seis."
+									"text": "Un método para los seis."
 								}
 							]
 						},
@@ -1227,7 +1227,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Contrato primero, configuración versionada y reglas escritas que también siguen los agentes. Así cubrimos seis verticales sin improvisar en ninguna."
+									"text": "El mismo contrato, la misma configuración en Terraform y las mismas reglas escritas, que siguen también los agentes de IA. Así ningún vertical empieza de cero."
 								}
 							]
 						}
@@ -1702,7 +1702,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "PoPs sirviendo tu web,300+;Workers · latencia al usuario,≈50 ms;Reglas sin porqué,0"
+									"text": "PoPs de Cloudflare,300+;Workers · latencia al usuario,≈50 ms;Reglas sin porqué,0"
 								}
 							]
 						},
@@ -3189,7 +3189,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Empresas que confían en nosotros"
+									"text": "Empresas con las que hemos trabajado"
 								}
 							]
 						},
@@ -3955,7 +3955,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Contract first, versioned configuration, and written rules the agents follow too. That is how we cover six verticals without improvising in any of them."
+									"text": "The same contract, the same configuration in Terraform and the same written rules, which AI agents follow too. So no vertical starts from scratch."
 								}
 							]
 						}
@@ -4430,7 +4430,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "PoPs serving your site,300+;Workers · latency to the user,≈50 ms;Rules without a reason,0"
+									"text": "Cloudflare PoPs,300+;Workers · latency to the user,≈50 ms;Rules without a reason,0"
 								}
 							]
 						},
@@ -5917,7 +5917,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Companies that trust us"
+									"text": "Companies we have worked with"
 								}
 							]
 						},
@@ -6921,7 +6921,7 @@
 				"status": "published",
 				"data": {
 					"title": "CDN, WAF y seguridad edge",
-					"excerpt": "Server Startup es socio oficial de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en [comercio electrónico](/comercio-electronico).",
+					"excerpt": "Server Startup es socio oficial de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y control de bots, sobre todo para cadenas de distribución y [comercio electrónico](/comercio-electronico).",
 					"cta_label": "Revisemos tu Cloudflare",
 					"content": [
 						{
@@ -7017,7 +7017,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": ", sobre todo para cadenas de distribución y comercio electrónico.",
+									"text": ".",
 									"marks": []
 								}
 							]
@@ -7115,7 +7115,7 @@
 								{
 									"_type": "span",
 									"_key": "kn",
-									"text": "Un *firewall* es una parte de la seguridad. La otra es saber por qué está cada regla, quién la cambió y qué ha parado hoy. Configuramos ",
+									"text": "Un *firewall* es una parte de la seguridad. La otra es saber quién cambió cada regla y qué ha parado hoy. Configuramos ",
 									"marks": []
 								},
 								{
@@ -7129,7 +7129,7 @@
 								{
 									"_type": "span",
 									"_key": "kp",
-									"text": " como arquitectura, y cada interruptor de este panel tiene un porqué.",
+									"text": " como arquitectura, con cada interruptor de este panel en `Terraform`.",
 									"marks": []
 								}
 							]
@@ -7145,7 +7145,7 @@
 								{
 									"_type": "span",
 									"_key": "kr",
-									"text": "Reglas `WAF` con su porqué.",
+									"text": "Reglas `WAF` escritas para tu negocio.",
 									"marks": [
 										"strong"
 									]
@@ -7301,7 +7301,7 @@
 								{
 									"_type": "span",
 									"_key": "k1b",
-									"text": " Cada día recibes qué ha parado el `WAF`, qué regla saltó y qué hemos cambiado. Y alertas de tráfico, seguridad y salud del origen.",
+									"text": " Cada día te llega un informe: qué ha parado el `WAF` y qué regla ha saltado. Y las alertas de tráfico, seguridad y salud del origen las atendemos nosotros.",
 									"marks": []
 								}
 							]
@@ -7343,7 +7343,7 @@
 								{
 									"_type": "span",
 									"_key": "k1h",
-									"text": ", lo seguimos llevando: vigilamos el tráfico, ajustamos las reglas cuando cambian los patrones de ataque y respondemos cuando algo se degrada.",
+									"text": ", lo seguimos llevando: vigilamos el tráfico, ajustamos las reglas cuando cambian los patrones de ataque y respondemos cuando algo se degrada. Si una regla frena tráfico legítimo, la revertimos desde su historial en `Terraform`.",
 									"marks": []
 								}
 							]
@@ -7399,7 +7399,7 @@
 								{
 									"_type": "span",
 									"_key": "k1p",
-									"text": "La plataforma no se acaba en el ",
+									"text": "La plataforma no se acaba en la ",
 									"marks": []
 								},
 								{
@@ -7561,7 +7561,7 @@
 				"status": "published",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "1.646 tests sobre 111 modelos `dbt` en `BigQuery`: el dato que no pasa uno no llega a `gold`. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando.",
+					"excerpt": "1.646 tests sobre 111 modelos `dbt` en `BigQuery`. Si un dato no los pasa, no llega a la capa *gold*. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando.",
 					"cta_label": "Hablemos de tus datos",
 					"content": [
 						{
@@ -7601,7 +7601,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Cualquiera monta un *pipeline* en una tarde. Una plataforma que aguante años de negocio, cambios de esquema y picos de campaña es otra historia.",
+									"text": "Una plataforma de datos tiene que aguantar años de negocio, cambios de esquema y picos de campaña.",
 									"marks": []
 								}
 							]
@@ -7865,7 +7865,7 @@
 								{
 									"_type": "span",
 									"_key": "k11",
-									"text": ") se decide en el diseño, mucho antes del código: la base de datos con el ",
+									"text": ") se decide mucho antes del código, al diseñar la base de datos con el ",
 									"marks": []
 								},
 								{
@@ -8068,7 +8068,7 @@
 								{
 									"_type": "span",
 									"_key": "k1u",
-									"text": "dbt a los dos lados: BigQuery y Oracle",
+									"text": "dbt en BigQuery y en Oracle",
 									"marks": []
 								}
 							]
@@ -8370,7 +8370,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": ") y con una regla: que cada mensaje deje rastro. Si un flujo falla, la traza dice *dónde*, *cuándo* y *por qué*.",
+									"text": ") y con una regla: que cada mensaje deje rastro.",
 									"marks": []
 								}
 							]
@@ -8432,7 +8432,7 @@
 								{
 									"_type": "span",
 									"_key": "kk",
-									"text": "Un simple *script* punto-a-punto es frágil. Una integración bien hecha ",
+									"text": "Una conexión directa de punto a punto es frágil. Una integración bien hecha ",
 									"marks": []
 								},
 								{
@@ -8931,21 +8931,7 @@
 								{
 									"_type": "span",
 									"_key": "k2j",
-									"text": ") o ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2l",
-									"text": "Cloudflare API Shield",
-									"marks": [
-										"k2k"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2m",
-									"text": ".",
+									"text": "), con el `WAF` de Cloudflare delante.",
 									"marks": []
 								}
 							]
@@ -8969,7 +8955,7 @@
 								{
 									"_type": "span",
 									"_key": "k2p",
-									"text": ": Registros y métricas centralizadas en ",
+									"text": ": Registros y métricas centralizados en ",
 									"marks": []
 								},
 								{
@@ -9098,7 +9084,7 @@
 								{
 									"_type": "span",
 									"_key": "k37",
-									"text": "). Primero la especificación (el contrato de datos, el patrón, la política de errores). Después el código, generado dentro de ese perímetro y firmado por el ingeniero que lo revisa. Cada flujo se lee como el anterior. Por eso nuestro ",
+									"text": "). Primero la especificación (el contrato de datos, el patrón, la política de errores). Después el código, generado dentro de ese perímetro y firmado por el ingeniero que lo revisa. Cada flujo se lee como el anterior. Nuestro ",
 									"marks": []
 								},
 								{
@@ -9112,7 +9098,7 @@
 								{
 									"_type": "span",
 									"_key": "k3a",
-									"text": " empieza por los sistemas.",
+									"text": " empieza por ahí: por los sistemas que el agente va a tocar.",
 									"marks": []
 								}
 							]
@@ -9226,7 +9212,7 @@
 				"status": "published",
 				"data": {
 					"title": "Desarrollo greenfield",
-					"excerpt": "Lo que ningún producto comercial cubre, construido para durar. Ciclo de vida completo, de la especificación a la observabilidad, con el contrato primero. Y en producción años después de la demo.",
+					"excerpt": "Construimos lo que ningún producto comercial cubre, con el ciclo de vida completo: de la especificación escrita a la observabilidad en producción.",
 					"cta_label": "Hablemos de tu proyecto",
 					"content": [
 						{
@@ -9925,7 +9911,7 @@
 								{
 									"_type": "span",
 									"_key": "k2l",
-									"text": "Del primer *commit* a la operación, los mismos ingenieros *senior*. Y cuando toca traspasarlo, acompañamos la transición y lo dejamos todo escrito: el conocimiento se queda en tu casa.",
+									"text": "Del primer *commit* a la operación, los mismos ingenieros *senior*. Y si un día el sistema pasa a manos de tu equipo, acompañamos el relevo y lo dejamos todo escrito: el conocimiento se queda en tu casa.",
 									"marks": []
 								}
 							]
@@ -10494,7 +10480,7 @@
 				"translationOf": "svc-cdn",
 				"data": {
 					"title": "CDN, WAF & Edge Security",
-					"excerpt": "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce).",
+					"excerpt": "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and bot control, mostly for retail chains and [e-commerce](/en/e-commerce).",
 					"cta_label": "Let's review your Cloudflare",
 					"content": [
 						{
@@ -10590,7 +10576,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": " accounts, mostly for retail and e-commerce.",
+									"text": " accounts.",
 									"marks": []
 								}
 							]
@@ -10694,7 +10680,7 @@
 								{
 									"_type": "span",
 									"_key": "ko",
-									"text": "A firewall is one part of security. The other is knowing why each rule is there, who changed it and what it stopped today. We configure ",
+									"text": "A firewall is one part of security. The other is knowing who changed each rule and what it stopped today. We configure ",
 									"marks": []
 								},
 								{
@@ -10708,7 +10694,7 @@
 								{
 									"_type": "span",
 									"_key": "kq",
-									"text": " as architecture, and every switch on this panel is there for a reason.",
+									"text": " as architecture, with every switch on this panel in `Terraform`.",
 									"marks": []
 								}
 							]
@@ -10724,7 +10710,7 @@
 								{
 									"_type": "span",
 									"_key": "ks",
-									"text": "`WAF` rules, each with a reason.",
+									"text": "`WAF` rules written for your business.",
 									"marks": [
 										"strong"
 									]
@@ -10866,7 +10852,7 @@
 								{
 									"_type": "span",
 									"_key": "k1a",
-									"text": " Every day you get what the `WAF` stopped, which rule fired and what we changed. And traffic, security and origin-health alerts.",
+									"text": " Every day you get a report: what the `WAF` stopped and which rule fired. And we handle the traffic, security and origin-health alerts.",
 									"marks": []
 								}
 							]
@@ -10908,7 +10894,7 @@
 								{
 									"_type": "span",
 									"_key": "k1g",
-									"text": ", we keep running it: we watch the traffic, adjust rules as attack patterns change, and answer when something degrades.",
+									"text": ", we keep running it: we watch the traffic, adjust rules as attack patterns change, and answer when something degrades. If a rule blocks legitimate traffic, we roll it back from its history in `Terraform`.",
 									"marks": []
 								}
 							]
@@ -11127,7 +11113,7 @@
 				"translationOf": "svc-bigdata",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "1,646 tests across 111 `dbt` models on `BigQuery`: data that fails one never reaches `gold`. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard.",
+					"excerpt": "1,646 tests across 111 `dbt` models on `BigQuery`. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard.",
 					"cta_label": "Let's talk data",
 					"content": [
 						{
@@ -11167,7 +11153,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.",
+									"text": "A data platform has to survive years of business, schema changes and campaign peaks.",
 									"marks": []
 								}
 							]
@@ -11634,7 +11620,7 @@
 								{
 									"_type": "span",
 									"_key": "k1u",
-									"text": "dbt on both sides: BigQuery and Oracle",
+									"text": "dbt on BigQuery and on Oracle",
 									"marks": []
 								}
 							]
@@ -11937,7 +11923,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": ") and one rule: every message leaves a trail. If a flow fails, the trace says *where* and *why* before it impacts the business.",
+									"text": ") and one rule: every message leaves a trail.",
 									"marks": []
 								}
 							]
@@ -11999,7 +11985,7 @@
 								{
 									"_type": "span",
 									"_key": "kk",
-									"text": "A simple point-to-point *script* is fragile. Integration done properly ",
+									"text": "A direct point-to-point connection is fragile. Integration done properly ",
 									"marks": []
 								},
 								{
@@ -12498,21 +12484,7 @@
 								{
 									"_type": "span",
 									"_key": "k2j",
-									"text": ") or ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2l",
-									"text": "Cloudflare API Shield",
-									"marks": [
-										"k2k"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2m",
-									"text": ".",
+									"text": "), with Cloudflare's `WAF` in front.",
 									"marks": []
 								}
 							]
@@ -12665,7 +12637,7 @@
 								{
 									"_type": "span",
 									"_key": "k37",
-									"text": ". The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Each flow reads like the one before it. It's why our ",
+									"text": ". The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Each flow reads like the one before it. Our ",
 									"marks": []
 								},
 								{
@@ -12679,7 +12651,7 @@
 								{
 									"_type": "span",
 									"_key": "k3a",
-									"text": " starts with the systems.",
+									"text": " starts there: with the systems the agent will touch.",
 									"marks": []
 								}
 							]
@@ -12794,7 +12766,7 @@
 				"translationOf": "svc-greenfield",
 				"data": {
 					"title": "Greenfield development",
-					"excerpt": "What no commercial product covers, built to last. The full lifecycle, from specification to observability, contract first. And still in production years after the demo.",
+					"excerpt": "We build what no commercial product covers, across the full lifecycle: from the written specification to observability in production.",
 					"cta_label": "Let's talk about your project",
 					"content": [
 						{
@@ -13493,7 +13465,7 @@
 								{
 									"_type": "span",
 									"_key": "k2l",
-									"text": "From the first *commit* to operations, the same senior engineers. And when it is time to hand it over, we walk the transition with you and write everything down: the knowledge stays in your house.",
+									"text": "From the first *commit* to operations, the same senior engineers. And if the system one day moves to your team, we see the handover through and write everything down: the knowledge stays in your house.",
 									"marks": []
 								}
 							]
@@ -13509,7 +13481,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Inteligencia artificial",
-					"excerpt": "La máquina escribe el código repetitivo. Nosotros ponemos la arquitectura, los datos de los que tira y el criterio, y firmamos cada línea antes de que llegue a producción. El agente propone, el ingeniero dispone.",
+					"excerpt": "La máquina escribe el código repetitivo. Nosotros ponemos la arquitectura, los datos y el criterio, y firmamos cada línea antes de producción. El agente propone, el ingeniero dispone.",
 					"cta_label": "Cuéntanos tu caso",
 					"content": [
 						{
@@ -13650,20 +13622,6 @@
 									"_type": "span",
 									"_key": "kb",
 									"text": " dentro de sistemas que ya existían. Es la parte de más valor del trabajo, y la que hacemos desde 2019.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "ke",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kd",
-									"text": "El código repetitivo lo hace la máquina. Nuestro tiempo va al criterio y a responder de lo que llega a producción.",
 									"marks": []
 								}
 							]
@@ -13865,7 +13823,7 @@
 								{
 									"_type": "span",
 									"_key": "k16",
-									"text": ", dentro de tu cuenta: el proveedor que ya sirve tu web, sin sumar otro.",
+									"text": ", en tu propia cuenta: si `Cloudflare` ya sirve tu web, no sumas otro proveedor.",
 									"marks": []
 								}
 							]
@@ -14104,7 +14062,7 @@
 								{
 									"_type": "span",
 									"_key": "k26",
-									"text": "Aquí no vas a encontrar un producto de IA. No lo tenemos y no lo fingimos. Tenemos un método hecho de reglas y protocolos versionados que dirigen a los agentes, distribuible y auditable.",
+									"text": "Aquí no vas a encontrar un producto de IA, porque no lo tenemos. Tenemos un método: reglas y protocolos versionados que dirigen a los agentes y que cualquiera puede auditar.",
 									"marks": []
 								}
 							]
@@ -14149,7 +14107,7 @@
 				"translationOf": "svc-ia",
 				"data": {
 					"title": "Artificial Intelligence",
-					"excerpt": "The machine writes the repetitive code. We bring the architecture, the data it draws on and the judgment, and we sign every line before it reaches production. The agent proposes; the engineer disposes.",
+					"excerpt": "The machine writes the repetitive code. We bring the architecture, the data and the judgment, and we sign every line before production. The agent proposes; the engineer disposes.",
 					"cta_label": "Tell us your case",
 					"content": [
 						{
@@ -14290,20 +14248,6 @@
 									"_type": "span",
 									"_key": "kb",
 									"text": " inside systems that already exist. That is the most valuable part of the work, and the part we have done since 2019.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "ke",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kd",
-									"text": "The repetitive code goes to the machine. Our time goes to judgment and to answering for what reaches production.",
 									"marks": []
 								}
 							]
@@ -14505,7 +14449,7 @@
 								{
 									"_type": "span",
 									"_key": "k16",
-									"text": " network, inside your account: the provider already serving your site, with no new one added.",
+									"text": " network, in your own account: if `Cloudflare` already serves your site, you add no new provider.",
 									"marks": []
 								}
 							]
@@ -14744,7 +14688,7 @@
 								{
 									"_type": "span",
 									"_key": "k26",
-									"text": "You won't find an AI product here. We don't have one, and we don't pretend to. What we have is a method made of versioned rules and protocols that steer the agents, distributable and auditable.",
+									"text": "You won't find an AI product here, because we don't have one. What we have is a method: versioned rules and protocols that steer the agents, and that anyone can audit.",
 									"marks": []
 								}
 							]
@@ -14982,7 +14926,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Más de veinte años de oficio en los sistemas de la distribución: "
+									"text": "Veinte años en la distribución: "
 								},
 								{
 									"_type": "span",
@@ -14997,7 +14941,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "integración de sistemas",
+									"text": "integración",
 									"marks": [
 										"hk3"
 									]
@@ -15284,7 +15228,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " por filosofía. Porque en este sector el mundo no para y hay que adaptarse y evolucionar continuamente. Claro que ya no somos una "
+									"text": " por filosofía: la tecnología cambia cada año, y cambiamos con ella. Claro que ya no somos una "
 								},
 								{
 									"_type": "span",
@@ -15407,29 +15351,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Si el mensaje de "
-								},
-								{
-									"_type": "span",
-									"text": "Server Startup",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " es la chispa vital, el "
-								},
-								{
-									"_type": "span",
-									"text": "rock'n'roll",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " de nuestros inicios, el "
+									"text": "El "
 								},
 								{
 									"_type": "span",
@@ -15440,18 +15362,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " canaliza hoy esa energía. Simboliza el salto de madurez que dimos al pasar de implantar "
-								},
-								{
-									"_type": "span",
-									"text": "e-commerce complejos",
-									"marks": [
-										"svc-ecom"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " a integrar plataformas de exigencia extrema como "
+									"text": " viene de la retícula del almacén robotizado de "
 								},
 								{
 									"_type": "span",
@@ -15462,29 +15373,18 @@
 								},
 								{
 									"_type": "span",
-									"text": ". Sus famosas colmenas ("
+									"text": ": robots sobre una cuadrícula donde cada pedido tiene que salir exacto. Integrar con esa plataforma fue nuestro salto de madurez, después de años implantando "
 								},
 								{
 									"_type": "span",
-									"text": "hives",
+									"text": "comercio electrónico complejo",
 									"marks": [
-										"em"
+										"svc-ecom"
 									]
 								},
 								{
 									"_type": "span",
-									"text": "), donde miles de robots optimizan el "
-								},
-								{
-									"_type": "span",
-									"text": "picking",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " al milímetro, son un referente de modernidad y eficiencia logística."
+									"text": "."
 								}
 							],
 							"markDefs": [
@@ -15507,7 +15407,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Nuestro logo nace de esa retícula. Símbolo de la precisión, el rigor, la escalabilidad y la búsqueda de sinergias que rigen nuestro día a día. Un espejo en el que mirarnos. Es el mismo cubo que te acompaña por todo este sitio."
+									"text": "Nuestro logo nace de esa retícula, y es el mismo cubo que te acompaña por todo este sitio."
 								}
 							]
 						},
@@ -16096,7 +15996,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Over twenty years in "
+									"text": "Over twenty years in retail: "
 								},
 								{
 									"_type": "span",
@@ -16352,7 +16252,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " for backend specialization. We like the guts, the complex logic, the hard problems. Rigor and optimization."
+									"text": " for backend specialization. We like the guts and the complex logic."
 								}
 							]
 						},
@@ -16373,7 +16273,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " as philosophy. This sector never stops, and neither do we. We are no longer a startup, of course (then again, the Pont Neuf, New York City and the Camp Nou were not exactly built yesterday...) but we keep the nerve and excitement of day one."
+									"text": " as philosophy: technology changes every year, and we change with it. We are no longer a startup, of course (then again, the Pont Neuf, New York City and the Camp Nou were not exactly built yesterday...) but we keep the nerve and excitement of day one."
 								}
 							]
 						},
@@ -16452,18 +16352,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "If that log line is the spark, the "
-								},
-								{
-									"_type": "span",
-									"text": "rock'n'roll",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " of our beginnings, the "
+									"text": "The "
 								},
 								{
 									"_type": "span",
@@ -16474,18 +16363,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " channels that energy today. It marks the maturity leap from building "
-								},
-								{
-									"_type": "span",
-									"text": "complex e-commerce",
-									"marks": [
-										"svc-ecom"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " to integrating platforms as demanding as "
+									"text": " comes from the grid of "
 								},
 								{
 									"_type": "span",
@@ -16496,7 +16374,18 @@
 								},
 								{
 									"_type": "span",
-									"text": ". Its famous hives, where thousands of robots optimize picking to the millimeter, set the bar for logistics engineering."
+									"text": "'s robotic warehouse: robots on a grid where every order has to come out exact. Integrating with that platform was our step up, after years building "
+								},
+								{
+									"_type": "span",
+									"text": "complex e-commerce",
+									"marks": [
+										"svc-ecom"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
 								}
 							],
 							"markDefs": [
@@ -16519,7 +16408,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Our logo is born from that grid. A symbol of the precision, rigor and scale that govern our daily work. A mirror to look at ourselves in. It is the same cube that guides you around this site."
+									"text": "Our logo is born from that grid, and it is the same cube that guides you around this site."
 								}
 							]
 						},
@@ -16562,7 +16451,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We work alongside your team, not around it. The "
+									"text": "We work alongside your team. The "
 								},
 								{
 									"_type": "span",
@@ -16632,7 +16521,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Few things, done well.",
+									"text": "Only what we know inside out.",
 									"marks": [
 										"strong"
 									]
@@ -16673,7 +16562,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " We'd rather have a resilient architecture today than technical debt tomorrow."
+									"text": " An architecture that holds today costs less than tomorrow's technical debt."
 								}
 							]
 						},
@@ -20548,7 +20437,7 @@
 						},
 						{
 							"key": "h9-7",
-							"text": "Every push is scanned for secrets, and a guard rejects naming clients we may not name.",
+							"text": "Every push is scanned for secrets, and a guard rejects any client name not published under References.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						}
@@ -20665,7 +20554,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Caché hasta el HTML en el borde, para que el pico de campaña no llegue a tu origen."
+										"text": "Caché hasta el HTML en el borde: en plena campaña, a tu origen solo llega lo que no se puede cachear."
 									}
 								]
 							},
@@ -20685,7 +20574,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Las reglas gestionadas de Cloudflare como base y, encima, las de tu tráfico, cada una con su porqué."
+										"text": "Las reglas gestionadas de Cloudflare como base y, encima, las que pide tu tráfico, versionadas en Terraform."
 									}
 								]
 							},
@@ -20815,7 +20704,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Caching down to the HTML at the edge, so the campaign peak never reaches your origin."
+										"text": "Caching down to the HTML at the edge: at peak, your origin only sees what can't be cached."
 									}
 								]
 							},
@@ -20835,7 +20724,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Cloudflare's managed rules as the base, and on top the ones your traffic needs, each with a reason."
+										"text": "Cloudflare's managed rules as the base, and on top the ones your traffic needs, versioned in Terraform."
 									}
 								]
 							},

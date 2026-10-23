@@ -17,7 +17,7 @@ H.L.
 VP1 ←
 → VP2
 Greenfield development
-What no commercial product covers, built to last. The full lifecycle, from specification to observability, contract first. And still in production years after the demo.
+We build what no commercial product covers, across the full lifecycle: from the written specification to observability in production.
 Let's talk about your project
 “[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.”
 — Andrej Karpathy
@@ -59,7 +59,7 @@ With AI, the framework comes first
 Maybe greenfield is where AI pays off most. It is certainly where it derails first. On a blank page, an agent delivers in hours what used to take weeks. Without a frame, every one of those hours is fresh debt.
 Our frameworks are that perimeter. The agent writes inside the rails, and an engineer signs every line that reaches main. The full story is in our AI vertical.
 Your technical debt is our problem
-From the first commit to operations, the same senior engineers. And when it is time to hand it over, we walk the transition with you and write everything down: the knowledge stays in your house.
+From the first commit to operations, the same senior engineers. And if the system one day moves to your team, we see the handover through and write everything down: the knowledge stays in your house.
 1
 team
 .

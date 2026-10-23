@@ -358,7 +358,7 @@ AI agents write most of the code under written rules, and the founder merges eve
 no file: shown by the merge history
 the repository
 9.7
-Every push is scanned for secrets, and a guard rejects naming clients we may not name.
+Every push is scanned for secrets, and a guard rejects any client name not published under References.
 .github/workflows/ci.yml
 The workshop, open
 If someone tells you how they work and cannot show you the workshop, be wary. This is ours: code, content, checks and deployments.

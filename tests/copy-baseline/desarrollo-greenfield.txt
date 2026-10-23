@@ -17,7 +17,7 @@ L.H.
 PF1 ←
 → PF2
 Desarrollo greenfield
-Lo que ningún producto comercial cubre, construido para durar. Ciclo de vida completo, de la especificación a la observabilidad, con el contrato primero. Y en producción años después de la demo.
+Construimos lo que ningún producto comercial cubre, con el ciclo de vida completo: de la especificación escrita a la observabilidad en producción.
 Hablemos de tu proyecto
 «[La IA] permite a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.»
 — Andrej Karpathy
@@ -59,7 +59,7 @@ Con IA, el framework va primero
 Puede que el greenfield sea donde más rinde la IA. Seguro que es donde antes descarrila. Sobre una página en blanco, un agente entrega en horas lo que costaba semanas. Sin marco, cada una de esas horas es deuda nueva.
 Nuestros frameworks son el perímetro. El agente escribe dentro de esos raíles y un ingeniero firma cada línea que llega a main. El detalle, en el vertical de IA.
 Tu deuda técnica es nuestro problema
-Del primer commit a la operación, los mismos ingenieros senior. Y cuando toca traspasarlo, acompañamos la transición y lo dejamos todo escrito: el conocimiento se queda en tu casa.
+Del primer commit a la operación, los mismos ingenieros senior. Y si un día el sistema pasa a manos de tu equipo, acompañamos el relevo y lo dejamos todo escrito: el conocimiento se queda en tu casa.
 1
 equipo
 .

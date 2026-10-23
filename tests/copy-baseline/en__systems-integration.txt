@@ -7,7 +7,7 @@ Your ERP, your storefront and your warehouse, wired together with enterprise int
 Let's talk integration
 “Interesting applications rarely live in isolation.”
 — Gregor Hohpe and Bobby Woolf
-Your ERP, your SaaS platforms and the legacy systems nobody dares touch have to keep running while we connect them: that is operational continuity. We approach every flow with enterprise integration patterns (EIP) and one rule: every message leaves a trail. If a flow fails, the trace says where and why before it impacts the business.
+Your ERP, your SaaS platforms and the legacy systems nobody dares touch have to keep running while we connect them: that is operational continuity. We approach every flow with enterprise integration patterns (EIP) and one rule: every message leaves a trail.
 We also connect the operational systems with the analytical ones, so what happens in the store reaches the data with no manual steps.
 Connector ≠ Integrated system
 ➜ serverstartup.io integrate --erp --storefront --warehouse
@@ -16,10 +16,10 @@ Connector ≠ Integrated system
 ✓ serverless compute — Elastic integration logic using Google Cloud Run or directly at the edge with Cloudflare Workers.
 ✓ data engineering & etl — Heavy data movement with Apache Hop or Talend for batch processing, and unified pipelines using Google Cloud Dataflow.
 ✓ contract-first design — The contract comes before the code (OpenAPI), with OAuth 2.0 and mTLS designed in.
-✓ api governance — Secure exposure via API Management solutions (like Gravitee) or Cloudflare API Shield.
+✓ api governance — Secure exposure via API Management solutions (like Gravitee), with Cloudflare's WAF in front.
 ✓ observability — Centralized logs and metrics via the ELK stack (Elasticsearch, Logstash, Kibana). Exact traceability for every single message, end-to-end.
 ➜ serverstartup.io observe --end-to-end
-│ A simple point-to-point script is fragile.
+│ A direct point-to-point connection is fragile.
 │ Integration done properly decouples the systems: it routes, transforms on the fly and isolates failures.
 │ If the ERP goes down, orders wait in a queue and are processed when it returns.
 │ Zero data loss.
@@ -28,7 +28,7 @@ Not PowerPoint. Not copy-paste.
 We design what can be built, and we build it ourselves. Patterns are the shared vocabulary; the topology is drawn on your systems and your load windows.
 AI speeds things up. Patterns call the shots.
 More and more of our integration work is built with AI. The difference between speed and debt is the frame. An unconstrained agent solves the same problem a different way each time, and that bill arrives with the first incident.
-We practice spec-driven development. The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Each flow reads like the one before it. It's why our AI vertical starts with the systems.
+We practice spec-driven development. The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Each flow reads like the one before it. Our AI vertical starts there: with the systems the agent will touch.
 What a duplicated order costs
 “Your integration works... except when it matters.”
 Stock doesn't match, orders duplicate, and nobody quite knows why.

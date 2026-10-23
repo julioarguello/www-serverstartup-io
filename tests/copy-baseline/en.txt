@@ -4,7 +4,7 @@ Skip to content
 ES
 Software engineering,
 from architecture to production
-Over twenty years in e-commerce, systems integration and data.
+Over twenty years in retail: e-commerce, systems integration and data.
 Server Startup has been an official Cloudflare partner since 2019.
 CDN, WAF & Edge Security
 Systems Integration
@@ -34,7 +34,7 @@ Every change passes tests, static analysis and a security scan in CI/CD before i
 If a SaaS already solves it, we don't build it.
 We would rather lose a project than maintain software nobody needs.
 One method for all six.
-Contract first, versioned configuration, and written rules the agents follow too. That is how we cover six verticals without improvising in any of them.
+The same contract, the same configuration in Terraform and the same written rules, which AI agents follow too. So no vertical starts from scratch.
 1
 team
 .
@@ -46,9 +46,9 @@ promise kept
 Official Cloudflare partner
 We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2.
 CDN
-Caching down to the HTML at the edge, so the campaign peak never reaches your origin.
+Caching down to the HTML at the edge: at peak, your origin only sees what can't be cached.
 WAF
-Cloudflare's managed rules as the base, and on top the ones your traffic needs, each with a reason.
+Cloudflare's managed rules as the base, and on top the ones your traffic needs, versioned in Terraform.
 Workers
 Logic at the edge, versioned and tested like the rest of the code.
 How we run CDN and WAF

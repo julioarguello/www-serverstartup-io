@@ -1,6 +1,6 @@
 ---
 cta_label: "Cuéntanos tu caso"
-excerpt: "La máquina escribe el código repetitivo. Nosotros ponemos la arquitectura, los datos de los que tira y el criterio, y firmamos cada línea antes de que llegue a producción. El agente propone, el ingeniero dispone."
+excerpt: "La máquina escribe el código repetitivo. Nosotros ponemos la arquitectura, los datos y el criterio, y firmamos cada línea antes de producción. El agente propone, el ingeniero dispone."
 # evidence traceability in issue 270 and docs/company/04-services-business-model.md
 ---
 
@@ -12,8 +12,6 @@ Usamos la IA de dos maneras. Como herramienta, para construir con más calidad y
 
 Cuando generar código sale casi gratis, se genera muchísimo más software ([paradoja de Jevons](https://news.northeastern.edu/2025/02/07/jevons-paradox-ai-future/)). Y todo ese software nuevo hay que [integrarlo](/integracion-de-sistemas) y [asegurarlo](/cdn-waf-seguridad-edge-cloudflare) dentro de sistemas que ya existían. Es la parte de más valor del trabajo, y la que hacemos desde 2019.
 
-El código repetitivo lo hace la máquina. Nuestro tiempo va al criterio y a responder de lo que llega a producción.
-
 ## Generado ≠ entregado
 
 Un agente es IA que hace cosas, no solo responde. Y para ser útil necesita leer el pedido en [`SAP`](/comercio-electronico), comprobar el *stock* en [`BigQuery`](/big-data-cloud-analytics) y escribir el resultado donde tu equipo trabaja de verdad. Ese cableado es lo nuestro.
@@ -21,7 +19,7 @@ Un agente es IA que hace cosas, no solo responde. Y para ser útil necesita leer
 Nuestro flujo es el de este *pull request*. El agente propone; el ingeniero revisa, aprueba y **firma**. Siempre con permisos mínimos y cada acción registrada.
 
 - **Agentes con permisos acotados.** Construidos sobre el [`Agents SDK`](https://developers.cloudflare.com/agents/), tocan solo lo que deben y siempre hay una persona que puede pararlos.
-- **Inferencia en el borde.** Clasificación y extracción de documentos con [`Workers AI`](https://developers.cloudflare.com/workers-ai/), en la red de [`Cloudflare`](https://www.cloudflare.com/es-es/), dentro de tu cuenta: el proveedor que ya sirve tu web, sin sumar otro.
+- **Inferencia en el borde.** Clasificación y extracción de documentos con [`Workers AI`](https://developers.cloudflare.com/workers-ai/), en la red de [`Cloudflare`](https://www.cloudflare.com/es-es/), en tu propia cuenta: si `Cloudflare` ya sirve tu web, no sumas otro proveedor.
 - **Tráfico de IA gobernado.** Cada llamada a un modelo queda registrada y con techo de gasto en [`AI Gateway`](https://developers.cloudflare.com/ai-gateway/). Sabrás qué modelo respondió y cuánto costó.
 - **Auditoría antes de producción.** Seguridad, lógica de negocio y rendimiento. Ninguna línea generada se despliega sin pasarla.
 
@@ -35,6 +33,6 @@ Por eso trabajamos con la seguridad por delante. Los agentes usan credenciales d
 
 La [ley europea de IA](https://artificialintelligenceact.eu/es/) exige supervisión humana con competencia y autoridad para corregir o parar un sistema de alto riesgo. Nosotros ya trabajamos así.
 
-Aquí no vas a encontrar un producto de IA. No lo tenemos y no lo fingimos. Tenemos un método hecho de reglas y protocolos versionados que dirigen a los agentes, distribuible y auditable.
+Aquí no vas a encontrar un producto de IA, porque no lo tenemos. Tenemos un método: reglas y protocolos versionados que dirigen a los agentes y que cualquiera puede auditar.
 
 [Esta misma web](/deconstruyendo) se construye así, con agentes supervisados, *pull request* a *pull request*. Y si un *chatbot* no te resuelve nada, te diremos que no lo pongas.

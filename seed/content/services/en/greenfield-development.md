@@ -1,6 +1,6 @@
 ---
 cta_label: "Let's talk about your project"
-excerpt: "What no commercial product covers, built to last. The full lifecycle, from specification to observability, contract first. And still in production years after the demo."
+excerpt: "We build what no commercial product covers, across the full lifecycle: from the written specification to observability in production."
 ---
 
 > “[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.” [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
@@ -40,4 +40,4 @@ Our *frameworks* are that perimeter. The agent writes inside the rails, and an e
 
 ## Your technical debt is our problem
 
-From the first *commit* to operations, the same senior engineers. And when it is time to hand it over, we walk the transition with you and write everything down: the knowledge stays in your house.
+From the first *commit* to operations, the same senior engineers. And if the system one day moves to your team, we see the handover through and write everything down: the knowledge stays in your house.

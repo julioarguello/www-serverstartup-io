@@ -1,6 +1,6 @@
 ---
 cta_label: "Hablemos de tu proyecto"
-excerpt: "Lo que ningún producto comercial cubre, construido para durar. Ciclo de vida completo, de la especificación a la observabilidad, con el contrato primero. Y en producción años después de la demo."
+excerpt: "Construimos lo que ningún producto comercial cubre, con el ciclo de vida completo: de la especificación escrita a la observabilidad en producción."
 ---
 
 > «[La IA] permite a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.» [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
@@ -40,4 +40,4 @@ Nuestros *frameworks* son el perímetro. El agente escribe dentro de esos raíle
 
 ## Tu deuda técnica es nuestro problema
 
-Del primer *commit* a la operación, los mismos ingenieros *senior*. Y cuando toca traspasarlo, acompañamos la transición y lo dejamos todo escrito: el conocimiento se queda en tu casa.
+Del primer *commit* a la operación, los mismos ingenieros *senior*. Y si un día el sistema pasa a manos de tu equipo, acompañamos el relevo y lo dejamos todo escrito: el conocimiento se queda en tu casa.

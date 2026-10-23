@@ -1,11 +1,11 @@
 ---
 cta_label: "Let's talk data"
-excerpt: "1,646 tests across 111 `dbt` models on `BigQuery`: data that fails one never reaches `gold`. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard."
+excerpt: "1,646 tests across 111 `dbt` models on `BigQuery`. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard."
 ---
 
 > “Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.” [Joe Reis](https://practicaldatamodeling.substack.com/p/we-dont-have-time-for-data-modeling)
 
-Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.
+A data platform has to survive years of business, schema changes and campaign peaks.
 
 We build them the way [serious software](/en/greenfield-development) gets built. Every transformation versioned in `git`, every dataset tested, every flow wired to an alert.
 
@@ -22,7 +22,7 @@ Our strength is analytics, and we run [`dbt`](https://www.getdbt.com/) on both s
 - **Infrastructure is code too**. [`Terraform`](https://www.terraform.io/) builds the same datasets, permissions and environments in development and in production.
 - **Real time when the business needs it**. Ingestion on [`Pub/Sub`](https://cloud.google.com/pubsub) and [`Dataflow`](https://cloud.google.com/dataflow) for the flows that can't wait for the nightly load.
 
-## dbt on both sides: BigQuery and Oracle
+## dbt on BigQuery and on Oracle
 
 On the analytical side we work with [`dbt Cloud`](https://docs.getdbt.com/docs/platform/about-platform/dbt-platform-features) on `BigQuery`. And when a transformation belongs in the operational layer, on a relational database like `Oracle`, we manage it with [`dbt Core`](https://github.com/dbt-labs/dbt-core) and the [adapter Oracle maintains](https://github.com/oracle/dbt-oracle) (plus our own improvements, as obvious as they were necessary...).
 

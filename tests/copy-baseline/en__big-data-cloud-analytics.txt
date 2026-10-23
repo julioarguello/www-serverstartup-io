@@ -3,11 +3,11 @@ Skip to content
 /en/big-data-cloud-analytics
 ES
 Big Data & Cloud Analytics
-1,646 tests across 111 dbt models on BigQuery: data that fails one never reaches gold. Medallion architecture, from ingestion to the dashboard.
+1,646 tests across 111 dbt models on BigQuery. Data that fails them never reaches the gold layer. Medallion architecture, from ingestion to the dashboard.
 Let's talk data
 “Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.”
 — Joe Reis
-Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.
+A data platform has to survive years of business, schema changes and campaign peaks.
 We build them the way serious software gets built. Every transformation versioned in git, every dataset tested, every flow wired to an alert.
 Our strength is analytics, and we run dbt on both sides: in the warehouse and in the operational database.
 dbt ≠ pipeline
@@ -37,7 +37,7 @@ Testing is the part most teams skip. On our platforms tests number in the thousa
 Layered architecture. The medallion pattern keeps raw and verified data apart, each layer with its purpose and its access control.
 Infrastructure is code too. Terraform builds the same datasets, permissions and environments in development and in production.
 Real time when the business needs it. Ingestion on Pub/Sub and Dataflow for the flows that can't wait for the nightly load.
-dbt on both sides: BigQuery and Oracle
+dbt on BigQuery and on Oracle
 On the analytical side we work with dbt Cloud on BigQuery. And when a transformation belongs in the operational layer, on a relational database like Oracle, we manage it with dbt Core and the adapter Oracle maintains (plus our own improvements, as obvious as they were necessary...).
 The same tests and the same versioning on both sides, with no toll booths between teams. Data reaches the dashboard already proven.
 We connect BigQuery to your e-commerce, to your ERP, and to the edge.

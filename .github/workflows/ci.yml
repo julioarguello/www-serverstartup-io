@@ -429,76 +429,53 @@ jobs:
   # ── engines: Safari's engine and Android's Chromium, on their own runner (#583) ──
   #
   # Every other rendered gate runs Puppeteer's Chrome. WebKit on Linux needs
-  # system libraries installed with apt on every run (they cannot be cached),
-  # so this is a job of its own beside `a11y` rather than more minutes on
-  # `rendered`: it runs in parallel and stays off the critical path.
+  # system libraries no cache restores, so this is a job of its own beside
+  # `a11y` rather than more minutes on `rendered`: it runs in parallel and
+  # stays off the critical path.
+  #
+  # It runs inside Playwright's own image (#646), which carries those libraries
+  # and the browsers already. Until then they came from apt on every run: median
+  # ~45 s, but 8 of 32 runs took 3–20 minutes and 2 failed, all of it the
+  # Ubuntu mirror (#631 bounded it; this removes it). The tag is the
+  # `playwright` pin in package.json — tests/unit/playwright-image.test.ts
+  # fails the build when the two part. `--user 1001` is the runner's uid, as
+  # Playwright's CI guide sets it, so the checkout stays writable.
   engines:
     needs: scope
     if: needs.scope.outputs.site == 'true'
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001 --ipc=host
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
+      # The image ships Node 24. The stack is built and seeded on 22 everywhere
+      # else, and native modules (better-sqlite3) load only on the ABI they were
+      # built for.
       - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
 
-      - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
+      # An entry of its own, node_modules only. actions/cache stores each path
+      # relative to the workspace (toolkit cacheUtils.resolvePaths), and `~` is
+      # /github/home in here but /home/runner on the jobs sharing `deps-…`, so
+      # `~/.cache/puppeteer` resolves to a different place on each side of that
+      # entry. Nothing in this job drives Puppeteer.
+      - name: Restore node_modules  # not-a-gate: a cache lookup, not a check
         id: deps
         uses: actions/cache@v6
         with:
-          path: |
-            node_modules
-            ~/.cache/puppeteer
-          key: deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
+          path: node_modules
+          key: engines-deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
 
       - name: Install  # not-a-gate: dependency install, not a check
         if: steps.deps.outputs.cache-hit != 'true'
-        run: npm ci
-
-      # Playwright's browsers are a function of its pinned version, which the
-      # lockfile carries. A path of their own, not added to the shared key above:
-      # the other jobs save that entry too, without these browsers in it.
-      - name: Restore the Playwright browsers  # not-a-gate: a cache lookup, not a check
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
-
-      # The browsers come from the cache above; WebKit's system libraries come
-      # from apt, which no cache restores. Twice in 30 runs apt stalled after
-      # "Reading package lists..." and the job sat until its 20-minute timeout
-      # (#631). So the apt half is bounded three ways: apt's own network
-      # timeouts; `timeout` run AS ROOT — the apt-get Playwright spawns is
-      # root, and an unprivileged `timeout` cannot signal it (measured in
-      # ubuntu:24.04: the stalled apt-get outlived the kill holding the dpkg
-      # lock, and the retry failed on that lock in under a second); and before
-      # the one retry, any surviving apt-get is killed and dpkg recovered.
-      - name: Install WebKit and Chromium for Playwright  # not-a-gate: browser and system-library install, not a check
-        timeout-minutes: 10
         env:
-          PW_BROWSERS: webkit chromium-headless-shell
-          APT_LIMIT: 240
-        run: |
-          # shellcheck disable=SC2086  # PW_BROWSERS is a word list on purpose
-          npx playwright install $PW_BROWSERS
-          printf 'Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "3";\n' \
-            | sudo tee /etc/apt/apt.conf.d/99-ci-bounded >/dev/null
-          for attempt in 1 2; do
-            rc=0
-            # shellcheck disable=SC2086
-            sudo env "PATH=$PATH" timeout -k 15 "$APT_LIMIT" npx playwright install-deps $PW_BROWSERS || rc=$?
-            [ "$rc" = 0 ] && exit 0
-            case "$rc" in
-              124|137) echo "::warning::system libraries, attempt $attempt: no answer within ${APT_LIMIT}s" ;;
-              *) echo "::warning::system libraries, attempt $attempt: exit $rc" ;;
-            esac
-            sudo pkill -KILL -x apt-get || true
-            sudo dpkg --configure -a || true
-          done
-          exit 1
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: npm ci
 
       - name: Build
         run: npx astro build

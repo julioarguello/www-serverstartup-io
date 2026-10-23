@@ -157,7 +157,10 @@ The order is the order CI runs them in. **`Secrets` is the one gate with no loca
 command** — it is a GitHub Action over the full history, so it cannot be reproduced
 from a working tree; everything else runs here first. The browser gates use the
 Chrome that `npm ci` installs, except **Engines**, which needs WebKit too:
-`npx playwright install --with-deps webkit chromium-headless-shell`, as CI does.
+`npx playwright install --with-deps webkit chromium-headless-shell`. CI does not install
+them: it runs that job inside `mcr.microsoft.com/playwright:v<version>-noble`, whose tag
+must equal the `playwright` pin in `package.json` (`tests/unit/playwright-image.test.ts`
+fails otherwise, so a Playwright bump moves both).
 
 | Gate | Local command | Target |
 | :--- | :--- | :--- |

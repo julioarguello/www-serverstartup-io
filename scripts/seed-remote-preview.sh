@@ -349,7 +349,8 @@ while read -r t; do
 done < "$WORK/tables.rev"
 sqlite3 "$D1_DB" "SELECT 'INSERT INTO ' || name || '(' || name || ') VALUES(''rebuild'');' FROM sqlite_master WHERE sql LIKE 'CREATE VIRTUAL TABLE%';" >> "$SQL"
 # …and the media-usage capture triggers come back, after the inserts so the
-# refresh itself enqueues no media-usage work (#627).
+# inserts themselves fire none (#627). `_emdash_media_usage_work` is copied like
+# any other table, so the remote inherits the local stack's pending rows.
 sqlite3 "$D1_DB" "SELECT sql || ';' FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';" >> "$SQL"
 
 # The whole list, not the two tables the plant below happens to touch: no
@@ -457,9 +458,10 @@ echo "identity kept: a planted admin, passkey, setup flag and runtime option sur
 
 # The media-usage triggers (#627): as many on the refreshed copy as locally —
 # none dropped and left missing, which would silently stop media-usage capture —
-# and a write that fires one must succeed, which it does not while a trigger
-# still names a collection ID the refresh replaced ("media usage capture
-# inactive", the failure that found this).
+# and a write that fires one must succeed. It aborts ("media usage capture
+# inactive", the failure that found this) whenever a trigger's collection has no
+# index-status row after the refresh: the state any mismatch between the
+# triggers and `_emdash_media_usage_index_status` leaves behind.
 MU_LOCAL=$(sqlite3 "$D1_DB" "SELECT count(*) FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';")
 MU_POP=$(sqlite3 "$WORK/rehearsal-populated.sqlite" "SELECT count(*) FROM sqlite_master WHERE type='trigger' AND name LIKE 'emdash\_mu\_%' ESCAPE '\';")
 [ "$MU_POP" = "$MU_LOCAL" ] || {

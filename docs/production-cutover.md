@@ -90,6 +90,23 @@ explicitly if anything landed in between.
 > overwrite live CMS content deliberately. On the cutover path there is no
 > reason to type it.
 
+> **Superseded at launch by the EmDash 1.x upgrade (#627).** The founder
+> decided on 2026-10-23 that production's D1 is **recreated, not migrated**:
+> it still holds a 0.34 schema, and 1.x migrations are forward-only. Preview
+> went through the same steps that day. In a shell with step 2's account line:
+>
+> ```bash
+> npx wrangler d1 export www-serverstartup-io --remote --output prod-before-1x.sql   # optional keepsake
+> npx wrangler d1 delete www-serverstartup-io -y
+> npx wrangler d1 create www-serverstartup-io     # prints the new database_id
+> ```
+>
+> Put that `database_id` into `env.production` in `wrangler.jsonc` through a
+> PR. Then dispatch **with** the seed this one time:
+> `gh workflow run deploy-production.yml --ref main -f seed_d1=true`.
+> The guard finds the database empty and allows it. Then claim the CMS
+> administrator below; the new database has none.
+
 > **What the first dispatch actually did** — run 33423944295, 2026-08-31.
 > It failed at the guard, which reported the production database unreadable.
 > It was not: the query succeeded and returned nothing, because production sat

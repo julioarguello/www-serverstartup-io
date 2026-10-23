@@ -132,11 +132,14 @@ jobs:
           TARGET=${{ steps.canonical.outputs.target }}
           for i in $(seq 1 36); do
             curl -s -o /dev/null -m 15 "$PRODUCTION_URL/_emdash/admin" || true
-            COUNT=$(npx wrangler d1 execute www-serverstartup-io --remote --json \
-              --command "SELECT count(*) AS c FROM _emdash_migrations;" 2>/dev/null \
-              | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s)[0].results[0].c)}catch{console.log(-1)}})")
-            echo "attempt $i: remote applied=$COUNT target=$TARGET (poked /_emdash/admin from the GitHub runner; count via wrangler d1 API)"
-            if [ "$COUNT" -ge "$TARGET" ] 2>/dev/null; then exit 0; fi
+            # EmDash 1.x (#627) also seeds the schema of a fresh database by
+            # itself once the migrations are in (`emdash:seed_complete`); the
+            # refresh must not read the remote before that has finished.
+            read -r COUNT SEEDED < <(npx wrangler d1 execute www-serverstartup-io --remote --json \
+              --command "SELECT (SELECT count(*) FROM _emdash_migrations) AS c, (SELECT value FROM options WHERE name = 'emdash:seed_complete') AS s;" 2>/dev/null \
+              | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{const r=JSON.parse(s)[0].results[0];console.log(r.c+' '+r.s)}catch{console.log('-1 null')}})")
+            echo "attempt $i: remote applied=$COUNT target=$TARGET seed_complete=$SEEDED (poked /_emdash/admin from the GitHub runner; read via wrangler d1 API)"
+            if [ "$COUNT" -ge "$TARGET" ] 2>/dev/null && [ "$SEEDED" = "true" ]; then exit 0; fi
             sleep 10
           done
           echo "::error::remote D1 never reached $TARGET applied migrations — the worker is not migrating; refusing to seed onto a stale schema"

@@ -19828,7 +19828,7 @@
 					"facts": [
 						{
 							"key": "h5-1",
-							"text": "`EmDash`, el CMS de código abierto (MIT) que `Cloudflare` anunció en abril de 2026, corre dentro del mismo Worker. Aún no ha llegado a la 1.0.",
+							"text": "`EmDash`, el CMS de código abierto (MIT) que `Cloudflare` anunció en abril de 2026, corre dentro del mismo Worker.",
 							"file": "package.json",
 							"docs": "[anuncio](https://blog.cloudflare.com/emdash-wordpress/) · [código](https://github.com/emdash-cms/emdash) · [documentación](https://docs.emdashcms.com)",
 							"status": "ok"
@@ -19953,7 +19953,7 @@
 					"facts": [
 						{
 							"key": "h5-1",
-							"text": "`EmDash`, the open-source (MIT) CMS that `Cloudflare` announced in April 2026, runs inside the same Worker. It is still pre-1.0.",
+							"text": "`EmDash`, the open-source (MIT) CMS that `Cloudflare` announced in April 2026, runs inside the same Worker.",
 							"file": "package.json",
 							"docs": "[announcement](https://blog.cloudflare.com/emdash-wordpress/) · [code](https://github.com/emdash-cms/emdash) · [documentation](https://docs.emdashcms.com)",
 							"status": "ok"

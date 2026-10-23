@@ -32,8 +32,11 @@ tags carry it too. Upstream also mirrors the pack to
 `npx skills add emdash-cms/skills`, but that repository has no tags, so a copy
 from it cannot be pinned or verified as above; and the tool writes to
 `.claude/skills` or `.agents/skills`, neither of which this repository uses.
-1.x also adds `upgrading-emdash` and two WordPress migration skills — add them
-then, if they apply.
+At 1.3.1 upstream `skills/` holds ten skills. Only these three are vendored, by
+decision (#627): `upgrading-emdash` is used from the updater itself, the two
+`wordpress-*` skills do not apply (no WordPress source), and
+`adversarial-reviewer`, `agent-browser`, `ux-acceptance-coordinator` and
+`writing-emdash-docs` are about working on EmDash, not with it.
 
 ## One thing the upstream text gets wrong for this project
 

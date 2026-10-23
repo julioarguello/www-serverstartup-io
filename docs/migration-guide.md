@@ -120,9 +120,10 @@ wrangler r2 bucket create www-serverstartup-io
 
 # 2. Actualizar wrangler.jsonc con el database_id real
 
-# 3. Generar auth secret y añadirlo como variable de entorno
-npx emdash auth secret
-wrangler secret put EMDASH_AUTH_SECRET
+# 3. Clave que cifra los secretos de los plugins (EmDash 1.x; `emdash auth
+#    secret` y EMDASH_AUTH_SECRET eran de la 0.34 y ya no existen)
+npx emdash secrets generate
+wrangler secret put EMDASH_ENCRYPTION_KEY
 
 # 4. Secreto que abre el setup wizard (#610), uno por entorno. La sesión de
 #    wrangler alcanza varias cuentas: sin CLOUDFLARE_ACCOUNT_ID pregunta cuál.

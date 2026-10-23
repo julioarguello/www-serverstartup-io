@@ -1,6 +1,6 @@
 ---
 cta_label: "Hablemos de tu proyecto"
-excerpt: "El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. `SDLC` completo, de la especificación a la observabilidad. Trabajamos *contract first*, con foco en estabilidad, seguridad y gobernanza."
+excerpt: "Construimos lo que ningún producto comercial cubre, con el ciclo de vida completo: de la especificación escrita a la observabilidad en producción."
 ---
 
 > «[La IA] permite a profesionales formados escribir mucho más software… que de otro modo nunca se habría escrito.» [Andrej Karpathy](https://karpathy.bearblog.dev/year-in-review-2025/)
@@ -9,7 +9,7 @@ Hay necesidades que ningún producto comercial cubre. Un motor de precios que so
 
 Y hoy pesa otro motivo. Con las capacidades que trae la [IA](/inteligencia-artificial), construir a medida sale a cuenta en casos donde antes se compraba por defecto.
 
-La advertencia, por delante. Si un `SaaS` te lo resuelve, te lo decimos y no lo construimos. Preferimos perder un proyecto antes que mantener uno que sobra.
+La advertencia, por delante. Si un `SaaS` te lo resuelve, te lo decimos y no lo construimos.
 
 ## El código no es el producto
 
@@ -18,7 +18,7 @@ El producto es el sistema que sigue en producción años después de la demo. La
 Cuatro reglas y ninguna es opcional.
 
 - **`Java` sin nostalgia.** [Spring Boot](https://spring.io/projects/spring-boot) o [Quarkus](https://quarkus.io/) sobre `Java` 21. *Virtual threads*, *records* y *pattern matching*. Código que escala sin trucos.
-- **El contrato antes que el código.** La `API` se pacta por escrito (*Contract First*, `OpenAPI`) y las credenciales (`OAuth 2.0`, `mTLS`) entran en el diseño, no en el parche.
+- **El contrato antes que el código.** La `API` se pacta por escrito (`OpenAPI`) y las credenciales (`OAuth 2.0`, `mTLS`) entran en el diseño, no en el parche.
 - **El `CI/CD` es la gobernanza.** Tests, análisis estático y validación de seguridad delante de cada despliegue. Siempre sabes qué corre en tus servidores y por qué.
 - **La seguridad se compila.** Control de acceso granular en el código y el [`WAF`](/cdn-waf-seguridad-edge-cloudflare) de [Cloudflare](https://www.cloudflare.com/es-es/) delante.
 
@@ -32,7 +32,7 @@ Nunca partimos de cero, y no dejamos que una IA lo haga. Para cada marco tecnol�
 
 La ventaja se nota en el segundo servicio. Se lee como el primero, se despliega igual y lo opera cualquiera del equipo. Aburrido a propósito.
 
-## La IA multiplica. El *framework* conduce.
+## Con IA, el *framework* va primero
 
 Puede que el *greenfield* sea donde más rinde la IA. Seguro que es donde antes descarrila. Sobre una página en blanco, un agente entrega en horas lo que costaba semanas. Sin marco, cada una de esas horas es deuda nueva.
 
@@ -40,4 +40,4 @@ Nuestros *frameworks* son el perímetro. El agente escribe dentro de esos raíle
 
 ## Tu deuda técnica es nuestro problema
 
-Quien diseña el sistema lo despliega y responde por su estabilidad. Los mismos ingenieros *senior*, del primer *commit* a la operación. No entregamos y desaparecemos. Acompañamos la transición y el conocimiento se queda en tu casa, no en la nuestra.
+Del primer *commit* a la operación, los mismos ingenieros *senior*. Y si un día el sistema pasa a manos de tu equipo, acompañamos el relevo y lo dejamos todo escrito: el conocimiento se queda en tu casa.

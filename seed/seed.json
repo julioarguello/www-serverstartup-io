@@ -1029,7 +1029,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Quien diseña tu sistema lo lleva a producción. Y cada mañana mira sus alertas."
+									"text": "Quien diseña tu sistema lo lleva a producción, y después vigila sus alertas."
 								}
 							]
 						},
@@ -1161,7 +1161,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " antes de llegar a producción. Allí, trazas y métricas con "
+									"text": " antes de llegar a producción, y allí deja trazas y métricas en "
 								},
 								{
 									"_type": "span",
@@ -1216,7 +1216,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Dicho y hecho."
+									"text": "Un método para los seis."
 								}
 							]
 						},
@@ -1227,7 +1227,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Lo que empezamos, lo terminamos. Cada día nos ocupamos de que el proyecto vaya bien, porque en él va nuestra palabra."
+									"text": "El mismo contrato, la misma configuración en Terraform y las mismas reglas escritas, que siguen también los agentes de IA. Así ningún vertical empieza de cero."
 								}
 							]
 						}
@@ -1625,7 +1625,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "-- lo garantizan 1.646 tests sobre 111 modelos dbt"
+									"text": "-- en un proyecto: 1.646 tests sobre 111 modelos dbt"
 								}
 							]
 						},
@@ -1702,7 +1702,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "PoPs sirviendo tu web,300+;Workers · latencia al usuario,<50 ms;Plantillas genéricas,0"
+									"text": "PoPs de Cloudflare,300+;Workers · latencia al usuario,≈50 ms;Reglas sin porqué,0"
 								}
 							]
 						},
@@ -2043,7 +2043,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "ORIGIN,CDN,WAF,ACCESS,ZERO TRUST"
+									"text": "ORIGIN,CDN,WAF,BOTS,WORKERS"
 								}
 							]
 						},
@@ -2787,7 +2787,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()\" because \"page\" is null"
+									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()” because “page” is null"
 								}
 							]
 						},
@@ -3189,7 +3189,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Empresas que confían en nosotros"
+									"text": "Empresas con las que hemos trabajado"
 								}
 							]
 						},
@@ -3768,7 +3768,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Whoever designs your system takes it to production. And checks its alerts every morning."
+									"text": "Whoever designs your system takes it to production, and keeps watching its alerts after that."
 								}
 							]
 						},
@@ -3889,7 +3889,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " before it reaches production. There, traces and metrics with "
+									"text": " before it reaches production, where it leaves traces and metrics in "
 								},
 								{
 									"_type": "span",
@@ -3944,7 +3944,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Promise kept."
+									"text": "One method for all six."
 								}
 							]
 						},
@@ -3955,7 +3955,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "What we start, we finish. Every day we make sure the project goes well, because our word is in it."
+									"text": "The same contract, the same configuration in Terraform and the same written rules, which AI agents follow too. So no vertical starts from scratch."
 								}
 							]
 						}
@@ -4353,7 +4353,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "-- guaranteed by 1,646 tests across 111 dbt models"
+									"text": "-- in one project: 1,646 tests across 111 dbt models"
 								}
 							]
 						},
@@ -4430,7 +4430,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "PoPs serving your site,300+;Workers · latency to the user,<50 ms;Generic templates,0"
+									"text": "Cloudflare PoPs,300+;Workers · latency to the user,≈50 ms;Rules without a reason,0"
 								}
 							]
 						},
@@ -4441,7 +4441,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "«Set up by someone who left» mode"
+									"text": "“Set up by someone who left” mode"
 								}
 							]
 						},
@@ -4771,7 +4771,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "ORIGIN,CDN,WAF,ACCESS,ZERO TRUST"
+									"text": "ORIGIN,CDN,WAF,BOTS,WORKERS"
 								}
 							]
 						},
@@ -5515,7 +5515,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()\" because \"page\" is null"
+									"text": "Caused by: java.lang.NullPointerException: Cannot invoke \"Page.getTitle()” because “page” is null"
 								}
 							]
 						},
@@ -5917,7 +5917,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Companies that trust us"
+									"text": "Companies we have worked with"
 								}
 							]
 						},
@@ -6371,8 +6371,8 @@
 				"status": "published",
 				"data": {
 					"title": "Comercio electrónico",
-					"excerpt": "Más de veinte años dentro de [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Extender la plataforma es lo fácil: hacerlo con cada mejora desacoplada del *core*, ajustada al estándar, para que sobreviva versión tras versión, es lo que casi nadie hace. Y el rendimiento, nuestra especialidad.",
-					"cta_label": "Audita tu e-commerce",
+					"excerpt": "Más de quince años dentro de `hybris`, hoy [`SAP Commerce Cloud`](https://www.sap.com/spain/products/crm/commerce-cloud.html). Cada mejora va desacoplada del núcleo y ajustada al estándar, para que la siguiente subida de versión no cueste un trimestre.",
+					"cta_label": "Revisemos tu tienda online",
 					"content": [
 						{
 							"_type": "block",
@@ -6411,7 +6411,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Extender una plataforma de comercio parece rápido… un desarrollo a medida aquí, un parche allá, y en unos años la subida de versión que el fabricante anuncia como rutina cuesta un trimestre. Lo hemos visto. Y sabemos evitarlo.",
+									"text": "Extender una plataforma de comercio parece rápido… un desarrollo a medida aquí, un parche allá, y en unos años la subida de versión que el fabricante anuncia como rutina cuesta un trimestre. Eso es lo que evitamos.",
 									"marks": []
 								}
 							]
@@ -6445,7 +6445,7 @@
 								{
 									"_type": "span",
 									"_key": "k4",
-									"text": " se parametriza y se extiende. Extender es lo fácil. Hacerlo con mesura, dejando cada mejora desacoplada del núcleo para que sobreviva a la siguiente subida de versión, es lo que casi nadie hace. Esa es nuestra ventaja. Con ",
+									"text": " se parametriza y se extiende, y lo que cuenta es extender con mesura: cada mejora desacoplada del núcleo, para que sobreviva a la siguiente subida de versión. Con ",
 									"marks": []
 								},
 								{
@@ -6459,7 +6459,7 @@
 								{
 									"_type": "span",
 									"_key": "k6",
-									"text": " el oficio está en el diálogo: todo lo a medida vive fuera, en un *middleware* de ",
+									"text": " el oficio está en el diálogo: todo lo hecho a medida vive fuera, en un *middleware* de ",
 									"marks": []
 								},
 								{
@@ -6487,7 +6487,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": "Llevamos más de veinte años dentro de ",
+									"text": "Llevamos más de quince años dentro de ",
 									"marks": []
 								},
 								{
@@ -6577,7 +6577,7 @@
 								{
 									"_type": "span",
 									"_key": "kn",
-									"text": " Sistema de terceros. Reglas de presentación, sustitutos y *feeds* cifrados, todo desde el *middleware*.",
+									"text": " Sistema de terceros. Reglas de presentación, sustitutos y datos cifrados, todo desde la capa de integración.",
 									"marks": []
 								}
 							]
@@ -6625,21 +6625,7 @@
 								{
 									"_type": "span",
 									"_key": "kt",
-									"text": " Caché en el ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "ku",
-									"text": "edge",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "kv",
-									"text": " y pre-renderizado selectivo. La arquitectura aguanta el pico real.",
+									"text": " Caché en el borde y pre-renderizado selectivo. La arquitectura aguanta el pico real.",
 									"marks": []
 								}
 							]
@@ -6935,8 +6921,8 @@
 				"status": "published",
 				"data": {
 					"title": "CDN, WAF y seguridad edge",
-					"excerpt": "Server Startup es socio oficial de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y seguridad perimetral, sobre todo en [comercio electrónico](/comercio-electronico).",
-					"cta_label": "Audita tu edge",
+					"excerpt": "Server Startup es socio oficial de [`Cloudflare`](https://www.cloudflare.com/es-es/) desde 2019. Auditoría, migración y operación de `CDN`, `WAF` y control de bots, sobre todo para cadenas de distribución y [comercio electrónico](/comercio-electronico).",
+					"cta_label": "Revisemos tu Cloudflare",
 					"content": [
 						{
 							"_type": "block",
@@ -7031,7 +7017,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": ", sobre todo para *retail* y comercio electrónico.",
+									"text": ".",
 									"marks": []
 								}
 							]
@@ -7129,7 +7115,7 @@
 								{
 									"_type": "span",
 									"_key": "kn",
-									"text": "Un *firewall* no es una estrategia de seguridad, sino una parte de ella. Configuramos ",
+									"text": "Un *firewall* es una parte de la seguridad. La otra es saber quién cambió cada regla y qué ha parado hoy. Configuramos ",
 									"marks": []
 								},
 								{
@@ -7143,7 +7129,7 @@
 								{
 									"_type": "span",
 									"_key": "kp",
-									"text": " como arquitectura, y cada interruptor de este panel tiene un porqué.",
+									"text": " como arquitectura, con cada interruptor de este panel en `Terraform`.",
 									"marks": []
 								}
 							]
@@ -7159,7 +7145,7 @@
 								{
 									"_type": "span",
 									"_key": "kr",
-									"text": "Reglas `WAF` a tu medida.",
+									"text": "Reglas `WAF` escritas para tu negocio.",
 									"marks": [
 										"strong"
 									]
@@ -7167,7 +7153,7 @@
 								{
 									"_type": "span",
 									"_key": "ks",
-									"text": " Ajustadas a tu superficie de ataque real. OWASP Top 10, DDoS, bots. Las plantillas genéricas, fuera.",
+									"text": " Las reglas gestionadas de `Cloudflare` como base, afinadas para tu superficie de ataque real, y encima las de tu negocio. OWASP Top 10, DDoS, bots.",
 									"marks": []
 								}
 							]
@@ -7191,7 +7177,7 @@
 								{
 									"_type": "span",
 									"_key": "kv",
-									"text": " Tu origen respira y los tiempos de respuesta se vuelven predecibles. También en la campaña de noviembre.",
+									"text": " La caché absorbe el tráfico antes de que llegue a tu origen, y los tiempos de respuesta se vuelven predecibles. También en la campaña de noviembre.",
 									"marks": []
 								}
 							]
@@ -7291,7 +7277,7 @@
 								{
 									"_type": "span",
 									"_key": "k18",
-									"text": " en más de 300 ciudades, a menos de 50 ms. Los primeros los pusimos en producción en 2018.",
+									"text": ": los primeros los pusimos en producción en 2018, y esta web corre entera sobre ellos.",
 									"marks": []
 								}
 							]
@@ -7307,7 +7293,7 @@
 								{
 									"_type": "span",
 									"_key": "k1a",
-									"text": "Guardia diaria.",
+									"text": "Informe diario del WAF.",
 									"marks": [
 										"strong"
 									]
@@ -7315,7 +7301,7 @@
 								{
 									"_type": "span",
 									"_key": "k1b",
-									"text": " Alertas y comprobaciones que un ingeniero revisa cada mañana. El mismo que escribió tus reglas.",
+									"text": " Cada día te llega un informe: qué ha parado el `WAF` y qué regla ha saltado. Y las alertas de tráfico, seguridad y salud del origen las atendemos nosotros.",
 									"marks": []
 								}
 							]
@@ -7343,7 +7329,7 @@
 								{
 									"_type": "span",
 									"_key": "k1f",
-									"text": "No montamos ",
+									"text": "Después de montar ",
 									"marks": []
 								},
 								{
@@ -7357,7 +7343,7 @@
 								{
 									"_type": "span",
 									"_key": "k1h",
-									"text": " y desaparecemos. Vigilamos el tráfico, ajustamos las reglas cuando cambian los patrones de ataque y damos la cara cuando algo se degrada.",
+									"text": ", lo seguimos llevando: vigilamos el tráfico, ajustamos las reglas cuando cambian los patrones de ataque y respondemos cuando algo se degrada. Si una regla frena tráfico legítimo, la revertimos desde su historial en `Terraform`.",
 									"marks": []
 								}
 							]
@@ -7413,7 +7399,7 @@
 								{
 									"_type": "span",
 									"_key": "k1p",
-									"text": "La plataforma no se acaba en el ",
+									"text": "La plataforma no se acaba en la ",
 									"marks": []
 								},
 								{
@@ -7469,7 +7455,7 @@
 								{
 									"_type": "span",
 									"_key": "k1x",
-									"text": ", ",
+									"text": " o ",
 									"marks": []
 								},
 								{
@@ -7483,21 +7469,7 @@
 								{
 									"_type": "span",
 									"_key": "k1z",
-									"text": ", ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k20",
-									"text": "R2",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k21",
-									"text": ". Te ayudamos a decidir qué piezas encajan y cuáles no.",
+									"text": " pueden venir después; te ayudamos a decidir qué piezas encajan y cuáles no.",
 									"marks": []
 								}
 							]
@@ -7559,21 +7531,7 @@
 								{
 									"_type": "span",
 									"_key": "k29",
-									"text": ", detrás del mismo ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2a",
-									"text": "WAF",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2b",
-									"text": " que operamos para clientes. La desmontamos pieza a pieza en ",
+									"text": ". La desmontamos pieza a pieza en ",
 									"marks": []
 								},
 								{
@@ -7603,7 +7561,7 @@
 				"status": "published",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "Un flujo de datos se monta rápido. Una plataforma que aguante años de negocio, cambios de esquema, picos de campaña y fuentes de datos variables es otra historia. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture) y tests que se cuentan por miles.",
+					"excerpt": "En proyectos con más de cien modelos `dbt` en `BigQuery`, los tests pasan del millar. Si un dato no los pasa, no llega a la capa *gold*. Arquitectura [*medallion*](https://dataengineering.wiki/Concepts/Medallion+Architecture), de la ingesta al cuadro de mando.",
 					"cta_label": "Hablemos de tus datos",
 					"content": [
 						{
@@ -7643,7 +7601,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Cualquiera monta un *pipeline* en una tarde. Una plataforma que aguante años de negocio, cambios de esquema y picos de campaña es otra historia.",
+									"text": "Una plataforma de datos tiene que aguantar años de negocio, cambios de esquema y picos de campaña.",
 									"marks": []
 								}
 							]
@@ -7711,7 +7669,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": "La esencia es analítica, y las sinergias con lo operacional la multiplican. Usamos ",
+									"text": "Nuestro fuerte es lo analítico, y usamos ",
 									"marks": []
 								},
 								{
@@ -7725,7 +7683,7 @@
 								{
 									"_type": "span",
 									"_key": "kc",
-									"text": " a los dos lados del *warehouse*.",
+									"text": " a los dos lados: en el *warehouse* y en la base operacional.",
 									"marks": []
 								}
 							]
@@ -7830,7 +7788,7 @@
 								{
 									"_type": "span",
 									"_key": "kq",
-									"text": ". En el *cloud* de Google, ",
+									"text": ". En la nube de Google, ",
 									"marks": []
 								},
 								{
@@ -7893,7 +7851,7 @@
 								{
 									"_type": "span",
 									"_key": "ky",
-									"text": ". Nuestra ",
+									"text": ". Lo que damos por terminado (nuestra ",
 									"marks": []
 								},
 								{
@@ -7907,7 +7865,7 @@
 								{
 									"_type": "span",
 									"_key": "k11",
-									"text": " nace en el *blueprint*, mucho antes del código. Diseño de la base de datos con el ",
+									"text": ") se decide mucho antes del código, al diseñar la base de datos con el ",
 									"marks": []
 								},
 								{
@@ -7945,7 +7903,7 @@
 								{
 									"_type": "span",
 									"_key": "k17",
-									"text": ". En nuestras plataformas los tests se cuentan por miles. *Unit tests* que corren antes de publicar y *data tests* que se ejecutan cada día, con cada carga. El dato que no los pasa no llega a *gold*.",
+									"text": ". En los proyectos grandes, los tests se cuentan por miles. *Unit tests* que corren antes de publicar y *data tests* que se ejecutan cada día, con cada carga.",
 									"marks": []
 								}
 							]
@@ -8096,7 +8054,7 @@
 								{
 									"_type": "span",
 									"_key": "k1s",
-									"text": " para los flujos que no pueden esperar al *batch* nocturno.",
+									"text": " para los flujos que no pueden esperar a la carga nocturna.",
 									"marks": []
 								}
 							]
@@ -8110,21 +8068,7 @@
 								{
 									"_type": "span",
 									"_key": "k1u",
-									"text": "Sinergias entre lo analítico y lo operacional",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1x",
-							"style": "blockquote",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1w",
-									"text": "«Un solo modo de trabajar para dos mundos divergentes.»",
+									"text": "dbt en BigQuery y en Oracle",
 									"marks": []
 								}
 							]
@@ -8216,7 +8160,7 @@
 								{
 									"_type": "span",
 									"_key": "k2a",
-									"text": "adapter que mantiene Oracle",
+									"text": "adaptador que mantiene Oracle",
 									"marks": [
 										"k29"
 									]
@@ -8224,7 +8168,7 @@
 								{
 									"_type": "span",
 									"_key": "k2b",
-									"text": " (con nuestras mejoras, tan obvias como necesarias...).",
+									"text": ", con mejoras nuestras.",
 									"marks": []
 								}
 							]
@@ -8288,7 +8232,7 @@
 								{
 									"_type": "span",
 									"_key": "k2j",
-									"text": "tu e-commerce",
+									"text": "tu tienda online",
 									"marks": [
 										"k2i"
 									]
@@ -8340,7 +8284,7 @@
 				"status": "published",
 				"data": {
 					"title": "Integración de sistemas",
-					"excerpt": "No somos «arquitectos de PowerPoint»: lo que planificamos, lo ejecutamos. Sin exageraciones — lo objetivamente necesario y viable. Un guante, no un martillo, con homogeneidad, metodología, testabilidad y observabilidad absoluta.",
+					"excerpt": "Conectamos tu `ERP`, la tienda y el almacén con patrones de integración empresarial (`EIP`) sobre `Apache Camel`. Cada flujo hereda la misma plantilla, y si uno falla, la traza dice dónde, cuándo y por qué.",
 					"cta_label": "Hablemos de integración",
 					"content": [
 						{
@@ -8384,7 +8328,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Mover datos de A a B es la parte fácil. El verdadero desafío de ingeniería es mantener la ",
+									"text": "Tu `ERP`, tus plataformas `SaaS` y los sistemas *legacy* que nadie se atreve a tocar tienen que seguir funcionando mientras los conectamos: eso es la ",
 									"marks": []
 								},
 								{
@@ -8398,35 +8342,7 @@
 								{
 									"_type": "span",
 									"_key": "k2",
-									"text": " en ecosistemas donde conviven tu ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k3",
-									"text": "ERP",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k4",
-									"text": ", plataformas ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k5",
-									"text": "SaaS",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k6",
-									"text": " y sistemas *legacy* intocables. Abordamos cada flujo con ",
+									"text": ". Abordamos cada flujo con ",
 									"marks": []
 								},
 								{
@@ -8454,7 +8370,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": ") y con una regla: observabilidad absoluta. Si un flujo falla, la traza revela exactamente *dónde*, *cuándo* y *por qué*.",
+									"text": ") y con una regla: que cada mensaje deje rastro.",
 									"marks": []
 								}
 							]
@@ -8488,7 +8404,7 @@
 								{
 									"_type": "span",
 									"_key": "kg",
-									"text": ", cerrando el ciclo del dato.",
+									"text": ", para que lo que pasa en la tienda llegue a los datos sin pasos a mano.",
 									"marks": []
 								}
 							]
@@ -8516,13 +8432,13 @@
 								{
 									"_type": "span",
 									"_key": "kk",
-									"text": "Un simple *script* punto-a-punto es frágil. Una integración profesional de verdad ",
+									"text": "Una conexión directa de punto a punto es frágil. Una integración bien hecha ",
 									"marks": []
 								},
 								{
 									"_type": "span",
 									"_key": "kl",
-									"text": "desacopla sistemas",
+									"text": "desacopla los sistemas",
 									"marks": [
 										"strong"
 									]
@@ -8530,7 +8446,7 @@
 								{
 									"_type": "span",
 									"_key": "km",
-									"text": ": enruta inteligentemente, transforma al vuelo y aísla los fallos. Si el ",
+									"text": ": enruta, transforma al vuelo y aísla los fallos. Si el ",
 									"marks": []
 								},
 								{
@@ -8544,7 +8460,7 @@
 								{
 									"_type": "span",
 									"_key": "ko",
-									"text": " se cae, los pedidos se encolan en *standby* y se procesan al volver. Cero pérdida de datos.",
+									"text": " se cae, los pedidos esperan en cola y se procesan al volver. Cero pérdida de datos.",
 									"marks": []
 								}
 							]
@@ -8699,7 +8615,7 @@
 								{
 									"_type": "span",
 									"_key": "k18",
-									"text": ": *Backbones* tolerantes a fallos con ",
+									"text": ": Buses de mensajería tolerantes a fallos con ",
 									"marks": []
 								},
 								{
@@ -8768,7 +8684,7 @@
 								{
 									"_type": "span",
 									"_key": "k1j",
-									"text": "Cómputo `Serverless`",
+									"text": "Cómputo sin servidores",
 									"marks": [
 										"strong"
 									]
@@ -8790,7 +8706,7 @@
 								{
 									"_type": "span",
 									"_key": "k1n",
-									"text": " o directamente en el borde (*edge computing*) con ",
+									"text": " o directamente en el borde con ",
 									"marks": []
 								},
 								{
@@ -8836,7 +8752,7 @@
 								{
 									"_type": "span",
 									"_key": "k1s",
-									"text": "Data Engineering y `ETL`",
+									"text": "Ingeniería de datos y `ETL`",
 									"marks": [
 										"strong"
 									]
@@ -8872,7 +8788,7 @@
 								{
 									"_type": "span",
 									"_key": "k1z",
-									"text": " para procesos *batch*, y canalizaciones unificadas con ",
+									"text": " para procesos por lotes, y canalizaciones unificadas con ",
 									"marks": []
 								},
 								{
@@ -8910,7 +8826,7 @@
 								{
 									"_type": "span",
 									"_key": "k25",
-									"text": ": El contrato antes que el código (*Contract First*, ",
+									"text": ": El contrato antes que el código (",
 									"marks": []
 								},
 								{
@@ -8952,7 +8868,7 @@
 								{
 									"_type": "span",
 									"_key": "k2b",
-									"text": " desde el diseño, no como parche posterior.",
+									"text": " desde el diseño.",
 									"marks": []
 								}
 							]
@@ -8987,13 +8903,13 @@
 								{
 									"_type": "span",
 									"_key": "k2e",
-									"text": ": Exposición segura mediante soluciones de ",
+									"text": ": Exposición segura mediante plataformas de gestión de ",
 									"marks": []
 								},
 								{
 									"_type": "span",
 									"_key": "k2f",
-									"text": "API Management",
+									"text": "APIs",
 									"marks": [
 										"code"
 									]
@@ -9015,21 +8931,7 @@
 								{
 									"_type": "span",
 									"_key": "k2j",
-									"text": ") o ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2l",
-									"text": "Cloudflare API Shield",
-									"marks": [
-										"k2k"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2m",
-									"text": ".",
+									"text": "), con el `WAF` de Cloudflare delante.",
 									"marks": []
 								}
 							]
@@ -9053,7 +8955,7 @@
 								{
 									"_type": "span",
 									"_key": "k2p",
-									"text": ": Logs y métricas centralizadas en ",
+									"text": ": Registros y métricas centralizados en ",
 									"marks": []
 								},
 								{
@@ -9095,7 +8997,7 @@
 								{
 									"_type": "span",
 									"_key": "k2v",
-									"text": "Diseñamos lo que se puede construir, y lo construimos nosotros. Sin florituras. Estudiamos cada caso y adoptamos la solución que mejor le encaja. Los patrones son el vocabulario común; la topología se dibuja sobre tus sistemas y tus ventanas de carga.",
+									"text": "Diseñamos lo que se puede construir, y lo construimos nosotros. Los patrones son el vocabulario común; la topología se dibuja sobre tus sistemas y tus ventanas de carga.",
 									"marks": []
 								}
 							]
@@ -9168,7 +9070,7 @@
 								{
 									"_type": "span",
 									"_key": "k34",
-									"text": "Nosotros practicamos ",
+									"text": "Practicamos el desarrollo guiado por especificación (",
 									"marks": []
 								},
 								{
@@ -9182,7 +9084,7 @@
 								{
 									"_type": "span",
 									"_key": "k37",
-									"text": ". Primero la especificación (el contrato de datos, el patrón, la política de errores). Después el código, generado dentro de ese perímetro y firmado por el ingeniero que lo revisa. Cero libre albedrío. Cada flujo se lee como el anterior. Por eso nuestro ",
+									"text": "). Primero la especificación (el contrato de datos, el patrón, la política de errores). Después el código, generado dentro de ese perímetro y firmado por el ingeniero que lo revisa. Cada flujo se lee como el anterior. Nuestro ",
 									"marks": []
 								},
 								{
@@ -9196,7 +9098,7 @@
 								{
 									"_type": "span",
 									"_key": "k3a",
-									"text": " empieza por los sistemas, no por el agente.",
+									"text": " empieza por ahí: por los sistemas que el agente va a tocar.",
 									"marks": []
 								}
 							]
@@ -9210,7 +9112,7 @@
 								{
 									"_type": "span",
 									"_key": "k3c",
-									"text": "Quién lo construye, responde",
+									"text": "Lo que cuesta un pedido duplicado",
 									"marks": []
 								}
 							]
@@ -9238,7 +9140,7 @@
 								{
 									"_type": "span",
 									"_key": "k3g",
-									"text": "El *stock* no cuadra, los pedidos se duplican y nadie sabe muy bien por qué. Lo hemos visto demasiadas veces.",
+									"text": "El *stock* no cuadra, los pedidos se duplican y nadie sabe muy bien por qué.",
 									"marks": []
 								}
 							]
@@ -9266,7 +9168,7 @@
 								{
 									"_type": "span",
 									"_key": "k3k",
-									"text": " que escribe el código, afina los *brokers* y levanta el teléfono si algo falla un viernes a las seis (aunque ya no falle 😉). Conocemos el negocio tan bien como la implementación. Sabemos lo que cuesta un pedido duplicado en plena campaña.",
+									"text": " que escribe el código, afina los *brokers* y responde si algo falla. Conocemos el negocio tan bien como la implementación: sabemos lo que cuesta un pedido duplicado en plena campaña.",
 									"marks": []
 								}
 							]
@@ -9280,7 +9182,7 @@
 								{
 									"_type": "span",
 									"_key": "k3m",
-									"text": "Si se rompe, no abrimos un *ticket*: ",
+									"text": "Si se rompe, ",
 									"marks": []
 								},
 								{
@@ -9294,7 +9196,7 @@
 								{
 									"_type": "span",
 									"_key": "k3o",
-									"text": ".",
+									"text": ", y queda escrito qué pasó y qué cambiamos.",
 									"marks": []
 								}
 							]
@@ -9310,7 +9212,7 @@
 				"status": "published",
 				"data": {
 					"title": "Desarrollo greenfield",
-					"excerpt": "El código no es el producto: el producto es la obra — el sistema y las personas que lo sostienen — y sigue en producción años después de la demo. `SDLC` completo, de la especificación a la observabilidad. Trabajamos *contract first*, con foco en estabilidad, seguridad y gobernanza.",
+					"excerpt": "Construimos lo que ningún producto comercial cubre, con el ciclo de vida completo: de la especificación escrita a la observabilidad en producción.",
 					"cta_label": "Hablemos de tu proyecto",
 					"content": [
 						{
@@ -9412,7 +9314,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": " te lo resuelve, te lo decimos y no lo construimos. Preferimos perder un proyecto antes que mantener uno que sobra.",
+									"text": " te lo resuelve, te lo decimos y no lo construimos.",
 									"marks": []
 								}
 							]
@@ -9569,7 +9471,7 @@
 								{
 									"_type": "span",
 									"_key": "kv",
-									"text": " se pacta por escrito (*Contract First*, ",
+									"text": " se pacta por escrito (",
 									"marks": []
 								},
 								{
@@ -9919,7 +9821,7 @@
 								{
 									"_type": "span",
 									"_key": "k28",
-									"text": "La IA multiplica. El *framework* conduce.",
+									"text": "Con IA, el *framework* va primero",
 									"marks": []
 								}
 							]
@@ -10009,7 +9911,7 @@
 								{
 									"_type": "span",
 									"_key": "k2l",
-									"text": "Quien diseña el sistema lo despliega y responde por su estabilidad. Los mismos ingenieros *senior*, del primer *commit* a la operación. No entregamos y desaparecemos. Acompañamos la transición y el conocimiento se queda en tu casa, no en la nuestra.",
+									"text": "Del primer *commit* a la operación, los mismos ingenieros *senior*. Y si un día el sistema pasa a manos de tu equipo, acompañamos el relevo y lo dejamos todo escrito: el conocimiento se queda en tu casa.",
 									"marks": []
 								}
 							]
@@ -10027,8 +9929,8 @@
 				"translationOf": "svc-ecommerce",
 				"data": {
 					"title": "E-commerce",
-					"excerpt": "Over twenty years inside [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Extending the platform is the easy part: doing it with every improvement decoupled from the core, close to the standard, surviving version after version, is what almost nobody does. And performance is our specialty.",
-					"cta_label": "Audit your e-commerce",
+					"excerpt": "Over fifteen years inside `hybris`, now [`SAP Commerce Cloud`](https://www.sap.com/products/crm/commerce-cloud.html). Every improvement stays decoupled from the core and close to the standard, so the next upgrade doesn't cost you a quarter.",
+					"cta_label": "Let's review your store",
 					"content": [
 						{
 							"_type": "block",
@@ -10045,7 +9947,7 @@
 								{
 									"_type": "span",
 									"_key": "eqa0",
-									"text": "«…serve customers' food missions wherever, whenever, and however they want to be served.» ",
+									"text": "“…serve customers' food missions wherever, whenever, and however they want to be served.” ",
 									"marks": []
 								},
 								{
@@ -10067,7 +9969,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Extending a commerce platform looks quick… a custom development here, a patch there, and a few years in, the version upgrade the vendor calls routine costs you a quarter. We've seen it. We know how to avoid it.",
+									"text": "Extending a commerce platform looks quick… a custom development here, a patch there, and a few years in, the version upgrade the vendor calls routine costs you a quarter. That is what we avoid.",
 									"marks": []
 								}
 							]
@@ -10101,7 +10003,7 @@
 								{
 									"_type": "span",
 									"_key": "k4",
-									"text": " is parameterized and extended. Extending is the easy part. Doing it with restraint, keeping each improvement decoupled from the core so it survives the next upgrade, is what almost nobody does. That's our advantage. With ",
+									"text": " is parameterized and extended, and what counts is extending with restraint: each improvement decoupled from the core, so it survives the next upgrade. With ",
 									"marks": []
 								},
 								{
@@ -10143,7 +10045,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": "We've spent over twenty years inside ",
+									"text": "We've spent over fifteen years inside ",
 									"marks": []
 								},
 								{
@@ -10561,7 +10463,7 @@
 								{
 									"_type": "span",
 									"_key": "k1u",
-									"text": " rules. Nobody will tell you \"let me check with the other team\".",
+									"text": " rules. Nobody will tell you “let me check with the other team”.",
 									"marks": []
 								}
 							]
@@ -10578,8 +10480,8 @@
 				"translationOf": "svc-cdn",
 				"data": {
 					"title": "CDN, WAF & Edge Security",
-					"excerpt": "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and edge security, mostly for [e-commerce](/en/e-commerce).",
-					"cta_label": "Audit your edge",
+					"excerpt": "Server Startup has been an official [`Cloudflare`](https://www.cloudflare.com/) partner since 2019. We audit, migrate and run `CDN`, `WAF` and bot control, mostly for retail chains and [e-commerce](/en/e-commerce).",
+					"cta_label": "Let's review your Cloudflare",
 					"content": [
 						{
 							"_type": "block",
@@ -10596,7 +10498,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "«Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.» "
+									"text": "“Imagine an organization’s network as a castle and the network perimeter as a moat. Once the drawbridge is lowered and someone crosses it, they have free rein inside the castle grounds.” "
 								},
 								{
 									"_type": "span",
@@ -10674,7 +10576,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": " accounts, mostly for retail and e-commerce.",
+									"text": " accounts.",
 									"marks": []
 								}
 							]
@@ -10778,7 +10680,7 @@
 								{
 									"_type": "span",
 									"_key": "ko",
-									"text": "A firewall is not a security strategy, it's one part of it. We configure ",
+									"text": "A firewall is one part of security. The other is knowing who changed each rule and what it stopped today. We configure ",
 									"marks": []
 								},
 								{
@@ -10792,7 +10694,7 @@
 								{
 									"_type": "span",
 									"_key": "kq",
-									"text": " as architecture, and every switch on this panel is there for a reason.",
+									"text": " as architecture, with every switch on this panel in `Terraform`.",
 									"marks": []
 								}
 							]
@@ -10808,7 +10710,7 @@
 								{
 									"_type": "span",
 									"_key": "ks",
-									"text": "`WAF` rules, tuned to you.",
+									"text": "`WAF` rules written for your business.",
 									"marks": [
 										"strong"
 									]
@@ -10816,7 +10718,7 @@
 								{
 									"_type": "span",
 									"_key": "kt",
-									"text": " Matched to your actual attack surface. OWASP Top 10, DDoS, bots. No generic templates.",
+									"text": " `Cloudflare`'s managed rules as the base, tuned to your actual attack surface, with your business rules on top. OWASP Top 10, DDoS, bots.",
 									"marks": []
 								}
 							]
@@ -10840,7 +10742,7 @@
 								{
 									"_type": "span",
 									"_key": "kw",
-									"text": " Your origin breathes and response times become predictable. Black Friday included.",
+									"text": " The cache takes the traffic before it reaches your origin, and response times become predictable. Black Friday included.",
 									"marks": []
 								}
 							]
@@ -10926,7 +10828,7 @@
 								{
 									"_type": "span",
 									"_key": "k17",
-									"text": " in 300+ cities, under 50 ms away. We shipped our first ones in 2018.",
+									"text": ": we put the first ones into production in 2018, and this whole site runs on them.",
 									"marks": []
 								}
 							]
@@ -10942,7 +10844,7 @@
 								{
 									"_type": "span",
 									"_key": "k19",
-									"text": "Daily watch.",
+									"text": "Daily WAF report.",
 									"marks": [
 										"strong"
 									]
@@ -10950,7 +10852,7 @@
 								{
 									"_type": "span",
 									"_key": "k1a",
-									"text": " Alerts and checks an engineer reviews every morning. The same engineer who wrote your rules.",
+									"text": " Every day you get a report: what the `WAF` stopped and which rule fired. And we handle the traffic, security and origin-health alerts.",
 									"marks": []
 								}
 							]
@@ -10978,7 +10880,7 @@
 								{
 									"_type": "span",
 									"_key": "k1e",
-									"text": "We don't set up ",
+									"text": "Once we set up ",
 									"marks": []
 								},
 								{
@@ -10992,7 +10894,7 @@
 								{
 									"_type": "span",
 									"_key": "k1g",
-									"text": " and disappear. We watch the traffic, adjust rules as attack patterns change, and answer personally when something degrades.",
+									"text": ", we keep running it: we watch the traffic, adjust rules as attack patterns change, and answer when something degrades. If a rule blocks legitimate traffic, we roll it back from its history in `Terraform`.",
 									"marks": []
 								}
 							]
@@ -11104,7 +11006,7 @@
 								{
 									"_type": "span",
 									"_key": "k1w",
-									"text": ", ",
+									"text": " or ",
 									"marks": []
 								},
 								{
@@ -11118,21 +11020,7 @@
 								{
 									"_type": "span",
 									"_key": "k1y",
-									"text": ", ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k1z",
-									"text": "R2",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k20",
-									"text": ". We help you decide which pieces fit, and which don't.",
+									"text": " can come later; we help you decide which pieces fit, and which don't.",
 									"marks": []
 								}
 							]
@@ -11194,21 +11082,7 @@
 								{
 									"_type": "span",
 									"_key": "k28",
-									"text": ", behind the same ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k29",
-									"text": "WAF",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2a",
-									"text": " we run for clients. We take it apart, piece by piece, in ",
+									"text": ". We take it apart, piece by piece, in ",
 									"marks": []
 								},
 								{
@@ -11239,7 +11113,7 @@
 				"translationOf": "svc-bigdata",
 				"data": {
 					"title": "Big Data & Cloud Analytics",
-					"excerpt": "A data pipeline comes together quickly. A platform that survives years of business, schema changes, campaign peaks and shifting data sources is another story. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, and tests that number in the thousands.",
+					"excerpt": "In projects with over a hundred `dbt` models on `BigQuery`, tests run into the thousands. Data that fails them never reaches the *gold* layer. [Medallion](https://dataengineering.wiki/Concepts/Medallion+Architecture) architecture, from ingestion to the dashboard.",
 					"cta_label": "Let's talk data",
 					"content": [
 						{
@@ -11257,7 +11131,7 @@
 								{
 									"_type": "span",
 									"_key": "bqa0",
-									"text": "«Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.» ",
+									"text": "“Data models tend to evolve more slowly than code, and the impacts of poor data models are sneaky. You won't know you're in danger until it's too late. So, take the time to do things right. Move slowly to move faster and safer over the long haul.” ",
 									"marks": []
 								},
 								{
@@ -11279,7 +11153,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Anyone can stand up a pipeline in an afternoon. A platform that survives years of business, schema changes and campaign peaks is another story.",
+									"text": "A data platform has to survive years of business, schema changes and campaign peaks.",
 									"marks": []
 								}
 							]
@@ -11347,7 +11221,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": "The essence is analytical, and the synergies with the operational side multiply it. We run ",
+									"text": "Our strength is analytics, and we run ",
 									"marks": []
 								},
 								{
@@ -11361,7 +11235,7 @@
 								{
 									"_type": "span",
 									"_key": "kc",
-									"text": " on both sides of the *warehouse*.",
+									"text": " on both sides: in the *warehouse* and in the operational database.",
 									"marks": []
 								}
 							]
@@ -11521,7 +11395,7 @@
 								{
 									"_type": "span",
 									"_key": "kx",
-									"text": "From blueprint to publication",
+									"text": "From whiteboard to publication",
 									"marks": [
 										"strong"
 									]
@@ -11581,7 +11455,7 @@
 								{
 									"_type": "span",
 									"_key": "k17",
-									"text": ". On our platforms tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load. Data that fails never reaches *gold*.",
+									"text": ". On large projects, tests number in the thousands. *Unit tests* run before anything ships, and *data tests* run every day, with every load.",
 									"marks": []
 								}
 							]
@@ -11732,7 +11606,7 @@
 								{
 									"_type": "span",
 									"_key": "k1s",
-									"text": " for the flows that can't wait for the nightly *batch*.",
+									"text": " for the flows that can't wait for the nightly load.",
 									"marks": []
 								}
 							]
@@ -11746,21 +11620,7 @@
 								{
 									"_type": "span",
 									"_key": "k1u",
-									"text": "Synergies between analytical and operational",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "k1x",
-							"style": "blockquote",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "k1w",
-									"text": "\"One way of working for two divergent worlds.\"",
+									"text": "dbt on BigQuery and on Oracle",
 									"marks": []
 								}
 							]
@@ -11977,7 +11837,7 @@
 				"translationOf": "svc-integracion",
 				"data": {
 					"title": "Systems Integration",
-					"excerpt": "We're not “PowerPoint architects”: what we plan is what we ship. No overpromising — the objectively necessary and viable. A glove, not a hammer, with homogeneity, methodology, testability and absolute observability.",
+					"excerpt": "Your `ERP`, your storefront and your warehouse, wired together with enterprise integration patterns (`EIP`) on `Apache Camel`. Every flow inherits the same template, and when one breaks, the trace already says where, when and why.",
 					"cta_label": "Let's talk integration",
 					"content": [
 						{
@@ -11995,7 +11855,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "«Interesting applications rarely live in isolation.» "
+									"text": "“Interesting applications rarely live in isolation.” "
 								},
 								{
 									"_type": "span",
@@ -12021,7 +11881,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Moving data from A to B is the easy part. The real engineering challenge is maintaining ",
+									"text": "Your `ERP`, your `SaaS` platforms and the *legacy* systems nobody dares touch have to keep running while we connect them: that is ",
 									"marks": []
 								},
 								{
@@ -12035,35 +11895,7 @@
 								{
 									"_type": "span",
 									"_key": "k2",
-									"text": " in ecosystems where your ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k3",
-									"text": "ERP",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k4",
-									"text": ", ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k5",
-									"text": "SaaS",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k6",
-									"text": " platforms, and untouchable *legacy* systems coexist. We approach every flow with ",
+									"text": ". We approach every flow with ",
 									"marks": []
 								},
 								{
@@ -12091,7 +11923,7 @@
 								{
 									"_type": "span",
 									"_key": "kb",
-									"text": ") and one rule: absolute observability. If a flow fails, the trace reveals exactly *where* and *why* before it impacts the business.",
+									"text": ") and one rule: every message leaves a trail.",
 									"marks": []
 								}
 							]
@@ -12125,7 +11957,7 @@
 								{
 									"_type": "span",
 									"_key": "kg",
-									"text": ", closing the data loop.",
+									"text": ", so what happens in the store reaches the data with no manual steps.",
 									"marks": []
 								}
 							]
@@ -12153,13 +11985,13 @@
 								{
 									"_type": "span",
 									"_key": "kk",
-									"text": "A simple point-to-point *script* is fragile. True professional integration ",
+									"text": "A direct point-to-point connection is fragile. Integration done properly ",
 									"marks": []
 								},
 								{
 									"_type": "span",
 									"_key": "kl",
-									"text": "decouples systems",
+									"text": "decouples the systems",
 									"marks": [
 										"strong"
 									]
@@ -12167,7 +11999,7 @@
 								{
 									"_type": "span",
 									"_key": "km",
-									"text": ": it routes intelligently, transforms on the fly, and isolates failures. If the ",
+									"text": ": it routes, transforms on the fly and isolates failures. If the ",
 									"marks": []
 								},
 								{
@@ -12181,7 +12013,7 @@
 								{
 									"_type": "span",
 									"_key": "ko",
-									"text": " goes down, orders queue up in *standby* and process when it returns. Zero data loss.",
+									"text": " goes down, orders wait in a queue and are processed when it returns. Zero data loss.",
 									"marks": []
 								}
 							]
@@ -12282,7 +12114,7 @@
 								{
 									"_type": "span",
 									"_key": "k12",
-									"text": ". We implement idempotent consumers with no \"black boxes.\" When a connector doesn't exist, we write it. We maintain our own Camel component for the ",
+									"text": ". We implement idempotent consumers with no “black boxes.” When a connector doesn't exist, we write it. We maintain our own Camel component for the ",
 									"marks": []
 								},
 								{
@@ -12547,7 +12379,7 @@
 								{
 									"_type": "span",
 									"_key": "k25",
-									"text": ": The contract comes before the code (*Contract First*, ",
+									"text": ": The contract comes before the code (",
 									"marks": []
 								},
 								{
@@ -12589,7 +12421,7 @@
 								{
 									"_type": "span",
 									"_key": "k2b",
-									"text": " designed in, not patched on later.",
+									"text": " designed in.",
 									"marks": []
 								}
 							]
@@ -12652,21 +12484,7 @@
 								{
 									"_type": "span",
 									"_key": "k2j",
-									"text": ") or ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k2l",
-									"text": "Cloudflare API Shield",
-									"marks": [
-										"k2k"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k2m",
-									"text": ".",
+									"text": "), with Cloudflare's `WAF` in front.",
 									"marks": []
 								}
 							]
@@ -12732,7 +12550,7 @@
 								{
 									"_type": "span",
 									"_key": "k2v",
-									"text": "We design what can be built, and we build it ourselves. No frills. We study each case and adopt the solution that fits it best. Patterns are the shared vocabulary; the topology is drawn on your systems and your load windows.",
+									"text": "We design what can be built, and we build it ourselves. Patterns are the shared vocabulary; the topology is drawn on your systems and your load windows.",
 									"marks": []
 								}
 							]
@@ -12819,7 +12637,7 @@
 								{
 									"_type": "span",
 									"_key": "k37",
-									"text": ". The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Zero free rein. Each flow reads like the one before it. It's why our ",
+									"text": ". The specification comes first (data contract, pattern, error policy). Then the code, generated inside that perimeter and signed by the engineer who reviews it. Each flow reads like the one before it. Our ",
 									"marks": []
 								},
 								{
@@ -12833,7 +12651,7 @@
 								{
 									"_type": "span",
 									"_key": "k3a",
-									"text": " starts with the systems, not the agent.",
+									"text": " starts there: with the systems the agent will touch.",
 									"marks": []
 								}
 							]
@@ -12847,7 +12665,7 @@
 								{
 									"_type": "span",
 									"_key": "k3c",
-									"text": "Who builds it, answers for it",
+									"text": "What a duplicated order costs",
 									"marks": []
 								}
 							]
@@ -12861,7 +12679,7 @@
 								{
 									"_type": "span",
 									"_key": "k3e",
-									"text": "\"Your integration works... except when it matters.\"",
+									"text": "“Your integration works... except when it matters.”",
 									"marks": []
 								}
 							]
@@ -12875,7 +12693,7 @@
 								{
 									"_type": "span",
 									"_key": "k3g",
-									"text": "Stock doesn't match, orders duplicate, and nobody quite knows why. We've seen it one too many times.",
+									"text": "Stock doesn't match, orders duplicate, and nobody quite knows why.",
 									"marks": []
 								}
 							]
@@ -12903,7 +12721,7 @@
 								{
 									"_type": "span",
 									"_key": "k3k",
-									"text": " that writes the code, fine-tunes the *brokers*, and picks up the phone if something breaks on a Friday at six (though they break less and less 😉). We know the business as well as we know the implementation. We know what a duplicated order costs mid-campaign.",
+									"text": " that writes the code, fine-tunes the *brokers* and answers when something breaks. We know the business as well as the implementation: we know what a duplicated order costs mid-campaign.",
 									"marks": []
 								}
 							]
@@ -12917,7 +12735,7 @@
 								{
 									"_type": "span",
 									"_key": "k3m",
-									"text": "If it breaks, we don't open a *ticket*: ",
+									"text": "If it breaks, ",
 									"marks": []
 								},
 								{
@@ -12931,7 +12749,7 @@
 								{
 									"_type": "span",
 									"_key": "k3o",
-									"text": ".",
+									"text": ", and what happened and what we changed gets written down.",
 									"marks": []
 								}
 							]
@@ -12948,7 +12766,7 @@
 				"translationOf": "svc-greenfield",
 				"data": {
 					"title": "Greenfield development",
-					"excerpt": "The code isn't the product: the product is the system and the people who keep it alive, years after the demo. Full `SDLC`, from specification to observability. We work contract first, focused on stability, security and governance.",
+					"excerpt": "We build what no commercial product covers, across the full lifecycle: from the written specification to observability in production.",
 					"cta_label": "Let's talk about your project",
 					"content": [
 						{
@@ -12966,7 +12784,7 @@
 								{
 									"_type": "span",
 									"_key": "gqa0",
-									"text": "«[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.» ",
+									"text": "“[AI] empowers trained professionals to write a lot more … software that would otherwise never be written.” ",
 									"marks": []
 								},
 								{
@@ -13050,7 +12868,7 @@
 								{
 									"_type": "span",
 									"_key": "k9",
-									"text": " solves it, we'll say so and we won't build it. We'd rather lose a project than maintain one that shouldn't exist.",
+									"text": " solves it, we'll say so and we won't build it.",
 									"marks": []
 								}
 							]
@@ -13207,7 +13025,7 @@
 								{
 									"_type": "span",
 									"_key": "kv",
-									"text": " is agreed in writing (*Contract First*, ",
+									"text": " is agreed in writing (",
 									"marks": []
 								},
 								{
@@ -13557,7 +13375,7 @@
 								{
 									"_type": "span",
 									"_key": "k28",
-									"text": "AI multiplies. The framework steers.",
+									"text": "With AI, the framework comes first",
 									"marks": []
 								}
 							]
@@ -13647,7 +13465,7 @@
 								{
 									"_type": "span",
 									"_key": "k2l",
-									"text": "Whoever designs the system deploys it and answers for its stability. The same senior engineers, from first *commit* to operations. We don't hand over and vanish. We walk the transition with you, and the knowledge stays in your house, not ours.",
+									"text": "From the first *commit* to operations, the same senior engineers. And if the system one day moves to your team, we see the handover through and write everything down: the knowledge stays in your house.",
 									"marks": []
 								}
 							]
@@ -13663,7 +13481,7 @@
 				"locale": "es",
 				"data": {
 					"title": "Inteligencia artificial",
-					"excerpt": "La IA es un medio, no un fin. La máquina hace el código repetitivo; nosotros ponemos la arquitectura y el criterio, del desarrollo a la operación — enfoque integral, perfil *DevOps*. El agente propone, el ingeniero dispone.",
+					"excerpt": "La máquina escribe el código repetitivo. Nosotros ponemos la arquitectura, los datos y el criterio, y firmamos cada línea antes de producción. El agente propone, el ingeniero dispone.",
 					"cta_label": "Cuéntanos tu caso",
 					"content": [
 						{
@@ -13731,7 +13549,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "Usamos la IA de dos maneras. Como herramienta, para construir con más calidad y menos horas lo que ya sabíamos construir. Y como pieza del sistema, para resolver lo que hace poco no era posible. En los dos casos es un medio, no un fin.",
+									"text": "Usamos la IA de dos maneras. Como herramienta, para construir con más calidad y menos horas lo que ya sabíamos construir. Y como pieza del sistema, para resolver lo que hace poco no era posible.",
 									"marks": []
 								}
 							]
@@ -13804,20 +13622,6 @@
 									"_type": "span",
 									"_key": "kb",
 									"text": " dentro de sistemas que ya existían. Es la parte de más valor del trabajo, y la que hacemos desde 2019.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "ke",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kd",
-									"text": "El código repetitivo lo hace la máquina. Nuestro tiempo va al criterio y la responsabilidad, y un equipo pequeño entrega hoy lo que antes pedía uno grande.",
 									"marks": []
 								}
 							]
@@ -14019,21 +13823,7 @@
 								{
 									"_type": "span",
 									"_key": "k16",
-									"text": ". El dato se procesa en tu propia cuenta, no en el ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k17",
-									"text": "SaaS",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k18",
-									"text": " de IA de un tercero.",
+									"text": ", en tu propia cuenta: si `Cloudflare` ya sirve tu web, no sumas otro proveedor.",
 									"marks": []
 								}
 							]
@@ -14244,7 +14034,7 @@
 								{
 									"_type": "span",
 									"_key": "k21",
-									"text": "El que firma, da la cara. Desde agosto de 2026, además, la ",
+									"text": "La ",
 									"marks": []
 								},
 								{
@@ -14272,7 +14062,7 @@
 								{
 									"_type": "span",
 									"_key": "k26",
-									"text": "Aquí no vas a encontrar un producto de IA. No lo tenemos y no lo fingimos. Tenemos un método hecho de reglas y protocolos versionados que dirigen a los agentes, distribuible y auditable.",
+									"text": "Aquí no vas a encontrar un producto de IA, porque no lo tenemos. Tenemos un método: reglas y protocolos versionados que dirigen a los agentes y que cualquiera puede auditar.",
 									"marks": []
 								}
 							]
@@ -14317,7 +14107,7 @@
 				"translationOf": "svc-ia",
 				"data": {
 					"title": "Artificial Intelligence",
-					"excerpt": "AI is a means, not an end. The machine writes the repetitive code; we bring the architecture and the judgment, from development to operations — one integral approach, a DevOps profile. The agent proposes; the engineer disposes.",
+					"excerpt": "The machine writes the repetitive code. We bring the architecture, the data and the judgment, and we sign every line before production. The agent proposes; the engineer disposes.",
 					"cta_label": "Tell us your case",
 					"content": [
 						{
@@ -14335,7 +14125,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "«I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.» ",
+									"text": "“I assert that the organizations that build and run agents are responsible for everything those agents do, whether that behavior is intended or emergent.” ",
 									"marks": []
 								},
 								{
@@ -14363,7 +14153,7 @@
 								{
 									"_type": "span",
 									"_key": "k4",
-									"text": "«We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.» ",
+									"text": "“We can outsource many things, but not the acceptance criteria, at some point there’s a human request and a human judgment on whether that request was properly executed.” ",
 									"marks": []
 								},
 								{
@@ -14385,7 +14175,7 @@
 								{
 									"_type": "span",
 									"_key": "k0",
-									"text": "We use AI in two ways. As a tool, to build with more quality and fewer hours what we already knew how to build. And as a system component, to solve what was not possible until recently. Either way it is a means, not an end.",
+									"text": "We use AI in two ways. As a tool, to build with more quality and fewer hours what we already knew how to build. And as a system component, to solve what was not possible until recently.",
 									"marks": []
 								}
 							]
@@ -14458,20 +14248,6 @@
 									"_type": "span",
 									"_key": "kb",
 									"text": " inside systems that already exist. That is the most valuable part of the work, and the part we have done since 2019.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "ke",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "kd",
-									"text": "The repetitive code goes to the machine. Our time goes to judgment and accountability, and a small team now ships what used to take a large one.",
 									"marks": []
 								}
 							]
@@ -14673,21 +14449,7 @@
 								{
 									"_type": "span",
 									"_key": "k16",
-									"text": " network. The data is processed in your own account, not in a third-party AI ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "k17",
-									"text": "SaaS",
-									"marks": [
-										"code"
-									]
-								},
-								{
-									"_type": "span",
-									"_key": "k18",
-									"text": ".",
+									"text": " network, in your own account: if `Cloudflare` already serves your site, you add no new provider.",
 									"marks": []
 								}
 							]
@@ -14850,7 +14612,7 @@
 								{
 									"_type": "span",
 									"_key": "k1v",
-									"text": "The industry's most repeated complaint is code that is almost right, but not quite. On a promotion calculation or a stock feed, \"almost\" is an incident.",
+									"text": "The industry's most repeated complaint is code that is almost right, but not quite. On a promotion calculation or a stock feed, “almost” is an incident.",
 									"marks": []
 								}
 							]
@@ -14898,7 +14660,7 @@
 								{
 									"_type": "span",
 									"_key": "k21",
-									"text": "Whoever signs, answers. From August 2026, the ",
+									"text": "The ",
 									"marks": []
 								},
 								{
@@ -14912,7 +14674,7 @@
 								{
 									"_type": "span",
 									"_key": "k24",
-									"text": " also demands human oversight with the competence and authority to override or halt a high-risk system. That is already how we work.",
+									"text": " demands human oversight with the competence and authority to override or halt a high-risk system. That is already how we work.",
 									"marks": []
 								}
 							]
@@ -14926,7 +14688,7 @@
 								{
 									"_type": "span",
 									"_key": "k26",
-									"text": "You won't find an AI product here. We don't have one, and we don't pretend to. What we have is a method made of versioned rules and protocols that steer the agents, distributable and auditable.",
+									"text": "You won't find an AI product here, because we don't have one. What we have is a method: versioned rules and protocols that steer the agents, and that anyone can audit.",
 									"marks": []
 								}
 							]
@@ -15164,7 +14926,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Más de veinte años en "
+									"text": "Veinte años en la distribución: "
 								},
 								{
 									"_type": "span",
@@ -15179,7 +14941,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "integración de sistemas",
+									"text": "integración",
 									"marks": [
 										"hk3"
 									]
@@ -15353,7 +15115,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " debe efectivamente su nombre a la trinchera de "
+									"text": " debe su nombre a la trinchera de "
 								},
 								{
 									"_type": "span",
@@ -15445,7 +15207,7 @@
 								},
 								{
 									"_type": "span",
-									"text": ". Nos gustan las tripas, la lógica compleja y afrontar retos. El rigor y la optimización."
+									"text": ". Nos gustan las tripas y la lógica compleja."
 								}
 							]
 						},
@@ -15466,7 +15228,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " por filosofía. Porque en este sector el mundo no para y hay que adaptarse y evolucionar continuamente. Claro que ya no somos una "
+									"text": " por filosofía: la tecnología cambia cada año, y cambiamos con ella. Claro que ya no somos una "
 								},
 								{
 									"_type": "span",
@@ -15540,18 +15302,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Aquel mismo 2019 nos hicimos "
-								},
-								{
-									"_type": "span",
-									"text": "partner",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " oficial de "
+									"text": "Aquel mismo 2019 nos hicimos socio oficial de "
 								},
 								{
 									"_type": "span",
@@ -15566,7 +15317,7 @@
 								},
 								{
 									"_type": "span",
-									"text": "“+ Calidad − Cantidad”",
+									"text": "«+ Calidad − Cantidad»",
 									"marks": [
 										"strong"
 									]
@@ -15600,29 +15351,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Si el mensaje de "
-								},
-								{
-									"_type": "span",
-									"text": "Server Startup",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " es la chispa vital, el "
-								},
-								{
-									"_type": "span",
-									"text": "rock'n'roll",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " de nuestros inicios, el "
+									"text": "El "
 								},
 								{
 									"_type": "span",
@@ -15633,18 +15362,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " canaliza hoy esa energía. Simboliza el salto de madurez que dimos al pasar de implantar "
-								},
-								{
-									"_type": "span",
-									"text": "e-commerce complejos",
-									"marks": [
-										"svc-ecom"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " a integrar plataformas de exigencia extrema como "
+									"text": " viene de la retícula del almacén robotizado de "
 								},
 								{
 									"_type": "span",
@@ -15655,29 +15373,18 @@
 								},
 								{
 									"_type": "span",
-									"text": ". Sus famosas colmenas ("
+									"text": ": robots sobre una cuadrícula donde cada pedido tiene que salir exacto. Integrar con esa plataforma fue nuestro salto de madurez, después de años implantando "
 								},
 								{
 									"_type": "span",
-									"text": "hives",
+									"text": "comercio electrónico complejo",
 									"marks": [
-										"em"
+										"svc-ecom"
 									]
 								},
 								{
 									"_type": "span",
-									"text": "), donde miles de robots optimizan el "
-								},
-								{
-									"_type": "span",
-									"text": "picking",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " al milímetro, son un referente de modernidad y eficiencia logística."
+									"text": "."
 								}
 							],
 							"markDefs": [
@@ -15700,7 +15407,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Nuestro logo nace de esa retícula. Símbolo de la precisión, el rigor, la escalabilidad y la búsqueda de sinergias que rigen nuestro día a día. Un espejo en el que mirarnos. Es el mismo cubo que te acompaña por todo este sitio."
+									"text": "Nuestro logo nace de esa retícula, y es el mismo cubo que te acompaña por todo este sitio."
 								}
 							]
 						},
@@ -15743,7 +15450,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Trabajamos junto a tu equipo, no desde fuera. El "
+									"text": "Trabajamos junto a tu equipo. El "
 								},
 								{
 									"_type": "span",
@@ -15813,7 +15520,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Pocas cosas, bien hechas.",
+									"text": "Solo lo que dominamos.",
 									"marks": [
 										"strong"
 									]
@@ -15854,7 +15561,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " Preferimos una arquitectura resiliente hoy que deuda técnica mañana."
+									"text": " Una arquitectura que aguanta hoy cuesta menos que la deuda técnica de mañana."
 								}
 							]
 						},
@@ -16126,7 +15833,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "No cedemos tus datos a terceros salvo obligación legal. Sí recurrimos a proveedores de servicios tecnológicos —correo electrónico, alojamiento y protección del sitio— que actúan como encargados del tratamiento y sólo tratan los datos siguiendo nuestras instrucciones, con contrato de encargo firmado."
+									"text": "No cedemos tus datos a terceros salvo obligación legal. Sí recurrimos a proveedores de servicios tecnológicos —correo electrónico, alojamiento y protección del sitio— que actúan como encargados del tratamiento y solo tratan los datos siguiendo nuestras instrucciones, con contrato de encargo firmado."
 								}
 							]
 						},
@@ -16289,7 +15996,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Over twenty years in "
+									"text": "Over twenty years in retail: "
 								},
 								{
 									"_type": "span",
@@ -16545,7 +16252,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " for backend specialization. We like the guts, the complex logic, the hard problems. Rigor and optimization."
+									"text": " for backend specialization. We like the guts and the complex logic."
 								}
 							]
 						},
@@ -16566,7 +16273,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " as philosophy. This sector never stops, and neither do we. We are no longer a startup, of course (then again, the Pont Neuf, New York City and the Camp Nou were not exactly built yesterday...) but we keep the nerve and excitement of day one."
+									"text": " as philosophy: technology changes every year, and we change with it. We are no longer a startup, of course (then again, the Pont Neuf, New York City and the Camp Nou were not exactly built yesterday...) but we keep the nerve and excitement of day one."
 								}
 							]
 						},
@@ -16645,18 +16352,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "If that log line is the spark, the "
-								},
-								{
-									"_type": "span",
-									"text": "rock'n'roll",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " of our beginnings, the "
+									"text": "The "
 								},
 								{
 									"_type": "span",
@@ -16667,18 +16363,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " channels that energy today. It marks the maturity leap from building "
-								},
-								{
-									"_type": "span",
-									"text": "complex e-commerce",
-									"marks": [
-										"svc-ecom"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " to integrating platforms as demanding as "
+									"text": " comes from the grid of "
 								},
 								{
 									"_type": "span",
@@ -16689,7 +16374,18 @@
 								},
 								{
 									"_type": "span",
-									"text": ". Its famous hives, where thousands of robots optimize picking to the millimeter, set the bar for logistics engineering."
+									"text": "'s robotic warehouse: robots on a grid where every order has to come out exact. Integrating with that platform was our step up, after years building "
+								},
+								{
+									"_type": "span",
+									"text": "complex e-commerce",
+									"marks": [
+										"svc-ecom"
+									]
+								},
+								{
+									"_type": "span",
+									"text": "."
 								}
 							],
 							"markDefs": [
@@ -16712,7 +16408,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Our logo is born from that grid. A symbol of the precision, rigor and scale that govern our daily work. A mirror to look at ourselves in. It is the same cube that guides you around this site."
+									"text": "Our logo is born from that grid, and it is the same cube that guides you around this site."
 								}
 							]
 						},
@@ -16755,7 +16451,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "We work alongside your team, not around it. The "
+									"text": "We work alongside your team. The "
 								},
 								{
 									"_type": "span",
@@ -16825,7 +16521,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Few things, done well.",
+									"text": "Only what we know inside out.",
 									"marks": [
 										"strong"
 									]
@@ -16866,7 +16562,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " We'd rather have a resilient architecture today than technical debt tomorrow."
+									"text": " An architecture that holds today costs less than tomorrow's technical debt."
 								}
 							]
 						},
@@ -17860,7 +17556,7 @@
 								},
 								{
 									"_type": "span",
-									"text": ", la lista de referencias se dibuja como imagen y un lector de pantalla no la lee (criterios 1.1.1 y 1.4.5 de las WCAG). Es una decisión: esos nombres se mantienen fuera del texto de la página y de los buscadores. Si necesita la lista, pídala por el canal que se describe abajo y se la enviamos.",
+									"text": ", la lista de referencias se dibuja como imagen y un lector de pantalla no la lee (criterios 1.1.1 y 1.4.5 de las WCAG). Es una decisión: esos nombres se mantienen fuera del texto de la página y de los buscadores, y esa lista no se ofrece en ningún otro formato.",
 									"marks": []
 								}
 							],
@@ -17878,7 +17574,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación y revisada el 21 de octubre de 2026 con la parte automática de la evaluación. Si encuentra una barrera, el canal está aquí abajo."
+									"text": "Declaración preparada el 3 de septiembre de 2026 mediante autoevaluación y revisada el 21 de octubre de 2026 con la parte automática de la evaluación. Si encuentras una barrera, el canal está aquí abajo."
 								}
 							]
 						},
@@ -17888,7 +17584,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Este es el canal de accesibilidad del sitio: sirve para avisarnos de que algo aquí no es accesible, para pedirnos un contenido en un formato que sí lo sea, y para reclamar si lo que respondemos no le sirve."
+									"text": "Este es el canal de accesibilidad del sitio: sirve para avisarnos de que algo aquí no es accesible, para pedirnos un contenido en un formato que sí lo sea, y para reclamar si lo que respondemos no te sirve."
 								}
 							]
 						},
@@ -17908,7 +17604,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Use la ",
+									"text": "Usa la ",
 									"marks": []
 								},
 								{
@@ -17920,7 +17616,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " y díganos que se trata de accesibilidad. Con eso basta.",
+									"text": " y dinos que se trata de accesibilidad. Con eso basta.",
 									"marks": []
 								}
 							],
@@ -17948,7 +17644,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Respondemos en un máximo de veinte días hábiles. Si la respuesta no le convence, puede reclamar y le contestaremos por escrito en un máximo de dos meses. Son los plazos que fija el Real Decreto 1112/2018 y los asumimos tal cual."
+									"text": "Respondemos en un máximo de veinte días hábiles. Si la respuesta no te convence, puedes reclamar y te contestaremos por escrito en un máximo de dos meses. Son los plazos que fija el Real Decreto 1112/2018 y los asumimos tal cual."
 								}
 							]
 						},
@@ -17958,7 +17654,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Sus datos"
+									"text": "Tus datos"
 								}
 							]
 						},
@@ -17968,7 +17664,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Lo que nos escriba se trata conforme a la ",
+									"text": "Lo que nos escribas se trata conforme a la ",
 									"marks": []
 								},
 								{
@@ -18053,7 +17749,7 @@
 								},
 								{
 									"_type": "span",
-									"text": " page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines. If you need the list, ask for it through the channel described below and we will send it to you.",
+									"text": " page, the reference list is drawn as an image and a screen reader does not read it (WCAG success criteria 1.1.1 and 1.4.5). That is a decision: those names stay out of the page's text and out of search engines, and the list is not offered in any other format.",
 									"marks": []
 								}
 							],
@@ -20636,7 +20332,7 @@
 						},
 						{
 							"key": "h9-7",
-							"text": "Cada *push* se analiza en busca de secretos, y una guarda rechaza nombrar a clientes que no podemos nombrar.",
+							"text": "Cada *push* se analiza en busca de secretos, y una guarda rechaza cualquier nombre de cliente que no esté publicado en Referencias.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						}
@@ -20741,7 +20437,7 @@
 						},
 						{
 							"key": "h9-7",
-							"text": "Every push is scanned for secrets, and a guard rejects naming clients we may not name.",
+							"text": "Every push is scanned for secrets, and a guard rejects any client name not published under References.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						}
@@ -20777,7 +20473,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Partner oficial de Cloudflare"
+										"text": "Socio oficial de Cloudflare"
 									}
 								]
 							},
@@ -20858,7 +20554,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Caché en el borde, purgada en cuanto publicas."
+										"text": "Caché hasta el HTML en el borde: en plena campaña, a tu origen solo llega lo que no se puede cachear."
 									}
 								]
 							},
@@ -20868,7 +20564,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "WAF y Zero Trust"
+										"text": "WAF"
 									}
 								]
 							},
@@ -20878,7 +20574,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Reglas escritas para tu tráfico y acceso sin VPN."
+										"text": "Las reglas gestionadas de Cloudflare como base y, encima, las que pide tu tráfico, versionadas en Terraform."
 									}
 								]
 							},
@@ -20898,12 +20594,12 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Lógica en el borde, sin servidores que mantener."
+										"text": "Lógica en el borde, versionada y probada como el resto del código."
 									}
 								]
 							}
 						],
-						"cta_label": "Descubre más sobre Cloudflare",
+						"cta_label": "Cómo operamos CDN y WAF",
 						"featured": true
 					},
 					"locale": "es"
@@ -21008,7 +20704,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Edge caching, purged the moment you publish."
+										"text": "Caching down to the HTML at the edge: at peak, your origin only sees what can't be cached."
 									}
 								]
 							},
@@ -21018,7 +20714,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "WAF and Zero Trust"
+										"text": "WAF"
 									}
 								]
 							},
@@ -21028,7 +20724,7 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Rules written for your traffic, and access without a VPN."
+										"text": "Cloudflare's managed rules as the base, and on top the ones your traffic needs, versioned in Terraform."
 									}
 								]
 							},
@@ -21048,12 +20744,12 @@
 								"children": [
 									{
 										"_type": "span",
-										"text": "Logic at the edge, with no servers to look after."
+										"text": "Logic at the edge, versioned and tested like the rest of the code."
 									}
 								]
 							}
 						],
-						"cta_label": "More about Cloudflare",
+						"cta_label": "How we run CDN and WAF",
 						"featured": true
 					},
 					"locale": "en"

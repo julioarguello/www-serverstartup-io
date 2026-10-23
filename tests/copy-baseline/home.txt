@@ -3,7 +3,7 @@ Saltar al contenido
 EN
 Ingeniería de software,
 de la arquitectura a producción
-Más de veinte años en comercio electrónico, integración de sistemas y datos.
+Veinte años en la distribución: comercio electrónico, integración y datos.
 Server Startup es socio oficial de Cloudflare desde 2019.
 CDN, WAF y seguridad edge
 Integración de sistemas
@@ -21,7 +21,7 @@ big data
 Ver todas las referencias
 Cómo trabajamos
 Los mismos ingenieros, de principio a fin.
-Quien diseña tu sistema lo lleva a producción. Y cada mañana mira sus alertas.
+Quien diseña tu sistema lo lleva a producción, y después vigila sus alertas.
 Primero el contrato.
 Cada interfaz se acuerda y se versiona antes que el código que la cumple (contract first).
 La configuración es código.
@@ -29,11 +29,11 @@ Permisos y entornos están en Terraform, con historial y revisión. Nada vive so
 Desarrollo guiado por especificación (SDD).
 Fijamos qué debe hacer y cómo se comprueba antes de generar una línea, con las reglas de tu negocio escritas y versionadas. Así el tiempo va donde rinde la experiencia, al diseño y a la revisión. Cuando un test falla, arreglamos el código, no el test.
 Nada se despliega en rojo.
-Cada cambio pasa tests, análisis estático y escaneo de seguridad en CI/CD antes de llegar a producción. Allí, trazas y métricas con OpenTelemetry.
+Cada cambio pasa tests, análisis estático y escaneo de seguridad en CI/CD antes de llegar a producción, y allí deja trazas y métricas en OpenTelemetry.
 Si un SaaS ya lo resuelve, no lo construimos.
 Preferimos perder un proyecto a mantener software que sobra.
-Dicho y hecho.
-Lo que empezamos, lo terminamos. Cada día nos ocupamos de que el proyecto vaya bien, porque en él va nuestra palabra.
+Un método para los seis.
+El mismo contrato, la misma configuración en Terraform y las mismas reglas escritas, que siguen también los agentes de IA. Así ningún vertical empieza de cero.
 1
 equipo
 .
@@ -42,15 +42,15 @@ verticales
 .
 dicho y hecho
 .
-Partner oficial de Cloudflare
+Socio oficial de Cloudflare
 Desplegamos y operamos Cloudflare para nuestros clientes, y esta misma web corre entera sobre su plataforma: Workers, D1 y R2.
 CDN
-Caché en el borde, purgada en cuanto publicas.
-WAF y Zero Trust
-Reglas escritas para tu tráfico y acceso sin VPN.
+Caché hasta el HTML en el borde: en plena campaña, a tu origen solo llega lo que no se puede cachear.
+WAF
+Las reglas gestionadas de Cloudflare como base y, encima, las que pide tu tráfico, versionadas en Terraform.
 Workers
-Lógica en el borde, sin servidores que mantener.
-Descubre más sobre Cloudflare
+Lógica en el borde, versionada y probada como el resto del código.
+Cómo operamos CDN y WAF
 Hablemos de ingeniero a ingeniero.
 Trae el problema como esté. Te responde quien va a escribir el código.
 Cuéntanos tu proyecto

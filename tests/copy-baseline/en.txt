@@ -4,7 +4,7 @@ Skip to content
 ES
 Software engineering,
 from architecture to production
-Over twenty years in e-commerce, systems integration and data.
+Over twenty years in retail: e-commerce, systems integration and data.
 Server Startup has been an official Cloudflare partner since 2019.
 CDN, WAF & Edge Security
 Systems Integration
@@ -22,7 +22,7 @@ big data
 See all references
 How we work
 The same engineers, start to finish.
-Whoever designs your system takes it to production. And checks its alerts every morning.
+Whoever designs your system takes it to production, and keeps watching its alerts after that.
 Contract first.
 Every interface is agreed and versioned before the code that fulfils it.
 Configuration is code.
@@ -30,11 +30,11 @@ Permissions and environments live in Terraform, with history and review. Nothing
 Specification-driven development (SDD).
 We settle what it must do and how it is checked before a line is generated, with your business rules written down and versioned. That puts the time where experience pays: design and review. When a test fails, we fix the code, not the test.
 Nothing ships on red.
-Every change passes tests, static analysis and a security scan in CI/CD before it reaches production. There, traces and metrics with OpenTelemetry.
+Every change passes tests, static analysis and a security scan in CI/CD before it reaches production, where it leaves traces and metrics in OpenTelemetry.
 If a SaaS already solves it, we don't build it.
 We would rather lose a project than maintain software nobody needs.
-Promise kept.
-What we start, we finish. Every day we make sure the project goes well, because our word is in it.
+One method for all six.
+The same contract, the same configuration in Terraform and the same written rules, which AI agents follow too. So no vertical starts from scratch.
 1
 team
 .
@@ -46,12 +46,12 @@ promise kept
 Official Cloudflare partner
 We deploy and run Cloudflare for our clients, and this very site runs on it end to end: Workers, D1 and R2.
 CDN
-Edge caching, purged the moment you publish.
-WAF and Zero Trust
-Rules written for your traffic, and access without a VPN.
+Caching down to the HTML at the edge: at peak, your origin only sees what can't be cached.
+WAF
+Cloudflare's managed rules as the base, and on top the ones your traffic needs, versioned in Terraform.
 Workers
-Logic at the edge, with no servers to look after.
-More about Cloudflare
+Logic at the edge, versioned and tested like the rest of the code.
+How we run CDN and WAF
 Let's talk, engineer to engineer.
 Bring the problem as it is. You'll hear back from the person who'll write the code.
 Tell us about your project

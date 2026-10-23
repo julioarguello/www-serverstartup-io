@@ -19,6 +19,8 @@ fallback string, meta description — and fails on a COUNT OF PEOPLE:
   · «somos N» / «we are N»
   · a numeral standing for the people     «los mismos tres,», «the three of us»
   · a multiplier against the engineers     «los ingenieros ×3» (a table cell)
+  · a team sized by an adjective           «un equipo pequeño», «a small team» (#641:
+    a size word caps the capacity a reader imagines exactly as a number does)
 
 It does NOT forbid numbers near the word "team": the mantra is literally
 «1 equipo → ▪▪▪▪▪▪ 6 verticales → ∎ dicho y hecho» (#579), and that is the one
@@ -72,6 +74,8 @@ COUNT_PATTERNS = [
     re.compile(rf"\b(?:the\s+{NUMERAL}\s+of\s+us|{NUMERAL}\s+de\s+nosotros)\b", re.I),
     # a table cell multiplying the engineers: «los ingenieros ×3»
     re.compile(rf"\b{PEOPLE}\W{{0,20}}[×x]\s*\d+", re.I),
+    # sized by an adjective: «un equipo pequeño», «un pequeño equipo», «a small team» (#641)
+    re.compile(r"\b(?:equipo\s+(?:pequeño|reducido)|(?:pequeño|reducido)\s+equipo|(?:small|tiny)\s+team)\b", re.I),
 ]
 
 SCRIPT_STYLE_RE = re.compile(
@@ -152,6 +156,8 @@ CONTROL_HTML = """<!doctype html>
 <p>1 equipo → ▪▪▪▪▪▪ 6 verticales → ∎ dicho y hecho. One team. Six verticals. Promise kept.</p>
 <p>Seis verticales. Más de veinte años de oficio. Tiempo de montaje: tres semanas a ratos.</p>
 <p>Trabajamos junto a tu equipo. Te responde una persona. One engineer answers.</p>
+<p>Un equipo pequeño entrega hoy lo que antes pedía uno grande. A small team now ships it.</p>
+<p>Patrocinamos equipos de cantera. Un cambio pequeño en el equipo de datos. A small change to the team page.</p>
 <img src="/a.jpg" alt="dos personas en la foto">
 """
 
@@ -167,6 +173,8 @@ CONTROL_HITS = {
     "The three of us",
     "ingenieros ×3",
     "dos personas",
+    "equipo pequeño",
+    "small team",
 }
 
 

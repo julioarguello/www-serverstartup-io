@@ -77,8 +77,9 @@ process.on("unhandledRejection", blindOn);
    the same with Puppeteer). WebKit did not need it; one rule for every engine is simpler to trust. */
 /* At most PAGES pages at once across the three profiles. Up to fifteen at a time (three profiles × two homes and
    three lanes) took `wrangler dev` down twice in one CI job — its ProxyWorker drops the runtime under concurrent
-   load (cloudflare/workers-sdk#15317, #524) — and `ci-gate.mjs` reboots it only once. The a11y gate holds four
-   lanes against the same stack and survives; this holds the same number. */
+   load (cloudflare/workers-sdk#15317, #524) — and `ci-gate.mjs` reboots it only once. Four, the a11y gate's
+   number, still lost the stack in about a quarter of jobs on wrangler 4.127.1 (#638); the upstream fix in 4.129.1
+   makes such a failure one request, not the stack. */
 const PAGES = Math.max(1, Number(process.env.ENGINES_CONCURRENCY) || 4);
 let open = 0;
 const waiting = [];

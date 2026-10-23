@@ -5,12 +5,19 @@
  *
  * `wrangler dev` treats an error scoped to a single in-flight request as fatal:
  * it kills the dev server and exits, so every check after that point fails on a
- * route that has nothing wrong with it. Upstream, open, not ours —
- * cloudflare/workers-sdk#15317, with the fix still open as
- * cloudflare/workers-sdk#15448 and in no release (latest 4.147.0 on
- * 2026-10-02); cloudflare/workers-sdk#15207, merged, only logs the cause.
- * Dropping the pin to the 4.113.0 some reporters run is fourteen minors
- * backwards under Astro 7.
+ * route that has nothing wrong with it. Upstream: cloudflare/workers-sdk#15317.
+ * The fix that shipped is cloudflare/workers-sdk#15252, in wrangler 4.129.1
+ * (2026-09-07): a request that fails crossing the proxy now fails alone, and
+ * the dev server keeps serving. #524 tracked #15448 instead, which never
+ * merged, so the repo stayed on 4.127.1 until #638 — measured over the last 60
+ * runs before it, a death in about a quarter of the a11y and engines jobs.
+ * This reboot stays as the net for any death the fix does not cover; its
+ * warnings are the measurement of whether it still fires.
+ *
+ * What the fix leaves: the failed request itself, now one 502 with the stack
+ * still up — so no reboot fires, and it is the gate's own red. To keep that
+ * visible rather than silent, every gate reports how many such requests
+ * wrangler logged (`the dev server continues`) in the job summary.
  *
  * #390 landed the half that makes the crash LEGIBLE and deliberately stopped
  * there: "This adds information and nothing else. It does not retry." This is
@@ -50,7 +57,7 @@
  * without `-e` would silently stop failing steps on their first bad command.
  */
 import { spawnSync } from "node:child_process";
-import { appendFileSync, existsSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { proxyCrashDeath } from "./lib/stack-probe.mjs";
 
@@ -85,20 +92,40 @@ const summary = (md) => {
 	if (path) appendFileSync(path, `${md}\n`);
 };
 
+/**
+ * Requests that failed inside wrangler while the stack survived (#638): the
+ * residue of the upstream fix. Reported once per new occurrence in the job,
+ * then the step exits with the code it was going to exit with anyway.
+ */
+const STACK_LOG = join(process.env.RUNNER_TEMP || "/tmp", "wrangler-ci.log");
+const SURVIVED_SEEN = join(process.env.RUNNER_TEMP || "/tmp", "ci-gate-survived");
+const finish = (code) => {
+	if (existsSync(STACK_LOG)) {
+		const count = (readFileSync(STACK_LOG, "utf8").match(/the dev server continues/g) || []).length;
+		const seen = existsSync(SURVIVED_SEEN) ? Number(readFileSync(SURVIVED_SEEN, "utf8")) || 0 : 0;
+		if (count > seen) {
+			console.error(`::notice::${count - seen} request(s) failed inside wrangler and the stack survived (#638)`);
+			summary(`- ${count - seen} request(s) failed inside \`wrangler dev\` and the stack kept serving (#638)`);
+			writeFileSync(SURVIVED_SEEN, String(count));
+		}
+	}
+	process.exit(code);
+};
+
 const first = runGate();
-if (first.status === 0) process.exit(0);
+if (first.status === 0) finish(0);
 
 const cause = await proxyCrashDeath(BASE);
-if (!cause) process.exit(codeOf(first));
+if (!cause) finish(codeOf(first));
 
 // From here the failure is known not to be about the change under test. Say so
 // where it cannot be missed: an annotation shows on the run page without
 // opening a log, which is where anyone actually looks first.
-const WHERE = "cloudflare/workers-sdk#15317 · tracked here as #524";
+const WHERE = "cloudflare/workers-sdk#15317 · fixed upstream in wrangler 4.129.1 (#638) · first tracked as #524";
 if (existsSync(MARKER)) {
 	console.error(`::error::the stack died a second time in this job (${cause}) — failing. ${WHERE}`);
 	summary(`### ❌ Stack died twice\n\n\`${cause}\` — a second death in one job is not bad luck. ${WHERE}`);
-	process.exit(codeOf(first));
+	finish(codeOf(first));
 }
 writeFileSync(MARKER, `${new Date().toISOString()} ${cause}\n`);
 
@@ -115,7 +142,7 @@ const revived = spawnSync("bash", ["-c", REVIVE], { stdio: "inherit" });
 if (revived.status !== 0) {
 	console.error("::error::could not reboot the stack — failing with the gate's own code");
 	summary(`### ❌ Stack died and would not come back\n\n\`${cause}\` — reboot failed. ${WHERE}`);
-	process.exit(codeOf(first));
+	finish(codeOf(first));
 }
 
 const second = runGate();
@@ -124,8 +151,8 @@ summary(
 	`### ${verdict} — stack rebooted once\n\n` +
 		`\`${cause}\`, the upstream ProxyWorker crash. The gate was re-run whole after ` +
 		`a full reboot and re-seed.\n\n` +
-		`- Upstream: [cloudflare/workers-sdk#15317](https://github.com/cloudflare/workers-sdk/issues/15317) — open, fix in review as [#15448](https://github.com/cloudflare/workers-sdk/pull/15448)\n` +
-		`- Here: [#524](https://github.com/julioarguello/www-serverstartup-io/issues/524)\n` +
+		`- Upstream: [cloudflare/workers-sdk#15317](https://github.com/cloudflare/workers-sdk/issues/15317), fixed by [#15252](https://github.com/cloudflare/workers-sdk/pull/15252) in wrangler 4.129.1 — a death after #638 is one the fix did not cover\n` +
+		`- Here: [#524](https://github.com/julioarguello/www-serverstartup-io/issues/524), [#638](https://github.com/julioarguello/www-serverstartup-io/issues/638)\n` +
 		`- ${second.status === 0 ? "Re-running was legitimate: this red was the crash, not the diff." : "The gate is red for its own reasons — read it as a real failure."}`,
 );
-process.exit(codeOf(second));
+finish(codeOf(second));

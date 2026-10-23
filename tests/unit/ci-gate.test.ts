@@ -170,6 +170,35 @@ describe("ci-gate.mjs", () => {
 		expect(r.stdout.match(/gate: dead again/g)).toHaveLength(1);
 	}, 30_000);
 
+	it("reports requests that failed inside wrangler while the stack survived, once each (#638)", () => {
+		bootStack();
+		const log = join(dir, "wrangler-ci.log");
+		const line = "✘ [ERROR] Error inside ProxyWorker (the affected request failed; the dev server continues): GET /x\n";
+		writeFileSync(join(dir, "gate.sh"), `echo "gate: green"; exit 0\n`);
+
+		// Control: nothing logged, nothing reported.
+		let r = runGate();
+		expect(r.status).toBe(0);
+		expect(r.stderr).not.toContain("::notice::");
+
+		writeFileSync(log, line + line);
+		r = runGate();
+		expect(r.status).toBe(0);
+		expect(r.stderr).toContain("::notice::2 request(s) failed inside wrangler");
+		expect(readFileSync(join(dir, "summary.md"), "utf8")).toContain("2 request(s) failed inside `wrangler dev`");
+
+		// The same two are not reported again by the next gate of the job…
+		r = runGate();
+		expect(r.stderr).not.toContain("::notice::");
+
+		// …only a new one is, and a red gate keeps its own code.
+		writeFileSync(log, line + line + line);
+		writeFileSync(join(dir, "gate.sh"), `echo "gate: a real finding"; exit 3\n`);
+		r = runGate();
+		expect(r.status).toBe(3);
+		expect(r.stderr).toContain("::notice::1 request(s) failed inside wrangler");
+	}, 30_000);
+
 	it("never re-runs a gate that failed while the stack was answering", () => {
 		bootStack();
 		writeFileSync(join(dir, "wrangler-debug.log"), PROXY_CRASH_LOG);

@@ -79,6 +79,19 @@ A single editing surface for translators. No JSON files, no code-level dictionar
 
 `src/middleware.ts` loads locale-specific aria labels from CMS on every request and stores the `t()` function on `Astro.locals.t`. This eliminates prop drilling and global state race conditions.
 
+**EmDash's middleware wraps ours, not the other way round** (#648). The
+integration injects its own chain with `order: "pre"`, so `src/middleware.ts`
+runs inside it, and anything EmDash writes after `next()` lands on the response
+after ours has returned. A header EmDash adds cannot be removed from
+`src/middleware.ts`. The one place that can is `src/middleware-outer.ts`, wired
+through EmDash's `middleware.outer` option in `astro.config.mjs`: it runs
+outside the whole EmDash pipeline. Today it does one thing — strips the
+`Server-Timing` header EmDash 1.3.1 writes on every response (setup probe,
+runtime init, DB init and migration policy, encryption-key validation, plugin
+states, query counts), with no option to turn it off. It keeps the header under
+`astro dev` and strips it from every build. `scripts/ci-check-headers.sh`
+asserts the absence on six routes, the admin and a 404 among them.
+
 ### 3.4 Route Parity
 
 All routes exist in both ES and EN:
@@ -1261,7 +1274,8 @@ PR → quality-gates green → merge to main
   sites), design tokens (5 planted CSS defects + 3 shapes it must not flag),
   CMS text (hardcoded attribute, hardcoded text node, unseeded label key),
   security headers (a matcher run over present / absent / wrong-value
-  responses), copy baseline (routes enumerate, `innerText` returns copy, the
+  responses, plus a planted `Set-Cookie` and a planted `Server-Timing` for
+  the two absences it asserts), copy baseline (routes enumerate, `innerText` returns copy, the
   comparator catches a deleted line, a changed word and a truncation) and
   a11y (a link under a fixed header with its ring suppressed, a 720px block at
   320px, an `<img>` with no alt).

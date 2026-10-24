@@ -87,6 +87,9 @@ export default defineConfig({
 			// Its Noto Sans was downloaded from Google on every build; the same
 			// files are local now, under the variable its admin reads (#629).
 			fonts: false,
+			// #648: the one middleware that runs OUTSIDE EmDash's. It strips the
+			// Server-Timing EmDash writes after src/middleware.ts has returned.
+			middleware: { outer: "./src/middleware-outer.ts" },
 			database: d1({ binding: "DB", session: "auto" }),
 			storage: r2({ binding: "MEDIA" }),
 			plugins: [

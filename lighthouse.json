@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "label": "Lighthouse",
+  "message": "perf ≥95 · a11y 100 · best practices 100 · SEO 100",
+  "color": "F44B21",
+  "namedLogo": "lighthouse",
+  "logoColor": "white"
+}

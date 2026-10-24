@@ -334,7 +334,8 @@ Decisions that are not obvious from the code, and the measurement behind each:
 - **Every opening is checked in Safari's engine and on an Android profile** (#583).
   `scripts/ci-check-engines.mjs` runs WebKit · iPhone 13, WebKit · Desktop Safari and Chromium · Pixel 7
   side by side, one browser per page (Chromium animates only the page it treats as shown): the home's
-  tail and card animate on the real clock, every vertical reaches `is-playing` then `is-done`, and
+  tail animates on the real clock and its card changes height from 768 px up and holds it on a phone
+  (#572), every vertical reaches `is-playing` then `is-done`, and
   reduced motion starts at rest with no control shown — Android's «Remove animations» is that setting,
   and #315 intends it. Real devices by hand: `docs/how-to/check-a-real-device.md`. The job runs inside
   Playwright's own image, which carries WebKit's system libraries and the browsers, rather than taking them
@@ -700,7 +701,7 @@ rotating edge (Base.astro), so the two cannot drift.
   apart from the heading, standing on the **chapter rail** (founder's choice C, 2026-10-06, after
   calling the old bars "enanas, feas, fuera de sitio"): six equal tracks as wide as the column,
   names at 16 px under them, arrows closing the rail at the right; on phones and tablets the rail
-  sits right under the card, in the first screen. The title wraps to two lines at its register; the
+  sits right under the card, in the first screen (on a 320 px phone, just under it since #572). The title wraps to two lines at its register; the
   kicker is two sentences, one line each from 768 px. The veil is lighter (the photographs barely
   showed): a soft shade behind the copy (`--hero-spot`, widened when the kicker became two unbroken
   lines — 3.7:1 at 1280 x 720 before, 6.0 after; the a11y gate's hero pass measures 1280 x 720 since)
@@ -721,9 +722,25 @@ rotating edge (Base.astro), so the two cannot drift.
   out, extended to the left: `faro.py`), the bridge with its bridge, its ships as photographed (turning
   them was tried: flipped, they sailed into the quay, and a tanker coming IN needs a bow the
   photograph does not have), and the warehouse further away — the whole photograph extended to the left.
-- **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
+- **Tablets (768–1024 px)**: the photograph is its own strip under the header and the
   caption stands on its foot, above the heading — over the whole band the copy hid the picture,
-  and under the heading the caption fell below a phone's fold (the layout gate's G18).
+  and under the heading the caption fell below a phone's fold (the layout gate's G18). That reason
+  was the strip's: with it above the copy, there was no room left under the heading. Phones dropped
+  the strip from the top in #572, and G18 still holds there (the card opens at y = 496 of 844).
+- **Phones (≤ 767 px), the copy first (#572, founder 2026-10-24)**: with the strip on top, a
+  phone's first screen was the cube and the index, and the kicker's first sentence (who we work
+  for) ended at y = 718 on a 659 px iPhone 15 Pro. Shrinking the strip was measured and rejected
+  (20 px to spare at 30 % of the screen, still under the fold at 320 px, the cube at its minimum
+  and the card over most of the picture). So the band reads h1 → kicker → card → rail, then the
+  strip, whole and uncovered, fading in from the band at its top (`--hero-scrim-strip-top`). The
+  card holds its taller state on phones: in the flow, a deck changing height each frame would move
+  the picture under it every six seconds. Measured after: the sentence ends at y = 406 on 393 × 659
+  and 435 on 320 × 568; the card and the rail open above the fold on every phone but the 320 px
+  one. The band ends with the strip (no screen-tall minimum), the cube is 86 % of the strip and is
+  lifted over it (`z-index: 1`: the reordered stage would otherwise paint over the seal). The layout
+  gate's G23 holds the sentence above a 393 × 659 fold; the engines gate holds the card's height on
+  a phone, each with a planted defect. The header «contacto» link offered in the same round was
+  declined (it cut the inner pages' breadcrumb from 173 to 88 px at 393 px).
 - **Weight** (superseded by #580: no photograph loads with the page, §4.12b): only the first photograph loads with the page; the other five carry their sources
   as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or
@@ -770,13 +787,15 @@ the header's edge and the title's tail on it too). Frame 0 is the company, not a
 its edges lighting up in paper white from the centre of the «Y» outwards («Filamento»). On the next
 frame it recedes to the faint outline in that vertical's colour: seal and cube are one drawing
 (`.s-hero__mark`), sized from the band (~86 % of its height, never wider than the margin left of the
-column on a desktop, above the card's tallest state on a phone), so nothing moves between frames.
+column on a desktop, above the card's tallest state on a tablet, 86 % of the strip on a phone since
+#572), so nothing moves between frames.
 
 - **The card changes scale**: on «nosotros» it is the index of the six verticals (each row a link,
   the full name on a desktop, `menu_short` in two columns on a phone or a short window); on each
   photograph, the vertical's name on one line and one factual line, `hero_line` — markdown-lite
   (`` `code` ``, `*italics*`), rendered with `excerptHtml`. The deck's height follows the frame from
-  two heights the script measures; until they arrive the card holds the taller.
+  two heights the script measures; until they arrive the card holds the taller — and on a phone it
+  always does (#572: in the flow, a changing card would move the picture under it).
 - **The two-voice title**: the h1 is split at its first comma in the template, never in the CMS; the
   tail is Computer Modern italic (`.ss-title__tail`, the CMU italic re-subset to carry both locales'
   tails and preloaded on the home), coloured per frame. Phones and tablets take each vertical's

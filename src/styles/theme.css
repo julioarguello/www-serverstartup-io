@@ -308,6 +308,11 @@
 	--hero-scrim-strip:
 		linear-gradient(0deg, rgba(30, 30, 30, 1) 0%, rgba(30, 30, 30, 0.9) 36%, rgba(30, 30, 30, 0) 62%),
 		linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(30, 30, 30, 0) 26%);
+	/* the home on phones (#572): the strip comes after the copy and the rail,
+	   so it runs out of the band's own ground at its top instead of its foot —
+	   the ground itself, or the join shows as a seam. No text stands on it,
+	   so it needs no shade under a card. */
+	--hero-scrim-strip-top: linear-gradient(180deg, var(--color-ground-dark) 0%, transparent 34%);
 	/* Seven frames, six seconds each: «nosotros», then the six photographs
 	   (#580). Named here because the header's edge and the title's tail
 	   rotate on the same clock as the images and the three must not drift. */

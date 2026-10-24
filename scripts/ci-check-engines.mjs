@@ -18,15 +18,17 @@
  *
  *   H  the home (/, /en), on the real clock: the title's tail has three different colours on frames
  *      0, 1 and 2 (sampled mid-frame on the document's timeline), the card changes height between
- *      frames 0 and 1, and every stop of the rail is a button.
+ *      frames 0 and 1 from 768 px up and holds it on a phone (#572: there the card is in the flow,
+ *      above the picture, which would jump with it), and every stop of the rail is a button.
  *   V  every vertical (the seed's Spanish services): it reaches `is-playing`, then `is-done` within
  *      SCENE_BEATS.end of starting, plus a margin.
  *   R  reduced motion: every vertical starts `is-done`, nothing runs in the home's band, and no
  *      pause or replay is shown — there is nothing for it to stop.
  *
- * Before any of it, each profile must catch two planted defects: a stylesheet that freezes the
- * tail's colour, and a vertical whose scene script never arrives. A profile that misses either is
- * blind and the run exits 3 — as it does when an engine fails to launch.
+ * Before any of it, each profile must catch its planted defects: a stylesheet that freezes the
+ * tail's colour, a vertical whose scene script never arrives, a label on the h1, and a card that
+ * does the opposite of what that width expects (animated on a phone, frozen from 768 px up). A
+ * profile that misses any is blind and the run exits 3 — as it does when an engine fails to launch.
  *
  * Exit: 0 green · 1 a defect · 3 blind (an engine missing, a plant not seen, the stack gone).
  *
@@ -142,13 +144,21 @@ async function home(page, route) {
 		frames.push(await page.evaluate(() => ({
 			tail: getComputedStyle(document.querySelector(".ss-title__tail")).color,
 			deck: Math.round(document.querySelector(".s-hero__deck").getBoundingClientRect().height),
+			// the taller of the deck's two states: the index, or the tallest caption
+			tallest: Math.max(...[...document.querySelectorAll(".s-hero__verticals, .s-hero__item")].map((e) => e.offsetHeight)),
 		})));
 	}
 	const stops = await page.evaluate(() => [...document.querySelectorAll(".s-hero__dots .s-hero__stop")].map((s) => s.getAttribute("role") === "button" && s.tabIndex === 0));
 	const problems = [];
 	const tails = frames.map((x) => x.tail);
 	if (new Set(tails).size !== 3) problems.push(`${route}: the tail's colour on frames 0/1/2 is ${tails.join(" / ")} — it should change on each`);
-	if (frames[0].deck === frames[1].deck) problems.push(`${route}: the card stays ${frames[0].deck}px between frames 0 and 1 — it should change height`);
+	// phones hold the card at its taller state (#572); from 768 px it follows the frame
+	const phone = (page.viewportSize()?.width ?? 1280) < 768;
+	if (phone && frames[0].deck !== frames[1].deck)
+		problems.push(`${route}: the card goes from ${frames[0].deck}px to ${frames[1].deck}px between frames 0 and 1 — on a phone it holds its taller state, or the picture under it jumps`);
+	else if (phone && Math.abs(frames[0].deck - frames[0].tallest) > 1)
+		problems.push(`${route}: the card holds ${frames[0].deck}px where its taller state is ${frames[0].tallest}px — on a phone it holds its taller state, or a caption is clipped`);
+	if (!phone && frames[0].deck === frames[1].deck) problems.push(`${route}: the card stays ${frames[0].deck}px between frames 0 and 1 — it should change height`);
 	if (!stops.length || stops.includes(false)) problems.push(`${route}: ${stops.filter((x) => !x).length} of ${stops.length} rail stops are not buttons`);
 	return { problems, tail0: tails[0] };
 }
@@ -230,7 +240,8 @@ async function profileRun(p) {
 	const t0 = Date.now();
 	{
 		/* the plants: both must be called, or this profile is not measuring anything */
-		const [frozen, stalled, covered] = await Promise.all([
+		const phone = devices[p.device].viewport.width < 768;
+		const [frozen, stalled, covered, flipped] = await Promise.all([
 			withPage(p, {}, async (page) => {
 				await page.addInitScript(plantStyle(".ss-title__tail { animation: none !important; }"));
 				return (await home(page, "/")).problems;
@@ -240,10 +251,19 @@ async function profileRun(p) {
 				return (await vertical(page, VERTICALS[0])).problems;
 			}),
 			withPage(p, {}, async (page) => (await vertical(page, VERTICALS[0], true)).problems),
+			/* the card's height, the wrong way round for this width: a phone's deck animated again as on a
+			   tablet, a desktop's frozen at one height */
+			withPage(p, {}, async (page) => {
+				await page.addInitScript(plantStyle(phone
+					? ".s-hero--home .s-hero__deck { animation: s-hero-deck var(--hero-cycle) linear 0.2s infinite !important; }"
+					: ".s-hero__deck { animation: none !important; height: 120px !important; }"));
+				return (await home(page, "/")).problems;
+			}),
 		]);
 		const onCopy = covered.some((m) => m.includes("PLANT"));
-		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy;
-		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"})` };
+		const deck = flipped.some((m) => m.includes(phone ? "holds its taller state" : "should change height"));
+		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy && deck;
+		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"}, the card ${phone ? "animated on a phone" : "frozen"}: ${deck ? "seen" : "MISSED"})` };
 
 		const [homes, verticals] = await Promise.all([
 			Promise.all(HOME.map((r) => withPage(p, {}, (page) => home(page, r)))),
@@ -269,10 +289,10 @@ for (const r of runs) {
 		console.error(`✗ BLIND ${r.blind}`);
 		continue;
 	}
-	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1)`);
+	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1, the card's height the wrong way round)`);
 	const span = r.took.length ? `${Math.min(...r.took)}–${Math.max(...r.took)} ms` : "—";
 	if (!r.problems.length) {
-		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height, the rail's stops are buttons`);
+		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height (holds it on a phone), the rail's stops are buttons`);
 		console.log(`  ✓ ${VERTICALS.length} verticals start and come to rest (${span} from is-playing to is-done; budget ${END + MARGIN} ms), no scene text on the copy mid-animation`);
 		console.log(`  ✓ reduced motion — intended (#315): every opening starts at its end, the home holds its first frame, no pause shown`);
 	}

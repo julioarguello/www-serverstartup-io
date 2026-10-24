@@ -87,7 +87,7 @@ def rows(seed: dict):
                     key = b.get("_key") or f"#{i}"
                     if is_home:
                         # read by position: the first two blocks are the kicker (#580)
-                        tier, comp = (1, "home kicker") if i < 2 else (1, "home body")
+                        tier, comp = (1, "home kicker") if i < 2 else (1, "NOT RENDERED: HomepageContent reads blocks 0-1 only")
                     else:
                         tier, comp = 2, f"{coll} body ({b.get('style', 'normal')})"
                     yield tier, coll, slug, "content", key, loc, comp, text

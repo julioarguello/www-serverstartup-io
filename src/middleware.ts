@@ -12,6 +12,10 @@ import { isGatedPath, setupGate } from "./utils/setup-gate";
  *
  * This eliminates the module-level mutable state race condition
  * that existed when t() was a global function.
+ *
+ * EmDash's middleware runs OUTSIDE this one (#648): a header it writes after
+ * next() — Server-Timing, for one — cannot be removed here. That belongs in
+ * src/middleware-outer.ts, the layer outside EmDash's.
  */
 /**
  * Security headers (#164). Applied to every SSR response.

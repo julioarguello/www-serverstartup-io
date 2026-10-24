@@ -239,14 +239,23 @@ describe("controls — the count can be wrong", () => {
  * says the number as a figure on the quality plate, in the map's note, in the
  * index's summary and in the delivery fact, so the test reads all of them
  * rather than one sentence that could move.
+ *
+ * A figure card (`{ value, label }`) is read the way the page shows it, value
+ * then label: «26» and «pasos que pueden fallar» are two strings in the seed
+ * and one claim on the page. Read apart, the bare value escaped this test, and
+ * the quality plate's card was the one place a gate added in #644 would have
+ * left the old number.
  */
-function layerStrings(locale: string): string[] {
-	const seed = JSON.parse(read("seed", "seed.json"));
+export function layerStrings(locale: string, seed = JSON.parse(read("seed", "seed.json"))): string[] {
 	const out: string[] = [];
 	const walk = (v: unknown): void => {
 		if (typeof v === "string") out.push(v);
 		else if (Array.isArray(v)) v.forEach(walk);
-		else if (v && typeof v === "object") Object.values(v).forEach(walk);
+		else if (v && typeof v === "object") {
+			const { value, label } = v as { value?: unknown; label?: unknown };
+			if (typeof value === "string" && typeof label === "string") out.push(`${value} ${label}`);
+			Object.values(v).forEach(walk);
+		}
 	};
 	for (const e of seed.content.layers ?? []) if (e.locale === locale) walk(e.data);
 	return out;
@@ -277,5 +286,16 @@ describe("the public page says the same number", () => {
 
 	it("a planted wrong number is caught", () => {
 		expect(numbersBefore(["pasa 23 pasos que pueden fallar", "24 pasos · Lighthouse"], "pasos")).toEqual([23, 24]);
+	});
+
+	it("a wrong number on a figure card is caught", () => {
+		const seed = {
+			content: {
+				layers: [
+					{ locale: "es", data: { stats: [{ value: "23", label: "pasos que pueden fallar", kind: "number" }] } },
+				],
+			},
+		};
+		expect(numbersBefore(layerStrings("es", seed), "pasos")).toEqual([23]);
 	});
 });

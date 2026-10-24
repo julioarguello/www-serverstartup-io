@@ -5,7 +5,7 @@ ES
 Deconstructing this website
 This is how this website is built. It runs on Cloudflare, a network of data centres around the world, and every claim on this page links to the file that proves it.
 Quality
-25 steps · Lighthouse · axe
+26 steps · Lighthouse · axe
 04
 03
 02
@@ -253,10 +253,10 @@ ACROSS THE LAYERS, FROM THE WORKSHOP
 across the layers · from the workshop
 Delivery
 How a change reaches production.
-The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 25 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with wrangler, Cloudflare's deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.
+The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 26 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with wrangler, Cloudflare's deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.
 pull request
 one change
-25 steps
+26 steps
 on workerd
 green
 preview
@@ -274,7 +274,7 @@ The working repository is public, with all its commits.
 README.md
 the repository
 7.2
-Every change that can reach a page passes 25 steps that can fail. A test derives that number from the workflow.
+Every change that can reach a page passes 26 steps that can fail. A test derives that number from the workflow.
 .github/workflows/ci.yml
 7.3
 The gates run the site locally on workerd, the open-source runtime behind Workers, through wrangler dev. If wrangler itself crashes, the stack restarts once and the summary says so.
@@ -319,7 +319,7 @@ across the layers · on every change
 Quality
 What is checked before anything is published.
 The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it. Lighthouse, Google's tool that scores performance and accessibility, measures nine pages; the text of 30 routes is frozen; and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.
-25
+26
 steps that can fail
 30
 routes with frozen text

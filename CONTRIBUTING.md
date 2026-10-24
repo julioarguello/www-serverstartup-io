@@ -169,6 +169,7 @@ fails otherwise, so a Playwright bump moves both).
 | Types | `npm run typecheck` | 0 errors, 0 warnings |
 | Seed schema | `npx emdash seed seed/seed.json --validate` | valid |
 | CMS text | `python3 scripts/ci-check-cms-text.py` | labels resolve in both locales; 0 hardcoded copy |
+| Copy voice | `python3 scripts/ci-check-copy-voice.py` | the voice rules a pattern can decide, read from `seed.json`: no spaced em dash in Spanish copy, at most one «X: Y» heading per page and one Spanish «X, no Y» contrast, none of the listed AI words, no «¡» |
 | Locale parity | `python3 scripts/ci-check-locale-parity.py` | a field filled in one locale is filled in both |
 | Cited files | `python3 scripts/ci-check-cited-files.py` | every repository file the site cites is tracked |
 | Design tokens | `python3 scripts/ci-check-design-tokens.py` | colour, radius, shadow, width and on-scale spacing declared only in `theme.css` |

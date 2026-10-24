@@ -157,6 +157,12 @@ jobs:
         if: needs.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-cms-text.py
 
+      - name: Copy voice (the anti-AI rules a pattern can decide, on the approved copy)
+        if: needs.scope.outputs.site == 'true'
+        # Reads seed.json, not the baselines: headings exist there as styles
+        # and are lost in the flattened text (#644).
+        run: python3 scripts/ci-check-copy-voice.py
+
       - name: Locale field parity (a field filled in one locale is filled in both)
         if: needs.scope.outputs.site == 'true'
         # ci-check-cms-text.py above enforces key parity for ui_labels_*, which
@@ -666,7 +672,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 25 steps that can fail"
+            echo "## Quality gates — 26 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -687,6 +693,7 @@ jobs:
             echo "| astro check | 0 errors, 0 warnings |"
             echo "| seed schema | seed.json validates |"
             echo "| cms-text | labels resolve ES+EN, 0 hardcoded copy |"
+            echo "| copy voice | per page: no spaced ES em dash, ≤1 colon headline, ≤1 ES «X, no Y»; no listed AI word, no ¡ |"
             echo "| locale parity | a field filled in one locale is filled in the other |"
             echo "| cited files | every file and repository link the seed cites is tracked |"
             echo "| design tokens | colour, radius, shadow and width from theme.css |"

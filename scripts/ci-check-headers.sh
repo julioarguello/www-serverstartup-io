@@ -116,6 +116,46 @@ for path in "/" "/en" "/politica-de-privacidad" "/en/privacy-policy" "/comercio-
 	check_no_cookie "$path"
 done
 
+# ── no response names the CMS start-up phases (#648) ─────────────────────────
+# EmDash writes Server-Timing on every response it finalizes: setup probe,
+# runtime init, DB init and migration policy, encryption-key validation, plugin
+# states, query counts. That is a map of the back end handed to anyone who sends
+# a HEAD, and the edge cache keeps a copy with every page. src/middleware-outer.ts
+# strips it outside `astro dev`; this is the check that it still does.
+#
+# Same shape as the cookie check — an absence — so it reuses `absent()`, and it
+# gets its own control for the same reason that one does: a blind matcher that
+# answers "no" to everything would call every route clean. The admin and a miss
+# are in the list on purpose: EmDash finalizes /_emdash/* and 404s too.
+check_no_server_timing() { # path
+	local hdrs
+	hdrs=$(curl -sI "$BASE$1")
+	if absent "$hdrs" "Server-Timing"; then
+		echo "  ok   $1 sends no Server-Timing"
+	else
+		echo "  FAIL $1 sends Server-Timing, which names the CMS start-up phases:" >&2
+		echo "$hdrs" | grep -i "^Server-Timing:" | cut -c1-160 | sed 's/^/         /' >&2
+		FAIL=1
+	fi
+}
+
+CONTROL_TIMING=$'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nServer-Timing: rt.init;dur=12;desc="Runtime init"\r\n'
+blind=""
+absent "$CONTROL_TIMING" "Server-Timing" \
+	&& blind="$blind\n    a response that DOES send Server-Timing was reported as clean"
+absent "$CONTROL_ABSENT" "Server-Timing" \
+	|| blind="$blind\n    a response without Server-Timing was reported as sending it"
+if [ -n "$blind" ]; then
+	echo "  THIS GATE IS BLIND — the Server-Timing check no longer decides anything," >&2
+	printf "%b\n" "${blind#\\n}" >&2
+	exit 3
+fi
+echo "  ok   positive control — a planted Server-Timing is seen, a clean response is not accused"
+
+for path in "/" "/en" "/comercio-electronico" "/en/privacy-policy" "/no-such-page-648" "/_emdash/admin"; do
+	check_no_server_timing "$path"
+done
+
 # security.txt must be served
 if curl -s "$BASE/.well-known/security.txt" | grep -q "^Contact: mailto:"; then
 	echo "  ok   /.well-known/security.txt"

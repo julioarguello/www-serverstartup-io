@@ -106,6 +106,16 @@ explicitly if anything landed in between.
 > `gh workflow run deploy-production.yml --ref main -f seed_d1=true`.
 > The guard finds the database empty and allows it. Then claim the CMS
 > administrator below; the new database has none.
+>
+> **Before claiming it, delete the site's data in every browser that used
+> production's admin before the recreate.** In Chrome, open
+> `chrome://settings/content/all?searchFor=serverstartup.dev` and delete the data
+> for that host. EmDash keeps a D1 "bookmark" in the `__em_d1_bookmark` cookie
+> and sends it with every logged-in request. A bookmark minted by the deleted
+> database is rejected (`D1_ERROR: invalid commitToken bookmark`), and the admin
+> answers 404 even after the setup gate has let the request through. Preview
+> hit exactly this on 2026-10-24 (#652). A browser that never logged in is not
+> affected.
 
 > **What the first dispatch actually did** — run 33423944295, 2026-08-31.
 > It failed at the guard, which reported the production database unreadable.

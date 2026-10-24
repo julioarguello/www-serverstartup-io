@@ -87,6 +87,13 @@ export default defineConfig({
 			// Its Noto Sans was downloaded from Google on every build; the same
 			// files are local now, under the variable its admin reads (#629).
 			fonts: false,
+			// #655: no visual-editing toolbar on public pages. For a signed-in
+			// editor EmDash injects it as an inline <script>, which the public
+			// CSP (script-src 'self', src/middleware.ts) refuses, so it drew
+			// controls that did nothing; and click-to-edit needs `entry.edit`
+			// spreads that the home, the verticals, About and Contact do not
+			// carry. Content is edited in the admin, outside that CSP.
+			toolbar: false,
 			// #648: the one middleware that runs OUTSIDE EmDash's. It strips the
 			// Server-Timing EmDash writes after src/middleware.ts has returned.
 			middleware: { outer: "./src/middleware-outer.ts" },

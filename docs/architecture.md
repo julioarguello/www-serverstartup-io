@@ -793,6 +793,23 @@ reader or crawler is shown, and the JSON-LD — because the count once reached e
 single widget. Its control plants every shape the copy actually used and, beside them, every number
 that must pass (the mantra, the verticals, the years, «tres semanas»).
 
+### 4.13b The voice rules a pattern can decide (#644)
+
+#649 rewrote the copy and the founder approved it page by page; `scripts/ci-check-copy-voice.py`
+keeps it from drifting back. It checks only what a pattern can decide without judgement: a spaced
+em dash in Spanish copy, more than one «X: Y» heading per page, the listed AI vocabulary, «¡», and
+more than one Spanish «X, no Y» contrast per page — the most the approved copy spends.
+
+It reads `seed/seed.json`, not the copy baselines, because headings exist only in the seed (as
+Portable Text styles and entry titles); a baseline line cannot say whether it was one. That also
+keeps it in the `static` job, with no stack.
+
+The trade-off is narrowness. Every check was cut until it reported nothing on the approved copy,
+and what that gave up is listed in the script's docstring: the Spanish inciso «—así—», interface
+labels, homonyms such as «pares clave y valor», conditionals such as «si ya existe, no lo
+construimos», and CTA length, where four approved labels exceed the guide's four words. A green run
+means none of the five shapes appeared — not that the copy reads well. That is still review's job.
+
 ### 4.14 /deconstruyendo: the site explained by its layers (#535)
 
 The page explains the whole site from the foundations up: four `Cloudflare` layers (network,

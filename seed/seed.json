@@ -20076,7 +20076,7 @@
 					"map_note": "`GitHub Actions` · `wrangler`",
 					"summary": "`wrangler` → *preview* · producción",
 					"lede": "Cómo llega un cambio a producción.",
-					"intro": "El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un *pull request*, y pasa 25 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con `wrangler`, la herramienta de despliegue de `Cloudflare`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.",
+					"intro": "El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un *pull request*, y pasa 26 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con `wrangler`, la herramienta de despliegue de `Cloudflare`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.",
 					"figure": "entrega",
 					"nodes": [
 						{
@@ -20086,7 +20086,7 @@
 							"fact": "h8-2"
 						},
 						{
-							"title": "25 pasos",
+							"title": "26 pasos",
 							"note": "sobre workerd",
 							"cloudflare": true,
 							"fact": "h8-2",
@@ -20117,7 +20117,7 @@
 						},
 						{
 							"key": "h8-2",
-							"text": "Cada cambio que puede llegar a una página pasa 25 pasos que pueden fallar. Un test deriva ese número del *workflow*.",
+							"text": "Cada cambio que puede llegar a una página pasa 26 pasos que pueden fallar. Un test deriva ese número del *workflow*.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						},
@@ -20165,7 +20165,7 @@
 					"map_note": "`GitHub Actions` · `wrangler`",
 					"summary": "`wrangler` → preview · production",
 					"lede": "How a change reaches production.",
-					"intro": "The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 25 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with `wrangler`, `Cloudflare`'s deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.",
+					"intro": "The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 26 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with `wrangler`, `Cloudflare`'s deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.",
 					"figure": "entrega",
 					"nodes": [
 						{
@@ -20175,7 +20175,7 @@
 							"fact": "h8-2"
 						},
 						{
-							"title": "25 steps",
+							"title": "26 steps",
 							"note": "on workerd",
 							"cloudflare": true,
 							"fact": "h8-2",
@@ -20206,7 +20206,7 @@
 						},
 						{
 							"key": "h8-2",
-							"text": "Every change that can reach a page passes 25 steps that can fail. A test derives that number from the workflow.",
+							"text": "Every change that can reach a page passes 26 steps that can fail. A test derives that number from the workflow.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						},
@@ -20252,14 +20252,14 @@
 					"group": "taller",
 					"kicker": "transversal · en cada cambio",
 					"short": "Calidad",
-					"map_note": "25 pasos · Lighthouse · axe",
-					"summary": "25 pasos · Lighthouse · axe",
+					"map_note": "26 pasos · Lighthouse · axe",
+					"summary": "26 pasos · Lighthouse · axe",
 					"lede": "Qué se comprueba antes de publicar nada.",
 					"intro": "Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran. Lighthouse, la herramienta de Google que puntúa rendimiento y accesibilidad, mide nueve páginas; el texto de 30 rutas está congelado, y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.",
 					"figure": "calidad",
 					"stats": [
 						{
-							"value": "25",
+							"value": "26",
 							"label": "pasos que pueden fallar",
 							"kind": "number"
 						},
@@ -20357,14 +20357,14 @@
 					"group": "taller",
 					"kicker": "across the layers · on every change",
 					"short": "Quality",
-					"map_note": "25 steps · Lighthouse · axe",
-					"summary": "25 steps · Lighthouse · axe",
+					"map_note": "26 steps · Lighthouse · axe",
+					"summary": "26 steps · Lighthouse · axe",
 					"lede": "What is checked before anything is published.",
 					"intro": "The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it. Lighthouse, Google's tool that scores performance and accessibility, measures nine pages; the text of 30 routes is frozen; and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.",
 					"figure": "calidad",
 					"stats": [
 						{
-							"value": "25",
+							"value": "26",
 							"label": "steps that can fail",
 							"kind": "number"
 						},

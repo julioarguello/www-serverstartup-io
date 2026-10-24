@@ -135,6 +135,9 @@ check_no_server_timing() { # path
 	else
 		echo "  FAIL $1 sends Server-Timing, which names the CMS start-up phases:" >&2
 		echo "$hdrs" | grep -i "^Server-Timing:" | cut -c1-160 | sed 's/^/         /' >&2
+		# A HIT here can be a copy the edge cached before the strip shipped
+		# (1 h TTL); a MISS cannot. Print which one this was.
+		echo "$hdrs" | grep -iE "^(cf-cache-status|age):" | sed 's/^/         /' >&2 || true
 		FAIL=1
 	fi
 }

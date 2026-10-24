@@ -353,8 +353,8 @@ const FOLD = { width: 390, height: 844 };
 const CARD_ROUTES = ["/", "/en"];
 /**
  * G23: the phone the home's «for whom» has to fit on. Smaller than FOLD on
- * purpose: 844 is the iPhone 15's screen, 659 what Safari leaves of it with
- * its bars showing (Playwright's `iPhone 15 Pro` viewport).
+ * purpose: 844 is an iPhone 15's whole screen, 659 what Safari leaves of a
+ * 15 Pro's with its bars showing (Playwright's `iPhone 15 Pro` viewport).
  */
 const WHO_FOLD = { width: 393, height: 659 };
 
@@ -1129,8 +1129,9 @@ const PLANT_FIXED_LAYER = () => {
 const PLANT_CARD_BELOW_FOLD = () => {
 	if (!document.querySelector(".s-hero__card")) return { missing: ".s-hero__card" };
 	const st = document.createElement("style");
-	// the card itself: since #560 it stands on the photograph's foot ABOVE the heading on a phone, so
-	// pushing the copy under it (the kicker, as this did) no longer moves it at all
+	// the card itself, by `translate`: on a tablet it stands on the photograph's foot above the heading
+	// (#560), on a phone after the kicker (#572) — pushing the copy would move it on one and not the
+	// other, and on a phone it would trip G23 too
 	st.textContent = ".s-hero__card { translate: 0 900px !important; }";
 	document.head.append(st);
 	return {};
@@ -1732,7 +1733,7 @@ if (ROW_LISTS.length) {
 		await browser.close();
 		process.exit(3);
 	}
-	ok("7 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, an opening with a bottom of its own, a page that scrolls sideways, a watermark fixed behind the page, a hero card below the fold, and «for whom» below a phone's fold");
+	ok(`${shapes.length} planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, an opening with a bottom of its own, a page that scrolls sideways, a watermark fixed behind the page, a hero card below the fold, and «for whom» below a phone's fold`);
 }
 
 // ── the real scan

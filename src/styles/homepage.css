@@ -18,9 +18,11 @@
 	justify-content: flex-start;
 	align-items: flex-start;
 	min-height: 100svh;
-	/* the tablet's photo strip: the header and two fifths of the screen
-	   (phones put it after the copy, #572 — see «phones: the copy first») */
-	--hero-strip: calc(var(--header-h) + 42svh);
+	/* the photograph's own height, two fifths of the screen — one value for
+	   both layouts. Tablets add the header above it; phones put the strip
+	   after the copy (#572, «phones: the copy first») and use it bare. */
+	--hero-strip-photo: 42svh;
+	--hero-strip: calc(var(--header-h) + var(--hero-strip-photo));
 	padding: calc(var(--hero-strip) + var(--space-3)) 0 var(--space-6);
 	background-color: var(--color-ground-dark);
 	/* the plates are cropped to the band; `clip` and not `hidden` so this
@@ -68,10 +70,11 @@
 	animation-delay: -0.5s;
 }
 
-/* Tablets (and phones, below the copy since #572): the photograph is its own strip under the header and the copy
+/* Tablets: the photograph is its own strip under the header and the copy
    stands below it on the band, as the vertical pages' scenes do (#560). Over the
    whole band the copy covered the picture entirely — a slideshow nobody
-   could see. The strip fades into the band at its foot. */
+   could see. The strip fades into the band at its foot. Phones put the strip
+   after the copy (#572) and fade it in at its top instead. */
 .s-hero__scrim {
 	position: absolute;
 	inset: 0;
@@ -631,8 +634,13 @@
    it. Tablets and desktops keep #560. The pause control stays in the
    band's corner, which is now the strip's. */
 @media (max-width: 767px) {
+	/* The band ends where the strip ends. With the screen-tall minimum, a
+	   narrow tall window (an iPad mini upright, 744 × 1133) left ground under
+	   the strip, and the cube and the pause — placed from the band's foot —
+	   fell out of the picture into it. */
 	.s-hero--home {
-		--hero-strip: 42svh;
+		--hero-strip: var(--hero-strip-photo);
+		min-height: 0;
 		padding: calc(var(--header-h) + var(--space-5)) 0 0;
 	}
 	.s-hero--home .s-hero__stage {
@@ -645,8 +653,11 @@
 		background-image: var(--hero-scrim-strip-top);
 	}
 	/* the subject fills ~86 % of the strip and sits in its middle; the
-	   drawing's box overhangs the cube by 0.07 of its height */
+	   drawing's box overhangs the cube by 0.07 of its height. Lifted over the
+	   stage: as a flex item with `order: 1` the stage now paints after the
+	   mark, and the photographs would cover the seal. */
 	.s-hero--home .s-hero__mark {
+		z-index: 1;
 		--cube-h: calc(var(--hero-strip) * 0.86);
 		top: auto;
 		bottom: calc((var(--hero-strip) - var(--cube-h)) / 2 - var(--cube-h) * 0.07);
@@ -663,10 +674,11 @@
 	}
 	/* In the flow, a card that changed height on each frame would move the
 	   rail and the picture under it every six seconds. It holds the taller
-	   of its two states instead — the deck's documented fallback. Listed a
-	   second time with the manual state so a gate pinning a frame measures
-	   the same card a reader sees. */
+	   of its two states instead — the deck's documented fallback. Listed again
+	   with the manual state, with and without a slide, so a gate pinning a
+	   frame measures the same card a reader sees. */
 	.s-hero--home .s-hero__deck,
+	.s-hero--home.is-manual .s-hero__deck,
 	.s-hero--home.is-manual[data-slide] .s-hero__deck {
 		height: auto;
 		animation: none;

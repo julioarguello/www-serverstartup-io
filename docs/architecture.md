@@ -721,9 +721,19 @@ rotating edge (Base.astro), so the two cannot drift.
   out, extended to the left: `faro.py`), the bridge with its bridge, its ships as photographed (turning
   them was tried: flipped, they sailed into the quay, and a tanker coming IN needs a bow the
   photograph does not have), and the warehouse further away — the whole photograph extended to the left.
-- **Phones and tablets (≤ 1024 px)**: the photograph is its own strip under the header and the
+- **Tablets (768–1024 px)**: the photograph is its own strip under the header and the
   caption stands on its foot, above the heading — over the whole band the copy hid the picture,
   and under the heading the caption fell below a phone's fold (the layout gate's G18).
+- **Phones (≤ 767 px), the copy first (#572, founder 2026-10-24)**: with the strip on top, a
+  phone's first screen was the cube and the index, and the kicker's first sentence (who we work
+  for) ended at y = 718 on a 659 px iPhone 15 Pro. Shrinking the strip was measured and rejected
+  (20 px to spare at 30 % of the screen, still under the fold at 320 px, the cube at its minimum
+  and the card over most of the picture). So the band reads h1 → kicker → card → rail, then the
+  strip, whole and uncovered, fading in from the band at its top (`--hero-scrim-strip-top`). The
+  card holds its taller state on phones: in the flow, a deck changing height each frame would move
+  the picture under it every six seconds. Measured after: the sentence ends at y = 406 on 393 × 659
+  and 435 on 320 × 568; the card and the rail open above the fold on every phone but the 320 px
+  one. The layout gate's G23 holds the sentence above a 393 × 659 fold.
 - **Weight** (superseded by #580: no photograph loads with the page, §4.12b): only the first photograph loads with the page; the other five carry their sources
   as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or

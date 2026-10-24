@@ -18,7 +18,8 @@
 	justify-content: flex-start;
 	align-items: flex-start;
 	min-height: 100svh;
-	/* the phone's photo strip: the header and two fifths of the screen */
+	/* the tablet's photo strip: the header and two fifths of the screen
+	   (phones put it after the copy, #572 — see «phones: the copy first») */
 	--hero-strip: calc(var(--header-h) + 42svh);
 	padding: calc(var(--hero-strip) + var(--space-3)) 0 var(--space-6);
 	background-color: var(--color-ground-dark);
@@ -67,7 +68,7 @@
 	animation-delay: -0.5s;
 }
 
-/* Phones and tablets: the photograph is its own strip under the header and the copy
+/* Tablets (and phones, below the copy since #572): the photograph is its own strip under the header and the copy
    stands below it on the band, as the vertical pages' scenes do (#560). Over the
    whole band the copy covered the picture entirely — a slideshow nobody
    could see. The strip fades into the band at its foot. */
@@ -93,7 +94,7 @@
 .s-hero__mark {
 	position: absolute;
 	z-index: 0;
-	/* phones and tablets: in the strip, under the header, above the card's
+	/* tablets: in the strip, under the header, above the card's
 	   tallest state (`--card-h`, measured by the script) */
 	--cube-h: max(var(--space-7), min(
 		calc((var(--hero-strip) - var(--header-h)) * 0.86),
@@ -181,7 +182,7 @@
       the one vertical on screen. Same position, same chrome — the card
       never disappears, it changes scale (brief §3.1). */
 .s-hero__card {
-	/* Phones and tablets: the caption stands on the photograph's foot, just
+	/* Tablets (and phones until #572): the caption stands on the photograph's foot, just
 	   above the heading — under it, it fell below the fold of a phone, and
 	   the picture rotated without saying whose it was. Anchored to the top of
 	   the copy and lifted by its own height, so it never needs to know how
@@ -426,7 +427,7 @@
    Founder, 2026-10-06: the band's chapters are equal tracks, each filling in
    its frame's colour, the name under it at reading size. On desktop the rail
    runs along the band's foot, as wide as the column, and the card stands on
-   it; on phones and tablets it stands right under the card, at the
+   it; on tablets it stands right under the card, at the
    photograph's foot, in the first screen. Since #580 it is the only way
    through them (brief §9.8: no arrows): the script makes each stop a button,
    and the arrow keys walk the stops. */
@@ -614,6 +615,63 @@
 .s-hero.is-manual[data-slide="5"] .ss-title__tail { color: var(--tm5, var(--color-brand-grey)); }
 
 .s-hero.is-manual[data-slide="6"] .ss-title__tail { color: var(--tm6, var(--color-brand-grey)); }
+
+/* ── phones: the copy first (#572, founder 2026-10-24) ──
+   With the photograph's strip on top, a phone's first screen was the cube
+   and the index: the h1 started at y = 413 of 659 on an iPhone 15 Pro and
+   the kicker's first sentence — who we work for — ended at 718, under the
+   fold. Shrinking the strip was measured and rejected: at 30 % of the
+   screen the sentence cleared the fold by 20 px and still missed it on a
+   320 px phone, with the cube at its minimum and the card over most of the
+   picture. So below 768 px the band reads h1 → kicker → card → rail, and the
+   strip follows, whole and uncovered; the cube and the photographs are the
+   first thing the reader scrolls to. This reverses #560's phone order (the
+   card above the h1, so the picture never rotated without its name): the
+   card now names the vertical with its picture right under it, not behind
+   it. Tablets and desktops keep #560. The pause control stays in the
+   band's corner, which is now the strip's. */
+@media (max-width: 767px) {
+	.s-hero--home {
+		--hero-strip: 42svh;
+		padding: calc(var(--header-h) + var(--space-5)) 0 0;
+	}
+	.s-hero--home .s-hero__stage {
+		position: relative;
+		order: 1;
+		inset: auto;
+		width: 100%;
+	}
+	.s-hero--home .s-hero__scrim {
+		background-image: var(--hero-scrim-strip-top);
+	}
+	/* the subject fills ~86 % of the strip and sits in its middle; the
+	   drawing's box overhangs the cube by 0.07 of its height */
+	.s-hero--home .s-hero__mark {
+		--cube-h: calc(var(--hero-strip) * 0.86);
+		top: auto;
+		bottom: calc((var(--hero-strip) - var(--cube-h)) / 2 - var(--cube-h) * 0.07);
+	}
+	.s-hero--home .s-hero__card {
+		position: relative;
+		top: auto;
+		translate: none;
+		order: 1;
+		margin-top: var(--space-5);
+	}
+	.s-hero--home .s-hero__ticker {
+		order: 2;
+	}
+	/* In the flow, a card that changed height on each frame would move the
+	   rail and the picture under it every six seconds. It holds the taller
+	   of its two states instead — the deck's documented fallback. Listed a
+	   second time with the manual state so a gate pinning a frame measures
+	   the same card a reader sees. */
+	.s-hero--home .s-hero__deck,
+	.s-hero--home.is-manual[data-slide] .s-hero__deck {
+		height: auto;
+		animation: none;
+	}
+}
 
 @media (min-width: 1025px) {
 

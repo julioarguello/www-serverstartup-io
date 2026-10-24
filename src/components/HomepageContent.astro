@@ -405,7 +405,7 @@ const CUBE = {
 		const cs = getComputedStyle(card);
 		card.style.setProperty("--deck-us", `${us}px`);
 		card.style.setProperty("--deck-v", `${v}px`);
-		// the phone's cube stands above the card's tallest state
+		// the tablet's cube stands above the card's tallest state
 		hero.style.setProperty("--card-h", `${parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + Math.max(us, v)}px`);
 	};
 	if (hero && card) {

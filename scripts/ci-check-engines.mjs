@@ -18,7 +18,8 @@
  *
  *   H  the home (/, /en), on the real clock: the title's tail has three different colours on frames
  *      0, 1 and 2 (sampled mid-frame on the document's timeline), the card changes height between
- *      frames 0 and 1, and every stop of the rail is a button.
+ *      frames 0 and 1 from 768 px up and holds it on a phone (#572: there the card is in the flow,
+ *      above the picture, which would jump with it), and every stop of the rail is a button.
  *   V  every vertical (the seed's Spanish services): it reaches `is-playing`, then `is-done` within
  *      SCENE_BEATS.end of starting, plus a margin.
  *   R  reduced motion: every vertical starts `is-done`, nothing runs in the home's band, and no
@@ -148,7 +149,11 @@ async function home(page, route) {
 	const problems = [];
 	const tails = frames.map((x) => x.tail);
 	if (new Set(tails).size !== 3) problems.push(`${route}: the tail's colour on frames 0/1/2 is ${tails.join(" / ")} — it should change on each`);
-	if (frames[0].deck === frames[1].deck) problems.push(`${route}: the card stays ${frames[0].deck}px between frames 0 and 1 — it should change height`);
+	// phones hold the card at its taller state (#572); from 768 px it follows the frame
+	const phone = (page.viewportSize()?.width ?? 1280) < 768;
+	if (phone && frames[0].deck !== frames[1].deck)
+		problems.push(`${route}: the card goes from ${frames[0].deck}px to ${frames[1].deck}px between frames 0 and 1 — on a phone it holds its taller state, or the picture under it jumps`);
+	if (!phone && frames[0].deck === frames[1].deck) problems.push(`${route}: the card stays ${frames[0].deck}px between frames 0 and 1 — it should change height`);
 	if (!stops.length || stops.includes(false)) problems.push(`${route}: ${stops.filter((x) => !x).length} of ${stops.length} rail stops are not buttons`);
 	return { problems, tail0: tails[0] };
 }
@@ -272,7 +277,7 @@ for (const r of runs) {
 	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1)`);
 	const span = r.took.length ? `${Math.min(...r.took)}–${Math.max(...r.took)} ms` : "—";
 	if (!r.problems.length) {
-		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height, the rail's stops are buttons`);
+		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height (holds it on a phone), the rail's stops are buttons`);
 		console.log(`  ✓ ${VERTICALS.length} verticals start and come to rest (${span} from is-playing to is-done; budget ${END + MARGIN} ms), no scene text on the copy mid-animation`);
 		console.log(`  ✓ reduced motion — intended (#315): every opening starts at its end, the home holds its first frame, no pause shown`);
 	}

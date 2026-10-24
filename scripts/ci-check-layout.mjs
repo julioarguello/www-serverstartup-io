@@ -191,6 +191,11 @@
  *       thing in the hero band that says what we do; a phone that has to
  *       scroll to reach it is a phone that was shown a picture and a heading.
  *
+ *   G23 the home's first kicker sentence — who we work for — ends above the
+ *       fold at 393×659, an iPhone 15 Pro's viewport with Safari's bars. With
+ *       the photograph's strip on top it ended at 718 there, and a first-time
+ *       reader saw a cube, an index and half a heading (#572, #643).
+ *
  * Deliberately NOT a screenshot diff. A pixel diff over 26 routes would go red
  * on every PR in this redesign by design, get re-baselined on sight, and become
  * furniture. Machines assert geometry; whether the composition is any good is a
@@ -346,6 +351,12 @@ const OPENING_WIDTHS = [390, 1440];
 const FOLD = { width: 390, height: 844 };
 /** Routes whose hero carries the card. */
 const CARD_ROUTES = ["/", "/en"];
+/**
+ * G23: the phone the home's «for whom» has to fit on. Smaller than FOLD on
+ * purpose: 844 is the iPhone 15's screen, 659 what Safari leaves of it with
+ * its bars showing (Playwright's `iPhone 15 Pro` viewport).
+ */
+const WHO_FOLD = { width: 393, height: 659 };
 
 /** A hairline plus a rounding error. Not a design allowance. */
 const TOLERANCE = 8;
@@ -1022,6 +1033,8 @@ const MEASURE_OPENING = (sel) => {
 	const header = document.querySelector("header");
 	const opening = document.querySelector(sel);
 	const card = document.querySelector(".s-hero__card");
+	// the kicker's first block is «for whom», read by position like the template does
+	const who = document.querySelector(".s-hero__kicker p");
 
 	// Every layer painted behind the document. `position: fixed` with a
 	// negative z-index is the shape: the header is fixed and positive, a
@@ -1063,6 +1076,8 @@ const MEASURE_OPENING = (sel) => {
 		padTop: opening ? px(getComputedStyle(opening).paddingTop) : null,
 		cardFound: !!card,
 		cardTop: card ? card.getBoundingClientRect().top : null,
+		whoFound: !!who,
+		whoBottom: who ? who.getBoundingClientRect().bottom : null,
 		vh: window.innerHeight,
 		behind,
 	};
@@ -1121,6 +1136,17 @@ const PLANT_CARD_BELOW_FOLD = () => {
 	return {};
 };
 
+/** G23: «for whom» pushed under the fold. `translate` and not a margin: a
+ *  margin would carry the card down with it and trip G18 too, and one plant
+ *  must fire one gate. */
+const PLANT_WHO_BELOW_FOLD = () => {
+	if (!document.querySelector(".s-hero__kicker p")) return { missing: ".s-hero__kicker p" };
+	const st = document.createElement("style");
+	st.textContent = ".s-hero__kicker { translate: 0 900px !important; }";
+	document.head.append(st);
+	return {};
+};
+
 /* ── judgement ─────────────────────────────────────────────────────────── */
 
 /** G15 + G16 + G17. */
@@ -1167,6 +1193,14 @@ const judgeOpening = (m, where, spec) => {
 		});
 
 	return found;
+};
+
+/** G23. Only where the home's kicker is: other openings have none. */
+const judgeWho = (m, where) => {
+	if (m.whoBottom == null) return [];
+	return m.whoBottom <= m.vh
+		? []
+		: [{ g: "G23", where, msg: `«for whom» ends at ${Math.round(m.whoBottom)}px in a ${m.vh}px viewport` }];
 };
 
 /** G18. */
@@ -1622,7 +1656,7 @@ if (ROW_LISTS.length) {
 		}
 		const scan = async () => {
 			const m = await page.evaluate(MEASURE_OPENING, spec.opening);
-			return [...judgeOpening(m, "control", spec), ...judgeCard(m, "control")];
+			return [...judgeOpening(m, "control", spec), ...judgeCard(m, "control"), ...judgeWho(m, "control")];
 		};
 		const before = new Set((await scan()).map(key));
 		const planted = await page.evaluate(plant, arg);
@@ -1652,6 +1686,17 @@ if (ROW_LISTS.length) {
 			plant: PLANT_CARD_BELOW_FOLD,
 			arg: undefined,
 			expect: /opens at \d+px in a \d+px viewport/,
+		},
+		{
+			id: "G23",
+			why: "«for whom» pushed below a phone's fold",
+			route: CARD_ROUTES[0],
+			spec: OPENING_ROUTES.find((o) => o.route === CARD_ROUTES[0]),
+			w: WHO_FOLD.width,
+			h: WHO_FOLD.height,
+			plant: PLANT_WHO_BELOW_FOLD,
+			arg: undefined,
+			expect: /«for whom» ends at \d+px in a \d+px viewport/,
 		},
 	];
 
@@ -1687,7 +1732,7 @@ if (ROW_LISTS.length) {
 		await browser.close();
 		process.exit(3);
 	}
-	ok("6 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, an opening with a bottom of its own, a page that scrolls sideways, a watermark fixed behind the page, and a hero card below the fold");
+	ok("7 planted defects judged correctly, one per shape — a header token that lies, an opening with an inset of its own, an opening with a bottom of its own, a page that scrolls sideways, a watermark fixed behind the page, a hero card below the fold, and «for whom» below a phone's fold");
 }
 
 // ── the real scan
@@ -1844,6 +1889,16 @@ for (const route of CARD_ROUTES) {
 		process.exit(3);
 	}
 	findings.push(...judgeCard(m, `${route} @${FOLD.width}\u00d7${FOLD.height}`));
+
+	const small = await open(route, WHO_FOLD.width, WHO_FOLD.height);
+	const w = await small.evaluate(MEASURE_OPENING, ".s-hero");
+	await small.close();
+	if (!w.whoFound) {
+		console.error(`✗ blind: \`.s-hero__kicker p\` is not on ${route} — G23 has nothing to measure.`);
+		await browser.close();
+		process.exit(3);
+	}
+	findings.push(...judgeWho(w, `${route} @${WHO_FOLD.width}\u00d7${WHO_FOLD.height}`));
 }
 
 await browser.close();
@@ -1991,6 +2046,12 @@ if (findings.length) {
 		console.error("  that says what we do; below the fold it is a picture and a heading and nothing else.");
 		for (const f of by("G18")) console.error(`    ${f.where}  ${f.msg}`);
 	}
+	if (by("G23").length) {
+		fail(`the home's «for whom» does not end above a phone's fold.`);
+		console.error(`  ${WHO_FOLD.width}\u00d7${WHO_FOLD.height} is an iPhone 15 Pro with Safari's bars. The kicker's first sentence says who`);
+		console.error("  we work for; under the fold, a first-time reader gets a heading and no reader (#572).");
+		for (const f of by("G23")) console.error(`    ${f.where}  ${f.msg}`);
+	}
 	if (by("G20").length) {
 		fail(`${by("G20").length} block(s) of body copy run past ${MEASURE_MAX} characters a line.`);
 		console.error(`  45-75 is the conventional range; this site was the widest of the nine measured by`);
@@ -2024,7 +2085,7 @@ ok(
 	`${MENU_ROUTES.length} routes × ${MENU_SIZES.length} sizes: the open panel wastes at most ${MENU_WASTE_MAX}% of the viewport and every current row is marked unlike a hovered one`
 );
 ok(
-	`${openingsSeen / OPENING_WIDTHS.length} page openings \u00d7 ${OPENING_WIDTHS.length} widths: \`--header-h\` matches the rendered header, every document opening reserves the same inset and closes on the section rhythm, no page scrolls sideways, nothing is painted fixed behind the page, and the hero card opens above the fold at ${FOLD.width}\u00d7${FOLD.height}`
+	`${openingsSeen / OPENING_WIDTHS.length} page openings \u00d7 ${OPENING_WIDTHS.length} widths: \`--header-h\` matches the rendered header, every document opening reserves the same inset and closes on the section rhythm, no page scrolls sideways, nothing is painted fixed behind the page, the hero card opens above the fold at ${FOLD.width}\u00d7${FOLD.height}, and the home's «for whom» ends above it at ${WHO_FOLD.width}\u00d7${WHO_FOLD.height}`
 );
 ok(
 	`the footer holds one alignment, one link size, no ground of its own, ${marksSeen} reference marks on one line from ${STRIP_ONE_LINE_FROM}px and centred lines below it, emblems at or above ${EMBLEM_MIN_PX}px and ${EMBLEM_PROMINENCE}× every other mark, and nothing outside the one measure`

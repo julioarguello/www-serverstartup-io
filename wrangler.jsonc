@@ -17,9 +17,11 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "www-serverstartup-io",
-			// Run `wrangler d1 create my-emdash-site` and paste the real ID here for deploy
-			"database_id": "1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1",
+			"database_name": "www-serverstartup-io-production",
+			// Production. Recreated 2026-10-25 for EmDash 1.x (#627, #162) under a new name:
+			// the 0.34-era database `www-serverstartup-io` (1b3b50f2) was left in place, not
+			// deleted, and is no longer bound. Deleting it is a manual, separate step.
+			"database_id": "7f3aa0d6-71aa-46e3-8803-f2c36612c1d3",
 		},
 	],
 	"r2_buckets": [
@@ -122,8 +124,8 @@
 			"d1_databases": [
 				{
 					"binding": "DB",
-					"database_name": "www-serverstartup-io",
-					"database_id": "1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1",
+					"database_name": "www-serverstartup-io-production",
+					"database_id": "7f3aa0d6-71aa-46e3-8803-f2c36612c1d3",
 				},
 			],
 			"r2_buckets": [

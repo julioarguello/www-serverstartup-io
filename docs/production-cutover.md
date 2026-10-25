@@ -23,7 +23,7 @@ far has changed some of the rows below.
 | `www.serverstartup.io` | `200`, `server: nginx`, `34.175.111.59` | The old WordPress. Still the live site. |
 | Production worker | `www.serverstartup.dev` → **`200`** (2026-10-24) | Deployed. Measure it through the `.dev` custom domain: from a Spanish line on a LaLiga match day the `workers.dev` hostname times out, because its Cloudflare IPs are blocked by the ISPs, not because the worker is down. |
 | Production commit | `dd4ec2e`, run `39729492942`, 2026-10-22 — **25 commits behind `main`** (`a133228`) | That run's `deploy` job was green and its `verify` job **red**: `/creditos`, `/accesibilidad`, `/en/credits` and `/en/accessibility` answer `404` (still `404` on 2026-10-24). Those pages entered `seed.json` on 2026-09-03 (`c2b1683`), after the one-time seed of 2026-09-01, and a deploy without the seed does not add them. **Not a cutover blocker**: production is recreated at launch (next row), and the seed brings them. |
-| Production D1 | `1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1`, still in `wrangler.jsonc` `env.production` | The 0.34-era database the 2026-09-01 run seeded. **To be recreated, not migrated** (founder, 2026-10-23, #627; restated 2026-10-24: "se despliega de cero"). The recipe is the *Superseded at launch* note in step 2; the new `database_id` lands through a PR before the dispatch. |
+| Production D1 | `www-serverstartup-io-production`, `7f3aa0d6-71aa-46e3-8803-f2c36612c1d3`, created empty 2026-10-25 | **Recreated, not migrated** (founder, 2026-10-23, #627; restated 2026-10-24: "se despliega de cero"), under a new name so nothing had to be deleted. The 0.34-era `www-serverstartup-io` (`1b3b50f2…`) is left in place and unbound. Its non-virtual tables were exported first: 14 pages, 12 services, 6 members, **0 users** (no administrator was ever claimed there, so nothing edited by hand is lost). Deleting it is a separate manual step, whenever. |
 | Worker routes | `www.serverstartup.dev`, `preview.serverstartup.dev` (#444) | Two `.dev` hostnames, both declared. **Neither `serverstartup.io` hostname is attached to anything.** That is still the actual DNS work. |
 
 The order below was originally forced by an undeployed worker and an empty
@@ -98,13 +98,20 @@ explicitly if anything landed in between.
 > went through the same steps that day. In a shell with step 2's account line:
 >
 > ```bash
-> npx wrangler d1 export www-serverstartup-io --remote --output prod-before-1x.sql   # optional keepsake
-> npx wrangler d1 delete www-serverstartup-io -y
-> npx wrangler d1 create www-serverstartup-io     # prints the new database_id
+> npx wrangler d1 create www-serverstartup-io-production   # prints the new database_id
 > ```
 >
-> Put that `database_id` into `env.production` in `wrangler.jsonc` through a
-> PR. Then dispatch **with** the seed this one time:
+> **As run on 2026-10-25:** a new name instead of delete-and-recreate, so the old
+> database stays as a fallback and nothing is destroyed. Two things this recipe
+> used to say did not hold. `d1 export` refuses a database holding FTS5 virtual
+> tables (`cannot export databases with virtual tables`), so the keepsake is a
+> per-table export: pass every table that is neither virtual nor an FTS shadow
+> table with `--table`. And the database name is not only in `wrangler.jsonc`:
+> `deploy-production.yml` names it three times (the guard, the migration wait,
+> the seed).
+>
+> Put the `database_id` and the name into `wrangler.jsonc` (top level and
+> `env.production`) and the workflow through a PR. Then dispatch **with** the seed this one time:
 > `gh workflow run deploy-production.yml --ref main -f seed_d1=true`.
 > The guard finds the database empty and allows it. Then claim the CMS
 > administrator below; the new database has none.
@@ -233,7 +240,7 @@ administrator and the setup flag, in a shell that has step 2's account line.
 Passkeys go with the user. Then repeat step 4:
 
 ```bash
-npx wrangler d1 execute www-serverstartup-io --env production --remote \
+npx wrangler d1 execute www-serverstartup-io-production --env production --remote \
   --command "DELETE FROM users; DELETE FROM options WHERE name = 'emdash:setup_complete';"
 ```
 

@@ -354,10 +354,30 @@ again — one page reachable at two URLs — moved from the trailing slash to th
 host.
 
 The apex belongs in a redirect, not a binding: **Rules → Redirect Rules →
-Create**, if hostname equals `serverstartup.io`, static redirect to
-`https://www.serverstartup.io` with status **301**, *preserving path and query
-string*. Create it before binding `www`, so the apex is never even briefly a
-second origin for the same content.
+Create**, as created on 2026-10-25:
+
+| Field | Value |
+| :--- | :--- |
+| When incoming requests match | *Wildcard pattern*, Request URL `http*://serverstartup.io/*` |
+| Target URL | `https://www.serverstartup.io/${2}` |
+| Status code | `301` |
+| Preserve query string | on |
+
+A *static* redirect, which an earlier revision of this step named, keeps the
+query string but drops the path: every old deep link would land on the home.
+The wildcard keeps both. The first `*` takes the scheme's optional `s`, so
+`http://` reaches `www` in one hop instead of two. Cloudflare's own template is
+`https://` only. Create the rule before binding `www`, so the apex is never even
+briefly a second origin for the same content.
+
+Measured 2026-10-25, once the rule was live. Every request was answered by
+Cloudflare, and none carried `x-redirect-by: WordPress`, the old origin's mark:
+
+```
+https://serverstartup.io/                           301 → https://www.serverstartup.io/
+http://serverstartup.io/integracion-de-sistemas?x=1 301 → https://www.serverstartup.io/integracion-de-sistemas?x=1
+https://serverstartup.io/quienes-somos?a=b&c=d      301 → https://www.serverstartup.io/quienes-somos?a=b&c=d
+```
 
 **And the apex record has to be orange first, or that rule never runs.** A
 Redirect Rule only executes for hostnames Cloudflare proxies, and today the

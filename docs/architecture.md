@@ -1471,6 +1471,11 @@ PR → quality-gates green → merge to main
 - **CSP constraint**: `script-src 'self'` with no hashes — Vite must never
   inline scripts into HTML (`assetsInlineLimit: 0` in astro.config.mjs) or
   the browser silently blocks them (menu + phone decode died this way).
+  The same rule turned off EmDash's visual-editing toolbar (`toolbar: false`,
+  #655): it reaches a signed-in editor as an inline `<script>`, so it drew
+  controls that did nothing, and no public template but posts and legal pages
+  carries the `entry.edit` spreads click-to-edit needs. Content is edited in the
+  admin. `tests/unit/editor-toolbar.test.ts` holds the setting and its premise.
 
 ## 11. Security
 

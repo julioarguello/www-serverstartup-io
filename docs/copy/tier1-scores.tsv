@@ -1,0 +1,160 @@
+# Tier 1 copy scores (#577 step 2). Rubric: 1-3 per criterion, '-' not applicable, fit n/m = not measured rendered.
+# Scored 2026-10-24 against seed/seed.json at a133228, by three agent reviewers checking facts against each entry's page and docs/company.
+# Keyed by the inventory's text hash: scripts/copy-inventory.py --unscored docs/copy/tier1-scores.tsv lists strings whose current text has no score.
+hash	locale	entry	slot	key	cla	rel	dif	bre	exc	fac	voi	ree	sea	fit	note
+b7236928c0	en	home	content	h_cred	2	3	2	2	3	2	2	2	3	n/m	unverified: «twenty years in retail» (KB backs 20+ years of experience and 15+ on hybris, not twenty in retail); ES says «Veinte», EN «Over twenty»; no subject beside «since 2019» reads as the company's age; names 3 of 6 verticals.
+45d792affd	en	home	content	h_partner	3	3	3	3	3	3	3	3	3	n/m	Same sentence opens the excerpt; the partner band lower on the home repeats it again.
+e0681da186	en	home	content	h_who	3	3	2	3	3	3	3	3	2	n/m	Repeats the excerpt («whoever designs your architecture writes the code»); first of four 'designer does it all' lines on the home.
+ea181c44ce	en	home	excerpt		3	2	2	2	3	3	2	3	2	n/m	Meta description = h_partner + h_who + the three mantra beats, all repeated on the page; names Cloudflare but none of the other five verticals; motto written as body copy.
+43be128ac6	en	home	title		3	2	1	2	3	3	3	2	2	n/m	dif: «Software engineering, from architecture to production» could head any software consultancy's home; no retail, Cloudflare or vertical term in the h1/<title>.
+1557b7f007	es	home	content	h_cred	2	3	2	2	3	2	2	-	3	n/m	unverified: «Veinte años en la distribución» (KB backs «más de veinte» years of experience and 15+ on hybris, not twenty in retail); no subject beside «desde 2019» reads as the company's age; one of two colon constructions on the page (cap is one).
+180ddd6636	es	home	content	h_partner	3	3	3	3	3	3	3	-	3	n/m	Same sentence opens the excerpt; the partner band lower on the home repeats it again.
+dd22ec0a25	es	home	content	h_who	3	3	2	3	3	3	3	-	2	n/m	Good es-ES idiom («da la cara»); repeats the excerpt verbatim («Quien diseña tu arquitectura escribe el código»).
+506e271495	es	home	excerpt		3	2	2	2	3	3	2	-	2	n/m	= h_partner + h_who + the three mantra beats, each repeated on the page; second colon construction on the page; motto written as body copy; names one vertical of six.
+7fc57a777f	es	home	title		3	2	1	2	3	3	3	-	2	n/m	dif: «Ingeniería de software, de la arquitectura a producción» could head any software consultancy's home; no retail, Cloudflare or vertical term in the h1/<title>.
+7351b2b694	en	ui_labels_en	hero_line	bd	3	3	2	3	3	2	2	3	2	n/m	unverified: «on-premises» (the BD page names Oracle as operational base but never states on-premise work); skill §4.7.8 asks for singular «on-premise»; «Data you can trust» is a pasteable opener.
+958574811d	en	ui_labels_en	hero_line	cdn	3	3	3	3	2	3	3	3	3	n/m	Four code tokens: products as proof, but near the rejected product-row shape; Terraform recurs in config_body and word_body.
+5351705058	en	ui_labels_en	hero_line	ec	2	3	3	3	2	3	2	2	3	n/m	«and the business, from catalogue to POS» is vague and verbless; italic *middleware* carries the ES anglicism marking into English; mirrors the ES item order.
+f48f6b2963	en	ui_labels_en	hero_line	gf	2	3	2	2	2	3	2	2	3	n/m	«Never from zero» calques «nunca partimos de cero» (EN: from scratch, as word_body itself says); colon; «Cloud Run» is a platform, not a stack's framework; «Whoever designs it runs it» is the fourth 'designer does it all' line.
+8a72819b71	en	ui_labels_en	hero_line	ia	3	3	3	3	3	3	3	3	2	n/m	Backed by the AI page: versioned rules, least privilege, AI Gateway spending cap.
+60e8270a66	en	ui_labels_en	hero_line	int	2	3	3	2	3	2	2	2	2	n/m	unverified: «More flows or more volume never reopen the architecture» (the page backs the shared template, not this scaling claim); «We design, with EIP, the template» keeps the Spanish word order; EIP unexplained.
+607cb696fa	en	ui_labels_en	how_we_work	config	3	3	2	3	3	3	3	3	2	n/m	
+622e50e9e5	en	ui_labels_en	how_we_work	config_body	3	3	2	3	3	3	2	3	3	n/m	«live … lives» repeats the verb; Terraform's third appearance on the home (cdn, word_body).
+065923aaff	en	ui_labels_en	how_we_work	contract	3	3	1	3	3	3	3	3	2	n/m	dif: «Contract first.» is the generic-practice shape the founder rejected («lo dice cualquiera»); the contract recurs in word_body.
+edaba8775b	en	ui_labels_en	how_we_work	contract_body	3	3	2	3	3	3	3	3	2	n/m	Backed by the greenfield and integration pages; OpenAPI, which they name, would give the line a checkable term.
+fc03ef8194	en	ui_labels_en	how_we_work	heading	3	2	1	-	3	3	3	3	2	n/m	dif: «How we work» is the stock section label on any agency site; the items carry the substance.
+d830ecbc14	en	ui_labels_en	how_we_work	red	3	3	2	3	3	3	3	3	2	n/m	
+6c98c69aeb	en	ui_labels_en	how_we_work	red_body	3	3	2	3	3	2	2	3	3	n/m	unverified: «OpenTelemetry» (no service page or KB file backs it; the integration page names ELK); 24 words, over the 20-word EN cap.
+5c8d4b54d9	en	ui_labels_en	how_we_work	saas	3	3	3	3	3	3	3	3	2	n/m	Negative honesty, backed by the greenfield page.
+93ac0e2621	en	ui_labels_en	how_we_work	saas_body	3	3	3	3	3	3	3	3	2	n/m	
+cfc466b125	en	ui_labels_en	how_we_work	sdd	2	3	2	3	3	3	2	3	2	n/m	The established and searched form is «spec-driven development», which the integration page itself uses.
+c70a75aef0	en	ui_labels_en	how_we_work	sdd_body	2	3	3	3	3	3	2	2	2	n/m	«what it must do» has no antecedent; «before a line is generated» assumes the reader knows the code is AI-generated; first sentence 24 words; «where experience pays» follows the ES phrasing.
+a0f831efb4	en	ui_labels_en	how_we_work	team	3	3	2	3	3	3	3	3	2	n/m	Third 'same engineers' statement on the home (excerpt, h_who).
+7698a4d30a	en	ui_labels_en	how_we_work	team_body	3	3	2	3	3	3	3	3	2	n/m	«Whoever designs…» is one of four phrasings of one idea on the home (excerpt, h_who, gf hero).
+66d5d8dc5a	en	ui_labels_en	how_we_work	word	2	3	2	3	3	3	3	3	2	n/m	«all six» assumes the reader has counted the verticals; the label never says six what.
+17c3ea96ba	en	ui_labels_en	how_we_work	word_body	3	3	3	3	3	3	2	3	2	n/m	«the same… the same… the same» recaps the three items above (triad + summary-closer tells); «from scratch» vs the gf hero's «Never from zero».
+bcc5a75c31	en	ui_labels_en	mantra	beat_1	3	2	2	-	3	3	3	3	-	n/m	The excerpt also carries the motto, so the home says it twice.
+027d1978ec	en	ui_labels_en	mantra	beat_2	3	3	2	-	3	3	3	3	-	n/m	
+a5085b5dcf	en	ui_labels_en	mantra	beat_3	3	2	2	-	3	3	3	3	-	n/m	A real re-expression of «Dicho y hecho».
+4c02e384a8	en	ui_labels_en	menu_short	bd	3	3	2	-	3	3	3	3	-	n/m	
+9cb918952f	en	ui_labels_en	menu_short	cdn	3	3	2	-	3	3	3	3	-	n/m	
+c991b729c7	en	ui_labels_en	menu_short	ec	3	3	2	-	3	3	3	3	-	n/m	
+1e882eedaa	en	ui_labels_en	menu_short	gf	2	3	2	-	3	3	3	3	-	n/m	«Greenfield» alone is jargon to a non-engineering stakeholder; the page name is «Greenfield development».
+560040c54a	en	ui_labels_en	menu_short	ia	3	3	2	-	3	3	3	3	-	n/m	
+899e5920ef	en	ui_labels_en	menu_short	int	3	3	2	-	3	3	3	3	-	n/m	
+3ffb811f9b	en	ui_labels_en	menu_short	us	3	3	2	-	3	3	3	3	-	n/m	
+3916ea7ced	es	ui_labels_es	hero_line	bd	3	3	2	3	3	2	3	-	2	n/m	unverified: «en un CPD propio» (the BD page names Oracle as operational base but never states on-premise work); «Datos de fiar» is a pasteable opener.
+53a9736f70	es	ui_labels_es	hero_line	cdn	3	3	3	3	2	3	3	-	3	n/m	Four code tokens: products as proof, but near the rejected product-row shape; Terraform recurs in config_body and word_body.
+96698b3135	es	ui_labels_es	hero_line	ec	2	3	3	3	2	3	3	-	3	n/m	«y el negocio, del catálogo al TPV» is vague and verbless; two named platforms invite a reader on another storefront to scan for his and leave.
+ece68e64ca	es	ui_labels_es	hero_line	gf	2	3	2	2	2	3	2	-	3	n/m	«de cada pila»: the review ladder lists «pila» as a double meaning (battery); «Cloud Run» is a platform, not a stack's framework; «Lo opera quien lo diseñó» is the fourth 'designer does it all' line; «de cero» repeats in word_body.
+6243d46f59	es	ui_labels_es	hero_line	ia	3	3	3	3	3	3	3	-	2	n/m	Backed by the AI page: versioned rules, least privilege, AI Gateway spending cap.
+9e1b7019a1	es	ui_labels_es	hero_line	int	2	3	3	2	3	2	3	-	2	n/m	unverified: «Más flujos o más volumen no reabren la arquitectura» (the page backs the shared template, not this scaling claim); `EIP` unexplained; nothing on ERP, store or tracing.
+69529e8494	es	ui_labels_es	how_we_work	config	3	3	2	3	3	3	3	-	2	n/m	
+b53086d4fe	es	ui_labels_es	how_we_work	config_body	3	3	2	3	3	3	3	-	3	n/m	Terraform's third appearance on the home (cdn, word_body).
+11b6d7fd55	es	ui_labels_es	how_we_work	contract	2	3	1	3	3	3	3	-	2	n/m	dif: «Primero el contrato.» is a generic practice any shop states; to a buyer it can first read as «sign the contract first» until the body clarifies.
+b50a507fd6	es	ui_labels_es	how_we_work	contract_body	3	3	2	3	3	3	2	-	2	n/m	«(contract first)» restates the label in English, which reads as translation residue.
+df2c75fc25	es	ui_labels_es	how_we_work	heading	3	2	1	-	3	3	3	-	2	n/m	dif: «Cómo trabajamos» is the stock section label on any agency site; the items carry the substance.
+e39a930fed	es	ui_labels_es	how_we_work	red	3	3	2	3	3	3	3	-	2	n/m	
+8c916cc3ac	es	ui_labels_es	how_we_work	red_body	3	3	2	3	3	2	3	-	3	n/m	unverified: «OpenTelemetry» (no service page or KB file backs it; the integration page names ELK).
+91a7ef2869	es	ui_labels_es	how_we_work	saas	3	3	3	3	3	3	3	-	2	n/m	Negative honesty, backed by the greenfield page («Si un SaaS te lo resuelve…»).
+d0b53adb2b	es	ui_labels_es	how_we_work	saas_body	3	3	3	3	3	3	3	-	2	n/m	
+5a6685ff8a	es	ui_labels_es	how_we_work	sdd	2	3	2	3	3	3	3	-	2	n/m	«SDD» abbreviates an English term (spec-driven development) the label never shows.
+a52651066f	es	ui_labels_es	how_we_work	sdd_body	2	3	3	3	3	3	3	-	2	n/m	«qué debe hacer» has no stated subject; «antes de generar una línea» assumes the reader knows the code is AI-generated.
+6b02276416	es	ui_labels_es	how_we_work	team	3	3	2	3	3	3	3	-	2	n/m	Third 'mismos ingenieros' statement on the home (excerpt, h_who).
+70512dd2aa	es	ui_labels_es	how_we_work	team_body	3	3	2	3	3	3	3	-	2	n/m	«Quien diseña…» is one of four phrasings of one idea on the home (excerpt, h_who, gf hero).
+5945b433ac	es	ui_labels_es	how_we_work	word	2	3	2	3	3	3	3	-	2	n/m	«los seis» assumes the reader has counted the verticals.
+6172b6b626	es	ui_labels_es	how_we_work	word_body	3	3	3	3	3	3	2	-	2	n/m	«El mismo…, la misma…, las mismas…» recaps the three items above (triad + summary-closer tells); «de cero» repeats the gf hero line.
+d14a6a3384	es	ui_labels_es	mantra	beat_1	3	2	2	-	3	3	3	-	-	n/m	The excerpt also carries the motto, so the home says it twice.
+da8061713a	es	ui_labels_es	mantra	beat_2	3	3	2	-	3	3	3	-	-	n/m	
+2baf22f82f	es	ui_labels_es	mantra	beat_3	3	2	2	-	3	3	3	-	-	n/m	
+4c02e384a8	es	ui_labels_es	menu_short	bd	3	3	2	-	3	3	3	-	-	n/m	
+62e0e07027	es	ui_labels_es	menu_short	cdn	3	3	2	-	3	3	3	-	-	n/m	
+4003df3986	es	ui_labels_es	menu_short	ec	2	3	2	-	3	3	3	-	-	n/m	«Comercio» alone can read as the retail trade itself rather than the e-commerce vertical; the page is «Comercio electrónico».
+1e882eedaa	es	ui_labels_es	menu_short	gf	2	3	2	-	3	3	2	-	-	n/m	Unmarked anglicism in a slot that cannot italicise, and opaque to a cold reader.
+d41daf5937	es	ui_labels_es	menu_short	ia	3	3	2	-	3	3	3	-	-	n/m	
+dde3c9a316	es	ui_labels_es	menu_short	int	3	3	2	-	3	3	3	-	-	n/m	
+7fbc0ed481	es	ui_labels_es	menu_short	us	3	3	2	-	3	3	3	-	-	n/m	
+901c21762d	en	artificial-intelligence	cta_label		2	3	2	3	3	3	1	1	-	n/m	voi/ree 1: 'Tell us your case' calques 'Cuéntanos tu caso'; in English 'your case' reads legal or medical, not a project or use case.
+04b63a9ba2	en	artificial-intelligence	excerpt		2	2	2	1	3	3	2	2	2	n/m	bre 1: covers only AI as a coding tool ('The machine writes the repetitive code… we sign every line'); AI as a system component (Agents SDK agents, Workers AI, AI Gateway), half the page, is absent. 'We bring… the data' is unclear when the data is the client's.
+4add517d26	en	artificial-intelligence	title		3	3	2	3	3	3	2	3	3	n/m	Title Case against the sentence-case H1 rule (EN titles mix: 'Greenfield development' is sentence case).
+92b5142ed6	en	big-data-cloud-analytics	cta_label		3	3	2	3	3	3	3	3	-	n/m	Idiomatic re-expression.
+a423ccdc3d	en	big-data-cloud-analytics	excerpt		2	3	3	2	2	2	2	2	3	n/m	unverified: 'Data that fails them never reaches the gold layer' (body: medallion separates raw from verified, not that tests gate promotion). Slice is tests + medallion only; Medallion is linked although skill §4.8.12 says unlinked.
+cad417546d	en	big-data-cloud-analytics	title		3	3	2	3	3	3	2	3	3	n/m	Title Case with '&' against the sentence-case H1 rule; same string as the ES page.
+18cc3f2994	es	big-data-cloud-analytics	cta_label		3	3	2	3	3	3	3	-	-	n/m	
+bd13043396	es	big-data-cloud-analytics	excerpt		2	3	3	2	2	2	2	-	3	n/m	unverified: 'Si un dato no los pasa, no llega a la capa gold'. 'de la ingesta al cuadro de mando' repeats greenfield's 'de X a Y' shape; *medallion* linked despite §4.8.12.
+cad417546d	es	big-data-cloud-analytics	title		3	3	2	3	3	3	2	-	3	n/m	English title, Title Case and '&', on the ES page: the only vertical not named in Spanish.
+8863b13e8c	en	cdn-waf-edge-security-cloudflare	cta_label		3	3	2	2	2	3	2	2	-	n/m	Assumes the reader already runs Cloudflare, so migration (in the body) gets no door; 'your Cloudflare' reads clipped in English.
+b442316053	en	cdn-waf-edge-security-cloudflare	excerpt		3	3	2	2	2	3	2	3	3	n/m	Third-person opener 'Server Startup has been' (skill §1.4); 'CDN, WAF and bot control' sits close to the rejected round-1 product-list shape and leaves out the developer stack (Workers) that is in scope.
+eeffb7fd00	en	cdn-waf-edge-security-cloudflare	title		3	3	2	2	3	3	2	3	3	n/m	Title Case against the sentence-case H1 rule; developer stack not in the name.
+cefbc21008	es	cdn-waf-seguridad-edge-cloudflare	cta_label		3	3	2	2	2	3	3	-	-	n/m	No door for a reader not yet on Cloudflare (migrations).
+bd75a19d2f	es	cdn-waf-seguridad-edge-cloudflare	excerpt		3	3	2	2	2	3	2	-	3	n/m	Third-person opener 'Server Startup es socio'; noun triad 'Auditoría, migración y operación' plus 'CDN, WAF y control de bots' near the round-1 product-list shape; Workers absent.
+943a0dfc9c	es	cdn-waf-seguridad-edge-cloudflare	title		2	3	2	2	3	3	2	-	2	n/m	'seguridad edge' puts an unmarked English adjective on a Spanish noun in a slot that cannot italicise; glossary §3.4.2 gives 'seguridad perimetral'. Cloudflare is absent from the h1/<title>.
+abe40bc2a0	es	comercio-electronico	cta_label		3	3	2	3	3	3	1	-	-	n/m	voi 1: 'online' is an unmarked anglicism in a plain-text slot, where §3.3 says reword ('Revisemos tu tienda' or 'tu tienda en línea').
+28b89ca478	es	comercio-electronico	excerpt		3	3	3	2	2	3	3	-	3	n/m	SAP-only slice: Ocado and the peak-sizing work the body calls 'nuestra especialidad' are absent; a reader on another commerce platform finds nothing for him.
+9e2919d9f4	es	comercio-electronico	title		3	3	2	3	3	3	3	-	3	n/m	
+1d23625606	es	desarrollo-greenfield	cta_label		3	3	2	3	3	3	3	-	-	n/m	The most generic CTA of the set.
+bc33664293	es	desarrollo-greenfield	excerpt		3	2	1	3	3	2	2	-	1	n/m	dif 1: 'de la especificación escrita a la observabilidad en producción' is the generic-practice shape rejected in round 2; sea 1: a meta description with no technology or buyer term (Java, Quarkus, desarrollo a medida). unverified: 'observabilidad en producción' (the greenfield body never names observability).
+3c72416c52	es	desarrollo-greenfield	title		2	3	2	3	3	3	2	-	2	n/m	'greenfield' unmarked in a title slot (name decided in #269). unverified: Spanish buyers search 'desarrollo a medida' more than 'greenfield'.
+960c521740	en	e-commerce	cta_label		3	3	2	3	3	3	3	3	-	n/m	Drops 'online' cleanly.
+b4ceefb6ab	en	e-commerce	excerpt		3	3	3	2	2	3	3	3	3	n/m	Same SAP-only slice as ES; English reads native ('doesn't cost you a quarter').
+c991b729c7	en	e-commerce	title		3	3	2	-	3	3	3	3	3	n/m	
+c30c39374a	en	greenfield-development	cta_label		3	3	2	3	3	3	3	2	-	n/m	Literal rendering of a generic CTA.
+d70f5acbee	en	greenfield-development	excerpt		3	2	1	3	3	2	2	1	1	n/m	dif 1: generic practice, as in ES; ree 1: word-for-word ('no commercial product covers', 'the written specification'), where natural English says off-the-shelf; sea 1: no technology term. unverified: observability in production.
+2091ce0581	en	greenfield-development	title		2	3	2	3	3	3	3	3	2	n/m	In English search 'greenfield development' also means building on undeveloped land.
+717642c6cb	es	integracion-de-sistemas	cta_label		3	3	2	3	3	3	3	-	-	n/m	
+7b685d4993	es	integracion-de-sistemas	excerpt		3	3	3	3	3	3	2	-	3	n/m	Two triads in two sentences ('tu ERP, la tienda y el almacén', 'dónde, cuándo y por qué'). 'almacén' is on site-review §2.5's double-meaning list (to a grocer, the stockroom); here the sense is probably the warehouse system.
+7d009b7ffc	es	integracion-de-sistemas	title		3	3	2	3	3	3	3	-	3	n/m	
+8b0a619525	es	inteligencia-artificial	cta_label		3	3	2	3	3	3	3	-	-	n/m	
+07be050b14	es	inteligencia-artificial	excerpt		2	2	2	1	3	3	2	-	2	n/m	bre 1: only AI as a coding tool ('La máquina escribe el código repetitivo'); agents, Workers AI and AI Gateway, half the page, are missing. 'ponemos… los datos' is unclear when the data is the client's; triad 'la arquitectura, los datos y el criterio'.
+47960b78dd	es	inteligencia-artificial	title		3	3	2	3	3	3	3	-	3	n/m	
+e1785928e2	en	systems-integration	cta_label		3	3	2	3	3	3	3	3	-	n/m	
+2ec7ebdddf	en	systems-integration	excerpt		3	3	3	3	3	3	2	3	3	n/m	Three 'your' in a row and the 'where, when and why' triad; otherwise a genuine re-expression.
+d6a62d1619	en	systems-integration	title		3	3	2	3	3	3	2	3	3	n/m	Title Case against the sentence-case H1 rule.
+b5dad276c9	en	about-us	excerpt		1	3	2	2	2	3	2	2	2	n/m	cla: «Senior engineers hold it up» has no referent for «it» (the ES says «la casa»), and «Backend, integration, data and edge» leaves out e-commerce, AI and greenfield.
+3ffb811f9b	en	about-us	title		3	2	2	-	3	3	3	3	2	n/m	standard label; differentiation not expected here.
+f0ee4fab20	es	accesibilidad	excerpt		3	2	2	2	3	3	3	-	3	n/m	Covers the channel and the deadline, not the partial-conformance statement that opens the page.
+92bcf9b964	es	accesibilidad	title		3	2	2	-	3	3	3	-	3	n/m	standard label; differentiation not expected here.
+75ce7f4c67	en	accessibility	excerpt		3	2	2	2	3	3	3	3	3	n/m	Same scope as the ES lead; natural English.
+d660049bc1	en	accessibility	title		3	2	2	-	3	3	3	3	3	n/m	standard label; differentiation not expected here.
+37235d791b	es	aviso-legal	excerpt		3	2	2	3	3	3	3	-	3	n/m	Legal boilerplate, matches the body's sections.
+20e22c4f32	es	aviso-legal	title		3	2	2	-	3	3	3	-	3	n/m	standard label; differentiation not expected here.
+178509aed7	en	contact	excerpt		3	3	2	3	3	3	3	3	2	n/m	
+48cd9ff674	en	contact	title		3	3	2	-	3	3	3	3	1	n/m	sea: as h1 and <title>, «Let's talk» carries no term a searcher uses («contact»); the glossary mandates this wording over «Contact us», so a measured trade-off.
+471b6d8cd3	es	contacto	excerpt		3	3	2	3	3	3	2	-	2	n/m	voi: «email» is an unmarked anglicism (Fundéu: «correo»), and «Escríbenos por… teléfono» joins a verb that does not fit the phone.
+0cf7705404	es	contacto	title		3	3	2	-	3	3	3	-	1	n/m	sea: as h1 and <title>, «Hablemos» carries no term a searcher uses («contacto»); the glossary mandates this wording, so a measured trade-off.
+183241a263	es	creditos	excerpt		2	2	3	3	3	3	3	-	2	n/m	«aperturas» is house jargon for the vertical heroes; a cold reader of the meta description will not decode it.
+fa59a5294e	es	creditos	title		3	2	2	-	3	3	3	-	2	n/m	standard label; differentiation not expected here.
+2cffc7abfe	en	credits	excerpt		2	2	3	3	3	3	3	3	2	n/m	«the openings» is house jargon; a cold reader will not know it means the page header photographs.
+bfac50d642	en	credits	title		3	2	2	-	3	3	3	3	2	n/m	standard label; differentiation not expected here.
+24160cf064	en	deconstructing	excerpt		3	2	3	3	3	1	3	3	3	n/m	fac: «every claim on this page links to the file that proves it» — 7 of the 46 published facts in the seed's layers collection render «no file» plus a note instead of a file link; also explains Cloudflare to a tech lead.
+ff622cb2d7	en	deconstructing	title		2	3	3	-	3	3	3	3	2	n/m	«Deconstructing» does not say on first read that this is a tour of the site's own build.
+d0c7da607f	es	deconstruyendo	excerpt		3	2	3	3	3	1	3	-	3	n/m	fac: «cada dato enlaza al fichero que lo demuestra» — 7 of the 46 published facts in the seed's layers collection render «sin fichero» plus a note instead of a file link; «una red de centros de datos…» explains Cloudflare to a tech lead.
+b7e6a52ce7	es	deconstruyendo	title		2	3	3	-	3	3	3	-	2	n/m	«Deconstruyendo» does not say on first read that this is a tour of the site's own build.
+b3146809f1	en	legal-notice	excerpt		3	2	2	3	3	3	3	3	3	n/m	Legal boilerplate, matches the body's sections.
+c0f11bb385	en	legal-notice	title		3	2	2	-	3	3	3	3	3	n/m	standard label; differentiation not expected here.
+7fff18f69f	es	politica-de-privacidad	excerpt		3	2	2	3	3	3	3	-	3	n/m	«sin letra pequeña» is backed by the body's «lo contamos en pocas líneas».
+fe7a40ce67	es	politica-de-privacidad	title		3	2	2	-	3	3	3	-	3	n/m	standard label; differentiation not expected here.
+f37440ee77	en	privacy-policy	excerpt		3	2	2	3	3	3	3	3	3	n/m	Natural re-expression.
+7ceacdcaab	en	privacy-policy	title		3	2	2	-	3	3	3	3	3	n/m	standard label; differentiation not expected here.
+720e98aacd	es	quienes-somos	excerpt		3	3	2	2	2	3	1	-	2	n/m	voi: «Backend» and «edge» are unmarked anglicisms in a plain-string slot (skill §3.3: reword to Spanish there), and «desde Getxo, desde 2019» repeats «desde»; the four-area list leaves out e-commerce, AI and greenfield.
+4c99a4f0a8	es	quienes-somos	title		3	2	2	-	3	3	3	-	2	n/m	standard label; differentiation not expected here.
+f359122b1b	en	references	excerpt		2	3	3	2	3	1	2	2	2	n/m	fac: «and the work behind them» promises context that the house policy (logo yes, context no) forbids the page from showing, and it shows only logos in an ls listing; ree: «names we can write» calques «nombres que podemos escribir».
+5d20d0fee3	en	references	title		3	3	2	-	3	3	3	3	2	n/m	standard label; differentiation not expected here.
+896eda637f	es	referencias	excerpt		2	3	3	2	3	1	3	-	2	n/m	fac: «y el trabajo que hay detrás» promises context that the house policy (logo yes, context no) forbids the page from showing, and it shows only logos in an ls listing.
+382921ecf4	es	referencias	title		3	3	2	-	3	3	3	-	2	n/m	standard label; differentiation not expected here.
+0d990e8b48	en	cloudflare	cta_label		3	3	2	3	3	3	3	3	-	n/m	Six words against the ≤4 CTA checklist.
+7e1cf14baf	en	cloudflare	excerpt		3	3	3	3	3	3	3	3	3	n/m	The site itself is the proof; backed by the About page (partner since 2019) and the deployed stack.
+a5b966cdcb	en	cloudflare	title		3	3	2	-	3	3	3	3	3	n/m	Brand name; any partner would show the same heading.
+98261168bf	es	cloudflare	cta_label		3	3	2	3	3	3	3	-	-	n/m	Five words against the ≤4 CTA checklist.
+4b06ff73e5	es	cloudflare	excerpt		3	3	3	3	3	3	2	-	3	n/m	voi: «corre entera sobre su plataforma» calques «runs on»; the /deconstruyendo lead says «funciona sobre».
+a5b966cdcb	es	cloudflare	title		3	3	2	-	3	3	3	-	3	n/m	Brand name; any partner would show the same heading.
+e8f9cf832f			defaultCtaLabel		3	2	2	-	3	3	3	-	-	n/m	Generic CTA any studio could use; it is the skill glossary's sanctioned wording (§3.4.2), so a deliberate trade-off.
+3cfdf27dd2		cta_global	Hablemos de ingeniero a ingeniero.	#0	3	3	3	3	3	2	3	-	-	n/m	Tension, not a contradiction: /deconstruyendo says AI agents write most of this site's code (not client work), so «who will write the code» sits awkwardly beside the skill's «we sign the code» AI stance.
+e8f9cf832f		cta_global	Hablemos de ingeniero a ingeniero.	cta-button	3	2	2	-	3	3	3	-	-	n/m	Generic CTA any studio could use; it is the skill glossary's sanctioned wording (§3.4.2), so a deliberate trade-off.
+02fb56a808		cta_global	heading		3	3	2	3	3	3	2	-	-	n/m	Single-phrase heading closed with a period; the house heading rule keeps the period for two-sentence headings (check whether the CTA band is exempt).
+3dd22d0a4d	en	cta_global_en	Let's talk, engineer to engineer.	#0	3	3	3	3	3	2	3	3	-	n/m	Tension, not a contradiction: /deconstruyendo says AI agents write most of this site's code (not client work), so «who will write the code» sits awkwardly beside the skill's «we sign the code» AI stance.
+622c9b537b	en	cta_global_en	Let's talk, engineer to engineer.	cta-button	3	2	2	-	3	3	3	3	-	n/m	Generic CTA any studio could use; sanctioned by the skill glossary (§3.4.2), and five words against the ≤4 CTA checklist.
+5b2cde592c	en	cta_global_en	heading		3	3	2	3	3	3	2	3	-	n/m	Single-phrase heading closed with a period; the house heading rule keeps the period for two-sentence headings (check whether the CTA band is exempt).
+3cfdf27dd2	es	cta_global_es	Hablemos de ingeniero a ingeniero.	#0	3	3	3	3	3	2	3	-	-	n/m	Tension, not a contradiction: /deconstruyendo says AI agents write most of this site's code (not client work), so «who will write the code» sits awkwardly beside the skill's «we sign the code» AI stance.
+e8f9cf832f	es	cta_global_es	Hablemos de ingeniero a ingeniero.	cta-button	3	2	2	-	3	3	3	-	-	n/m	Generic CTA any studio could use; it is the skill glossary's sanctioned wording (§3.4.2), so a deliberate trade-off.
+02fb56a808	es	cta_global_es	heading		3	3	2	3	3	3	2	-	-	n/m	Single-phrase heading closed with a period; the house heading rule keeps the period for two-sentence headings (check whether the CTA band is exempt).

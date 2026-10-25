@@ -4,12 +4,10 @@
 hash	locale	entry	slot	key	cla	rel	dif	bre	exc	fac	voi	ree	sea	fit	note
 b7236928c0	en	home	content	h_cred	2	3	2	2	3	2	2	2	3	n/m	unverified: «twenty years in retail» (KB backs 20+ years of experience and 15+ on hybris, not twenty in retail); ES says «Veinte», EN «Over twenty»; no subject beside «since 2019» reads as the company's age; names 3 of 6 verticals.
 45d792affd	en	home	content	h_partner	3	3	3	3	3	3	3	3	3	n/m	Same sentence opens the excerpt; the partner band lower on the home repeats it again.
-e0681da186	en	home	content	h_who	3	3	2	3	3	3	3	3	2	n/m	Repeats the excerpt («whoever designs your architecture writes the code»); first of four 'designer does it all' lines on the home.
 ea181c44ce	en	home	excerpt		3	2	2	2	3	3	2	3	2	n/m	Meta description = h_partner + h_who + the three mantra beats, all repeated on the page; names Cloudflare but none of the other five verticals; motto written as body copy.
 43be128ac6	en	home	title		3	2	1	2	3	3	3	2	2	n/m	dif: «Software engineering, from architecture to production» could head any software consultancy's home; no retail, Cloudflare or vertical term in the h1/<title>.
 1557b7f007	es	home	content	h_cred	2	3	2	2	3	2	2	-	3	n/m	unverified: «Veinte años en la distribución» (KB backs «más de veinte» years of experience and 15+ on hybris, not twenty in retail); no subject beside «desde 2019» reads as the company's age; one of two colon constructions on the page (cap is one).
 180ddd6636	es	home	content	h_partner	3	3	3	3	3	3	3	-	3	n/m	Same sentence opens the excerpt; the partner band lower on the home repeats it again.
-dd22ec0a25	es	home	content	h_who	3	3	2	3	3	3	3	-	2	n/m	Good es-ES idiom («da la cara»); repeats the excerpt verbatim («Quien diseña tu arquitectura escribe el código»).
 506e271495	es	home	excerpt		3	2	2	2	3	3	2	-	2	n/m	= h_partner + h_who + the three mantra beats, each repeated on the page; second colon construction on the page; motto written as body copy; names one vertical of six.
 7fc57a777f	es	home	title		3	2	1	2	3	3	3	-	2	n/m	dif: «Ingeniería de software, de la arquitectura a producción» could head any software consultancy's home; no retail, Cloudflare or vertical term in the h1/<title>.
 7351b2b694	en	ui_labels_en	hero_line	bd	3	3	2	3	3	2	2	3	2	n/m	unverified: «on-premises» (the BD page names Oracle as operational base but never states on-premise work); skill §4.7.8 asks for singular «on-premise»; «Data you can trust» is a pasteable opener.

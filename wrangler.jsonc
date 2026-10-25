@@ -120,7 +120,15 @@
 			// switches off the hostname deploy-production.yml polls for D1
 			// migrations and then verifies.
 			"workers_dev": true,
-			"routes": [{ "pattern": "www.serverstartup.dev", "custom_domain": true }],
+			// #162: www.serverstartup.io is the canonical host — the site's
+			// `site`, every canonical, the sitemap. Only `www`: the apex
+			// serverstartup.io is a Redirect Rule in the zone
+			// (http*://serverstartup.io/* → https://www.serverstartup.io/${2}, 301,
+			// query kept), for the same reason as the .dev apex above.
+			"routes": [
+				{ "pattern": "www.serverstartup.dev", "custom_domain": true },
+				{ "pattern": "www.serverstartup.io", "custom_domain": true },
+			],
 			"d1_databases": [
 				{
 					"binding": "DB",

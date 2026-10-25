@@ -14991,46 +14991,6 @@
 									"text": " desde 2019."
 								}
 							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "h_who",
-							"markDefs": [
-								{
-									"_key": "hk5",
-									"_type": "link",
-									"href": "/quienes-somos#equipo"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "En tu proyecto, siempre los mismos "
-								},
-								{
-									"_type": "span",
-									"text": "ingenieros",
-									"marks": [
-										"hk5"
-									]
-								},
-								{
-									"_type": "span",
-									"text": " "
-								},
-								{
-									"_type": "span",
-									"text": "senior",
-									"marks": [
-										"em"
-									]
-								},
-								{
-									"_type": "span",
-									"text": ". Quien diseña tu arquitectura escribe el código. Y da la cara si algo se rompe."
-								}
-							]
 						}
 					]
 				},
@@ -16059,35 +16019,6 @@
 								{
 									"_type": "span",
 									"text": " partner since 2019."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "h_who",
-							"markDefs": [
-								{
-									"_key": "hk5",
-									"_type": "link",
-									"href": "/en/about-us#team"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "On your project, always the same "
-								},
-								{
-									"_type": "span",
-									"text": "senior engineers",
-									"marks": [
-										"hk5"
-									]
-								},
-								{
-									"_type": "span",
-									"text": ". Whoever designs your architecture writes the code. And answers for it when something breaks."
 								}
 							]
 						}

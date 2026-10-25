@@ -85,7 +85,7 @@ jobs:
         # input description above (#358). Prints the per-table counts —
         # the record, taken before anything is written — and refuses unless
         # the database is empty or the operator typed the confirmation.
-        run: scripts/ci-guard-prod-seed.sh www-serverstartup-io "$SEED_D1_CONFIRM"
+        run: scripts/ci-guard-prod-seed.sh www-serverstartup-io-production "$SEED_D1_CONFIRM"
 
       # The worker deploys BEFORE the D1 refresh, not after. This is the order
       # deploy-preview.yml already learned the hard way, and production shipped
@@ -135,7 +135,7 @@ jobs:
             # EmDash 1.x (#627) also seeds the schema of a fresh database by
             # itself once the migrations are in (`emdash:seed_complete`); the
             # refresh must not read the remote before that has finished.
-            read -r COUNT SEEDED < <(npx wrangler d1 execute www-serverstartup-io --remote --json \
+            read -r COUNT SEEDED < <(npx wrangler d1 execute www-serverstartup-io-production --remote --json \
               --command "SELECT (SELECT count(*) FROM _emdash_migrations) AS c, (SELECT value FROM options WHERE name = 'emdash:seed_complete') AS s;" 2>/dev/null \
               | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{const r=JSON.parse(s)[0].results[0];console.log(r.c+' '+r.s)}catch{console.log('-1 null')}})")
             echo "attempt $i: remote applied=$COUNT target=$TARGET seed_complete=$SEEDED (poked /_emdash/admin from the GitHub runner; read via wrangler d1 API)"
@@ -152,7 +152,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: d70cd71aecc76f94c73d7a6f3cc1265d
         # The local stack was already built by the canonical step above.
         run: |
-          scripts/seed-remote-preview.sh www-serverstartup-io
+          scripts/seed-remote-preview.sh www-serverstartup-io-production
 
       - name: Summary
         if: always()

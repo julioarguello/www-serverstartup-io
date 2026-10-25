@@ -7,10 +7,10 @@ Written to be executed, not read: every command is copy-pasteable, and every
 step ends with the observation that decides whether to continue. Where a step
 cannot be verified from a terminal, it says so.
 
-**First measured 2026-08-31, re-measured 2026-09-03**, and the measurements are
-the reason the order is what it is. Re-measure before you start — this file
-records a state, not a promise, and between those two dates three of the rows
-below changed value.
+**First measured 2026-08-31, re-measured 2026-09-03 and 2026-10-24**, and the
+measurements are the reason the order is what it is. Re-measure before you
+start — this file records a state, not a promise, and every re-measurement so
+far has changed some of the rows below.
 
 ---
 
@@ -21,17 +21,19 @@ below changed value.
 | Zone nameservers | `tara.ns.cloudflare.com`, `kobe.ns.cloudflare.com` | Already Cloudflare. The cutover is a **record change inside the panel**, not a registrar nameserver change — minutes, not 48 hours, and reversible from the same screen. |
 | `serverstartup.io` | `301` → `https://www.serverstartup.io/` | Apex already funnels to `www`. Keep that shape after the cutover or every existing inbound link gains a hop. |
 | `www.serverstartup.io` | `200`, `server: nginx`, `34.175.111.59` | The old WordPress. Still the live site. |
-| Production worker | **`200`** | Deployed. Run `33481322489`, 2026-09-01, green — after two failures whose causes are recorded in step 2. |
-| Production commit | `4ac6a69`, **26 commits behind `main`** (`d12cc29`) | What is deployed is not what CI verified this morning. Step 2 is now a promotion, not a bootstrap. |
-| Production D1 | `1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1` | **Holds content**, seeded by that run. Not observable by counting rows from here without a token — observed instead through `www.serverstartup.dev`, which is bound to this worker and this database and serves 26 sitemap URLs. |
+| Production worker | `www.serverstartup.dev` → **`200`** (2026-10-24) | Deployed. Measure it through the `.dev` custom domain: from a Spanish line on a LaLiga match day the `workers.dev` hostname times out, because its Cloudflare IPs are blocked by the ISPs, not because the worker is down. |
+| Production commit | `dd4ec2e`, run `39729492942`, 2026-10-22 — **25 commits behind `main`** (`a133228`) | That run's `deploy` job was green and its `verify` job **red**: `/creditos`, `/accesibilidad`, `/en/credits` and `/en/accessibility` answer `404` (still `404` on 2026-10-24). Those pages entered `seed.json` on 2026-09-03 (`c2b1683`), after the one-time seed of 2026-09-01, and a deploy without the seed does not add them. **Not a cutover blocker**: production is recreated at launch (next row), and the seed brings them. |
+| Production D1 | `1b3b50f2-0269-4fe2-8f80-1b55b08bdfa1`, still in `wrangler.jsonc` `env.production` | The 0.34-era database the 2026-09-01 run seeded. **To be recreated, not migrated** (founder, 2026-10-23, #627; restated 2026-10-24: "se despliega de cero"). The recipe is the *Superseded at launch* note in step 2; the new `database_id` lands through a PR before the dispatch. |
 | Worker routes | `www.serverstartup.dev`, `preview.serverstartup.dev` (#444) | Two `.dev` hostnames, both declared. **Neither `serverstartup.io` hostname is attached to anything.** That is still the actual DNS work. |
 
 The order below was originally forced by an undeployed worker and an empty
-database. Both of those rows have flipped, so what forces it now is narrower
-and worth stating plainly: **the only things left that change what the public
-sees are step 3 and step 5**, and both are Julio's. Steps 1, 2 and 4 have been
-executed once already; they are re-run to promote a newer commit, not to reach
-a state for the first time.
+database. What forces it now: **step 2 runs as a first deploy again**, on a
+recreated database with the seed, because the EmDash 1.x schema cannot be
+migrated onto the old one. After that, **the only things that change what the
+public sees are step 3 and step 5**, and both are Julio's. Step 3 still waits
+on the bot settings (#333), a dashboard check only the zone's owner can make.
+The Kit Digital question (#510) was taken off the path by the founder on
+2026-10-24.
 
 ---
 

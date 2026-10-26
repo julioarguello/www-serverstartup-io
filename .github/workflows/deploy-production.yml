@@ -154,6 +154,24 @@ jobs:
         run: |
           scripts/seed-remote-preview.sh www-serverstartup-io-production
 
+      # #662: once live, text changes ship as dated patches in seed/patches/,
+      # applied through EmDash's own client so each is a revision the admin can
+      # revert. A patch is skipped when the site already holds its "after", and
+      # the run refuses — writing nothing — when a value holds neither side
+      # (edited in the admin). On a fresh seed every "after" is already in
+      # seed.json (`content-patch.mjs check` gates that on every PR), and a new
+      # database has no administrator to issue a token yet.
+      - name: Apply content patches (seed/patches/, through EmDash's API)
+        if: ${{ !inputs.seed_d1 }}
+        env:
+          EMDASH_TOKEN: ${{ secrets.EMDASH_TOKEN }}
+        run: |
+          if [ -z "$EMDASH_TOKEN" ]; then
+            echo "::error::EMDASH_TOKEN is not set — content patches cannot be read or applied. Create a token at /_emdash/admin/settings/api-tokens (scopes content:read, content:write) and store it as the production environment secret EMDASH_TOKEN."
+            exit 1
+          fi
+          node scripts/content-patch.mjs apply --url "$PRODUCTION_URL"
+
       - name: Summary
         if: always()
         run: |

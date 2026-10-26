@@ -55,6 +55,8 @@ All editorial text lives in EmDash CMS. Templates contain only layout, CSS, and 
 
 `seed/seed.json` is the **source of truth** for initial content: schema, content, settings, menus, widgets, and taxonomies. After schema changes, always do a clean rebuild.
 
+Since the site went live on 2026-10-25, the production database holds the content, and EmDash never re-applies a seed to it. A text change ships as a **content patch** (#662): a dated file in `seed/patches/`, in the same PR as the same change to `seed.json`. `deploy-production` applies pending patches through EmDash's own client, so each one is a revision the admin can revert. A patch is skipped when the site already holds its `after`, and refused when the site holds neither its `before` nor its `after`. The convention and the mechanism are in `seed/patches/README.md`.
+
 ## 3. Internationalization (i18n)
 
 ### 3.1 Strategy: Everything in the CMS

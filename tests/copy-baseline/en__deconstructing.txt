@@ -5,7 +5,7 @@ ES
 Deconstructing this website
 This is how this website is built. It runs on Cloudflare, a network of data centres around the world, and every claim on this page links to the file that proves it.
 Quality
-26 steps · Lighthouse · axe
+27 steps · Lighthouse · axe
 04
 03
 02
@@ -63,7 +63,7 @@ Workers
 the origin
 The zone's Cloudflare dashboard: TLS 1.3 as the minimum, and Encrypted Client Hello on.
 Detail and proof
-2 rows
+3 rows
 1.1
 DNS is authoritative on Cloudflare, and the zone is signed with DNSSEC.
 no file: checked in the zone's API
@@ -72,6 +72,10 @@ DNS full setup · DNSSEC
 TLS 1.3 is the minimum version the zone accepts. Encrypted Client Hello is on. Clients that support it also get the post-quantum key agreement Cloudflare offers by default.
 no file: checked in the zone's API
 Minimum TLS · Encrypted Client Hello · post-quantum
+1.3
+Always Use HTTPS redirects plain HTTP at the edge. The app sends HSTS with a one-year max-age, includeSubDomains and preload.
+src/middleware.ts
+Always Use HTTPS · HSTS
 layer 2 · Cloudflare
 The cache
 Which pages are kept ready-made, and when they are cleared.
@@ -90,7 +94,7 @@ Workers Cache sits in front of the Worker and is tiered by default: a hit does n
 wrangler.jsonc
 Workers Cache
 2.2
-A rendered page is cached at the edge only if it opts in. Every other rendered response is sent no-store.
+A rendered page is cached at the edge only if it opts in. A response that declares no caching of its own is sent no-store.
 src/middleware.ts
 2.3
 Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they expire within the hour.
@@ -144,7 +148,7 @@ Dynamic Workers · plugin sandbox
 layer 4 · Cloudflare
 Data
 Where each thing is kept.
-The texts and their history live in D1, Cloudflare's SQLite database. Editors' sessions are kept in Workers KV, a key-value store; Images crops each picture to its slot and turns it into WebP; and R2, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four.
+The texts and their history live in D1, Cloudflare's SQLite database. Editors' sessions are kept in Workers KV, a key-value store; Images fits the photographs that are resized to their slot and turns them into WebP; and R2, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four.
 D1
 content
 Workers KV
@@ -165,7 +169,7 @@ Workers KV holds the editors' sessions.
 wrangler.jsonc
 Workers KV
 4.3
-The Worker hands each image to the Images binding, which resizes it to its slot and converts it to WebP.
+The photographs the page resizes go through the Images binding, which fits them to their slot and converts them to WebP. Everything else is served as it is in the repository.
 wrangler.jsonc
 Images binding
 4.4
@@ -224,7 +228,7 @@ Cloudflare runs its blog on it
 The code
 The documentation
 Detail and proof
-7 rows
+10 rows
 6.1
 EmDash, the open-source (MIT) CMS that Cloudflare announced in April 2026, runs inside the same Worker.
 package.json
@@ -247,16 +251,28 @@ src/utils/ui-labels.ts
 Search comes from EmDash, on SQLite FTS5 with bm25 ranking.
 no file: in EmDash, migration 064
 6.7
+The admin admits editors by passkey (WebAuthn) only: there is no password to store or leak.
+no file: answered by /_emdash/api/auth/mode
+authentication
+6.8
+EmDash is also an OAuth authorization server (the OAuth 2.1 profile: code + PKCE, dynamic client registration). So an AI agent can work on the content through its MCP server, with a token an editor grants.
+no file: answered by the admin's endpoints
+MCP server · AI tools
+6.9
+The emdash command line signs in with the OAuth device flow (RFC 8628).
+no file: answered by /_emdash/.well-known/auth
+MCP server
+6.10
 A plugin kept in the repository purges the cache on publish. It declares content:read, because without it EmDash skips its hooks.
 astro.config.mjs
 ACROSS THE LAYERS, FROM THE WORKSHOP
 across the layers · from the workshop
 Delivery
 How a change reaches production.
-The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 26 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with wrangler, Cloudflare's deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.
+The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 27 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with wrangler, Cloudflare's deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.
 pull request
 one change
-26 steps
+27 steps
 on workerd
 green
 preview
@@ -274,7 +290,7 @@ The working repository is public, with all its commits.
 README.md
 the repository
 7.2
-Every change that can reach a page passes 26 steps that can fail. A test derives that number from the workflow.
+Every change that can reach a page passes 27 steps that can fail. A test derives that number from the workflow.
 .github/workflows/ci.yml
 7.3
 The gates run the site locally on workerd, the open-source runtime behind Workers, through wrangler dev. If wrangler itself crashes, the stack restarts once and the summary says so.
@@ -319,7 +335,7 @@ across the layers · on every change
 Quality
 What is checked before anything is published.
 The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it. Lighthouse, Google's tool that scores performance and accessibility, measures nine pages; the text of 30 routes is frozen; and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.
-26
+27
 steps that can fail
 30
 routes with frozen text

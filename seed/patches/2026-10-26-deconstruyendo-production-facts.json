@@ -1,0 +1,195 @@
+{
+	"date": "2026-10-26",
+	"issue": 662,
+	"summary": "/deconstruyendo, checked against www.serverstartup.io after the launch: two claims narrowed to what production does (only resized photographs go through Images; only responses without their own cache policy are no-store), and four facts that now hold on production shown (HTTPS redirect + HSTS, passkey-only admin, OAuth server, CLI device flow).",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-2"
+				},
+				"text"
+			],
+			"before": "Una página renderizada solo se guarda en el borde si lo pide. Cualquier otra respuesta renderizada sale con `no-store`.",
+			"after": "Una página renderizada solo se guarda en el borde si lo pide. Las respuestas que no declaran su propia caché salen con `no-store`."
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h2-2"
+				},
+				"text"
+			],
+			"before": "A rendered page is cached at the edge only if it opts in. Every other rendered response is sent `no-store`.",
+			"after": "A rendered page is cached at the edge only if it opts in. A response that declares no caching of its own is sent `no-store`."
+		},
+		{
+			"collection": "layers",
+			"slug": "datos",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h4-3"
+				},
+				"text"
+			],
+			"before": "El Worker pasa cada imagen al *binding* de [`Images`](https://developers.cloudflare.com/images/optimization/binding/), que la ajusta a su hueco y la convierte a WebP.",
+			"after": "Las fotografías que la página redimensiona pasan por el *binding* de [`Images`](https://developers.cloudflare.com/images/optimization/binding/), que las ajusta a su hueco y las convierte a WebP. El resto se sirve tal como está en el repositorio."
+		},
+		{
+			"collection": "layers",
+			"slug": "data",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h4-3"
+				},
+				"text"
+			],
+			"before": "The Worker hands each image to the [`Images`](https://developers.cloudflare.com/images/optimization/binding/) binding, which resizes it to its slot and converts it to WebP.",
+			"after": "The photographs the page resizes go through the [`Images`](https://developers.cloudflare.com/images/optimization/binding/) binding, which fits them to their slot and converts them to WebP. Everything else is served as it is in the repository."
+		},
+		{
+			"collection": "layers",
+			"slug": "datos",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "Los textos y su historial viven en `D1`, la base de datos `SQLite` de `Cloudflare`. Las sesiones de quien edita se guardan en `Workers KV`, un almacén de pares clave y valor; `Images` recorta cada imagen a su hueco y la convierte a WebP, y `R2`, el almacenamiento de ficheros, queda listo para lo que se suba desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.",
+			"after": "Los textos y su historial viven en `D1`, la base de datos `SQLite` de `Cloudflare`. Las sesiones de quien edita se guardan en `Workers KV`, un almacén de pares clave y valor; `Images` ajusta a su hueco las fotografías que se redimensionan y las convierte a WebP, y `R2`, el almacenamiento de ficheros, queda listo para lo que se suba desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro."
+		},
+		{
+			"collection": "layers",
+			"slug": "data",
+			"locale": "en",
+			"path": [
+				"intro"
+			],
+			"before": "The texts and their history live in `D1`, `Cloudflare`'s `SQLite` database. Editors' sessions are kept in `Workers KV`, a key-value store; `Images` crops each picture to its slot and turns it into WebP; and `R2`, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four.",
+			"after": "The texts and their history live in `D1`, `Cloudflare`'s `SQLite` database. Editors' sessions are kept in `Workers KV`, a key-value store; `Images` fits the photographs that are resized to their slot and turns them into WebP; and `R2`, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four."
+		},
+		{
+			"collection": "layers",
+			"slug": "red",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h1-3"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "network",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h1-3"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h5-7"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h5-8"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h5-9"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h5-7"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h5-8"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h5-9"
+				},
+				"status"
+			],
+			"before": "pending",
+			"after": "ok"
+		}
+	]
+}

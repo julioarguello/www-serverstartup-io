@@ -7,6 +7,24 @@ import { defineConfig } from "astro/config";
 import emdash from "emdash/astro";
 import { fonts } from "./src/assets/fonts/families.mjs";
 
+/**
+ * #664: the origin the admin is used from, per deployed environment. EmDash
+ * takes the passkey's rpId from it. Without it, the rpId was whatever host the
+ * request came in on, so the production administrator, claimed on
+ * www.serverstartup.dev, held a passkey the browser would not offer on
+ * www.serverstartup.io. WebAuthn cannot share one passkey across .dev and .io.
+ * Both deploy workflows build with CLOUDFLARE_ENV. Local builds and CI leave
+ * it unset and keep deriving the origin from the request, as before.
+ * The runtime fallback, EMDASH_SITE_URL, needs the
+ * nodejs_compat_populate_process_env flag on Workers
+ * (node_modules/emdash/src/api/public-url.ts), so the URL is fixed at build
+ * time instead.
+ */
+const ADMIN_ORIGIN = {
+	production: "https://www.serverstartup.io",
+	preview: "https://preview.serverstartup.dev",
+}[process.env.CLOUDFLARE_ENV ?? ""];
+
 export default defineConfig({
 	site: "https://www.serverstartup.io",
 	output: "server",
@@ -84,6 +102,7 @@ export default defineConfig({
 	integrations: [
 		react(),
 		emdash({
+			...(ADMIN_ORIGIN ? { siteUrl: ADMIN_ORIGIN } : {}),
 			// Its Noto Sans was downloaded from Google on every build; the same
 			// files are local now, under the variable its admin reads (#629).
 			fonts: false,

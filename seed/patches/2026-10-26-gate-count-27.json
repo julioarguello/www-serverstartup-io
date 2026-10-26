@@ -1,0 +1,143 @@
+{
+	"date": "2026-10-26",
+	"issue": 662,
+	"summary": "The gate count on /deconstruyendo goes from 26 to 27: the content-patch check (#662) is a new CI step that can refuse a branch. tests/unit/gate-count.test.ts derives the number from ci.yml.",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "entrega",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un *pull request*, y pasa 26 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con `wrangler`, la herramienta de despliegue de `Cloudflare`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.",
+			"after": "El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un *pull request*, y pasa 27 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con `wrangler`, la herramienta de despliegue de `Cloudflare`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido."
+		},
+		{
+			"collection": "layers",
+			"slug": "entrega",
+			"locale": "es",
+			"path": [
+				"nodes",
+				1,
+				"title"
+			],
+			"before": "26 pasos",
+			"after": "27 pasos"
+		},
+		{
+			"collection": "layers",
+			"slug": "entrega",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h8-2"
+				},
+				"text"
+			],
+			"before": "Cada cambio que puede llegar a una página pasa 26 pasos que pueden fallar. Un test deriva ese número del *workflow*.",
+			"after": "Cada cambio que puede llegar a una página pasa 27 pasos que pueden fallar. Un test deriva ese número del *workflow*."
+		},
+		{
+			"collection": "layers",
+			"slug": "delivery",
+			"locale": "en",
+			"path": [
+				"intro"
+			],
+			"before": "The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 26 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with `wrangler`, `Cloudflare`'s deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.",
+			"after": "The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 27 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with `wrangler`, `Cloudflare`'s deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content."
+		},
+		{
+			"collection": "layers",
+			"slug": "delivery",
+			"locale": "en",
+			"path": [
+				"nodes",
+				1,
+				"title"
+			],
+			"before": "26 steps",
+			"after": "27 steps"
+		},
+		{
+			"collection": "layers",
+			"slug": "delivery",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h8-2"
+				},
+				"text"
+			],
+			"before": "Every change that can reach a page passes 26 steps that can fail. A test derives that number from the workflow.",
+			"after": "Every change that can reach a page passes 27 steps that can fail. A test derives that number from the workflow."
+		},
+		{
+			"collection": "layers",
+			"slug": "calidad",
+			"locale": "es",
+			"path": [
+				"map_note"
+			],
+			"before": "26 pasos · Lighthouse · axe",
+			"after": "27 pasos · Lighthouse · axe"
+		},
+		{
+			"collection": "layers",
+			"slug": "calidad",
+			"locale": "es",
+			"path": [
+				"summary"
+			],
+			"before": "26 pasos · Lighthouse · axe",
+			"after": "27 pasos · Lighthouse · axe"
+		},
+		{
+			"collection": "layers",
+			"slug": "calidad",
+			"locale": "es",
+			"path": [
+				"stats",
+				0,
+				"value"
+			],
+			"before": "26",
+			"after": "27"
+		},
+		{
+			"collection": "layers",
+			"slug": "quality",
+			"locale": "en",
+			"path": [
+				"map_note"
+			],
+			"before": "26 steps · Lighthouse · axe",
+			"after": "27 steps · Lighthouse · axe"
+		},
+		{
+			"collection": "layers",
+			"slug": "quality",
+			"locale": "en",
+			"path": [
+				"summary"
+			],
+			"before": "26 steps · Lighthouse · axe",
+			"after": "27 steps · Lighthouse · axe"
+		},
+		{
+			"collection": "layers",
+			"slug": "quality",
+			"locale": "en",
+			"path": [
+				"stats",
+				0,
+				"value"
+			],
+			"before": "26",
+			"after": "27"
+		}
+	]
+}

@@ -18790,7 +18790,7 @@
 							"text": "[`Always Use HTTPS`](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) redirige el HTTP plano en el borde. La aplicación envía HSTS con un año de max-age, includeSubDomains y preload.",
 							"file": "src/middleware.ts",
 							"docs": "[Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) · [HSTS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "cuando se verifique el HSTS de la zona en el dominio que sirve la página"
 						},
 						{
@@ -18879,7 +18879,7 @@
 							"text": "[`Always Use HTTPS`](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) redirects plain HTTP at the edge. The app sends HSTS with a one-year max-age, includeSubDomains and preload.",
 							"file": "src/middleware.ts",
 							"docs": "[Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/) · [HSTS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "once the zone's HSTS setting is verified on the domain that serves the page"
 						},
 						{
@@ -18948,7 +18948,7 @@
 						},
 						{
 							"key": "h2-2",
-							"text": "Una página renderizada solo se guarda en el borde si lo pide. Cualquier otra respuesta renderizada sale con `no-store`.",
+							"text": "Una página renderizada solo se guarda en el borde si lo pide. Las respuestas que no declaran su propia caché salen con `no-store`.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19023,7 +19023,7 @@
 						},
 						{
 							"key": "h2-2",
-							"text": "A rendered page is cached at the edge only if it opts in. Every other rendered response is sent `no-store`.",
+							"text": "A rendered page is cached at the edge only if it opts in. A response that declares no caching of its own is sent `no-store`.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19251,7 +19251,7 @@
 					"map_note": "`D1` · `Workers KV` · `Images` · `R2`",
 					"summary": "`D1` · `Workers KV` · `Images` · `R2`",
 					"lede": "Dónde se guarda cada cosa.",
-					"intro": "Los textos y su historial viven en `D1`, la base de datos `SQLite` de `Cloudflare`. Las sesiones de quien edita se guardan en `Workers KV`, un almacén de pares clave y valor; `Images` recorta cada imagen a su hueco y la convierte a WebP, y `R2`, el almacenamiento de ficheros, queda listo para lo que se suba desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.",
+					"intro": "Los textos y su historial viven en `D1`, la base de datos `SQLite` de `Cloudflare`. Las sesiones de quien edita se guardan en `Workers KV`, un almacén de pares clave y valor; `Images` ajusta a su hueco las fotografías que se redimensionan y las convierte a WebP, y `R2`, el almacenamiento de ficheros, queda listo para lo que se suba desde el CMS. La versión de pruebas y la de producción no comparten ninguno de los cuatro.",
 					"figure": "datos",
 					"nodes": [
 						{
@@ -19296,7 +19296,7 @@
 						},
 						{
 							"key": "h4-3",
-							"text": "El Worker pasa cada imagen al *binding* de [`Images`](https://developers.cloudflare.com/images/optimization/binding/), que la ajusta a su hueco y la convierte a WebP.",
+							"text": "Las fotografías que la página redimensiona pasan por el *binding* de [`Images`](https://developers.cloudflare.com/images/optimization/binding/), que las ajusta a su hueco y las convierte a WebP. El resto se sirve tal como está en el repositorio.",
 							"file": "wrangler.jsonc",
 							"docs": "[binding de Images](https://developers.cloudflare.com/images/optimization/binding/)",
 							"status": "ok"
@@ -19339,7 +19339,7 @@
 					"map_note": "`D1` · `Workers KV` · `Images` · `R2`",
 					"summary": "`D1` · `Workers KV` · `Images` · `R2`",
 					"lede": "Where each thing is kept.",
-					"intro": "The texts and their history live in `D1`, `Cloudflare`'s `SQLite` database. Editors' sessions are kept in `Workers KV`, a key-value store; `Images` crops each picture to its slot and turns it into WebP; and `R2`, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four.",
+					"intro": "The texts and their history live in `D1`, `Cloudflare`'s `SQLite` database. Editors' sessions are kept in `Workers KV`, a key-value store; `Images` fits the photographs that are resized to their slot and turns them into WebP; and `R2`, the file storage, is ready for whatever is uploaded through the CMS. The preview and production share none of the four.",
 					"figure": "datos",
 					"nodes": [
 						{
@@ -19384,7 +19384,7 @@
 						},
 						{
 							"key": "h4-3",
-							"text": "The Worker hands each image to the [`Images`](https://developers.cloudflare.com/images/optimization/binding/) binding, which resizes it to its slot and converts it to WebP.",
+							"text": "The photographs the page resizes go through the [`Images`](https://developers.cloudflare.com/images/optimization/binding/) binding, which fits them to their slot and converts them to WebP. Everything else is served as it is in the repository.",
 							"file": "wrangler.jsonc",
 							"docs": "[Images binding](https://developers.cloudflare.com/images/optimization/binding/)",
 							"status": "ok"
@@ -19497,7 +19497,7 @@
 							"text": "El admin admite editores solo con *passkey* (WebAuthn): no hay contraseña que guardar ni que filtrar.",
 							"file_note": "lo responde `/_emdash/api/auth/mode`",
 							"docs": "[autenticación](https://docs.emdashcms.com/guides/authentication/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "cuando se confirme en el admin desplegado"
 						},
 						{
@@ -19505,7 +19505,7 @@
 							"text": "`EmDash` es también un servidor de autorización OAuth (perfil OAuth 2.1: código + PKCE, registro dinámico de clientes). Por eso un agente de IA puede trabajar en el contenido a través de su servidor MCP, con un token que concede un editor.",
 							"file_note": "lo responden los endpoints del admin",
 							"docs": "[servidor MCP](https://docs.emdashcms.com/reference/mcp-server/) · [herramientas de IA](https://docs.emdashcms.com/guides/ai-tools/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "cuando se confirme en el admin desplegado"
 						},
 						{
@@ -19513,7 +19513,7 @@
 							"text": "La línea de comandos `emdash` inicia sesión con el flujo de dispositivo de OAuth (RFC 8628).",
 							"file_note": "lo responde `/_emdash/.well-known/auth`",
 							"docs": "[servidor MCP](https://docs.emdashcms.com/reference/mcp-server/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "cuando se confirme en el admin desplegado"
 						},
 						{
@@ -19622,7 +19622,7 @@
 							"text": "The admin admits editors by passkey (WebAuthn) only: there is no password to store or leak.",
 							"file_note": "answered by `/_emdash/api/auth/mode`",
 							"docs": "[authentication](https://docs.emdashcms.com/guides/authentication/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "once confirmed on the deployed admin"
 						},
 						{
@@ -19630,7 +19630,7 @@
 							"text": "`EmDash` is also an OAuth authorization server (the OAuth 2.1 profile: code + PKCE, dynamic client registration). So an AI agent can work on the content through its MCP server, with a token an editor grants.",
 							"file_note": "answered by the admin's endpoints",
 							"docs": "[MCP server](https://docs.emdashcms.com/reference/mcp-server/) · [AI tools](https://docs.emdashcms.com/guides/ai-tools/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "once confirmed on the deployed admin"
 						},
 						{
@@ -19638,7 +19638,7 @@
 							"text": "The `emdash` command line signs in with the OAuth device flow (RFC 8628).",
 							"file_note": "answered by `/_emdash/.well-known/auth`",
 							"docs": "[MCP server](https://docs.emdashcms.com/reference/mcp-server/)",
-							"status": "pending",
+							"status": "ok",
 							"pending_note": "once confirmed on the deployed admin"
 						},
 						{
@@ -20007,7 +20007,7 @@
 					"map_note": "`GitHub Actions` · `wrangler`",
 					"summary": "`wrangler` → *preview* · producción",
 					"lede": "Cómo llega un cambio a producción.",
-					"intro": "El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un *pull request*, y pasa 26 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con `wrangler`, la herramienta de despliegue de `Cloudflare`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.",
+					"intro": "El código vive en un repositorio de GitHub. Cada cambio entra como una propuesta revisable, un *pull request*, y pasa 27 pasos de comprobación automáticos (la integración continua, o CI) sobre una copia local del sitio. Si todos pasan, la versión de pruebas se despliega sola con `wrangler`, la herramienta de despliegue de `Cloudflare`. Producción se despliega a mano, y una guarda impide sobrescribir una base de datos que ya tiene contenido.",
 					"figure": "entrega",
 					"nodes": [
 						{
@@ -20017,7 +20017,7 @@
 							"fact": "h8-2"
 						},
 						{
-							"title": "26 pasos",
+							"title": "27 pasos",
 							"note": "sobre workerd",
 							"cloudflare": true,
 							"fact": "h8-2",
@@ -20048,7 +20048,7 @@
 						},
 						{
 							"key": "h8-2",
-							"text": "Cada cambio que puede llegar a una página pasa 26 pasos que pueden fallar. Un test deriva ese número del *workflow*.",
+							"text": "Cada cambio que puede llegar a una página pasa 27 pasos que pueden fallar. Un test deriva ese número del *workflow*.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						},
@@ -20096,7 +20096,7 @@
 					"map_note": "`GitHub Actions` · `wrangler`",
 					"summary": "`wrangler` → preview · production",
 					"lede": "How a change reaches production.",
-					"intro": "The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 26 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with `wrangler`, `Cloudflare`'s deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.",
+					"intro": "The code lives in a GitHub repository. Every change comes in as a reviewable proposal, a pull request, and goes through 27 steps of automatic checks (the continuous integration, or CI) against a local copy of the site. If they all pass, the preview deploys itself with `wrangler`, `Cloudflare`'s deployment tool. Production is deployed by hand, and a guard refuses to overwrite a database that already holds content.",
 					"figure": "entrega",
 					"nodes": [
 						{
@@ -20106,7 +20106,7 @@
 							"fact": "h8-2"
 						},
 						{
-							"title": "26 steps",
+							"title": "27 steps",
 							"note": "on workerd",
 							"cloudflare": true,
 							"fact": "h8-2",
@@ -20137,7 +20137,7 @@
 						},
 						{
 							"key": "h8-2",
-							"text": "Every change that can reach a page passes 26 steps that can fail. A test derives that number from the workflow.",
+							"text": "Every change that can reach a page passes 27 steps that can fail. A test derives that number from the workflow.",
 							"file": ".github/workflows/ci.yml",
 							"status": "ok"
 						},
@@ -20183,14 +20183,14 @@
 					"group": "taller",
 					"kicker": "transversal · en cada cambio",
 					"short": "Calidad",
-					"map_note": "26 pasos · Lighthouse · axe",
-					"summary": "26 pasos · Lighthouse · axe",
+					"map_note": "27 pasos · Lighthouse · axe",
+					"summary": "27 pasos · Lighthouse · axe",
 					"lede": "Qué se comprueba antes de publicar nada.",
 					"intro": "Las comprobaciones de accesibilidad, diseño, textos e idiomas plantan primero el defecto que buscan y solo dan verde si lo encuentran. Lighthouse, la herramienta de Google que puntúa rendimiento y accesibilidad, mide nueve páginas; el texto de 30 rutas está congelado, y cada apertura se prueba con los motores de Safari y de Chrome. Agentes de IA escriben la mayor parte del código, y el fundador fusiona cada cambio.",
 					"figure": "calidad",
 					"stats": [
 						{
-							"value": "26",
+							"value": "27",
 							"label": "pasos que pueden fallar",
 							"kind": "number"
 						},
@@ -20288,14 +20288,14 @@
 					"group": "taller",
 					"kicker": "across the layers · on every change",
 					"short": "Quality",
-					"map_note": "26 steps · Lighthouse · axe",
-					"summary": "26 steps · Lighthouse · axe",
+					"map_note": "27 steps · Lighthouse · axe",
+					"summary": "27 steps · Lighthouse · axe",
 					"lede": "What is checked before anything is published.",
 					"intro": "The accessibility, design, text and language checks first plant the defect they look for and pass only once they find it. Lighthouse, Google's tool that scores performance and accessibility, measures nine pages; the text of 30 routes is frozen; and every opening is tried in Safari's and Chrome's engines. AI agents write most of the code, and the founder merges every change.",
 					"figure": "calidad",
 					"stats": [
 						{
-							"value": "26",
+							"value": "27",
 							"label": "steps that can fail",
 							"kind": "number"
 						},

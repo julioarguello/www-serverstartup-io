@@ -96,19 +96,23 @@ Two local gotchas worth knowing before they cost you an hour:
 The architecture is UI-first, content-driven: templates carry layout and CSS,
 the CMS carries every word.
 
-- **Content ownership has two phases.** Pre-release (now): seeds are the
-  source of truth — any content change lands in `seed/seed.json`, so a clean
-  rebuild reproduces the whole site, and an edit made only in the admin UI
-  will not survive one. `seed/content/**.md` is an *input* to `seed.json`, not
-  an alternative to it: editing only the markdown changes nothing on the site.
-  Read `seed/content/README.md` before touching it (#500). Once live: the
-  production database owns the content and the admin UI
-  (`/_emdash/admin`) is the editing surface — that is what the CMS is
-  for. The seeds then remain the bootstrap corpus and the fixture for
-  local dev and preview; re-seeding production becomes a destructive,
-  opt-in operation (see the production deploy workflow). Templates,
-  schema and code keep flowing through PRs in both phases — only content
-  ownership changes.
+- **Content ownership has two phases.** Before launch, `seed/seed.json` was
+  the source of truth: a clean rebuild reproduced the whole site.
+  `seed/content/**.md` is an *input* to `seed.json`, not an alternative to it:
+  editing only the markdown changes nothing on the site. Read
+  `seed/content/README.md` before touching it (#500). The site went live on
+  2026-10-25, and from then on the production database holds the content.
+  EmDash never re-applies a seed to a live database. Its rule is that
+  "existing data is never overwritten". Re-seeding production is a
+  destructive, opt-in operation in the production deploy workflow.
+- **A text change in production is a content patch** (#662): a dated file in
+  `seed/patches/`. It ships in the same PR as the same change to `seed.json`,
+  so the preview, local dev and a fresh install all match production. The
+  convention, the commands and how the patches reach production are in
+  [`seed/patches/README.md`](seed/patches/README.md). Do not edit text in the
+  production admin: the next patch on that entry refuses to write rather than
+  overwrite the edit, and the edit never reaches the repository. Templates,
+  schema and code keep flowing through PRs as before.
 - **No text in templates.** UI strings come from CMS widgets (`t()` /
   `labels.get()`), contact data from site settings (`getSiteSettings()`),
   body copy from PortableText. If you are typing a Spanish or English word

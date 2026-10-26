@@ -153,6 +153,12 @@ jobs:
         if: needs.scope.outputs.site == 'true'
         run: npx emdash seed seed/seed.json --validate
 
+      - name: Content patches (valid, and seed.json holds every "after")
+        if: needs.scope.outputs.site == 'true'
+        # #662: a production text change is a patch in seed/patches/ plus the
+        # same change in seed.json, so a fresh install matches production.
+        run: node scripts/content-patch.mjs check
+
       - name: CMS text integrity (labels resolve, no hardcoded copy)
         if: needs.scope.outputs.site == 'true'
         run: python3 scripts/ci-check-cms-text.py
@@ -672,7 +678,7 @@ jobs:
             # main has been through all of them. That is not caution, it is
             # the condition that keeps a sentence on the public site true —
             # do not "simplify" it by gating main too.
-            echo "## Quality gates — 26 steps that can fail"
+            echo "## Quality gates — 27 steps that can fail"
             echo ""
             echo "\`$RESULTS\`"
             if [ "$SITE" != "true" ]; then
@@ -693,6 +699,7 @@ jobs:
             echo "| astro check | 0 errors, 0 warnings |"
             echo "| seed schema | seed.json validates |"
             echo "| cms-text | labels resolve ES+EN, 0 hardcoded copy |"
+            echo "| content patches | every patch in seed/patches/ is valid and seed.json holds its \"after\" (#662) |"
             echo "| copy voice | per page: no spaced ES em dash, ≤1 colon headline, ≤1 ES «X, no Y»; no listed AI word, no ¡ |"
             echo "| locale parity | a field filled in one locale is filled in the other |"
             echo "| cited files | every file and repository link the seed cites is tracked |"

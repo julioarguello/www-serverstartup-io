@@ -110,8 +110,9 @@ the CMS carries every word.
   so the preview, local dev and a fresh install all match production. The
   convention, the commands and how the patches reach production are in
   [`seed/patches/README.md`](seed/patches/README.md). Do not edit text in the
-  production admin: the next patch on that entry refuses to write rather than
-  overwrite the edit, and the edit never reaches the repository. Templates,
+  production admin. A patch on that same value refuses to write rather than
+  overwrite the edit. An edit to any other field goes unnoticed, never reaches
+  the repository, and is lost on the next rebuild from the seed. Templates,
   schema and code keep flowing through PRs as before.
 - **No text in templates.** UI strings come from CMS widgets (`t()` /
   `labels.get()`), contact data from site settings (`getSiteSettings()`),

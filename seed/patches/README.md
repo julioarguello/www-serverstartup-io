@@ -60,6 +60,8 @@ are applied. A file looks like this:
     matches. If the selector matches no item, or more than one, the patch fails.
 - **`before`** is the value the patch expects to find. **`after`** is the value it writes. Both can be a
   string, a number or any JSON value.
+- One change per value in a patch. A patch, or two patches, cannot change a value and also its
+  parent, such as `facts` and `facts[0].text`; `check` rejects it.
 - A patch is only for content that already exists. Collections and fields come from the seed's schema;
   entries come from the seed itself.
 
@@ -93,14 +95,27 @@ flowchart LR
 - **The production deploy** runs `content-patch.mjs apply` after the worker is deployed. It reads each
   value first and only then decides what to do:
 
+  Patches that change the same value form a **chain** in date order. If one patch changes A to B and a
+  later one changes B to C, the value's **target** is C, and `seed.json` must hold C.
+
   | The site holds | What happens |
   | :--- | :--- |
-  | the `after` | the change is already applied, so it is skipped. No ledger is kept: the content says what was applied |
-  | the `before` | it is written with the entry's `_rev` (optimistic concurrency), published, then read back |
-  | anything else | someone edited it outside the repository. The run **writes nothing** and fails, naming the value |
+  | the target | already applied, so it is skipped. No ledger is kept: the content says what was applied |
+  | an earlier state of the chain (A or B above) | it is written to the target with the entry's `_rev` (optimistic concurrency), published, then read back |
+  | anything else | someone edited **that value** outside the repository. The run **writes nothing** and fails, naming it |
 
-  It also refuses when an entry has an unpublished draft, because publishing would ship that draft
-  too. After writing, it checks that every field the patch did not touch reads back unchanged.
+  Before writing anything, the run reads every entry it will touch. Any conflict, or an entry with an
+  unpublished draft, means it writes nothing at all. After writing an entry, it checks three things:
+  the entry was published, the patched fields read back as written, and every other field is unchanged.
+
+  The guarantee is per value, not per entry. An admin edit to a field that no patch touches goes
+  unnoticed, and it is lost the next time someone rebuilds from the seed. Hence the rule in
+  `CONTRIBUTING.md`: do not edit text in the production admin.
+
+  Writes across several entries are not atomic. If a write fails part-way (the network, or a `409` when
+  someone saved the entry between the read and the write), the run stops with exit 3. It lists what it
+  already wrote and published, and what it did not. A second run skips what was written and retries
+  the rest.
 
 ## The token
 
@@ -133,6 +148,7 @@ Measured 2026-10-26 against a local dev server seeded from main's `seed.json`:
   values changed.
 - A second run wrote nothing and reported every change as already applied.
 - After a value was edited through the API, the run refused and wrote nothing.
+- With an unpublished draft on an entry, the run refused and wrote nothing.
 - The page rendered the new text and showed 50 facts, up from 46.
 
 Not measured locally, because a dev server cannot purge the edge: whether publishing through the API

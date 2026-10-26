@@ -1,0 +1,179 @@
+{
+	"date": "2026-10-26",
+	"issue": 309,
+	"summary": "Cloudflare Web Analytics goes live (#309): the one script loaded from outside the site. Every published claim of zero third-party requests now says Cloudflare is the one, and the privacy page says what is counted and what is not.",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "computo",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h3-3"
+				},
+				"text"
+			],
+			"before": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP no admite ningún *script* de terceros.",
+			"after": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP admite un único *script* de fuera: el contador de visitas de `Cloudflare`."
+		},
+		{
+			"collection": "layers",
+			"slug": "compute",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h3-3"
+				},
+				"text"
+			],
+			"before": "One middleware stamps 7 security headers on every page the Worker renders. The CSP admits no third-party script.",
+			"after": "One middleware stamps 7 security headers on every page the Worker renders. The CSP admits one outside script and no other: the visit counter from `Cloudflare`."
+		},
+		{
+			"collection": "layers",
+			"slug": "presentacion",
+			"locale": "es",
+			"path": [
+				"summary"
+			],
+			"before": "`Astro` · una hoja · 0 terceros",
+			"after": "`Astro` · una hoja · solo `Cloudflare`"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentation",
+			"locale": "en",
+			"path": [
+				"summary"
+			],
+			"before": "`Astro` · one stylesheet · 0 third parties",
+			"after": "`Astro` · one stylesheet · `Cloudflare` only"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentacion",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "La interfaz está hecha con `Astro` y una sola hoja de estilos. Fuentes, *scripts* e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador.",
+			"after": "La interfaz está hecha con `Astro` y una sola hoja de estilos. Fuentes, *scripts* e imágenes salen del propio sitio; lo único que se pide fuera es el contador de visitas de `Cloudflare`. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador."
+		},
+		{
+			"collection": "layers",
+			"slug": "presentation",
+			"locale": "en",
+			"path": [
+				"intro"
+			],
+			"before": "The interface is built with `Astro` and a single stylesheet. Fonts, scripts and images come from the site itself, asking nothing of third parties. The openings of each section pair restored photographs with a drawing animated in the browser.",
+			"after": "The interface is built with `Astro` and a single stylesheet. Fonts, scripts and images come from the site itself; the one thing fetched from outside is the visit counter from `Cloudflare`. The openings of each section pair restored photographs with a drawing animated in the browser."
+		},
+		{
+			"collection": "layers",
+			"slug": "presentacion",
+			"locale": "es",
+			"path": [
+				"stats",
+				0,
+				"value"
+			],
+			"before": "0",
+			"after": "1"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentation",
+			"locale": "en",
+			"path": [
+				"stats",
+				0,
+				"value"
+			],
+			"before": "0",
+			"after": "1"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentacion",
+			"locale": "es",
+			"path": [
+				"stats",
+				0,
+				"label"
+			],
+			"before": "peticiones a terceros al cargar una página",
+			"after": "petición a terceros al cargar una página: la de Cloudflare"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentation",
+			"locale": "en",
+			"path": [
+				"stats",
+				0,
+				"label"
+			],
+			"before": "third-party requests when a page loads",
+			"after": "third-party request when a page loads: Cloudflare"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentacion",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h7-2"
+				},
+				"text"
+			],
+			"before": "Cargar una página no hace ninguna petición a terceros. Fuentes, *scripts* e imágenes son del propio sitio.",
+			"after": "Cargar una página hace una sola petición fuera del sitio: el *script* de [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/), de `Cloudflare`, que cuenta visitas sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de *scripts* son del propio sitio."
+		},
+		{
+			"collection": "layers",
+			"slug": "presentation",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h7-2"
+				},
+				"text"
+			],
+			"before": "Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.",
+			"after": "Loading a page makes one request off the site: the [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) script from `Cloudflare`, which counts visits with no cookies and identifies no one. Fonts, images and every other script are the site's own."
+		},
+		{
+			"collection": "pages",
+			"slug": "politica-de-privacidad",
+			"locale": "es",
+			"path": [
+				"content",
+				20,
+				"children",
+				0,
+				"text"
+			],
+			"before": "Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Tampoco empleamos ninguna herramienta de analítica, ni carga la página recursos de terceros: todo lo que descarga tu navegador al visitarla procede de este mismo dominio.",
+			"after": "Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Para contar las visitas usamos Web Analytics, de Cloudflare, nuestro proveedor de alojamiento: no usa cookies, no guarda nada en tu navegador y no te identifica. Registra la página que ves, la página desde la que llegas, lo que tarda en cargar, y tu país, navegador y tipo de dispositivo; tu dirección IP no se guarda. Es lo único que tu navegador descarga desde fuera de este dominio."
+		},
+		{
+			"collection": "pages",
+			"slug": "privacy-policy",
+			"locale": "en",
+			"path": [
+				"content",
+				20,
+				"children",
+				0,
+				"text"
+			],
+			"before": "This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. We run no analytics either, and the page loads nothing from third parties: everything your browser downloads when you visit comes from this domain.",
+			"after": "This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. To count visits we use Web Analytics from Cloudflare, our hosting provider: it uses no cookies, stores nothing in your browser and does not identify you. It records the page you view, the page you came from, how long it takes to load, and your country, browser and type of device; your IP address is not stored. It is the only thing your browser downloads from outside this domain."
+		}
+	]
+}

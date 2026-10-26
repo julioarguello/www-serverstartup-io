@@ -23,7 +23,7 @@ We keep correspondence for as long as it takes to deal with it and, where invoic
 Your rights
 You may exercise your rights of access, rectification, erasure, restriction of processing, portability and objection by writing to the address above. If you believe your request has not been handled properly, you may lodge a complaint with the Spanish Data Protection Agency (aepd.es).
 Cookies
-This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. We run no analytics either, and the page loads nothing from third parties: everything your browser downloads when you visit comes from this domain.
+This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. To count visits we use Web Analytics from Cloudflare, our hosting provider: it uses no cookies, stores nothing in your browser and does not identify you. It records the page you view, the page you came from, how long it takes to load, and your country, browser and type of device; your IP address is not stored. It is the only thing your browser downloads from outside this domain.
 Changes to this policy
 If the way we process data changes, we will update this page. The published version is always the one in force.
 references

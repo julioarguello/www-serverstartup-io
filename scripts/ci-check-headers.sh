@@ -67,9 +67,10 @@ done
 # ── no public route sets a cookie (#471) ─────────────────────────────────────
 # The privacy page tells the visitor, in both locales, that this site "no
 # instala cookies que requieran tu consentimiento". The other half of that
-# same paragraph — that the page loads nothing from a third party — is already
-# enforced by something real: the `default-src 'self'` asserted above, which
-# the browser itself imposes. The cookie half was measured by hand once, when
+# same paragraph — that the only thing loaded from outside this domain is the
+# Cloudflare Web Analytics beacon (#309) — is enforced by the CSP the browser
+# itself imposes, and tests/unit/csp-outside-hosts.test.ts pins that CSP to
+# that one host. The cookie half was measured by hand once, when
 # #471 was filed, and after that nothing watched it.
 #
 # It is the half likelier to become false without anyone deciding to make it

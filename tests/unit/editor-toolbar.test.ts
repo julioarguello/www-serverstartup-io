@@ -2,7 +2,7 @@
  * EmDash's visual-editing toolbar stays off on public pages (#655).
  *
  * For a signed-in editor EmDash injects it as an inline <script>. The public
- * CSP is `script-src 'self'` with no hash and no nonce (src/middleware.ts), so
+ * CSP admits no inline script — no hash, no nonce (src/middleware.ts) — so
  * the browser drew the toolbar and refused its script: controls that did
  * nothing, seen by the founder on 2026-10-24. Its default is "server" — on —
  * so removing the line brings it back and nothing else would notice: the
@@ -37,7 +37,9 @@ describe("EmDash's editor toolbar", () => {
 	it("is off for the reason recorded: the public CSP refuses inline scripts", () => {
 		// If the CSP ever gains a nonce or 'unsafe-inline', this premise is gone and the
 		// decision in #655 is worth revisiting rather than inheriting.
+		// Hosts may be added (the Web Analytics beacon, #309); an inline allowance may not.
 		const scriptSrc = middleware.match(/"script-src ([^"]+)"/)?.[1];
-		expect(scriptSrc).toBe("'self'");
+		expect(scriptSrc).toMatch(/^'self'/);
+		expect(scriptSrc).not.toMatch(/'unsafe-inline'|'nonce-|'sha(256|384|512)-|'strict-dynamic'/);
 	});
 });

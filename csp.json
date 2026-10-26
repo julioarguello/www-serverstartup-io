@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "label": "CSP",
+  "message": "default-src 'self'",
+  "color": "brightgreen"
+}

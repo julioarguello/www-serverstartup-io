@@ -222,8 +222,16 @@ closed for everyone, the owner included. That is why the secret comes first.
    claim URL:
 
    ```bash
-   echo "https://www.serverstartup.dev/_emdash/admin/setup?setup_token=$TOKEN"
+   echo "https://www.serverstartup.io/_emdash/admin/setup?setup_token=$TOKEN"
    ```
+
+   **Claim it on `www.serverstartup.io`, the host the admin will be used from.**
+   A passkey works only on the domain it was created on. Since #664 the
+   production build fixes that domain (`siteUrl` in `astro.config.mjs`, from
+   `CLOUDFLARE_ENV`), so a claim made on any other host leaves a passkey the
+   browser will not offer there. Measured 2026-10-26: the administrator was
+   claimed on `www.serverstartup.dev` before that fix. Its passkey was useless
+   on `.io`, and the email login is not configured.
 
    Paste it into the address bar of the browser that will hold the passkey.
    The worker sets a one-hour cookie and drops the token from the URL. Finish

@@ -935,21 +935,36 @@ All schemas use CMS data — no hardcoded strings. Validate with [Google Rich Re
 
 ## 6. Analytics
 
-**None is deployed** (verified 2026-10-21 against `main`: no `zaraz`,
-`cloudflareinsights` or `beacon.min.js` in `src/`, `public/` or `worker/`).
-Until 2026-10-21 this section described Zaraz as configured; it never was (#309).
+**Cloudflare Web Analytics, injected by the zone** (#309). The zone adds the
+beacon to every HTML response from the proxied hostname; nothing in `src/`
+loads it. It is the one script the site fetches from outside its own origin.
 
-- **What the site promises today**: the published privacy text says the site runs
-  no analytics and sets no cookie requiring consent (`seed/seed.json`, privacy page,
-  ES and EN). That sentence is the contract — switching any tool on means
-  rewriting it in the same change.
-- **The intended path** (#309, behind #162): Cloudflare Web Analytics through
-  **Zaraz**, enabled in the dashboard on the proxied zone. Zaraz injects
-  `/cdn-cgi/zaraz/i.js` from the same origin, so `script-src 'self'`
-  (`src/middleware.ts`) should cover it — verify on the deployed page, not by
-  reasoning.
-- **What would change the legal footing**: any Zaraz tool that sets cookies or
-  profiles (GA4, Meta Pixel). That is a compliance decision, not a switch.
+- **Why Web Analytics and not Zaraz.** Zaraz is a tag manager for third-party
+  tools (GA4, Meta Pixel and the like), and its own docs say every tool it
+  carries uses cookies and needs consent. Web Analytics is a separate product:
+  its beacon stores nothing in the browser — no cookies, no `localStorage` —
+  and Cloudflare discards the IP at the edge. That keeps it out of
+  consent-banner territory. Until #309 this section said "Web Analytics
+  through Zaraz"; Cloudflare's Web Analytics docs do not mention Zaraz at all.
+- **The CSP admits it by host**: `script-src 'self' https://static.cloudflareinsights.com`
+  (`src/middleware.ts`). The host, not the file: the injected URL carries a
+  version segment after `beacon.min.js`, which a file-exact source refuses. The
+  beacon posts to `/cdn-cgi/rum` on this origin, so `connect-src 'self'` covers
+  it. `tests/unit/csp-outside-hosts.test.ts` pins the policy to that one
+  outside host.
+- **What the site promises, and where**: the privacy page (ES and EN) says what
+  is recorded and that it is the only download from outside the domain; the
+  Presentation and Compute layers of /deconstruyendo say "1 third-party request"
+  and "the CSP admits one outside script". A second outside host makes all of
+  them false — changing the CSP means a content patch in the same change.
+- **Setting it up** (dashboard, per hostname): Web Analytics → Add a site → the
+  hostname → automatic setup. Keep the mode **Enable**, never *Enable,
+  excluding visitor data in the EU*: for a Spanish site that excludes most
+  visitors. A `Cache-Control: no-transform` on our responses would stop the
+  injection; we send none.
+- **What would change the legal footing**: any tool that sets cookies or
+  profiles (GA4, Meta Pixel, anything carried by Zaraz). That is a compliance
+  decision, not a switch.
 
 ## 7. Media & Video Strategy
 

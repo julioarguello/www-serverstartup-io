@@ -135,7 +135,7 @@ The team that makes Astro has worked at Cloudflare since January 2026. Astro rem
 no file: per the announcement
 announcement
 3.3
-One middleware stamps 7 security headers on every page the Worker renders. The CSP admits no third-party script.
+One middleware stamps 7 security headers on every page the Worker renders. The CSP admits one outside script and no other: the visit counter from Cloudflare.
 src/middleware.ts
 3.4
 The Worker knows the visitor's city and which Cloudflare data centre answered (request.cf). The edge-security opening shows them.
@@ -183,11 +183,11 @@ INSIDE THE WORKER
 inside the Worker
 Presentation
 How what you see is drawn.
-The interface is built with Astro and a single stylesheet. Fonts, scripts and images come from the site itself, asking nothing of third parties. The openings of each section pair restored photographs with a drawing animated in the browser.
+The interface is built with Astro and a single stylesheet. Fonts, scripts and images come from the site itself; the one thing fetched from outside is the visit counter from Cloudflare. The openings of each section pair restored photographs with a drawing animated in the browser.
 Cabo Peñas · Einaz80 · CC BY-SA 4.0
 Guggenheim · Sergio S.C · CC BY-SA 2.0
-0
-third-party requests when a page loads
+1
+third-party request when a page loads: Cloudflare
 one stylesheet for everything
 Detail and proof
 6 rows
@@ -195,7 +195,7 @@ Detail and proof
 One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.
 src/styles/theme.css
 5.2
-Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.
+Loading a page makes one request off the site: the Web Analytics script from Cloudflare, which counts visits with no cookies and identifies no one. Fonts, images and every other script are the site's own.
 src/middleware.ts
 5.3
 The fonts live in the repository, so building the site does not depend on Google Fonts. Cloudflare Fonts does not apply: it only rewrites links to Google Fonts, and there are none here.

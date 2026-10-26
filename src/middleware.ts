@@ -24,16 +24,21 @@ import { isGatedPath, setupGate } from "./utils/setup-gate";
  * - style-src needs 'unsafe-inline': Astro emits component styles as inline
  *   <style> tags (framework behavior, documented trade-off — costs a notch on
  *   Observatory, hashes are the future upgrade path).
- * - script-src stays 'self': all scripts are bundled external modules; inline
- *   JSON-LD <script type="application/ld+json"> is a non-executable data block
- *   and is not subject to script-src.
+ * - script-src is 'self' plus one host: all our scripts are bundled external
+ *   modules; inline JSON-LD <script type="application/ld+json"> is a
+ *   non-executable data block and is not subject to script-src. The one host is
+ *   static.cloudflareinsights.com, the Cloudflare Web Analytics beacon the zone
+ *   injects (#309). It is the host, not the file: the injected URL carries a
+ *   version segment after beacon.min.js, which a file-exact source refuses.
+ *   The beacon reports to /cdn-cgi/rum on this origin, so connect-src 'self'
+ *   already covers it. Still no 'unsafe-inline', no nonce, no hash.
  * - Static assets in public/ are served by the asset layer (no middleware);
  *   /demo/ keeps its own external fonts and stays outside this policy.
  */
 const SECURITY_HEADERS: Record<string, string> = {
 	"Content-Security-Policy": [
 		"default-src 'self'",
-		"script-src 'self'",
+		"script-src 'self' https://static.cloudflareinsights.com",
 		"style-src 'self' 'unsafe-inline'",
 		"img-src 'self' data:",
 		"font-src 'self'",

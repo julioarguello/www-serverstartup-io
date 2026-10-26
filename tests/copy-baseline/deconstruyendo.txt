@@ -135,7 +135,7 @@ El equipo que hace Astro trabaja en Cloudflare desde enero de 2026. Astro sigue 
 sin fichero: lo cuenta el anuncio
 anuncio
 3.3
-Un middleware pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP no admite ningún script de terceros.
+Un middleware pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP admite un único script de fuera: el contador de visitas de Cloudflare.
 src/middleware.ts
 3.4
 El Worker sabe la ciudad del visitante y qué centro de datos de Cloudflare respondió (request.cf). La apertura de seguridad en el borde los muestra.
@@ -183,11 +183,11 @@ DENTRO DEL WORKER
 dentro del Worker
 Presentación
 Cómo se dibuja lo que ves.
-La interfaz está hecha con Astro y una sola hoja de estilos. Fuentes, scripts e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador.
+La interfaz está hecha con Astro y una sola hoja de estilos. Fuentes, scripts e imágenes salen del propio sitio; lo único que se pide fuera es el contador de visitas de Cloudflare. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador.
 Cabo Peñas · Einaz80 · CC BY-SA 4.0
 Guggenheim · Sergio S.C · CC BY-SA 2.0
-0
-peticiones a terceros al cargar una página
+1
+petición a terceros al cargar una página: la de Cloudflare
 una hoja de estilos para todo
 Detalle y pruebas
 6 filas
@@ -195,7 +195,7 @@ Detalle y pruebas
 Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
 src/styles/theme.css
 5.2
-Cargar una página no hace ninguna petición a terceros. Fuentes, scripts e imágenes son del propio sitio.
+Cargar una página hace una sola petición fuera del sitio: el script de Web Analytics, de Cloudflare, que cuenta visitas sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de scripts son del propio sitio.
 src/middleware.ts
 5.3
 Las fuentes están en el repositorio, así que construir la web no depende de Google Fonts. Cloudflare Fonts no aplica: solo reescribe los enlaces a Google Fonts, y aquí no hay ninguno.

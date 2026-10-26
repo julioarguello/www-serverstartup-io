@@ -15894,7 +15894,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Tampoco empleamos ninguna herramienta de analítica, ni carga la página recursos de terceros: todo lo que descarga tu navegador al visitarla procede de este mismo dominio."
+									"text": "Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Para contar las visitas usamos Web Analytics, de Cloudflare, nuestro proveedor de alojamiento: no usa cookies, no guarda nada en tu navegador y no te identifica. Registra la página que ves, la página desde la que llegas, lo que tarda en cargar, y tu país, navegador y tipo de dispositivo; tu dirección IP no se guarda. Es lo único que tu navegador descarga desde fuera de este dominio."
 								}
 							]
 						},
@@ -16868,7 +16868,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. We run no analytics either, and the page loads nothing from third parties: everything your browser downloads when you visit comes from this domain."
+									"text": "This site uses no tracking or advertising cookies, and sets no cookie that would require your consent. To count visits we use Web Analytics from Cloudflare, our hosting provider: it uses no cookies, stores nothing in your browser and does not identify you. It records the page you view, the page you came from, how long it takes to load, and your country, browser and type of device; your IP address is not stored. It is the only thing your browser downloads from outside this domain."
 								}
 							]
 						},
@@ -19122,7 +19122,7 @@
 						},
 						{
 							"key": "h3-3",
-							"text": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP no admite ningún *script* de terceros.",
+							"text": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP admite un único *script* de fuera: el contador de visitas de `Cloudflare`.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19214,7 +19214,7 @@
 						},
 						{
 							"key": "h3-3",
-							"text": "One middleware stamps 7 security headers on every page the Worker renders. The CSP admits no third-party script.",
+							"text": "One middleware stamps 7 security headers on every page the Worker renders. The CSP admits one outside script and no other: the visit counter from `Cloudflare`.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19677,14 +19677,14 @@
 					"kicker": "dentro del `Worker`",
 					"short": "Presentación",
 					"map_note": "`Astro` · en el `Worker`",
-					"summary": "`Astro` · una hoja · 0 terceros",
+					"summary": "`Astro` · una hoja · solo `Cloudflare`",
 					"lede": "Cómo se dibuja lo que ves.",
-					"intro": "La interfaz está hecha con `Astro` y una sola hoja de estilos. Fuentes, *scripts* e imágenes salen del propio sitio, sin pedir nada a terceros. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador.",
+					"intro": "La interfaz está hecha con `Astro` y una sola hoja de estilos. Fuentes, *scripts* e imágenes salen del propio sitio; lo único que se pide fuera es el contador de visitas de `Cloudflare`. Las aperturas de cada sección combinan fotografías restauradas con un dibujo que se anima en el navegador.",
 					"figure": "presentacion",
 					"stats": [
 						{
-							"value": "0",
-							"label": "peticiones a terceros al cargar una página",
+							"value": "1",
+							"label": "petición a terceros al cargar una página: la de Cloudflare",
 							"kind": "number"
 						},
 						{
@@ -19722,7 +19722,7 @@
 						},
 						{
 							"key": "h7-2",
-							"text": "Cargar una página no hace ninguna petición a terceros. Fuentes, *scripts* e imágenes son del propio sitio.",
+							"text": "Cargar una página hace una sola petición fuera del sitio: el *script* de [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/), de `Cloudflare`, que cuenta visitas sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de *scripts* son del propio sitio.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19767,14 +19767,14 @@
 					"kicker": "inside the `Worker`",
 					"short": "Presentation",
 					"map_note": "`Astro` · inside the `Worker`",
-					"summary": "`Astro` · one stylesheet · 0 third parties",
+					"summary": "`Astro` · one stylesheet · `Cloudflare` only",
 					"lede": "How what you see is drawn.",
-					"intro": "The interface is built with `Astro` and a single stylesheet. Fonts, scripts and images come from the site itself, asking nothing of third parties. The openings of each section pair restored photographs with a drawing animated in the browser.",
+					"intro": "The interface is built with `Astro` and a single stylesheet. Fonts, scripts and images come from the site itself; the one thing fetched from outside is the visit counter from `Cloudflare`. The openings of each section pair restored photographs with a drawing animated in the browser.",
 					"figure": "presentacion",
 					"stats": [
 						{
-							"value": "0",
-							"label": "third-party requests when a page loads",
+							"value": "1",
+							"label": "third-party request when a page loads: Cloudflare",
 							"kind": "number"
 						},
 						{
@@ -19812,7 +19812,7 @@
 						},
 						{
 							"key": "h7-2",
-							"text": "Loading a page makes no third-party request. Fonts, scripts and images are all the site's own.",
+							"text": "Loading a page makes one request off the site: the [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) script from `Cloudflare`, which counts visits with no cookies and identifies no one. Fonts, images and every other script are the site's own.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},

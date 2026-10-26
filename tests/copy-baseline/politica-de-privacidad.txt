@@ -23,7 +23,7 @@ Conservamos la correspondencia mientras sea necesaria para atenderla y, cuando m
 Tus derechos
 Puedes ejercer los derechos de acceso, rectificación, supresión, limitación del tratamiento, portabilidad y oposición escribiéndonos a la dirección indicada. Si consideras que no hemos atendido tu solicitud correctamente, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).
 Cookies
-Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Tampoco empleamos ninguna herramienta de analítica, ni carga la página recursos de terceros: todo lo que descarga tu navegador al visitarla procede de este mismo dominio.
+Esta web no utiliza cookies de seguimiento ni de publicidad, y no instala cookies que requieran tu consentimiento. Para contar las visitas usamos Web Analytics, de Cloudflare, nuestro proveedor de alojamiento: no usa cookies, no guarda nada en tu navegador y no te identifica. Registra la página que ves, la página desde la que llegas, lo que tarda en cargar, y tu país, navegador y tipo de dispositivo; tu dirección IP no se guarda. Es lo único que tu navegador descarga desde fuera de este dominio.
 Cambios en esta política
 Si cambia la forma en que tratamos los datos, actualizaremos esta página. La versión publicada es siempre la vigente.
 referencias

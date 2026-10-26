@@ -19684,7 +19684,7 @@
 					"stats": [
 						{
 							"value": "1",
-							"label": "petición a terceros al cargar una página: la de Cloudflare",
+							"label": "proveedor de fuera al que llama el navegador: Cloudflare",
 							"kind": "number"
 						},
 						{
@@ -19722,7 +19722,7 @@
 						},
 						{
 							"key": "h7-2",
-							"text": "Cargar una página hace una sola petición fuera del sitio: el *script* de [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/), de `Cloudflare`, que cuenta visitas sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de *scripts* son del propio sitio.",
+							"text": "Fuera del sitio, el navegador solo llama a `Cloudflare`: descarga el *script* de [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) y le envía sus mediciones, sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de *scripts* son del propio sitio.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19774,7 +19774,7 @@
 					"stats": [
 						{
 							"value": "1",
-							"label": "third-party request when a page loads: Cloudflare",
+							"label": "outside provider the browser calls: Cloudflare",
 							"kind": "number"
 						},
 						{
@@ -19812,7 +19812,7 @@
 						},
 						{
 							"key": "h7-2",
-							"text": "Loading a page makes one request off the site: the [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) script from `Cloudflare`, which counts visits with no cookies and identifies no one. Fonts, images and every other script are the site's own.",
+							"text": "Outside the site, the browser calls `Cloudflare` and nobody else: it downloads the [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) script and sends it its measurements, with no cookies and identifying no one. Fonts, images and every other script are the site's own.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},

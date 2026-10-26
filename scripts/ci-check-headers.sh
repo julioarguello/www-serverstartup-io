@@ -70,7 +70,7 @@ done
 # same paragraph — that the only thing loaded from outside this domain is the
 # Cloudflare Web Analytics beacon (#309) — is enforced by the CSP the browser
 # itself imposes, and tests/unit/csp-outside-hosts.test.ts pins that CSP to
-# that one host. The cookie half was measured by hand once, when
+# Cloudflare's two Web Analytics hosts. The cookie half was measured by hand once, when
 # #471 was filed, and after that nothing watched it.
 #
 # It is the half likelier to become false without anyone deciding to make it

@@ -187,7 +187,7 @@ La interfaz está hecha con Astro y una sola hoja de estilos. Fuentes, scripts e
 Cabo Peñas · Einaz80 · CC BY-SA 4.0
 Guggenheim · Sergio S.C · CC BY-SA 2.0
 1
-petición a terceros al cargar una página: la de Cloudflare
+proveedor de fuera al que llama el navegador: Cloudflare
 una hoja de estilos para todo
 Detalle y pruebas
 6 filas
@@ -195,7 +195,7 @@ Detalle y pruebas
 Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
 src/styles/theme.css
 5.2
-Cargar una página hace una sola petición fuera del sitio: el script de Web Analytics, de Cloudflare, que cuenta visitas sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de scripts son del propio sitio.
+Fuera del sitio, el navegador solo llama a Cloudflare: descarga el script de Web Analytics y le envía sus mediciones, sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de scripts son del propio sitio.
 src/middleware.ts
 5.3
 Las fuentes están en el repositorio, así que construir la web no depende de Google Fonts. Cloudflare Fonts no aplica: solo reescribe los enlaces a Google Fonts, y aquí no hay ninguno.

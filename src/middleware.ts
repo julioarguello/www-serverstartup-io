@@ -27,11 +27,10 @@ import { isGatedPath, setupGate } from "./utils/setup-gate";
  * - script-src is 'self' plus one host: all our scripts are bundled external
  *   modules; inline JSON-LD <script type="application/ld+json"> is a
  *   non-executable data block and is not subject to script-src. The one host is
- *   static.cloudflareinsights.com, the Cloudflare Web Analytics beacon the zone
- *   injects (#309). It is the host, not the file: the injected URL carries a
- *   version segment after beacon.min.js, which a file-exact source refuses.
- *   The beacon reports to /cdn-cgi/rum on this origin, so connect-src 'self'
- *   already covers it. Still no 'unsafe-inline', no nonce, no hash.
+ *   static.cloudflareinsights.com, the Cloudflare Web Analytics beacon (#309).
+ *   It is installed by hand (src/utils/web-analytics.ts), so it reports to
+ *   cloudflareinsights.com, and connect-src names that host too. Still no
+ *   'unsafe-inline', no nonce, no hash.
  * - Static assets in public/ are served by the asset layer (no middleware);
  *   /demo/ keeps its own external fonts and stays outside this policy.
  */
@@ -42,7 +41,7 @@ const SECURITY_HEADERS: Record<string, string> = {
 		"style-src 'self' 'unsafe-inline'",
 		"img-src 'self' data:",
 		"font-src 'self'",
-		"connect-src 'self'",
+		"connect-src 'self' https://cloudflareinsights.com",
 		"object-src 'none'",
 		"base-uri 'self'",
 		"form-action 'self'",

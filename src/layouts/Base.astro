@@ -16,6 +16,7 @@ import { getUiLabels } from "../utils/ui-labels";
 import { routeAlternatePath } from "../utils/alternate";
 import { sortByFace } from "../utils/nav";
 import { sortByVoyage } from "../utils/hero-art";
+import { BEACON_SRC, beaconConfig } from "../utils/web-analytics";
 import type { SiteSettings } from "../types";
 
 import SiteHeader from "../components/SiteHeader.astro";
@@ -245,6 +246,8 @@ const partnerUrl = (partnerEntries ?? []).find((p) => Boolean(p.data.featured))?
 // The prop wins; the prefix-swap default is only correct for routes whose
 // path is identical in both locales (#291).
 const currentPath = Astro.url.pathname;
+// #309: Web Analytics beacon, per host; null on any host not measured.
+const beacon = beaconConfig(Astro.url.hostname);
 const altLocale = locale === "es" ? "en" : "es";
 const altPath =
 	altPathProp !== undefined ? altPathProp : routeAlternatePath(currentPath, locale);
@@ -321,6 +324,9 @@ const resolvedOgType = ogType || "website";
 	    the posts pages pass it — so when they 404 on an empty collection, the
 	    advertisement goes with them and there is no second switch to remember. */}
 	{feed && <link rel="alternate" type="application/rss+xml" title={rssTitle} href={rssPath} />}
+	{/* #309. is:inline keeps Astro from bundling an external URL; the tag stays
+	    a plain module script with a src, which the CSP admits by host. */}
+	{beacon && <script is:inline type="module" src={BEACON_SRC} data-cf-beacon={beacon}></script>}
 </head>
 <body>
 

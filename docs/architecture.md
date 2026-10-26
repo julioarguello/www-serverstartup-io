@@ -935,9 +935,19 @@ All schemas use CMS data — no hardcoded strings. Validate with [Google Rich Re
 
 ## 6. Analytics
 
-**Cloudflare Web Analytics, injected by the zone** (#309). The zone adds the
-beacon to every HTML response from the proxied hostname; nothing in `src/`
-loads it. It is the one script the site fetches from outside its own origin.
+**Cloudflare Web Analytics, installed by hand** (#309). `Base.astro` emits
+the beacon tag with a token chosen by hostname (`src/utils/web-analytics.ts`);
+a host without a token — localhost, the CI stack — gets no tag. It is the one
+script the site fetches from outside its own origin.
+
+- **Why by hand.** The zone's automatic setup never reached these pages:
+  `serverstartup.dev` sat in Automatic mode for three months with no beacon in
+  any response, and preview showed none after the CSP admitted it (2026-10-26,
+  curl and a real browser). The pages come from a Worker on a Custom Domain.
+- **One token per host**, because one production build answers on
+  `www.serverstartup.io` and on the `www.serverstartup.dev` rehearsal, and each
+  counts in its own Web Analytics site. In the dashboard every site is in mode
+  *Enable with JS Snippet installation*, so the zone never injects a second tag.
 
 - **Why Web Analytics and not Zaraz.** Zaraz is a tag manager for third-party
   tools (GA4, Meta Pixel and the like), and its own docs say every tool it
@@ -946,22 +956,22 @@ loads it. It is the one script the site fetches from outside its own origin.
   and Cloudflare discards the IP at the edge. That keeps it out of
   consent-banner territory. Until #309 this section said "Web Analytics
   through Zaraz"; Cloudflare's Web Analytics docs do not mention Zaraz at all.
-- **The CSP admits it by host**: `script-src 'self' https://static.cloudflareinsights.com`
-  (`src/middleware.ts`). The host, not the file: the injected URL carries a
-  version segment after `beacon.min.js`, which a file-exact source refuses. The
-  beacon posts to `/cdn-cgi/rum` on this origin, so `connect-src 'self'` covers
-  it. `tests/unit/csp-outside-hosts.test.ts` pins the policy to that one
-  outside host.
+- **The CSP admits it by host**: `script-src` names
+  `https://static.cloudflareinsights.com`, and `connect-src` names
+  `https://cloudflareinsights.com`, where a hand-installed beacon reports
+  (`src/middleware.ts`). `tests/unit/csp-outside-hosts.test.ts` pins the policy
+  to those two hosts, and `tests/unit/web-analytics.test.ts` pins the tokens
+  and the tag.
 - **What the site promises, and where**: the privacy page (ES and EN) says what
   is recorded and that it is the only download from outside the domain; the
-  Presentation and Compute layers of /deconstruyendo say "1 third-party request"
-  and "the CSP admits one outside script". A second outside host makes all of
-  them false — changing the CSP means a content patch in the same change.
-- **Setting it up** (dashboard, per hostname): Web Analytics → Add a site → the
-  hostname → automatic setup. Keep the mode **Enable**, never *Enable,
-  excluding visitor data in the EU*: for a Spanish site that excludes most
-  visitors. A `Cache-Control: no-transform` on our responses would stop the
-  injection; we send none.
+  Presentation and Compute layers of /deconstruyendo say the browser calls one
+  outside provider, Cloudflare, and that the CSP admits one outside script. A
+  provider other than Cloudflare makes them false — changing the CSP means a
+  content patch in the same change.
+- **Adding a host**: Web Analytics → Add a site → the hostname → Manage site →
+  *Enable with JS Snippet installation*, then its token into
+  `BEACON_TOKENS`. Never *Enable, excluding visitor data in the EU*: for a
+  Spanish site that excludes most visitors.
 - **What would change the legal footing**: any tool that sets cookies or
   profiles (GA4, Meta Pixel, anything carried by Zaraz). That is a compliance
   decision, not a switch.

@@ -15,7 +15,7 @@ const middleware = readFileSync(new URL("../../src/middleware.ts", import.meta.u
 describe("Web Analytics beacon", () => {
 	it("gives each measured host its zone's token: one token per zone, never shared across zones", () => {
 		expect(Object.keys(BEACON_TOKENS).sort()).toEqual(
-			["preview.serverstartup.dev", "www.serverstartup.dev", "www.serverstartup.io"],
+			["preview.serverstartup.dev", "www.serverstartup.io"],
 		);
 		const zoneOf = (host: string) => host.split(".").slice(-2).join(".");
 		const byZone = new Map<string, Set<string>>();

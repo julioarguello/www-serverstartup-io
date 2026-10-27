@@ -303,7 +303,7 @@ recreates them and no reader has to open the dashboard to learn they exist:
 
 | Hostname | Worker | What it is |
 | :--- | :--- | :--- |
-| `www.serverstartup.dev` | `www-serverstartup-io` | This rehearsal, and the A/B probe below. **Production data** — `/_emdash/admin` here edits live content |
+| `www.serverstartup.dev` | `www-serverstartup-io` | **Retired 2026-10-27.** A Redirect Rule on the zone answers every request with a `301` to the same path and query on `www.serverstartup.io`, before the worker runs. The custom domain stays declared only so the hostname keeps its DNS record and certificate. Was: this rehearsal, and the A/B probe below |
 | `preview.serverstartup.dev` | `www-serverstartup-io-preview` | The test environment, on its own D1, R2 and KV |
 
 The apex is deliberately not among them, for the reason given below, and

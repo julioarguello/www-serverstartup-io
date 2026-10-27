@@ -991,8 +991,11 @@ script the site fetches from outside its own origin.
     consent again on every page — as the banner of #674 did — counts every page
     after the first twice, so the site never calls the consent API.
   - **The window's words live in the Zaraz dashboard**, in Spanish and English
-    — the one piece of site text outside the CMS. Zaraz picks the language from
-    the browser's `Accept-Language`, not from the page; Spanish is the default.
+    — the one piece of site text outside the CMS — and so is its stylesheet
+    (Zaraz's *Custom CSS*, built on the site's tokens, which inherit into the
+    window's shadow DOM). Its language follows the page: `src/utils/zaraz-language.ts`
+    sets `__zarazConsentLanguage` before Zaraz starts, where Zaraz alone would
+    follow the browser's `Accept-Language`.
   - **Withdrawal**: the footer's «Preferencias de cookies» calls
     `zaraz.showConsentModal()`. It is rendered hidden and revealed only when
     `window.zaraz` exists, so localhost and the CI stack never show it — and no

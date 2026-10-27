@@ -73,9 +73,10 @@ checks out.
    Expect: GA4 shows `Analítica` as its purpose.
 5. On the same page, turn on the automatic display of the consent modal.
 6. Set the default language to Spanish.
-7. Enter the **Consent modal text** for `es` and for `en`, exactly as the repository keeps it, and leave
-   **Custom CSS** empty. → [Reference: the consent window's text](#reference-the-consent-windows-text)
-8. Select **Save**.
+7. Enter the **Consent modal text** for `es` and for `en`, exactly as the repository keeps it.
+   → [Reference: the consent window's text](#reference-the-consent-windows-text)
+8. Paste the site's stylesheet into **Custom CSS**. → [Reference: the consent window's CSS](#reference-the-consent-windows-css)
+9. Select **Save**.
    Expect: a first visit to the site, in a private window, shows Zaraz's window.
 
 ---
@@ -150,9 +151,144 @@ Used by step 7 of [2. Prepare Zaraz](#2-prepare-zaraz-for-google-analytics-on-a-
 <p>With your permission we measure visits with Google Analytics, through Cloudflare's Zaraz: your browser never connects to Google. You can change your choice at any time from “Cookie preferences” at the foot of every page. More in the <a href="/en/privacy-policy">privacy policy</a>.</p>
 ```
 
-Zaraz picks the language from the browser's `Accept-Language` header, not from the page: an English
-browser reading a Spanish page gets the English window. A browser asking for neither language gets
-the default, Spanish.
+The window takes the page's language: the footer script sets `__zarazConsentLanguage` to `es` or `en`
+before Zaraz starts (`src/utils/zaraz-language.ts`). Left to itself, Zaraz would follow the browser's
+`Accept-Language` instead, so an English browser reading a Spanish page would get the English window.
+
+### Reference: the consent window's CSS
+
+Zaraz draws its window inside a shadow DOM, but CSS custom properties inherit into it, so this
+stylesheet uses the site's own tokens from `src/styles/theme.css`, with their values as fallbacks.
+It turns the window into a band at the foot of the page, in the site's type, ink and ghost buttons,
+aligned with the column. With one purpose, Accept and Decline say everything, so it hides the title,
+the purpose list and the third button. The `.cf_*` class names are Zaraz's markup, not a documented
+API: after a Zaraz update, check that the window still looks like this. Used by step 8 of
+[2. Prepare Zaraz](#2-prepare-zaraz-for-google-analytics-on-a-zone).
+
+```css
+/* Server Startup — Zaraz consent window as the site's own band.
+   Pasted into Zaraz → Consent → Custom CSS. Colours, type and the column come
+   from the site's theme.css: custom properties inherit into Zaraz's shadow DOM. */
+
+/* A band across the foot of the viewport, not a box in the middle */
+dialog::backdrop {
+	backdrop-filter: none;
+	background-color: transparent;
+}
+.cf_modal {
+	position: fixed;
+	inset: auto 0 0 0;
+	margin: 0;
+	width: 100%;
+	max-width: none;
+	max-height: none;
+	border-radius: 0;
+	border: 0;
+	border-top: 1px solid var(--color-border, #E3E7EB);
+	box-shadow: var(--shadow-card, 0 2px 10px rgba(0, 0, 0, 0.06));
+	filter: none;
+	background: var(--color-secondary, #FFFFFF);
+	color: var(--color-text, #1E1E1E);
+	font-family: var(--font-family, sans-serif);
+	padding-block: 16px;
+	padding-inline: max(16px, calc((100vw - var(--container-max, 880px)) / 2 + 20px));
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-rows: auto;
+	overflow: visible;
+	align-items: center;
+	column-gap: 24px;
+	row-gap: 16px;
+}
+
+/* One purpose, so Accept and Decline say everything: no title, no list,
+   no third button */
+.title_container,
+.cf_modal > hr,
+.cf_consent-container,
+.cf_button--save,
+.cf_modal > p:not(:has(a)) {
+	display: none;
+}
+
+.cf_modal > p {
+	grid-column: 1;
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.5;
+	text-align: left;
+}
+.cf_modal a {
+	color: inherit;
+	text-decoration: underline dashed;
+	text-underline-offset: 3px;
+}
+.cf_modal a:hover,
+.cf_modal a:focus-visible {
+	text-decoration-style: solid;
+}
+/* the window focuses its first link on open: mark it as the site does, not with a box */
+.cf_modal a:focus {
+	outline: none;
+	text-decoration-thickness: 2px;
+}
+
+/* The site's ghost buttons, side by side and equal: refusing is as easy as
+   accepting */
+.cf_consent-buttons {
+	grid-column: 2;
+	margin: 0;
+	padding: 0;
+	background: none;
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 8px;
+}
+.cf_button {
+	margin: 0;
+	height: auto;
+	padding: 10px 18px;
+	font-family: inherit;
+	font-size: 17px;
+	font-weight: 600;
+	line-height: 22px;
+	border-radius: 0;
+	background: transparent;
+	color: var(--color-primary, #1E1E1E);
+	border: 1px solid var(--color-primary, #1E1E1E);
+	transition: background-color 0.3s, color 0.3s;
+}
+.cf_button:hover,
+.cf_button:focus-visible {
+	background: var(--color-primary, #1E1E1E);
+	color: var(--color-secondary, #FFFFFF);
+}
+.cf_button:focus-visible {
+	outline: 2px solid var(--color-primary, #1E1E1E);
+	outline-offset: 2px;
+}
+
+/* Phone: text above, the two buttons below at equal width */
+@media (max-width: 700px) {
+	.cf_modal {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.cf_consent-buttons {
+		grid-column: 1;
+	}
+	.cf_button {
+		flex: 1 1 0;
+	}
+}
+
+/* The site has one ground; the window keeps it in dark mode too */
+@media (prefers-color-scheme: dark) {
+	.cf_modal {
+		background: var(--color-secondary, #FFFFFF);
+		color: var(--color-text, #1E1E1E);
+	}
+}
+```
 
 ### Explanation: why Zaraz is injected by the zone and the beacon is not
 

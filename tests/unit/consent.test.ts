@@ -63,3 +63,39 @@ describe("CSP", () => {
 		expect(scriptSrc).not.toMatch(/'unsafe-inline'|'nonce-/);
 	});
 });
+
+describe("consent window language", async () => {
+	const { LANGUAGE_KEY, STORAGE_KEY, consentLanguage, setConsentLanguage } = await import("../../src/utils/zaraz-language");
+
+	it("follows the page: es and en, Spanish for anything else", () => {
+		expect(consentLanguage("es")).toBe("es");
+		expect(consentLanguage("en")).toBe("en");
+		expect(consentLanguage("en-GB")).toBe("en");
+		expect(consentLanguage("")).toBe("es");
+	});
+
+	it("is stored where zaraz.set keeps it, before Zaraz starts, and set through the documented call too", () => {
+		const stored = new Map<string, string>();
+		const calls: unknown[][] = [];
+		setConsentLanguage({ zaraz: { set: (...a: unknown[]) => void calls.push(a) } }, "en", { setItem: (k, v) => void stored.set(k, v) });
+		expect(STORAGE_KEY).toBe("_zaraz___zarazConsentLanguage");
+		expect(stored.get(STORAGE_KEY)).toBe('"en"');
+		expect(calls).toEqual([[LANGUAGE_KEY, "en"]]);
+	});
+
+	it("does nothing where Zaraz is not on the page, and survives blocked storage", () => {
+		const stored = new Map<string, string>();
+		setConsentLanguage({}, "es", { setItem: (k, v) => void stored.set(k, v) });
+		expect(stored.size).toBe(0);
+		const calls: unknown[][] = [];
+		const blocked = { setItem: () => { throw new Error("blocked"); } };
+		expect(() => setConsentLanguage({ zaraz: { set: (...a: unknown[]) => void calls.push(a) } }, "es", blocked)).not.toThrow();
+		expect(calls).toEqual([[LANGUAGE_KEY, "es"]]);
+	});
+
+	it("runs from the footer's module script, which executes before DOMContentLoaded, when Zaraz starts", () => {
+		const script = footer.match(/<script>([\s\S]*?)<\/script>/)?.[1] ?? "";
+		expect(script).toMatch(/import \{ setConsentLanguage \} from "\.\.\/utils\/zaraz-language";/);
+		expect(script).toMatch(/setConsentLanguage\(window as never, document\.documentElement\.lang,/);
+	});
+});

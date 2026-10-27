@@ -232,6 +232,15 @@ const partnerMarks = (partnerLogos.length > 0
 </footer>
 
 <script>
+	import { setConsentLanguage } from "../utils/zaraz-language";
+	// #667: Zaraz's window in the page's language, set before Zaraz starts.
+	setConsentLanguage(window as never, document.documentElement.lang, (() => {
+		try {
+			return window.localStorage;
+		} catch {
+			return null;
+		}
+	})());
 	// #667: reopen Zaraz's own consent window (zaraz.showConsentModal), so a
 	// visitor can withdraw as easily as they accepted. Zaraz injects itself on
 	// the zones where it is on; anywhere else (local, CI, workers.dev) there is

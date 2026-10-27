@@ -25,27 +25,30 @@ Why the setup is shaped this way is in [`docs/architecture.md` §6](../architect
 
 ### `TL;DR`
 
-1. In the dashboard, open **Web Analytics** and select **Add a site**. Choose the hostname, for example
-   `www.serverstartup.io`.
+1. If the hostname's zone already has a site with an orange cloud, skip to step 3: one site counts
+   every host of its zone. Otherwise open **Web Analytics**, select **Add a site**, and pick the zone
+   from the drop-down, for example `serverstartup.io`, instead of typing a hostname.
+   Expect: the site shows an orange cloud. A typed hostname gets a grey one, because the dashboard
+   treats it as a host outside Cloudflare.
 2. On that site, select **Manage site** and set the mode to **Enable with JS Snippet installation**.
    Expect: the site's row reads *JS Snippet installation*, not *Automatic setup*.
 3. Copy the `token` from the snippet the dashboard shows. → [Register the token](#register-the-token)
-4. Repeat steps 2 and 3 for every Web Analytics site of the account, including a zone-level one such
-   as `serverstartup.dev`.
-   Expect: no site left in *Automatic setup*.
+4. Check every Web Analytics site of the account.
+   Expect: no site left in *Automatic setup*, and no grey-cloud site for a host of a zone we own.
 5. Once the change is deployed, check the page. → [3. Check what a page actually loads](#3-check-what-a-page-actually-loads)
 
 ### Register the token
 
-The token goes into `BEACON_TOKENS` in `src/utils/web-analytics.ts`, keyed by the exact hostname:
+The token goes into `BEACON_TOKENS` in `src/utils/web-analytics.ts`, keyed by the exact hostname. Every
+hostname of one zone carries that zone's token, and the dashboard's **Host** filter tells them apart:
 
 ```ts
 "www.serverstartup.io": "<token>",
 ```
 
 `Base.astro` emits the beacon only for a hostname listed there, so a hostname left out is simply not
-measured. `tests/unit/web-analytics.test.ts` lists the expected hostnames, so adding one means changing
-the test in the same pull request. The token is not a secret: Cloudflare prints it into the page source.
+measured. `tests/unit/web-analytics.test.ts` lists the expected hostnames and checks one token per zone,
+so adding a hostname means changing the test in the same pull request. The token is not a secret: Cloudflare prints it into the page source.
 
 **Never** choose *Enable, excluding visitor data in the EU*. For a Spanish site it drops most visitors.
 

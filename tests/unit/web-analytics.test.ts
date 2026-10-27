@@ -1,7 +1,7 @@
 /**
  * The Web Analytics beacon is ours to place (#309): the zone's automatic
  * injection never reached these Worker-rendered pages. These pin the three
- * things that keep it honest — a token only on the hosts that own one, the tag
+ * things that keep it honest — a token only on the hosts that own one (its zone's), the tag
  * only when there is a token, and a script host the CSP admits.
  */
 import { readFileSync } from "node:fs";
@@ -13,11 +13,16 @@ const base = readFileSync(new URL("../../src/layouts/Base.astro", import.meta.ur
 const middleware = readFileSync(new URL("../../src/middleware.ts", import.meta.url), "utf8");
 
 describe("Web Analytics beacon", () => {
-	it("gives each measured host its own token", () => {
+	it("gives each measured host its zone's token: one token per zone, never shared across zones", () => {
 		expect(Object.keys(BEACON_TOKENS).sort()).toEqual(
 			["preview.serverstartup.dev", "www.serverstartup.dev", "www.serverstartup.io"],
 		);
-		expect(new Set(Object.values(BEACON_TOKENS)).size).toBe(3);
+		const zoneOf = (host: string) => host.split(".").slice(-2).join(".");
+		const byZone = new Map<string, Set<string>>();
+		for (const [host, token] of Object.entries(BEACON_TOKENS)) byZone.set(zoneOf(host), (byZone.get(zoneOf(host)) ?? new Set()).add(token));
+		expect([...byZone.keys()].sort()).toEqual(["serverstartup.dev", "serverstartup.io"]);
+		for (const tokens of byZone.values()) expect(tokens.size).toBe(1);
+		expect(new Set(Object.values(BEACON_TOKENS)).size).toBe(byZone.size);
 		expect(JSON.parse(beaconConfig("www.serverstartup.io") ?? "{}")).toEqual({
 			token: BEACON_TOKENS["www.serverstartup.io"],
 		});

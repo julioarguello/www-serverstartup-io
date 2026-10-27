@@ -968,13 +968,12 @@ script the site fetches from outside its own origin.
   outside provider, Cloudflare, and that the CSP admits one outside script. A
   provider other than Cloudflare makes them false — changing the CSP means a
   content patch in the same change.
-- **Adding a host**: Web Analytics → Add a site → the hostname → Manage site →
-  *Enable with JS Snippet installation*, then its token into
-  `BEACON_TOKENS`. Never *Enable, excluding visitor data in the EU*: for a
-  Spanish site that excludes most visitors.
-- **What would change the legal footing**: any tool that sets cookies or
-  profiles (GA4, Meta Pixel, anything carried by Zaraz). That is a compliance
-  decision, not a switch.
+- **The dashboard half** — Web Analytics sites and their mode, Zaraz's
+  settings, the GA4 tool and its consent purpose — is not in this repository.
+  Its steps and checks are in
+  [`docs/how-to/set-up-analytics.md`](how-to/set-up-analytics.md).
+- **GA4 sets cookies**, so it runs through Zaraz behind the site's own consent
+  banner (#667), and a visitor who rejects it is counted by Web Analytics only.
 
 ## 7. Media & Video Strategy
 

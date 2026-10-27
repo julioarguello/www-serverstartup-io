@@ -100,7 +100,16 @@
 		"production": {
 			"name": "www-serverstartup-io",
 			"cache": { "enabled": true },
-			// #444: NOT a second test environment — this hostname serves the
+			// #444, retired 2026-10-27: www.serverstartup.dev now answers every
+			// request with a 301 to the same path on www.serverstartup.io, from a
+			// Redirect Rule on the serverstartup.dev zone that runs before the
+			// worker (measured: /, /contacto?query, http://, /_emdash/admin). The
+			// route stays declared only so the hostname keeps its DNS record and
+			// certificate; without them the rule would never be reached. The A/B
+			// probe below now lives on preview: preview.serverstartup.dev against
+			// its workers.dev hostname. What it was:
+			//
+			// NOT a second test environment — this hostname served the
 			// production worker and the production D1, and /_emdash/admin
 			// through it edits live content. It exists for two things: to
 			// rehearse the §3 custom-domain step of docs/production-cutover.md

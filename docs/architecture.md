@@ -944,9 +944,10 @@ script the site fetches from outside its own origin.
   `serverstartup.dev` sat in Automatic mode for three months with no beacon in
   any response, and preview showed none after the CSP admitted it (2026-10-26,
   curl and a real browser). The pages come from a Worker on a Custom Domain.
-- **One token per host**, because one production build answers on
-  `www.serverstartup.io` and on the `www.serverstartup.dev` rehearsal, and each
-  counts in its own Web Analytics site. In the dashboard every site is in mode
+- **One token per zone.** Each token belongs to the Web Analytics site linked to
+  its zone (picked from the dashboard's drop-down), and one site counts every
+  host of its zone. `www.serverstartup.dev` gets none: a Redirect Rule sends it
+  to `www.serverstartup.io` (#444). In the dashboard every site is in mode
   *Enable with JS Snippet installation*, so the zone never injects a second tag.
 
 - **Why Web Analytics and not Zaraz.** Zaraz is a tag manager for third-party

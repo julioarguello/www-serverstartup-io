@@ -130,6 +130,89 @@ describe("content patches", () => {
 	});
 });
 
+const blocks = (...texts: string[]) => texts.map((t, i) => ({ _type: "block", style: "normal", _key: `k${i}`, children: [{ _type: "span", text: t }] }));
+const widgetChange = (over: Record<string, unknown> = {}) => ({
+	widgetArea: "ui_labels_es",
+	widget: "consent",
+	path: ["content"],
+	before: null,
+	after: blocks("Aceptar"),
+	...over,
+});
+const widgetSeed = (widgets: unknown[]) => `${JSON.stringify({ widgetAreas: [{ name: "ui_labels_es", widgets }] }, null, "\t")}\n`;
+
+/** A throwaway seed holding one widget area, and a patch directory, for `check`. */
+function widgetFixture(widgets: unknown[], patches: Record<string, unknown>) {
+	const dir = mkdtempSync(join(tmpdir(), "content-patch-widget-"));
+	const seed = join(dir, "seed.json");
+	writeFileSync(seed, widgetSeed(widgets));
+	const pdir = join(dir, "patches");
+	mkdirSync(pdir);
+	for (const [name, p] of Object.entries(patches)) writeFileSync(join(pdir, name), JSON.stringify(p));
+	return () => run("check", "--seed", seed, "--patches", pdir);
+}
+
+describe("widget patches (#667)", () => {
+	const existing = { type: "content", title: "footer_headings", content: blocks("La casa") };
+
+	it("validates the widget shape: whole content, a list of blocks, null only for a widget not yet created", () => {
+		const ok = (c: unknown) => validatePatch("2026-10-27-w.json", patchFile("2026-10-27", [c]));
+		expect(ok(widgetChange())).toEqual([]);
+		expect(ok(widgetChange({ before: blocks("A"), after: blocks("B") }))).toEqual([]);
+		expect(ok(widgetChange({ path: ["content", 0] })).join()).toMatch(/must be \["content"\]/);
+		expect(ok(widgetChange({ after: "Aceptar" })).join()).toMatch(/list of blocks/);
+		expect(ok(widgetChange({ before: "x" })).join()).toMatch(/or null/);
+		expect(ok(widgetChange({ collection: "pages" })).join()).toMatch(/not both/);
+	});
+
+	it("check fails while the seed lacks a created widget, and passes once `seed` has appended it", () => {
+		const p = { "2026-10-27-w.json": patchFile("2026-10-27", [widgetChange()]) };
+		const before = widgetFixture([existing], p)();
+		expect(before.status).toBe(1);
+		expect(before.stderr).toMatch(/does not hold the target of widget ui_labels_es\/consent/);
+		const appended = JSON.parse(seedApply(widgetSeed([existing]), p["2026-10-27-w.json"]));
+		expect(widgetFixture(appended.widgetAreas[0].widgets, p)().status).toBe(0);
+	});
+
+	it("appends a new widget after the last one, keeping every byte before it", () => {
+		const src = widgetSeed([existing]);
+		const out = seedApply(src, { changes: [widgetChange()] });
+		const widgets = parseWithSpans(src).entries[0][1].items[0].entries.find(([k]: [string]) => k === "widgets")[1];
+		const lastEnd = widgets.items.at(-1).end;
+		expect(out.slice(0, lastEnd)).toBe(src.slice(0, lastEnd));
+		expect(out.slice(-12)).toBe(src.slice(-12));
+		expect(JSON.parse(out).widgetAreas[0].widgets).toEqual([existing, { type: "content", title: "consent", content: blocks("Aceptar") }]);
+		// indented like its sibling
+		expect(out).toMatch(/\n\t\t\t\t\{\n\t\t\t\t\t"type": "content",\n\t\t\t\t\t"title": "consent"/);
+	});
+
+	it("replaces an existing widget's content and nothing else", () => {
+		const src = widgetSeed([existing]);
+		const c = widgetChange({ widget: "footer_headings", before: blocks("La casa"), after: blocks("La casa", "Cookies") });
+		const out = seedApply(src, { changes: [c] });
+		expect(JSON.parse(out).widgetAreas[0].widgets).toEqual([{ ...existing, content: blocks("La casa", "Cookies") }]);
+		expect(() => seedApply(src, { changes: [{ ...c, before: blocks("otra cosa") }] })).toThrow(/neither/);
+	});
+
+	it("chains a creation and a later edit: null → A → B targets B", () => {
+		const p = {
+			"2026-10-27-a.json": patchFile("2026-10-27", [widgetChange()]),
+			"2026-11-02-b.json": patchFile("2026-11-02", [widgetChange({ before: blocks("Aceptar"), after: blocks("Aceptar todo") })]),
+		};
+		const { chains: all, problems } = chains(listPatchesFrom(p));
+		expect(problems).toEqual([]);
+		expect(all[0].states).toEqual([null, blocks("Aceptar"), blocks("Aceptar todo")]);
+		expect(widgetFixture([existing, { type: "content", title: "consent", content: blocks("Aceptar todo") }], p)().status).toBe(0);
+	});
+
+	it("creates a widget in the real seed as valid JSON, changing nothing else", () => {
+		const out = seedApply(SEED, { changes: [widgetChange({ widget: "zz_probe" })] });
+		const doc = JSON.parse(SEED);
+		doc.widgetAreas.find((a: { name: string }) => a.name === "ui_labels_es").widgets.push({ type: "content", title: "zz_probe", content: blocks("Aceptar") });
+		expect(JSON.parse(out)).toEqual(doc);
+	});
+});
+
 /** The same shape listPatches returns, from an in-memory map. */
 function listPatchesFrom(p: Record<string, unknown>) {
 	return Object.entries(p)

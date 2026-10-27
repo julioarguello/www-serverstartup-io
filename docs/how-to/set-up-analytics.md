@@ -74,13 +74,15 @@ checks out.
 
 ### Turn off Auto-inject script
 
-The site loads Zaraz itself, from `Base.astro`:
+The site loads Zaraz itself, and only after the visitor accepts the banner: `src/utils/consent.ts`
+appends this script then, and on every later page while the answer stands.
 
 ```html
 <script src="/cdn-cgi/zaraz/i.js" referrerpolicy="origin"></script>
 ```
 
-With Auto-inject on as well, a page could get the script twice. And according to
+With Auto-inject on, Zaraz would load on every page before anyone answered, and set its
+`cf_zaraz_client` cookie without consent. A page that had accepted would also get the script twice. And according to
 [Cloudflare's post on Zaraz and CSP](https://blog.cloudflare.com/cloudflare-zaraz-supports-csp/),
 auto-injection adds a nonce to the response's Content Security Policy (CSP). The site's CSP is pinned by
 `tests/unit/csp-outside-hosts.test.ts`, and that rewrite would happen where no test sees it.

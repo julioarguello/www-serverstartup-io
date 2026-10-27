@@ -99,9 +99,18 @@ auto-injection adds a nonce to the response's Content Security Policy (CSP). The
    ```
    Expect: `200` once Zaraz is on for the zone; `404` while it is off.
 3. Open the page in a browser with developer tools. In **Console**, look for CSP errors. In
-   **Application → Cookies**, look for `_ga`.
-   Expect: no CSP errors, and no `_ga` until the banner is accepted.
-4. In **Web Analytics**, open the hostname's site.
+   **Application → Cookies**, look for the GA4 cookies, `cfz_google-analytics_v4` and
+   `cfzs_google-analytics_v4`.
+   Expect: no CSP errors, and neither GA4 cookie until the banner is accepted. Zaraz runs GA4 on
+   Cloudflare's side, so the browser never receives Google's own `_ga`.
+   → [Troubleshooting: the console reports an inline script blocked by the CSP](#troubleshooting-the-console-reports-an-inline-script-blocked-by-the-csp)
+4. In the same **Console**, list the consent purposes:
+   ```js
+   zaraz.consent.purposes
+   ```
+   Expect: one purpose, named `Analítica` / `Analytics`. A purpose shows up only when a tool is
+   assigned to it, so an empty object means GA4 has no purpose and skips consent.
+5. In **Web Analytics**, open the hostname's site.
    Expect: page views counting within a few minutes of a visit.
 
 ---
@@ -117,7 +126,10 @@ auto-injection adds a nonce to the response's Content Security Policy (CSP). The
 | CSP hosts for Web Analytics | repository | `src/middleware.ts`, pinned by `tests/unit/csp-outside-hosts.test.ts` |
 | Zaraz Auto-inject script | dashboard | off, on every zone |
 | GA4 measurement ID | dashboard | `G-CZDVNRD4NB` |
-| Consent purpose and its tools | dashboard | `Analítica` / `Analytics`, with GA4 assigned |
+| Consent purpose and its tools | dashboard | `Analítica` / `Analytics`, with GA4 assigned; its ID on `serverstartup.dev` is `TlZw` (each zone generates its own) |
+| Consent cookie | Zaraz | `zaraz-consent`, set when the visitor answers |
+| GA4 cookies | Zaraz | `cfz_google-analytics_v4`, `cfzs_google-analytics_v4`, only after consent |
+| Zaraz client cookie | Zaraz | `cf_zaraz_client`, set by `/cdn-cgi/zaraz/s.js` on every load, before any answer |
 | Zaraz modal automatic display | dashboard | off |
 | Banner text and the link to reopen it | CMS | `ui_labels_es` / `ui_labels_en` (#667) |
 
@@ -139,7 +151,7 @@ website, Zaraz does not assign any purpose to it. This means that this tool will
 default."* Then GA4 would set its cookies before anyone accepted, and the privacy page would be false.
 
 **Verification:** in [3. Check what a page actually loads](#3-check-what-a-page-actually-loads), no
-`_ga` cookie exists before the banner is answered.
+GA4 cookie exists before the banner is answered.
 
 ### Troubleshooting: Web Analytics shows zero page views
 
@@ -147,3 +159,14 @@ Run step 1 of [3. Check what a page actually loads](#3-check-what-a-page-actuall
 hostname. No tag means the hostname is missing from `BEACON_TOKENS`, or the change is not deployed yet.
 A tag with no counts after a visit means its token belongs to another site: compare it with the one
 **Manage site** shows.
+
+### Troubleshooting: the console reports an inline script blocked by the CSP
+
+The error reads *Executing inline script violates the following Content Security Policy directive
+'script-src …'*, once per script Zaraz delivers. Zaraz runs those scripts inline, giving each the nonce
+of the first `<script nonce>` in the page, and the site's CSP admits no inline script.
+
+What they carry decides whether it matters. On `serverstartup.dev` they were Zaraz's own bookkeeping,
+such as `zarazData.executed.push("Pageview")`. GA4 runs on Cloudflare's side, and with the CSP
+unchanged it still set its cookies once consent was given. A tool that runs code in the browser would
+lose it. Whether the site's CSP gains a per-response nonce is decided in #667.

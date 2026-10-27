@@ -977,8 +977,9 @@ script the site fetches from outside its own origin.
   window — the standard setup, unchanged (#667). A visitor who rejects it is
   counted by Web Analytics only.
   - **Cloudflare injects Zaraz** (*Auto-inject* on, in the dashboard) into every
-    HTML page of the zones where it is on, and adds the nonce of its inline
-    script to our CSP itself. Unlike Web Analytics' automatic setup, this does
+    page requested as HTML on the zones where it is on, and adds the nonce of
+    its inline script to our CSP itself — at the edge, after the Worker, so the
+    CSP tests pin what the Worker sends, not what the browser receives. Unlike Web Analytics' automatic setup, this does
     reach the Worker's pages (measured on preview, 2026-10-27).
   - **Zaraz asks.** Its window shows on the first visit; GA4 is assigned to one
     purpose and runs only once the visitor accepts it. Before an answer Zaraz
@@ -986,15 +987,16 @@ script the site fetches from outside its own origin.
     `zaraz-consent`. The privacy page lists every cookie and its lifetime.
   - **One Pageview per page.** Zaraz sends it with the request for
     `/cdn-cgi/zaraz/s.js`; on the page where the visitor accepts, it sends the
-    queued one once, as `__zarazConsentedPageview`. The site's own banner
-    (#674) granted consent again on every page, and every page after the first
-    counted twice — the reason this is now the standard setup and nothing else.
+    queued one once, as `__zarazConsentedPageview`. Site code that grants
+    consent again on every page — as the banner of #674 did — counts every page
+    after the first twice, so the site never calls the consent API.
   - **The window's words live in the Zaraz dashboard**, in Spanish and English
     — the one piece of site text outside the CMS. Zaraz picks the language from
     the browser's `Accept-Language`, not from the page; Spanish is the default.
   - **Withdrawal**: the footer's «Preferencias de cookies» calls
     `zaraz.showConsentModal()`. It is rendered hidden and revealed only when
-    `window.zaraz` exists, so localhost and the CI stack never show it. After a
+    `window.zaraz` exists, so localhost and the CI stack never show it — and no
+    CI gate exercises it; it is checked on preview. After a
     withdrawal GA4 stops; Zaraz does not delete the two cookies GA4 already set,
     and the privacy page says so.
   - **Zaraz is same-origin and GA4 runs on Cloudflare's servers**, so the CSP

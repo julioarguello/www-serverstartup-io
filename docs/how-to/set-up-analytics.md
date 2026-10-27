@@ -7,7 +7,7 @@ The site measures visits in two ways:
 - **Cloudflare Web Analytics** counts every visit. It sets no cookie, so it needs no consent. The site
   has to know each measured hostname's token.
 - **Google Analytics 4 (GA4)**, loaded through **Zaraz**, Cloudflare's tag manager. GA4 sets cookies,
-  so it runs only after the visitor accepts the site's consent banner (#667).
+  so it runs only after the visitor accepts it in Zaraz's own consent window (#667).
 
 Part of the setup is code in this repository. The rest lives in the Cloudflare dashboard, where no
 review or CI reaches it. This page is that rest: what to set, where, and how to check it took effect.
@@ -57,12 +57,13 @@ so adding a hostname means changing the test in the same pull request. The token
 ## 2. Prepare Zaraz for Google Analytics on a zone
 
 Do it on `serverstartup.dev` first, where preview runs, and on `serverstartup.io` only once preview
-checks out.
+checks out. Everything here is Zaraz's standard setup; the site adds nothing to it but a footer link
+that reopens the consent window.
 
 ### `TL;DR`
 
 1. Open **Zaraz → Settings** (the dashboard may file it under **Tag management**), choose the zone,
-   turn off **Auto-inject script**, and select **Save**. → [Turn off Auto-inject script](#turn-off-auto-inject-script)
+   and check that **Auto-inject script** is on, as it is by default.
 2. Open **Zaraz → Tools**, add **Google Analytics 4**, and enter the zone's own measurement ID:
    `G-CZDVNRD4NB` on `serverstartup.io`, `G-JTC176MCZD` on `serverstartup.dev`. Each is a separate GA4
    property, so test visits on preview never count as production.
@@ -71,23 +72,30 @@ checks out.
 4. Under **Purposes**, add a purpose named `Analítica`, with the English translation `Analytics`.
    Assign Google Analytics 4 to it. → [Explanation: why GA4 must have a purpose](#explanation-why-ga4-must-have-a-purpose)
    Expect: GA4 shows `Analítica` as its purpose.
-5. On the same page, turn off the automatic display of Zaraz's consent modal, and select **Save**.
-   Expect: visiting the site shows no Zaraz modal. The site's own banner asks instead.
+5. On the same page, turn on the automatic display of the consent modal, set the default language to
+   Spanish, enter the modal text in both languages, and select **Save**. → [The consent window's text](#the-consent-windows-text)
+   Expect: a first visit to the site shows Zaraz's window.
 
-### Turn off Auto-inject script
+### The consent window's text
 
-The site loads Zaraz itself, and only after the visitor accepts the banner: `src/utils/consent.ts`
-appends this script then, and on every later page while the answer stands.
+Paste this into **Consent modal text** for `es`:
 
 ```html
-<script src="/cdn-cgi/zaraz/i.js" referrerpolicy="origin"></script>
+<p>Con tu permiso medimos las visitas con Google Analytics, a través de Zaraz, de Cloudflare: tu navegador no se conecta con Google. Puedes cambiar tu elección cuando quieras desde «Preferencias de cookies», al pie de cada página. Más detalle en la <a href="/politica-de-privacidad">política de privacidad</a>.</p>
 ```
 
-With Auto-inject on, Zaraz would load on every page before anyone answered, and set its
-`cf_zaraz_client` cookie without consent. A page that had accepted would also get the script twice. And according to
-[Cloudflare's post on Zaraz and CSP](https://blog.cloudflare.com/cloudflare-zaraz-supports-csp/),
-auto-injection adds a nonce to the response's Content Security Policy (CSP). The site's CSP is pinned by
-`tests/unit/csp-outside-hosts.test.ts`, and that rewrite would happen where no test sees it.
+And this for `en`:
+
+```html
+<p>With your permission we measure visits with Google Analytics, through Cloudflare's Zaraz: your browser never connects to Google. You can change your choice at any time from “Cookie preferences” at the foot of every page. More in the <a href="/en/privacy-policy">privacy policy</a>.</p>
+```
+
+Leave **Custom CSS** empty. This is the one piece of the site's text that lives outside the CMS, so
+the repository keeps it here.
+
+Zaraz picks the language from the browser's `Accept-Language` header, not from the page: an English
+browser reading a Spanish page gets the English window. A browser asking for neither language gets
+the default, Spanish.
 
 ---
 
@@ -100,15 +108,16 @@ auto-injection adds a nonce to the response's Content Security Policy (CSP). The
    curl -s https://www.serverstartup.io/ | grep -o '<script[^>]*cloudflareinsights[^>]*>'
    ```
    Expect: one tag, carrying the token for that hostname.
-2. Check that Zaraz answers through the Worker:
+2. Check that Zaraz is injected, and that the CSP carries its nonce:
    ```bash
-   curl -s -o /dev/null -w '%{http_code}\n' https://www.serverstartup.io/cdn-cgi/zaraz/i.js
+   curl -s -D - -o /tmp/page.html https://www.serverstartup.io/ | grep -io "'nonce-[^']*'"
+   grep -c 'zaraz._v' /tmp/page.html
    ```
-   Expect: `200` once Zaraz is on for the zone; `404` while it is off.
-3. Open the page in a browser with developer tools. In **Console**, look for CSP errors. In
-   **Application → Cookies**, look for the GA4 cookies, `cfz_google-analytics_v4` and
-   `cfzs_google-analytics_v4`.
-   Expect: no CSP errors, and neither GA4 cookie until the banner is accepted. Zaraz runs GA4 on
+   Expect: one nonce, and `1`. Neither while Zaraz is off for the zone.
+3. Open the page in a private window with developer tools. In **Console**, look for CSP errors. In
+   **Application → Cookies**, look at the cookies before and after you answer the window.
+   Expect: no CSP errors. Before an answer, only `cf_zaraz_client`. After **Accept**, also
+   `zaraz-consent`, `cfz_google-analytics_v4` and `cfzs_google-analytics_v4`. Zaraz runs GA4 on
    Cloudflare's side, so the browser never receives Google's own `_ga`.
    → [Troubleshooting: the console reports an inline script blocked by the CSP](#troubleshooting-the-console-reports-an-inline-script-blocked-by-the-csp)
 4. In the same **Console**, list the consent purposes:
@@ -131,14 +140,15 @@ auto-injection adds a nonce to the response's Content Security Policy (CSP). The
 | Web Analytics sites and their mode | dashboard | one site per measured hostname, *JS Snippet installation* |
 | Web Analytics tokens | repository | `BEACON_TOKENS`, `src/utils/web-analytics.ts` |
 | CSP hosts for Web Analytics | repository | `src/middleware.ts`, pinned by `tests/unit/csp-outside-hosts.test.ts` |
-| Zaraz Auto-inject script | dashboard | off, on every zone |
+| Zaraz Auto-inject script | dashboard | on, on every zone (the default) |
 | GA4 measurement ID, one property per zone | dashboard | `serverstartup.io`: `G-CZDVNRD4NB` · `serverstartup.dev` (preview): `G-JTC176MCZD` |
 | Consent purpose and its tools | dashboard | `Analítica` / `Analytics`, with GA4 assigned; its ID on `serverstartup.dev` is `TlZw` (each zone generates its own) |
-| Consent cookie | Zaraz | `zaraz-consent`, set when the visitor answers |
+| Consent cookie | Zaraz | `zaraz-consent`, set when the visitor answers, one year |
 | GA4 cookies | Zaraz | `cfz_google-analytics_v4`, `cfzs_google-analytics_v4`, only after consent |
-| Zaraz client cookie | Zaraz | `cf_zaraz_client`, set by `/cdn-cgi/zaraz/s.js` on every load, before any answer |
-| Zaraz modal automatic display | dashboard | off |
-| Banner text and the link to reopen it | CMS | `ui_labels_es` / `ui_labels_en` (#667) |
+| Zaraz client cookie | Zaraz | `cf_zaraz_client`, empty, set by `/cdn-cgi/zaraz/s.js` on every load, before any answer |
+| Zaraz modal automatic display | dashboard | on |
+| Consent window's text, `es` and `en` | dashboard | as in [The consent window's text](#the-consent-windows-text); default language Spanish |
+| Footer link that reopens the window | CMS | `consent` widget, `reopen`, in `ui_labels_es` / `ui_labels_en` (#667) |
 
 ### Explanation: why the beacon is not injected by the zone
 
@@ -148,8 +158,8 @@ beacon's host, preview still served no beacon. That was measured on 2026-10-26, 
 Chromium session, which made zero requests outside the origin. The pages come from a Worker on a Custom
 Domain. Hence the tag in `Base.astro` (#668).
 
-The same reasoning is why Zaraz is loaded by hand. Its auto-injection was not measured here, but it is the
-same kind of edge rewriting.
+Zaraz's auto-injection, by contrast, does reach them: measured on preview on 2026-10-27, it puts its
+script in the page and its nonce in the CSP. So Zaraz uses its standard setup.
 
 ### Explanation: why GA4 must have a purpose
 
@@ -158,7 +168,7 @@ website, Zaraz does not assign any purpose to it. This means that this tool will
 default."* Then GA4 would set its cookies before anyone accepted, and the privacy page would be false.
 
 **Verification:** in [3. Check what a page actually loads](#3-check-what-a-page-actually-loads), no
-GA4 cookie exists before the banner is answered.
+GA4 cookie exists before the window is answered.
 
 ### Troubleshooting: Web Analytics shows zero page views
 
@@ -170,10 +180,15 @@ A tag with no counts after a visit means its token belongs to another site: comp
 ### Troubleshooting: the console reports an inline script blocked by the CSP
 
 The error reads *Executing inline script violates the following Content Security Policy directive
-'script-src …'*, once per script Zaraz delivers. Zaraz runs those scripts inline, giving each the nonce
-of the first `<script nonce>` in the page, and the site's CSP admits no inline script.
+'script-src …'*. With Auto-inject on, Zaraz adds the nonce of its inline script to the CSP itself, so
+this means the page reached the browser without it: Auto-inject is off, or the script was added by
+hand. Check step 1 of [2. Prepare Zaraz](#2-prepare-zaraz-for-google-analytics-on-a-zone) and step 2
+of [3. Check what a page actually loads](#3-check-what-a-page-actually-loads).
 
-What they carry decides whether it matters. On `serverstartup.dev` they were Zaraz's own bookkeeping,
-such as `zarazData.executed.push("Pageview")`. GA4 runs on Cloudflare's side, and with the CSP
-unchanged it still set its cookies once consent was given. A tool that runs code in the browser would
-lose it. Whether the site's CSP gains a per-response nonce is decided in #667.
+### Troubleshooting: GA4 counts every page twice
+
+Something besides Zaraz is granting consent again on every page. Zaraz sends each page's Pageview once,
+and the queued one once more only on the page where the visitor accepts. The site's own banner (#674)
+called `zaraz.consent.setAll(true)` and `sendQueuedEvents()` on every page, which Zaraz's docs do
+only when no consent cookie exists yet; every page after the first counted twice. Nothing in the site
+calls the consent API now; search for one before anything else.

@@ -65,9 +65,10 @@ for path in "/" "/comercio-electronico"; do
 done
 
 # ── no public route sets a cookie (#471) ─────────────────────────────────────
-# The privacy page tells the visitor, in both locales, that this site "no
-# instala cookies que requieran tu consentimiento". The other half of that
-# same paragraph — that the only thing loaded from outside this domain is the
+# The privacy page lists, in both locales, every cookie the site uses, and all
+# of them are Zaraz's (#667): Cloudflare's edge sets them on /cdn-cgi/zaraz/,
+# never the worker. So the worker setting one makes that list false. The other
+# half of that same paragraph — that the only thing loaded from outside this domain is the
 # Cloudflare Web Analytics beacon (#309) — is enforced by the CSP the browser
 # itself imposes, and tests/unit/csp-outside-hosts.test.ts pins that CSP to
 # Cloudflare's two Web Analytics hosts. The cookie half was measured by hand once, when

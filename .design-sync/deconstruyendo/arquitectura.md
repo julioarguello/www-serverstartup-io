@@ -143,7 +143,7 @@ Struck: "the marketplace is wired" (nothing installed; bundles load from an empt
 
 ## Never claim
 
-- **Products not in use:** Access, Turnstile, Zaraz, Web Analytics, Polish, Image transformations at the zone,
+- **Products not in use:** Access, Turnstile, Polish, Image transformations at the zone,
   Stream, Durable Objects, Queues, Workflows, Vectorize, AI Gateway, AI Search, Browser Rendering, Analytics
   Engine, Email, Workers Builds (CI is on GitHub Actions), Workers Logs and Observability, Gradual
   deployments.

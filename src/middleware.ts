@@ -31,6 +31,10 @@ import { isGatedPath, setupGate } from "./utils/setup-gate";
  *   It is installed by hand (src/utils/web-analytics.ts), so it reports to
  *   cloudflareinsights.com, and connect-src names that host too. Still no
  *   'unsafe-inline', no nonce, no hash.
+ * - Zaraz (#667) needs nothing here. On the zones where it is on, Cloudflare's
+ *   edge injects its inline script after the worker answers and adds that
+ *   script's nonce to this header itself; it loads everything else from
+ *   /cdn-cgi/zaraz/ on this origin, which 'self' already covers.
  * - Static assets in public/ are served by the asset layer (no middleware);
  *   /demo/ keeps its own external fonts and stays outside this policy.
  */

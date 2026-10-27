@@ -83,7 +83,8 @@ Hold until the key points are cut.
   nameservers, `docs/production-cutover.md`), Workers, Workers Cache with tag purge, D1, R2, KV, Images
   binding, Worker Loaders (sandboxed plugins), custom domains on `.dev`, workers.dev, and Workers AI at
   design time. EmDash and Astro are Cloudflare's own.
-- **Dashboard only, unconfirmed**: WAF, bots, Web Analytics/Zaraz, Polish, Stream.
+- **Dashboard only, unconfirmed**: WAF, bots, Polish, Stream.
+- **Analytics**: Web Analytics, its beacon installed by hand (#309), and Google Analytics 4 through Zaraz, behind Zaraz's own consent window (#667).
 - **Not in use**: Access, Turnstile, Durable Objects, Queues.
 - **Admin login**: EmDash's passkey (WebAuthn) by default. No OAuth and no Access are configured
   (`docs/migration-guide.md:90`, `astro.config.mjs:86-103`). Asked the founder what "OAuth" means.

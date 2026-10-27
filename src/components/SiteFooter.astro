@@ -65,6 +65,8 @@ interface Props {
 	partnerUrl?: string;
 	localePrefix: string;
 	locale: string;
+	/** #667: the control that reopens the consent banner; absent where there is no banner. */
+	consentLabel?: string;
 }
 
 const {
@@ -89,6 +91,7 @@ const {
 	partnerUrl,
 	localePrefix,
 	locale,
+	consentLabel,
 } = Astro.props;
 const t = Astro.locals.t;
 const en = (Astro.currentLocale || "es") === "en";
@@ -223,6 +226,7 @@ const partnerMarks = (partnerLogos.length > 0
 			<a href={`${localePrefix}/${privacySlug}`}>{privacyLabel}</a>
 			<a href={`${localePrefix}/${accessibilitySlug}`}>{accessibilityLabel}</a>
 			<a href={`${localePrefix}/${creditsSlug}`}>{creditsLabel}</a>
+			{consentLabel && <button type="button" class="footer-legal__consent" data-consent-open>{consentLabel}</button>}
 		</nav>
 	</div>
 </footer>
@@ -423,6 +427,19 @@ const partnerMarks = (partnerLogos.length > 0
 		text-underline-offset: 3px;
 	}
 	.footer-legal a:hover { color: var(--color-text); text-decoration-style: solid; }
+	/* #667: a button, because it opens the banner rather than going anywhere,
+	   dressed as its neighbours so the legal row reads as one list */
+	.footer-legal__consent {
+		font: inherit;
+		color: var(--color-text-muted);
+		background: none;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		text-decoration: underline dashed;
+		text-underline-offset: 3px;
+	}
+	.footer-legal__consent:hover { color: var(--color-text); text-decoration-style: solid; }
 
 	/* 900, not 768: below it the signature line and two full-width columns do
 	   not fit side by side without squeezing one of them, and a squeezed column

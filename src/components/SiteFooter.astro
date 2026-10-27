@@ -65,7 +65,7 @@ interface Props {
 	partnerUrl?: string;
 	localePrefix: string;
 	locale: string;
-	/** #667: the control that reopens the consent banner; absent where there is no banner. */
+	/** #667: the label of the control that reopens Zaraz's consent window. */
 	consentLabel?: string;
 }
 
@@ -226,10 +226,24 @@ const partnerMarks = (partnerLogos.length > 0
 			<a href={`${localePrefix}/${privacySlug}`}>{privacyLabel}</a>
 			<a href={`${localePrefix}/${accessibilitySlug}`}>{accessibilityLabel}</a>
 			<a href={`${localePrefix}/${creditsSlug}`}>{creditsLabel}</a>
-			{consentLabel && <button type="button" class="footer-legal__consent" data-consent-open>{consentLabel}</button>}
+			{consentLabel && <button type="button" class="footer-legal__consent" data-consent-open hidden>{consentLabel}</button>}
 		</nav>
 	</div>
 </footer>
+
+<script>
+	// #667: reopen Zaraz's own consent window (zaraz.showConsentModal), so a
+	// visitor can withdraw as easily as they accepted. Zaraz injects itself on
+	// the zones where it is on; anywhere else (local, CI, workers.dev) there is
+	// no window to reopen, so the control stays hidden.
+	const page = window as Window & { zaraz?: { showConsentModal?: () => void } };
+	if (page.zaraz)
+		for (const el of document.querySelectorAll<HTMLElement>("[data-consent-open]")) {
+			el.hidden = false;
+			// read at click time: Zaraz's full script replaces the stub it starts with
+			el.addEventListener("click", () => page.zaraz?.showConsentModal?.());
+		}
+</script>
 
 <style is:global>
 	/* ═══════════════════════════════════════════
@@ -440,6 +454,7 @@ const partnerMarks = (partnerLogos.length > 0
 		text-underline-offset: 3px;
 	}
 	.footer-legal__consent:hover { color: var(--color-text); text-decoration-style: solid; }
+	.footer-legal__consent[hidden] { display: none; }
 
 	/* 900, not 768: below it the signature line and two full-width columns do
 	   not fit side by side without squeezing one of them, and a squeezed column

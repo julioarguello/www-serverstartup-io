@@ -17,8 +17,6 @@ import { routeAlternatePath } from "../utils/alternate";
 import { sortByFace } from "../utils/nav";
 import { sortByVoyage } from "../utils/hero-art";
 import { BEACON_SRC, beaconConfig } from "../utils/web-analytics";
-import { zarazEnabled } from "../utils/zaraz";
-import ConsentBanner from "../components/ConsentBanner.astro";
 import type { SiteSettings } from "../types";
 
 import SiteHeader from "../components/SiteHeader.astro";
@@ -250,18 +248,10 @@ const partnerUrl = (partnerEntries ?? []).find((p) => Boolean(p.data.featured))?
 const currentPath = Astro.url.pathname;
 // #309: Web Analytics beacon, per host; null on any host not measured.
 const beacon = beaconConfig(Astro.url.hostname);
-// #667: the consent banner and its footer control, only where Zaraz can run.
-// Every word is in the `consent` widget; until a deploy has created it, the
-// banner stays out rather than render empty buttons.
-const consentBody = labels.getBlocks("consent").get("body");
-const consent = {
-	label: labels.get("consent", "region"),
-	body: consentBody ? [consentBody] : [],
-	accept: labels.get("consent", "accept"),
-	reject: labels.get("consent", "reject"),
-	reopen: labels.get("consent", "reopen"),
-};
-const showConsent = zarazEnabled(Astro.url.hostname) && consent.body.length > 0 && Boolean(consent.label && consent.accept && consent.reject && consent.reopen);
+// #667: the footer control that reopens Zaraz's consent window. Zaraz shows
+// the window itself (its text lives in the Zaraz dashboard, not the CMS); the
+// control's label is the one word of it the site renders.
+const consentReopen = labels.get("consent", "reopen") || undefined;
 const altLocale = locale === "es" ? "en" : "es";
 const altPath =
 	altPathProp !== undefined ? altPathProp : routeAlternatePath(currentPath, locale);
@@ -380,10 +370,8 @@ const resolvedOgType = ogType || "website";
 		partnerUrl={partnerUrl}
 		localePrefix={localePrefix}
 		locale={locale}
-		consentLabel={showConsent ? consent.reopen : undefined}
+		consentLabel={consentReopen}
 	/>
-
-	{showConsent && <ConsentBanner label={consent.label} body={consent.body} accept={consent.accept} reject={consent.reject} />}
 
 	<!-- ═══ SCRIPTS ═══ -->
 	<script>

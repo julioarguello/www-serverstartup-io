@@ -1,107 +1,65 @@
 /**
- * The analytics consent (#667): Zaraz, and GA4 through it, load only after the
- * visitor accepts, and only on hosts where Zaraz is on. These pin the decisions
- * (src/utils/consent.ts), the hosts and cookie scope (src/utils/zaraz.ts), the
- * withdrawal endpoint, and the wiring in Base.astro and the footer.
+ * The analytics consent (#667) is Zaraz's own, the standard setup: Cloudflare
+ * injects Zaraz on the zones where it is on, Zaraz shows its consent window,
+ * and GA4 runs only after Accept. The window's text lives in the Zaraz
+ * dashboard (docs/how-to/set-up-analytics.md). What is left in this repository
+ * is pinned here: the footer control that reopens the window, its one label,
+ * and a CSP that needs nothing for Zaraz.
  *
- * What a real browser does with them — no cookie before an answer, GA4's
- * cookies after Accept, none of Google's hosts contacted — is checked on
- * preview, where Zaraz exists (docs/how-to/set-up-analytics.md §3).
+ * What a real browser does — the window, the cookies before and after an
+ * answer, one Pageview per page — is checked on preview, where Zaraz exists.
  */
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { POST } from "../../src/pages/api/consent-withdraw";
-import { CONSENT_KEY, onAnswer, onLoad, readChoice, writeChoice } from "../../src/utils/consent";
-import { ZARAZ_COOKIES, ZARAZ_HOSTS, ZARAZ_LOADER, cookieDomain, zarazEnabled } from "../../src/utils/zaraz";
 import { outsideSources } from "./csp-sources";
 
 const read = (p: string) => readFileSync(new URL(p, import.meta.url), "utf8");
 const base = read("../../src/layouts/Base.astro");
 const footer = read("../../src/components/SiteFooter.astro");
-const banner = read("../../src/components/ConsentBanner.astro");
 const middleware = read("../../src/middleware.ts");
+const seed = JSON.parse(read("../../seed/seed.json"));
 
-const memory = (init: Record<string, string> = {}) => {
-	const m = new Map(Object.entries(init));
-	return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), m };
-};
-
-describe("consent decisions", () => {
-	it("loads nothing and shows the banner until there is an answer", () => {
-		expect(onLoad(null)).toEqual({ showBanner: true, loadZaraz: false });
-		expect(onLoad("denied")).toEqual({ showBanner: false, loadZaraz: false });
-		expect(onLoad("granted")).toEqual({ showBanner: false, loadZaraz: true });
+describe("footer control", () => {
+	it("is rendered hidden, so a page without Zaraz never shows a control that does nothing", () => {
+		expect(footer).toMatch(/\{consentLabel && <button type="button" class="footer-legal__consent" data-consent-open hidden>\{consentLabel\}<\/button>\}/);
+		expect(footer).toMatch(/\.footer-legal__consent\[hidden\] \{ display: none; \}/);
 	});
 
-	it("withdraws only when a refusal follows a grant", () => {
-		expect(onAnswer(null, "granted")).toEqual({ loadZaraz: true, withdraw: false });
-		expect(onAnswer(null, "denied")).toEqual({ loadZaraz: false, withdraw: false });
-		expect(onAnswer("granted", "denied")).toEqual({ loadZaraz: false, withdraw: true });
-		expect(onAnswer("denied", "denied")).toEqual({ loadZaraz: false, withdraw: false });
+	it("is revealed only where Zaraz is on the page, and reopens Zaraz's window", () => {
+		const script = footer.match(/<script>([\s\S]*?)<\/script>/)?.[1] ?? "";
+		expect(script).toMatch(/if \(page\.zaraz\)/);
+		expect(script).toMatch(/el\.hidden = false;/);
+		expect(script).toMatch(/addEventListener\("click", \(\) => page\.zaraz\?\.showConsentModal\?\.\(\)\)/);
 	});
 
-	it("reads only the two answers it writes, and survives storage that throws", () => {
-		const s = memory();
-		writeChoice(s, "granted");
-		expect(s.m.get(CONSENT_KEY)).toBe("granted");
-		expect(readChoice(s)).toBe("granted");
-		expect(readChoice(memory({ [CONSENT_KEY]: "yes" }))).toBeNull();
-		const broken = { getItem: () => { throw new Error("denied"); }, setItem: () => { throw new Error("denied"); } };
-		expect(readChoice(broken)).toBeNull();
-		expect(() => writeChoice(broken, "denied")).not.toThrow();
-		expect(readChoice(null)).toBeNull();
+	it("takes its label from the consent widget", () => {
+		expect(base).toMatch(/const consentReopen = labels\.get\("consent", "reopen"\) \|\| undefined;/);
+		expect(base).toMatch(/consentLabel=\{consentReopen\}/);
 	});
 });
 
-describe("Zaraz hosts and cookies", () => {
-	it("is on only where the zone has Zaraz, never locally or on workers.dev", () => {
-		expect([...ZARAZ_HOSTS].sort()).toEqual(["preview.serverstartup.dev", "www.serverstartup.io"]);
-		for (const host of ["localhost", "127.0.0.1", "serverstartup.io", "www.serverstartup.dev", "x.workers.dev", "toString"])
-			expect(zarazEnabled(host)).toBe(false);
-	});
+describe("consent widget", () => {
+	const widget = (area: string) =>
+		seed.widgetAreas.find((a: { name: string }) => a.name === area)?.widgets.find((w: { title: string }) => w.title === "consent");
 
-	it("loads from the site's own origin, so the CSP needs no new host", () => {
-		expect(ZARAZ_LOADER.startsWith("/cdn-cgi/zaraz/")).toBe(true);
+	it("holds only the footer label in both locales: the window's words are Zaraz's", () => {
+		const labels = { ui_labels_es: "Preferencias de cookies", ui_labels_en: "Cookie preferences" };
+		for (const [area, text] of Object.entries(labels)) {
+			const content = widget(area)?.content;
+			expect(content?.map((b: { _key: string }) => b._key)).toEqual(["reopen"]);
+			expect(content[0].children[0].text).toBe(text);
+		}
+	});
+});
+
+describe("CSP", () => {
+	it("names no Zaraz or Google host: Zaraz is served from this origin", () => {
 		expect(outsideSources(middleware).join(" ")).not.toMatch(/zaraz|google/i);
 	});
 
-	it("scopes the cookies to the zone, as Zaraz sets them", () => {
-		expect(cookieDomain("preview.serverstartup.dev")).toBe(".serverstartup.dev");
-		expect(cookieDomain("www.serverstartup.io")).toBe(".serverstartup.io");
-	});
-});
-
-describe("withdrawal endpoint", () => {
-	const call = (host: string) => POST({ url: new URL(`https://${host}/api/consent-withdraw`) } as never) as Response;
-
-	it("expires every Zaraz cookie on the zone's domain, uncached", () => {
-		const res = call("preview.serverstartup.dev");
-		expect(res.status).toBe(204);
-		expect(res.headers.get("cache-control")).toBe("no-store");
-		const cookies = res.headers.getSetCookie();
-		expect(cookies).toHaveLength(ZARAZ_COOKIES.length);
-		for (const name of ZARAZ_COOKIES)
-			expect(cookies).toContain(`${name}=; Max-Age=0; Domain=.serverstartup.dev; Path=/; Secure; SameSite=Lax`);
-	});
-
-	it("answers 404 where there is no Zaraz", () => {
-		expect(call("localhost").status).toBe(404);
-	});
-});
-
-describe("wiring", () => {
-	it("renders the banner and the footer control only behind one condition", () => {
-		expect(base).toMatch(/const showConsent = zarazEnabled\(Astro\.url\.hostname\) &&/);
-		expect(base).toMatch(/\{showConsent && <ConsentBanner /);
-		expect(base).toMatch(/consentLabel=\{showConsent \? consent\.reopen : undefined\}/);
-		expect(footer).toMatch(/\{consentLabel && <button type="button" class="footer-legal__consent" data-consent-open>/);
-	});
-
-	it("starts hidden, gives accept and decline the same button, and names the withdrawal endpoint", () => {
-		expect(banner).toMatch(/<section class="consent" data-consent-banner[^>]*\shidden>/);
-		const buttons = [...banner.matchAll(/<button type="button" class="([^"]+)" data-consent-(accept|reject)>/g)];
-		expect(buttons.map((b) => b[2])).toEqual(["accept", "reject"]);
-		expect(buttons[0][1]).toBe(buttons[1][1]);
-		expect(banner).toMatch(/data-withdraw-url="\/api\/consent-withdraw"/);
+	it("sends no nonce and no 'unsafe-inline' for scripts: the edge adds Zaraz's nonce itself", () => {
+		const scriptSrc = middleware.match(/"script-src ([^"]*)"/)?.[1];
+		expect(scriptSrc).toBeDefined();
+		expect(scriptSrc).not.toMatch(/'unsafe-inline'|'nonce-/);
 	});
 });

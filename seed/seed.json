@@ -3576,81 +3576,7 @@
 				{
 					"type": "content",
 					"title": "consent",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "region",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Aviso de cookies"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "body",
-							"markDefs": [
-								{
-									"_key": "privacy",
-									"_type": "link",
-									"href": "/politica-de-privacidad"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "Con tu permiso medimos las visitas con Google Analytics, a través de Zaraz, de Cloudflare; tu navegador no se conecta con Google. Si lo rechazas, no se carga nada. Puedes cambiar tu respuesta desde el pie de cada página. Más detalle en la "
-								},
-								{
-									"_type": "span",
-									"text": "política de privacidad",
-									"marks": [
-										"privacy"
-									]
-								},
-								{
-									"_type": "span",
-									"text": "."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "accept",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Aceptar"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "reject",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Rechazar"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "reopen",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Preferencias de cookies"
-								}
-							]
-						}
-					]
+					"content": [{"_type":"block","style":"normal","_key":"reopen","children":[{"_type":"span","text":"Preferencias de cookies"}]}]
 				}
 			]
 		},
@@ -6383,81 +6309,7 @@
 				{
 					"type": "content",
 					"title": "consent",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "region",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Cookie notice"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "body",
-							"markDefs": [
-								{
-									"_key": "privacy",
-									"_type": "link",
-									"href": "/en/privacy-policy"
-								}
-							],
-							"children": [
-								{
-									"_type": "span",
-									"text": "With your permission we measure visits with Google Analytics, through Cloudflare's Zaraz; your browser never connects to Google. If you decline, nothing loads. You can change your answer from the foot of any page. More in the "
-								},
-								{
-									"_type": "span",
-									"text": "privacy policy",
-									"marks": [
-										"privacy"
-									]
-								},
-								{
-									"_type": "span",
-									"text": "."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "accept",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Accept"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "reject",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Decline"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"_key": "reopen",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Cookie preferences"
-								}
-							]
-						}
-					]
+					"content": [{"_type":"block","style":"normal","_key":"reopen","children":[{"_type":"span","text":"Cookie preferences"}]}]
 				}
 			]
 		}
@@ -15921,7 +15773,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Tu consentimiento al dirigirte a nosotros y, cuando exista relación profesional, la ejecución de un contrato y el cumplimiento de las obligaciones legales asociadas. La medición con Google Analytics se basa únicamente en tu consentimiento, que das o retiras en el aviso de cookies."
+									"text": "Tu consentimiento al dirigirte a nosotros y, cuando exista relación profesional, la ejecución de un contrato y el cumplimiento de las obligaciones legales asociadas. La medición con Google Analytics se basa únicamente en tu consentimiento, que das o retiras en la ventana de configuración de cookies."
 								}
 							]
 						},
@@ -16052,7 +15904,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Esta web no utiliza cookies de publicidad. Para contar las visitas usamos Web Analytics, de Cloudflare, nuestro proveedor de alojamiento: no usa cookies, no guarda nada en tu navegador y no te identifica. Registra la página que ves, la página desde la que llegas, lo que tarda en cargar, y tu país, navegador y tipo de dispositivo; tu dirección IP no se guarda. Es lo único que tu navegador descarga desde fuera de este dominio. Además, solo si lo aceptas en el aviso de cookies, medimos las visitas con Google Analytics a través de Zaraz, el gestor de etiquetas de Cloudflare: se sirve desde este mismo dominio y envía los datos a Google desde los servidores de Cloudflare, así que tu navegador no se conecta con Google. Al aceptar se guardan cuatro cookies de este dominio: zaraz-consent, con tu respuesta, durante un año; cf_zaraz_client, que Zaraz necesita para funcionar, durante un año; cfz_google-analytics_v4, que identifica tu navegador ante Google Analytics, durante un año; y cfzs_google-analytics_v4, que identifica la visita, hasta que cierras el navegador. Si lo rechazas, no se carga nada de esto y solo guardamos tu respuesta en el almacenamiento de tu navegador. Puedes cambiarla cuando quieras desde «Preferencias de cookies», al pie de cada página; si retiras el permiso, borramos esas cookies."
+									"text": "Esta web no utiliza cookies de publicidad. Para contar las visitas usamos Web Analytics, de Cloudflare, nuestro proveedor de alojamiento: no usa cookies, no guarda nada en tu navegador y no te identifica. Registra la página que ves, la página desde la que llegas, lo que tarda en cargar, y tu país, navegador y tipo de dispositivo; tu dirección IP no se guarda. Es lo único que tu navegador descarga desde fuera de este dominio. Además, con tu permiso, medimos las visitas con Google Analytics a través de Zaraz, el gestor de etiquetas de Cloudflare: se sirve desde este mismo dominio y envía los datos a Google desde los servidores de Cloudflare, así que tu navegador no se conecta con Google. Zaraz se carga en todas las páginas, porque es quien te pregunta, y guarda una cookie vacía, cf_zaraz_client, durante un año. Tu respuesta se guarda en la cookie zaraz-consent, también durante un año. Google Analytics solo se ejecuta si lo aceptas, y entonces guarda dos cookies más: cfz_google-analytics_v4, que identifica tu navegador ante Google Analytics, durante un año, y cfzs_google-analytics_v4, que identifica la visita, hasta que cierras el navegador. Puedes cambiar tu respuesta cuando quieras desde «Preferencias de cookies», al pie de cada página. Si retiras el permiso, Google Analytics deja de ejecutarse; esas dos cookies dejan de usarse y caducan solas, aunque puedes borrarlas antes desde tu navegador."
 								}
 							]
 						},
@@ -16895,7 +16747,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Your consent when you contact us and, where a professional relationship exists, performance of a contract and compliance with the associated legal obligations. Measuring visits with Google Analytics rests solely on your consent, which you give or withdraw in the cookie notice."
+									"text": "Your consent when you contact us and, where a professional relationship exists, performance of a contract and compliance with the associated legal obligations. Measuring visits with Google Analytics rests solely on your consent, which you give or withdraw in the cookie settings window."
 								}
 							]
 						},
@@ -17026,7 +16878,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This site uses no advertising cookies. To count visits we use Web Analytics from Cloudflare, our hosting provider: it uses no cookies, stores nothing in your browser and does not identify you. It records the page you view, the page you came from, how long it takes to load, and your country, browser and type of device; your IP address is not stored. It is the only thing your browser downloads from outside this domain. On top of that, and only if you accept it in the cookie notice, we measure visits with Google Analytics through Zaraz, Cloudflare's tag manager: it is served from this same domain and sends the data to Google from Cloudflare's servers, so your browser never connects to Google. Accepting stores four cookies from this domain: zaraz-consent, holding your answer, for one year; cf_zaraz_client, which Zaraz needs to work, for one year; cfz_google-analytics_v4, which identifies your browser to Google Analytics, for one year; and cfzs_google-analytics_v4, which identifies the visit, until you close the browser. If you decline, none of this loads and we keep only your answer, in your browser's storage. You can change it at any time from “Cookie preferences” at the foot of every page; if you withdraw your permission, we delete those cookies."
+									"text": "This site uses no advertising cookies. To count visits we use Web Analytics from Cloudflare, our hosting provider: it uses no cookies, stores nothing in your browser and does not identify you. It records the page you view, the page you came from, how long it takes to load, and your country, browser and type of device; your IP address is not stored. It is the only thing your browser downloads from outside this domain. On top of that, and with your permission, we measure visits with Google Analytics through Zaraz, Cloudflare's tag manager: it is served from this same domain and sends the data to Google from Cloudflare's servers, so your browser never connects to Google. Zaraz loads on every page, because it is what asks you, and stores one empty cookie, cf_zaraz_client, for one year. Your answer is kept in the zaraz-consent cookie, also for one year. Google Analytics runs only if you accept, and then stores two more cookies: cfz_google-analytics_v4, which identifies your browser to Google Analytics, for one year, and cfzs_google-analytics_v4, which identifies the visit, until you close the browser. You can change your answer at any time from “Cookie preferences” at the foot of every page. If you withdraw your permission, Google Analytics stops running; those two cookies are no longer used and expire on their own, though you can delete them sooner from your browser."
 								}
 							]
 						},
@@ -19880,7 +19732,7 @@
 						},
 						{
 							"key": "h7-2",
-							"text": "Fuera del sitio, el navegador solo llama a `Cloudflare`: descarga el *script* de [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) y le envía sus mediciones, sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de *scripts* son del propio sitio. Si aceptas la analítica, [`Zaraz`](https://developers.cloudflare.com/zaraz/), el gestor de etiquetas de `Cloudflare`, se carga desde este mismo dominio y envía la visita a [`Google Analytics 4`](https://developers.google.com/analytics) desde los servidores de `Cloudflare`: ni siquiera entonces llama el navegador a Google. Si la rechazas, `Zaraz` no llega a cargarse.",
+							"text": "Fuera del sitio, el navegador solo llama a `Cloudflare`: descarga el *script* de [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) y le envía sus mediciones, sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de *scripts* son del propio sitio. [`Zaraz`](https://developers.cloudflare.com/zaraz/), el gestor de etiquetas de `Cloudflare`, se carga en cada página desde este mismo dominio, y la ventana que pregunta por las cookies es la suya. Si aceptas la analítica, envía la visita a [`Google Analytics 4`](https://developers.google.com/analytics) desde los servidores de `Cloudflare`: ni siquiera entonces llama el navegador a Google. Si la rechazas, `Google Analytics 4` no llega a ejecutarse.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},
@@ -19970,7 +19822,7 @@
 						},
 						{
 							"key": "h7-2",
-							"text": "Outside the site, the browser calls `Cloudflare` and nobody else: it downloads the [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) script and sends it its measurements, with no cookies and identifying no one. Fonts, images and every other script are the site's own. If you accept analytics, [`Zaraz`](https://developers.cloudflare.com/zaraz/), Cloudflare's tag manager, loads from this same domain and sends the visit to [`Google Analytics 4`](https://developers.google.com/analytics) from Cloudflare's servers: even then the browser never calls Google. If you decline, `Zaraz` never loads.",
+							"text": "Outside the site, the browser calls `Cloudflare` and nobody else: it downloads the [`Web Analytics`](https://developers.cloudflare.com/web-analytics/about/) script and sends it its measurements, with no cookies and identifying no one. Fonts, images and every other script are the site's own. [`Zaraz`](https://developers.cloudflare.com/zaraz/), Cloudflare's tag manager, loads on every page from this same domain, and the window that asks about cookies is its own. If you accept analytics, it sends the visit to [`Google Analytics 4`](https://developers.google.com/analytics) from Cloudflare's servers: even then the browser never calls Google. If you decline, `Google Analytics 4` never runs.",
 							"file": "src/middleware.ts",
 							"status": "ok"
 						},

@@ -195,7 +195,7 @@ Detalle y pruebas
 Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
 src/styles/theme.css
 5.2
-Fuera del sitio, el navegador solo llama a Cloudflare: descarga el script de Web Analytics y le envía sus mediciones, sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de scripts son del propio sitio. Si aceptas la analítica, Zaraz, el gestor de etiquetas de Cloudflare, se carga desde este mismo dominio y envía la visita a Google Analytics 4 desde los servidores de Cloudflare: ni siquiera entonces llama el navegador a Google. Si la rechazas, Zaraz no llega a cargarse.
+Fuera del sitio, el navegador solo llama a Cloudflare: descarga el script de Web Analytics y le envía sus mediciones, sin cookies y sin identificar a nadie. Fuentes, imágenes y el resto de scripts son del propio sitio. Zaraz, el gestor de etiquetas de Cloudflare, se carga en cada página desde este mismo dominio, y la ventana que pregunta por las cookies es la suya. Si aceptas la analítica, envía la visita a Google Analytics 4 desde los servidores de Cloudflare: ni siquiera entonces llama el navegador a Google. Si la rechazas, Google Analytics 4 no llega a ejecutarse.
 src/middleware.ts
 5.3
 Las fuentes están en el repositorio, así que construir la web no depende de Google Fonts. Cloudflare Fonts no aplica: solo reescribe los enlaces a Google Fonts, y aquí no hay ninguno.

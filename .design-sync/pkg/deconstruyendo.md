@@ -113,7 +113,7 @@ voice. Everything else stays on paper.
   Anglicisms in *italics* (*middleware*, *passkeys*, *plugin*, *pull request*, *hash*). Stack and product
   names in `code`. Short: the founder wants it to read fast.
 - **Numbers.** Only those in the facts file's numbers table.
-- **Never claim** anything in its "Never claim" list. In particular: no HTTP/3, no Zaraz, no Turnstile, no
+- **Never claim** anything in its "Never claim" list. In particular: no HTTP/3, no Turnstile, no
   Access, no WebMCP, no llms.txt, no read replicas.
 - **Photographs.** Every one shown carries its credit as a small caption, from the credits table at the end
   of the facts file. Say the changes: «restaurada; puente retirado con IA».

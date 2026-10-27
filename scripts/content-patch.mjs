@@ -19,6 +19,11 @@
  * Pre-flight reads every entry before any write; any conflict, or an entry with
  * an unpublished draft, means nothing is written.
  *
+ * A change can also name a widget instead of an entry (#667): UI labels live in
+ * the ui_labels_<locale> widget areas, which are not a collection. Its value is
+ * always the widget's whole `content`, and a `before` of null means the widget
+ * does not exist yet, so applying the change creates it.
+ *
  * Usage:
  *   content-patch.mjs check [--seed <file>] [--patches <dir>]
  *       validate every patch and chain; seed.json must hold each value's target
@@ -44,7 +49,12 @@ const fail = (code, msg) => {
 	console.error(msg);
 	process.exit(code);
 };
-const where = (c) => `${c.collection}/${c.slug} [${c.locale}] ${JSON.stringify(c.path)}`;
+/** A change to a widget's content rather than to an entry's data. */
+const isWidget = (c) => c !== null && typeof c === "object" && "widgetArea" in c;
+/** The thing a change writes to: one entry, or one widget. */
+const entryKey = (c) => (isWidget(c) ? `widget:${c.widgetArea}/${c.widget}` : `${c.collection}/${c.slug}/${c.locale}`);
+const where = (c) =>
+	isWidget(c) ? `widget ${c.widgetArea}/${c.widget} ${JSON.stringify(c.path)}` : `${c.collection}/${c.slug} [${c.locale}] ${JSON.stringify(c.path)}`;
 
 /* ── patch files ──────────────────────────────────────────────────────── */
 
@@ -76,8 +86,15 @@ export function validatePatch(file, patch) {
 	const seen = [];
 	for (const [i, c] of patch.changes.entries()) {
 		const at = `${file} change ${i}`;
-		if (typeof c?.collection !== "string" || typeof c?.slug !== "string" || typeof c?.locale !== "string")
-			out.push(`${at}: "collection", "slug" and "locale" are required`);
+		if (isWidget(c)) {
+			if (typeof c.widgetArea !== "string" || typeof c.widget !== "string") out.push(`${at}: "widgetArea" and "widget" must be names`);
+			if ("collection" in c || "slug" in c || "locale" in c) out.push(`${at}: a change names a widget or an entry, not both`);
+			if (!isDeepStrictEqual(c.path, ["content"])) out.push(`${at}: a widget change replaces the widget's whole content — "path" must be ["content"]`);
+			if ("after" in c && !Array.isArray(c.after)) out.push(`${at}: a widget's "after" must be its list of blocks`);
+			if ("before" in c && c.before !== null && !Array.isArray(c.before))
+				out.push(`${at}: a widget's "before" must be its list of blocks, or null when the widget does not exist yet`);
+		} else if (typeof c?.collection !== "string" || typeof c?.slug !== "string" || typeof c?.locale !== "string")
+			out.push(`${at}: "collection", "slug" and "locale" are required — or "widgetArea" and "widget" for a widget`);
 		if (!Array.isArray(c?.path) || c.path.length === 0) {
 			out.push(`${at}: "path" must be a non-empty list`);
 			continue;
@@ -86,7 +103,7 @@ export function validatePatch(file, patch) {
 		if (bad.length) out.push(`${at}: path segment ${JSON.stringify(bad[0])} is not a key, an index or a one-key selector`);
 		if (!("before" in c) || !("after" in c)) out.push(`${at}: "before" and "after" are required`);
 		else if (isDeepStrictEqual(c.before, c.after)) out.push(`${at}: "before" and "after" are equal`);
-		const entry = `${c.collection}/${c.slug}/${c.locale}`;
+		const entry = entryKey(c);
 		for (const s of seen)
 			if (s.entry === entry && (isDeepStrictEqual(s.path, c.path) || isPrefix(s.path, c.path) || isPrefix(c.path, s.path)))
 				out.push(`${at}: its path overlaps change ${s.i} on the same entry — one change per value`);
@@ -106,8 +123,8 @@ export function chains(patches) {
 	const keys = [];
 	for (const { file, patch } of patches)
 		for (const c of patch.changes) {
-			const k = `${c.collection}/${c.slug}/${c.locale}::${JSON.stringify(c.path)}`;
-			const entry = `${c.collection}/${c.slug}/${c.locale}`;
+			const entry = entryKey(c);
+			const k = `${entry}::${JSON.stringify(c.path)}`;
 			for (const other of keys)
 				if (other.entry === entry && (isPrefix(other.path, c.path) || isPrefix(c.path, other.path)))
 					problems.push(`${file}: ${where(c)} overlaps ${JSON.stringify(other.path)} changed by ${other.file} — patch one value, never a value and its parent`);
@@ -210,6 +227,7 @@ export function parseWithSpans(src) {
 
 /** Plain value of a span node. */
 function plain(node) {
+	if (node.kind === "absent") return null;
 	if (node.kind === "scalar") return node.value;
 	if (node.kind === "array") return node.items.map(plain);
 	return Object.fromEntries(node.entries.map(([k, v]) => [k, plain(v)]));
@@ -224,8 +242,27 @@ function spanStep(node, seg) {
 	return hits.length === 1 ? hits[0] : undefined;
 }
 
+/**
+ * A widget's content in seed.json: widgetAreas[name].widgets[title].content.
+ * A widget the area does not hold yet comes back as { kind: "absent", list },
+ * whose plain value is null and which `seedApply` fills by appending to `list`.
+ */
+function seedWidgetSpan(root, c) {
+	const areas = spanStep(root, "widgetAreas");
+	if (!areas || areas.kind !== "array") return undefined;
+	const area = areas.items.filter((it) => it.kind === "object" && plain(it).name === c.widgetArea);
+	if (area.length !== 1) return undefined;
+	const list = spanStep(area[0], "widgets");
+	if (!list || list.kind !== "array") return undefined;
+	const hits = list.items.filter((it) => it.kind === "object" && plain(it).title === c.widget);
+	if (hits.length > 1) return undefined;
+	if (hits.length === 0) return { kind: "absent", list, start: list.end, end: list.end };
+	return spanStep(hits[0], "content");
+}
+
 /** The span of a change's value in seed.json: content.<collection>[slug+locale].data.<path>. */
 export function seedSpan(root, c) {
+	if (isWidget(c)) return seedWidgetSpan(root, c);
 	const list = spanStep(root, "content") && spanStep(spanStep(root, "content"), c.collection);
 	if (!list || list.kind !== "array") return undefined;
 	const hits = list.items.filter((it) => {
@@ -249,8 +286,30 @@ export function seedApply(src, patch) {
 		const cur = plain(node);
 		if (isDeepStrictEqual(cur, c.after)) continue;
 		if (!isDeepStrictEqual(cur, c.before)) throw new Error(`${where(c)}: seed holds neither "before" nor "after"`);
-		out = out.slice(0, node.start) + JSON.stringify(c.after) + out.slice(node.end);
+		if (node.kind === "absent") out = appendWidget(out, node.list, { type: "content", title: c.widget, content: c.after });
+		else out = out.slice(0, node.start) + JSON.stringify(c.after) + out.slice(node.end);
 	}
+	return out;
+}
+
+/** Append a widget to an area's widget list, indented like the widget before it. */
+function appendWidget(src, list, widget) {
+	const last = list.items.at(-1);
+	const at = last ? last.end : list.start + 1;
+	const lineStart = src.lastIndexOf("\n", (last ?? list).start) + 1;
+	const indent = (src.slice(lineStart).match(/^[\t ]*/)?.[0] ?? "") + (last ? "" : "\t");
+	const text = JSON.stringify(widget, null, "\t").replaceAll("\n", `\n${indent}`);
+	return `${src.slice(0, at)}${last ? "," : ""}\n${indent}${text}${src.slice(at)}`;
+}
+
+/** A copy of the plain seed document with one change's value set (widgets appended when absent). */
+function docSet(doc, c, value) {
+	if (!isWidget(c)) return setAt(doc, ["content", c.collection, entryIndex(doc, c), "data", ...c.path], value);
+	const out = structuredClone(doc);
+	const area = out.widgetAreas.find((a) => a.name === c.widgetArea);
+	const widget = area.widgets.find((w) => w.title === c.widget);
+	if (widget) widget.content = value;
+	else area.widgets.push({ type: "content", title: c.widget, content: value });
 	return out;
 }
 
@@ -301,7 +360,7 @@ function seed(file) {
 	}
 	// nothing but the patched values may differ
 	const doc = JSON.parse(src);
-	const expected = patch.changes.reduce((d, c) => setAt(d, ["content", c.collection, entryIndex(d, c), "data", ...c.path], c.after), doc);
+	const expected = patch.changes.reduce((d, c) => docSet(d, c, c.after), doc);
 	let written;
 	try {
 		written = JSON.parse(out);
@@ -334,10 +393,42 @@ async function apply(args) {
 
 	// Pre-flight: read every entry once, decide every value, write nothing yet.
 	const entries = new Map(); // "collection/slug/locale" → { c0, item, data, fields:Set, files:Set }
+	const areas = new Map(); // widget area name → its widgets, as the API returns them
+	const widgetWrites = []; // { c, widget (or undefined: create), target, files }
 	let skipped = 0;
 	const conflicts = [];
 	for (const { c, states, files } of all) {
-		const k = `${c.collection}/${c.slug}/${c.locale}`;
+		if (isWidget(c)) {
+			if (!areas.has(c.widgetArea)) {
+				let area;
+				try {
+					area = await client.request("GET", `/widget-areas/${encodeURIComponent(c.widgetArea)}`);
+				} catch (e) {
+					fail(3, `content-patch: cannot read widget area ${c.widgetArea} from ${baseUrl} — ${e.message}`);
+				}
+				areas.set(c.widgetArea, area.widgets ?? []);
+			}
+			const hits = areas.get(c.widgetArea).filter((w) => w.title === c.widget);
+			if (hits.length > 1) {
+				conflicts.push(`${where(c)}: ${hits.length} widgets carry that title`);
+				continue;
+			}
+			const widget = hits[0];
+			const cur = widget ? (widget.content ?? null) : null;
+			const target = states[states.length - 1];
+			if (isDeepStrictEqual(cur, target)) {
+				skipped++;
+				continue;
+			}
+			const at = states.findIndex((s) => isDeepStrictEqual(s, cur));
+			if (at === -1) {
+				conflicts.push(`${where(c)} holds ${JSON.stringify(cur)?.slice(0, 120)}, no state of its patches (${files.join(", ")})`);
+				continue;
+			}
+			widgetWrites.push({ c, widget, target, files: files.slice(at) });
+			continue;
+		}
+		const k = entryKey(c);
 		if (!entries.has(k)) {
 			let item;
 			try {
@@ -370,12 +461,20 @@ async function apply(args) {
 
 	const pending = [...entries.values()].filter((e) => e.fields.size > 0);
 	const fieldCount = pending.reduce((s, e) => s + e.fields.size, 0);
-	console.log(`content-patch: ${baseUrl} — ${skipped} value(s) already at target, ${pending.length} entr(ies) to write (${fieldCount} field(s))${dryRun ? " [dry run]" : ""}`);
+	const widgetLabel = (w) => `widget ${w.c.widgetArea}/${w.c.widget}`;
+	console.log(
+		`content-patch: ${baseUrl} — ${skipped} value(s) already at target, ${pending.length} entr(ies) to write (${fieldCount} field(s)), ` +
+			`${widgetWrites.length} widget(s) to write${dryRun ? " [dry run]" : ""}`,
+	);
 	if (dryRun) {
 		for (const e of pending) console.log(`  would write ${e.c0.collection}/${e.c0.slug} [${e.c0.locale}]: ${[...e.fields].join(", ")} (${[...e.files].join(", ")})`);
+		for (const w of widgetWrites) console.log(`  would ${w.widget ? "update" : "create"} ${widgetLabel(w)} (${w.files.join(", ")})`);
 		return;
 	}
 	const written = [];
+	const notWritten = (from) =>
+		[...pending.slice(from).map((p) => `${p.c0.collection}/${p.c0.slug} [${p.c0.locale}]`), ...widgetWrites.slice(Math.max(0, from - pending.length)).map(widgetLabel)].join(", ") ||
+		"none";
 	for (const e of pending) {
 		const { collection, slug, locale } = e.c0;
 		const label = `${collection}/${slug} [${locale}]`;
@@ -396,7 +495,31 @@ async function apply(args) {
 				3,
 				`content-patch: writing ${label} failed — ${err.message}\n` +
 					`  already written and published: ${written.length ? written.join(", ") : "none"}\n` +
-					`  not written: ${pending.slice(written.length + 1).map((p) => `${p.c0.collection}/${p.c0.slug} [${p.c0.locale}]`).join(", ") || "none"}\n` +
+					`  not written: ${notWritten(written.length + 1)}\n` +
+					"  A re-run skips what was written and retries the rest.",
+			);
+		}
+	}
+	// Widgets carry no revision and no _rev: the pre-flight read is the only
+	// guard, so the window between it and the write is the one this cannot close.
+	for (const w of widgetWrites) {
+		const label = widgetLabel(w);
+		const areaPath = `/widget-areas/${encodeURIComponent(w.c.widgetArea)}`;
+		try {
+			if (w.widget) await client.request("PUT", `${areaPath}/widgets/${encodeURIComponent(w.widget.id)}`, { content: w.target });
+			else await client.request("POST", `${areaPath}/widgets`, { type: "content", title: w.c.widget, content: w.target });
+			const back = ((await client.request("GET", areaPath)).widgets ?? []).filter((x) => x.title === w.c.widget);
+			if (back.length !== 1) throw new Error(`${back.length} widgets carry that title after the write`);
+			if (!isDeepStrictEqual(back[0].content, w.target)) throw new Error("its content did not read back as written");
+			if (w.widget && back[0].type !== w.widget.type) throw new Error("its type changed although no patch touched it");
+			written.push(label);
+			console.log(`  ${w.widget ? "updated" : "created"} ${label}`);
+		} catch (err) {
+			fail(
+				3,
+				`content-patch: writing ${label} failed — ${err.message}\n` +
+					`  already written and published: ${written.length ? written.join(", ") : "none"}\n` +
+					`  not written: ${notWritten(written.length + 1)}\n` +
 					"  A re-run skips what was written and retries the rest.",
 			);
 		}

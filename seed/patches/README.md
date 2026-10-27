@@ -63,7 +63,37 @@ are applied. A file looks like this:
 - One change per value in a patch. A patch, or two patches, cannot change a value and also its
   parent, such as `facts` and `facts[0].text`; `check` rejects it.
 - A patch is only for content that already exists. Collections and fields come from the seed's schema;
-  entries come from the seed itself.
+  entries come from the seed itself. The one exception is a UI-label widget, below.
+
+### UI labels: a change to a widget
+
+UI labels live in the `ui_labels_es` and `ui_labels_en` widget areas, which are not a collection. A
+change names the widget instead of an entry:
+
+```json
+{
+	"widgetArea": "ui_labels_es",
+	"widget": "consent",
+	"path": ["content"],
+	"before": null,
+	"after": [{ "_type": "block", "style": "normal", "_key": "accept", "children": [{ "_type": "span", "text": "Aceptar" }] }]
+}
+```
+
+- **`widget`** is the widget's title, the first argument of `labels.get()`.
+- **`path`** is always `["content"]`. A widget change writes the widget's whole list of blocks, so a
+  later change to one label repeats the list with that label changed.
+- **`before: null`** means the widget does not exist yet. Applying the change creates it at the end of
+  the area. In `seed.json`, `content-patch.mjs seed` appends it to the area's `widgets`.
+- A widget has no revisions and no `_rev`, so its write has no optimistic concurrency. The pre-flight
+  read is the only guard: an admin edit made between that read and the write is overwritten. After
+  writing, the run reads the widget back and checks its content and type.
+- Create at most one new widget per area in a patch. `seed` would insert two at the same place in
+  reverse order, and it refuses rather than write that.
+- The edge cache is not proven to follow. EmDash's widget handlers invalidate the area's cache tag
+  through Astro's route cache, but no widget write has been watched reaching Cloudflare's cache. Until
+  one has, a page showing the label may serve the old text for up to the one-hour edge TTL set in
+  `src/middleware.ts`.
 
 The same change also goes into `seed.json`. `content-patch.mjs seed <file>` writes each `after` into the
 seed by replacing only that value's text, so the hand formatting elsewhere in the file survives. It

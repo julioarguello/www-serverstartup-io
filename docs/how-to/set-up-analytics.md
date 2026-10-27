@@ -63,7 +63,9 @@ checks out.
 
 1. Open **Zaraz → Settings** (the dashboard may file it under **Tag management**), choose the zone,
    turn off **Auto-inject script**, and select **Save**. → [Turn off Auto-inject script](#turn-off-auto-inject-script)
-2. Open **Zaraz → Tools**, add **Google Analytics 4**, and enter the measurement ID `G-CZDVNRD4NB`.
+2. Open **Zaraz → Tools**, add **Google Analytics 4**, and enter the zone's own measurement ID:
+   `G-CZDVNRD4NB` on `serverstartup.io`, `G-JTC176MCZD` on `serverstartup.dev`. Each is a separate GA4
+   property, so test visits on preview never count as production.
    Expect: the tool listed as enabled.
 3. Open **Zaraz → Consent** and turn on **Enable Consent Management**.
 4. Under **Purposes**, add a purpose named `Analítica`, with the English translation `Analytics`.
@@ -130,7 +132,7 @@ auto-injection adds a nonce to the response's Content Security Policy (CSP). The
 | Web Analytics tokens | repository | `BEACON_TOKENS`, `src/utils/web-analytics.ts` |
 | CSP hosts for Web Analytics | repository | `src/middleware.ts`, pinned by `tests/unit/csp-outside-hosts.test.ts` |
 | Zaraz Auto-inject script | dashboard | off, on every zone |
-| GA4 measurement ID | dashboard | `G-CZDVNRD4NB` |
+| GA4 measurement ID, one property per zone | dashboard | `serverstartup.io`: `G-CZDVNRD4NB` · `serverstartup.dev` (preview): `G-JTC176MCZD` |
 | Consent purpose and its tools | dashboard | `Analítica` / `Analytics`, with GA4 assigned; its ID on `serverstartup.dev` is `TlZw` (each zone generates its own) |
 | Consent cookie | Zaraz | `zaraz-consent`, set when the visitor answers |
 | GA4 cookies | Zaraz | `cfz_google-analytics_v4`, `cfzs_google-analytics_v4`, only after consent |

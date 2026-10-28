@@ -8,6 +8,10 @@
 //   header's edge set to the same time and paused, which is what the site's own rail does.
 //
 // Frame f (0 = «nosotros», 1-6 the photographs) at `at` ms into the frame.
+// STEP is the delivery's clock (its `ns.js` runs 6 s frames). The site's is read from its stylesheet
+// (`--hero-cycle`, `--hero-step`), never restated here: it moved from 6 s to 8 s in #682. Callers give `at`
+// against a 6 s frame; on the site it is scaled to the same share of the frame, so «5200 ms into «nosotros»»
+// still means its lit end state.
 const STEP = 6000;
 const LEAD = 500; // every frame's animations are delayed by i * step - 0.5 s
 
@@ -64,7 +68,14 @@ async function pinFrame(page, url, f, at) {
 		const imgs = [...document.querySelectorAll('.s-hero__photo')];
 		return imgs.length && imgs.every((i) => !i.dataset.srcset && i.complete && i.naturalWidth > 0);
 	}, { timeout: 60000 });
-	await page.evaluate((t) => {
+	await page.evaluate(([f, lead, at, delivery]) => {
+		const ms = (name) => {
+			const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+			return raw.endsWith('ms') ? parseFloat(raw) : parseFloat(raw) * 1000;
+		};
+		const step = ms('--hero-step');
+		const t = ms('--hero-cycle') + f * step - lead + at * step / delivery;
+		if (!Number.isFinite(t)) throw new Error('no --hero-cycle / --hero-step on the page to pin a frame on');
 		const anims = [
 			...document.querySelector('.s-hero').getAnimations({ subtree: true }),
 			...(document.querySelector('.site-header')?.getAnimations() ?? []),
@@ -73,7 +84,7 @@ async function pinFrame(page, url, f, at) {
 			a.pause();
 			a.currentTime = t;
 		}
-	}, 42000 + f * STEP - LEAD + at);
+	}, [f, LEAD, at, STEP]);
 	await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 	await new Promise((r) => setTimeout(r, 300));
 }

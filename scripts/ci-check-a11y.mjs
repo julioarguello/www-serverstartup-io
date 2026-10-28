@@ -1322,13 +1322,25 @@ console.log("── 1.4.11 the bands' pause at rest, on its photograph");
 		if (frame === undefined) {
 			await page.waitForFunction(() => document.querySelector(".s-hero--scene")?.classList.contains("is-done"), { timeout: 20000 });
 		} else {
-			// the rail's own move (`.design-sync/verify/frame.cjs`): every animation of the band and the header pinned
-			await page.evaluate((t) => {
+			// the rail's own move (`.design-sync/verify/frame.cjs`): every animation of the band and the header pinned,
+			// 3 s into the frame, on the stylesheet's own clock — never a copy of it, which pins the wrong frame the day
+			// the clock changes and still reads green (#682)
+			await page.evaluate((f) => {
+				const ms = (name) => {
+					const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+					return raw.endsWith("ms") ? parseFloat(raw) : parseFloat(raw) * 1000;
+				};
+				const t = ms("--hero-cycle") + f * ms("--hero-step") - 500 + 3000;
+				if (!Number.isFinite(t)) throw new Error("1.4.11: no --hero-cycle / --hero-step to pin a frame on");
 				for (const a of [...document.querySelector(".s-hero").getAnimations({ subtree: true }), ...(document.querySelector(".site-header")?.getAnimations() ?? [])]) {
 					a.pause();
 					a.currentTime = t;
 				}
-			}, 42000 + frame * 6000 - 500 + 3000);
+				// the frame on screen must be the one asked for: «nosotros» is the index, a photograph its caption
+				const item = [...document.querySelectorAll(".s-hero__item")].findIndex((e) => +getComputedStyle(e).opacity > 0.5);
+				const shows = +getComputedStyle(document.querySelector(".s-hero__verticals")).opacity > 0.5 ? 0 : item === -1 ? "none" : item + 1;
+				if (shows !== f) throw new Error(`1.4.11: frame ${f} pinned at ${t} ms, but the band shows frame ${shows} — the clock was read wrong`);
+			}, frame);
 		}
 		await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 		const box = await (await page.$(".scene__pause-btn")).boundingBox();

@@ -24,6 +24,12 @@ const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 });
 Astro.cache.set(cacheHint);
 
+// #626: the same rule as posts/index.astro (#464). With no posts, an archive
+// is an empty page with a 200, which is what the template's demo terms served
+// in production. An empty archive is absent: 404. It comes back by itself once
+// a post carries the term.
+if (posts.length === 0) return new Response(null, { status: 404 });
+
 // Fetch tags for display on each post card
 const filteredPosts = await Promise.all(
 	posts.map(async (post) => {

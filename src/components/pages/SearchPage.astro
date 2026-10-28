@@ -79,6 +79,7 @@ const results = query
 				<div class="search-results">
 					{results.map((result) => (
 						<PostCard
+							locale={locale}
 							title={result.title || ""}
 							href={resultHref(result)}
 							placeholder={false}

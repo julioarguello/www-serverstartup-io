@@ -18,7 +18,14 @@ export async function loadPosts(locale: string) {
 export async function loadPost(slug: string, locale: string) {
 	const { entry: post, cacheHint } = await getEmDashEntry("posts", slug, { locale });
 	if (!post) return null;
-	return { locale, slug, post, cacheHints: [cacheHint] };
+	// The "More posts" section: a few extra in case the current post is among them.
+	// Its hint goes to the route too, so publishing another post refreshes this one.
+	const { entries: recentPosts, cacheHint: recentHint } = await getEmDashCollection("posts", {
+		orderBy: { published_at: "desc" },
+		limit: 4,
+		locale,
+	});
+	return { locale, slug, post, recentPosts, cacheHints: [cacheHint, recentHint] };
 }
 
 export async function loadArchive(taxonomy: "category" | "tag", slug: string, locale: string) {

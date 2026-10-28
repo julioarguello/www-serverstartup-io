@@ -966,8 +966,9 @@ Decisions:
   `seo` in `supports`, so each entry gets a panel in the admin: title,
   description, image, canonical and noindex, stored in `_emdash_seo`.
   - **What reads it:** `src/utils/entry-seo.ts` (`entryHead`) lays what the
-    editor filled over the page's own defaults, in `[slug].astro` and
-    `en/[slug].astro`, the JSON-LD included.
+    editor filled over the page's own defaults, in
+    `src/components/pages/EntryPage.astro` (the body of `[slug].astro` and `en/[slug].astro`), the
+    JSON-LD included.
     - Only a filled field overrides.
     - An empty one keeps Base's title suffix, the origin canonical, the
       excerpt as description and the site's OG image.

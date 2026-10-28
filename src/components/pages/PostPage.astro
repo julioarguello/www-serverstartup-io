@@ -5,7 +5,6 @@
  * post, and cache.
  */
 import {
-	getEmDashCollection,
 	getEntryTerms,
 	getSeoMeta,
 	getSiteSettings,
@@ -24,7 +23,7 @@ import { postSlug } from "../../utils/pages/post-path";
 import type { PostData } from "../../utils/pages/blog";
 
 type Props = Omit<PostData, "cacheHints">;
-const { locale, slug, post } = Astro.props;
+const { locale, slug, post, recentPosts } = Astro.props;
 const t = Astro.locals.t;
 const prefix = locale === "en" ? "/en" : "";
 
@@ -70,12 +69,7 @@ const bylines = post.data.bylines ?? [];
 // Get reading time
 const readingTime = getReadingTime(post.data.content);
 
-// Get other posts for "More posts" section, with their tags
-// Fetch a few extra in case the current post is among them
-const { entries: recentPosts } = await getEmDashCollection("posts", {
-	orderBy: { published_at: "desc" },
-	limit: 4,
-});
+// Other posts for the "More posts" section, with their tags (loaded by utils/pages/blog.ts)
 const otherPosts = recentPosts.filter((p) => p.id !== post.id).slice(0, 3);
 
 // Fetch tags for related posts (bylines are already hydrated by getEmDashCollection)
@@ -94,7 +88,8 @@ const publishDate =
 		month: "long",
 		day: "numeric",
 	}) ?? null;
-const publishDateIso = post.data.publishedAt?.toISOString() ?? null;---
+const publishDateIso = post.data.publishedAt?.toISOString() ?? null;
+---
 
 <Base
 	title={seo.title}
@@ -113,7 +108,7 @@ const publishDateIso = post.data.publishedAt?.toISOString() ?? null;---
 		title: seo.title || post.data.title,
 		description: seo.description || post.data.excerpt || "",
 		slug,
-		locale: Astro.currentLocale || "es",
+		locale,
 		publishedAt: post.data.publishedAt,
 		updatedAt: post.data.updatedAt,
 		image: featuredImageUrl,
@@ -262,6 +257,7 @@ const publishDateIso = post.data.publishedAt?.toISOString() ?? null;---
 						{otherPostsWithTags.map(
 							({ post: p, tags: postTags, bylines: postBylines }) => (
 								<PostCard
+							locale={locale}
 									title={p.data.title}
 									excerpt={p.data.excerpt}
 									featuredImage={p.data.featured_image}

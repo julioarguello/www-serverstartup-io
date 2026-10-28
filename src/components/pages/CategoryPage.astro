@@ -22,7 +22,8 @@ const filteredPosts = await Promise.all(
 		const tags = await getEntryTerms("posts", post.data.id, "tag");
 		return { post, tags };
 	})
-);---
+);
+---
 
 <Base title={`${t("posts_in")} ${term.label}`} description={`${t("all_posts_in")} ${term.label}`}>
 	<section class="archive-section">

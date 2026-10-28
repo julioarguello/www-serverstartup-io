@@ -22,7 +22,8 @@ const filteredPosts = await Promise.all(
 		const tags = await getEntryTerms("posts", post.data.id, "tag");
 		return { post, tags };
 	})
-);---
+);
+---
 
 <Base
 	title={`${t("posts_tagged")} "${term.label}"`}

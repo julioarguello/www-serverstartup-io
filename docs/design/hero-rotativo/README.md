@@ -213,7 +213,7 @@ source has to be paid for there.
 | --- | --- |
 | Face → file map | [`src/utils/hero-art.ts`](../../../src/utils/hero-art.ts) |
 | The home's rotation | [`src/components/HomepageContent.astro`](../../../src/components/HomepageContent.astro), [`src/styles/homepage.css`](../../../src/styles/homepage.css) |
-| The vertical page's still plate | [`src/pages/[slug].astro`](../../../src/pages/%5Bslug%5D.astro), [`src/styles/service.css`](../../../src/styles/service.css) |
+| The vertical page's still plate | [`src/components/pages/EntryPage.astro`](../../../src/components/pages/EntryPage.astro), [`src/styles/service.css`](../../../src/styles/service.css) |
 | The photographic ground | [`grounds.py`](grounds.py); `.s-hero__ground` in [`homepage.css`](../../../src/styles/homepage.css) and [`service.css`](../../../src/styles/service.css) |
 | The solved crop and the colour | `GROUNDS` and `treat()` in [`grounds.py`](grounds.py) |
 | The bed under each subject | `bed()` in [`generate.py`](generate.py) |

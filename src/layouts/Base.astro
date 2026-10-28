@@ -22,6 +22,7 @@ import type { SiteSettings } from "../types";
 import SiteHeader from "../components/SiteHeader.astro";
 import MenuDialog from "../components/MenuDialog.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import ConsentNotice from "../components/ConsentNotice.astro";
 import "../styles/theme.css";
 
 interface Props {
@@ -248,10 +249,19 @@ const partnerUrl = (partnerEntries ?? []).find((p) => Boolean(p.data.featured))?
 const currentPath = Astro.url.pathname;
 // #309: Web Analytics beacon, per host; null on any host not measured.
 const beacon = beaconConfig(Astro.url.hostname);
-// #667: the footer control that reopens Zaraz's consent window. Zaraz shows
-// the window itself (its text lives in the Zaraz dashboard, not the CMS); the
-// control's label is the one word of it the site renders.
-const consentReopen = labels.get("consent", "reopen") || undefined;
+// #679: the cookie notice and the footer control that reopens it. Every word
+// is in the `consent` widget; until a deploy has created all of them, neither
+// renders, rather than show empty buttons. Whether Zaraz is on the page is
+// decided in the browser (src/utils/consent.ts), so the cached HTML is shared.
+const consentBody = labels.getBlocks("consent").get("body");
+const consent = {
+	label: labels.get("consent", "region"),
+	body: consentBody ? [consentBody] : [],
+	accept: labels.get("consent", "accept"),
+	reject: labels.get("consent", "reject"),
+	reopen: labels.get("consent", "reopen"),
+};
+const showConsent = consent.body.length > 0 && Boolean(consent.label && consent.accept && consent.reject && consent.reopen);
 const altLocale = locale === "es" ? "en" : "es";
 const altPath =
 	altPathProp !== undefined ? altPathProp : routeAlternatePath(currentPath, locale);
@@ -339,6 +349,11 @@ const resolvedOgType = ogType || "website";
 	     header when it appears — hence the offset, not just `top: 0`. -->
 	<a href="#content" class="skip-link">{Astro.locals.t("skip_to_content")}</a>
 
+	<!-- #679: right after the skip link, so the second Tab reaches the notice
+	     while it is shown. GOV.UK puts its banner before the skip link; axe's
+	     region rule exempts a skip link only when it comes first. -->
+	{showConsent && <ConsentNotice label={consent.label} body={consent.body} accept={consent.accept} reject={consent.reject} />}
+
 	<SiteHeader promptPath={promptPath} accent={headerAccent} altPath={altPath} overHero={heroOverlay} slideColors={heroSlideColors} />
 
 	<MenuDialog services={services} siteItems={siteMenuItems} currentPath={promptPath} localePrefix={localePrefix} />
@@ -370,7 +385,7 @@ const resolvedOgType = ogType || "website";
 		partnerUrl={partnerUrl}
 		localePrefix={localePrefix}
 		locale={locale}
-		consentLabel={consentReopen}
+		consentLabel={showConsent ? consent.reopen : undefined}
 	/>
 
 	<!-- ═══ SCRIPTS ═══ -->

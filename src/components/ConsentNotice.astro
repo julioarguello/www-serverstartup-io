@@ -1,0 +1,84 @@
+---
+/**
+ * The cookie notice (#679): a small card in the bottom-left corner that does
+ * not block the page, in place of Zaraz's own window, which is a true modal.
+ * Its shape copies the corner cards of the sites listed in the issue (Neon's
+ * Zaraz notice, Framer, Stripe): about 4 % of a desktop viewport, Accept and
+ * Reject side by side and identical, as the AEPD's cookie guide asks.
+ *
+ * Rendered hidden on every page, so the edge-cached HTML is the same for
+ * everyone; src/utils/consent.ts shows it only where Zaraz is on the page and
+ * the visitor has not answered. It stays until they answer: no close button,
+ * and Escape does nothing (AEPD guide §3.1.2.2). The footer reopens it.
+ * Every word comes from the `consent` widget.
+ */
+import { PortableText } from "emdash/ui";
+import PtLink from "./PtLink.astro";
+import type { WidgetBlock } from "../utils/ui-labels";
+
+interface Props {
+	label: string;
+	body: WidgetBlock[];
+	accept: string;
+	reject: string;
+}
+
+const { label, body, accept, reject } = Astro.props;
+---
+<section class="consent" data-consent-notice aria-label={label} hidden>
+	<div class="consent__body"><PortableText value={body} components={{ mark: { link: PtLink } }} /></div>
+	<div class="consent__actions">
+		<button type="button" class="btn btn-dark" data-consent-accept>{accept}</button>
+		<button type="button" class="btn btn-dark" data-consent-reject>{reject}</button>
+	</div>
+</section>
+
+<script>
+	import { start } from "../utils/consent";
+	start();
+</script>
+
+<style>
+	/* PANEL chrome (#452): a separate surface floating over the page, so the
+	   hairline, the radius and the card shadow. Not modal: the page behind it
+	   stays usable. Below the header's menu, above everything else. */
+	.consent {
+		position: fixed;
+		left: var(--space-3);
+		bottom: var(--space-3);
+		z-index: 150;
+		width: min(var(--notice-width), calc(100% - 2 * var(--space-3)));
+		padding: var(--space-3);
+		background: var(--color-secondary);
+		color: var(--color-text);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow-card);
+	}
+	.consent[hidden] {
+		display: none;
+	}
+	.consent__body {
+		font-size: 15px;
+		line-height: 1.5;
+	}
+	.consent__body :global(p) {
+		margin: 0;
+	}
+	.consent__body :global(a) {
+		color: inherit;
+		text-decoration: underline dashed;
+		text-underline-offset: 3px;
+	}
+	.consent__body :global(a:hover) {
+		text-decoration-style: solid;
+	}
+	.consent__actions {
+		display: flex;
+		gap: var(--space-2);
+		margin-top: var(--space-3);
+	}
+	.consent__actions .btn {
+		flex: 1 1 0;
+	}
+</style>

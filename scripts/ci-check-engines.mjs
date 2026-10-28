@@ -24,11 +24,15 @@
  *      SCENE_BEATS.end of starting, plus a margin.
  *   R  reduced motion: every vertical starts `is-done`, nothing runs in the home's band, and no
  *      pause or replay is shown — there is nothing for it to stop.
+ *   P  the home's pause, at load: inside the first screen, below the header, and on no text (#681 —
+ *      after #572 it sat at the band's foot, 180–440 px under a phone's fold); on a phone also at 360
+ *      and 320 px, the narrowest widths, where the h1's first line comes closest to it.
  *
  * Before any of it, each profile must catch its planted defects: a stylesheet that freezes the
- * tail's colour, a vertical whose scene script never arrives, a label on the h1, and a card that
- * does the opposite of what that width expects (animated on a phone, frozen from 768 px up). A
- * profile that misses any is blind and the run exits 3 — as it does when an engine fails to launch.
+ * tail's colour, a vertical whose scene script never arrives, a label on the h1, a card that
+ * does the opposite of what that width expects (animated on a phone, frozen from 768 px up), a
+ * pause pushed a screen down, a pause lifted under the header, and a word under the pause. A profile that misses any is blind and
+ * the run exits 3 — as it does when an engine fails to launch.
  *
  * Exit: 0 green · 1 a defect · 3 blind (an engine missing, a plant not seen, the stack gone).
  *
@@ -163,6 +167,46 @@ async function home(page, route) {
 	return { problems, tail0: tails[0] };
 }
 
+/** P — the home's pause where this profile's first screen shows it (#681): below the header, above the fold, on no
+    text in the band. Read at load, before any scroll; `plant` pushes it a screen down, lifts it under the header, or puts
+    a word under it — one plant per bound. */
+async function pauseInView(page, route, plant) {
+	await page.goto(`${BASE}${route}?engines=${Date.now()}`, { waitUntil: "load", timeout: 60_000 });
+	return page.evaluate(([route, plant]) => {
+		const ctl = document.querySelector(".s-hero--home .scene__ctl");
+		if (!ctl) return [`${route}: no pause in the home's band`];
+		if (plant === "fold") ctl.style.translate = "0 100vh";
+		if (plant === "header") Object.assign(ctl.style, { top: "0px", bottom: "auto" });
+		if (plant === "word") {
+			const c = ctl.getBoundingClientRect(), band = document.querySelector(".s-hero--home");
+			const s = document.createElement("span");
+			s.textContent = "PLANT";
+			s.style.cssText = `position:absolute;left:${c.left - band.getBoundingClientRect().left + 4}px;top:${c.top - band.getBoundingClientRect().top + 4}px;color:#fff`;
+			band.append(s);
+		}
+		const c = ctl.getBoundingClientRect();
+		/* the header is the first screen's top bound: with no header there is nothing to measure "below" against, and a
+		   silent 0 would pass a control hidden under it */
+		const header = document.querySelector(".site-header");
+		if (!header) return [`${route}: no .site-header — the pause's top bound cannot be measured`];
+		const top = header.getBoundingClientRect().bottom;
+		const problems = [];
+		if (c.top < top || c.bottom > innerHeight)
+			problems.push(`${route} at ${innerWidth} px: the pause is at y ${Math.round(c.top)}–${Math.round(c.bottom)}, outside the first screen (${Math.round(top)}–${innerHeight}) — the band can only be stopped after a scroll`);
+		/* every painted text line in the band, the control's own glyphs aside; opacity read up the whole chain */
+		const seen = (e) => { for (let x = e; x && x.nodeType === 1; x = x.parentElement) { const s = getComputedStyle(x); if (s.display === "none" || s.visibility === "hidden" || +s.opacity < 0.05) return false; } return true; };
+		const walk = document.createTreeWalker(document.querySelector(".s-hero--home"), NodeFilter.SHOW_TEXT);
+		for (let n; (n = walk.nextNode());) {
+			if (!n.textContent.trim() || n.parentElement.closest(".scene__ctl") || !seen(n.parentElement)) continue;
+			const r = document.createRange();
+			r.selectNodeContents(n);
+			const under = [...r.getClientRects()].some((q) => Math.min(q.right, c.right) - Math.max(q.left, c.left) > 1 && Math.min(q.bottom, c.bottom) - Math.max(q.top, c.top) > 1);
+			if (under) problems.push(`${route} at ${innerWidth} px: the pause covers «${n.textContent.trim().slice(0, 24)}»`);
+		}
+		return problems;
+	}, [route, plant]);
+}
+
 /* O — the scene's own text against the copy's lines, mid-animation: what is painted (opacity read up the whole
    chain, so a label under a fade still counts) and not part of the copy, the epigraph or the controls. The copy's
    selectors are restated here on purpose — a check that imported the scenes' own list would agree with them by
@@ -239,9 +283,9 @@ async function profileRun(p) {
 	}
 	const t0 = Date.now();
 	{
-		/* the plants: both must be called, or this profile is not measuring anything */
+		/* the plants: every one must be called, or this profile is not measuring anything */
 		const phone = devices[p.device].viewport.width < 768;
-		const [frozen, stalled, covered, flipped] = await Promise.all([
+		const [frozen, stalled, covered, flipped, sunk, lifted, worded] = await Promise.all([
 			withPage(p, {}, async (page) => {
 				await page.addInitScript(plantStyle(".ss-title__tail { animation: none !important; }"));
 				return (await home(page, "/")).problems;
@@ -259,21 +303,31 @@ async function profileRun(p) {
 					: ".s-hero__deck { animation: none !important; height: 120px !important; }"));
 				return (await home(page, "/")).problems;
 			}),
+			withPage(p, {}, (page) => pauseInView(page, "/", "fold")),
+			withPage(p, {}, (page) => pauseInView(page, "/", "header")),
+			withPage(p, {}, (page) => pauseInView(page, "/", "word")),
 		]);
 		const onCopy = covered.some((m) => m.includes("PLANT"));
 		const deck = flipped.some((m) => m.includes(phone ? "holds its taller state" : "should change height"));
-		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy && deck;
-		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"}, the card ${phone ? "animated on a phone" : "frozen"}: ${deck ? "seen" : "MISSED"})` };
+		const fold = sunk.some((m) => m.includes("outside the first screen"));
+		const under = lifted.some((m) => m.includes("outside the first screen"));
+		const word = worded.some((m) => m.includes("«PLANT»"));
+		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy && deck && fold && under && word;
+		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"}, the card ${phone ? "animated on a phone" : "frozen"}: ${deck ? "seen" : "MISSED"}, the pause a screen down: ${fold ? "seen" : "MISSED"}, the pause under the header: ${under ? "seen" : "MISSED"}, a word under the pause: ${word ? "seen" : "MISSED"})` };
 
-		const [homes, verticals] = await Promise.all([
+		const [homes, verticals, pauses] = await Promise.all([
 			Promise.all(HOME.map((r) => withPage(p, {}, (page) => home(page, r)))),
 			pool(VERTICALS, LANES, (r) => withPage(p, {}, (page) => vertical(page, r)).then((v) => ({ r, ...v }))),
+			/* the pause at the profile's own size and, on a phone, at the narrowest width the site holds (360) and under it
+			   (320, where the h1 makes room for it): from 360 up nothing makes room, so a longer first line would run under it */
+			pool(HOME.flatMap((r) => (phone ? [{}, { viewport: { width: 360, height: 780 } }, { viewport: { width: 320, height: 568 } }] : [{}]).map((o) => [r, o])),
+				LANES, ([r, o]) => withPage(p, o, (page) => pauseInView(page, r))),
 		]);
 		const tail0 = Object.fromEntries(HOME.map((r, i) => [r, homes[i].tail0]));
 		const still = await pool([...HOME, ...VERTICALS], LANES, (r) => withPage(p, { reducedMotion: "reduce" }, (page) => reduced(page, r, tail0[r])));
 		return {
 			p,
-			problems: [...homes.flatMap((h) => h.problems), ...verticals.flatMap((v) => v.problems), ...still.flat()],
+			problems: [...homes.flatMap((h) => h.problems), ...pauses.flat(), ...verticals.flatMap((v) => v.problems), ...still.flat()],
 			took: verticals.map((v) => v.took).filter(Boolean),
 			seconds: Math.round((Date.now() - t0) / 1000),
 		};
@@ -289,10 +343,10 @@ for (const r of runs) {
 		console.error(`✗ BLIND ${r.blind}`);
 		continue;
 	}
-	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1, the card's height the wrong way round)`);
+	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1, the card's height the wrong way round, the pause a screen down, the pause under the header, a word under the pause)`);
 	const span = r.took.length ? `${Math.min(...r.took)}–${Math.max(...r.took)} ms` : "—";
 	if (!r.problems.length) {
-		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height (holds it on a phone), the rail's stops are buttons`);
+		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height (holds it on a phone), the rail's stops are buttons, the pause is in the first screen on no text`);
 		console.log(`  ✓ ${VERTICALS.length} verticals start and come to rest (${span} from is-playing to is-done; budget ${END + MARGIN} ms), no scene text on the copy mid-animation`);
 		console.log(`  ✓ reduced motion — intended (#315): every opening starts at its end, the home holds its first frame, no pause shown`);
 	}

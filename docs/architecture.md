@@ -743,6 +743,22 @@ rotating edge (Base.astro), so the two cannot drift.
   gate's G23 holds the sentence above a 393 × 659 fold; the engines gate holds the card's height on
   a phone, each with a planted defect. The header «contacto» link offered in the same round was
   declined (it cut the inner pages' breadcrumb from 173 to 88 px at 393 px).
+- **The pause on a phone, at the band's top corner (#681)**: #572 left it in the band's corner,
+  which had become the strip's, 180–440 px under the fold of every phone measured. A visitor
+  reported having to scroll to stop the band. Lower in the first screen no corner is free. The
+  card's corners carry text on most frames (up to 40 px of overlap over the seven frames at
+  320–430 px). Under the card, a 390/393 phone has 26–31 px left for a 40 px control. So below
+  768 px the control stands level with the h1's first line, at the column's right edge. That line
+  ends at x = 286 in Spanish and 203 in English, leaving 58 px or more from 360 px up. Below 360 px
+  the h1 makes room with a floated `::before` the control's size (`--scene-ctl-size`, one token for
+  both), and the Spanish first line gives a word to the second. The float is not used from 360 px
+  up: in WebKit a float switches off the h1's `text-wrap: pretty`, and on an iPhone the title then
+  ended on a lone «producción». So from 360 px up nothing makes room, and the engines gate is what
+  keeps a longer title from running under the control. At load it checks the control on all three
+  profiles, and on the phones also at 360 and 320 px: below the header, above the fold, on no text.
+  Its plants push the control a screen down, lift it under the header, and put a word under it; with
+  no header it reports a problem rather than measuring against 0. Tablets and desktops keep the
+  bottom corner, which is in their first screen.
 - **Weight** (superseded by #580: no photograph loads with the page, §4.12b): only the first photograph loads with the page; the other five carry their sources
   as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's
   slow 4G; deferred, the home measured 0.97 against main's 0.91 (fewer requests: no plates or

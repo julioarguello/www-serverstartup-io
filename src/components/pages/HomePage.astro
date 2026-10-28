@@ -1,0 +1,47 @@
+---
+/**
+ * The home page, one body for / and /en (#622). The page itself is
+ * HomepageContent.astro; this adds the document head, the JSON-LD and the
+ * sheets. Data: utils/pages/home.ts. The two routes only load and cache.
+ */
+import Base from "../../layouts/Base.astro";
+import HomepageContent from "../HomepageContent.astro";
+import { homepageJsonLd } from "../../utils/jsonld";
+import type { HomeData } from "../../utils/pages/home";
+
+type Props = Omit<HomeData, "cacheHints">;
+const { locale, entry, settings } = Astro.props;
+
+const { title, excerpt } = entry?.data ?? { title: "Server Startup", excerpt: "" };
+const description = excerpt || `${title} — Server Startup`;
+// The document title is the H1's head (before the colon or the comma): Base appends
+// the site name and html-validate caps <title> at 70 chars — the full
+// H1 overflows it. H1 and <title> differing is standard SEO practice.
+const seoTitle = title.split(/[:,]/)[0].trim();
+const schemas = homepageJsonLd({
+	siteUrl: Astro.site?.origin!,
+	description,
+	locale,
+	phone: settings.phone,
+	// #311: deliberately omitted — jsonld.ts already says why: an address in
+	// JSON-LD is indexed, which defeats the click-to-decode obfuscation the
+	// rest of the site relies on. contactJsonLd honoured that; this did not.
+});
+---
+
+<Base
+	title={seoTitle}
+	description={description}
+	heroOverlay
+>
+	{schemas.map((schema) => (
+		<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+	))}
+	<HomepageContent />
+</Base>
+
+
+<style is:global>
+	@import "../../styles/homepage.css";
+	@import "../../styles/scene-ctl.css";
+</style>

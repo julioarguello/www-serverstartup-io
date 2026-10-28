@@ -26,16 +26,14 @@ const COMPONENTS = join(ROOT, "src", "components", "pages");
 
 /** Route files still written out in full, in both locales. #622 folds them. */
 const NOT_FOLDED = new Set([
-	"index.astro", "en/index.astro",
-	"[slug].astro", "en/[slug].astro",
 	"posts/index.astro", "en/posts/index.astro",
 	"posts/[slug].astro", "en/posts/[slug].astro",
 	"category/[slug].astro", "en/category/[slug].astro",
 	"tag/[slug].astro", "en/tag/[slug].astro",
 	"rss.xml.ts", "en/rss.xml.ts",
 ]);
-/** The list's size the day the guard landed; it may only go down. */
-const NOT_FOLDED_AT_LANDING = 14;
+/** The list's ceiling: 14 when the guard landed, lowered by every fold. It never goes up. */
+const NOT_FOLDED_MAX = 10;
 
 /** A thin wrapper has room to load, cache and render — and not for a page body. */
 const MAX_WRAPPER_LINES = 20;
@@ -101,10 +99,10 @@ describe("locale routes are thin wrappers around one shared page (#622)", () => 
 	});
 
 	it("the list of routes not folded yet only shrinks", () => {
-		expect(NOT_FOLDED.size).toBeLessThanOrEqual(NOT_FOLDED_AT_LANDING);
+		expect(NOT_FOLDED.size).toBeLessThanOrEqual(NOT_FOLDED_MAX);
 		for (const r of NOT_FOLDED) {
 			expect(routes, `${r} is listed but does not exist`).toContain(r);
-			expect(wrapped(source(r)), `${r} is folded now: remove it from NOT_FOLDED and lower NOT_FOLDED_AT_LANDING`).toBeNull();
+			expect(wrapped(source(r)), `${r} is folded now: remove it from NOT_FOLDED and lower NOT_FOLDED_MAX`).toBeNull();
 		}
 	});
 });

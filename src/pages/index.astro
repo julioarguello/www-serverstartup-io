@@ -1,52 +1,11 @@
 ---
-/**
- * Homepage (ES) — /
- * Thin wrapper around HomepageContent component.
- * All layout logic lives in HomepageContent.astro (DRY).
- */
-import Base from "../layouts/Base.astro";
-import HomepageContent from "../components/HomepageContent.astro";
-import { getEmDashEntry, getSiteSettings } from "emdash";
-import { homepageJsonLd } from "../utils/jsonld";
-import type { SiteSettings } from "../types";
+/** / — the home page. Body: components/pages/HomePage.astro; data: utils/pages/home.ts (#622). */
+import HomePage from "../components/pages/HomePage.astro";
+import { loadHome } from "../utils/pages/home";
 
-const locale = Astro.currentLocale || "es";
-const { entry, cacheHint } = await getEmDashEntry("pages", "home", { locale });
-// The hint MUST be set here, in PAGE frontmatter: HomepageContent's own call
-// runs mid-stream, after the headers left — the home served BYPASS until the
-// verify-purge E2E caught it (2026-08-23). Middleware adds the footer tags.
-Astro.cache.set(cacheHint);
-const { title, excerpt } = entry?.data ?? { title: "Server Startup", excerpt: "" };
-const settings = await getSiteSettings() as SiteSettings;
-const description = excerpt || `${title} — Server Startup`;
-// The document title is the H1's head (before the colon or the comma): Base appends
-// the site name and html-validate caps <title> at 70 chars — the full
-// H1 overflows it. H1 and <title> differing is standard SEO practice.
-const seoTitle = title.split(/[:,]/)[0].trim();
-const schemas = homepageJsonLd({
-	siteUrl: Astro.site?.origin!,
-	description,
-	locale,
-	phone: settings.phone,
-	// #311: deliberately omitted — jsonld.ts already says why: an address in
-	// JSON-LD is indexed, which defeats the click-to-decode obfuscation the
-	// rest of the site relies on. contactJsonLd honoured that; this did not.
-});
+const page = await loadHome("es");
+for (const hint of page.cacheHints) if (hint) Astro.cache.set(hint);
+const { cacheHints, ...props } = page;
 ---
 
-<Base
-	title={seoTitle}
-	description={description}
-	heroOverlay
->
-	{schemas.map((schema) => (
-		<script type="application/ld+json" set:html={JSON.stringify(schema)} />
-	))}
-	<HomepageContent />
-</Base>
-
-
-<style is:global>
-	@import "../styles/homepage.css";
-	@import "../styles/scene-ctl.css";
-</style>
+<HomePage {...props} />

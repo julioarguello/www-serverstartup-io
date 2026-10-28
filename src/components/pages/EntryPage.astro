@@ -1,0 +1,243 @@
+---
+/**
+ * A service or CMS page, one body for /[slug] and /en/[slug] (#622).
+ * Data: utils/pages/entry.ts. The two routes only load and cache.
+ *
+ * Layout matches original WordPress pattern:
+ * 1. Hero — full-height, themed cube SVG bg, h1 + body + CTA button
+ * 2. "~ Con qué te ayudamos" — dark bg, white text, service cards grid
+ * 3. CTA — dark bg, white heading + light button
+ *
+ * Each service has a color-themed cube background SVG.
+ */
+import Base from "../../layouts/Base.astro";
+import CtaGlobal from "../CtaGlobal.astro";
+import MantraCloser from "../MantraCloser.astro";
+import ServiceInstrument from "../service/ServiceInstrument.astro";
+import { accentFill as accentButton } from "../../utils/accent";
+import CubeEmblem from "../CubeEmblem.astro";
+import { FACE_BY_SLUG, SITE_BY_PATH } from "../../utils/nav";
+import { serviceJsonLd, breadcrumbJsonLd } from "../../utils/jsonld";
+import { excerptHtml, excerptPlain } from "../../utils/excerpt";
+import { heroArtForSlug, heroGroundForSlug, heroSceneForSlug } from "../../utils/hero-art";
+import HeroRadar from "../HeroRadar.astro";
+import HeroBridge from "../HeroBridge.astro";
+import HeroElevation from "../HeroElevation.astro";
+import HeroStore from "../HeroStore.astro";
+import HeroSky from "../HeroSky.astro";
+import HeroVision from "../HeroVision.astro";
+import { entryHead } from "../../utils/entry-seo";
+import type { SiteSettings } from "../../types";
+import type { EntryData } from "../../utils/pages/entry";
+
+type Props = Omit<EntryData, "cacheHints">;
+const { slug, locale, entry, entryCollection, settings, labels, altPath } = Astro.props;
+
+// fallback only; the label itself comes from ui_labels via Base/CtaGlobal (#306)
+const defaultCtaLabel = settings.defaultCtaLabel || (locale === "en" ? "Tell us about your project" : "Contacta ahora");
+
+const { title, content, excerpt } = entry.data as { title: string; content: any; excerpt: string; cta_label?: string; color?: string };
+const data = entry.data as { cta_label?: string; color?: string };
+
+// Theme color from CMS entry (fallback to teal)
+const accentColor = data.color || "#1E1E1E";
+// the filled (hover) state of every button on this page: the section's own
+// colour, with a label the palette can actually carry — see utils/accent.ts
+const { fill: accentFill, label: accentLabel } = accentButton(accentColor);
+const emblemKey = FACE_BY_SLUG[slug] ?? SITE_BY_PATH[Astro.url.pathname.replace(/\/$/, "")];
+
+// CTA label from CMS (fallback to site settings default)
+const ctaLabel = data.cta_label || defaultCtaLabel;
+
+// Locale-aware URL prefix ("" for ES default, "/en" for English)
+const localePrefix = locale === "es" ? "" : `/${locale}`;
+
+// #413: the six verticals own a drawn plate — the same picture the home
+// rotates through, held still. Everything else (contacto, quiénes somos, a
+// blog page) returns null here and keeps the light hero it has always had.
+// #529/#531/#537: edge security, integration and AI open with a scene instead
+// (the radar, the bridge, the machine's eye) — the plate stays on the other
+// three. Their content may open with blockquotes (Cloudflare's castle-and-moat
+// line, Hohpe & Woolf, three of Fowler's): the hero's epigraph carries them,
+// so the instrument below renders the rest.
+const heroScene = heroSceneForSlug(slug);
+const heroArt = heroScene ? null : heroArtForSlug(slug);
+const heroGround = heroScene ? null : heroGroundForSlug(slug);
+const blocks: any[] = Array.isArray(content) ? content : [];
+/* every blockquote the content opens with is an epigraph: the scene shows them in turn (#537) */
+const isQuote = (b: any) => b?._type === "block" && b?.style === "blockquote";
+const leadQuotes = heroScene ? blocks.findIndex((b) => !isQuote(b)) : 0;
+const heroQuote = leadQuotes !== 0 ? blocks.slice(0, leadQuotes === -1 ? blocks.length : leadQuotes) : null;
+const instrumentContent = heroQuote ? blocks.slice(heroQuote.length) : content;
+// #624: what the admin's SEO panel set for this entry, over the page's defaults.
+const head = entryHead(entry, {
+	title,
+	description: excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`,
+	siteUrl: Astro.site?.origin ?? Astro.url.origin,
+	path: Astro.url.pathname,
+});
+---
+
+<Base
+	title={head.title}
+	description={head.description}
+	image={head.image}
+	canonical={head.canonical}
+	robots={head.robots}
+	altPath={altPath}
+	heroOverlay={heroArt !== null}
+>
+	<script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd({
+		siteUrl: Astro.site?.origin!,
+		name: title,
+		description: head.description,
+		slug,
+		locale,
+	}))} />
+	<script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd({
+		siteUrl: Astro.site?.origin!,
+		locale,
+		homeName: (settings as SiteSettings).title || "Server Startup",
+		trail: [{ name: title, path: `${localePrefix}/${slug}` }],
+	}))} />
+	<!-- ══════ HERO — compact, solid cube glyph in the discipline color ══════ -->
+	{heroScene === "radar" ? (
+		<HeroRadar
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "bridge" ? (
+		<HeroBridge
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "elevation" ? (
+		<HeroElevation
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "store" ? (
+		<HeroStore
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "sky" ? (
+		<HeroSky
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : heroScene === "vision" ? (
+		<HeroVision
+			title={title}
+			excerptHtml={excerpt ? excerptHtml(excerpt) : ""}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			quote={heroQuote}
+			labels={labels}
+		/>
+	) : (
+	<section class:list={["s-hero", heroArt && "s-hero--art"]} aria-label={title}>
+		{heroArt && (
+			<div class="s-hero__stage" aria-hidden="true">
+				{/* The room the drawing hangs in: this vertical's own NASA
+				    photograph, cropped at build time so what it shows sits
+				    under what the drawing means. AVIF at 2160 with the 720
+				    JPEG as the fallback — see grounds.py for what each one
+				    is, what it is anchored to, and who to credit. */}
+				<picture class="s-hero__ground">
+					<source type="image/avif" srcset={heroGround!.avif} />
+					<img
+						src={heroGround!.jpg}
+						alt=""
+						width="2160"
+						height="1350"
+						fetchpriority="high"
+						decoding="async"
+					/>
+				</picture>
+				<img
+					class="s-hero__plate"
+					src={heroArt}
+					alt=""
+					width="1440"
+					height="900"
+					fetchpriority="high"
+					decoding="async"
+				/>
+				<span class="s-hero__scrim"></span>
+			</div>
+		)}
+		<div class="container s-hero__inner">
+			<div class="s-hero__copy">
+				{/* the plate IS the mark, drawn at full size in this discipline's
+				    colour — a cube beside it would be the same cube twice */}
+				{!heroArt && <CubeEmblem class="s-open-mark" color={accentColor} faceKey={emblemKey} size={104} />}
+				<h1>{title}</h1>
+				{excerpt && (
+					<div class="s-hero__body">
+						<p class="text-body" set:html={excerptHtml(excerpt)} />
+					</div>
+				)}
+				{/* #304: one CTA label per page. A service hero earns its own
+				    (the instrument body is long); a plain page's closing band
+				    already carries the same words a screen below. */}
+				{entryCollection === "services" && (
+					<a href={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`} class:list={["btn", heroArt ? "btn-light" : "btn-dark"]}>{ctaLabel}</a>
+				)}
+			</div>
+		</div>
+	</section>
+	)}
+
+	<!-- ══════ CONTENT — discipline instrument (or legacy fallback) ══════ -->
+	{content && (
+		<ServiceInstrument
+			slug={slug!}
+			content={instrumentContent as any[]}
+			ctaLabel={ctaLabel}
+			contactPath={`${localePrefix}/${locale === "en" ? "contact" : "contacto"}`}
+			labels={labels}
+		/>
+	)}
+
+		{entryCollection === "services" && (
+		<div class="container mantra-wrap">
+			<MantraCloser />
+		</div>
+	)}
+
+	<!-- ══════ CTA (from cta_global widget) ══════ -->
+	<CtaGlobal />
+</Base>
+
+<style is:global define:vars={{ accentColor, accentFill, accentLabel }}>
+	@import "../../styles/service.css";
+	@import "../../styles/hero-scene.css";
+	@import "../../styles/scene-ctl.css";
+	@import "../../styles/hero-radar.css";
+	@import "../../styles/hero-bridge.css";
+	@import "../../styles/hero-vision.css";
+	@import "../../styles/hero-elevation.css";
+	@import "../../styles/hero-store.css";
+	@import "../../styles/hero-sky.css";
+</style>

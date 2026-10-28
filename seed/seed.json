@@ -24,26 +24,6 @@
 	},
 	"collections": [
 		{
-			"slug": "elementor_library",
-			"label": "Elementor Library",
-			"labelSingular": "Elementor Block",
-			"supports": [
-				"revisions"
-			],
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Title",
-					"type": "string"
-				},
-				{
-					"slug": "content",
-					"label": "Content",
-					"type": "portableText"
-				}
-			]
-		},
-		{
 			"slug": "members",
 			"label": "Personas",
 			"labelSingular": "Persona",
@@ -133,7 +113,7 @@
 				"search",
 				"seo"
 			],
-			"commentsEnabled": true,
+			"commentsEnabled": false,
 			"fields": [
 				{
 					"slug": "title",
@@ -521,20 +501,7 @@
 			"collections": [
 				"posts"
 			],
-			"terms": [
-				{
-					"slug": "development",
-					"label": "Development"
-				},
-				{
-					"slug": "design",
-					"label": "Design"
-				},
-				{
-					"slug": "notes",
-					"label": "Notes"
-				}
-			]
+			"terms": []
 		},
 		{
 			"name": "tag",
@@ -544,69 +511,10 @@
 			"collections": [
 				"posts"
 			],
-			"terms": [
-				{
-					"slug": "webdev",
-					"label": "Web Development"
-				},
-				{
-					"slug": "opinion",
-					"label": "Opinion"
-				},
-				{
-					"slug": "tools",
-					"label": "Tools"
-				},
-				{
-					"slug": "creativity",
-					"label": "Creativity"
-				}
-			]
+			"terms": []
 		}
 	],
 	"menus": [
-		{
-			"name": "primary",
-			"locale": "es",
-			"label": "Navegación principal",
-			"items": [
-				{
-					"type": "custom",
-					"label": "Ingeniería Greenfield",
-					"url": "/desarrollo-greenfield"
-				},
-				{
-					"type": "custom",
-					"label": "Integración",
-					"url": "/integracion-de-sistemas"
-				},
-				{
-					"type": "custom",
-					"label": "E-commerce",
-					"url": "/comercio-electronico"
-				},
-				{
-					"type": "custom",
-					"label": "Big Data",
-					"url": "/big-data-cloud-analytics"
-				},
-				{
-					"type": "custom",
-					"label": "CDN",
-					"url": "/cdn-waf-seguridad-edge-cloudflare"
-				},
-				{
-					"type": "custom",
-					"label": "Quiénes somos",
-					"url": "/quienes-somos"
-				},
-				{
-					"type": "custom",
-					"label": "Contacto",
-					"url": "/contacto"
-				}
-			]
-		},
 		{
 			"name": "site_es",
 			"locale": "es",
@@ -678,29 +586,6 @@
 						"type": "monthly",
 						"limit": 6
 					}
-				}
-			]
-		},
-		{
-			"name": "footer",
-			"label": "Footer",
-			"description": "Widget area displayed in the site footer",
-			"widgets": [
-				{
-					"type": "content",
-					"title": "About",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Ingeniería de sistemas, integración y seguridad edge. El trabajo lo hacen ingenieros senior, desde Getxo y desde 2019."
-								}
-							]
-						}
-					]
 				}
 			]
 		},
@@ -6314,65 +6199,7 @@
 			]
 		}
 	],
-	"sections": [
-		{
-			"slug": "newsletter-signup",
-			"title": "Newsletter Signup",
-			"description": "A call-to-action block for newsletter subscriptions",
-			"keywords": [
-				"newsletter",
-				"subscribe",
-				"email",
-				"cta"
-			],
-			"source": "theme",
-			"content": [
-				{
-					"_type": "block",
-					"style": "h3",
-					"children": [
-						{
-							"_type": "span",
-							"text": "Stay in the loop"
-						}
-					]
-				},
-				{
-					"_type": "block",
-					"style": "normal",
-					"children": [
-						{
-							"_type": "span",
-							"text": "Get notified when new posts are published. No spam, unsubscribe anytime."
-						}
-					]
-				}
-			]
-		},
-		{
-			"slug": "about-author",
-			"title": "About the Author",
-			"description": "Brief author bio for use in posts or pages",
-			"keywords": [
-				"author",
-				"bio",
-				"about"
-			],
-			"source": "theme",
-			"content": [
-				{
-					"_type": "block",
-					"style": "normal",
-					"children": [
-						{
-							"_type": "span",
-							"text": "A software developer who writes about building things on the web. Based somewhere with good coffee and reliable internet."
-						}
-					]
-				}
-			]
-		}
-	],
+	"sections": [],
 	"content": {
 		"services": [
 			{

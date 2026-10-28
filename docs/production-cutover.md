@@ -30,8 +30,8 @@ The order below was originally forced by an undeployed worker and an empty
 database. What forces it now: **step 2 runs as a first deploy again**, on a
 recreated database with the seed, because the EmDash 1.x schema cannot be
 migrated onto the old one. After that, **the only things that change what the
-public sees are step 3 and step 5**, and both are Julio's. Step 3 still waits
-on the bot settings (#333), a dashboard check only the zone's owner can make.
+public sees are step 3 and step 5**, and both are Julio's. The bot settings
+(#333) were settled by the founder on 2026-10-25: no crawler is blocked.
 The Kit Digital question (#510) was taken off the path by the founder on
 2026-10-24.
 
@@ -278,17 +278,18 @@ symptom would be an absence of crawling nobody is watching for. **Security → S
 read the state of *Block AI bots*, and of Bot Fight Mode and Super Bot Fight
 Mode while you are there.
 
-If *Block AI bots* is on, move to the newer control that blocks training while
-**keeping search allowed**. On 2026-09-15 the legacy option starts blocking
-mixed-purpose crawlers, Googlebot among them, and a corporate site has no
-reason to block search. Two minutes here, and the failure it prevents is
-silent: nothing breaks on cutover day, and weeks later the site stops being
+**The decision (founder, 2026-10-25): block nothing**, no AI crawler either, in
+the dashboard or in `robots.txt`. So every one of those toggles stays off. A
+*Block AI bots* left on by hand is the one thing to undo: since 2026-09-15 it
+also blocks mixed-purpose crawlers, Googlebot among them. The failure it causes
+is silent: nothing breaks on cutover day, and weeks later the site stops being
 crawled.
 
 This cannot be measured from outside. Cloudflare classifies crawlers by IP and
 reverse DNS, not by `User-Agent`, so a spoofed Googlebot request from any
 ordinary connection is classified as an unverified bot and tells you nothing
-about the setting. It has to be read in the dashboard.
+about the setting. It has to be read in the dashboard, and the proof from
+Google's side is Search Console's live URL test on `/` (#163).
 
 ### Rehearse on `serverstartup.dev` first
 

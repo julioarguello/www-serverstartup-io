@@ -427,16 +427,16 @@ const CUBE = {
 	 */
 	const stops = Array.from(hero?.querySelectorAll<HTMLElement>(".s-hero__stop") ?? []);
 	const n = stops.length;
-	if (hero && n > 1) {
-		const secs = (name: string, fallback: number) => {
-			const raw = getComputedStyle(hero).getPropertyValue(name).trim();
-			const v = parseFloat(raw);
-			if (!Number.isFinite(v)) return fallback;
-			return raw.endsWith("ms") ? v / 1000 : v;
-		};
-		// the clock is the stylesheet's, read back rather than restated here
-		const cycle = secs("--hero-cycle", 56) * 1000;
-		const step = secs("--hero-step", 8) * 1000;
+	// the clock is the stylesheet's, read back rather than restated here. Without the tokens the band does not
+	// animate either (its `var()` durations are invalid), so the stops are left as the no-script page has them
+	const secs = (name: string) => {
+		const raw = hero ? getComputedStyle(hero).getPropertyValue(name).trim() : "";
+		const v = parseFloat(raw);
+		return raw.endsWith("ms") ? v / 1000 : v;
+	};
+	const cycle = secs("--hero-cycle") * 1000;
+	const step = secs("--hero-step") * 1000;
+	if (hero && n > 1 && cycle > 0 && step > 0) {
 		// every frame's animation is delayed by `--i * step - 0.5 s`. The seek lands a sixth of a frame in,
 		// two thirds through the photograph's dissolve, whatever the step (#682: a fixed second would not)
 		const LEAD = 500, IN = step / 6;

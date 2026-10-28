@@ -813,9 +813,16 @@ column on a desktop, above the card's tallest state on a tablet, 86 % of the str
   `hero_line` of 18–25 words. At 238 words per minute, the mean adult silent-reading rate
   (Brysbaert, 2019), the median caption needs about 5.5 s. At 8 s it is whole for 6.4 s. 7 s would
   have left 5.6 s, the average reader's bare minimum. Every keyframe is a share of the cycle, so
-  only the two tokens move and the band slows as a whole (the dissolve takes 2 s). The exception
-  is the deck, whose stops are anchored to absolute delays and are recomputed. Anything that pins
-  a frame reads the clock from the stylesheet: the a11y gate, `frame.cjs` and the rail's seek.
+  only the two tokens move and the band slows as a whole (the dissolve takes 2 s). Three timings
+  are written in seconds and do not scale, so the next clock change has to revisit them. The
+  frames' 0.5 s lead (CSS `- 0.5s`, `LEAD` in the rail script and `frame.cjs`, `- 500` in the a11y
+  gate) stays as it is. The deck's
+  0.2 s delay anchors its two inner stops, which are recomputed (13.3036 %, 99.0179 %). The title
+  tail's 0.85 s delay is kept, so its recolouring starts 0.55 s into the 2 s dissolve instead of
+  0.75 s into 1.5 s, still just after the photograph starts. Anything that pins a frame reads the
+  clock from the stylesheet, in `s` or `ms`: the rail's seek, `frame.cjs` (which also keeps a
+  caller's `at` at its share of the frame) and the a11y gate. On every run, the a11y gate also
+  checks that the frame on screen is the one it pinned.
 - **No photograph loads with the page**: the first is a whole frame away, so all six take their
   sources on `load`, and Base no longer preloads one.
 - **Gates**: the a11y gate freezes frames through `.is-manual[data-slide]`, 0 = «nosotros»; the

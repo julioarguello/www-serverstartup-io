@@ -756,7 +756,8 @@ rotating edge (Base.astro), so the two cannot drift.
   ended on a lone «producción». So from 360 px up nothing makes room, and the engines gate is what
   keeps a longer title from running under the control. At load it checks the control on all three
   profiles, and on the phones also at 360 and 320 px: below the header, above the fold, on no text.
-  Its plants push the control a screen down and put a word under it. Tablets and desktops keep the
+  Its plants push the control a screen down, lift it under the header, and put a word under it; with
+  no header it reports a problem rather than measuring against 0. Tablets and desktops keep the
   bottom corner, which is in their first screen.
 - **Weight** (superseded by #580: no photograph loads with the page, §4.12b): only the first photograph loads with the page; the other five carry their sources
   as `data-` until `load`. All six at once held the `<h1>` (the LCP) to 3.7 s on Lighthouse's

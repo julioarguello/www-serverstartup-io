@@ -31,7 +31,7 @@
  * Before any of it, each profile must catch its planted defects: a stylesheet that freezes the
  * tail's colour, a vertical whose scene script never arrives, a label on the h1, a card that
  * does the opposite of what that width expects (animated on a phone, frozen from 768 px up), a
- * pause pushed a screen down, and a word under the pause. A profile that misses any is blind and
+ * pause pushed a screen down, a pause lifted under the header, and a word under the pause. A profile that misses any is blind and
  * the run exits 3 — as it does when an engine fails to launch.
  *
  * Exit: 0 green · 1 a defect · 3 blind (an engine missing, a plant not seen, the stack gone).
@@ -168,13 +168,15 @@ async function home(page, route) {
 }
 
 /** P — the home's pause where this profile's first screen shows it (#681): below the header, above the fold, on no
-    text in the band. Read at load, before any scroll; `plant` pushes it a screen down, or puts a word under it. */
+    text in the band. Read at load, before any scroll; `plant` pushes it a screen down, lifts it under the header, or puts
+    a word under it — one plant per bound. */
 async function pauseInView(page, route, plant) {
 	await page.goto(`${BASE}${route}?engines=${Date.now()}`, { waitUntil: "load", timeout: 60_000 });
 	return page.evaluate(([route, plant]) => {
 		const ctl = document.querySelector(".s-hero--home .scene__ctl");
 		if (!ctl) return [`${route}: no pause in the home's band`];
 		if (plant === "fold") ctl.style.translate = "0 100vh";
+		if (plant === "header") Object.assign(ctl.style, { top: "0px", bottom: "auto" });
 		if (plant === "word") {
 			const c = ctl.getBoundingClientRect(), band = document.querySelector(".s-hero--home");
 			const s = document.createElement("span");
@@ -183,7 +185,11 @@ async function pauseInView(page, route, plant) {
 			band.append(s);
 		}
 		const c = ctl.getBoundingClientRect();
-		const top = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
+		/* the header is the first screen's top bound: with no header there is nothing to measure "below" against, and a
+		   silent 0 would pass a control hidden under it */
+		const header = document.querySelector(".site-header");
+		if (!header) return [`${route}: no .site-header — the pause's top bound cannot be measured`];
+		const top = header.getBoundingClientRect().bottom;
 		const problems = [];
 		if (c.top < top || c.bottom > innerHeight)
 			problems.push(`${route} at ${innerWidth} px: the pause is at y ${Math.round(c.top)}–${Math.round(c.bottom)}, outside the first screen (${Math.round(top)}–${innerHeight}) — the band can only be stopped after a scroll`);
@@ -277,9 +283,9 @@ async function profileRun(p) {
 	}
 	const t0 = Date.now();
 	{
-		/* the plants: both must be called, or this profile is not measuring anything */
+		/* the plants: every one must be called, or this profile is not measuring anything */
 		const phone = devices[p.device].viewport.width < 768;
-		const [frozen, stalled, covered, flipped, sunk, worded] = await Promise.all([
+		const [frozen, stalled, covered, flipped, sunk, lifted, worded] = await Promise.all([
 			withPage(p, {}, async (page) => {
 				await page.addInitScript(plantStyle(".ss-title__tail { animation: none !important; }"));
 				return (await home(page, "/")).problems;
@@ -298,14 +304,16 @@ async function profileRun(p) {
 				return (await home(page, "/")).problems;
 			}),
 			withPage(p, {}, (page) => pauseInView(page, "/", "fold")),
+			withPage(p, {}, (page) => pauseInView(page, "/", "header")),
 			withPage(p, {}, (page) => pauseInView(page, "/", "word")),
 		]);
 		const onCopy = covered.some((m) => m.includes("PLANT"));
 		const deck = flipped.some((m) => m.includes(phone ? "holds its taller state" : "should change height"));
 		const fold = sunk.some((m) => m.includes("outside the first screen"));
+		const under = lifted.some((m) => m.includes("outside the first screen"));
 		const word = worded.some((m) => m.includes("«PLANT»"));
-		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy && deck && fold && word;
-		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"}, the card ${phone ? "animated on a phone" : "frozen"}: ${deck ? "seen" : "MISSED"}, the pause a screen down: ${fold ? "seen" : "MISSED"}, a word under the pause: ${word ? "seen" : "MISSED"})` };
+		const seen = frozen.some((m) => m.includes("tail")) && stalled.some((m) => m.includes("never started")) && onCopy && deck && fold && under && word;
+		if (!seen) return { p, blind: `${p.name}: a planted defect went unseen (frozen tail: ${frozen.length ? "seen" : "MISSED"}, scene script withheld: ${stalled.length ? "seen" : "MISSED"}, a label on the h1: ${onCopy ? "seen" : "MISSED"}, the card ${phone ? "animated on a phone" : "frozen"}: ${deck ? "seen" : "MISSED"}, the pause a screen down: ${fold ? "seen" : "MISSED"}, the pause under the header: ${under ? "seen" : "MISSED"}, a word under the pause: ${word ? "seen" : "MISSED"})` };
 
 		const [homes, verticals, pauses] = await Promise.all([
 			Promise.all(HOME.map((r) => withPage(p, {}, (page) => home(page, r)))),
@@ -335,7 +343,7 @@ for (const r of runs) {
 		console.error(`✗ BLIND ${r.blind}`);
 		continue;
 	}
-	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1, the card's height the wrong way round, the pause a screen down, a word under the pause)`);
+	console.log(`${r.p.name} (${r.seconds} s): plants seen (frozen tail, withheld scene script, a label on the h1, the card's height the wrong way round, the pause a screen down, the pause under the header, a word under the pause)`);
 	const span = r.took.length ? `${Math.min(...r.took)}–${Math.max(...r.took)} ms` : "—";
 	if (!r.problems.length) {
 		console.log(`  ✓ home ${HOME.join(" ")}: the tail changes colour on frames 0/1/2, the card changes height (holds it on a phone), the rail's stops are buttons, the pause is in the first screen on no text`);

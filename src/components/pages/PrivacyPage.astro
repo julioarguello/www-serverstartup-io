@@ -1,0 +1,42 @@
+---
+/**
+ * The privacy policy, one body for /politica-de-privacidad and
+ * /en/privacy-policy (#622): a legal page, content from the CMS. Indexable and
+ * reachable from the footer legal row (#335).
+ * Data: utils/pages/simple.ts. The two routes only load and cache.
+ */
+import { PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import CubeEmblem from "../CubeEmblem.astro";
+import type { PageData } from "../../utils/pages/simple";
+
+type Props = Omit<PageData, "cacheHints">;
+const { entry, altPath } = Astro.props;
+const { title, content, excerpt } = entry.data;
+---
+
+<!-- #335: indexable, like the legal notice beside it. It was `noindex,
+     nofollow`: the nofollow threw away link signal through the header, the
+     footer with all six verticals and the language switcher, and bought
+     nothing; the noindex left the page both unfindable AND declared in the
+     sitemap — which asks Google to index what it lists. Two legal documents
+     of the same class now behave the same way. -->
+<Base
+	title={title}
+	description={excerpt || `${title} — Server Startup`}
+	altPath={altPath}
+>
+	{/* #350: every page carries the mark with its own detail — these were
+	    the only two without one. `legal` is a nav key with no menu entry. */}
+	<section class="legal" aria-label={title}>
+		<div class="container legal-inner">
+			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="legal" size={104} />
+			<h1>{title}</h1>
+			{content && <PortableText value={content} />}
+		</div>
+	</section>
+</Base>
+
+<style>
+	@import "../../styles/legal.css";
+</style>

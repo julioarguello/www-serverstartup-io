@@ -1,0 +1,28 @@
+---
+/**
+ * Deconstruyendo esta web — how the site is built, layer by layer (#161, #305,
+ * #535): one page for /deconstruyendo and /en/deconstructing (#622). The body
+ * is DeconstructPage.astro; the page entry, the `layers` collection and the
+ * `deconstruct_labels` widget carry every word.
+ * Data: utils/pages/deconstruct.ts. The two routes only load and cache.
+ */
+import Base from "../../layouts/Base.astro";
+import CtaGlobal from "../CtaGlobal.astro";
+import DeconstructPage from "../DeconstructPage.astro";
+import { excerptPlain } from "../../utils/excerpt";
+import type { loadDeconstruct } from "../../utils/pages/deconstruct";
+
+type Props = Omit<NonNullable<Awaited<ReturnType<typeof loadDeconstruct>>>, "cacheHints">;
+const { entry, layers, labels, altPath, repoUrl } = Astro.props;
+const { title, content, excerpt } = entry.data;
+---
+
+<Base title={title} description={excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`} altPath={altPath}>
+	<DeconstructPage title={title} lead={excerpt || ""} content={(content as unknown[]) ?? []} layers={layers} labels={labels} repoUrl={repoUrl} />
+	<CtaGlobal />
+</Base>
+
+<style is:global>
+	@import "../../styles/hero-scene.css";
+	@import "../../styles/deconstruct.css";
+</style>

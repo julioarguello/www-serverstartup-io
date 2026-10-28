@@ -111,6 +111,36 @@ All routes exist in both ES and EN:
 | `/search` | `/en/search` |
 | `/politica-de-privacidad` | `/en/privacy-policy` |
 | `/rss.xml` | `/en/rss.xml` |
+| `/referencias` | `/en/references` |
+| `/deconstruyendo` | `/en/deconstructing` |
+
+### 3.5 One page, two routes (#622)
+
+Slugs are translated, so each page needs a route file per locale. Those files used to be full copies
+of each other, and the copies drifted. One example: a missing About entry gave a 404 in Spanish but
+redirected to the English home in English.
+
+A page now lives once, in three files, and both routes use them:
+
+| File | Holds |
+| :--- | :--- |
+| `src/utils/pages/<page>.ts` | the loader: every fetch, returning the data plus its cache hints |
+| `src/components/pages/<Page>Page.astro` | the whole page, `<Base>` included: logic, markup, styles |
+| `src/pages/<es-route>.astro`, `src/pages/en/<en-route>.astro` | about ten lines each: call the loader with the slug and locale, 404 if the entry is missing, set the cache hints, render the component |
+
+The cache hints are set in the route because only page frontmatter reaches the response headers
+(`scripts/ci-check-cache-hints.py`). For the same reason, a component never fetches anything that
+carries a hint. Where a locale needs its own value, the component chooses it from `locale`. Examples:
+- the in-page anchors (`#historia` / `#history`);
+- the terminal's directory and date on /referencias;
+- a label's fallback text.
+
+`tests/unit/locale-routes.test.ts` holds the shape:
+- every route under `src/pages/en/` renders exactly one component from `src/components/pages/`, and
+  nothing else;
+- each such component has exactly one English route and one Spanish route.
+
+The pages not folded yet are listed in that test, and the list only shrinks.
 
 ## 4. Component Architecture
 

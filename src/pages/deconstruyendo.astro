@@ -1,41 +1,12 @@
 ---
-/**
- * Deconstruyendo esta web — how the site is built, layer by layer (#161, #305, #535).
- * Body in DeconstructPage.astro; the page entry `deconstruyendo`, the `layers`
- * collection and the `deconstruct_labels` widget carry every word.
- */
-import { getEmDashEntry, getSiteSettings } from "emdash";
-import { entryAlternatePath } from "../utils/alternate";
-import { excerptPlain } from "../utils/excerpt";
-import { getLayers } from "../utils/layers";
-import Base from "../layouts/Base.astro";
-import CtaGlobal from "../components/CtaGlobal.astro";
-import DeconstructPage from "../components/DeconstructPage.astro";
-import { getUiLabels } from "../utils/ui-labels";
-import type { SiteSettings } from "../types";
+/** /deconstruyendo — how the site is built. Body: components/pages/DeconstructingPage.astro; data: utils/pages/deconstruct.ts (#622). */
+import DeconstructingPage from "../components/pages/DeconstructingPage.astro";
+import { loadDeconstruct } from "../utils/pages/deconstruct";
 
-const locale = Astro.currentLocale || "es";
-const { entry, cacheHint } = await getEmDashEntry("pages", "deconstruyendo", { locale });
-if (!entry) return Astro.rewrite("/404");
-const { layers, cacheHint: layersHint } = await getLayers(locale);
-// Both stay in the page: ci-check-cache-hints.py allows cache.set only here or in the
-// middleware. Tags accumulate, so publishing the page or any layer purges this route.
-Astro.cache.set(cacheHint);
-Astro.cache.set(layersHint as typeof cacheHint);
-
-const { title, content, excerpt } = entry.data;
-const settings = await getSiteSettings() as SiteSettings;
-const labels = await getUiLabels(locale);
-// Slugs are translated across locales — resolve the counterpart via the CMS (#291)
-const altPath = await entryAlternatePath("pages", entry.data.id, "es");
+const page = await loadDeconstruct("deconstruyendo", "es");
+if (!page) return Astro.rewrite("/404");
+for (const hint of page.cacheHints) if (hint) Astro.cache.set(hint);
+const { cacheHints, ...props } = page;
 ---
 
-<Base title={title} description={excerpt ? excerptPlain(excerpt) : `${title} — Server Startup`} altPath={altPath}>
-	<DeconstructPage title={title} lead={excerpt || ""} content={(content as unknown[]) ?? []} layers={layers} labels={labels} repoUrl={settings.repoUrl || ""} />
-	<CtaGlobal />
-</Base>
-
-<style is:global>
-	@import "../styles/hero-scene.css";
-	@import "../styles/deconstruct.css";
-</style>
+<DeconstructingPage {...props} />

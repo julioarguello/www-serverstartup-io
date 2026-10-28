@@ -1,0 +1,151 @@
+---
+/**
+ * The contact page, one body for /contacto and /en/contact (#622).
+ * - Hero with the page title, and the CMS intro text
+ * - The team faces, from the members collection
+ * - Contact methods (WhatsApp, phone, email) — data from site settings.
+ *   Phone/WhatsApp live base64-encoded in settings; the email is encoded here
+ *   at render time. All three decode on click, so neither number nor address
+ *   appears in static HTML, JSON-LD or crawlable text.
+ * Data: utils/pages/contact.ts. The two routes only load and cache.
+ */
+import { PortableText } from "emdash/ui";
+import TeamPhoto from "../TeamPhoto.astro";
+import CubeEmblem from "../CubeEmblem.astro";
+import ContactAction from "../ContactAction.astro";
+import MantraCloser from "../MantraCloser.astro";
+import Base from "../../layouts/Base.astro";
+import { contactJsonLd } from "../../utils/jsonld";
+import type { ContactData } from "../../utils/pages/contact";
+
+type Props = Omit<ContactData, "cacheHints">;
+const { locale, entry, settings, members, labels, altPath } = Astro.props;
+const en = locale === "en";
+
+const { title, content, excerpt } = entry.data;
+
+// Content convention: the LAST block is the identity colophon rendered under
+// the contact methods ("Server Startup S.L. · …"); everything before it is
+// the intro above them.
+const blocks: any[] = (content as any[]) || [];
+const introBlocks = blocks.slice(0, -1);
+const colophonBlocks = blocks.slice(-1);
+
+// The English page prefers the English-locale address (settings.emailEn).
+const email = (en ? settings.emailEn || settings.email || "hello@serverstartup.io" : settings.email || "hola@serverstartup.io");
+const emailEncoded = btoa(email);
+const phoneEncoded = settings.phoneEncoded || "";
+const whatsappEncoded = settings.whatsappEncoded || "";
+
+// Each person carries their own caption — the member's `excerpt`, the same
+// line Quiénes somos prints under the bio. The label is the fallback for a
+// member without one (#575; it was one shared caption since #272).
+const engineerCaption = labels.get("footer_headings", "engineer_caption", en ? "Senior engineer" : "Ingeniero senior");
+
+// Contact method labels from site settings
+const whatsappLabel = settings.contactWhatsappLabel || "WhatsApp";
+const phoneLabel = settings.contactPhoneLabel || (en ? "Phone" : "Teléfono");
+const emailLabel = settings.contactEmailLabel || "Email";
+---
+
+<Base
+	title={title}
+	description={excerpt || `${title} — Server Startup`}
+	altPath={altPath}
+>
+	<script type="application/ld+json" set:html={JSON.stringify(contactJsonLd({
+		siteUrl: Astro.site?.origin!,
+		description: excerpt || `${title} — Server Startup`,
+	}))} />
+	<section class="s-contact" aria-label={title}>
+		<div class="container s-contact__inner">
+			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="contacto" size={104} />
+			<h1>{title}</h1>
+			{introBlocks.length > 0 && (
+				<div class="s-contact__content">
+					<PortableText value={introBlocks} />
+				</div>
+			)}
+
+			{members.length > 0 && (
+				<ul class="s-contact__team" role="list">
+					{members.map((m) => (
+						<li class="s-contact__person">
+							<div class="s-contact__avatar">
+								{m.data.featured_image?.src
+									? <TeamPhoto
+											image={m.data.featured_image}
+											alt={m.data.title}
+											width={56}
+											height={56}
+											sizes="56px"
+											face
+										/>
+									: <span aria-hidden="true">{m.data.title?.charAt(0) || "?"}</span>
+								}
+							</div>
+							<span class="s-contact__person-name">{m.data.title}</span>
+							<span class="s-contact__person-caption">{m.data.excerpt || engineerCaption}</span>
+						</li>
+					))}
+				</ul>
+			)}
+
+			<ul class="s-contact__methods" role="list">
+				{whatsappEncoded && (
+					<li><ContactAction kind="wa" encoded={whatsappEncoded} label={whatsappLabel} class="s-contact__method">
+						<svg slot="icon" class="s-contact__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+						</svg>
+						<span class="s-contact__method-label">{whatsappLabel}</span>
+						<svg slot="after" class="s-contact__arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</ContactAction></li>
+				)}
+
+				{phoneEncoded && (
+					<li><ContactAction kind="tel" encoded={phoneEncoded} label={phoneLabel} class="s-contact__method">
+						<svg slot="icon" class="s-contact__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+						</svg>
+						<span class="s-contact__method-label">{phoneLabel}</span>
+						<svg slot="after" class="s-contact__arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</ContactAction></li>
+				)}
+
+				<li><ContactAction kind="mail" encoded={emailEncoded} label={emailLabel} class="s-contact__method">
+					<svg slot="icon" class="s-contact__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<rect width="20" height="16" x="2" y="4" rx="2"/>
+						<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+					</svg>
+					<span class="s-contact__method-label">{emailLabel}</span>
+					<svg slot="after" class="s-contact__arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+						<path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</ContactAction></li>
+			</ul>
+
+			{colophonBlocks.length > 0 && (
+				<div class="s-contact__colophon">
+					<PortableText value={colophonBlocks} />
+				</div>
+			)}
+		</div>
+	</section>
+	{/* #311: the click-to-decode listener now lives in ContactAction, which
+	    the footer uses too — one implementation instead of this page having
+	    its own while the footer published the address in plain. */}
+	<section class="container mantra-section">
+		<MantraCloser />
+	</section>
+</Base>
+
+{/* is:global (#311): the method rows render inside ContactAction now,
+    and scoped styles only reach this component's own markup — every
+    other page in the project already imports its sheet globally. */}
+<style is:global>
+	@import "../../styles/contact.css";
+</style>

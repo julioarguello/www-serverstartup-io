@@ -631,8 +631,9 @@
    first thing the reader scrolls to. This reverses #560's phone order (the
    card above the h1, so the picture never rotated without its name): the
    card now names the vertical with its picture right under it, not behind
-   it. Tablets and desktops keep #560. The pause control stays in the
-   band's corner, which is now the strip's. */
+   it. Tablets and desktops keep #560. The pause control stayed in the
+   band's corner, which became the strip's — a screen down, until #681
+   moved it to the band's top corner (below). */
 @media (max-width: 767px) {
 	/* The band ends where the strip ends. With the screen-tall minimum, a
 	   narrow tall window (an iPad mini upright, 744 × 1133) left ground under
@@ -640,8 +641,18 @@
 	   fell out of the picture into it. */
 	.s-hero--home {
 		--hero-strip: var(--hero-strip-photo);
+		--home-top: calc(var(--header-h) + var(--space-5));
 		min-height: 0;
-		padding: calc(var(--header-h) + var(--space-5)) 0 0;
+		padding: var(--home-top) 0 0;
+	}
+	/* The pause (#681), level with the h1's first line at the column's right
+	   edge: the corner of the band a phone sees first. At the foot it sat
+	   under the strip, 180–440 px below the fold. Lower in the first screen
+	   no corner is free: the card's carry text on most frames, and under the
+	   card a 390 px phone has 26–31 px left. */
+	.s-hero--home .scene__ctl {
+		top: var(--home-top);
+		bottom: auto;
 	}
 	.s-hero--home .s-hero__stage {
 		position: relative;
@@ -682,6 +693,20 @@
 	.s-hero--home.is-manual[data-slide] .s-hero__deck {
 		height: auto;
 		animation: none;
+	}
+}
+
+/* Below 360 px the h1 keeps the pause's square clear, and its first line
+   gives a word to the second: from 360 px up today's first lines leave 58 px
+   or more and need no room made (the engines gate measures it at 360 and on
+   its phones). Only there, because the float costs the h1 its `text-wrap:
+   pretty` in WebKit — on an iPhone the title ended on a lone «producción». */
+@media (max-width: 359px) {
+	.s-hero--home h1::before {
+		content: "";
+		float: right;
+		width: calc(var(--scene-ctl-size) + var(--space-2));
+		height: var(--scene-ctl-size);
 	}
 }
 
@@ -850,7 +875,11 @@
 	}
 	/* Nothing moves, so the STOP has nothing to stop and goes (scene-ctl.css,
 	   for every band) — but the stops are the only way to the six
-	   photographs. They stay. */
+	   photographs. They stay. And the h1 no longer keeps the pause's square
+	   clear on a narrow phone (#681): there is no pause. */
+	.s-hero--home h1::before {
+		content: none;
+	}
 }
 
 @media (min-width: 768px) {

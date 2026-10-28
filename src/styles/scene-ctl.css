@@ -1,6 +1,7 @@
 /* ═══ The band's controls — every vertical's opening and the home (#560) ═══
    One pause (and, where an opening can be replayed, a replay) in the band's
-   lower right corner. The home's carousel took the verticals' own controls
+   lower right corner — on a phone's home, its top right one (#681,
+   homepage.css). The home's carousel took the verticals' own controls
    (founder, 2026-10-05: "el botón de pause y seguir hazlo como en el resto de
    verticales"), so they live here rather than in the scene's sheet. */
 /* WCAG 2.2.2: pause stops all motion, replay restarts it */
@@ -10,8 +11,8 @@
 .scene__replay {
 	display: grid;
 	place-items: center;
-	width: 40px;
-	height: 40px;
+	width: var(--scene-ctl-size);
+	height: var(--scene-ctl-size);
 	margin: 0;
 	padding: 0;
 	border: 1px solid var(--color-secondary);

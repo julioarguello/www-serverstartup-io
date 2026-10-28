@@ -135,12 +135,14 @@ carries a hint. Where a locale needs its own value, the component chooses it fro
 - the terminal's directory and date on /referencias;
 - a label's fallback text.
 
-`tests/unit/locale-routes.test.ts` holds the shape:
-- every route under `src/pages/en/` renders exactly one component from `src/components/pages/`, and
-  nothing else;
-- each such component has exactly one English route and one Spanish route.
+An endpoint follows the same rule with a module in place of a component: `/rss.xml` and `/en/rss.xml`
+call `src/utils/pages/rss.ts`. A post's URL segment is its slug, never its `id`: outside the default
+locale the id carries the locale, so `src/utils/pages/post-path.ts` is the one place that builds it.
 
-The pages not folded yet are listed in that test, and the list only shrinks.
+`tests/unit/locale-routes.test.ts` holds the shape:
+- every route under `src/pages/en/` wraps exactly one component from `src/components/pages/` or one
+  module from `src/utils/pages/`, and holds no markup of its own;
+- each component or module has exactly one English route and one Spanish route.
 
 ## 4. Component Architecture
 

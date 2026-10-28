@@ -1,0 +1,127 @@
+---
+/**
+ * The blog listing, one body for /posts and /en/posts (#622).
+ * Data: utils/pages/blog.ts. The two routes load, answer 404 while there are
+ * no posts (#464), and cache.
+ */
+import { getEntryTerms } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { getReadingTime } from "../../utils/reading-time";
+import { postSlug } from "../../utils/pages/post-path";
+import type { PostsData } from "../../utils/pages/blog";
+
+type Props = Omit<PostsData, "cacheHints">;
+const { locale, posts } = Astro.props;
+const t = Astro.locals.t;
+const prefix = locale === "en" ? "/en" : "";
+
+const sortedPosts = [...posts].sort((a, b) => {
+	const dateA = a.data.publishedAt?.getTime() ?? 0;
+	const dateB = b.data.publishedAt?.getTime() ?? 0;
+	return dateB - dateA;
+});
+
+// Fetch tags for each post (bylines are already hydrated by getEmDashCollection)
+const postsWithTags = await Promise.all(
+	sortedPosts.map(async (post) => {
+		const tags = await getEntryTerms("posts", post.data.id, "tag");
+		const bylines = post.data.bylines ?? [];
+		return { post, tags, bylines };
+	})
+);
+
+const dateLocale = locale === "en" ? "en-US" : "es-ES";
+const formatDate = (date: Date) =>
+	date.toLocaleDateString(dateLocale, {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});---
+
+{/* #335: an empty index is a soft-404 candidate; it comes back the day there is a
+	     first post (#340) */}
+{/* The `noindex` stays even though the 404 above makes it moot today (#464).
+    It is not redundancy: without it, the day #340 publishes a first post this
+    page starts being indexable by itself, and nobody decided that. Indexing the
+    blog is #340's call to make deliberately, not a side effect of content
+    arriving. */}
+<Base title={t("articles_title")} description={t("articles_description")} feed
+	robots="noindex">
+	<div class="posts-page">
+		<div class="container">
+			<header class="page-header">
+				<h1>{t("articles_title")}</h1>
+				<p class="text-body page-count">
+					{posts.length}{" "}
+					{posts.length === 1 ? t("article_singular") : t("article_plural")}
+				</p>
+			</header>
+
+			{
+				sortedPosts.length === 0 ? (
+					<p class="text-body empty">{t("no_articles")}</p>
+				) : (
+					<div class="posts-list">
+						{postsWithTags.map(({ post, tags, bylines }) => (
+							<article class="post-item">
+								<a href={`${prefix}/posts/${postSlug(post)}`} class="post-link">
+									<div class="post-meta">
+										{bylines.length > 0 && (
+											<>
+												<div class="post-bylines">
+													{bylines.slice(0, 2).map((credit, index) => (
+														<>
+															{index > 0 && <span class="byline-sep">,</span>}
+															<span class="post-byline">
+																{credit.byline.avatarMediaId && (
+																	<img
+																		src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
+																		alt={credit.byline.displayName}
+																		class="post-byline-avatar"
+																	/>
+																)}
+																<span class="post-byline-name">
+																	{credit.byline.displayName}
+																</span>
+															</span>
+														</>
+													))}
+													{bylines.length > 2 && (
+														<span class="byline-more">+{bylines.length - 2}</span>
+													)}
+												</div>
+												<span class="meta-dot" />
+											</>
+										)}
+										{post.data.publishedAt && (
+											<time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+										)}
+										{post.data.publishedAt && <span class="meta-dot" />}
+										<span>{getReadingTime(post.data.content)} {t("min_read")}</span>
+									</div>
+									<h2 class="post-title">{post.data.title}</h2>
+									{post.data.excerpt && (
+										<p class="post-excerpt">{post.data.excerpt}</p>
+									)}
+								</a>
+								{tags.length > 0 && (
+									<div class="post-tags">
+										{tags.slice(0, 3).map((tag) => (
+											<a href={`${prefix}/tag/${tag.slug}`} class="post-tag">
+												{tag.label}
+											</a>
+										))}
+									</div>
+								)}
+							</article>
+						))}
+					</div>
+				)
+			}
+		</div>
+	</div>
+</Base>
+
+<style>
+	@import "../../styles/posts.css";
+</style>

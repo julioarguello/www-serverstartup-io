@@ -65,7 +65,7 @@ interface Props {
 	partnerUrl?: string;
 	localePrefix: string;
 	locale: string;
-	/** #667: the label of the control that reopens Zaraz's consent window. */
+	/** #679: the label of the control that reopens the cookie notice (src/utils/consent.ts wires it). */
 	consentLabel?: string;
 }
 
@@ -230,29 +230,6 @@ const partnerMarks = (partnerLogos.length > 0
 		</nav>
 	</div>
 </footer>
-
-<script>
-	import { setConsentLanguage } from "../utils/zaraz-language";
-	// #667: Zaraz's window in the page's language, set before Zaraz starts.
-	setConsentLanguage(window as never, document.documentElement.lang, (() => {
-		try {
-			return window.localStorage;
-		} catch {
-			return null;
-		}
-	})());
-	// #667: reopen Zaraz's own consent window (zaraz.showConsentModal), so a
-	// visitor can withdraw as easily as they accepted. Zaraz injects itself on
-	// the zones where it is on; anywhere else (local, CI, workers.dev) there is
-	// no window to reopen, so the control stays hidden.
-	const page = window as Window & { zaraz?: { showConsentModal?: () => void } };
-	if (page.zaraz)
-		for (const el of document.querySelectorAll<HTMLElement>("[data-consent-open]")) {
-			el.hidden = false;
-			// read at click time: Zaraz's full script replaces the stub it starts with
-			el.addEventListener("click", () => page.zaraz?.showConsentModal?.());
-		}
-</script>
 
 <style is:global>
 	/* ═══════════════════════════════════════════

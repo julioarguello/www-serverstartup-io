@@ -973,39 +973,51 @@ script the site fetches from outside its own origin.
   settings, the GA4 tool and its consent purpose — is not in this repository.
   Its steps and checks are in
   [`docs/how-to/set-up-analytics.md`](how-to/set-up-analytics.md).
-- **GA4 sets cookies**, so it runs through Zaraz with Zaraz's own consent
-  window — the standard setup, unchanged (#667). A visitor who rejects it is
-  counted by Web Analytics only.
+- **GA4 sets cookies**, so it runs through Zaraz and only after the visitor
+  accepts it in the site's own cookie notice (#667, #679). A visitor who
+  rejects it is counted by Web Analytics only.
   - **Cloudflare injects Zaraz** (*Auto-inject* on, in the dashboard) into every
     page requested as HTML on the zones where it is on, and adds the nonce of
     its inline script to our CSP itself — at the edge, after the Worker, so the
     CSP tests pin what the Worker sends, not what the browser receives. Unlike Web Analytics' automatic setup, this does
     reach the Worker's pages (measured on preview, 2026-10-27).
-  - **Zaraz asks.** Its window shows on the first visit; GA4 is assigned to one
-    purpose and runs only once the visitor accepts it. Before an answer Zaraz
-    sets one empty cookie, `cf_zaraz_client`; the answer is kept in
-    `zaraz-consent`. The privacy page lists every cookie and its lifetime.
+  - **The site asks, not Zaraz.** Zaraz's own window is a true modal
+    (`showModal()`): it blocked the page and covered 31 % of a phone
+    (measured 2026-10-28), and *Custom CSS* cannot change that. Its automatic
+    display is off in the dashboard, and `ConsentNotice.astro` shows a small
+    card in the bottom-left corner that does not block the page, with Accept
+    and Reject identical and no close button: the AEPD guide asks for both
+    buttons at one level and a notice that stays until answered, nothing
+    more. Its shape and wiring copy sites that drive Zaraz with their own
+    notice; #679 lists which piece came from which.
+  - **When it shows, and what it tells Zaraz** (`src/utils/consent.ts`): it
+    waits for `zaraz.consent.APIReady`, as in Cloudflare's example. It shows
+    only while Zaraz's consent cookie (`zaraz-consent`) is absent, checked by
+    presence. Accept calls `setAll(true)` and `sendQueuedEvents()`, and Reject
+    `setAll(false)`, only inside the click handler and only when the answer
+    changes. Zaraz keeps the answer in its cookie and applies it on every
+    later page; before an answer it sets one empty cookie, `cf_zaraz_client`.
+    The privacy page lists every cookie and its lifetime.
   - **One Pageview per page.** Zaraz sends it with the request for
     `/cdn-cgi/zaraz/s.js`; on the page where the visitor accepts, it sends the
-    queued one once, as `__zarazConsentedPageview`. Site code that grants
-    consent again on every page — as the banner of #674 did — counts every page
-    after the first twice, so the site never calls the consent API.
-  - **The window's words live in the Zaraz dashboard**, in Spanish and English
-    — the one piece of site text outside the CMS — and so is its stylesheet
-    (Zaraz's *Custom CSS*, built on the site's tokens, which inherit into the
-    window's shadow DOM). Its language follows the page: `src/utils/zaraz-language.ts`
-    sets `__zarazConsentLanguage` before Zaraz starts, where Zaraz alone would
-    follow the browser's `Accept-Language`.
-  - **Withdrawal**: the footer's «Preferencias de cookies» calls
-    `zaraz.showConsentModal()`. It is rendered hidden and revealed only when
-    `window.zaraz` exists, so localhost and the CI stack never show it — and no
-    CI gate exercises it; it is checked on preview. After a
-    withdrawal GA4 stops; Zaraz does not delete the two cookies GA4 already set,
-    and the privacy page says so.
+    queued one once, as `__zarazConsentedPageview`. A page load that calls the
+    Consent API again — as the banner of #674 did on every page — counts every
+    page after the first twice. `tests/unit/consent.test.ts` fails if a page
+    load with an answer stored makes any call.
+  - **Withdrawal**: the footer's «Preferencias de cookies» reopens the same
+    card. It and the card are rendered hidden and shown only when
+    `window.zaraz` exists, so localhost and the CI stack never show them — and
+    no CI gate sees them in a browser; that is checked on preview. After a
+    withdrawal GA4 stops; Zaraz does not delete the two cookies GA4 already
+    set, and the privacy page says so.
+  - **Rollout order**: on each zone, turn Zaraz's automatic window off in the
+    dashboard *before* the deploy that brings the card. In between, nobody is
+    asked and GA4 does not run; the other way round, a first visit gets both.
   - **Zaraz is same-origin and GA4 runs on Cloudflare's servers**, so the CSP
     gains no host and the browser never contacts Google (measured on preview).
-  - **Its one label** is the `consent` widget in `ui_labels_es` /
-    `ui_labels_en`, changed by content patches (`seed/patches/README.md`).
+  - **Every word** is the `consent` widget in `ui_labels_es` /
+    `ui_labels_en` (`region`, `body`, `accept`, `reject`, `reopen`), changed
+    by content patches (`seed/patches/README.md`).
 
 ## 7. Media & Video Strategy
 

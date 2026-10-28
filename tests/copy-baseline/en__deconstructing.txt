@@ -195,7 +195,7 @@ Detail and proof
 One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.
 src/styles/theme.css
 5.2
-Outside the site, the browser calls Cloudflare and nobody else: it downloads the Web Analytics script and sends it its measurements, with no cookies and identifying no one. Fonts, images and every other script are the site's own. Zaraz, Cloudflare's tag manager, loads on every page from this same domain, and the window that asks about cookies is its own. If you accept analytics, it sends the visit to Google Analytics 4 from Cloudflare's servers: even then the browser never calls Google. If you decline, Google Analytics 4 never runs.
+Outside the site, the browser calls Cloudflare and nobody else: it downloads the Web Analytics script and sends it its measurements, with no cookies and identifying no one. Fonts, images and every other script are the site's own. Zaraz, Cloudflare's tag manager, loads on every page from this same domain and receives the answer you give in the cookie notice. If you accept analytics, it sends the visit to Google Analytics 4 from Cloudflare's servers: even then the browser never calls Google. If you decline, Google Analytics 4 never runs.
 src/middleware.ts
 5.3
 The fonts live in the repository, so building the site does not depend on Google Fonts. Cloudflare Fonts does not apply: it only rewrites links to Google Fonts, and there are none here.

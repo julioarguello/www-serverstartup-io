@@ -7,7 +7,8 @@ The site measures visits in two ways:
 - **Cloudflare Web Analytics** counts every visit. It sets no cookie, so it needs no consent. The site
   has to know each measured hostname's token.
 - **Google Analytics 4 (GA4)**, loaded through **Zaraz**, Cloudflare's tag manager. GA4 sets cookies,
-  so it runs only after the visitor accepts it in Zaraz's own consent window (#667).
+  so it runs only after the visitor accepts it in the site's cookie notice, which passes the answer to
+  Zaraz through Zaraz's Consent API (#667, #679).
 
 Part of the setup is code in this repository. The rest lives in the Cloudflare dashboard, where no
 review or CI reaches it. This page is that rest: what to set, where, and how to check it took effect.
@@ -71,13 +72,12 @@ checks out.
 4. Under **Purposes**, add a purpose named `Analítica`, with the English translation `Analytics`.
    Assign Google Analytics 4 to it. → [Explanation: why GA4 must have a purpose](#explanation-why-ga4-must-have-a-purpose)
    Expect: GA4 shows `Analítica` as its purpose.
-5. On the same page, turn on the automatic display of the consent modal.
-6. Set the default language to Spanish.
-7. Enter the **Consent modal text** for `es` and for `en`, exactly as the repository keeps it.
-   → [Reference: the consent window's text](#reference-the-consent-windows-text)
-8. Paste the site's stylesheet into **Custom CSS**. → [Reference: the consent window's CSS](#reference-the-consent-windows-css)
-9. Select **Save**.
-   Expect: a first visit to the site, in a private window, shows Zaraz's window.
+5. On the same page, turn off **Show consent modal**, the automatic display of Zaraz's own window.
+   Do it before deploying the site to the zone: with both on, a first visit gets Zaraz's window and
+   the site's notice. → [Explanation: why the site draws its own notice](#explanation-why-the-site-draws-its-own-notice)
+6. Select **Save**.
+   Expect: a first visit to the site, in a private window, shows the site's small notice in the
+   bottom-left corner, and no Zaraz window.
 
 ---
 
@@ -98,7 +98,7 @@ checks out.
    Expect: one nonce, and `1`. Neither while Zaraz is off for the zone. The edge injects Zaraz only
    when the request asks for HTML, so without the `Accept` header both read as off.
 3. Open the page in a private window with developer tools. In **Console**, look for CSP errors. In
-   **Application → Cookies**, look at the cookies before and after you answer the window.
+   **Application → Cookies**, look at the cookies before and after you answer the notice.
    Expect: no CSP errors. Before an answer, only `cf_zaraz_client`. After **Accept**, also
    `zaraz-consent`, `cfz_google-analytics_v4` and `cfzs_google-analytics_v4`; after **Reject**, only
    `zaraz-consent` besides the first. Zaraz runs GA4 on Cloudflare's side, so the browser never
@@ -130,165 +130,9 @@ checks out.
 | Consent cookie | Zaraz | `zaraz-consent`, set when the visitor answers, one year |
 | GA4 cookies | Zaraz | `cfz_google-analytics_v4` (one year) and `cfzs_google-analytics_v4` (session), only after consent; a withdrawal leaves them to expire |
 | Zaraz client cookie | Zaraz | `cf_zaraz_client`, empty, one year, set by `/cdn-cgi/zaraz/s.js` on every load, before any answer |
-| Zaraz modal automatic display | dashboard | on |
-| Consent window's text, `es` and `en` | dashboard | as in [The consent window's text](#the-consent-windows-text); default language Spanish |
-| Footer link that reopens the window | CMS | `consent` widget, `reopen`, in `ui_labels_es` / `ui_labels_en` (#667) |
-
-### Reference: the consent window's text
-
-The one piece of the site's text that lives outside the CMS, kept here so the repository has it.
-Used by step 7 of [2. Prepare Zaraz](#2-prepare-zaraz-for-google-analytics-on-a-zone).
-
-`es`:
-
-```html
-<p>Con tu permiso medimos las visitas con Google Analytics, a través de Zaraz, de Cloudflare: tu navegador no se conecta con Google. Puedes cambiar tu elección cuando quieras desde «Preferencias de cookies», al pie de cada página. Más detalle en la <a href="/politica-de-privacidad">política de privacidad</a>.</p>
-```
-
-`en`:
-
-```html
-<p>With your permission we measure visits with Google Analytics, through Cloudflare's Zaraz: your browser never connects to Google. You can change your choice at any time from “Cookie preferences” at the foot of every page. More in the <a href="/en/privacy-policy">privacy policy</a>.</p>
-```
-
-The window takes the page's language: the footer script sets `__zarazConsentLanguage` to `es` or `en`
-before Zaraz starts (`src/utils/zaraz-language.ts`). Left to itself, Zaraz would follow the browser's
-`Accept-Language` instead, so an English browser reading a Spanish page would get the English window.
-
-### Reference: the consent window's CSS
-
-Zaraz draws its window inside a shadow DOM, but CSS custom properties inherit into it, so this
-stylesheet uses the site's own tokens from `src/styles/theme.css`, with their values as fallbacks.
-It turns the window into a band at the foot of the page, in the site's type, ink and ghost buttons,
-aligned with the column. With one purpose, Accept and Decline say everything, so it hides the title,
-the purpose list and the third button. The `.cf_*` class names are Zaraz's markup, not a documented
-API: after a Zaraz update, check that the window still looks like this. Used by step 8 of
-[2. Prepare Zaraz](#2-prepare-zaraz-for-google-analytics-on-a-zone).
-
-```css
-/* Server Startup — Zaraz consent window as the site's own band.
-   Pasted into Zaraz → Consent → Custom CSS. Colours, type and the column come
-   from the site's theme.css: custom properties inherit into Zaraz's shadow DOM. */
-
-/* A band across the foot of the viewport, not a box in the middle */
-dialog::backdrop {
-	backdrop-filter: none;
-	background-color: transparent;
-}
-.cf_modal {
-	position: fixed;
-	inset: auto 0 0 0;
-	margin: 0;
-	width: 100%;
-	max-width: none;
-	max-height: none;
-	border-radius: 0;
-	border: 0;
-	border-top: 1px solid var(--color-border, #E3E7EB);
-	box-shadow: var(--shadow-card, 0 2px 10px rgba(0, 0, 0, 0.06));
-	filter: none;
-	background: var(--color-secondary, #FFFFFF);
-	color: var(--color-text, #1E1E1E);
-	font-family: var(--font-family, sans-serif);
-	padding-block: 16px;
-	padding-inline: max(16px, calc((100vw - var(--container-max, 880px)) / 2 + 20px));
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
-	grid-template-rows: auto;
-	overflow: visible;
-	align-items: center;
-	column-gap: 24px;
-	row-gap: 16px;
-}
-
-/* One purpose, so Accept and Decline say everything: no title, no list,
-   no third button */
-.title_container,
-.cf_modal > hr,
-.cf_consent-container,
-.cf_button--save,
-.cf_modal > p:not(:has(a)) {
-	display: none;
-}
-
-.cf_modal > p {
-	grid-column: 1;
-	margin: 0;
-	font-size: 16px;
-	line-height: 1.5;
-	text-align: left;
-}
-.cf_modal a {
-	color: inherit;
-	text-decoration: underline dashed;
-	text-underline-offset: 3px;
-}
-.cf_modal a:hover,
-.cf_modal a:focus-visible {
-	text-decoration-style: solid;
-}
-/* the window focuses its first link on open: mark it as the site does, not with a box */
-.cf_modal a:focus {
-	outline: none;
-	text-decoration-thickness: 2px;
-}
-
-/* The site's ghost buttons, side by side and equal: refusing is as easy as
-   accepting */
-.cf_consent-buttons {
-	grid-column: 2;
-	margin: 0;
-	padding: 0;
-	background: none;
-	display: flex;
-	flex-wrap: nowrap;
-	gap: 8px;
-}
-.cf_button {
-	margin: 0;
-	height: auto;
-	padding: 10px 18px;
-	font-family: inherit;
-	font-size: 17px;
-	font-weight: 600;
-	line-height: 22px;
-	border-radius: 0;
-	background: transparent;
-	color: var(--color-primary, #1E1E1E);
-	border: 1px solid var(--color-primary, #1E1E1E);
-	transition: background-color 0.3s, color 0.3s;
-}
-.cf_button:hover,
-.cf_button:focus-visible {
-	background: var(--color-primary, #1E1E1E);
-	color: var(--color-secondary, #FFFFFF);
-}
-.cf_button:focus-visible {
-	outline: 2px solid var(--color-primary, #1E1E1E);
-	outline-offset: 2px;
-}
-
-/* Phone: text above, the two buttons below at equal width */
-@media (max-width: 700px) {
-	.cf_modal {
-		grid-template-columns: minmax(0, 1fr);
-	}
-	.cf_consent-buttons {
-		grid-column: 1;
-	}
-	.cf_button {
-		flex: 1 1 0;
-	}
-}
-
-/* The site has one ground; the window keeps it in dark mode too */
-@media (prefers-color-scheme: dark) {
-	.cf_modal {
-		background: var(--color-secondary, #FFFFFF);
-		color: var(--color-text, #1E1E1E);
-	}
-}
-```
+| Zaraz modal automatic display (**Show consent modal**) | dashboard | off: the site's notice asks (#679) |
+| The notice's words and the footer link that reopens it | CMS | `consent` widget in `ui_labels_es` / `ui_labels_en`: `region`, `body`, `accept`, `reject`, `reopen` (#679) |
+| When the notice shows and what it tells Zaraz | repository | `src/utils/consent.ts`, pinned by `tests/unit/consent.test.ts` |
 
 ### Explanation: why Zaraz is injected by the zone and the beacon is not
 
@@ -300,9 +144,24 @@ Domain. Hence the tag in `Base.astro` (#668).
 
 Zaraz's auto-injection, by contrast, does reach them: measured on preview on 2026-10-27, it puts its
 script in every page requested as HTML and its nonce in the CSP. So Zaraz runs in its standard setup,
-and the site adds nothing to it but the footer link that reopens the consent window. That rewrite of
+except for its consent window, which the site replaces with its own notice. That rewrite of
 the CSP happens at the edge, after the Worker: `tests/unit/csp-outside-hosts.test.ts` pins the policy
 the Worker sends, not the one the browser receives.
+
+### Explanation: why the site draws its own notice
+
+Zaraz's window is a true modal: its script opens a `<dialog aria-modal="true">` with `showModal()`, so
+until the visitor answers, nothing else on the page can be clicked or focused. Measured on
+`www.serverstartup.io` on 2026-10-28, it covered 17 % of a 1440×900 screen and 31 % of a 393×852
+phone. **Custom CSS** changes how it looks, not that it blocks, and Zaraz has no setting for a window
+that does not block. The AEPD's cookie guide asks for nothing of the kind: Reject must be at the same
+level as Accept, and the notice must stay until the visitor answers.
+
+So the site turns that window off and shows a small card that does not block the page, as sites that
+drive Zaraz with their own notice do. Issue #679 lists them, along with which piece came from which.
+`src/utils/consent.ts` waits for `zaraz.consent.APIReady`, as in Cloudflare's own example. It shows
+the card only while Zaraz's consent cookie is absent, and calls the Consent API only when the visitor
+clicks. Zaraz still stores the answer in its own cookie and applies it on every later page.
 
 ### Explanation: why GA4 must have a purpose
 
@@ -311,7 +170,7 @@ website, Zaraz does not assign any purpose to it. This means that this tool will
 default."* Then GA4 would set its cookies before anyone accepted, and the privacy page would be false.
 
 **Verification:** in [3. Check what a page actually loads](#3-check-what-a-page-actually-loads), no
-GA4 cookie exists before the window is answered.
+GA4 cookie exists before the notice is answered.
 
 ### Troubleshooting: Web Analytics shows zero page views
 
@@ -332,5 +191,7 @@ of [3. Check what a page actually loads](#3-check-what-a-page-actually-loads).
 
 Some code is granting consent again on every page, as the site's own banner did in #674. Zaraz sends
 each page's Pageview once, and the queued one once more only on the page where the visitor accepts.
-Search the site for a call to `zaraz.consent`; [Zaraz's consent API](https://developers.cloudflare.com/zaraz/consent-management/api/)
-calls `setAll` and `sendQueuedEvents` only while no consent cookie exists.
+`src/utils/consent.ts` calls `setAll` and `sendQueuedEvents` only inside the Accept and Reject click
+handlers, and `sendQueuedEvents` only when consent goes from not granted to granted;
+`tests/unit/consent.test.ts` fails if a page load with an answer stored calls either. Search the site
+for any other call to `zaraz.consent`.

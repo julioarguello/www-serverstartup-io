@@ -369,7 +369,7 @@ const CUBE = {
 
 	// The six photographs, once the page has loaded (#560, #580): in the
 	// markup their sources are data, so they never compete with the first
-	// screen's own bytes — the first is not on screen for six seconds.
+	// screen's own bytes — the first is not on screen for a whole frame.
 	const later = () => {
 		for (const img of document.querySelectorAll<HTMLImageElement>(".s-hero__photo[data-srcset]")) {
 			// sizes first: it is only valid beside a srcset, so it travels as data too (#573)
@@ -435,10 +435,11 @@ const CUBE = {
 			return raw.endsWith("ms") ? v / 1000 : v;
 		};
 		// the clock is the stylesheet's, read back rather than restated here
-		const cycle = secs("--hero-cycle", 42) * 1000;
-		const step = secs("--hero-step", 6) * 1000;
-		// every frame's animation is delayed by `--i * step - 0.5 s`; one second in, the frame is whole
-		const LEAD = 500, IN = 1000;
+		const cycle = secs("--hero-cycle", 56) * 1000;
+		const step = secs("--hero-step", 8) * 1000;
+		// every frame's animation is delayed by `--i * step - 0.5 s`. The seek lands a sixth of a frame in,
+		// two thirds through the photograph's dissolve, whatever the step (#682: a fixed second would not)
+		const LEAD = 500, IN = step / 6;
 		const clocked = () => [
 			...hero.getAnimations({ subtree: true }),
 			...(document.querySelector(".site-header")?.getAnimations() ?? []),

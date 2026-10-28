@@ -691,7 +691,7 @@ Teide — and is `HOME_VOYAGE` in `src/utils/hero-art.ts`, not `FACE_ORDER`: the
 and the area rows keep theirs. `sortByVoyage()` builds both the hero's slides and the header's
 rotating edge (Base.astro), so the two cannot drift.
 
-- **One clock**, the one the plates had: `--hero-cycle` 36 s (42 s and seven frames since #580, §4.12b), `--hero-step` 6 s, CSS-only. Each photograph holds still and the next dissolves in over 1.5 s on top of it; the
+- **One clock**, the one the plates had: `--hero-cycle` 36 s (42 s and seven frames since #580, §4.12b; 56 s since #682), `--hero-step` 6 s (8 s since #682), CSS-only. Each photograph holds still and the next dissolves in over 1.5 s (2 s since #682) on top of it; the
   caption leaves before the next arrives, one text at a time (the push and the quick fades read as
   "PowerPoint trasnochado", founder 2026-10-06). The pause
   is the verticals' own control (`scene-ctl.css`, shared since #560), in the band's corner. The
@@ -736,7 +736,7 @@ rotating edge (Base.astro), so the two cannot drift.
   and the card over most of the picture). So the band reads h1 → kicker → card → rail, then the
   strip, whole and uncovered, fading in from the band at its top (`--hero-scrim-strip-top`). The
   card holds its taller state on phones: in the flow, a deck changing height each frame would move
-  the picture under it every six seconds. Measured after: the sentence ends at y = 406 on 393 × 659
+  the picture under it on every frame. Measured after: the sentence ends at y = 406 on 393 × 659
   and 435 on 320 × 568; the card and the rail open above the fold on every phone but the 320 px
   one. The band ends with the strip (no screen-tall minimum), the cube is 86 % of the strip and is
   lifted over it (`z-index: 1`: the reordered stage would otherwise paint over the seal). The layout
@@ -782,8 +782,8 @@ console and `panel_labels` → `lh_*` with it. The team band left in #565 (found
 
 ### 4.12b The October band: «nosotros» first (#580)
 
-The band is seven frames since #580, on the same CSS clock (`--hero-cycle` 42 s, `--hero-step` 6 s,
-the header's edge and the title's tail on it too). Frame 0 is the company, not a vertical (founder:
+The band is seven frames since #580, on the same CSS clock (`--hero-cycle` 56 s, `--hero-step` 8 s
+since #682 — 42 s and 6 s before — the header's edge and the title's tail on it too). Frame 0 is the company, not a vertical (founder:
 "lo primero que veo es un faro… eso no me representa"): no photograph, the band's own ground
 (`--color-ground-dark`) with the haze at its far edge, and the logo's cube **in the seal's place** —
 its edges lighting up in paper white from the centre of the «Y» outwards («Filamento»). On the next
@@ -808,7 +808,15 @@ column on a desktop, above the card's tallest state on a tablet, 86 % of the str
   per-frame tints failed on the real face and were re-lifted by the same method.
 - **The rail is the navigation** (no arrows, brief §9.8): seven stops, buttons with the keyboard
   (arrows walk them, Home/End), each seeking the clock as the arrows used to.
-- **No photograph loads with the page**: the first is six seconds away, so all six take their
+- **Eight seconds a frame, not six (#682)**: a visitor could not finish a caption. At 6 s the
+  caption is whole for 4.8 s (2.8571–14.2857 % of the cycle), and a caption is a name plus a
+  `hero_line` of 18–25 words. At 238 words per minute, the mean adult silent-reading rate
+  (Brysbaert, 2019), the median caption needs about 5.5 s. At 8 s it is whole for 6.4 s. 7 s would
+  have left 5.6 s, the average reader's bare minimum. Every keyframe is a share of the cycle, so
+  only the two tokens move and the band slows as a whole (the dissolve takes 2 s). The exception
+  is the deck, whose stops are anchored to absolute delays and are recomputed. Anything that pins
+  a frame reads the clock from the stylesheet: the a11y gate, `frame.cjs` and the rail's seek.
+- **No photograph loads with the page**: the first is a whole frame away, so all six take their
   sources on `load`, and Base no longer preloads one.
 - **Gates**: the a11y gate freezes frames through `.is-manual[data-slide]`, 0 = «nosotros»; the
   verification scripts in `.design-sync/verify/` pin the clock through the Web Animations API and

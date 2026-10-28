@@ -317,11 +317,15 @@
 	   the ground itself, or the join shows as a seam. No text stands on it,
 	   so it needs no shade under a card. */
 	--hero-scrim-strip-top: linear-gradient(180deg, var(--color-ground-dark) 0%, transparent 34%);
-	/* Seven frames, six seconds each: «nosotros», then the six photographs
+	/* Seven frames, eight seconds each: «nosotros», then the six photographs
 	   (#580). Named here because the header's edge and the title's tail
-	   rotate on the same clock as the images and the three must not drift. */
-	--hero-cycle: 42s;
-	--hero-step: 6s;
+	   rotate on the same clock as the images and the three must not drift.
+	   Eight, not six (#682): a caption is a name and a line of 18–25 words,
+	   and at six seconds it showed whole for 4.8 s, less than the median one
+	   takes to read. Every keyframe is a share of the cycle, so the whole band
+	   slows by the same factor; the caption now shows whole for 6.4 s. */
+	--hero-cycle: 56s;
+	--hero-step: 8s;
 	/* The brand's own voice on the band: graphite grey, 6.1:1 on the ground.
 	   The «nosotros» frame's tail and header edge (#580). */
 	--color-brand-grey: #A8A49C;

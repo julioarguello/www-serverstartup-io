@@ -373,7 +373,7 @@
 
 /* The two-voice title (#580, brief §3.2): the tail in Computer Modern italic,
    sized so its x-height meets the head's (~+13 %), coloured by the frame.
-   The words never change; the colour follows the photograph, ~600 ms,
+   The words never change; the colour follows the photograph, ~800 ms,
    starting just after it begins to dissolve in. Code tokens stay upright. */
 .ss-title__tail {
 	font-family: "CMU Serif", serif;
@@ -673,7 +673,7 @@
 		order: 2;
 	}
 	/* In the flow, a card that changed height on each frame would move the
-	   rail and the picture under it every six seconds. It holds the taller
+	   rail and the picture under it on every frame. It holds the taller
 	   of its two states instead — the deck's documented fallback. Listed again
 	   with the manual state, with and without a slide, so a gate pinning a
 	   frame measures the same card a reader sees. */
@@ -712,8 +712,8 @@
 	animation-play-state: paused;
 }
 
-/* One frame is 14.2857% of the 42 s cycle. The next photograph dissolves in
-   over 3.5714% (1.5 s) on top of the one showing, which stays whole beneath it
+/* One frame is 14.2857% of the 56 s cycle. The next photograph dissolves in
+   over 3.5714% (2 s) on top of the one showing, which stays whole beneath it
    until it is covered — never two half-faded pictures. The last fades OUT
    instead, over the «nosotros» ground. */
 @keyframes s-hero-photo {
@@ -742,10 +742,10 @@
 	17.8571%, 100% { opacity: 0; }
 }
 
-/* «Filamento», drawn once per pass in the frame's 1.5–4 s: the spokes from
-   the centre (1.5–2.6 s), the rim (2.4–3.3 s), the bloom and the spill
-   swelling to 4 s, the cells last (3–4 s). Undrawn again only once the frame
-   has dissolved away. */
+/* «Filamento», drawn once per pass in the frame's 2–5.3 s: the spokes from
+   the centre (2–3.5 s), the rim (3.2–4.4 s), the bloom and the spill
+   swelling to 5.3 s, the cells last (4–5.3 s). Undrawn again only once the
+   frame has dissolved away. */
 @keyframes s-hero-spoke {
 	0%, 3.5714% { stroke-dashoffset: 1; }
 	6.1905%, 17.8571% { stroke-dashoffset: 0; }
@@ -776,7 +776,7 @@
 	17.8572%, 100% { opacity: 0; }
 }
 
-/* The caption leaves in 0.3 s as the next photograph starts to dissolve, and
+/* The caption leaves in 0.4 s as the next photograph starts to dissolve, and
    the next one arrives once the picture is well in — one text at a time. */
 @keyframes s-hero-item {
 	0%, 2.1429% { opacity: 0; visibility: hidden; }
@@ -798,10 +798,13 @@
 }
 
 /* The card follows the photograph: it changes scale 0.15–0.7 s into the
-   frame that leaves or enters «nosotros». Its 0 % is 0.7 s into «nosotros». */
+   frame that leaves or enters «nosotros». Its 0 % is 0.7 s into «nosotros».
+   Those are seconds, not shares of the cycle: 13.3036 % is (8 − 0.5 + 0.15
+   − 0.2) / 56, and 99.0179 % the same for the next round's «nosotros» —
+   recompute both when `--hero-cycle` changes. */
 @keyframes s-hero-deck {
-	0%, 12.9762% { height: var(--deck-us, auto); }
-	14.2857%, 98.6905% { height: var(--deck-v, auto); }
+	0%, 13.3036% { height: var(--deck-us, auto); }
+	14.2857%, 99.0179% { height: var(--deck-v, auto); }
 	100% { height: var(--deck-us, auto); }
 }
 

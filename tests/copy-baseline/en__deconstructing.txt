@@ -190,7 +190,7 @@ Guggenheim · Sergio S.C · CC BY-SA 2.0
 outside provider the browser calls: Cloudflare
 one stylesheet for everything
 Detail and proof
-6 rows
+7 rows
 5.1
 One stylesheet declares every colour, radius and shadow, the column width and the spacing scale. CI rejects those values written anywhere else, except in marked blocks that imitate another product's interface.
 src/styles/theme.css
@@ -211,6 +211,10 @@ docs/design/hero-rotativo/photo_restore.py
 5.6
 The photographs are CC BY-SA, and the site credits them with the changes stated.
 seed/seed.json
+5.7
+The cookie notice is the site's own. It is a card in the bottom-left corner, and the page keeps working behind it while you decide. Accept and Reject are two identical buttons, side by side. The notice has no close button and waits for your answer. “Cookie preferences”, in the footer, opens it again. Zaraz's own window is off because it blocks the whole page, and the cookie guide of Spain's data protection authority (AEPD) asks for less. It asks for Reject at the same level as Accept, a notice that stays until you answer, and withdrawal as easy as consent. Only your click passes the answer to Zaraz, through its consent API. Google Analytics 4 is not needed to count visits, since Web Analytics already does. It is here because this site is also a lab.
+src/components/ConsentNotice.astro
+AEPD cookie guide · Zaraz Consent API
 inside the Worker
 The CMS: EmDash
 Where the content is edited.

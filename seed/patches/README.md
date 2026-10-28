@@ -63,7 +63,34 @@ are applied. A file looks like this:
 - One change per value in a patch. A patch, or two patches, cannot change a value and also its
   parent, such as `facts` and `facts[0].text`; `check` rejects it.
 - A patch is only for content that already exists. Collections and fields come from the seed's schema;
-  entries come from the seed itself. The one exception is a UI-label widget, below.
+  entries come from the seed itself. There are two exceptions: a new item in an entry's list, and a
+  UI-label widget, both below.
+
+### A new item in a list
+
+A path that ends in a one-key selector, with `before: null`, adds an item that no item of the list
+matches yet (#685):
+
+```json
+{
+	"collection": "layers",
+	"slug": "presentacion",
+	"locale": "es",
+	"path": ["facts", { "key": "h7-7" }],
+	"before": null,
+	"after": { "key": "h7-7", "text": "The new fact.", "status": "ok" }
+}
+```
+
+- **`after`** is the whole item. It must be an object, and its selector field must hold the selector's
+  value: here `"key": "h7-7"`. `check` rejects anything else.
+- Applying the change appends the item at the end of the list. `content-patch.mjs seed` appends it in
+  `seed.json` the same way, indented like the item before it.
+- An item that already matches the selector with other content is a conflict, and nothing is written.
+- Create at most one item per list in a patch, for the same reason as widgets below.
+- A later edit to that item changes the whole item, at the same path, with the created item as its
+  `before`. Changing only `["facts", { "key": "h7-7" }, "text"]` would change a value and its parent
+  across two patches, and `check` rejects that.
 
 ### UI labels: a change to a widget
 
@@ -180,6 +207,15 @@ Measured 2026-10-26 against a local dev server seeded from main's `seed.json`:
 - After a value was edited through the API, the run refused and wrote nothing.
 - With an unpublished draft on an entry, the run refused and wrote nothing.
 - The page rendered the new text and showed 50 facts, up from 46.
+
+Measured 2026-10-28 against a local dev server seeded from main's `seed.json`, for a new list item
+(#685):
+
+- The run wrote the two `presentacion` / `presentation` entries, appending fact `h7-7` to each, and
+  reported every other field unchanged.
+- A second run wrote nothing.
+- After the created item's text was edited in the database, the run refused and wrote nothing.
+- `/deconstruyendo` and `/en/deconstructing` rendered the new fact.
 
 Not measured locally, because a dev server cannot purge the edge: whether publishing through the API
 purges the production cache. The first production run checks it.

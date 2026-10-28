@@ -19761,6 +19761,13 @@
 							"text": "Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.",
 							"status": "ok",
 							"file": "seed/seed.json"
+						},
+						{
+							"key": "h7-7",
+							"text": "El aviso de cookies lo dibuja el propio sitio. Es una tarjeta en la esquina inferior izquierda, y la página sigue funcionando detrás mientras decides. Aceptar y Rechazar son dos botones iguales, uno al lado del otro. El aviso no tiene cierre y espera a tu respuesta; «Preferencias de cookies», en el pie, lo vuelve a abrir. La ventana propia de `Zaraz` está apagada porque bloquea la página entera, y la guía de la AEPD no pide tanto. Pide rechazar al mismo nivel que aceptar, un aviso que se mantenga hasta que respondas y retirar el consentimiento con la misma facilidad. Solo tu clic pasa la respuesta a `Zaraz`, a través de su API de consentimiento. `Google Analytics 4` sobra para contar visitas, porque ya lo hace `Web Analytics`. Está porque esta web también es un laboratorio.",
+							"file": "src/components/ConsentNotice.astro",
+							"docs": "[Guía sobre el uso de las cookies, AEPD](https://www.aepd.es/guias/guia-cookies.pdf) · [API de consentimiento de Zaraz](https://developers.cloudflare.com/zaraz/consent-management/api/)",
+							"status": "ok"
 						}
 					]
 				}
@@ -19851,6 +19858,13 @@
 							"text": "The photographs are CC BY-SA, and the site credits them with the changes stated.",
 							"status": "ok",
 							"file": "seed/seed.json"
+						},
+						{
+							"key": "h7-7",
+							"text": "The cookie notice is the site's own. It is a card in the bottom-left corner, and the page keeps working behind it while you decide. Accept and Reject are two identical buttons, side by side. The notice has no close button and waits for your answer. “Cookie preferences”, in the footer, opens it again. `Zaraz`'s own window is off because it blocks the whole page, and the cookie guide of Spain's data protection authority (AEPD) asks for less. It asks for Reject at the same level as Accept, a notice that stays until you answer, and withdrawal as easy as consent. Only your click passes the answer to `Zaraz`, through its consent API. `Google Analytics 4` is not needed to count visits, since `Web Analytics` already does. It is here because this site is also a lab.",
+							"file": "src/components/ConsentNotice.astro",
+							"docs": "[AEPD cookie guide](https://www.aepd.es/guias/guia-cookies.pdf) · [Zaraz Consent API](https://developers.cloudflare.com/zaraz/consent-management/api/)",
+							"status": "ok"
 						}
 					]
 				},

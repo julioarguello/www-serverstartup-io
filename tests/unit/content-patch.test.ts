@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error — plain ESM script, no types
-import { chains, getAt, listPatches, parseWithSpans, seedApply, seedSpan, setAt, validatePatch } from "../../scripts/content-patch.mjs";
+import { chains, getAt, listPatches, parseWithSpans, seedApply, seedSpan, setAt, validatePatch, valueAt } from "../../scripts/content-patch.mjs";
 
 const ROOT = join(import.meta.dirname, "..", "..");
 const SCRIPT = join(ROOT, "scripts", "content-patch.mjs");
@@ -210,6 +210,81 @@ describe("widget patches (#667)", () => {
 		const doc = JSON.parse(SEED);
 		doc.widgetAreas.find((a: { name: string }) => a.name === "ui_labels_es").widgets.push({ type: "content", title: "zz_probe", content: blocks("Aceptar") });
 		expect(JSON.parse(out)).toEqual(doc);
+	});
+});
+
+const item = { key: "h7-7", text: "Nuevo", status: "ok" };
+const itemChange = (over: Record<string, unknown> = {}) => change({ path: ["facts", { key: "h7-7" }], before: null, after: item, ...over });
+const itemSeed = (facts: unknown[]) => `${JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro: "A", facts } }] } }, null, "\t")}\n`;
+const existingFact = { key: "h7-1", text: "Uno", status: "ok" };
+
+describe("list items created by a patch (#685)", () => {
+	it("validates a created item: an object whose selector field matches, one per list in a patch", () => {
+		const ok = (...cs: unknown[]) => validatePatch("2026-10-28-i.json", patchFile("2026-10-28", cs));
+		expect(ok(itemChange())).toEqual([]);
+		expect(ok(itemChange({ after: { ...item, key: "h7-8" } })).join()).toMatch(/whose "key" is "h7-7"/);
+		expect(ok(itemChange({ after: "Nuevo" })).join()).toMatch(/must be an object/);
+		const second = itemChange({ path: ["facts", { key: "h7-8" }], after: { ...item, key: "h7-8" } });
+		expect(ok(itemChange(), second).join()).toMatch(/at most one item per list/);
+	});
+
+	it("reads an absent item as null, and an ambiguous or missing list as nothing", () => {
+		const doc = { facts: [existingFact] };
+		expect(valueAt(doc, ["facts", { key: "h7-7" }])).toBeNull();
+		expect(valueAt(doc, ["facts", { key: "h7-1" }])).toEqual(existingFact);
+		expect(valueAt({ facts: [item, item] }, ["facts", { key: "h7-7" }])).toBeUndefined();
+		expect(valueAt({}, ["facts", { key: "h7-7" }])).toBeUndefined();
+		expect(valueAt(doc, ["facts", { key: "h7-7" }, "text"])).toBeUndefined();
+	});
+
+	it("setAt appends an absent item, and still refuses a missing path elsewhere", () => {
+		expect(setAt({ facts: [existingFact] }, ["facts", { key: "h7-7" }], item)).toEqual({ facts: [existingFact, item] });
+		expect(() => setAt({ facts: [existingFact] }, ["facts", { key: "h7-7" }, "text"], "x")).toThrow(/not found/);
+		expect(() => setAt({}, ["facts", { key: "h7-7" }], item)).toThrow(/not found/);
+	});
+
+	it("check fails while the seed lacks the item, and passes once `seed` has appended it", () => {
+		const p = { "2026-10-28-i.json": patchFile("2026-10-28", [itemChange()]) };
+		const checkWith = (src: string) => {
+			const dir = mkdtempSync(join(tmpdir(), "content-patch-item-"));
+			writeFileSync(join(dir, "seed.json"), src);
+			mkdirSync(join(dir, "patches"));
+			writeFileSync(join(dir, "patches", "2026-10-28-i.json"), JSON.stringify(p["2026-10-28-i.json"]));
+			return run("check", "--seed", join(dir, "seed.json"), "--patches", join(dir, "patches"));
+		};
+		const src = itemSeed([existingFact]);
+		const before = checkWith(src);
+		expect(before.status).toBe(1);
+		expect(before.stderr).toMatch(/does not hold the target of layers\/cache/);
+		const out = seedApply(src, p["2026-10-28-i.json"]);
+		expect(checkWith(out).status).toBe(0);
+		// appended after the last item, indented like it, every byte before it kept
+		const list = seedSpan(parseWithSpans(src), itemChange()).list;
+		const lastEnd = list.items.at(-1).end;
+		expect(out.slice(0, lastEnd)).toBe(src.slice(0, lastEnd));
+		expect(JSON.parse(out).content.layers[0].data.facts).toEqual([existingFact, item]);
+		expect(out).toMatch(/\t\},\n\t{6}\{\n\t{7}"key": "h7-7"/);
+		// applying it again changes nothing
+		expect(seedApply(out, p["2026-10-28-i.json"])).toBe(out);
+	});
+
+	it("refuses to create an item a seed already holds with different content", () => {
+		const src = itemSeed([existingFact, { ...item, text: "Otro" }]);
+		expect(() => seedApply(src, { changes: [itemChange()] })).toThrow(/neither/);
+	});
+
+	it("chains a creation and a later edit of the whole item: null → A → B targets B", () => {
+		const edited = { ...item, text: "Editado" };
+		const p = {
+			"2026-10-28-a.json": patchFile("2026-10-28", [itemChange()]),
+			"2026-11-02-b.json": patchFile("2026-11-02", [itemChange({ before: item, after: edited })]),
+		};
+		const { chains: all, problems } = chains(listPatchesFrom(p));
+		expect(problems).toEqual([]);
+		expect(all[0].states).toEqual([null, item, edited]);
+		// an edit of one field of the created item would be a value and its parent
+		const child = { "2026-11-02-b.json": patchFile("2026-11-02", [change({ path: ["facts", { key: "h7-7" }, "text"], before: "Nuevo", after: "Editado" })]) };
+		expect(chains(listPatchesFrom({ ...p, ...child })).problems.join()).toMatch(/never a value and its parent/);
 	});
 });
 

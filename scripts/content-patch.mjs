@@ -24,6 +24,13 @@
  * always the widget's whole `content`, and a `before` of null means the widget
  * does not exist yet, so applying the change creates it.
  *
+ * An entry's list item can be created the same way (#685): a path ending in a
+ * one-key selector, such as ["facts", {"key": "h7-7"}], with a `before` of null
+ * means no item of the list matches the selector yet, and applying the change
+ * appends `after` at the end of the list. A later edit to that item replaces
+ * the whole item at the same path, because a patch never changes a value and
+ * its parent.
+ *
  * Usage:
  *   content-patch.mjs check [--seed <file>] [--patches <dir>]
  *       validate every patch and chain; seed.json must hold each value's target
@@ -66,8 +73,10 @@ export function listPatches(dir = PATCH_DIR) {
 		.map((file) => ({ file, patch: JSON.parse(readFileSync(join(dir, file), "utf8")) }));
 }
 
-const isSegment = (seg) =>
-	typeof seg === "string" || Number.isInteger(seg) || (seg !== null && typeof seg === "object" && !Array.isArray(seg) && Object.keys(seg).length === 1);
+const isSelector = (seg) => seg !== null && typeof seg === "object" && !Array.isArray(seg) && Object.keys(seg).length === 1;
+const isSegment = (seg) => typeof seg === "string" || Number.isInteger(seg) || isSelector(seg);
+/** An entry change that creates a list item: its path ends in a selector and nothing is expected there. */
+const createsItem = (c) => !isWidget(c) && Array.isArray(c?.path) && isSelector(c.path.at(-1)) && c.before === null;
 
 /** True when `a` is a strict prefix of `b`. */
 const isPrefix = (a, b) => a.length < b.length && a.every((seg, i) => isDeepStrictEqual(seg, b[i]));
@@ -103,11 +112,18 @@ export function validatePatch(file, patch) {
 		if (bad.length) out.push(`${at}: path segment ${JSON.stringify(bad[0])} is not a key, an index or a one-key selector`);
 		if (!("before" in c) || !("after" in c)) out.push(`${at}: "before" and "after" are required`);
 		else if (isDeepStrictEqual(c.before, c.after)) out.push(`${at}: "before" and "after" are equal`);
+		if (createsItem(c)) {
+			const [[k, v]] = Object.entries(c.path.at(-1));
+			if (c.after === null || typeof c.after !== "object" || Array.isArray(c.after) || !isDeepStrictEqual(c.after[k], v))
+				out.push(`${at}: a created list item must be an object whose "${k}" is ${JSON.stringify(v)}, as its selector says`);
+			const list = `${entryKey(c)}::${JSON.stringify(c.path.slice(0, -1))}`;
+			if (seen.some((s) => s.creates === list)) out.push(`${at}: create at most one item per list in a patch`);
+		}
 		const entry = entryKey(c);
 		for (const s of seen)
 			if (s.entry === entry && (isDeepStrictEqual(s.path, c.path) || isPrefix(s.path, c.path) || isPrefix(c.path, s.path)))
 				out.push(`${at}: its path overlaps change ${s.i} on the same entry — one change per value`);
-		seen.push({ entry, path: c.path, i });
+		seen.push({ entry, path: c.path, i, creates: createsItem(c) ? `${entry}::${JSON.stringify(c.path.slice(0, -1))}` : undefined });
 	}
 	return out;
 }
@@ -156,11 +172,29 @@ export function getAt(root, path) {
 	return path.reduce((node, seg) => (node === undefined ? undefined : step(node, seg)), root);
 }
 
-/** A copy of `root` with the value at `path` replaced; the path must exist. */
+/** True when `list` is a list and none of its items matches `seg`. */
+const noneMatches = (list, seg) => {
+	if (!Array.isArray(list)) return false;
+	const [[k, v]] = Object.entries(seg);
+	return !list.some((it) => it && typeof it === "object" && isDeepStrictEqual(it[k], v));
+};
+
+/** The value at `path`, or null when its last step selects a list item that does not exist yet. */
+export function valueAt(root, path) {
+	const v = getAt(root, path);
+	if (v !== undefined || path.length === 0 || !isSelector(path.at(-1))) return v;
+	return noneMatches(getAt(root, path.slice(0, -1)), path.at(-1)) ? null : undefined;
+}
+
+/**
+ * A copy of `root` with the value at `path` replaced. The path must exist, except
+ * a last selector that matches no item: then `value` is appended to that list.
+ */
 export function setAt(root, path, value) {
 	if (path.length === 0) return value;
 	const [seg, ...rest] = path;
 	const child = step(root, seg);
+	if (child === undefined && rest.length === 0 && isSelector(seg) && noneMatches(root, seg)) return [...root, value];
 	if (child === undefined) throw new Error(`path segment ${JSON.stringify(seg)} not found`);
 	if (Array.isArray(root)) {
 		const i = Number.isInteger(seg) ? seg : root.indexOf(child);
@@ -270,7 +304,13 @@ export function seedSpan(root, c) {
 		return p.slug === c.slug && p.locale === c.locale;
 	});
 	if (hits.length !== 1) return undefined;
-	return ["data", ...c.path].reduce((node, seg) => (node === undefined ? undefined : spanStep(node, seg)), hits[0]);
+	const walk = (path) => path.reduce((node, seg) => (node === undefined ? undefined : spanStep(node, seg)), hits[0]);
+	const node = walk(["data", ...c.path]);
+	const last = c.path.at(-1);
+	if (node !== undefined || !isSelector(last)) return node;
+	// a list item not created yet: { kind: "absent", list }, which `seedApply` appends to
+	const parent = walk(["data", ...c.path.slice(0, -1)]);
+	return parent?.kind === "array" && noneMatches(parent.items.map(plain), last) ? { kind: "absent", list: parent, start: parent.end, end: parent.end } : undefined;
 }
 
 /** Write a patch's `after` values into the seed text, touching only those values. */
@@ -286,19 +326,19 @@ export function seedApply(src, patch) {
 		const cur = plain(node);
 		if (isDeepStrictEqual(cur, c.after)) continue;
 		if (!isDeepStrictEqual(cur, c.before)) throw new Error(`${where(c)}: seed holds neither "before" nor "after"`);
-		if (node.kind === "absent") out = appendWidget(out, node.list, { type: "content", title: c.widget, content: c.after });
+		if (node.kind === "absent") out = appendItem(out, node.list, isWidget(c) ? { type: "content", title: c.widget, content: c.after } : c.after);
 		else out = out.slice(0, node.start) + JSON.stringify(c.after) + out.slice(node.end);
 	}
 	return out;
 }
 
-/** Append a widget to an area's widget list, indented like the widget before it. */
-function appendWidget(src, list, widget) {
+/** Append a value to a list in the seed text — a widget, or an entry's list item — indented like the item before it. */
+function appendItem(src, list, item) {
 	const last = list.items.at(-1);
 	const at = last ? last.end : list.start + 1;
 	const lineStart = src.lastIndexOf("\n", (last ?? list).start) + 1;
 	const indent = (src.slice(lineStart).match(/^[\t ]*/)?.[0] ?? "") + (last ? "" : "\t");
-	const text = JSON.stringify(widget, null, "\t").replaceAll("\n", `\n${indent}`);
+	const text = JSON.stringify(item, null, "\t").replaceAll("\n", `\n${indent}`);
 	return `${src.slice(0, at)}${last ? "," : ""}\n${indent}${text}${src.slice(at)}`;
 }
 
@@ -442,7 +482,7 @@ async function apply(args) {
 			entries.set(k, { c0: c, item, data: item.data, fields: new Set(), files: new Set() });
 		}
 		const e = entries.get(k);
-		const cur = getAt(e.data, c.path);
+		const cur = valueAt(e.data, c.path);
 		const target = states[states.length - 1];
 		if (isDeepStrictEqual(cur, target)) {
 			skipped++;

@@ -190,7 +190,7 @@ Guggenheim · Sergio S.C · CC BY-SA 2.0
 proveedor de fuera al que llama el navegador: Cloudflare
 una hoja de estilos para todo
 Detalle y pruebas
-6 filas
+7 filas
 5.1
 Una hoja de estilos declara cada color, radio y sombra, el ancho de columna y la escala de espaciado. CI rechaza esos valores escritos en otro sitio, salvo en bloques marcados que imitan la interfaz de otro producto.
 src/styles/theme.css
@@ -211,6 +211,10 @@ docs/design/hero-rotativo/photo_restore.py
 5.6
 Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
 seed/seed.json
+5.7
+El aviso de cookies lo dibuja el propio sitio. Es una tarjeta en la esquina inferior izquierda, y la página sigue funcionando detrás mientras decides. Aceptar y Rechazar son dos botones iguales, uno al lado del otro. El aviso no tiene cierre y espera a tu respuesta; «Preferencias de cookies», en el pie, lo vuelve a abrir. La ventana propia de Zaraz está apagada porque bloquea la página entera, y la guía de la AEPD no pide tanto. Pide rechazar al mismo nivel que aceptar, un aviso que se mantenga hasta que respondas y retirar el consentimiento con la misma facilidad. Solo tu clic pasa la respuesta a Zaraz, a través de su API de consentimiento. Google Analytics 4 sobra para contar visitas, porque ya lo hace Web Analytics. Está porque esta web también es un laboratorio.
+src/components/ConsentNotice.astro
+Guía sobre el uso de las cookies, AEPD · API de consentimiento de Zaraz
 dentro del Worker
 El CMS: EmDash
 Dónde se edita el contenido.

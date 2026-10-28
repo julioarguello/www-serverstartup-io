@@ -1,0 +1,117 @@
+---
+/**
+ * The references page, one body for /referencias and /en/references (#622):
+ * `ls -alh referencias/` (#271, founder-picked console).
+ *
+ * The wall IS terminal output: a long listing where the logo occupies
+ * the filename column — nothing is named in text (founder rule, which
+ * also dissolved the need for names-at-rest anywhere in the tree). The
+ * file group carries the clientes/colaboraciones distinction, `ls`
+ * itself justifies the alphabetical order (slugs are alphabetized into
+ * name order), and the metadata is real where it can be: sizes are the
+ * actual asset sizes, the date is the company's public founding date.
+ * Terminal output is invariant across locales, like code.
+ *
+ * Logos: flat, white-inverted, optically equalized at the asset level
+ * (common 560×160 canvas, equal artwork area), inert — no links, no
+ * hover color: referential use, not endorsement. Entries with alt=""
+ * stay unnamed for indexing and assistive tech alike.
+ */
+import { PortableText } from "emdash/ui";
+import PtLink from "../PtLink.astro";
+import CubeEmblem from "../CubeEmblem.astro";
+import CtaGlobal from "../CtaGlobal.astro";
+import Base from "../../layouts/Base.astro";
+import { SITE_BY_PATH } from "../../utils/nav";
+import type { ReferencesData } from "../../utils/pages/references";
+
+type Props = Omit<ReferencesData, "cacheHints">;
+const { locale, entry, altPath, labels, refs } = Astro.props;
+const en = locale === "en";
+const ptComponents = { mark: { link: PtLink } };
+const { title, content, excerpt } = entry.data;
+// The listing is terminal output: each locale lists its own directory, and
+// dates print the way `ls` prints them under that locale.
+const listingDir = en ? "references/" : "referencias/";
+const listingDate = en ? "Jan 24 2019" : "24 ene 2019";
+
+// `ls` sorts by name; our slugs are alphabetized into the names' order.
+const rows = refs
+	.filter((r: any) => Boolean(r.data.featured) && r.data.featured_image?.src)
+	.sort((a: any, b: any) =>
+		String((a as any).slug ?? a.id).localeCompare(String((b as any).slug ?? b.id)))
+	.map((r: any) => {
+		const [groupKey, size] = String(r.data.excerpt || "clientes · —").split(" · ");
+		return {
+			src: r.data.featured_image.src,
+			alt: r.data.featured_image.alt ?? "",
+			group: labels.get("refs_labels", `group_${groupKey}`, groupKey),
+			// clients carry the execute bit — we run things for them;
+			// collaborations stay read-only
+			perms: groupKey === "clientes" ? "-r-xr-xr-x" : "-r--r--r--",
+			size,
+		};
+	});
+
+const latticeAria = labels.get("refs_labels", "lattice_aria", en ? "References" : "Referencias");
+const disclaimer = labels.get("refs_labels", "disclaimer", en
+	? "All logos belong to their respective owners; shown solely as a factual reference of delivered work."
+	: "Los logotipos pertenecen a sus titulares; se muestran únicamente como referencia de proyectos realizados.");
+
+
+const emblemKey = SITE_BY_PATH[Astro.url.pathname.replace(/\/$/, "")];
+const accentColor = "#1E1E1E";
+---
+
+<Base title={title} description={excerpt || `${title} — Server Startup`} altPath={altPath}>
+	<!-- ══════ HERO ══════ -->
+	<section class="s-hero" aria-label={title}>
+		<div class="container s-hero__inner">
+			<div class="s-hero__copy">
+				<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey={emblemKey} size={104} />
+				<h1>{title}</h1>
+				{(content || []).length > 0 && (
+					<div class="s-hero__body">
+						<PortableText value={content as any[]} components={ptComponents} />
+					</div>
+				)}
+			</div>
+		</div>
+	</section>
+
+	<!-- ══════ THE LISTING — title above, terminal below, nothing else ══════ -->
+	<section class="refs">
+		<div class="container refs__inner">
+			<figure class="ls" aria-label={latticeAria}>
+				<div class="ls__chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+				<p class="ls__cmd" aria-hidden="true">ls -alh {listingDir}</p>
+				<ul class="ls__out" role="list">
+					<li class="ls-row ls-row--dim" aria-hidden="true">
+						<span class="ls-pre">total 9</span>
+					</li>
+					<li class="ls-row ls-row--dim" aria-hidden="true">
+						<span class="ls-perms">drwxr-xr-x</span><span class="ls-n">2</span><span class="ls-owner">serverstartup</span><span class="ls-group">{labels.get("refs_labels", "group_clientes", "clientes")}</span><span class="ls-size">96B</span><span class="ls-date">{listingDate}</span><span class="ls-name">.</span>
+					</li>
+					<li class="ls-row ls-row--dim" aria-hidden="true">
+						<span class="ls-perms">drwxr-xr-x</span><span class="ls-n">5</span><span class="ls-owner">serverstartup</span><span class="ls-group">serverstartup</span><span class="ls-size">160B</span><span class="ls-date">{listingDate}</span><span class="ls-name">..</span>
+					</li>
+					{rows.map((r) => (
+						<li class="ls-row">
+							<span class="ls-perms" aria-hidden="true">{r.perms}</span><span class="ls-n" aria-hidden="true">1</span><span class="ls-owner" aria-hidden="true">serverstartup</span><span class="ls-group">{r.group}</span><span class="ls-size" aria-hidden="true">{r.size}</span><span class="ls-date" aria-hidden="true">{listingDate}</span><span class="ls-name"><img src={r.src} alt={r.alt} loading="lazy" decoding="async" /></span>
+						</li>
+					))}
+				</ul>
+			</figure>
+			<p class="refs-disclaimer">{disclaimer}</p>
+
+		</div>
+	</section>
+
+	<!-- ══════ CTA (from cta_global widget) ══════ -->
+	<CtaGlobal />
+</Base>
+
+<style is:global define:vars={{ accentColor }}>
+	@import "../../styles/service.css";
+	@import "../../styles/refs.css";
+</style>

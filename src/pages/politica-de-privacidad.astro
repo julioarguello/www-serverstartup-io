@@ -1,46 +1,12 @@
 ---
-/**
- * Política de privacidad — legal page, content from CMS.
- * Indexable and reachable from the footer legal row (#335).
- */
-import { getEmDashEntry } from "emdash";
-import { entryAlternatePath } from "../utils/alternate";
-import { PortableText } from "emdash/ui";
-import Base from "../layouts/Base.astro";
-import CubeEmblem from "../components/CubeEmblem.astro";
+/** /politica-de-privacidad — the privacy policy. Body: components/pages/PrivacyPage.astro; data: utils/pages/simple.ts (#622). */
+import PrivacyPage from "../components/pages/PrivacyPage.astro";
+import { loadPage } from "../utils/pages/simple";
 
-const { entry, cacheHint } = await getEmDashEntry("pages", "politica-de-privacidad");
-if (!entry) return Astro.rewrite("/404");
-Astro.cache.set(cacheHint);
-
-const { title, content, excerpt } = entry.data;
-// Slugs are translated across locales — resolve the counterpart via the CMS (#291)
-const altPath = entry ? await entryAlternatePath("pages", entry.data.id, "es") : null;
-
+const page = await loadPage("politica-de-privacidad", "es");
+if (!page) return Astro.rewrite("/404");
+for (const hint of page.cacheHints) if (hint) Astro.cache.set(hint);
+const { cacheHints, ...props } = page;
 ---
 
-<!-- #335: indexable, like the legal notice beside it. It was `noindex,
-     nofollow`: the nofollow threw away link signal through the header, the
-     footer with all six verticals and the language switcher, and bought
-     nothing; the noindex left the page both unfindable AND declared in the
-     sitemap — which asks Google to index what it lists. Two legal documents
-     of the same class now behave the same way. -->
-<Base
-	title={title}
-	description={excerpt || `${title} — Server Startup`}
-	altPath={altPath}
->
-	{/* #350: every page carries the mark with its own detail — these were
-	    the only two without one. `legal` is a nav key with no menu entry. */}
-	<section class="legal" aria-label={title}>
-		<div class="container legal-inner">
-			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="legal" size={104} />
-			<h1>{title}</h1>
-			{content && <PortableText value={content} />}
-		</div>
-	</section>
-</Base>
-
-<style>
-	@import "../styles/legal.css";
-</style>
+<PrivacyPage {...props} />

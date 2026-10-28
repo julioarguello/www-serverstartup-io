@@ -1,52 +1,12 @@
 ---
-/**
- * English privacy policy — /en/privacy-policy
- * Mirrors politica-de-privacidad.astro with EN locale.
- * Indexable and reachable from the footer legal row (#335).
- */
-import { getEmDashEntry } from "emdash";
-import { entryAlternatePath } from "../../utils/alternate";
-import { PortableText } from "emdash/ui";
-import Base from "../../layouts/Base.astro";
-import CubeEmblem from "../../components/CubeEmblem.astro";
+/** /en/privacy-policy — the privacy policy. Body: components/pages/PrivacyPage.astro; data: utils/pages/simple.ts (#622). */
+import PrivacyPage from "../../components/pages/PrivacyPage.astro";
+import { loadPage } from "../../utils/pages/simple";
 
-// Try EN slug first, fall back to ES slug with locale override
-const { entry, cacheHint } = await getEmDashEntry("pages", "privacy-policy", { locale: "en" });
-const fallback = entry ? null : await getEmDashEntry("pages", "politica-de-privacidad", { locale: "en" });
-const page = entry || fallback?.entry;
-
+const page = await loadPage("privacy-policy", "en");
 if (!page) return Astro.rewrite("/404");
-if (cacheHint) Astro.cache.set(cacheHint);
-if (fallback?.cacheHint) Astro.cache.set(fallback.cacheHint);
-
-const { title, content, excerpt } = page.data;
-// Slugs are translated across locales — resolve the counterpart via the CMS (#291)
-const altPath = page ? await entryAlternatePath("pages", page.data.id, "en") : null;
-
+for (const hint of page.cacheHints) if (hint) Astro.cache.set(hint);
+const { cacheHints, ...props } = page;
 ---
 
-<!-- #335: indexable, like the legal notice beside it. It was `noindex,
-     nofollow`: the nofollow threw away link signal through the header, the
-     footer with all six verticals and the language switcher, and bought
-     nothing; the noindex left the page both unfindable AND declared in the
-     sitemap — which asks Google to index what it lists. Two legal documents
-     of the same class now behave the same way. -->
-<Base
-	title={title}
-	description={excerpt || `${title} — Server Startup`}
-	altPath={altPath}
->
-	{/* #350: every page carries the mark with its own detail — these were
-	    the only two without one. `legal` is a nav key with no menu entry. */}
-	<section class="legal" aria-label={title}>
-		<div class="container legal-inner">
-			<CubeEmblem class="s-open-mark" color="var(--color-primary)" faceKey="legal" size={104} />
-			<h1>{title}</h1>
-			{content && <PortableText value={content} />}
-		</div>
-	</section>
-</Base>
-
-<style>
-	@import "../../styles/legal.css";
-</style>
+<PrivacyPage {...props} />

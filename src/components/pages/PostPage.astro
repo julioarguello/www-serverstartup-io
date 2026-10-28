@@ -1,0 +1,345 @@
+---
+/**
+ * A blog post, one body for /posts/[slug] and /en/posts/[slug] (#622).
+ * Data: utils/pages/blog.ts. The two routes load, answer 404 for an unknown
+ * post, and cache.
+ */
+import {
+	getEntryTerms,
+	getSeoMeta,
+	getSiteSettings,
+} from "emdash";
+import {
+	Image,
+	PortableText,
+	WidgetArea,
+} from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import PostCard from "../PostCard.astro";
+import { getReadingTime } from "../../utils/reading-time";
+import { resolveBlogSiteIdentity } from "../../utils/site-identity";
+import { blogPostJsonLd } from "../../utils/jsonld";
+import { postSlug } from "../../utils/pages/post-path";
+import type { PostData } from "../../utils/pages/blog";
+
+type Props = Omit<PostData, "cacheHints">;
+const { locale, slug, post, recentPosts } = Astro.props;
+const t = Astro.locals.t;
+const prefix = locale === "en" ? "/en" : "";
+
+// Get featured image URL for OG fallback
+// The image may have src (external) or meta.storageKey (local)
+function getImageUrl(img: unknown): string | undefined {
+	if (!img || typeof img !== "object") return undefined;
+	const image = img as Record<string, unknown>;
+	// Check for direct src
+	if (typeof image.src === "string" && image.src) {
+		return image.src.startsWith("http")
+			? image.src
+			: `${Astro.url.origin}${image.src}`;
+	}
+	// Build from storageKey for local images
+	const meta = image.meta as Record<string, unknown> | undefined;
+	const storageKey =
+		(typeof meta?.storageKey === "string" ? meta.storageKey : undefined) ||
+		(typeof image.id === "string" ? image.id : undefined);
+	if (storageKey) {
+		return `${Astro.url.origin}/_emdash/api/media/file/${storageKey}`;
+	}
+	return undefined;
+}
+const featuredImageUrl = getImageUrl(post.data.featured_image);
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+
+// Generate SEO meta from content
+const seo = getSeoMeta(post, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: `${prefix}/posts/${slug}`,
+	defaultOgImage: featuredImageUrl,
+});
+
+// Get tags for this post
+// Note: post.id is the slug in the default locale only (see utils/pages/post-path.ts); post.data.id is the database ULID
+const tags = await getEntryTerms("posts", post.data.id, "tag");
+
+// Bylines are already hydrated by getEmDashEntry
+const bylines = post.data.bylines ?? [];
+
+// Get reading time
+const readingTime = getReadingTime(post.data.content);
+
+// Other posts for the "More posts" section, with their tags (loaded by utils/pages/blog.ts)
+const otherPosts = recentPosts.filter((p) => p.id !== post.id).slice(0, 3);
+
+// Fetch tags for related posts (bylines are already hydrated by getEmDashCollection)
+const otherPostsWithTags = await Promise.all(
+	otherPosts.map(async (p) => {
+		const postTags = await getEntryTerms("posts", p.data.id, "tag");
+		const postBylines = p.data.bylines ?? [];
+		return { post: p, tags: postTags, bylines: postBylines };
+	})
+);
+
+const dateLocale = locale === "en" ? "en-US" : "es-ES";
+const publishDate =
+	post.data.publishedAt?.toLocaleDateString(dateLocale, {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	}) ?? null;
+const publishDateIso = post.data.publishedAt?.toISOString() ?? null;
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	image={seo.ogImage}
+	canonical={seo.canonical}
+	robots={seo.robots}
+	type="article"
+	publishedTime={post.data.publishedAt?.toISOString() ?? null}
+	modifiedTime={post.data.updatedAt.toISOString()}
+	content={{ collection: "posts", id: post.data.id, slug }}
+>
+	<script type="application/ld+json" set:html={JSON.stringify(blogPostJsonLd({
+		siteUrl: Astro.site?.origin!,
+		title: seo.title || post.data.title,
+		description: seo.description || post.data.excerpt || "",
+		slug,
+		locale,
+		publishedAt: post.data.publishedAt,
+		updatedAt: post.data.updatedAt,
+		image: featuredImageUrl,
+		authors: bylines.map((c) => ({ name: c.byline.displayName })),
+	}))} />
+	<article class="article">
+		{/* Hero: Full-width featured image */}
+		{
+			post.data.featured_image && (
+				<div class="article-hero" {...post.edit.featured_image}>
+					<Image image={post.data.featured_image} />
+				</div>
+			)
+		}
+
+		{/* Three-column layout */}
+		<div class="article-grid">
+			{/* Left gutter: Meta information */}
+			<aside class="article-meta-col">
+				<div class="meta-sticky">
+					{
+						bylines.length > 0 && (
+							<div class="meta-block byline-block">
+								<span class="meta-label">
+									{bylines.length === 1 ? t("author") : t("authors")}
+								</span>
+								<div class="bylines">
+									{bylines.map((credit) => (
+										<div class="byline">
+											{credit.byline.avatarMediaId && (
+												<img
+													src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
+													alt={credit.byline.displayName}
+													class="byline-avatar"
+												/>
+											)}
+											<div class="byline-info">
+												<span class="byline-name">
+													{credit.byline.displayName}
+												</span>
+												{credit.roleLabel && (
+													<span class="byline-role">{credit.roleLabel}</span>
+												)}
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+						)
+					}
+					{
+						publishDate && (
+							<div class="meta-block">
+								<span class="meta-label">{t("published")}</span>
+								<time class="meta-value">{publishDate}</time>
+							</div>
+						)
+					}
+					<div class="meta-block">
+						<span class="meta-label">{t("reading_time")}</span>
+						<span class="meta-value">{readingTime} min</span>
+					</div>
+					{
+						tags.length > 0 && (
+							<div class="meta-block">
+								<span class="meta-label">{t("tags")}</span>
+								<div class="meta-tags">
+									{tags.map((tag) => (
+										<a href={`${prefix}/tag/${tag.slug}`} class="meta-tag">
+											{tag.label}
+										</a>
+									))}
+								</div>
+							</div>
+						)
+					}
+				</div>
+			</aside>
+
+			{/* Main content */}
+			<div class="article-main">
+				<header class="article-header">
+					<div class="article-meta">
+						{
+							bylines.length > 0 && (
+								<>
+									<span class="article-meta-byline">
+										{bylines.map((credit, i) => (
+											<>
+												{i > 0 && ", "}
+												{credit.byline.displayName}
+											</>
+										))}
+									</span>
+									<span class="meta-dot" />
+								</>
+							)
+						}
+						{
+							publishDate && (
+								<>
+									<time datetime={publishDateIso || undefined}>{publishDate}</time>
+									<span class="meta-dot" />
+								</>
+							)
+						}
+						<span>{readingTime} {t("min_read")}</span>
+					</div>
+					<h1 class="article-title" {...post.edit.title}>{post.data.title}</h1>
+					{
+						post.data.excerpt && (
+							<p class="article-excerpt" {...post.edit.excerpt}>{post.data.excerpt}</p>
+						)
+					}
+				</header>
+
+				<div class="article-content">
+					<PortableText value={post.data.content} />
+				</div>
+
+			</div>
+
+			{/* Right gutter: TOC + Sidebar widgets */}
+			<aside class="article-sidebar">
+				<div class="sidebar-sticky">
+					<nav class="toc" aria-label={t("toc")}>
+						<h4 class="toc-title">{t("on_this_page")}</h4>
+						<div class="toc-content" id="toc-content">
+							<!-- Populated by JS -->
+						</div>
+					</nav>
+					<div class="sidebar-widgets">
+						<WidgetArea name="sidebar" />
+					</div>
+				</div>
+			</aside>
+		</div>
+	</article>
+
+	{
+		otherPostsWithTags.length > 0 && (
+			<section class="more-posts">
+				<div class="more-inner">
+					<h2 class="more-title">{t("continue_reading")}</h2>
+					<div class="more-grid">
+						{otherPostsWithTags.map(
+							({ post: p, tags: postTags, bylines: postBylines }) => (
+								<PostCard
+							locale={locale}
+									title={p.data.title}
+									excerpt={p.data.excerpt}
+									featuredImage={p.data.featured_image}
+									href={`${prefix}/posts/${postSlug(p)}`}
+									date={p.data.publishedAt ?? undefined}
+									readingTime={getReadingTime(p.data.content)}
+									tags={postTags.map((t) => ({ slug: t.slug, label: t.label }))}
+									bylines={postBylines}
+								/>
+							)
+						)}
+					</div>
+				</div>
+			</section>
+		)
+	}
+
+	<script>
+		// Build table of contents from h2/h3 headings
+		function buildToc() {
+			const content = document.querySelector(".article-content");
+			const tocContainer = document.getElementById("toc-content");
+			if (!content || !tocContainer) return;
+
+			const headings = content.querySelectorAll("h2, h3");
+			if (headings.length === 0) {
+				// Hide TOC if no headings
+				const toc = document.querySelector(".toc") as HTMLElement | null;
+				if (toc) toc.style.display = "none";
+				return;
+			}
+
+			const list = document.createElement("ul");
+			list.className = "toc-list";
+
+			headings.forEach((heading, index) => {
+				// Add ID if missing
+				if (!heading.id) {
+					heading.id = `heading-${index}`;
+				}
+
+				const li = document.createElement("li");
+				li.className =
+					heading.tagName === "H3" ? "toc-item toc-item--nested" : "toc-item";
+
+				const link = document.createElement("a");
+				link.href = `#${heading.id}`;
+				link.className = "toc-link";
+				link.textContent = heading.textContent;
+
+				li.appendChild(link);
+				list.appendChild(li);
+			});
+
+			tocContainer.appendChild(list);
+
+			// Highlight current section on scroll
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						const id = entry.target.id;
+						const link = tocContainer.querySelector(`a[href="#${id}"]`);
+						if (link) {
+							if (entry.isIntersecting) {
+								tocContainer
+									.querySelectorAll(".toc-link")
+									.forEach((l) => l.classList.remove("active"));
+								link.classList.add("active");
+							}
+						}
+					});
+				},
+				{ rootMargin: "-80px 0px -80% 0px" }
+			);
+
+			headings.forEach((heading) => observer.observe(heading));
+		}
+
+		buildToc();
+	</script>
+</Base>
+
+<style>
+	@import "../../styles/post-detail.css";
+</style>

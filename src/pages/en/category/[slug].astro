@@ -1,78 +1,16 @@
 ---
-/**
- * English category archive — /en/category/[slug]
- * Mirrors category/[slug].astro with locale-aware links.
- */
-import { getTerm, getEmDashCollection, getEntryTerms, decodeSlug } from "emdash";
-import Base from "../../../layouts/Base.astro";
-import PostCard from "../../../components/PostCard.astro";
-import { getReadingTime } from "../../../utils/reading-time";
-
-const locale = "en";
-const t = Astro.locals.t;
+/** /en/category/[slug] — the category archive. Body: components/pages/CategoryPage.astro; data: utils/pages/blog.ts (#622). */
+import CategoryPage from "../../../components/pages/CategoryPage.astro";
+import { loadArchive } from "../../../utils/pages/blog";
+import { decodeSlug } from "emdash";
 
 const slug = decodeSlug(Astro.params.slug);
-const term = slug ? await getTerm("category", slug) : null;
-
-if (!term) {
-	return Astro.rewrite("/404");
-}
-
-const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
-	where: { category: term.slug },
-	orderBy: { published_at: "desc" },
-});
-Astro.cache.set(cacheHint);
-
-// #626: the same rule as posts/index.astro (#464). With no posts, an archive
-// is an empty page with a 200, which is what the template's demo terms served
-// in production. An empty archive is absent: 404. It comes back by itself once
-// a post carries the term.
-if (posts.length === 0) return new Response(null, { status: 404 });
-
-// Fetch tags for display on each post card
-const filteredPosts = await Promise.all(
-	posts.map(async (post) => {
-		const tags = await getEntryTerms("posts", post.data.id, "tag");
-		return { post, tags };
-	})
-);
+const page = slug ? await loadArchive("category", slug, "en") : null;
+if (!page) return Astro.rewrite("/404");
+for (const hint of page.cacheHints) if (hint) Astro.cache.set(hint);
+// An empty archive is absent, like the blog listing (#464, #626).
+if (page.posts.length === 0) return new Response(null, { status: 404 });
+const { cacheHints, ...props } = page;
 ---
 
-<Base title={`${term.label} ${t("post_plural")}`} description={`${t("all_posts_in")} ${term.label}`}>
-	<section class="archive-section">
-		<header class="archive-header">
-			<span class="archive-label">{t("category_label")}</span>
-			<h1 class="archive-title">{term.label}</h1>
-			<p class="archive-count">
-				{filteredPosts.length}
-				{filteredPosts.length === 1 ? t("post_singular") : t("post_plural")}
-			</p>
-		</header>
-
-		{
-			filteredPosts.length === 0 ? (
-				<p class="no-posts">{t("no_posts_category")}</p>
-			) : (
-				<div class="posts-grid">
-					{filteredPosts.map(({ post, tags }) => (
-						<PostCard
-							title={post.data.title}
-							excerpt={post.data.excerpt}
-							featuredImage={post.data.featured_image}
-							href={`/en/posts/${(post as any).slug ?? post.id}`}
-							date={post.data.publishedAt ?? undefined}
-							readingTime={getReadingTime(post.data.content)}
-							tags={tags.map((t) => ({ slug: t.slug, label: t.label }))}
-							locale={locale}
-						/>
-					))}
-				</div>
-			)
-		}
-	</section>
-</Base>
-
-<style>
-	@import "../../../styles/archive.css";
-</style>
+<CategoryPage {...props} />

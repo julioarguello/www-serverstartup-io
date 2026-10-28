@@ -481,6 +481,9 @@
 	--header-h: 69px;
 	--open-clear: var(--space-6);
 	--open-pad-top: calc(var(--header-h) + var(--open-clear));
+	/* the home's band on a phone opens closer (#572), and its pause stands
+	   level with that first line (#681) */
+	--home-pad-top: calc(var(--header-h) + var(--space-5));
 	--open-mark-w: 68px;
 	/* The band's pause and replay (scene-ctl.css): one square. Named here
 	   because the home's h1 keeps that square clear on a phone (#681). */

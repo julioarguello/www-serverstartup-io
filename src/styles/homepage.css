@@ -641,9 +641,8 @@
 	   fell out of the picture into it. */
 	.s-hero--home {
 		--hero-strip: var(--hero-strip-photo);
-		--home-top: calc(var(--header-h) + var(--space-5));
 		min-height: 0;
-		padding: var(--home-top) 0 0;
+		padding: var(--home-pad-top) 0 0;
 	}
 	/* The pause (#681), level with the h1's first line at the column's right
 	   edge: the corner of the band a phone sees first. At the foot it sat
@@ -651,7 +650,7 @@
 	   no corner is free: the card's carry text on most frames, and under the
 	   card a 390 px phone has 26–31 px left. */
 	.s-hero--home .scene__ctl {
-		top: var(--home-top);
+		top: var(--home-pad-top);
 		bottom: auto;
 	}
 	.s-hero--home .s-hero__stage {

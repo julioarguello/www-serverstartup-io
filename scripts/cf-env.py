@@ -2,7 +2,7 @@
 """
 cloudflare-env.py — Docker-inspired CLI environment manager for Cloudflare Workers / Wrangler.
 
-Follows the *-env pattern (ai-protocols.md §8.12):
+Follows the *-env pattern (dev-env-wrapper.md §8.12):
   - Packages the execution context so `wrangler` runs in a predictable, isolated environment.
   - Supports dual-mode: source (human) + subprocess (agent/CI).
 

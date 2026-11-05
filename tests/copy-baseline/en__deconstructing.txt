@@ -88,7 +88,7 @@ MISS
 Workers
 renders
 Detail and proof
-5 rows
+6 rows
 2.1
 Workers Cache sits in front of the Worker and is tiered by default: a hit does not run the Worker.
 wrangler.jsonc
@@ -97,7 +97,7 @@ Workers Cache
 A rendered page is cached at the edge only if it opts in. A response that declares no caching of its own is sent no-store.
 src/middleware.ts
 2.3
-Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they expire within the hour.
+Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they are refreshed once the hour is up.
 src/plugins/cache-purge.ts
 last green check, 2026-08-23 · purge
 2.4
@@ -105,9 +105,12 @@ Build output under /_astro/ is content-hashed and served with a one-year, immuta
 public/_headers
 Static Assets headers
 2.5
-Resized images are kept in the Cache API.
-no file: in the @astrojs/cloudflare dependency
-Cache API
+Resized images are kept for a year: their address already says which image they come from and at what size, so they never change.
+src/middleware.ts
+2.6
+An expired copy is served at once and rebuilt behind the request, for up to a week. Nobody waits for the Worker except after a deploy, after that page is published, or after a week without visits. These rules live in the Worker, because the zone's cache rules do not reach Workers Cache.
+src/middleware.ts
+stale-while-revalidate · limitations
 layer 3 · Cloudflare
 Compute
 Where the code that builds each page runs.

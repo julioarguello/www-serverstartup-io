@@ -119,8 +119,9 @@ change names the widget instead of an entry:
   reverse order, and it refuses rather than write that.
 - The edge cache is not proven to follow. EmDash's widget handlers invalidate the area's cache tag
   through Astro's route cache, but no widget write has been watched reaching Cloudflare's cache. Until
-  one has, a page showing the label may serve the old text for up to the one-hour edge TTL set in
-  `src/middleware.ts`.
+  one has, a page showing the label may serve the old text until the one-hour `maxAge` set in
+  `src/middleware.ts` has passed, plus one request: the first request after the hour still gets the old
+  copy and starts the refresh.
 
 The same change also goes into `seed.json`. `content-patch.mjs seed <file>` writes each `after` into the
 seed by replacing only that value's text, so the hand formatting elsewhere in the file survives. It

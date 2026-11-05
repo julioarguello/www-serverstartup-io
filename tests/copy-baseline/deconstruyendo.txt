@@ -88,7 +88,7 @@ MISS
 Workers
 renderiza
 Detalle y pruebas
-5 filas
+6 filas
 2.1
 Workers Cache está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.
 wrangler.jsonc
@@ -97,7 +97,7 @@ Workers Cache
 Una página renderizada solo se guarda en el borde si lo pide. Las respuestas que no declaran su propia caché salen con no-store.
 src/middleware.ts
 2.3
-Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: caducan antes de una hora.
+Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: se renuevan pasada una hora.
 src/plugins/cache-purge.ts
 última comprobación en verde, 2026-08-23 · purga
 2.4
@@ -105,9 +105,12 @@ Lo compilado bajo /_astro/ lleva hash de contenido y se sirve con un año de max
 public/_headers
 cabeceras de Static Assets
 2.5
-Las imágenes redimensionadas se guardan en la Cache API.
-sin fichero: en la dependencia @astrojs/cloudflare
-Cache API
+Las imágenes redimensionadas se guardan un año: su dirección ya dice de qué imagen salen y a qué tamaño, así que no cambian.
+src/middleware.ts
+2.6
+Una copia caducada se entrega al momento y se rehace por detrás, durante una semana. Solo se espera al Worker tras un despliegue, tras publicar esa página o tras una semana sin visitas. Estas reglas viven en el Worker, porque las de caché de la zona no alcanzan a Workers Cache.
+src/middleware.ts
+stale-while-revalidate · límites
 capa 3 · Cloudflare
 Cómputo
 Dónde se ejecuta el código que genera cada página.

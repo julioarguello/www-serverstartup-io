@@ -57,7 +57,7 @@ The seed is a **frozen base plus dated deltas** (#697), the model of a SAP Comme
 
 Since the site went live on 2026-10-25, the production database holds the content, and EmDash never re-applies a seed to it. A text change ships as a **content patch** (#662): a dated file in `seed/patches/`, and nothing else. `deploy-production` applies pending patches through EmDash's own client, so each one is a revision the admin can revert. A patch is skipped when the site already holds its `after`, and refused when the site holds neither its `before` nor its `after`. `compose` makes the same decision against the base (`standing()` is the one function both call), so a fresh environment and production after `apply` hold the same content. The convention and the mechanism are in `seed/patches/README.md`.
 
-What the freeze does not carry: creating or deleting an entry, and schema changes. A patch cannot express them, and a seed never reached production for them either. #687's removal of template leftovers is the measured case: composing every patch over the go-live seed reproduces today's seed except exactly those deletions. Such a change is a rebaseline: a PR that rewrites `seed/base.json` and its pin together, and says how production gets it.
+What the freeze does not carry: creating or deleting an entry, and schema changes. A patch cannot express them, and a seed never reached production for them either. #687's removal of template leftovers is the measured case: composing every patch over the go-live seed reproduces today's seed except exactly those deletions. Such a change is a rebaseline: a PR that rewrites `seed/base.json`, its pin and the list of patches it already holds, together, and says how production gets it.
 
 ## 3. Internationalization (i18n)
 

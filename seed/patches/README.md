@@ -59,7 +59,8 @@ value from the same `before`. Each passes alone; after both merge, the chain is 
 fails naming both files. A rebase shows it on the PR before merging.
 
 **Rebaselining** — folding the patches into a new base — is deliberate: one PR rewrites
-`seed/base.json` and the pinned sha256 together. Creating or deleting an entry and changing the
+`seed/base.json`, the pinned sha256 and the test's `IN_BASE` list of the patches the base already
+holds, together. Creating or deleting an entry and changing the
 schema also need one, because a patch cannot express them.
 
 ## The convention

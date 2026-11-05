@@ -1,0 +1,181 @@
+{
+	"date": "2026-11-05",
+	"issue": 700,
+	"summary": "/deconstruyendo writes «Worker» in code format in its Spanish prose, like every other stack name on the page.",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "red",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "Cuando escribes la dirección, responde el DNS de `Cloudflare`. La zona está firmada con `DNSSEC`, una firma que permite comprobar que la respuesta no se ha alterado por el camino. La conexión se cifra como mínimo con TLS 1.3 y, en los navegadores que lo admiten, ni siquiera el nombre del sitio viaja en claro. Al otro lado no hay un servidor propio: responde un Worker, un programa que `Cloudflare` ejecuta en el centro de datos más cercano a quien visita.",
+			"after": "Cuando escribes la dirección, responde el DNS de `Cloudflare`. La zona está firmada con `DNSSEC`, una firma que permite comprobar que la respuesta no se ha alterado por el camino. La conexión se cifra como mínimo con TLS 1.3 y, en los navegadores que lo admiten, ni siquiera el nombre del sitio viaja en claro. Al otro lado no hay un servidor propio: responde un `Worker`, un programa que `Cloudflare` ejecuta en el centro de datos más cercano a quien visita."
+		},
+		{
+			"collection": "layers",
+			"slug": "red",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h1-4"
+				},
+				"text"
+			],
+			"before": "Cada dominio es un [`Custom Domain`](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/): el Worker es el origen y no hay servidor detrás. El certificado se emite y se renueva solo.",
+			"after": "Cada dominio es un [`Custom Domain`](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/): el `Worker` es el origen y no hay servidor detrás. El certificado se emite y se renueva solo."
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "Delante del Worker está la caché de `Cloudflare`, que guarda copias de las páginas en cada centro de datos. Si la página que pides ya está guardada, se entrega sin ejecutar el Worker. Solo se guardan las páginas que lo piden expresamente, y al publicar un cambio desde el gestor de contenidos (el CMS) se borran, por etiqueta, esa página y las que la incluyen en un listado.",
+			"after": "Delante del `Worker` está la caché de `Cloudflare`, que guarda copias de las páginas en cada centro de datos. Si la página que pides ya está guardada, se entrega sin ejecutar el `Worker`. Solo se guardan las páginas que lo piden expresamente, y al publicar un cambio desde el gestor de contenidos (el CMS) se borran, por etiqueta, esa página y las que la incluyen en un listado."
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-1"
+				},
+				"text"
+			],
+			"before": "[`Workers Cache`](https://developers.cloudflare.com/workers/cache/) está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.",
+			"after": "[`Workers Cache`](https://developers.cloudflare.com/workers/cache/) está delante del `Worker` y es escalonada por defecto: un acierto no ejecuta el `Worker`."
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-6"
+				}
+			],
+			"before": {
+				"key": "h2-6",
+				"text": "Una copia caducada se entrega al momento y se rehace por detrás, durante una semana. Solo se espera al Worker tras un despliegue, tras publicar esa página o tras una semana sin visitas. Estas reglas viven en el Worker, porque las de caché de la zona no alcanzan a `Workers Cache`.",
+				"file": "src/middleware.ts",
+				"docs": "[stale-while-revalidate](https://developers.cloudflare.com/workers/cache/configuration/) · [límites](https://developers.cloudflare.com/workers/cache/limitations/)",
+				"status": "ok"
+			},
+			"after": {
+				"key": "h2-6",
+				"text": "Una copia caducada se entrega al momento y se rehace por detrás, durante una semana. Solo se espera al `Worker` tras un despliegue, tras publicar esa página o tras una semana sin visitas. Estas reglas viven en el `Worker`, porque las de caché de la zona no alcanzan a `Workers Cache`.",
+				"file": "src/middleware.ts",
+				"docs": "[stale-while-revalidate](https://developers.cloudflare.com/workers/cache/configuration/) · [límites](https://developers.cloudflare.com/workers/cache/limitations/)",
+				"status": "ok"
+			}
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-8"
+				}
+			],
+			"before": {
+				"key": "h2-8",
+				"text": "Al pasar el ratón por un enlace interno, el navegador pide esa página por adelantado. Si no estaba guardada, el Worker la genera entonces y el clic ya la encuentra en la caché. La precarga de `Cloudflare`, `Speed Brain`, no sirve aquí: no precarga páginas que ejecutan un Worker.",
+				"file": "astro.config.mjs",
+				"docs": "[precarga de Astro](https://docs.astro.build/es/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
+				"status": "ok"
+			},
+			"after": {
+				"key": "h2-8",
+				"text": "Al pasar el ratón por un enlace interno, el navegador pide esa página por adelantado. Si no estaba guardada, el `Worker` la genera entonces y el clic ya la encuentra en la caché. La precarga de `Cloudflare`, `Speed Brain`, no sirve aquí: no precarga páginas que ejecutan un `Worker`.",
+				"file": "astro.config.mjs",
+				"docs": "[precarga de Astro](https://docs.astro.build/es/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
+				"status": "ok"
+			}
+		},
+		{
+			"collection": "layers",
+			"slug": "computo",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "Toda la web la genera un solo Worker con `Astro`, un *framework* que monta cada página en el momento en que se pide. Los ficheros que no cambian, como estilos, *scripts* e imágenes, se sirven directamente, sin ejecutar código. No hay ningún servidor detrás, y antes de responder el Worker añade siete cabeceras de seguridad a cada página.",
+			"after": "Toda la web la genera un solo `Worker` con `Astro`, un *framework* que monta cada página en el momento en que se pide. Los ficheros que no cambian, como estilos, *scripts* e imágenes, se sirven directamente, sin ejecutar código. No hay ningún servidor detrás, y antes de responder el `Worker` añade siete cabeceras de seguridad a cada página."
+		},
+		{
+			"collection": "layers",
+			"slug": "computo",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h3-1"
+				},
+				"text"
+			],
+			"before": "Un solo [`Worker`](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/) renderiza las páginas bajo demanda con `Astro` (SSR). Los ficheros compilados se sirven como [`Workers Static Assets`](https://developers.cloudflare.com/workers/static-assets/) sin ejecutarlo. No hay servidor detrás del Worker.",
+			"after": "Un solo [`Worker`](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/) renderiza las páginas bajo demanda con `Astro` (SSR). Los ficheros compilados se sirven como [`Workers Static Assets`](https://developers.cloudflare.com/workers/static-assets/) sin ejecutarlo. No hay servidor detrás del `Worker`."
+		},
+		{
+			"collection": "layers",
+			"slug": "computo",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h3-3"
+				},
+				"text"
+			],
+			"before": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el Worker. La CSP admite un único *script* de fuera: el contador de visitas de `Cloudflare`.",
+			"after": "Un *middleware* pone 7 cabeceras de seguridad en cada página que renderiza el `Worker`. La CSP admite un único *script* de fuera: el contador de visitas de `Cloudflare`."
+		},
+		{
+			"collection": "layers",
+			"slug": "computo",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h3-4"
+				},
+				"text"
+			],
+			"before": "El Worker sabe la ciudad del visitante y qué centro de datos de `Cloudflare` respondió (`request.cf`). La apertura de seguridad en el borde los muestra.",
+			"after": "El `Worker` sabe la ciudad del visitante y qué centro de datos de `Cloudflare` respondió (`request.cf`). La apertura de seguridad en el borde los muestra."
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "El CMS de esta web es `EmDash`, el gestor de contenidos de código abierto de `Cloudflare`, y corre dentro del mismo Worker que sirve las páginas. Desde su panel se editan páginas, servicios, menús y cada etiqueta de la interfaz, en español y en inglés. Al publicar, un *plugin* guardado en el repositorio borra de la caché lo que ha cambiado.",
+			"after": "El CMS de esta web es `EmDash`, el gestor de contenidos de código abierto de `Cloudflare`, y corre dentro del mismo `Worker` que sirve las páginas. Desde su panel se editan páginas, servicios, menús y cada etiqueta de la interfaz, en español y en inglés. Al publicar, un *plugin* guardado en el repositorio borra de la caché lo que ha cambiado."
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h5-1"
+				},
+				"text"
+			],
+			"before": "`EmDash`, el CMS de código abierto (MIT) que `Cloudflare` anunció en abril de 2026, corre dentro del mismo Worker.",
+			"after": "`EmDash`, el CMS de código abierto (MIT) que `Cloudflare` anunció en abril de 2026, corre dentro del mismo `Worker`."
+		}
+	]
+}

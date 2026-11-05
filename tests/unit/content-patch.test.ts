@@ -27,9 +27,26 @@ const BASE = readFileSync(BASE_FILE, "utf8");
  * together, and says so.
  */
 const BASE_SHA256 = "86c5e2904e7c224bf92acee7c3cf8be71dfa48acb60cbc783bb33460ad92f202";
-/** The first patch written after the freeze: every patch before it is already in the base. A rebaseline moves it with the pin. */
-const FIRST_AFTER_FREEZE = "2026-11-05-seed-base-and-patches.json";
-const beforeFreeze = () => listPatches().filter(({ file }: { file: string }) => file < FIRST_AFTER_FREEZE);
+/**
+ * The patches that existed when the base was frozen: every value they write is
+ * already in the base. Named, not inferred from file order: a later patch dated
+ * the same day can sort before the freeze (#700 did). A rebaseline replaces this
+ * list with the pin.
+ */
+const IN_BASE = new Set([
+	"2026-10-26-deconstruyendo-production-facts.json",
+	"2026-10-26-gate-count-27.json",
+	"2026-10-26-web-analytics.json",
+	"2026-10-26-web-beacon-by-hand.json",
+	"2026-10-27-consent-banner.json",
+	"2026-10-27-zaraz-standard.json",
+	"2026-10-28-consent-notice.json",
+	"2026-10-28-deconstruct-cookie-notice.json",
+	"2026-11-05-deconstruct-cache-stale.json",
+	"2026-11-05-deconstruct-html-validators.json",
+	"2026-11-05-deconstruct-prefetch.json",
+]);
+const beforeFreeze = () => listPatches().filter(({ file }: { file: string }) => IN_BASE.has(file));
 const run = (...args: string[]) => spawnSync("node", [SCRIPT, ...args], { cwd: ROOT, encoding: "utf8" });
 
 const change = (over: Record<string, unknown> = {}) => ({
@@ -143,7 +160,8 @@ describe("content patches", () => {
 	});
 
 	it("the patches written before the freeze compose into the base itself, byte for byte", () => {
-		expect(listPatches().some(({ file }: { file: string }) => file === FIRST_AFTER_FREEZE)).toBe(true);
+		// every named file is still tracked, or the composition below proves less than it says
+		expect(beforeFreeze()).toHaveLength(IN_BASE.size);
 		const r = compose(BASE, beforeFreeze());
 		expect(r.problems).toEqual([]);
 		expect(r.advanced).toBe(0);

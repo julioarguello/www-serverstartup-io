@@ -120,6 +120,13 @@ jobs:
         if: needs.scope.outputs.site == 'true' && steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
+        # #697: seed/base.json never changes; a text change is a patch in
+        # seed/patches/. Every reader below reads the composed seed/seed.json,
+        # which is generated and gitignored. A conflict stops the job here,
+        # naming the patch — the Content patches gate reports the same.
+        run: node scripts/content-patch.mjs compose
+
       - name: Secret scan (gitleaks)
         uses: gitleaks/gitleaks-action@v3
         env:
@@ -153,10 +160,12 @@ jobs:
         if: needs.scope.outputs.site == 'true'
         run: npx emdash seed seed/seed.json --validate
 
-      - name: Content patches (valid, and seed.json holds every "after")
+      - name: Content patches (valid, and they compose over the frozen base)
         if: needs.scope.outputs.site == 'true'
-        # #662: a production text change is a patch in seed/patches/ plus the
-        # same change in seed.json, so a fresh install matches production.
+        # #662, #697: a production text change is a patch in seed/patches/ and
+        # nothing else. The base never changes (its bytes are pinned in
+        # tests/unit/content-patch.test.ts); a new environment is the base plus
+        # every patch, decided per value exactly as the production deploy does.
         run: node scripts/content-patch.mjs check
 
       - name: CMS text integrity (labels resolve, no hardcoded copy)
@@ -247,6 +256,13 @@ jobs:
         # `npm ci` downloads here. No second browser path (#355).
         if: steps.deps.outputs.cache-hit != 'true'
         run: npm ci
+
+      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
+        # #697: seed/base.json never changes; a text change is a patch in
+        # seed/patches/. Every reader below reads the composed seed/seed.json,
+        # which is generated and gitignored. A conflict stops the job here,
+        # naming the patch — the Content patches gate reports the same.
+        run: node scripts/content-patch.mjs compose
 
       - name: Build
         run: npx astro build
@@ -416,6 +432,13 @@ jobs:
         if: steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
+        # #697: seed/base.json never changes; a text change is a patch in
+        # seed/patches/. Every reader below reads the composed seed/seed.json,
+        # which is generated and gitignored. A conflict stops the job here,
+        # naming the patch — the Content patches gate reports the same.
+        run: node scripts/content-patch.mjs compose
+
       - name: Build
         run: npx astro build
 
@@ -489,6 +512,13 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: "true"
         run: npm ci
 
+      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
+        # #697: seed/base.json never changes; a text change is a patch in
+        # seed/patches/. Every reader below reads the composed seed/seed.json,
+        # which is generated and gitignored. A conflict stops the job here,
+        # naming the patch — the Content patches gate reports the same.
+        run: node scripts/content-patch.mjs compose
+
       - name: Build
         run: npx astro build
 
@@ -557,6 +587,13 @@ jobs:
       - name: Install  # not-a-gate: dependency install, not a check
         if: steps.deps.outputs.cache-hit != 'true'
         run: npm ci
+
+      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
+        # #697: seed/base.json never changes; a text change is a patch in
+        # seed/patches/. Every reader below reads the composed seed/seed.json,
+        # which is generated and gitignored. A conflict stops the job here,
+        # naming the patch — the Content patches gate reports the same.
+        run: node scripts/content-patch.mjs compose
 
       - name: Build
         run: npx astro build
@@ -699,7 +736,7 @@ jobs:
             echo "| astro check | 0 errors, 0 warnings |"
             echo "| seed schema | seed.json validates |"
             echo "| cms-text | labels resolve ES+EN, 0 hardcoded copy |"
-            echo "| content patches | every patch in seed/patches/ is valid and seed.json holds its \"after\" (#662) |"
+            echo "| content patches | every patch in seed/patches/ is valid and composes over the frozen seed/base.json (#662, #697) |"
             echo "| copy voice | per page: no spaced ES em dash, ≤1 colon headline, ≤1 ES «X, no Y»; no listed AI word, no ¡ |"
             echo "| locale parity | a field filled in one locale is filled in the other |"
             echo "| cited files | every file and repository link the seed cites is tracked |"

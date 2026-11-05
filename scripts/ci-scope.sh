@@ -73,7 +73,8 @@ self_test() {
 	check false "the budget doc"       "docs/design-system.md"
 	check false "root markdown"        "README.md" "CONTRIBUTING.md"
 	check true  "a template"           "src/pages/index.astro"
-	check true  "the seed"             "seed/seed.json"
+	check true  "the base"             "seed/base.json"
+	check true  "a content patch"      "seed/patches/2026-11-05-x.json"
 	check true  "a gate script"        "scripts/ci-check-layout.mjs"
 	check true  "the workflow itself"  ".github/workflows/ci.yml"
 	check true  "docs AND a template"  "docs/x.md" "src/worker.ts"
@@ -84,7 +85,7 @@ self_test() {
 		echo "ci-scope: SELF-TEST FAILED ($fails) — refusing to narrow the battery." >&2
 		return 1
 	fi
-	echo "ci-scope: self-test ok (11 cases, including fail-open on an empty list)"
+	echo "ci-scope: self-test ok (12 cases, including fail-open on an empty list)"
 }
 
 case "${1:-}" in

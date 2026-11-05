@@ -20,7 +20,7 @@ Workers · Astro · Dynamic Workers
 Datos
 D1 · Workers KV · Images · R2
 Contenido
-seed.json · ES ↔ EN
+base.json + parches · ES ↔ EN
 Entrega
 GitHub Actions · wrangler
 /_emdash/admin
@@ -221,7 +221,7 @@ docs/design/hero-rotativo/photo_restore.py
 [FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
 5.6
 Las fotografías son CC BY-SA y el sitio las acredita con los cambios indicados.
-seed/seed.json
+seed/base.json
 5.7
 El aviso de cookies lo dibuja el propio sitio. Es una tarjeta en la esquina inferior izquierda, y la página sigue funcionando detrás mientras decides. Aceptar y Rechazar son dos botones iguales, uno al lado del otro. El aviso no tiene cierre y espera a tu respuesta; «Preferencias de cookies», en el pie, lo vuelve a abrir. La ventana propia de Zaraz está apagada porque bloquea la página entera, y la guía de la AEPD no pide tanto. Pide rechazar al mismo nivel que aceptar, un aviso que se mantenga hasta que respondas y retirar el consentimiento con la misma facilidad. Solo tu clic pasa la respuesta a Zaraz, a través de su API de consentimiento. Google Analytics 4 sobra para contar visitas, porque ya lo hace Web Analytics. Está porque esta web también es un laboratorio.
 src/components/ConsentNotice.astro
@@ -254,11 +254,11 @@ sin fichero: lo cuenta su blog
 el blog de Cloudflare
 6.3
 Cinco tipos de contenido: páginas, servicios, miembros, referencias y partners, con entradas de blog preparadas y vacías. Páginas y servicios tienen borradores; esos dos y miembros guardan revisiones. Los cuerpos son Portable Text.
-seed/seed.json
+seed/base.json
 documentación
 6.4
 Dos idiomas: páginas, servicios y miembros se publican en pares enlazados por translationOf.
-seed/seed.json
+seed/base.json
 6.5
 Menús, áreas de widgets, ajustes del sitio y taxonomías vienen del CMS. Cada etiqueta de la interfaz vive en un widget, no en una plantilla.
 src/utils/ui-labels.ts
@@ -321,21 +321,22 @@ Producción solo se despliega cuando el fundador lo arranca a mano, y una guarda
 transversal · desde el taller
 Contenido
 Dónde está escrito cada texto.
-Todo el texto de la web está en un fichero del repositorio, seed/seed.json, en español y en inglés. En cada cambio, la integración continua construye el sitio y llena con ese fichero una base de datos vacía, así que la web entera se puede rehacer desde cero en cualquier momento.
-seed/seed.json
+Todo el texto de la web está en el repositorio, en español y en inglés: una base congelada, seed/base.json, y un parche fechado por cada cambio posterior, en seed/patches/. Producción aplica los parches. En cada cambio, la integración continua construye el sitio y llena una base de datos vacía con la base más todos los parches, así que la web entera se puede rehacer desde cero en cualquier momento.
+seed/base.json
 cada frase
 D1, vacía
 ×12 en paralelo
 el sitio
 ES ↔ EN
 La carpeta seed/ del repositorio público.
-seed/seed.json en GitHub
+seed/base.json en GitHub
+Los parches
 Las páginas de servicio en Markdown
 Detalle y pruebas
 4 filas
 8.1
-Cada frase que renderiza el sitio vive en un fichero versionado, seed/seed.json. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.
-seed/seed.json
+Cada frase que renderiza el sitio vive en el repositorio: una base congelada, seed/base.json, más un parche fechado por cada cambio desde entonces. Producción aplica los parches, y un entorno nuevo arranca con la base más todos ellos. Las páginas de servicio se escriben en Markdown y el CMS las convierte en un parche. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.
+seed/base.json
 ficheros semilla
 8.2
 En cada cambio que puede llegar a una página, CI compila el sitio y llena una base de datos vacía desde ese fichero, doce veces en paralelo.

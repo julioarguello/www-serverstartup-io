@@ -53,9 +53,11 @@ All editorial text lives in EmDash CMS. Templates contain only layout, CSS, and 
 
 ### 2.4 Seed File
 
-`seed/seed.json` is the **source of truth** for initial content: schema, content, settings, menus, widgets, and taxonomies. After schema changes, always do a clean rebuild.
+The seed is a **frozen base plus dated deltas** (#697), the model of a SAP Commerce initial load plus its delta impex. `seed/base.json` holds schema, content, settings, menus, widgets and taxonomies as they stood at the freeze, and never changes: `tests/unit/content-patch.test.ts` pins its sha256. Every text change since is a patch in `seed/patches/`. A new environment is the base plus every patch: `node scripts/content-patch.mjs compose` writes it to `seed/seed.json`, which is generated, gitignored, and the one file every reader reads (the local stack, the preview and production reseeds, `emdash seed`, and the gates). After schema changes, always do a clean rebuild.
 
-Since the site went live on 2026-10-25, the production database holds the content, and EmDash never re-applies a seed to it. A text change ships as a **content patch** (#662): a dated file in `seed/patches/`, in the same PR as the same change to `seed.json`. `deploy-production` applies pending patches through EmDash's own client, so each one is a revision the admin can revert. A patch is skipped when the site already holds its `after`, and refused when the site holds neither its `before` nor its `after`. The convention and the mechanism are in `seed/patches/README.md`.
+Since the site went live on 2026-10-25, the production database holds the content, and EmDash never re-applies a seed to it. A text change ships as a **content patch** (#662): a dated file in `seed/patches/`, and nothing else. `deploy-production` applies pending patches through EmDash's own client, so each one is a revision the admin can revert. A patch is skipped when the site already holds its `after`, and refused when the site holds neither its `before` nor its `after`. `compose` makes the same decision against the base (`standing()` is the one function both call), so a fresh environment and production after `apply` hold the same content. The convention and the mechanism are in `seed/patches/README.md`.
+
+What the freeze does not carry: creating or deleting an entry, and schema changes. A patch cannot express them, and a seed never reached production for them either. #687's removal of template leftovers is the measured case: composing every patch over the go-live seed reproduces today's seed except exactly those deletions. Such a change is a rebaseline: a PR that rewrites `seed/base.json` and its pin together, and says how production gets it.
 
 ## 3. Internationalization (i18n)
 

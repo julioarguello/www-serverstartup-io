@@ -18,7 +18,7 @@ What counts as a citation
 - `content.layers[*].data.facts[*].file`, a path relative to the repository root
   (a trailing slash means a directory: some tracked file must live under it);
 - any URL `<repoUrl>/blob/<ref>/<path>` or `<repoUrl>/tree/<ref>/<path>` in any
-  string of seed/seed.json, where `<repoUrl>` is the seed's own `repoUrl`
+  string of seed/seed.json (the base plus every patch, #697), where `<repoUrl>` is the seed's own `repoUrl`
   setting. The ref is not checked, only the path: the site cites `main`.
 
 Links to `/actions/runs/<id>` and other non-file pages are not files and are
@@ -103,7 +103,7 @@ def control(files: set[str], dirs: set[str]) -> bool:
         "content": {"layers": [{"id": "layer-control", "data": {"facts": [
             {"key": "c1", "text": "x", "file": "src/__the_control_file_that_is_not_there__.ts"},
             {"key": "c2", "text": f"see [it]({repo}/blob/main/docs/__nor_this_one__.md)"},
-            {"key": "c3", "text": "fine", "file": "seed/seed.json"},
+            {"key": "c3", "text": "fine", "file": "seed/base.json"},
         ]}}]},
     }
     found = check(planted, files, dirs)

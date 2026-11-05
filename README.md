@@ -69,7 +69,8 @@ npm run dev             # astro dev + admin at /_emdash/admin
 ```
 
 The dev server creates its local database on first boot. To load the real
-content, seed it from `seed/seed.json` — the exact recipe (including why the
+content, seed it from `seed/seed.json`, which `npm run dev` composes from the
+frozen `seed/base.json` plus every patch in `seed/patches/` — the exact recipe (including why the
 server must be down while seeding) is in
 [`docs/architecture.md`](docs/architecture.md). Local checks and the full
 quality bar: [CONTRIBUTING.md](CONTRIBUTING.md).

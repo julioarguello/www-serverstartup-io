@@ -4,20 +4,32 @@
  *
  * The network half was checked against a dev server seeded from main
  * (apply, skip on a second run, refuse after a hand edit). This suite holds
- * the offline half: the format, the chains a value goes through, the
- * "the seed holds every target" gate run as CI runs it, and the seed splice.
+ * the offline half: the format, the chains a value goes through, the frozen
+ * base (#697) and the seed composed from it, run as CI runs them.
  */
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error — plain ESM script, no types
-import { chains, getAt, listPatches, parseWithSpans, seedApply, seedSpan, setAt, validatePatch, valueAt } from "../../scripts/content-patch.mjs";
+import { chains, compose, getAt, listPatches, parseWithSpans, seedApply, seedSpan, setAt, standing, validatePatch, valueAt } from "../../scripts/content-patch.mjs";
 
 const ROOT = join(import.meta.dirname, "..", "..");
 const SCRIPT = join(ROOT, "scripts", "content-patch.mjs");
-const SEED = readFileSync(join(ROOT, "seed", "seed.json"), "utf8");
+const BASE_FILE = join(ROOT, "seed", "base.json");
+const BASE = readFileSync(BASE_FILE, "utf8");
+/**
+ * The frozen base (#697). A change to it fails here on purpose: the site's text
+ * changes through a patch in seed/patches/. Rebaselining — folding the patches
+ * into a new base — is a deliberate PR that changes the file and this value
+ * together, and says so.
+ */
+const BASE_SHA256 = "86c5e2904e7c224bf92acee7c3cf8be71dfa48acb60cbc783bb33460ad92f202";
+/** The first patch written after the freeze: every patch before it is already in the base. A rebaseline moves it with the pin. */
+const FIRST_AFTER_FREEZE = "2026-11-05-seed-base-and-patches.json";
+const beforeFreeze = () => listPatches().filter(({ file }: { file: string }) => file < FIRST_AFTER_FREEZE);
 const run = (...args: string[]) => spawnSync("node", [SCRIPT, ...args], { cwd: ROOT, encoding: "utf8" });
 
 const change = (over: Record<string, unknown> = {}) => ({
@@ -31,30 +43,40 @@ const change = (over: Record<string, unknown> = {}) => ({
 });
 const patchFile = (date: string, changes: unknown[]) => ({ date, issue: 662, summary: "test", changes });
 
-/** A throwaway seed and patch directory, for running `check` as CI does. */
+/** A throwaway base and patch directory, for running `check` as CI does. */
 function fixture(intro: string, patches: Record<string, unknown>) {
 	const dir = mkdtempSync(join(tmpdir(), "content-patch-"));
-	const seed = join(dir, "seed.json");
-	writeFileSync(seed, JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro } }] } }, null, "\t"));
+	const base = join(dir, "base.json");
+	writeFileSync(base, JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro } }] } }, null, "\t"));
 	const pdir = join(dir, "patches");
 	mkdirSync(pdir);
 	for (const [name, p] of Object.entries(patches)) writeFileSync(join(pdir, name), JSON.stringify(p));
-	return (...more: string[]) => run("check", "--seed", seed, "--patches", pdir, ...more);
+	return (...more: string[]) => run("check", "--base", base, "--patches", pdir, ...more);
 }
 
 describe("content patches", () => {
-	it("the tracked patches are valid and the seed holds every target", () => {
+	it("the tracked patches are valid and compose over the frozen base", () => {
 		const res = run("check");
 		expect(res.stderr).toBe("");
 		expect(res.status).toBe(0);
 		expect(listPatches().length).toBeGreaterThan(0);
 	});
 
-	it("check exits 1 when the seed lacks a target, and 0 once it holds it", () => {
+	it("the base is frozen: its bytes are the pinned ones", () => {
+		expect(createHash("sha256").update(readFileSync(BASE_FILE)).digest("hex")).toBe(BASE_SHA256);
+	});
+
+	it("check accepts a base at any state of the chain, and refuses one at none", () => {
 		const p = { "2026-10-26-a.json": patchFile("2026-10-26", [change()]) };
-		expect(fixture("A", p)().status).toBe(1);
-		expect(fixture("A", p)().stderr).toMatch(/does not hold the target/);
+		expect(fixture("A", p)().status).toBe(0);
 		expect(fixture("B", p)().status).toBe(0);
+		const res = fixture("X", p)();
+		expect(res.status).toBe(1);
+		expect(res.stderr).toMatch(/the base holds "X", no state of its patches \(2026-10-26-a.json\)/);
+	});
+
+	it("check exits 3 when it finds no patch, instead of passing over nothing", () => {
+		expect(fixture("A", {})().status).toBe(3);
 	});
 
 	it("chains two patches on one value: A→B then B→C targets C", () => {
@@ -62,8 +84,8 @@ describe("content patches", () => {
 			"2026-10-26-a.json": patchFile("2026-10-26", [change()]),
 			"2026-11-20-b.json": patchFile("2026-11-20", [change({ before: "B", after: "C" })]),
 		};
-		expect(fixture("C", p)().status).toBe(0);
-		expect(fixture("B", p)().status).toBe(1);
+		for (const at of ["A", "B", "C"]) expect(fixture(at, p)().status).toBe(0);
+		expect(fixture("X", p)().status).toBe(1);
 		const { chains: all, problems } = chains(listPatchesFrom(p));
 		expect(problems).toEqual([]);
 		expect(all[0].states).toEqual(["A", "B", "C"]);
@@ -112,13 +134,55 @@ describe("content patches", () => {
 		expect(out).toBe(src.replace('"key": "h2-2", "text": "A"', '"key": "h2-2", "text": "B"'));
 	});
 
-	it("reverting one tracked change in the real seed is caught, and the patch restores it exactly", () => {
-		const [{ patch }] = listPatches();
+	it("decides each value as apply does: at the target, behind it, or at no state", () => {
+		expect(standing("C", ["A", "B", "C"])).toEqual({ atTarget: true, at: 2 });
+		expect(standing("B", ["A", "B", "C"])).toEqual({ atTarget: false, at: 1 });
+		expect(standing("X", ["A", "B", "C"])).toEqual({ atTarget: false, at: -1 });
+		// a chain that returns to its start is at its target, not behind it
+		expect(standing("A", ["A", "B", "A"]).atTarget).toBe(true);
+	});
+
+	it("the patches written before the freeze compose into the base itself, byte for byte", () => {
+		expect(listPatches().some(({ file }: { file: string }) => file === FIRST_AFTER_FREEZE)).toBe(true);
+		const r = compose(BASE, beforeFreeze());
+		expect(r.problems).toEqual([]);
+		expect(r.advanced).toBe(0);
+		expect(r.skipped).toBeGreaterThan(0);
+		expect(r.src).toBe(BASE);
+	});
+
+	it("a base one tracked value behind gets it back from compose, and only it", () => {
+		const [{ patch }] = beforeFreeze();
 		const c = patch.changes[0];
-		const node = seedSpan(parseWithSpans(SEED), c);
-		const reverted = SEED.slice(0, node.start) + JSON.stringify(c.before) + SEED.slice(node.end);
-		expect(reverted).not.toBe(SEED);
-		expect(seedApply(reverted, patch)).toBe(SEED);
+		const node = seedSpan(parseWithSpans(BASE), c);
+		const behind = BASE.slice(0, node.start) + JSON.stringify(c.before) + BASE.slice(node.end);
+		expect(behind).not.toBe(BASE);
+		const r = compose(behind, beforeFreeze());
+		expect(r.problems).toEqual([]);
+		expect(r.advanced).toBe(1);
+		expect(r.src).toBe(BASE);
+	});
+
+	it("the real base and every patch compose, and composing the result again changes nothing", () => {
+		const r = compose(BASE, listPatches());
+		expect(r.problems).toEqual([]);
+		const again = compose(r.src, listPatches());
+		expect(again.advanced).toBe(0);
+		expect(again.src).toBe(r.src);
+	});
+
+	it("compose is idempotent: composing its own output changes nothing", () => {
+		const p = listPatchesFrom({ "2026-10-26-a.json": patchFile("2026-10-26", [change()]) });
+		const base = JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro: "A" } }] } }, null, "\t");
+		const once = compose(base, p).src;
+		expect(JSON.parse(once).content.layers[0].data.intro).toBe("B");
+		expect(compose(once, p).src).toBe(once);
+	});
+
+	it("compose names the patch whose value the base does not hold", () => {
+		const p = listPatchesFrom({ "2026-11-06-z.json": patchFile("2026-11-06", [change({ slug: "nope" })]) });
+		const base = JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro: "A" } }] } });
+		expect(compose(base, p).problems.join()).toMatch(/2026-11-06-z.json: layers\/nope \[es\]: 0 entries in the seed/);
 	});
 
 	it("runs when reached through a symlink, instead of exiting 0 having done nothing", () => {
@@ -141,15 +205,15 @@ const widgetChange = (over: Record<string, unknown> = {}) => ({
 });
 const widgetSeed = (widgets: unknown[]) => `${JSON.stringify({ widgetAreas: [{ name: "ui_labels_es", widgets }] }, null, "\t")}\n`;
 
-/** A throwaway seed holding one widget area, and a patch directory, for `check`. */
+/** A throwaway base holding one widget area, and a patch directory, for `check`. */
 function widgetFixture(widgets: unknown[], patches: Record<string, unknown>) {
 	const dir = mkdtempSync(join(tmpdir(), "content-patch-widget-"));
-	const seed = join(dir, "seed.json");
-	writeFileSync(seed, widgetSeed(widgets));
+	const base = join(dir, "base.json");
+	writeFileSync(base, widgetSeed(widgets));
 	const pdir = join(dir, "patches");
 	mkdirSync(pdir);
 	for (const [name, p] of Object.entries(patches)) writeFileSync(join(pdir, name), JSON.stringify(p));
-	return () => run("check", "--seed", seed, "--patches", pdir);
+	return () => run("check", "--base", base, "--patches", pdir);
 }
 
 describe("widget patches (#667)", () => {
@@ -165,13 +229,14 @@ describe("widget patches (#667)", () => {
 		expect(ok(widgetChange({ collection: "pages" })).join()).toMatch(/not both/);
 	});
 
-	it("check fails while the seed lacks a created widget, and passes once `seed` has appended it", () => {
+	it("compose creates a widget the base lacks; check refuses a base holding it with other content", () => {
 		const p = { "2026-10-27-w.json": patchFile("2026-10-27", [widgetChange()]) };
-		const before = widgetFixture([existing], p)();
-		expect(before.status).toBe(1);
-		expect(before.stderr).toMatch(/does not hold the target of widget ui_labels_es\/consent/);
-		const appended = JSON.parse(seedApply(widgetSeed([existing]), p["2026-10-27-w.json"]));
-		expect(widgetFixture(appended.widgetAreas[0].widgets, p)().status).toBe(0);
+		expect(widgetFixture([existing], p)().status).toBe(0);
+		const out = compose(widgetSeed([existing]), listPatchesFrom(p));
+		expect(JSON.parse(out.src).widgetAreas[0].widgets).toEqual([existing, { type: "content", title: "consent", content: blocks("Aceptar") }]);
+		const other = widgetFixture([existing, { type: "content", title: "consent", content: blocks("Otra cosa") }], p)();
+		expect(other.status).toBe(1);
+		expect(other.stderr).toMatch(/widget ui_labels_es\/consent .*no state of its patches/);
 	});
 
 	it("appends a new widget after the last one, keeping every byte before it", () => {
@@ -205,9 +270,9 @@ describe("widget patches (#667)", () => {
 		expect(widgetFixture([existing, { type: "content", title: "consent", content: blocks("Aceptar todo") }], p)().status).toBe(0);
 	});
 
-	it("creates a widget in the real seed as valid JSON, changing nothing else", () => {
-		const out = seedApply(SEED, { changes: [widgetChange({ widget: "zz_probe" })] });
-		const doc = JSON.parse(SEED);
+	it("creates a widget in the real base as valid JSON, changing nothing else", () => {
+		const out = seedApply(BASE, { changes: [widgetChange({ widget: "zz_probe" })] });
+		const doc = JSON.parse(BASE);
 		doc.widgetAreas.find((a: { name: string }) => a.name === "ui_labels_es").widgets.push({ type: "content", title: "zz_probe", content: blocks("Aceptar") });
 		expect(JSON.parse(out)).toEqual(doc);
 	});
@@ -243,20 +308,19 @@ describe("list items created by a patch (#685)", () => {
 		expect(() => setAt({}, ["facts", { key: "h7-7" }], item)).toThrow(/not found/);
 	});
 
-	it("check fails while the seed lacks the item, and passes once `seed` has appended it", () => {
+	it("compose appends an item the base lacks, and check accepts the base with or without it", () => {
 		const p = { "2026-10-28-i.json": patchFile("2026-10-28", [itemChange()]) };
 		const checkWith = (src: string) => {
 			const dir = mkdtempSync(join(tmpdir(), "content-patch-item-"));
-			writeFileSync(join(dir, "seed.json"), src);
+			writeFileSync(join(dir, "base.json"), src);
 			mkdirSync(join(dir, "patches"));
 			writeFileSync(join(dir, "patches", "2026-10-28-i.json"), JSON.stringify(p["2026-10-28-i.json"]));
-			return run("check", "--seed", join(dir, "seed.json"), "--patches", join(dir, "patches"));
+			return run("check", "--base", join(dir, "base.json"), "--patches", join(dir, "patches"));
 		};
 		const src = itemSeed([existingFact]);
-		const before = checkWith(src);
-		expect(before.status).toBe(1);
-		expect(before.stderr).toMatch(/does not hold the target of layers\/cache/);
-		const out = seedApply(src, p["2026-10-28-i.json"]);
+		expect(checkWith(src).status).toBe(0);
+		const out = compose(src, listPatchesFrom(p)).src;
+		expect(out).toBe(seedApply(src, p["2026-10-28-i.json"]));
 		expect(checkWith(out).status).toBe(0);
 		// appended after the last item, indented like it, every byte before it kept
 		const list = seedSpan(parseWithSpans(src), itemChange()).list;
@@ -266,6 +330,25 @@ describe("list items created by a patch (#685)", () => {
 		expect(out).toMatch(/\t\},\n\t{6}\{\n\t{7}"key": "h7-7"/);
 		// applying it again changes nothing
 		expect(seedApply(out, p["2026-10-28-i.json"])).toBe(out);
+	});
+
+	it("two patches that each create an item in one list land in date order", () => {
+		const second = { ...item, key: "h7-8", text: "Segundo" };
+		const p = listPatchesFrom({
+			"2026-11-06-b.json": patchFile("2026-11-06", [itemChange({ path: ["facts", { key: "h7-8" }], after: second })]),
+			"2026-11-05-a.json": patchFile("2026-11-05", [itemChange()]),
+		});
+		const r = compose(itemSeed([existingFact]), p);
+		expect(r.problems).toEqual([]);
+		expect(JSON.parse(r.src).content.layers[0].data.facts).toEqual([existingFact, item, second]);
+	});
+
+	it("two patches that create the same item, as two parallel branches would, fail check naming both", () => {
+		const p = listPatchesFrom({
+			"2026-11-05-a.json": patchFile("2026-11-05", [itemChange()]),
+			"2026-11-05-b.json": patchFile("2026-11-05", [itemChange({ after: { ...item, text: "Otro" } })]),
+		});
+		expect(compose(itemSeed([existingFact]), p).problems.join()).toMatch(/2026-11-05-b.json: .*expects null, but 2026-11-05-a.json left/);
 	});
 
 	it("refuses to create an item a seed already holds with different content", () => {

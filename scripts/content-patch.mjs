@@ -2,12 +2,18 @@
 /**
  * content-patch.mjs — live text changes as dated content patches (#662).
  *
- * Once live, EmDash does not let seed/seed.json change a database: "Later edits
+ * Once live, EmDash does not let a seed file change a database: "Later edits
  * to the seed file are not re-applied … Existing data is never overwritten"
  * (vendor/emdash-skills/building-emdash-site/references/schema-and-seed.md).
  * A text change therefore reaches production as a patch file in seed/patches/,
  * applied through EmDash's own client (`emdash/client`, the one its CLI uses),
  * so every write is an ordinary revision the admin can revert.
+ *
+ * The base is frozen (#697): seed/base.json is the content at the freeze and
+ * never changes, and a new environment starts from the base plus every patch.
+ * `compose` writes that seed to seed/seed.json — generated, gitignored, and
+ * the file every reader reads. A change is a patch and nothing else, so two
+ * branches that change the site's text add two files and never meet in git.
  *
  * Each change names the value it expects (`before`) and the value it writes
  * (`after`). Patches touching the same value form a chain in date order —
@@ -31,11 +37,15 @@
  * the whole item at the same path, because a patch never changes a value and
  * its parent.
  *
+ * `compose` decides each value exactly as `apply` does (`standing`), against
+ * the base instead of the live site. A value the base already holds at its
+ * target is left alone, which is every patch written before the freeze.
+ *
  * Usage:
- *   content-patch.mjs check [--seed <file>] [--patches <dir>]
- *       validate every patch and chain; seed.json must hold each value's target
- *   content-patch.mjs seed <patch.json>
- *       write one patch's `after` values into seed/seed.json (value spans only)
+ *   content-patch.mjs check [--base <file>] [--patches <dir>]
+ *       validate every patch and chain, and compose them over the base
+ *   content-patch.mjs compose [--base <file>] [--patches <dir>] [--out <file>]
+ *       write the base plus every patch to seed/seed.json (value spans only)
  *   content-patch.mjs apply --url <base> [--dry-run] [--dev-bypass]
  *       apply pending changes to a running site; token from EMDASH_TOKEN
  *
@@ -49,6 +59,7 @@ import { isDeepStrictEqual } from "node:util";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PATCH_DIR = join(ROOT, "seed", "patches");
+const BASE = join(ROOT, "seed", "base.json");
 const SEED = join(ROOT, "seed", "seed.json");
 const NAME = /^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.json$/;
 
@@ -277,7 +288,7 @@ function spanStep(node, seg) {
 }
 
 /**
- * A widget's content in seed.json: widgetAreas[name].widgets[title].content.
+ * A widget's content in the seed text: widgetAreas[name].widgets[title].content.
  * A widget the area does not hold yet comes back as { kind: "absent", list },
  * whose plain value is null and which `seedApply` fills by appending to `list`.
  */
@@ -294,7 +305,7 @@ function seedWidgetSpan(root, c) {
 	return spanStep(hits[0], "content");
 }
 
-/** The span of a change's value in seed.json: content.<collection>[slug+locale].data.<path>. */
+/** The span of a change's value in the seed text: content.<collection>[slug+locale].data.<path>. */
 export function seedSpan(root, c) {
 	if (isWidget(c)) return seedWidgetSpan(root, c);
 	const list = spanStep(root, "content") && spanStep(spanStep(root, "content"), c.collection);
@@ -322,7 +333,7 @@ export function seedApply(src, patch) {
 		.sort((a, b) => (b.node?.start ?? 0) - (a.node?.start ?? 0));
 	let out = src;
 	for (const { c, node } of spans) {
-		if (!node) throw new Error(`${where(c)}: not in seed.json`);
+		if (!node) throw new Error(`${where(c)}: not in the seed`);
 		const cur = plain(node);
 		if (isDeepStrictEqual(cur, c.after)) continue;
 		if (!isDeepStrictEqual(cur, c.before)) throw new Error(`${where(c)}: seed holds neither "before" nor "after"`);
@@ -353,63 +364,110 @@ function docSet(doc, c, value) {
 	return out;
 }
 
+/**
+ * The value a change addresses in the plain seed document: null for a widget
+ * or list item not created yet, undefined when the place itself is missing.
+ */
+function docGet(doc, c) {
+	if (!isWidget(c)) return valueAt(doc.content[c.collection][entryIndex(doc, c)].data, c.path);
+	const area = (doc.widgetAreas ?? []).filter((a) => a.name === c.widgetArea);
+	if (area.length !== 1) return undefined;
+	const hits = (area[0].widgets ?? []).filter((w) => w.title === c.widget);
+	if (hits.length > 1) throw new Error(`${where(c)}: ${hits.length} widgets carry that title`);
+	return hits.length ? (hits[0].content ?? null) : null;
+}
+
+/**
+ * Where a value stands on its chain of states. The one decision `apply` makes
+ * against the live site and `compose` makes against the base, so a fresh
+ * environment and production after `apply` end on the same content:
+ *   { atTarget: true }  → nothing to write
+ *   { at: i }           → holds state i, an earlier one: write the target
+ *   { at: -1 }          → holds no state of the chain: a conflict
+ */
+export function standing(cur, states) {
+	if (isDeepStrictEqual(cur, states.at(-1))) return { atTarget: true, at: states.length - 1 };
+	return { atTarget: false, at: states.findIndex((s) => isDeepStrictEqual(s, cur)) };
+}
+
+/**
+ * The base plus every patch, as seed text (#697). Each value behind its target
+ * is spliced into the base one at a time, in date order, so the base's hand
+ * formatting survives and two items created in one list land in the order
+ * their patches were written. Returns { src, skipped, advanced, problems }.
+ */
+export function compose(baseSrc, patches) {
+	const problems = patches.flatMap(({ file, patch }) => validatePatch(file, patch));
+	if (problems.length) return { problems };
+	const { chains: all, problems: links } = chains(patches);
+	if (links.length) return { problems: links };
+	let doc = JSON.parse(baseSrc);
+	let src = baseSrc;
+	let skipped = 0;
+	let advanced = 0;
+	for (const { c, states, files } of all) {
+		let cur;
+		try {
+			cur = docGet(doc, c);
+		} catch (e) {
+			problems.push(`${files[0]}: ${e.message}`);
+			continue;
+		}
+		if (cur === undefined) {
+			problems.push(`${files[0]}: ${where(c)} is not in the base`);
+			continue;
+		}
+		const s = standing(cur, states);
+		if (s.atTarget) {
+			skipped++;
+			continue;
+		}
+		if (s.at === -1) {
+			problems.push(`${where(c)}: the base holds ${JSON.stringify(cur)?.slice(0, 120)}, no state of its patches (${files.join(", ")})`);
+			continue;
+		}
+		src = seedApply(src, { changes: [{ ...c, before: cur, after: states.at(-1) }] });
+		doc = docSet(doc, c, states.at(-1));
+		advanced++;
+	}
+	if (problems.length) return { problems };
+	// nothing but the patched values may differ
+	if (!isDeepStrictEqual(JSON.parse(src), doc)) return { problems: ["the spliced seed differs from the composed document — refusing to write"] };
+	return { src, skipped, advanced, problems };
+}
+
 /* ── commands ─────────────────────────────────────────────────────────── */
 
 const opt = (args, name, dflt) => (args.includes(name) ? resolve(args[args.indexOf(name) + 1]) : dflt);
 
-function check(args) {
+/** The base and the patches named by the arguments, composed — or the run fails, naming why. */
+function composeFromArgs(args) {
 	const patches = listPatches(opt(args, "--patches", PATCH_DIR));
 	if (patches.length === 0) fail(3, "content-patch: no patch found — nothing was checked");
-	const seedFile = opt(args, "--seed", SEED);
-	const seedRoot = parseWithSpans(readFileSync(seedFile, "utf8"));
-	const problems = patches.flatMap(({ file, patch }) => validatePatch(file, patch));
-	if (problems.length) fail(1, `content-patch: ${problems.length} problem(s)\n  ${problems.join("\n  ")}`);
-	const { chains: all, problems: links } = chains(patches);
-	problems.push(...links);
-	for (const { c, states, files } of all) {
-		const node = seedSpan(seedRoot, c);
-		const target = states[states.length - 1];
-		if (!node) problems.push(`${files.at(-1)}: ${where(c)} is not in ${seedFile}`);
-		else if (!isDeepStrictEqual(plain(node), target))
-			problems.push(`${files.at(-1)}: the seed does not hold the target of ${where(c)} — run: node scripts/content-patch.mjs seed seed/patches/${files.at(-1)}`);
-	}
-	if (problems.length) fail(1, `content-patch: ${problems.length} problem(s)\n  ${problems.join("\n  ")}`);
+	const baseFile = opt(args, "--base", BASE);
+	const r = compose(readFileSync(baseFile, "utf8"), patches);
+	if (r.problems.length) fail(1, `content-patch: ${r.problems.length} problem(s)\n  ${r.problems.join("\n  ")}`);
 	const n = patches.reduce((s, p) => s + p.patch.changes.length, 0);
-	console.log(`content-patch: ${patches.length} patch(es), ${n} change(s) over ${all.length} value(s) valid, and the seed holds every target`);
+	return { ...r, summary: `${patches.length} patch(es), ${n} change(s) over ${r.skipped + r.advanced} value(s): ${r.skipped} already in the base, ${r.advanced} applied over it` };
+}
+
+function check(args) {
+	const { summary } = composeFromArgs(args);
+	console.log(`content-patch: ${summary} — valid, and they compose over the base`);
 }
 
 function entryIndex(doc, c) {
 	const list = doc.content?.[c.collection] ?? [];
 	const hits = list.map((e, i) => [e, i]).filter(([e]) => e.slug === c.slug && e.locale === c.locale);
-	if (hits.length !== 1) throw new Error(`${c.collection}/${c.slug} [${c.locale}]: ${hits.length} entries in seed.json`);
+	if (hits.length !== 1) throw new Error(`${c.collection}/${c.slug} [${c.locale}]: ${hits.length} entries in the seed`);
 	return hits[0][1];
 }
 
-function seed(file) {
-	if (!file) fail(1, "usage: content-patch.mjs seed seed/patches/<file>.json");
-	const name = file.split("/").pop();
-	const patch = JSON.parse(readFileSync(resolve(file), "utf8"));
-	const problems = validatePatch(name, patch);
-	if (problems.length) fail(1, problems.join("\n"));
-	const src = readFileSync(SEED, "utf8");
-	let out;
-	try {
-		out = seedApply(src, patch);
-	} catch (e) {
-		fail(1, `content-patch: ${e.message}`);
-	}
-	// nothing but the patched values may differ
-	const doc = JSON.parse(src);
-	const expected = patch.changes.reduce((d, c) => docSet(d, c, c.after), doc);
-	let written;
-	try {
-		written = JSON.parse(out);
-	} catch {
-		fail(3, "content-patch: the spliced seed is not valid JSON — refusing to write");
-	}
-	if (!isDeepStrictEqual(written, expected)) fail(3, "content-patch: the spliced seed differs from the expected document — refusing to write");
-	writeFileSync(SEED, out);
-	console.log(`content-patch: ${patch.changes.length} value(s) written into seed/seed.json`);
+function composeCmd(args) {
+	const { src, summary } = composeFromArgs(args);
+	const out = opt(args, "--out", SEED);
+	writeFileSync(out, src);
+	console.log(`content-patch: wrote ${out} — base plus ${summary}`);
 }
 
 async function apply(args) {
@@ -455,12 +513,12 @@ async function apply(args) {
 			}
 			const widget = hits[0];
 			const cur = widget ? (widget.content ?? null) : null;
-			const target = states[states.length - 1];
-			if (isDeepStrictEqual(cur, target)) {
+			const target = states.at(-1);
+			const { atTarget, at } = standing(cur, states);
+			if (atTarget) {
 				skipped++;
 				continue;
 			}
-			const at = states.findIndex((s) => isDeepStrictEqual(s, cur));
 			if (at === -1) {
 				conflicts.push(`${where(c)} holds ${JSON.stringify(cur)?.slice(0, 120)}, no state of its patches (${files.join(", ")})`);
 				continue;
@@ -483,12 +541,12 @@ async function apply(args) {
 		}
 		const e = entries.get(k);
 		const cur = valueAt(e.data, c.path);
-		const target = states[states.length - 1];
-		if (isDeepStrictEqual(cur, target)) {
+		const target = states.at(-1);
+		const { atTarget, at } = standing(cur, states);
+		if (atTarget) {
 			skipped++;
 			continue;
 		}
-		const at = states.findIndex((s) => isDeepStrictEqual(s, cur));
 		if (at === -1) {
 			conflicts.push(`${where(c)} holds ${JSON.stringify(cur)?.slice(0, 120)}, no state of its patches (${files.join(", ")})`);
 			continue;
@@ -576,7 +634,7 @@ const isMain = (() => {
 if (isMain) {
 	const [cmd, ...rest] = process.argv.slice(2);
 	if (cmd === "check") check(rest);
-	else if (cmd === "seed") seed(rest[0]);
+	else if (cmd === "compose") composeCmd(rest);
 	else if (cmd === "apply") await apply(rest);
-	else fail(1, "usage: content-patch.mjs check | seed <patch.json> | apply --url <base> [--dry-run] [--dev-bypass]");
+	else fail(1, "usage: content-patch.mjs check | compose | apply --url <base> [--dry-run] [--dev-bypass]");
 }

@@ -1,0 +1,255 @@
+{
+	"date": "2026-11-05",
+	"issue": 697,
+	"summary": "/deconstruyendo says the text lives in a frozen base plus dated patches, and every fact that cited seed/seed.json cites seed/base.json.",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"map_note"
+			],
+			"before": "`seed.json` · ES ↔ EN",
+			"after": "`base.json` + parches · ES ↔ EN"
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"summary"
+			],
+			"before": "`seed.json` → `D1`",
+			"after": "base + parches → `D1`"
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"intro"
+			],
+			"before": "Todo el texto de la web está en un fichero del repositorio, `seed/seed.json`, en español y en inglés. En cada cambio, la integración continua construye el sitio y llena con ese fichero una base de datos vacía, así que la web entera se puede rehacer desde cero en cualquier momento.",
+			"after": "Todo el texto de la web está en el repositorio, en español y en inglés: una base congelada, `seed/base.json`, y un parche fechado por cada cambio posterior, en `seed/patches/`. Producción aplica los parches. En cada cambio, la integración continua construye el sitio y llena una base de datos vacía con la base más todos los parches, así que la web entera se puede rehacer desde cero en cualquier momento."
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"links"
+			],
+			"before": "[seed/seed.json en GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json) · [Las páginas de servicio en Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)",
+			"after": "[seed/base.json en GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/base.json) · [Los parches](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/patches) · [Las páginas de servicio en Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)"
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"nodes",
+				{
+					"fact": "h6-1"
+				},
+				"title"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h6-1"
+				},
+				"text"
+			],
+			"before": "Cada frase que renderiza el sitio vive en un fichero versionado, `seed/seed.json`. Las páginas de servicio se escriben en Markdown y el CMS las convierte a ese fichero. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla.",
+			"after": "Cada frase que renderiza el sitio vive en el repositorio: una base congelada, `seed/base.json`, más un parche fechado por cada cambio desde entonces. Producción aplica los parches, y un entorno nuevo arranca con la base más todos ellos. Las páginas de servicio se escriben en Markdown y el CMS las convierte en un parche. Un test mantiene los dos palabra por palabra, y una puerta de CI rechaza el texto escrito en una plantilla."
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h6-1"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"map_note"
+			],
+			"before": "`seed.json` · ES ↔ EN",
+			"after": "`base.json` + patches · ES ↔ EN"
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"summary"
+			],
+			"before": "`seed.json` → `D1`",
+			"after": "base + patches → `D1`"
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"intro"
+			],
+			"before": "Every word on the site lives in one file in the repository, `seed/seed.json`, in Spanish and English. On every change, the CI builds the site and fills an empty database from that file, so the whole site can be rebuilt from scratch at any time.",
+			"after": "Every word on the site lives in the repository, in Spanish and English: a frozen base, `seed/base.json`, and a dated patch for every change since, in `seed/patches/`. Production applies the patches. On every change, the CI builds the site and fills an empty database with the base plus every patch, so the whole site can be rebuilt from scratch at any time."
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"links"
+			],
+			"before": "[seed/seed.json on GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/seed.json) · [The service pages in Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)",
+			"after": "[seed/base.json on GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/base.json) · [The patches](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/patches) · [The service pages in Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)"
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"nodes",
+				{
+					"fact": "h6-1"
+				},
+				"title"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h6-1"
+				},
+				"text"
+			],
+			"before": "Every sentence the site renders lives in one versioned file, `seed/seed.json`. The service pages are written in Markdown, and the CMS converts them into that file. A test keeps the two word for word, and a CI gate rejects copy typed into a template.",
+			"after": "Every sentence the site renders lives in the repository: a frozen base, `seed/base.json`, plus a dated patch for every change since. Production applies the patches, and a new environment starts from the base plus all of them. The service pages are written in Markdown, and the CMS turns them into a patch. A test keeps the two word for word, and a CI gate rejects copy typed into a template."
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h6-1"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h5-3"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h5-4"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h5-3"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "emdash",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h5-4"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentacion",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h7-5"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		},
+		{
+			"collection": "layers",
+			"slug": "presentation",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h7-5"
+				},
+				"file"
+			],
+			"before": "seed/seed.json",
+			"after": "seed/base.json"
+		}
+	]
+}

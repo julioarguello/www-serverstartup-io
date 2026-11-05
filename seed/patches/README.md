@@ -1,14 +1,14 @@
 # Content patches
 
-How a text change reaches the live site. Issue #662.
+How a text change reaches the live site and every new environment. Issues #662 and #697.
 
 > [!TIP]
-> **TL;DR** — edit the text through a patch file, never in the production admin. Write the file, then
-> put the same change into `seed.json` and let CI and the production deploy do the rest:
+> **TL;DR** — a text change is a patch file here and nothing else: never an edit to `seed/base.json`,
+> never an edit in the production admin. Write the file, then compose and check:
 >
 > ```bash
-> node scripts/content-patch.mjs seed seed/patches/2026-10-26-<slug>.json   # same change into seed.json
-> node scripts/content-patch.mjs check                                      # what CI runs on every PR
+> node scripts/content-patch.mjs compose   # seed/seed.json = seed/base.json + every patch
+> node scripts/content-patch.mjs check     # what CI runs on every PR
 > ```
 >
 > The production deploy applies pending patches on its own and refuses to overwrite a value that
@@ -16,7 +16,7 @@ How a text change reaches the live site. Issue #662.
 
 ## Why patches, not the seed
 
-`seed/seed.json` creates a site the first time. EmDash does not let it change a live one:
+A seed creates a site the first time. EmDash does not let it change a live one:
 
 > "Later edits to the seed file are not re-applied to that database … Existing data is never
 > overwritten."
@@ -29,6 +29,38 @@ is an ordinary revision that the admin can revert.
 
 We pay for this with a small script of our own, `scripts/content-patch.mjs`. EmDash supplies the parts
 it is built from but does not ship this workflow.
+
+## A frozen base plus deltas
+
+Until #697 every patch was written twice: as a patch, and as the same change into `seed.json`. Two
+branches changing the site's text both edited `seed.json`, often the same list, and collided in git
+even when their patches were independent. The seed now works like a SAP Commerce initial load and
+its delta impex:
+
+| File | What it is |
+| :--- | :--- |
+| `seed/base.json` | The content at the freeze. It never changes: `tests/unit/content-patch.test.ts` pins its sha256 |
+| `seed/patches/*.json` | One dated patch per change since. The only place text changes |
+| `seed/seed.json` | The base plus every patch, written by `content-patch.mjs compose`. Generated and gitignored: never edit it |
+
+Production applies the patches. A new environment (local dev, CI, the preview, a reseed) starts from
+the base plus all of them. `npm run dev`, `npm test`, `scripts/ci-local-stack.sh` and
+`scripts/preview.sh reseed` compose before they read, and so does the first step of every CI job.
+
+`compose` decides each value exactly as the production deploy does (below), against the base instead
+of the live site: a value the base already holds at its target is left alone, which is every patch
+written before the freeze; one the base holds at an earlier state of its chain is written to the
+target; anything else fails, naming the patch. It splices each value into the base's text one at a
+time, in date order, so the base's formatting survives and two items created in one list land in
+the order their patches were written.
+
+What the freeze does not remove: two branches that create the same list item, or change the same
+value from the same `before`. Each passes alone; after both merge, the chain is broken and `check`
+fails naming both files. A rebase shows it on the PR before merging.
+
+**Rebaselining** — folding the patches into a new base — is deliberate: one PR rewrites
+`seed/base.json` and the pinned sha256 together. Creating or deleting an entry and changing the
+schema also need one, because a patch cannot express them.
 
 ## The convention
 
@@ -84,8 +116,8 @@ matches yet (#685):
 
 - **`after`** is the whole item. It must be an object, and its selector field must hold the selector's
   value: here `"key": "h7-7"`. `check` rejects anything else.
-- Applying the change appends the item at the end of the list. `content-patch.mjs seed` appends it in
-  `seed.json` the same way, indented like the item before it.
+- Applying the change appends the item at the end of the list. `content-patch.mjs compose` appends it in
+  `seed/seed.json` the same way, indented like the item before it.
 - An item that already matches the selector with other content is a conflict, and nothing is written.
 - Create at most one item per list in a patch, for the same reason as widgets below.
 - A later edit to that item changes the whole item, at the same path, with the created item as its
@@ -111,21 +143,22 @@ change names the widget instead of an entry:
 - **`path`** is always `["content"]`. A widget change writes the widget's whole list of blocks, so a
   later change to one label repeats the list with that label changed.
 - **`before: null`** means the widget does not exist yet. Applying the change creates it at the end of
-  the area. In `seed.json`, `content-patch.mjs seed` appends it to the area's `widgets`.
+  the area. In `seed/seed.json`, `content-patch.mjs compose` appends it to the area's `widgets`.
 - A widget has no revisions and no `_rev`, so its write has no optimistic concurrency. The pre-flight
   read is the only guard: an admin edit made between that read and the write is overwritten. After
   writing, the run reads the widget back and checks its content and type.
-- Create at most one new widget per area in a patch. `seed` would insert two at the same place in
-  reverse order, and it refuses rather than write that.
+- Create at most one new widget per area in a patch. The rule was made for a splice that inserted two
+  at the same place in reverse order; `compose` now splices one value at a time, but `check` still
+  enforces it.
 - The edge cache is not proven to follow. EmDash's widget handlers invalidate the area's cache tag
   through Astro's route cache, but no widget write has been watched reaching Cloudflare's cache. Until
   one has, a page showing the label may serve the old text until the one-hour `maxAge` set in
   `src/middleware.ts` has passed, plus one request: the first request after the hour still gets the old
   copy and starts the refresh.
 
-The same change also goes into `seed.json`. `content-patch.mjs seed <file>` writes each `after` into the
-seed by replacing only that value's text, so the hand formatting elsewhere in the file survives. It
-refuses to write if anything else would change.
+Nothing else changes for the change: the base stays as it is, and `compose` writes each `after` into
+`seed/seed.json` by replacing only that value's text. It refuses to write if anything else would
+change.
 
 ## How a patch reaches production
 
@@ -136,9 +169,9 @@ amber for EmDash's database.
 ```mermaid
 %%{init: {"theme":"base","themeVariables":{"lineColor":"#5a5248","edgeLabelBackground":"#f4f2ee"}}}%%
 flowchart LR
-	PR["PR: patch + seed.json"]:::ours --> CI["CI: content-patch.mjs check"]:::runtime
+	PR["PR: one patch file"]:::ours --> CI["CI: compose + check"]:::runtime
 	CI --> Main["merge to main"]:::ours
-	Main --> Preview["deploy-preview: reseed from seed.json"]:::outcome
+	Main --> Preview["deploy-preview: reseed from base + patches"]:::outcome
 	Main --> Prod["deploy-production: content-patch.mjs apply"]:::runtime
 	Prod --> API["EmDash API: update + publish a revision"]:::store
 	classDef ours     fill:#f3eef8,stroke:#7a5ba6,stroke-width:2.4px,color:#33204d
@@ -147,14 +180,14 @@ flowchart LR
 	classDef store    fill:#fbf4e0,stroke:#b8912e,stroke-width:2.4px,color:#4a3a10
 ```
 
-- **On every PR**, `content-patch.mjs check` validates every patch and confirms that `seed.json` already
-  holds each `after`. A patch without its seed change fails CI.
-- **The preview** reseeds from `seed.json` on every deploy, so it already shows the change.
+- **On every PR**, `content-patch.mjs check` validates every patch and composes them over the base. A
+  patch whose `before` the base and the patches before it never produce fails CI.
+- **The preview** reseeds from the composed seed on every deploy, so it already shows the change.
 - **The production deploy** runs `content-patch.mjs apply` after the worker is deployed. It reads each
   value first and only then decides what to do:
 
   Patches that change the same value form a **chain** in date order. If one patch changes A to B and a
-  later one changes B to C, the value's **target** is C, and `seed.json` must hold C.
+  later one changes B to C, the value's **target** is C.
 
   | The site holds | What happens |
   | :--- | :--- |
@@ -167,7 +200,7 @@ flowchart LR
   the entry was published, the patched fields read back as written, and every other field is unchanged.
 
   The guarantee is per value, not per entry. An admin edit to a field that no patch touches goes
-  unnoticed, and it is lost the next time someone rebuilds from the seed. Hence the rule in
+  unnoticed, and it is lost the next time someone rebuilds from the base and the patches. Hence the rule in
   `CONTRIBUTING.md`: do not edit text in the production admin.
 
   Writes across several entries are not atomic. If a write fails part-way (the network, or a `409` when

@@ -1,30 +1,35 @@
 # `seed/content/` — the markdown half of the copy loop
 
-**`seed/seed.json` is what renders.** Nothing in `src/`, `scripts/`,
-`package.json` or `.github/` reads the files in this directory. Editing a `.md`
-here and stopping changes nothing on the site.
+**The seed is what renders**: the frozen `seed/base.json` plus every patch in
+`seed/patches/` (#697). Nothing in `src/`, `scripts/`, `package.json` or
+`.github/` reads the files in this directory. Editing a `.md` here and stopping
+changes nothing on the site.
 
-These files exist because the copy that ends up in `seed.json` is Portable Text,
+These files exist because the copy that ends up in the seed is Portable Text,
 and hand-forging its `markDefs` is how two locale mix-ups reached the tree in one
 week (#305). So links, emphasis and headings are written as markdown, and the
 CMS converts them server-side. This directory is the input to that conversion,
-and `seed.json` is its output.
+and a content patch is its output.
 
 ## Changing copy
 
-Edit the `.md`, then run both halves. Two commands, in this order:
+Edit the `.md`, then run both halves. Three commands, in this order:
 
 ```bash
-npm run dev                                              # 1. Astro dev server
+npm run dev                                              # 1. Astro dev server (composes the seed first)
 scripts/load-content.sh services --url http://localhost:4321   # 2. markdown → CMS
-python3 scripts/seed-sync-services.py services           # 3. CMS → seed.json
+python3 scripts/seed-sync-services.py --name <slug> services   # 3. CMS → seed/patches/<today>-<slug>.json
 ```
 
-Then commit the `.md` **and** the `seed.json` diff together. Half a round trip
-is the failure this directory keeps having.
+The third writes one patch holding every field the CMS now stores differently
+from the seed; the issue comes from the branch name, or `--issue N`. Then
+commit the `.md` **and** the patch together, and run
+`node scripts/content-patch.mjs check`. Half a round trip is the failure this
+directory keeps having.
 
-Copy that has no `.md` here — most pages — is edited directly in `seed.json`.
-That is fine; it just means the Portable Text is written by hand.
+Copy that has no `.md` here — most pages — is changed by writing the patch by
+hand (`seed/patches/README.md`). That is fine; it just means the Portable Text
+is written by hand.
 
 ### The server it needs is not the one you have running
 

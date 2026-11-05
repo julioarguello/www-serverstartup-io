@@ -3,8 +3,9 @@
 #
 # Encodes the emdash-ops runbook (see .agent skill): the dev server must be
 # DOWN while seeding the local D1 sqlite (concurrent writes corrupt the FTS
-# virtual tables), and seeds are the complete text corpus, so a fresh boot
-# from seed.json alone reproduces the whole site.
+# virtual tables), and the seed is the complete text corpus, so a fresh boot
+# from it alone reproduces the whole site. The seed is composed first: the
+# frozen seed/base.json plus every patch in seed/patches/ (#697).
 #
 # Usage: scripts/ci-local-stack.sh [port]   (default 8787; assumes astro build ran)
 set -euo pipefail
@@ -128,6 +129,13 @@ listeners() {
 # forever — and `pkill` then reports nothing to kill, which reads like success.
 # `dev --port $PORT` matches both and is still port-scoped, so it cannot reach
 # another project's stack.
+# FIXME(tech-debt): stop_stack's pattern also kills any other process whose command line holds "dev --port <port>".
+# Measured 2026-11-05: a second session stopping its stack on 8787 killed the
+# first session's shell, whose command text carried that string. The pattern
+# exists because the supervisor above respawns workerd, so killing the port's
+# listener alone is not enough; the fix is to walk up from the listener's PID
+# to the wrangler parent and kill that subtree. Until then a session uses its
+# own port, 8000 + issue. (origin: #697)
 stop_stack() {
 	local holders pid
 	pkill -TERM -f "dev --port $PORT" 2>/dev/null || true
@@ -154,10 +162,11 @@ stop_stack() {
 stop_stack
 D1_DB=$(find .wrangler -name "*.sqlite" -path "*/d1/*" -not -name "metadata.sqlite" | head -1)
 [ -n "$D1_DB" ] || { echo "ERROR: local D1 sqlite not found" >&2; exit 1; }
+node scripts/content-patch.mjs compose
 npx emdash seed seed/seed.json -d "$D1_DB"
 
 # 3. Boot again on the seeded database — now the homepage must be a real 200.
 npx wrangler dev --port "$PORT" >>"$LOG" 2>&1 &
 WRANGLER_PID=$!
 wait_http "200"
-echo "stack up on :$PORT (seeded from seed/seed.json)"
+echo "stack up on :$PORT (seeded from seed/seed.json: seed/base.json plus every patch)"

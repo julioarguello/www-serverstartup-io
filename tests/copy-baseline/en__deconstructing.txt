@@ -20,7 +20,7 @@ Workers · Astro · Dynamic Workers
 Data
 D1 · Workers KV · Images · R2
 Content
-seed.json · ES ↔ EN
+base.json + patches · ES ↔ EN
 Delivery
 GitHub Actions · wrangler
 /_emdash/admin
@@ -221,7 +221,7 @@ docs/design/hero-rotativo/photo_restore.py
 [FLUX.2 [dev]](https://developers.cloudflare.com/workers-ai/models/flux-2-dev/)
 5.6
 The photographs are CC BY-SA, and the site credits them with the changes stated.
-seed/seed.json
+seed/base.json
 5.7
 The cookie notice is the site's own. It is a card in the bottom-left corner, and the page keeps working behind it while you decide. Accept and Reject are two identical buttons, side by side. The notice has no close button and waits for your answer. “Cookie preferences”, in the footer, opens it again. Zaraz's own window is off because it blocks the whole page, and the cookie guide of Spain's data protection authority (AEPD) asks for less. It asks for Reject at the same level as Accept, a notice that stays until you answer, and withdrawal as easy as consent. Only your click passes the answer to Zaraz, through its consent API. Google Analytics 4 is not needed to count visits, since Web Analytics already does. It is here because this site is also a lab.
 src/components/ConsentNotice.astro
@@ -254,11 +254,11 @@ no file: per its blog
 the Cloudflare blog
 6.3
 Five content types: pages, services, members, references and partners, with blog posts ready and empty. Pages and services have drafts; those two and members keep revisions. Bodies are Portable Text.
-seed/seed.json
+seed/base.json
 documentation
 6.4
 Two languages: pages, services and members are published in pairs linked by translationOf.
-seed/seed.json
+seed/base.json
 6.5
 Menus, widget areas, site settings and taxonomies come from the CMS. Every interface label lives in a widget, not in a template.
 src/utils/ui-labels.ts
@@ -321,21 +321,22 @@ Production deploys only when the founder starts it by hand, and a guard refuses 
 across the layers · from the workshop
 Content
 Where every text is written.
-Every word on the site lives in one file in the repository, seed/seed.json, in Spanish and English. On every change, the CI builds the site and fills an empty database from that file, so the whole site can be rebuilt from scratch at any time.
-seed/seed.json
+Every word on the site lives in the repository, in Spanish and English: a frozen base, seed/base.json, and a dated patch for every change since, in seed/patches/. Production applies the patches. On every change, the CI builds the site and fills an empty database with the base plus every patch, so the whole site can be rebuilt from scratch at any time.
+seed/base.json
 every sentence
 D1, empty
 ×12 in parallel
 the site
 ES ↔ EN
 The seed/ folder of the public repository.
-seed/seed.json on GitHub
+seed/base.json on GitHub
+The patches
 The service pages in Markdown
 Detail and proof
 4 rows
 8.1
-Every sentence the site renders lives in one versioned file, seed/seed.json. The service pages are written in Markdown, and the CMS converts them into that file. A test keeps the two word for word, and a CI gate rejects copy typed into a template.
-seed/seed.json
+Every sentence the site renders lives in the repository: a frozen base, seed/base.json, plus a dated patch for every change since. Production applies the patches, and a new environment starts from the base plus all of them. The service pages are written in Markdown, and the CMS turns them into a patch. A test keeps the two word for word, and a CI gate rejects copy typed into a template.
+seed/base.json
 seed files
 8.2
 On every change that can reach a page, CI builds the site and fills an empty database from that file, twelve times in parallel.

@@ -7,11 +7,13 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"predev": "node scripts/content-patch.mjs compose",
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
 		"deploy": "astro build && wrangler deploy",
 		"typecheck": "astro check",
+		"pretest": "node scripts/content-patch.mjs compose",
 		"test": "vitest run"
 	},
 	"dependencies": {

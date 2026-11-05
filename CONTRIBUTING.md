@@ -45,9 +45,13 @@ npm run dev             # astro dev at :4321, admin at /_emdash/admin
 
 The first boot creates a local D1 database (Wrangler's emulator) and runs the
 CMS migrations. To load the real content, seed it — **with the dev server
-down**; seeding while it runs corrupts the full-text-search tables:
+down**; seeding while it runs corrupts the full-text-search tables. The seed is
+`seed/seed.json`, which `npm run dev` and `npm test` compose first from the
+frozen `seed/base.json` plus every patch in `seed/patches/`; compose it by hand
+after pulling new patches:
 
 ```bash
+node scripts/content-patch.mjs compose
 D1_DB=$(find .wrangler -name "*.sqlite" -path "*/d1/*" -not -name "metadata.sqlite")
 npx emdash seed seed/seed.json -d "$D1_DB"
 ```
@@ -55,7 +59,7 @@ npx emdash seed seed/seed.json -d "$D1_DB"
 Clean rebuild after schema changes: `scripts/preview.sh [PORT] reseed`. It stops
 the server, wipes `.wrangler` and `data.db`, boots once so EmDash creates the
 database, seeds it, and boots again — the seeder skips entries that already
-exist, so text edits in `seed/seed.json` need this, not a plain reseed.
+exist, so a new patch needs this, not a plain reseed.
 
 Two local gotchas worth knowing before they cost you an hour:
 
@@ -96,18 +100,20 @@ Two local gotchas worth knowing before they cost you an hour:
 The architecture is UI-first, content-driven: templates carry layout and CSS,
 the CMS carries every word.
 
-- **Content ownership has two phases.** Before launch, `seed/seed.json` was
-  the source of truth: a clean rebuild reproduced the whole site.
-  `seed/content/**.md` is an *input* to `seed.json`, not an alternative to it:
+- **Content ownership has two phases.** Before launch, the seed was the
+  source of truth: a clean rebuild reproduced the whole site.
+  `seed/content/**.md` is an *input* to the seed, not an alternative to it:
   editing only the markdown changes nothing on the site. Read
   `seed/content/README.md` before touching it (#500). The site went live on
   2026-10-25, and from then on the production database holds the content.
   EmDash never re-applies a seed to a live database. Its rule is that
   "existing data is never overwritten". Re-seeding production is a
   destructive, opt-in operation in the production deploy workflow.
-- **A text change in production is a content patch** (#662): a dated file in
-  `seed/patches/`. It ships in the same PR as the same change to `seed.json`,
-  so the preview, local dev and a fresh install all match production. The
+- **A text change is a content patch, and nothing else** (#662, #697): a dated
+  file in `seed/patches/`. The base, `seed/base.json`, is frozen — a test pins
+  its bytes — and `seed/seed.json` is generated from it plus every patch, so
+  the preview, local dev and a fresh install all match production, and two
+  branches that change text add two files instead of colliding in one. The
   convention, the commands and how the patches reach production are in
   [`seed/patches/README.md`](seed/patches/README.md). Do not edit text in the
   production admin. A patch on that same value refuses to write rather than
@@ -166,6 +172,10 @@ Chrome that `npm ci` installs, except **Engines**, which needs WebKit too:
 them: it runs that job inside `mcr.microsoft.com/playwright:v<version>-noble`, whose tag
 must equal the `playwright` pin in `package.json` (`tests/unit/playwright-image.test.ts`
 fails otherwise, so a Playwright bump moves both).
+
+Every gate that reads the seed reads `seed/seed.json`, which is generated (#697). After pulling
+new patches, run `node scripts/content-patch.mjs compose` before running one of them by hand.
+`npm test`, `npm run dev`, any Astro command and `dev-ci-run.py` compose on their own.
 
 | Gate | Local command | Target |
 | :--- | :--- | :--- |

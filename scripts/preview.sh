@@ -71,6 +71,7 @@ case "$CMD" in
 		done
 		[ -n "$D1_DB" ] || fail
 		kill_port; sleep 1
+		node scripts/content-patch.mjs compose
 		npx -y emdash seed seed/seed.json -d "$D1_DB"
 		start_server
 		wait_200 90 && echo "preview reseeded + OK on $URL" || fail

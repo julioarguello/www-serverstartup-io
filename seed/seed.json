@@ -18791,7 +18791,7 @@
 						},
 						{
 							"key": "h2-3",
-							"text": "Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: caducan antes de una hora.",
+							"text": "Publicar una entrada purga, por etiqueta de caché, sus páginas y las que la listan. Menús y ajustes no se purgan: se renuevan pasada una hora.",
 							"file": "src/plugins/cache-purge.ts",
 							"docs": "[última comprobación en verde, 2026-08-23](https://github.com/julioarguello/www-serverstartup-io/actions/runs/32654856970) · [purga](https://developers.cloudflare.com/workers/cache/purge/)",
 							"status": "ok"
@@ -18803,11 +18803,12 @@
 							"docs": "[cabeceras de Static Assets](https://developers.cloudflare.com/workers/static-assets/headers/)",
 							"status": "ok"
 						},
+						{"key":"h2-5","text":"Las imágenes redimensionadas se guardan un año: su dirección ya dice de qué imagen salen y a qué tamaño, así que no cambian.","file":"src/middleware.ts","status":"ok"},
 						{
-							"key": "h2-5",
-							"text": "Las imágenes redimensionadas se guardan en la [`Cache API`](https://developers.cloudflare.com/workers/runtime-apis/cache/).",
-							"file_note": "en la dependencia `@astrojs/cloudflare`",
-							"docs": "[Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/)",
+							"key": "h2-6",
+							"text": "Una copia caducada se entrega al momento y se rehace por detrás, durante una semana. Solo se espera al Worker tras un despliegue o una semana sin visitas. Estas reglas viven en el Worker, porque las de caché de la zona no alcanzan a `Workers Cache`.",
+							"file": "src/middleware.ts",
+							"docs": "[stale-while-revalidate](https://developers.cloudflare.com/workers/cache/configuration/) · [límites](https://developers.cloudflare.com/workers/cache/limitations/)",
 							"status": "ok"
 						}
 					]
@@ -18866,7 +18867,7 @@
 						},
 						{
 							"key": "h2-3",
-							"text": "Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they expire within the hour.",
+							"text": "Publishing an entry purges, by cache tag, its own pages and the pages that list it. Menus and settings are not purged; they are refreshed once the hour is up.",
 							"file": "src/plugins/cache-purge.ts",
 							"docs": "[last green check, 2026-08-23](https://github.com/julioarguello/www-serverstartup-io/actions/runs/32654856970) · [purge](https://developers.cloudflare.com/workers/cache/purge/)",
 							"status": "ok"
@@ -18878,11 +18879,12 @@
 							"docs": "[Static Assets headers](https://developers.cloudflare.com/workers/static-assets/headers/)",
 							"status": "ok"
 						},
+						{"key":"h2-5","text":"Resized images are kept for a year: their address already says which image they come from and at what size, so they never change.","file":"src/middleware.ts","status":"ok"},
 						{
-							"key": "h2-5",
-							"text": "Resized images are kept in the [`Cache API`](https://developers.cloudflare.com/workers/runtime-apis/cache/).",
-							"file_note": "in the `@astrojs/cloudflare` dependency",
-							"docs": "[Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/)",
+							"key": "h2-6",
+							"text": "An expired copy is served at once and rebuilt behind the request, for up to a week. Nobody waits for the Worker except after a deploy or a week without visits. These rules live in the Worker, because the zone's cache rules do not reach `Workers Cache`.",
+							"file": "src/middleware.ts",
+							"docs": "[stale-while-revalidate](https://developers.cloudflare.com/workers/cache/configuration/) · [limitations](https://developers.cloudflare.com/workers/cache/limitations/)",
 							"status": "ok"
 						}
 					]

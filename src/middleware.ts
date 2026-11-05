@@ -94,6 +94,23 @@ function applyHeaders(response: Response, patch: [string, string][]): Response {
 	}
 }
 
+/**
+ * Edge lifetimes (#691). Emitted by the cache provider as
+ * `Cloudflare-CDN-Cache-Control`, which only the edge reads.
+ *
+ * PAGE_EDGE: `maxAge` bounds how long a menu or site-settings change can stay
+ * unseen, since EmDash 1.3.1 emits no hook for those (published entries are
+ * purged at once by tag). `swr` is what keeps a visitor from waiting: once
+ * `maxAge` passes, the stale copy is served immediately and refreshed behind
+ * the request. With `swr: 60` the copy was EXPIRED after a minute and the
+ * next click waited 0.8–2 s for a full render (measured 2026-11-05).
+ *
+ * IMAGE_EDGE: a resized image's URL names its source and its transform, so
+ * the bytes behind one URL never change.
+ */
+const PAGE_EDGE = { maxAge: 3600, swr: 604800 } as const;
+const IMAGE_EDGE = { maxAge: 31536000 } as const;
+
 export const onRequest = defineMiddleware(async ({ locals, currentLocale, url, cache, request }, next) => {
 	// #610: nobody becomes the first CMS administrator without this environment's
 	// SETUP_GATE_TOKEN. Imported here, not at the top: the module exists only
@@ -132,13 +149,14 @@ export const onRequest = defineMiddleware(async ({ locals, currentLocale, url, c
 	// below writes in place when it can and rebuilds when it cannot.
 	const patch: [string, string][] = [];
 
-	// ── Edge cache policy (#332/#357): default-deny, opt-in only ──
-	// With Workers Cache enabled, a 200 without Cache-Control is heuristically
-	// cacheable for ~2h (RFC 9111) — admin pages included. So: pages that
-	// opted in through a CMS cacheHint (their accumulated tags prove it) get
-	// a 1h edge TTL, which also bounds the staleness of menu/site-settings
-	// changes (EmDash 0.34 has no publish hooks for those); everything else
-	// gets an explicit no-store. Purge-on-publish: src/plugins/cache-purge.ts.
+	// ── Edge cache policy (#332/#357/#691): default-deny, opt-in only ──
+	// The whole policy lives here: zone Cache Rules do not reach Workers Cache
+	// (developers.cloudflare.com/workers/cache/limitations/). With Workers
+	// Cache enabled, a 200 without Cache-Control is heuristically cacheable for
+	// ~2h (RFC 9111) — admin pages included. So: pages that opted in through a
+	// CMS cacheHint (their accumulated tags prove it) get PAGE_EDGE; resized
+	// images get IMAGE_EDGE; everything else gets an explicit no-store.
+	// Purge-on-publish: src/plugins/cache-purge.ts.
 	if (cache.enabled && cache.tags.length > 0 && !url.pathname.startsWith("/_emdash")) {
 		// Footer tags (services cards, partners, the references banner render on
 		// every page). Their cache.set calls inside Base/components run
@@ -154,11 +172,17 @@ export const onRequest = defineMiddleware(async ({ locals, currentLocale, url, c
 		for (const r of [svc, part, refs]) {
 			if (r.cacheHint) cache.set(r.cacheHint);
 		}
-		cache.set({ maxAge: 3600, swr: 60 });
+		cache.set(PAGE_EDGE);
 		if (!response.headers.has("Cache-Control")) {
 			// browsers revalidate; the edge TTL travels in Cloudflare-CDN-Cache-Control
 			patch.push(["Cache-Control", "public, max-age=0, must-revalidate"]);
 		}
+	} else if (cache.enabled && url.pathname === "/_image" && response.status === 200) {
+		// The adapter stamps `Cloudflare-CDN-Cache-Control: no-store` on any
+		// rendered response that lacks it (@astrojs/cloudflare 14.2.3,
+		// dist/utils/handler.js), so without this the endpoint's own year-long
+		// Cache-Control never reached the edge and every image was BYPASS.
+		cache.set(IMAGE_EDGE);
 	} else if (!response.headers.has("Cache-Control")) {
 		patch.push(["Cache-Control", "no-store"]);
 	}

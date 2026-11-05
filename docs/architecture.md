@@ -1302,6 +1302,15 @@ because no provider was configured.
   silently). It purges tags `[collection, id]` on afterSave-when-published,
   afterPublish, afterUnpublish, afterDelete and afterRestore — so purging an
   entry also evicts the pages that merely embed it.
+- **Prefetch on hover** (#693): `prefetch: { prefetchAll: true, defaultStrategy:
+  "hover" }` in `astro.config.mjs`. An internal link is fetched while the pointer
+  rests on it, so a page the edge no longer holds (after a deploy, a publish or
+  a week without visits) is rendered before the click and the click finds it
+  cached. Cloudflare's Speed Brain is not a substitute: it *"will not prefetch
+  on routes that run Workers"*
+  ([Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)),
+  and every page here does. A prefetch fetches the HTML and runs no script, so
+  Web Analytics and GA4 count nothing for it.
 - **Known gap**: menus and site settings emit no publish hook in EmDash 1.3.1 (nor 0.34),
   so their staleness is bounded by the 1h `maxAge` rather than purged: the
   first request after the hour still gets the old copy, and starts the refresh.

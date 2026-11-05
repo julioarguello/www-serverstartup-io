@@ -18822,6 +18822,13 @@
 							"file": "src/utils/html-validators.ts",
 							"docs": "[Zaraz y CSP](https://blog.cloudflare.com/cloudflare-zaraz-supports-csp/)",
 							"status": "ok"
+						},
+						{
+							"key": "h2-8",
+							"text": "Al pasar el ratón por un enlace interno, el navegador pide esa página por adelantado. Si no estaba guardada, el Worker la genera entonces y el clic ya la encuentra en la caché. La precarga de `Cloudflare`, `Speed Brain`, no sirve aquí: no precarga páginas que ejecutan un Worker.",
+							"file": "astro.config.mjs",
+							"docs": "[precarga de Astro](https://docs.astro.build/es/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
+							"status": "ok"
 						}
 					]
 				}
@@ -18909,6 +18916,13 @@
 							"text": "Pages leave without `Last-Modified` or `ETag`: returning to one fetches it whole from the cache, never a 304. A 304 brings back the stored security policy, without the nonce `Zaraz` adds to every response, and its script was blocked.",
 							"file": "src/utils/html-validators.ts",
 							"docs": "[Zaraz and CSP](https://blog.cloudflare.com/cloudflare-zaraz-supports-csp/)",
+							"status": "ok"
+						},
+						{
+							"key": "h2-8",
+							"text": "When the pointer rests on an internal link, the browser asks for that page in advance. If it was not stored, the Worker renders it then, and the click finds it in the cache. `Cloudflare`'s own prefetch, `Speed Brain`, does not apply here: it never prefetches a page that runs a Worker.",
+							"file": "astro.config.mjs",
+							"docs": "[Astro prefetch](https://docs.astro.build/en/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
 							"status": "ok"
 						}
 					]

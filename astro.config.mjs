@@ -71,6 +71,13 @@ export default defineConfig({
 	// the default-deny policy lives in src/middleware.ts and the
 	// purge-on-publish hooks in src/plugins/cache-purge.ts (#357).
 	cache: { provider: cacheCloudflare() },
+	// #693: an internal link is fetched while the pointer rests on it (or it
+	// has keyboard focus), so a page the edge no longer holds is rendered
+	// before the click. Cloudflare's own prefetch, Speed Brain, cannot do this:
+	// it never prefetches a route that runs a Worker, and every page here does.
+	// A prefetch fetches the HTML only and runs no script, so it counts no
+	// visit in Web Analytics or GA4.
+	prefetch: { prefetchAll: true, defaultStrategy: "hover" },
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,

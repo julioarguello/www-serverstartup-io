@@ -1,0 +1,45 @@
+{
+	"date": "2026-11-05",
+	"issue": 693,
+	"summary": "/deconstruyendo's cache layer says that a hovered internal link is fetched before the click, and why Cloudflare's Speed Brain is not used for it.",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-8"
+				}
+			],
+			"before": null,
+			"after": {
+				"key": "h2-8",
+				"text": "Al pasar el ratón por un enlace interno, el navegador pide esa página por adelantado. Si no estaba guardada, el Worker la genera entonces y el clic ya la encuentra en la caché. La precarga de `Cloudflare`, `Speed Brain`, no sirve aquí: no precarga páginas que ejecutan un Worker.",
+				"file": "astro.config.mjs",
+				"docs": "[precarga de Astro](https://docs.astro.build/es/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
+				"status": "ok"
+			}
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h2-8"
+				}
+			],
+			"before": null,
+			"after": {
+				"key": "h2-8",
+				"text": "When the pointer rests on an internal link, the browser asks for that page in advance. If it was not stored, the Worker renders it then, and the click finds it in the cache. `Cloudflare`'s own prefetch, `Speed Brain`, does not apply here: it never prefetches a page that runs a Worker.",
+				"file": "astro.config.mjs",
+				"docs": "[Astro prefetch](https://docs.astro.build/en/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
+				"status": "ok"
+			}
+		}
+	]
+}

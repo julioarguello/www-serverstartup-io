@@ -88,7 +88,7 @@ MISS
 Workers
 renderiza
 Detalle y pruebas
-7 filas
+8 filas
 2.1
 Workers Cache está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.
 wrangler.jsonc
@@ -115,6 +115,10 @@ stale-while-revalidate · límites
 Las páginas salen sin Last-Modified ni ETag: al volver a una, el navegador la recibe entera desde la caché, nunca un 304. Un 304 trae la política de seguridad guardada, sin el nonce que Zaraz añade a cada respuesta, y su script quedaba bloqueado.
 src/utils/html-validators.ts
 Zaraz y CSP
+2.8
+Al pasar el ratón por un enlace interno, el navegador pide esa página por adelantado. Si no estaba guardada, el Worker la genera entonces y el clic ya la encuentra en la caché. La precarga de Cloudflare, Speed Brain, no sirve aquí: no precarga páginas que ejecutan un Worker.
+astro.config.mjs
+precarga de Astro · Speed Brain
 capa 3 · Cloudflare
 Cómputo
 Dónde se ejecuta el código que genera cada página.

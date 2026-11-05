@@ -120,13 +120,6 @@ jobs:
         if: needs.scope.outputs.site == 'true' && steps.deps.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
-        # #697: seed/base.json never changes; a text change is a patch in
-        # seed/patches/. Every reader below reads the composed seed/seed.json,
-        # which is generated and gitignored. A conflict stops the job here,
-        # naming the patch — the Content patches gate reports the same.
-        run: node scripts/content-patch.mjs compose
-
       - name: Secret scan (gitleaks)
         uses: gitleaks/gitleaks-action@v3
         env:
@@ -138,6 +131,14 @@ jobs:
           # must never tell. Nothing consumed those 236 SARIFs: they were never
           # fed to code scanning, and no one downloaded one.
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+
+      - name: Compose the seed  # not-a-gate: writes seed/seed.json (the frozen base plus every patch) for the steps below
+        # After the secret scan, which never reads the seed: a patch conflict must not skip it.
+        # #697: seed/base.json never changes; a text change is a patch in
+        # seed/patches/. Every reader below reads the composed seed/seed.json,
+        # which is generated and gitignored. A conflict stops the job here,
+        # naming the patch — the Content patches gate reports the same.
+        run: node scripts/content-patch.mjs compose
 
       - name: Citability guard
         env:

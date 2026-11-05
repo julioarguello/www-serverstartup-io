@@ -173,12 +173,16 @@ them: it runs that job inside `mcr.microsoft.com/playwright:v<version>-noble`, w
 must equal the `playwright` pin in `package.json` (`tests/unit/playwright-image.test.ts`
 fails otherwise, so a Playwright bump moves both).
 
+Every gate that reads the seed reads `seed/seed.json`, which is generated (#697). After pulling
+new patches, run `node scripts/content-patch.mjs compose` before running one of them by hand.
+`npm test`, `npm run dev`, any Astro command and `dev-ci-run.py` compose on their own.
+
 | Gate | Local command | Target |
 | :--- | :--- | :--- |
 | Secrets | — (gitleaks Action, CI only) | no leaks, full history |
 | Citability | `python3 scripts/ci-check-citability.py` | no name outside the policy, in any tracked file — needs the `FORBIDDEN_NAMES` secret |
 | Types | `npm run typecheck` | 0 errors, 0 warnings |
-| Seed schema | `node scripts/content-patch.mjs compose && npx emdash seed seed/seed.json --validate` | valid |
+| Seed schema | `npx emdash seed seed/seed.json --validate` | valid |
 | CMS text | `python3 scripts/ci-check-cms-text.py` | labels resolve in both locales; 0 hardcoded copy |
 | Copy voice | `python3 scripts/ci-check-copy-voice.py` | the voice rules a pattern can decide, read from `seed.json`: no spaced em dash in Spanish copy, at most one «X: Y» heading per page and one Spanish «X, no Y» contrast, none of the listed AI words, no «¡» |
 | Locale parity | `python3 scripts/ci-check-locale-parity.py` | a field filled in one locale is filled in both |

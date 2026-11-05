@@ -28,6 +28,8 @@ the branch name (<type>/<issue>-<summary>). Default collection: services.
 Requires: a local D1 seeded from seed/seed.json (dev server may be running;
 reads are safe).
 """
+from __future__ import annotations
+
 import argparse
 import datetime
 import json

@@ -9,12 +9,12 @@
  */
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error — plain ESM script, no types
-import { chains, compose, getAt, listPatches, parseWithSpans, seedApply, seedSpan, setAt, standing, validatePatch, valueAt } from "../../scripts/content-patch.mjs";
+import { chains, compose, composeSeed, getAt, listPatches, parseWithSpans, seedApply, seedSpan, setAt, standing, validatePatch, valueAt } from "../../scripts/content-patch.mjs";
 
 const ROOT = join(import.meta.dirname, "..", "..");
 const SCRIPT = join(ROOT, "scripts", "content-patch.mjs");
@@ -177,6 +177,30 @@ describe("content patches", () => {
 		const once = compose(base, p).src;
 		expect(JSON.parse(once).content.layers[0].data.intro).toBe("B");
 		expect(compose(once, p).src).toBe(once);
+	});
+
+	it("the Astro config composes the seed before EmDash embeds it, so no build runs on a missing one", () => {
+		// EmDash silently embeds its demo seed when seed/seed.json is absent at build time.
+		const config = readFileSync(join(ROOT, "astro.config.mjs"), "utf8");
+		expect(config).toMatch(/^import \{ composeSeed \} from "\.\/scripts\/content-patch\.mjs";$/m);
+		expect(config).toMatch(/^composeSeed\(\);$/m);
+	});
+
+	it("composeSeed writes the composed seed, leaves an up-to-date one untouched, and throws on a conflict", () => {
+		const dir = mkdtempSync(join(tmpdir(), "content-patch-seed-"));
+		const base = join(dir, "base.json");
+		const out = join(dir, "seed.json");
+		const pdir = join(dir, "patches");
+		mkdirSync(pdir);
+		writeFileSync(join(pdir, "2026-10-26-a.json"), JSON.stringify(patchFile("2026-10-26", [change()])));
+		writeFileSync(base, JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro: "A" } }] } }, null, "\t"));
+		composeSeed({ base, patches: pdir, out });
+		expect(JSON.parse(readFileSync(out, "utf8")).content.layers[0].data.intro).toBe("B");
+		const mtime = statSync(out).mtimeMs;
+		composeSeed({ base, patches: pdir, out });
+		expect(statSync(out).mtimeMs).toBe(mtime);
+		writeFileSync(base, JSON.stringify({ content: { layers: [{ slug: "cache", locale: "es", data: { intro: "X" } }] } }));
+		expect(() => composeSeed({ base, patches: pdir, out })).toThrow(/no state of its patches/);
 	});
 
 	it("compose names the patch whose value the base does not hold", () => {

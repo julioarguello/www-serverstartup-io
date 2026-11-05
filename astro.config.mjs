@@ -5,7 +5,18 @@ import { d1, r2, sandbox } from "@emdash-cms/cloudflare";
 import webhookNotifier from "@emdash-cms/plugin-webhook-notifier";
 import { defineConfig } from "astro/config";
 import emdash from "emdash/astro";
+import { composeSeed } from "./scripts/content-patch.mjs";
 import { fonts } from "./src/assets/fonts/families.mjs";
+
+/**
+ * #697: seed/seed.json is generated — the frozen seed/base.json plus every
+ * patch in seed/patches/ — and gitignored. EmDash embeds that file in the
+ * worker at build time and, when it is missing, silently embeds its own demo
+ * seed instead. Composing here means no build, dev server or check can run on
+ * a seed that is absent or stale, whoever starts it. A conflict between
+ * patches stops the build, naming them.
+ */
+composeSeed();
 
 /**
  * #664: the origin the admin is used from, per deployed environment. EmDash

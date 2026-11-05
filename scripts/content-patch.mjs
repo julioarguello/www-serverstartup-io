@@ -394,7 +394,8 @@ export function standing(cur, states) {
  * The base plus every patch, as seed text (#697). Each value behind its target
  * is spliced into the base one at a time, in date order, so the base's hand
  * formatting survives and two items created in one list land in the order
- * their patches were written. Returns { src, skipped, advanced, problems }.
+ * their patches were written. Returns { src, skipped, advanced, problems }, or
+ * { broken } when the splice itself misbehaved — the tool's defect, exit 3.
  */
 export function compose(baseSrc, patches) {
 	const problems = patches.flatMap(({ file, patch }) => validatePatch(file, patch));
@@ -426,14 +427,45 @@ export function compose(baseSrc, patches) {
 			problems.push(`${where(c)}: the base holds ${JSON.stringify(cur)?.slice(0, 120)}, no state of its patches (${files.join(", ")})`);
 			continue;
 		}
-		src = seedApply(src, { changes: [{ ...c, before: cur, after: states.at(-1) }] });
+		try {
+			src = seedApply(src, { changes: [{ ...c, before: cur, after: states.at(-1) }] });
+		} catch (e) {
+			return { problems: [], broken: `splicing ${where(c)} failed although the document holds a state of its chain — ${e.message}` };
+		}
 		doc = docSet(doc, c, states.at(-1));
 		advanced++;
 	}
 	if (problems.length) return { problems };
-	// nothing but the patched values may differ
-	if (!isDeepStrictEqual(JSON.parse(src), doc)) return { problems: ["the spliced seed differs from the composed document — refusing to write"] };
+	// nothing but the patched values may differ; a splice that breaks this is the tool's defect, not a conflict
+	let spliced;
+	try {
+		spliced = JSON.parse(src);
+	} catch {
+		return { problems: [], broken: "the spliced seed is not valid JSON — refusing to write" };
+	}
+	if (!isDeepStrictEqual(spliced, doc)) return { problems: [], broken: "the spliced seed differs from the composed document — refusing to write" };
 	return { src, skipped, advanced, problems };
+}
+
+/**
+ * Compose seed/seed.json from the base and every patch, writing it only when
+ * it changed. Throws, naming why, on a conflict or a broken splice. The Astro
+ * config calls this, so no build can embed a seed that is missing or stale:
+ * EmDash reads seed/seed.json at build time and, when the file is absent,
+ * silently embeds its own demo seed (node_modules/emdash/dist/virtual-modules-*.mjs,
+ * generateSeedModule).
+ */
+export function composeSeed({ base = BASE, patches = PATCH_DIR, out = SEED } = {}) {
+	const list = listPatches(patches);
+	const r = compose(readFileSync(base, "utf8"), list);
+	if (r.broken) throw new Error(`content-patch: ${r.broken}`);
+	if (r.problems.length) throw new Error(`content-patch: ${r.problems.length} problem(s)\n  ${r.problems.join("\n  ")}`);
+	let current = null;
+	try {
+		current = readFileSync(out, "utf8");
+	} catch {}
+	if (current !== r.src) writeFileSync(out, r.src);
+	return { ...r, patches: list.length };
 }
 
 /* ── commands ─────────────────────────────────────────────────────────── */
@@ -446,6 +478,7 @@ function composeFromArgs(args) {
 	if (patches.length === 0) fail(3, "content-patch: no patch found — nothing was checked");
 	const baseFile = opt(args, "--base", BASE);
 	const r = compose(readFileSync(baseFile, "utf8"), patches);
+	if (r.broken) fail(3, `content-patch: ${r.broken}`);
 	if (r.problems.length) fail(1, `content-patch: ${r.problems.length} problem(s)\n  ${r.problems.join("\n  ")}`);
 	const n = patches.reduce((s, p) => s + p.patch.changes.length, 0);
 	return { ...r, summary: `${patches.length} patch(es), ${n} change(s) over ${r.skipped + r.advanced} value(s): ${r.skipped} already in the base, ${r.advanced} applied over it` };

@@ -1345,7 +1345,8 @@ because no provider was configured.
 `npx emdash seed` writes to `./data.db` by default. With `d1()` adapter, the dev server uses Wrangler's D1 emulator at `.wrangler/state/v3/d1/miniflare-D1DatabaseObject/<hash>.sqlite`.
 
 ```bash
-# Find and seed the correct DB
+# Compose the seed (frozen base + every patch, #697), then find and seed the correct DB
+node scripts/content-patch.mjs compose
 D1_DB=$(find .wrangler -name "*.sqlite" -path "*/d1/*" -not -name "metadata.sqlite")
 npx emdash seed seed/seed.json -d "$D1_DB"
 ```

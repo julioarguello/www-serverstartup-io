@@ -88,7 +88,7 @@ MISS
 Workers
 renders
 Detail and proof
-6 rows
+7 rows
 2.1
 Workers Cache sits in front of the Worker and is tiered by default: a hit does not run the Worker.
 wrangler.jsonc
@@ -111,6 +111,10 @@ src/middleware.ts
 An expired copy is served at once and rebuilt behind the request, for up to a week. Nobody waits for the Worker except after a deploy, after that page is published, or after a week without visits. These rules live in the Worker, because the zone's cache rules do not reach Workers Cache.
 src/middleware.ts
 stale-while-revalidate · limitations
+2.7
+Pages leave without Last-Modified or ETag: returning to one fetches it whole from the cache, never a 304. A 304 brings back the stored security policy, without the nonce Zaraz adds to every response, and its script was blocked.
+src/utils/html-validators.ts
+Zaraz and CSP
 layer 3 · Cloudflare
 Compute
 Where the code that builds each page runs.

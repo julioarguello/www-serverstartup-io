@@ -88,7 +88,7 @@ MISS
 Workers
 renderiza
 Detalle y pruebas
-6 filas
+7 filas
 2.1
 Workers Cache está delante del Worker y es escalonada por defecto: un acierto no ejecuta el Worker.
 wrangler.jsonc
@@ -111,6 +111,10 @@ src/middleware.ts
 Una copia caducada se entrega al momento y se rehace por detrás, durante una semana. Solo se espera al Worker tras un despliegue, tras publicar esa página o tras una semana sin visitas. Estas reglas viven en el Worker, porque las de caché de la zona no alcanzan a Workers Cache.
 src/middleware.ts
 stale-while-revalidate · límites
+2.7
+Las páginas salen sin Last-Modified ni ETag: al volver a una, el navegador la recibe entera desde la caché, nunca un 304. Un 304 trae la política de seguridad guardada, sin el nonce que Zaraz añade a cada respuesta, y su script quedaba bloqueado.
+src/utils/html-validators.ts
+Zaraz y CSP
 capa 3 · Cloudflare
 Cómputo
 Dónde se ejecuta el código que genera cada página.

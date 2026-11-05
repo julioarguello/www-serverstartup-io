@@ -1,0 +1,45 @@
+{
+	"date": "2026-11-05",
+	"issue": 694,
+	"summary": "/deconstruyendo's cache layer says that pages leave without validators, so a revisit is never a 304 that blocks Zaraz.",
+	"changes": [
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-8"
+				}
+			],
+			"before": null,
+			"after": {
+				"key": "h2-8",
+				"text": "Las páginas salen sin `Last-Modified` ni `ETag`: al volver a una, el navegador la recibe entera desde la caché, nunca un 304. Un 304 trae la política de seguridad guardada, sin el *nonce* que `Zaraz` añade a cada respuesta, y su *script* quedaba bloqueado.",
+				"file": "src/utils/html-validators.ts",
+				"docs": "[Zaraz y CSP](https://blog.cloudflare.com/cloudflare-zaraz-supports-csp/)",
+				"status": "ok"
+			}
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h2-8"
+				}
+			],
+			"before": null,
+			"after": {
+				"key": "h2-8",
+				"text": "Pages leave without `Last-Modified` or `ETag`: returning to one fetches it whole from the cache, never a 304. A 304 brings back the stored security policy, without the nonce `Zaraz` adds to every response, and its script was blocked.",
+				"file": "src/utils/html-validators.ts",
+				"docs": "[Zaraz and CSP](https://blog.cloudflare.com/cloudflare-zaraz-supports-csp/)",
+				"status": "ok"
+			}
+		}
+	]
+}

@@ -1045,6 +1045,27 @@ script the site fetches from outside its own origin.
     its inline script to our CSP itself — at the edge, after the Worker, so the
     CSP tests pin what the Worker sends, not what the browser receives. Unlike Web Analytics' automatic setup, this does
     reach the Worker's pages (measured on preview, 2026-10-27).
+  - **That nonce does not survive a 304, so HTML carries no validators**
+    (#694, `src/utils/html-validators.ts`). Astro's cache provider gives every
+    cached page a `Last-Modified`; the browser revalidates with it, the edge
+    answers 304 with the CSP it stored — without the nonce the 200 had — and
+    the browser applies that CSP to the body it kept, which still holds the
+    old nonce. Zaraz's bootstrap is blocked: no GA4, no consent card, on every
+    revisit (measured 2026-11-05 on production: 200, 200, then 304 with
+    `window.zaraz` absent). The Worker deletes `Last-Modified` and `ETag` from
+    `text/html` on the way out, so a revisit is a whole 200 from the edge with
+    a fresh nonce. Images, assets and feeds keep theirs.
+  - **The cost**: a revisit downloads the page — 7 to 22 KB compressed on the
+    pages measured 2026-11-05 — instead of a 304 of a few hundred bytes. Both
+    come from the edge cache, so the wait is the same; it is bytes, not time.
+  - **Loading Zaraz by hand does not avoid it.** We tried Cloudflare's
+    documented alternative, `<script src="/cdn-cgi/zaraz/i.js">` with
+    *Auto-inject* off, on the preview (2026-11-05). `i.js` still runs inline
+    scripts at runtime and copies the nonce from the first `script[nonce]` in
+    the page; with none, the CSP blocked three per page, among them Zaraz's
+    Pageview bookkeeping and GA4's visibility handler. A nonce of our own would
+    meet the same 304 as soon as the edge re-renders a page whose content has
+    not changed. Whoever writes the nonce, HTML revalidation has to go.
   - **The site asks, not Zaraz.** Zaraz's own window is a true modal
     (`showModal()`): it blocked the page and covered 31 % of a phone
     (measured 2026-10-28), and *Custom CSS* cannot change that. Its automatic
@@ -1261,6 +1282,11 @@ because no provider was configured.
   no-store` on any rendered response without that header, so the endpoint's
   own year-long `Cache-Control` never reached the edge and every image was
   `BYPASS`. Its `caches.default` copy still runs the Worker on every request.
+- **The browser keeps nothing it could revalidate**: pages go out with
+  `Cache-Control: public, max-age=0, must-revalidate` and, from #694 on,
+  without `Last-Modified` or `ETag`, so every navigation is a 200 from the
+  edge. A 304 would carry a CSP whose Zaraz nonce no longer matches the body
+  (§6, Analytics).
 - **A deploy starts a cold cache**: the Worker version is part of the cache key
   ([cache keys](https://developers.cloudflare.com/workers/cache/cache-keys/)).
   `cross_version_cache` would keep it warm, and would also keep serving pages

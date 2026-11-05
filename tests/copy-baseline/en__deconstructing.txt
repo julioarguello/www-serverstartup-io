@@ -88,7 +88,7 @@ MISS
 Workers
 renders
 Detail and proof
-7 rows
+8 rows
 2.1
 Workers Cache sits in front of the Worker and is tiered by default: a hit does not run the Worker.
 wrangler.jsonc
@@ -115,6 +115,10 @@ stale-while-revalidate · limitations
 Pages leave without Last-Modified or ETag: returning to one fetches it whole from the cache, never a 304. A 304 brings back the stored security policy, without the nonce Zaraz adds to every response, and its script was blocked.
 src/utils/html-validators.ts
 Zaraz and CSP
+2.8
+When the pointer rests on an internal link, the browser asks for that page in advance. If it was not stored, the Worker renders it then, and the click finds it in the cache. Cloudflare's own prefetch, Speed Brain, does not apply here: it never prefetches a page that runs a Worker.
+astro.config.mjs
+Astro prefetch · Speed Brain
 layer 3 · Cloudflare
 Compute
 Where the code that builds each page runs.

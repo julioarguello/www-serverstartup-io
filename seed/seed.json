@@ -18827,7 +18827,7 @@
 							"key": "h2-8",
 							"text": "Al pasar el ratón por un enlace interno, el navegador pide esa página por adelantado. Si no estaba guardada, el Worker la genera entonces y el clic ya la encuentra en la caché. La precarga de `Cloudflare`, `Speed Brain`, no sirve aquí: no precarga páginas que ejecutan un Worker.",
 							"file": "astro.config.mjs",
-							"docs": "[precarga de Astro](https://docs.astro.build/en/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
+							"docs": "[precarga de Astro](https://docs.astro.build/es/guides/prefetch/) · [Speed Brain](https://developers.cloudflare.com/speed/optimization/content/speed-brain/)",
 							"status": "ok"
 						}
 					]

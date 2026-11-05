@@ -1243,7 +1243,28 @@ because no provider was configured.
   without `Cache-Control` is heuristically cacheable for ~2h under RFC 9111,
   admin pages included. So only a page that opted in — proven by the tags it
   accumulated from its own `Astro.cache.set(cacheHint)` — gets `maxAge: 3600,
-  swr: 60`. Everything else gets an explicit `no-store`.
+  swr: 604800`, and a resized image (`/_image`, 200) gets a year. Everything
+  else gets an explicit `no-store`. Both lifetimes are `PAGE_EDGE` and
+  `IMAGE_EDGE` in that file, the one place the policy is declared (#691).
+- **Why the policy is not in the zone's Cache Rules**: Workers Cache is the
+  Worker's cache, not the zone's, and Cloudflare documents that Cache Rules,
+  cache level and custom tiering do not apply to it
+  ([limitations](https://developers.cloudflare.com/workers/cache/limitations/)).
+  Only response headers configure it.
+- **Why `swr` is a week and `maxAge` an hour**: past `maxAge` a copy inside the
+  `stale-while-revalidate` window is served at once and refreshed behind the
+  request (`UPDATING`); past the window it is `EXPIRED` and the visitor waits
+  for a full render. Measured 2026-11-05 from Madrid with `swr: 60`: `HIT`
+  0.08–0.18 s, `EXPIRED`/`MISS` 0.8–2.0 s, 8 of 14 pages expired. `maxAge`
+  stays at an hour because it is what bounds menus and site settings.
+- **`/_image`**: `@astrojs/cloudflare` stamps `Cloudflare-CDN-Cache-Control:
+  no-store` on any rendered response without that header, so the endpoint's
+  own year-long `Cache-Control` never reached the edge and every image was
+  `BYPASS`. Its `caches.default` copy still runs the Worker on every request.
+- **A deploy starts a cold cache**: the Worker version is part of the cache key
+  ([cache keys](https://developers.cloudflare.com/workers/cache/cache-keys/)).
+  `cross_version_cache` would keep it warm, and would also keep serving pages
+  rendered by the previous code until they expire.
 - **Where a hint may be set**: page frontmatter (`src/pages/**`) or the
   middleware, and nowhere else. A `cache.set` inside a layout or component runs
   mid-stream, after the response headers have left, and is silently dropped.
@@ -1256,7 +1277,8 @@ because no provider was configured.
   afterPublish, afterUnpublish, afterDelete and afterRestore — so purging an
   entry also evicts the pages that merely embed it.
 - **Known gap**: menus and site settings emit no publish hook in EmDash 1.3.1 (nor 0.34),
-  so their staleness is bounded by the 1h TTL rather than purged.
+  so their staleness is bounded by the 1h `maxAge` rather than purged: the
+  first request after the hour still gets the old copy, and starts the refresh.
 - **Verification**: `cf-cache-status` on a real preview deploy — `wrangler dev`
   strips the CDN headers and the local emulator implements no purge at all.
   `scripts/verify-purge.sh` runs the end-to-end proof, negative control included.

@@ -4,8 +4,9 @@
 # One grouped PR a month keeps it to a single review.
 #
 # A Dependabot PR gets Dependabot secrets, not Actions secrets: FORBIDDEN_NAMES
-# and GITLEAKS_LICENSE must exist there too (`gh secret set NAME --app
-# dependabot`), or the citability guard and the secret scan refuse by design.
+# must exist there too (`gh secret set FORBIDDEN_NAMES --app dependabot`), or
+# the citability guard refuses by design. The secret scan skips these PRs
+# instead (#711) and runs on the merge to main.
 version: 2
 updates:
   - package-ecosystem: github-actions

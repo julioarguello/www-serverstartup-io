@@ -7,14 +7,14 @@
 ---
 
 ## Review Checklist (Process)
-- [ ] The project's own gates ran on THIS branch — the full set, not a subset; every SKIP is named below
-- [ ] The gates ran on the target's current head: `git fetch origin && git rev-list --count HEAD..origin/<target>` printed `0` (a merge or rebase after the run means running them again)
+- [ ] The project's own checks (the steps its CI runs: lint, tests, `dbt parse`…) ran locally on THIS branch — all of them, not a subset; any skipped one is named below
+- [ ] Those checks ran on the target branch's current head: `git fetch origin && git rev-list --count HEAD..origin/<target>` printed `0` (a merge or rebase after the run means running them again)
 - [ ] Conventions checked against this repository's own CONTRIBUTING and `docs/`; any convention accepted rather than followed is named below
 - [ ] Every numbered item and acceptance criterion of the issue is done, or the deviation is named below with its reason
 - [ ] Every acceptance criterion has a test that goes red when the behaviour it names is removed — name the mutation you tried
-- [ ] Not stacked: nothing here depends on another open pull request; a change that needs another waits for it to merge
-- [ ] Tech-debt delta reported — markers added AND removed, never one side alone
-- [ ] `Closes #<ISSUE>` resolves to the issue this branch is named after (check the sidebar, not the text)
+- [ ] Not stacked — nothing here depends on another open pull request; a change that needs another waits for it to merge
+- [ ] Tech-debt markers (`FIXME(tech-debt)`, `TODO(tech-debt)`, `HACK(tech-debt)` comments) that this PR adds AND removes are listed — never one side alone
+- [ ] The issue or ticket this branch is named after is linked: `Closes #<n>` for a GitHub issue (check the sidebar, not the text), the ticket key for Jira
 - [ ] **Not verified**: gates skipped, findings accepted, and anything changed but not exercised — "none" only when every box above was ticked from evidence; a reviewer who has to guess assumes everything was checked
 
 ---

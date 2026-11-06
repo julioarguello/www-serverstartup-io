@@ -1,0 +1,18 @@
+# #709: every action is pinned to a commit (#702, the serverstartup
+# organisation requires it), so nothing moves a pin unless this does.
+# Dependabot updates the SHA and its `# vX.Y.Z` comment together.
+# One grouped PR a month keeps it to a single review.
+#
+# A Dependabot PR gets Dependabot secrets, not Actions secrets: FORBIDDEN_NAMES
+# and GITLEAKS_LICENSE must exist there too (`gh secret set NAME --app
+# dependabot`), or the citability guard and the secret scan refuse by design.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - "*"

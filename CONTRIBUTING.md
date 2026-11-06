@@ -8,7 +8,7 @@ how we work.
 
 ## Where development happens
 
-Here. [julioarguello/www-serverstartup-io](https://github.com/julioarguello/www-serverstartup-io)
+Here. [serverstartup/www-serverstartup-io](https://github.com/serverstartup/www-serverstartup-io)
 is the working repository and the public one — the same repository, not a copy
 of it. Branches, pull requests, issues and CI logs are all in the open.
 

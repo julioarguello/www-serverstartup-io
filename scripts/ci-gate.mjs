@@ -152,7 +152,7 @@ summary(
 		`\`${cause}\`, the upstream ProxyWorker crash. The gate was re-run whole after ` +
 		`a full reboot and re-seed.\n\n` +
 		`- Upstream: [cloudflare/workers-sdk#15317](https://github.com/cloudflare/workers-sdk/issues/15317), fixed by [#15252](https://github.com/cloudflare/workers-sdk/pull/15252) in wrangler 4.129.1 — a death after #638 is one the fix did not cover\n` +
-		`- Here: [#524](https://github.com/julioarguello/www-serverstartup-io/issues/524), [#638](https://github.com/julioarguello/www-serverstartup-io/issues/638)\n` +
+		`- Here: [#524](https://github.com/serverstartup/www-serverstartup-io/issues/524), [#638](https://github.com/serverstartup/www-serverstartup-io/issues/638)\n` +
 		`- ${second.status === 0 ? "Re-running was legitimate: this red was the crash, not the diff." : "The gate is red for its own reasons — read it as a real failure."}`,
 );
 finish(codeOf(second));

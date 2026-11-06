@@ -34,7 +34,7 @@ import subprocess
 import sys
 import time
 
-REPO = os.environ.get("GITHUB_REPOSITORY", "julioarguello/www-serverstartup-io")
+REPO = os.environ.get("GITHUB_REPOSITORY", "serverstartup/www-serverstartup-io")
 
 # The run is long and sequential, and its output is meant to be WATCHED.
 # Redirected to a file, Python block-buffers stdout: measured on the first

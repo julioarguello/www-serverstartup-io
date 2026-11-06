@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   todo-to-issue:
-    if: github.repository == 'julioarguello/www-serverstartup-io'
+    if: github.repository == 'serverstartup/www-serverstartup-io'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

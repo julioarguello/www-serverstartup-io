@@ -124,6 +124,10 @@ jobs:
         uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # An organisation's repository needs a license key, a personal one
+          # does not: the first run after the move to serverstartup (#704)
+          # stopped at "missing gitleaks license".
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
           # The gate is the scan's exit code, never the upload. Observed on PR
           # #397: "1 commits scanned / no leaks found", then the step died in
           # CreateArtifact because the artifact quota was full (#399) — a red

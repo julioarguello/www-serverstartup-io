@@ -26,7 +26,7 @@ the reason to read this file rather than grep for hex codes.
    `src/styles/`. Total source budget **<= 150 KB**; measured **129 KB across 20
    files**, comments left out (`ci-check-css-budget.py` strips them; strings stay). Both numbers are read out of this line by
    `ci-check-css-budget.py`, so the doc is the source and cannot disagree with
-   the gate — see [#475](https://github.com/julioarguello/www-serverstartup-io/issues/475)
+   the gate — see [#475](https://github.com/serverstartup/www-serverstartup-io/issues/475)
    for where the previous figure went and why the budget is where it is.
 2. **Mobile-first.** Base styles are mobile; enhancements at `min-width: 768px`
    (21 uses) and `min-width: 1025px` (2 uses).

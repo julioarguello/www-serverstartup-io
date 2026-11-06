@@ -58,6 +58,11 @@ What the freeze does not remove: two branches that create the same list item, or
 value from the same `before`. Each passes alone; after both merge, the chain is broken and `check`
 fails naming both files. A rebase shows it on the PR before merging.
 
+<!-- TODO(tech-debt): the next rebaseline moves settings.repoUrl and the site's repository links to serverstartup/www-serverstartup-io
+Blocked: a patch cannot change a site setting, and EmDash's settings API drops repoUrl (src/api/schemas/settings.ts strips unknown keys).
+The repository moved on 2026-11-06; GitHub redirects the old URLs until then. Move repoUrl and the links together, or
+scripts/ci-check-cited-files.py stops recognising the links as citations. Change seed/content/pages/*/deconstru*.md in the
+same PR: they are the markdown the patches come from, and left alone they bring the old URL back. (origin: #704) -->
 **Rebaselining** — folding the patches into a new base — is deliberate: one PR rewrites
 `seed/base.json`, the pinned sha256 and the test's `IN_BASE` list of the patches the base already
 holds, together. Creating or deleting an entry and changing the

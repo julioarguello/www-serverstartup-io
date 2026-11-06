@@ -45,4 +45,4 @@ This is tracked as an upstream MCP tooling limitation. Until resolved, rotate to
 ### References
 
 - [Cloudflare API Token Best Practices](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/)
-- GitHub Issue: julioarguello/www-serverstartup-io#62
+- GitHub Issue: serverstartup/www-serverstartup-io#62

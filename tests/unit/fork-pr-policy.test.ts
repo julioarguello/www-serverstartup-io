@@ -41,7 +41,7 @@ function runWithoutSecret() {
 	return spawnSync("python3", [join(ROOT, "scripts", "ci-check-citability.py")], {
 		cwd: ROOT,
 		encoding: "utf8",
-		env: { ...process.env, FORBIDDEN_NAMES: "", GITHUB_REPOSITORY: "julioarguello/www-serverstartup-io" },
+		env: { ...process.env, FORBIDDEN_NAMES: "", GITHUB_REPOSITORY: "serverstartup/www-serverstartup-io" },
 	});
 }
 

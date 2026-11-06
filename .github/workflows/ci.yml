@@ -47,7 +47,7 @@ jobs:
       site: ${{ steps.scope.outputs.site }}
       lighthouse_urls: ${{ steps.lighthouse_urls.outputs.urls }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # ci-scope.sh diffs base...head
 
@@ -82,11 +82,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # gitleaks scans history of the push range
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -109,7 +109,7 @@ jobs:
       # Exact match or full install, nothing in between (#526).
       - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
         id: deps
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             node_modules
@@ -121,7 +121,7 @@ jobs:
         run: npm ci
 
       - name: Secret scan (gitleaks)
-        uses: gitleaks/gitleaks-action@v3
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # The gate is the scan's exit code, never the upload. Observed on PR
@@ -219,9 +219,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -244,7 +244,7 @@ jobs:
       # Exact match or full install, nothing in between (#526).
       - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
         id: deps
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             node_modules
@@ -397,9 +397,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -422,7 +422,7 @@ jobs:
       # Exact match or full install, nothing in between (#526).
       - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
         id: deps
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             node_modules
@@ -485,13 +485,13 @@ jobs:
       options: --user 1001 --ipc=host
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # The image ships Node 24. The stack is built and seeded on 22 everywhere
       # else, and native modules (better-sqlite3) load only on the ABI they were
       # built for. No `cache: npm`: its key is shared with the hosted jobs and
       # `~/.npm` resolves elsewhere in here (see the next step).
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
 
@@ -502,7 +502,7 @@ jobs:
       # entry. Nothing in this job drives Puppeteer.
       - name: Restore node_modules  # not-a-gate: a cache lookup, not a check
         id: deps
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: node_modules
           key: engines-deps-${{ runner.os }}-${{ runner.arch }}-node22-${{ hashFiles('package-lock.json') }}
@@ -553,9 +553,9 @@ jobs:
       matrix:
         url: ${{ fromJSON(needs.scope.outputs.lighthouse_urls) }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -578,7 +578,7 @@ jobs:
       # Exact match or full install, nothing in between (#526).
       - name: Restore node_modules and the browser  # not-a-gate: a cache lookup, not a check
         id: deps
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             node_modules
@@ -619,7 +619,7 @@ jobs:
       # npm cache is saved by whichever job misses first, never a perf shard.
       # npx keeps what it installs under ~/.npm/_npx, keyed by the spec (#631).
       - name: Restore the Lighthouse CI CLI  # not-a-gate: a cache lookup, not a check
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.npm/_npx
           key: lhci-${{ runner.os }}-${{ runner.arch }}-${{ env.LHCI }}

@@ -34,7 +34,9 @@ instead of printing a green it has not earned.
 
 Without `repository.url` the links could not be recognised at all, so a missing
 one exits 3 too: it used to be the seed's `repoUrl` setting, and an absent
-setting skipped every link without a word.
+setting skipped every link without a word. So does a URL that matches no link
+in the seed: written as npm normalises it (`git+https://….git`), it would
+recognise nothing and print the same green.
 
 Exit 0 = every citation resolves. Exit 1 = findings. Exit 3 = the gate is blind.
 """
@@ -79,6 +81,10 @@ def strings(node, path=""):
             yield from strings(v, where)
 
 
+def repo_links(repo: str) -> re.Pattern[str]:
+    return re.compile(re.escape(repo.rstrip("/")) + r"/(?:blob|tree)/[^/\s)\"]+/([^\s)\"#?]+)")
+
+
 def check(seed: dict, files: set[str], dirs: set[str], repo: str) -> list[str]:
     findings: list[str] = []
 
@@ -92,7 +98,7 @@ def check(seed: dict, files: set[str], dirs: set[str], repo: str) -> list[str]:
             if f and not exists(f):
                 findings.append(f"layers/{entry.get('id')} fact {fact.get('key')}: cites '{f}', which git does not track")
 
-    url = re.compile(re.escape(repo.rstrip("/")) + r"/(?:blob|tree)/[^/\s)\"]+/([^\s)\"#?]+)")
+    url = repo_links(repo)
     for where, text in strings(seed):
         for m in url.finditer(text):
             if not exists(m.group(1)):
@@ -126,6 +132,10 @@ def main() -> int:
         print("cited-files: package.json declares no repository.url — no repository link can be recognised", file=sys.stderr)
         return 3
     seed = json.loads(SEED.read_text())
+    n_links = sum(len(repo_links(repo).findall(text)) for _, text in strings(seed))
+    if n_links == 0:
+        print(f"cited-files: BLIND — no link in the seed starts with {repo}/blob/ or /tree/; is repository.url in package.json a plain https URL?", file=sys.stderr)
+        return 3
     findings = check(seed, files, dirs, repo)
     if findings:
         for f in findings:
@@ -133,7 +143,7 @@ def main() -> int:
         print(f"cited-files: {len(findings)} citation(s) point at nothing")
         return 1
     n_facts = sum(1 for e in seed.get("content", {}).get("layers", []) for f in (e.get("data") or {}).get("facts") or [] if f.get("file"))
-    print(f"cited-files: every cited file exists ({n_facts} facts cite a file, plus every repository link in the seed) — the 2 planted dead citations were found first")
+    print(f"cited-files: every cited file exists ({n_facts} facts cite a file, plus {n_links} repository links in the seed) — the 2 planted dead citations were found first")
     return 0
 
 

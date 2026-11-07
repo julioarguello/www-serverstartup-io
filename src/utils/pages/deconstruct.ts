@@ -5,19 +5,21 @@
  * rest to components/DeconstructPage.astro (see utils/pages/about.ts). Tags
  * accumulate, so publishing the page or any layer purges the route.
  */
-import { getEmDashEntry, getSiteSettings } from "emdash";
+import { getEmDashEntry } from "emdash";
 import { entryAlternatePath } from "../alternate";
 import { getLayers } from "../layers";
 import { getUiLabels } from "../ui-labels";
-import type { SiteSettings } from "../../types";
+// The repository is a fact about the code, not CMS content: package.json declares
+// it, and scripts/ci-check-cited-files.py reads the same field (#713). A CMS
+// setting could not move with the repository, because no patch reaches one.
+import { repository } from "../../../package.json";
 
 export async function loadDeconstruct(slug: string, locale: string) {
 	const { entry, cacheHint } = await getEmDashEntry("pages", slug, { locale });
 	if (!entry) return null;
 	const { layers, cacheHint: layersHint } = await getLayers(locale);
-	const settings = (await getSiteSettings()) as SiteSettings;
 	const labels = await getUiLabels(locale);
 	// Slugs are translated across locales — resolve the counterpart via the CMS (#291)
 	const altPath = await entryAlternatePath("pages", entry.data.id, locale);
-	return { entry, layers, labels, altPath, repoUrl: settings.repoUrl || "", cacheHints: [cacheHint, layersHint as typeof cacheHint] };
+	return { entry, layers, labels, altPath, repoUrl: repository.url, cacheHints: [cacheHint, layersHint as typeof cacheHint] };
 }

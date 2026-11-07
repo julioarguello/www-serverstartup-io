@@ -15,7 +15,6 @@ export interface SiteSettings {
 	/* Base64-encoded contact endpoints — decoded on click so the number never
 	   appears in static HTML, JSON-LD or the committed seed in plain text. */
 	phoneEncoded?: string;
-	repoUrl?: string;
 	whatsappEncoded?: string;
 	email?: string;
 	/* EN-locale address (hello@); ES pages and the shared footer use `email`. */

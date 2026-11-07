@@ -6,4 +6,4 @@ excerpt: "Así está hecha esta web. Funciona sobre `Cloudflare`, una red de cen
 
 Si te cuentan cómo trabajan y no pueden enseñarte el taller, desconfía. Este es el nuestro: código, contenido, comprobaciones y despliegues.
 
-[Ver el repositorio](https://github.com/julioarguello/www-serverstartup-io)
+[Ver el repositorio](https://github.com/serverstartup/www-serverstartup-io)

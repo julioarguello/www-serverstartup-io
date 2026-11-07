@@ -1,0 +1,235 @@
+{
+	"date": "2026-11-07",
+	"issue": 713,
+	"summary": "Every repository link in the content points at serverstartup/www-serverstartup-io, where the repository moved on 2026-11-06, instead of going through GitHub's redirect from the old owner.",
+	"changes": [
+		{
+			"collection": "pages",
+			"slug": "deconstruyendo",
+			"locale": "es",
+			"path": [
+				"content",
+				2,
+				"markDefs",
+				0,
+				"href"
+			],
+			"before": "https://github.com/julioarguello/www-serverstartup-io",
+			"after": "https://github.com/serverstartup/www-serverstartup-io"
+		},
+		{
+			"collection": "pages",
+			"slug": "deconstructing",
+			"locale": "en",
+			"path": [
+				"content",
+				2,
+				"markDefs",
+				0,
+				"href"
+			],
+			"before": "https://github.com/julioarguello/www-serverstartup-io",
+			"after": "https://github.com/serverstartup/www-serverstartup-io"
+		},
+		{
+			"collection": "pages",
+			"slug": "creditos",
+			"locale": "es",
+			"path": [
+				"content",
+				0,
+				"markDefs",
+				0,
+				"href"
+			],
+			"before": "https://github.com/julioarguello/www-serverstartup-io/blob/main/docs/design/hero-rotativo/flux-prompts.md",
+			"after": "https://github.com/serverstartup/www-serverstartup-io/blob/main/docs/design/hero-rotativo/flux-prompts.md"
+		},
+		{
+			"collection": "pages",
+			"slug": "credits",
+			"locale": "en",
+			"path": [
+				"content",
+				0,
+				"markDefs",
+				0,
+				"href"
+			],
+			"before": "https://github.com/julioarguello/www-serverstartup-io/blob/main/docs/design/hero-rotativo/flux-prompts.md",
+			"after": "https://github.com/serverstartup/www-serverstartup-io/blob/main/docs/design/hero-rotativo/flux-prompts.md"
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h2-3"
+				},
+				"docs"
+			],
+			"before": "[última comprobación en verde, 2026-08-23](https://github.com/julioarguello/www-serverstartup-io/actions/runs/32654856970) · [purga](https://developers.cloudflare.com/workers/cache/purge/)",
+			"after": "[última comprobación en verde, 2026-08-23](https://github.com/serverstartup/www-serverstartup-io/actions/runs/32654856970) · [purga](https://developers.cloudflare.com/workers/cache/purge/)"
+		},
+		{
+			"collection": "layers",
+			"slug": "cache",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h2-3"
+				},
+				"docs"
+			],
+			"before": "[last green check, 2026-08-23](https://github.com/julioarguello/www-serverstartup-io/actions/runs/32654856970) · [purge](https://developers.cloudflare.com/workers/cache/purge/)",
+			"after": "[last green check, 2026-08-23](https://github.com/serverstartup/www-serverstartup-io/actions/runs/32654856970) · [purge](https://developers.cloudflare.com/workers/cache/purge/)"
+		},
+		{
+			"collection": "layers",
+			"slug": "contenido",
+			"locale": "es",
+			"path": [
+				"links"
+			],
+			"before": "[seed/base.json en GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/base.json) · [Los parches](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/patches) · [Las páginas de servicio en Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)",
+			"after": "[seed/base.json en GitHub](https://github.com/serverstartup/www-serverstartup-io/blob/main/seed/base.json) · [Los parches](https://github.com/serverstartup/www-serverstartup-io/tree/main/seed/patches) · [Las páginas de servicio en Markdown](https://github.com/serverstartup/www-serverstartup-io/tree/main/seed/content)"
+		},
+		{
+			"collection": "layers",
+			"slug": "site-content",
+			"locale": "en",
+			"path": [
+				"links"
+			],
+			"before": "[seed/base.json on GitHub](https://github.com/julioarguello/www-serverstartup-io/blob/main/seed/base.json) · [The patches](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/patches) · [The service pages in Markdown](https://github.com/julioarguello/www-serverstartup-io/tree/main/seed/content)",
+			"after": "[seed/base.json on GitHub](https://github.com/serverstartup/www-serverstartup-io/blob/main/seed/base.json) · [The patches](https://github.com/serverstartup/www-serverstartup-io/tree/main/seed/patches) · [The service pages in Markdown](https://github.com/serverstartup/www-serverstartup-io/tree/main/seed/content)"
+		},
+		{
+			"collection": "layers",
+			"slug": "entrega",
+			"locale": "es",
+			"path": [
+				"links"
+			],
+			"before": "[Las ejecuciones en GitHub Actions](https://github.com/julioarguello/www-serverstartup-io/actions) · [wrangler-action](https://github.com/cloudflare/wrangler-action)",
+			"after": "[Las ejecuciones en GitHub Actions](https://github.com/serverstartup/www-serverstartup-io/actions) · [wrangler-action](https://github.com/cloudflare/wrangler-action)"
+		},
+		{
+			"collection": "layers",
+			"slug": "entrega",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h8-1"
+				},
+				"docs"
+			],
+			"before": "[el repositorio](https://github.com/julioarguello/www-serverstartup-io)",
+			"after": "[el repositorio](https://github.com/serverstartup/www-serverstartup-io)"
+		},
+		{
+			"collection": "layers",
+			"slug": "delivery",
+			"locale": "en",
+			"path": [
+				"links"
+			],
+			"before": "[The runs on GitHub Actions](https://github.com/julioarguello/www-serverstartup-io/actions) · [wrangler-action](https://github.com/cloudflare/wrangler-action)",
+			"after": "[The runs on GitHub Actions](https://github.com/serverstartup/www-serverstartup-io/actions) · [wrangler-action](https://github.com/cloudflare/wrangler-action)"
+		},
+		{
+			"collection": "layers",
+			"slug": "delivery",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h8-1"
+				},
+				"docs"
+			],
+			"before": "[the repository](https://github.com/julioarguello/www-serverstartup-io)",
+			"after": "[the repository](https://github.com/serverstartup/www-serverstartup-io)"
+		},
+		{
+			"collection": "layers",
+			"slug": "calidad",
+			"locale": "es",
+			"path": [
+				"links"
+			],
+			"before": "[La ejecución del 2026-10-16](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508) · [lighthouserc.json](https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json)",
+			"after": "[La ejecución del 2026-10-16](https://github.com/serverstartup/www-serverstartup-io/actions/runs/38889005508) · [lighthouserc.json](https://github.com/serverstartup/www-serverstartup-io/blob/main/lighthouserc.json)"
+		},
+		{
+			"collection": "layers",
+			"slug": "calidad",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h9-2"
+				},
+				"docs"
+			],
+			"before": "[la ejecución](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508)",
+			"after": "[la ejecución](https://github.com/serverstartup/www-serverstartup-io/actions/runs/38889005508)"
+		},
+		{
+			"collection": "layers",
+			"slug": "calidad",
+			"locale": "es",
+			"path": [
+				"facts",
+				{
+					"key": "h9-6"
+				},
+				"docs"
+			],
+			"before": "[el repositorio](https://github.com/julioarguello/www-serverstartup-io)",
+			"after": "[el repositorio](https://github.com/serverstartup/www-serverstartup-io)"
+		},
+		{
+			"collection": "layers",
+			"slug": "quality",
+			"locale": "en",
+			"path": [
+				"links"
+			],
+			"before": "[The 2026-10-16 run](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508) · [lighthouserc.json](https://github.com/julioarguello/www-serverstartup-io/blob/main/lighthouserc.json)",
+			"after": "[The 2026-10-16 run](https://github.com/serverstartup/www-serverstartup-io/actions/runs/38889005508) · [lighthouserc.json](https://github.com/serverstartup/www-serverstartup-io/blob/main/lighthouserc.json)"
+		},
+		{
+			"collection": "layers",
+			"slug": "quality",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h9-2"
+				},
+				"docs"
+			],
+			"before": "[the run](https://github.com/julioarguello/www-serverstartup-io/actions/runs/38889005508)",
+			"after": "[the run](https://github.com/serverstartup/www-serverstartup-io/actions/runs/38889005508)"
+		},
+		{
+			"collection": "layers",
+			"slug": "quality",
+			"locale": "en",
+			"path": [
+				"facts",
+				{
+					"key": "h9-6"
+				},
+				"docs"
+			],
+			"before": "[the repository](https://github.com/julioarguello/www-serverstartup-io)",
+			"after": "[the repository](https://github.com/serverstartup/www-serverstartup-io)"
+		}
+	]
+}

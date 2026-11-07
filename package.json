@@ -5,6 +5,10 @@
 		"seed": "seed/seed.json"
 	},
 	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/serverstartup/www-serverstartup-io"
+	},
 	"type": "module",
 	"scripts": {
 		"predev": "node scripts/content-patch.mjs compose",

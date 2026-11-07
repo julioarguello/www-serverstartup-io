@@ -18,8 +18,9 @@ What counts as a citation
 - `content.layers[*].data.facts[*].file`, a path relative to the repository root
   (a trailing slash means a directory: some tracked file must live under it);
 - any URL `<repoUrl>/blob/<ref>/<path>` or `<repoUrl>/tree/<ref>/<path>` in any
-  string of seed/seed.json (the base plus every patch, #697), where `<repoUrl>` is the seed's own `repoUrl`
-  setting. The ref is not checked, only the path: the site cites `main`.
+  string of seed/seed.json (the base plus every patch, #697), where `<repoUrl>` is
+  `repository.url` in package.json, the one place the site reads it from (#713).
+  The ref is not checked, only the path: the site cites `main`.
 
 Links to `/actions/runs/<id>` and other non-file pages are not files and are
 left alone.
@@ -30,6 +31,10 @@ Before judging the real seed, the check runs over a seed of its own making that
 carries one missing `file` and one dead repository URL. If it does not find
 both, the pattern or the tree listing has stopped working and the gate exits 3
 instead of printing a green it has not earned.
+
+Without `repository.url` the links could not be recognised at all, so a missing
+one exits 3 too: it used to be the seed's `repoUrl` setting, and an absent
+setting skipped every link without a word.
 
 Exit 0 = every citation resolves. Exit 1 = findings. Exit 3 = the gate is blind.
 """
@@ -43,6 +48,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SEED = ROOT / "seed" / "seed.json"
+PACKAGE = ROOT / "package.json"
 
 
 def tracked() -> tuple[set[str], set[str]]:
@@ -73,7 +79,7 @@ def strings(node, path=""):
             yield from strings(v, where)
 
 
-def check(seed: dict, files: set[str], dirs: set[str]) -> list[str]:
+def check(seed: dict, files: set[str], dirs: set[str], repo: str) -> list[str]:
     findings: list[str] = []
 
     def exists(path: str) -> bool:
@@ -86,27 +92,24 @@ def check(seed: dict, files: set[str], dirs: set[str]) -> list[str]:
             if f and not exists(f):
                 findings.append(f"layers/{entry.get('id')} fact {fact.get('key')}: cites '{f}', which git does not track")
 
-    repo = (seed.get("settings") or {}).get("repoUrl", "").rstrip("/")
-    if repo:
-        url = re.compile(re.escape(repo) + r"/(?:blob|tree)/[^/\s)\"]+/([^\s)\"#?]+)")
-        for where, text in strings(seed):
-            for m in url.finditer(text):
-                if not exists(m.group(1)):
-                    findings.append(f"{where}: links to '{m.group(1)}', which git does not track")
+    url = re.compile(re.escape(repo.rstrip("/")) + r"/(?:blob|tree)/[^/\s)\"]+/([^\s)\"#?]+)")
+    for where, text in strings(seed):
+        for m in url.finditer(text):
+            if not exists(m.group(1)):
+                findings.append(f"{where}: links to '{m.group(1)}', which git does not track")
     return findings
 
 
 def control(files: set[str], dirs: set[str]) -> bool:
     repo = "https://github.com/example/control"
     planted = {
-        "settings": {"repoUrl": repo},
         "content": {"layers": [{"id": "layer-control", "data": {"facts": [
             {"key": "c1", "text": "x", "file": "src/__the_control_file_that_is_not_there__.ts"},
             {"key": "c2", "text": f"see [it]({repo}/blob/main/docs/__nor_this_one__.md)"},
             {"key": "c3", "text": "fine", "file": "seed/base.json"},
         ]}}]},
     }
-    found = check(planted, files, dirs)
+    found = check(planted, files, dirs, repo)
     return len(found) == 2 and all("__" in f for f in found)
 
 
@@ -118,8 +121,12 @@ def main() -> int:
     if not control(files, dirs):
         print("cited-files: BLIND — the planted missing file and dead link were not both found", file=sys.stderr)
         return 3
+    repo = (json.loads(PACKAGE.read_text()).get("repository") or {}).get("url", "")
+    if not repo:
+        print("cited-files: package.json declares no repository.url — no repository link can be recognised", file=sys.stderr)
+        return 3
     seed = json.loads(SEED.read_text())
-    findings = check(seed, files, dirs)
+    findings = check(seed, files, dirs, repo)
     if findings:
         for f in findings:
             print(f"seed/seed.json: {f}")
